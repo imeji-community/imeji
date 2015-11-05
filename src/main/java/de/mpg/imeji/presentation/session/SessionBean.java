@@ -348,7 +348,6 @@ public class SessionBean implements Serializable {
 
   public void reloadUser() throws Exception {
     if (user != null) {
-      System.out.println("RELOAD USER");
       UserController c = new UserController(user);
       user = c.retrieve(user.getId());
     }

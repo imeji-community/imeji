@@ -31,8 +31,12 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
     if (isDelete())
       return;
 
+    boolean valid=true;
+    String errorMessage = "";
+    
     if (isNullOrEmptyTrim(space.getTitle())) {
-      throw new UnprocessableError("error_space_need_title");
+      valid=false;
+      errorMessage+="error_space_need_title;";
     }
 
     try {
@@ -40,15 +44,22 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
       // above creation of URI in order to check if it is a syntactically
       // valid slug
     } catch (URISyntaxException e) {
-      throw new UnprocessableError("error_space_invalid_slug");
+      valid=false;
+      errorMessage+="error_space_invalid_slug;";
     }
 
     if (isSpaceByLabel(space.getSlug(), space.getId())) {
-      throw new UnprocessableError("error_there_is_another_space_with_same_slug");
+      valid=false;
+      errorMessage+="error_there_is_another_space_with_same_slug;";
     }
 
     if (isNullOrEmptyTrim(space.getSlug())) {
-      throw new UnprocessableError("error_space_needs_slug");
+      valid=false;
+      errorMessage+="error_space_needs_slug";
+    }
+    
+    if (!valid) {
+      throw new UnprocessableError(errorMessage);
     }
 
   }

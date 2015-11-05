@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -111,8 +112,6 @@ public class UserController {
         u.setRegistrationToken(IdentifierUtil.newUniversalUniqueId());
         break;
     }
-    u.setName(u.getPerson().getGivenName() + " " + u.getPerson().getFamilyName());
-
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
     u.setModified(now);
@@ -149,7 +148,7 @@ public class UserController {
     Search search = SearchFactory.create();
     SearchResult result =
         search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
-    if (result.getNumberOfRecords() == 1) {
+    if (result.getNumberOfRecords() > 0) {
       String id = result.getResults().get(0);
       User u = (User) reader.read(id, user, new User());
       UserGroupController ugc = new UserGroupController();
@@ -198,7 +197,7 @@ public class UserController {
    * @throws ImejiException
    */
   public User retrieveRegisteredUser(String registrationToken) throws ImejiException {
-    Search search = SearchFactory.create();
+    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
     SearchResult result = search.searchString(
         JenaCustomQueries.selectUserByRegistrationToken(registrationToken), null, null, 0, -1);
     if (result.getNumberOfRecords() == 1) {
@@ -210,15 +209,11 @@ public class UserController {
   }
 
   public User retrieve(String email, User currentUser) throws ImejiException {
-    Search search = SearchFactory.create();
+    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
     SearchResult result =
         search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
     if (result.getNumberOfRecords() == 1) {
-      String id = result.getResults().get(0);
-      User u = (User) reader.read(id, currentUser, new User());
-      UserGroupController ugc = new UserGroupController();
-      u.setGroups((List<UserGroup>) ugc.searchByUser(u, currentUser));
-      return u;
+      return retrieve(URI.create(result.getResults().get(0)), currentUser);
     }
     throw new NotFoundException("User with email " + email + " not found");
   }
@@ -265,8 +260,6 @@ public class UserController {
     } catch (NotFoundException e) {
       // fine, user can be updated
     }
-    updatedUser.setName(
-        updatedUser.getPerson().getGivenName() + " " + updatedUser.getPerson().getFamilyName());
 
     // if quota is set to 0, set it to default disk space quota
     if (updatedUser.getQuota() == 0) {
@@ -428,6 +421,23 @@ public class UserController {
       c.addAll(loadPersons(l, Imeji.collectionModel));
     }
     return c.iterator().next();
+  }
+
+  /**
+   * Retrieve a User by its API Key
+   * 
+   * @param key
+   * @return
+   * @throws ImejiException
+   */
+  public User retrieveByApiKey(String key) throws ImejiException {
+    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
+    SearchResult result =
+        search.searchString(JenaCustomQueries.selectUserByApiKey(key), null, null, 0, -1);
+    if (result.getNumberOfRecords() != 1) {
+      throw new AuthenticationError("API Key not valid!");
+    }
+    return retrieve(URI.create(result.getResults().get(0)));
   }
 
   /**

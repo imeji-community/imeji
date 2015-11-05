@@ -56,8 +56,8 @@ public class NotificationUtils {
       emailClient.sendMail(u.getEmail(), null,
           msgs.getEmailOnItemDownload_Subject(fileItem, session),
           msgs.getEmailOnItemDownload_Body(u, user, fileItem, c, session));
-      LOGGER.info("Sent notification email to user: " + u.getName() + "<" + u.getEmail() + ">"
-          + " by item " + fileItem.getId() + " download");
+      LOGGER.info("Sent notification email to user: " + u.getPerson().getCompleteName() + "<"
+          + u.getEmail() + ">" + " by item " + fileItem.getId() + " download");
     }
   }
 
@@ -86,11 +86,9 @@ public class NotificationUtils {
           final CollectionImeji c = cc.retrieve(entry.getKey(), Imeji.adminUser);
           for (User u : uc.searchUsersToBeNotified(user, c)) {
             String key = u.getEmail();
-            msgsPerEmail.put(
-                key,
+            msgsPerEmail.put(key,
                 (msgsPerEmail.containsKey(key) ? msgsPerEmail.get(key) + "\r\n" : "")
-                    + "XXX_COLLECTION_XXX URI"
-                    + (isNullOrEmpty(q) ? ": " : " (XXX_FILTERED_XXX): ")
+                    + "XXX_COLLECTION_XXX URI" + (isNullOrEmpty(q) ? ": " : " (XXX_FILTERED_XXX): ")
                     + UrlHelper.encodeQuery(entry.getKey().toString() + q)
                     + ", XXX_ITEMS_COUNT_XXX: " + entry.getValue().intValue());
             usersPerEmail.put(key, u);
@@ -101,8 +99,8 @@ public class NotificationUtils {
           User u = usersPerEmail.get(entry.getKey());
           emailClient.sendMail(u.getEmail(), null, msgs.getEmailOnZipDownload_Subject(session),
               msgs.getEmailOnZipDownload_Body(u, user, entry.getValue(), url, session));
-          LOGGER.info("Sent notification email to user: " + u.getName() + "<" + u.getEmail() + ">;"
-              + " zip download query: <" + url + ">; message: <"
+          LOGGER.info("Sent notification email to user: " + u.getPerson().getCompleteName() + "<"
+              + u.getEmail() + ">;" + " zip download query: <" + url + ">; message: <"
               + entry.getValue().replaceAll("[\\r\\n]]", ";") + ">");
         }
       }
@@ -129,14 +127,14 @@ public class NotificationUtils {
     }
     return session.getApplicationUrl() + path + q;
   }
-  
-  
+
+
   /**
    * Send account activation email
    */
   public static void sendActivationNotification(User user, SessionBean sb) {
-//    EmailClient emailClient = new EmailClient();
-//    EmailMessages emailMessages = new EmailMessages();
+    // EmailClient emailClient = new EmailClient();
+    // EmailMessages emailMessages = new EmailMessages();
     try {
       // send to support
       emailClient.sendMail(getContactEmailStatic(), null,

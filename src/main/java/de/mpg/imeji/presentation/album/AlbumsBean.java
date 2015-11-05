@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
@@ -43,15 +42,10 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
   @Override
   public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
-    UserController uc = new UserController(sb.getUser());
-    if (sb.getUser() != null) {
-      sb.setUser(uc.retrieve(sb.getUser().getEmail()));
-    }
     AlbumController controller = new AlbumController();
     Collection<Album> albums = new ArrayList<Album>();
     int myOffset = offset;
     myOffset = prepareList(offset);
-
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
     albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), limit, myOffset);
     return ImejiFactory.albumListToBeanList(albums);
@@ -105,9 +99,8 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
    * 
    * @return
    * 
-   * @see
-   * de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.SearchQuery
-   * , de.mpg.imeji.logic.search.vo.SortCriterion)
+   * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.
+   * SearchQuery , de.mpg.imeji.logic.search.vo.SortCriterion)
    */
   @Override
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {

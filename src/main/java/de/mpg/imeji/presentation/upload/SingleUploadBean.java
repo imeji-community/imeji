@@ -35,7 +35,8 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
@@ -336,9 +337,7 @@ public class SingleUploadBean implements Serializable {
   private List<CollectionImeji> retrieveAllUserCollections() throws ImejiException {
     CollectionController cc = new CollectionController();
     SearchQuery sq = new SearchQuery();
-    SortCriterion sortCriterion = new SortCriterion();
-    sortCriterion.setIndex(JenaSearch.getIndex("cont_title"));
-    sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
+    SortCriterion sortCriterion = new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.DESCENDING);
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
     return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
   }

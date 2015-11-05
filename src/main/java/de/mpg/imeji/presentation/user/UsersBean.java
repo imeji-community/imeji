@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.notification.NotificationUtils;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -68,12 +67,8 @@ public class UsersBean implements Serializable {
   public void search() {
     Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     try {
-      FacesContext
-          .getCurrentInstance()
-          .getExternalContext()
-          .redirect(
-              nav.getApplicationUrl() + "users?q=" + query
-                  + (group != null ? "&group=" + group.getId() : ""));
+      FacesContext.getCurrentInstance().getExternalContext().redirect(nav.getApplicationUrl()
+          + "users?q=" + query + (group != null ? "&group=" + group.getId() : ""));
     } catch (IOException e) {
       BeanHelper.error(e.getMessage());
       logger.error(e);
@@ -115,9 +110,8 @@ public class UsersBean implements Serializable {
    * @throws Exception
    */
   public String sendPassword() {
-    String email =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-            .get("email");
+    String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get("email");
     PasswordGenerator generator = new PasswordGenerator();
     UserBean userBean = new UserBean(email);
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
@@ -125,7 +119,7 @@ public class UsersBean implements Serializable {
       String newPassword = generator.generatePassword();
       userBean.getUser().setEncryptedPassword(StringHelper.convertToMD5(newPassword));
       userBean.updateUser();
-      sendEmail(email, newPassword, userBean.getUser().getName());
+      sendEmail(email, newPassword, userBean.getUser().getPerson().getCompleteName());
     } catch (Exception e) {
       BeanHelper.error("Could not update or send new password!");
       logger.error("Could not update or send new password", e);
@@ -140,8 +134,8 @@ public class UsersBean implements Serializable {
    * @param email
    * @param password
    * @param username
-   * @throws URISyntaxException 
-   * @throws IOException 
+   * @throws URISyntaxException
+   * @throws IOException
    */
   public void sendEmail(String email, String password, String username) {
     EmailClient emailClient = new EmailClient();
@@ -161,9 +155,8 @@ public class UsersBean implements Serializable {
    * @return
    */
   public String deleteUser() {
-    String email =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-            .get("email");
+    String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get("email");
     UserController controller = new UserController(sessionUser);
     try {
       controller.delete(ObjectLoader.loadUser(email, sessionUser));
@@ -181,37 +174,39 @@ public class UsersBean implements Serializable {
    * @return
    */
   public String activateUser() {
-    String email =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-            .get("email");
+    String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get("email");
     UserController controller = new UserController(sessionUser);
-    User toActivateUser = null; 
+    User toActivateUser = null;
     String newPassword = "";
     try {
-      //Activate first
+      // Activate first
       toActivateUser = controller.retrieve(email, sessionUser);
-      toActivateUser=controller.activate(toActivateUser.getRegistrationToken());
+      toActivateUser = controller.activate(toActivateUser.getRegistrationToken());
       PasswordGenerator generator = new PasswordGenerator();
       newPassword = generator.generatePassword();
       toActivateUser.setEncryptedPassword(StringHelper.convertToMD5(newPassword));
       controller.update(toActivateUser, sessionUser);
     } catch (Exception e) {
-        BeanHelper.error("Error during activation of the user ");
-        logger.error("Error during activation of the user", e);
+      BeanHelper.error("Error during activation of the user ");
+      logger.error("Error during activation of the user", e);
     }
 
+    BeanHelper.cleanMessages();
+    BeanHelper.info("Sending activation email and new password.");
+    NotificationUtils.sendActivationNotification(toActivateUser,
+        (SessionBean) BeanHelper.getSessionBean(SessionBean.class));
+    sendEmail(email, newPassword, toActivateUser.getPerson().getCompleteName());
+    if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
       BeanHelper.cleanMessages();
-      BeanHelper.info("Sending activation email and new password.");
-      NotificationUtils.sendActivationNotification(toActivateUser, (SessionBean) BeanHelper.getSessionBean(SessionBean.class));
-      sendEmail(email, newPassword, toActivateUser.getName());
-      if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
-        BeanHelper.cleanMessages();
-       BeanHelper.info("User account has been activated, but email notification about activation and/or new password could not be performed! Check the eMail Server settings!");
-      }
-    
+      BeanHelper.info(
+          "User account has been activated, but email notification about activation and/or new password could not be performed! Check the eMail Server settings!");
+    }
+
     doSearch();
     return "";
   }
+
   /**
    * Add a {@link User} to a {@link UserGroup} and then redirect to the {@link UserGroup} page
    * 
@@ -219,9 +214,8 @@ public class UsersBean implements Serializable {
    */
   public String addToGroup() {
     Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    String email =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-            .get("email");
+    String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get("email");
     try {
       UserController uc = new UserController(sessionUser);
       User user = uc.retrieve(email);

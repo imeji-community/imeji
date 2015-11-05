@@ -4,6 +4,8 @@
 package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
@@ -59,12 +62,9 @@ public class UserBean {
   private void init(String id) {
     try {
       this.id = id;
-
       newPassword = null;
       repeatedPassword = null;
-
       retrieveUser();
-
       if (user != null) {
         this.roles = AuthUtil.getAllRoles(user, session.getUser());
         this.setEdit(false);
@@ -108,6 +108,21 @@ public class UserBean {
 
   public void toggleEdit() {
     this.edit = edit ? false : true;
+  }
+
+  /**
+   * Generate a new API Key, and update the user
+   * 
+   * @throws ImejiException
+   * @throws NoSuchAlgorithmException
+   * @throws UnsupportedEncodingException
+   */
+  public void generateNewApiKey()
+      throws ImejiException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    user.setApiKey(IdentifierUtil.newUniversalUniqueId());
+    if (user != null) {
+      new UserController(session.getUser()).update(user, session.getUser());
+    }
   }
 
   /**
@@ -188,9 +203,9 @@ public class UserBean {
           BeanHelper.error(session.getMessage(errorM));
         }
       }
-    }  
+    }
   }
-  
+
   /**
    * Reload the page with the current user
    * 

@@ -43,12 +43,14 @@ public class HttpAuthentication implements Authentication {
    * The content of the http header
    */
   private String usernamePassword = null;
+  private String apiKey = null;
 
   /**
    * Constructor
    */
   public HttpAuthentication(HttpServletRequest request) {
     usernamePassword = getUsernamePassword(request);
+    apiKey = getApiKey(request);
   }
 
   /*
@@ -58,7 +60,10 @@ public class HttpAuthentication implements Authentication {
    */
   @Override
   public User doLogin() {
-    if (usernamePassword != null) {
+    if (apiKey != null) {
+      APIKeyAuthentication keyAuthentication = new APIKeyAuthentication(apiKey);
+      return keyAuthentication.doLogin();
+    } else if (usernamePassword != null) {
       int p = usernamePassword.indexOf(":");
       if (p != -1) {
         SimpleAuthentication simpleAuthentification =
@@ -78,10 +83,22 @@ public class HttpAuthentication implements Authentication {
    */
   private String getUsernamePassword(HttpServletRequest request) {
     String authHeader = request.getHeader("Authorization");
-    if (authHeader != null) {
-      String userPass =
-          new String(Base64.decodeBase64(authHeader.replace("Basic ", "").trim().getBytes()));
-      return userPass;
+    if (authHeader != null && authHeader.contains("Basic")) {
+      return new String(Base64.decodeBase64(authHeader.replace("Basic ", "").trim().getBytes()));
+    }
+    return null;
+  }
+
+  /**
+   * Return the api Key
+   * 
+   * @param request
+   * @return
+   */
+  private String getApiKey(HttpServletRequest request) {
+    String authHeader = request.getHeader("Authorization");
+    if (authHeader != null && authHeader.contains("apiKey=")) {
+      return new String(Base64.decodeBase64(authHeader.replace("apiKey=", "").trim().getBytes()));
     }
     return null;
   }

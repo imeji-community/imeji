@@ -66,7 +66,8 @@ public class HistoryPage {
         return ObjectLoader.loadUserGroupLazy(URI.create(groupUri), user).getName();
       } else if (ImejiPages.USER == imejiPage) {
         String email = UrlHelper.decode(ObjectHelper.getId(uri));
-        return ObjectLoader.loadUser(email, user).getName();
+        return email.equals(user.getEmail()) ? user.getPerson().getCompleteName()
+            : ObjectLoader.loadUser(email, user).getPerson().getCompleteName();
       }
     }
     return "";
@@ -95,9 +96,8 @@ public class HistoryPage {
 
   public String getInternationalizedName() {
     try {
-      String inter =
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel(imejiPage
-              .getLabel());
+      String inter = ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+          .getLabel(imejiPage.getLabel());
       return title != null ? inter + " " + title : inter;
     } catch (Exception e) {
       return imejiPage.getLabel();

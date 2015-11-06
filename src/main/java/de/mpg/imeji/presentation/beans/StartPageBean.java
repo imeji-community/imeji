@@ -57,9 +57,9 @@ public class StartPageBean implements Serializable {
    * @throws ImejiException
    */
   public StartPageBean() throws IOException, URISyntaxException, ImejiException {
-    SearchQuery query = readSearchQueryInProperty();
-    SortCriterion order = readSortCriterionInProperty();
-    SearchResult result = searchItems(query, order);
+     SearchQuery query = readSearchQueryInProperty();
+     SortCriterion order = readSortCriterionInProperty();
+     SearchResult result = searchItems(query, order);
     loadItemInCaroussel(result, order == null);// if order is null, then it
     // is random
   }

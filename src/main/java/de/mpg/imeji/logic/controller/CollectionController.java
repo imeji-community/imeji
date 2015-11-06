@@ -501,6 +501,18 @@ public class CollectionController extends ImejiController {
     return ImejiSPARQL.exec(JenaCustomQueries.selectCollectionImejiOfSpace(spaceId.toString()),
         Imeji.collectionModel);
   }
+  
+  // TODO Remove and replace with method checking the cache, related to ElasticIndexer.java (see comment there as well) 
+  public String retrieveSpaceOfCollection(URI collectionId) {
+    List<String> collectionSpace = ImejiSPARQL.exec(JenaCustomQueries.selectSpaceOfCollection(collectionId), null);
+    if ( collectionSpace.isEmpty() ){ 
+      return null;
+    }
+    else
+    {
+      return collectionSpace.get(0);
+    }
+  }
 
   /**
    * Patch a collection. !!! Use with Care !!! TODO make private

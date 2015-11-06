@@ -15,6 +15,7 @@ public class ElasticFolder extends ElasticContainerProperties {
   public ElasticFolder(CollectionImeji c) {
     super(c);
     this.setProfile(c.getProfile().toString());
+    this.setSpace(String.valueOf(c.getSpace()));
   }
 
   /**

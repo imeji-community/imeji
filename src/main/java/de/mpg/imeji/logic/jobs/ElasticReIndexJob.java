@@ -10,6 +10,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticIndexer;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticIndex;
@@ -17,6 +18,7 @@ import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Space;
 
 /**
  * REindex data from the database into elastic search
@@ -35,6 +37,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
     reindexAlbums();
     reindexItems();
     reindexFolders();
+    reindexSpaces();
     // IMPORTANT: Albums must be reindex after Items
     logger.info("Reindex done!");
     return null;
@@ -90,4 +93,24 @@ public class ElasticReIndexJob implements Callable<Integer> {
     logger.info("Items reindexed!");
 
   }
+  
+  /**
+   * Reindex all {@link Item} stored in the database
+   * 
+   * @throws ImejiException
+   * 
+   */
+  private void reindexSpaces() throws ImejiException {
+    logger.info("Indexing Spaces...");
+    ElasticIndexer indexer = new ElasticIndexer(ElasticIndex.data, ElasticTypes.spaces);
+    indexer.addMapping();
+    SpaceController controller = new SpaceController();
+    List<Space> items = (List<Space>) controller.retrieveAll();
+    logger.info("+++ " + items.size() + " items to index +++");
+    indexer.indexBatch(items);
+    indexer.commit();
+    logger.info("Items reindexed!");
+
+  }
+ 
 }

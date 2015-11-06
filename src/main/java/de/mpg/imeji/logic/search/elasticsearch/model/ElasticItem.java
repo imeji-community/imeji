@@ -19,6 +19,7 @@ public class ElasticItem extends ElasticProperties {
   private String folder;
   private String filename;
   private String filetype;
+  private String space;
   private String checksum;
   private long width;
   private long height;
@@ -40,6 +41,8 @@ public class ElasticItem extends ElasticProperties {
     this.height = item.getHeight();
     this.width = item.getWidth();
     this.album = item.getAlbums();
+    //Space is set-up after ElasticItem call is initialized
+    this.space = "";
     for (Metadata md : item.getMetadataSet().getMetadata()) {
       metadata.add(new ElasticMetadata(md));
     }
@@ -173,4 +176,21 @@ public class ElasticItem extends ElasticProperties {
   public void setAlbum(List<String> album) {
     this.album = album;
   }
+
+
+  /**
+   * @return the space
+   */
+  public String getSpace() {
+    return space;
+  }
+
+
+  /**
+   * @param space the space to set
+   */
+  public void setSpace(String space) {
+    this.space = space;
+  }
+
 }

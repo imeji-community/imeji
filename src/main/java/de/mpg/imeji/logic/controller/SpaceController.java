@@ -73,7 +73,7 @@ public class SpaceController extends ImejiController {
   public SpaceController() {
     try {
 
-      File storageDir =
+        File storageDir =
           new File(PropertyReader.getProperty("imeji.storage.path") + SPACES_STORAGE_SUBDIRECTORY);
       storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
       storageUrl =
@@ -128,7 +128,6 @@ public class SpaceController extends ImejiController {
 
   public Space update(Space space, Collection<String> newSpaceCollections, File file, User user)
       throws ImejiException, IOException {
-    Space spaceUpdated = update(space, user);
 
     CollectionController cc = new CollectionController();
     List<String> alreadyAssignedCollections = cc.retrieveAllCollectionIdsInSpace(space.getId());
@@ -153,7 +152,10 @@ public class SpaceController extends ImejiController {
       updateFile(space, file, user);
 
     }
-
+    
+    //update space for reindexing at the end
+    space.setSpaceCollections(newSpaceCollections);
+    Space spaceUpdated = update(space, user);
     return spaceUpdated;
   }
 
@@ -475,7 +477,7 @@ public class SpaceController extends ImejiController {
    */
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset,
       User user, String spaceId) {
-    Search search = SearchFactory.create(SearchObjectTypes.SPACE, SEARCH_IMPLEMENTATIONS.JENA);
+    Search search = SearchFactory.create(SearchObjectTypes.SPACE, SEARCH_IMPLEMENTATIONS.ELASTIC);
     return search.search(searchQuery, sortCri, user, null, null, 0, -1);
   }
 

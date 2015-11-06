@@ -114,7 +114,7 @@ public class ElasticQueryFactory {
       return FilterBuilders.matchAllFilter();
     } else {
       // TODO: implements when folder are indexed as well
-      return fieldQuery(ElasticFields.SPACEID, spaceId, null, false);
+      return fieldQuery(ElasticFields.SPACE, spaceId, SearchOperators.EQUALS , false);
     }
   }
 

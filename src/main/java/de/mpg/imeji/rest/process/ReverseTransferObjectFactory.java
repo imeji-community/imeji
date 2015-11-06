@@ -144,10 +144,10 @@ public class ReverseTransferObjectFactory {
           // throw new RuntimeException(message);
           LOGGER.debug(message);
         }
-      } else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
+      } /*else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
         throw new BadRequestException("Statement { type: \"" + st.getType() + "\", id: \"" + stURI
             + "\" } for item id: \"" + vo.getId() + "\" occurs more then once");
-      } else
+      } */else
         for (MetadataSetTO md : mdsList)
           switch (st.getType().toString()) {
             case "http://imeji.org/terms/metadata#text":

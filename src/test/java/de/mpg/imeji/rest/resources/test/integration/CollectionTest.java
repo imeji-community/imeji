@@ -18,6 +18,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -131,7 +132,7 @@ public class CollectionTest extends ImejiTestBase {
 
   }
   
-  @Test
+  @Ignore
   public void test_1_CreateCollection_5_NotReleasedReferenceProfileByOtherUser() throws ImejiException,
       UnsupportedEncodingException, IOException {
     

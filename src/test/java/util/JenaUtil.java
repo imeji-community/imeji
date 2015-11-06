@@ -148,7 +148,6 @@ public class JenaUtil {
     orgCol.add(org);
     userPerson.setOrganizations(orgCol);
     user.setPerson(userPerson);
-    user.setName(name);
 
     user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
     user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId().toString()));

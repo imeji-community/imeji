@@ -59,8 +59,8 @@ public class CollectionController extends ImejiController {
   private static ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
   private static WriterFacade writer = new WriterFacade(Imeji.collectionModel);
   private static Logger logger = Logger.getLogger(CollectionController.class);
-  private Search search = SearchFactory.create(SearchObjectTypes.COLLECTION,
-      SEARCH_IMPLEMENTATIONS.ELASTIC);
+  private Search search =
+      SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC);
 
   public static enum MetadataProfileCreationMethod {
     COPY, REFERENCE, NEW;
@@ -101,16 +101,6 @@ public class CollectionController extends ImejiController {
       }
       p = pc.create(p.clone(), user);
     }
-
-    // Check in controller if Profile is released and is created by user
-    if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
-      if (!(p.getCreatedBy().equals(user.getId()) || Status.RELEASED.equals(p.getStatus()))) {
-        throw new UnprocessableError("You can not reference the metadata profile with Id="
-            + p.getIdString()
-            + "The profile you reference must be released or must be created by you!");
-      }
-    }
-
     c.setProfile(p.getId());
     writeCreateProperties(c, user);
     c.setProfile(p.getId());
@@ -170,9 +160,8 @@ public class CollectionController extends ImejiController {
     if (limit < 0) {
       retrieveUris = uris;
     } else {
-      retrieveUris =
-          uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
-              : new ArrayList<String>();
+      retrieveUris = uris.size() > 0 && limit > 0
+          ? uris.subList(offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
     }
     for (String s : retrieveUris) {
       cols.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
@@ -230,8 +219,8 @@ public class CollectionController extends ImejiController {
    * @param hasgrant
    * @throws ImejiException
    */
-  public void updateLogo(CollectionImeji ic, File f, User u) throws ImejiException, IOException,
-      URISyntaxException {
+  public void updateLogo(CollectionImeji ic, File f, User u)
+      throws ImejiException, IOException, URISyntaxException {
 
     ic = (CollectionImeji) updateFile(ic, f, u);
     if (f != null && f.exists()) {
@@ -319,9 +308,8 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(collection.getId(), null, null, user, null, -1, 0).getResults();
     if (hasImageLocked(itemUris, user)) {
-      throw new RuntimeException(
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getMessage("collection_locked"));
+      throw new RuntimeException(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+          .getMessage("collection_locked"));
     } else {
       if (collection.getStatus() != Status.PENDING && !user.isAdmin()) {
         throw new UnprocessableError("Collection is not pending and can not be deleted!");
@@ -336,12 +324,12 @@ public class CollectionController extends ImejiController {
       try {
 
         MetadataProfile collectionMdp = pc.retrieve(collection.getProfile(), user);
-        if ((pc.isReferencedByOtherResources(collectionMdp.getId().toString(), collection.getId()
-            .toString()))
+        if ((pc.isReferencedByOtherResources(collectionMdp.getId().toString(),
+            collection.getId().toString()))
             || (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString()))
             || collectionMdp.getDefault()) {
-          logger
-              .info("Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
+          logger.info(
+              "Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
                   + "Profile <" + collectionMdp.getId().toString() + "> will not be deleted!");
         } else {
           logger.info("Metadata profile <" + collectionMdp.getId().toString()
@@ -379,9 +367,8 @@ public class CollectionController extends ImejiController {
 
 
     if (hasImageLocked(itemUris, user)) {
-      throw new UnprocessableError(
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getMessage("collection_locked"));
+      throw new UnprocessableError(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+          .getMessage("collection_locked"));
     } else if (itemUris.isEmpty()) {
       throw new UnprocessableError("An empty collection can not be released!");
     } else if (collection.getStatus().equals(Status.RELEASED)) {
@@ -419,9 +406,8 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(coll.getId(), null, null, user, null, -1, 0).getResults();
     if (hasImageLocked(itemUris, user)) {
-      throw new UnprocessableError(
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getMessage("collection_locked"));
+      throw new UnprocessableError(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+          .getMessage("collection_locked"));
     } else if (!Status.RELEASED.equals(coll.getStatus())) {
       throw new UnprocessableError("Withdraw collection: Collection must be released");
     } else {

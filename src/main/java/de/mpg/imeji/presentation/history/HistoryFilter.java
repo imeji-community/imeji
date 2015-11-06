@@ -3,21 +3,6 @@
  */
 package de.mpg.imeji.presentation.history;
 
-import com.ocpsoft.pretty.PrettyContext;
-import com.ocpsoft.pretty.faces.config.PrettyConfig;
-import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
-import com.ocpsoft.pretty.faces.url.URL;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.controller.SpaceController;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -42,6 +27,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response.Status;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.ocpsoft.pretty.PrettyContext;
+import com.ocpsoft.pretty.faces.config.PrettyConfig;
+import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
+import com.ocpsoft.pretty.faces.url.URL;
+
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * {@link Filter} for the imeji history
@@ -76,8 +76,8 @@ public class HistoryFilter implements Filter {
     } catch (Exception e) {
       if (e instanceof NotFoundException || e instanceof NullPointerException) {
         if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
-          ((HttpServletResponse) resp).sendRedirect(getNavigation((HttpServletRequest) serv, resp)
-              .getApplicationUrl());
+          ((HttpServletResponse) resp)
+              .sendRedirect(getNavigation((HttpServletRequest) serv, resp).getApplicationUrl());
         } else {
           ((HttpServletResponse) resp).sendError(Status.NOT_FOUND.getStatusCode(),
               "RESOURCE_NOT_FOUND");
@@ -116,9 +116,9 @@ public class HistoryFilter implements Filter {
         nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
     Map<String, String[]> params =
         PrettyContext.getCurrentInstance(request).getRequestQueryString().getParameterMap();
-    ((HttpServletResponse) resp).sendRedirect(serv.getServletContext().getContextPath()
-        + "/login?redirect="
-        + URLEncoder.encode(url + HistoryUtil.paramsMapToString(params), "UTF-8"));
+    ((HttpServletResponse) resp)
+        .sendRedirect(serv.getServletContext().getContextPath() + "/login?redirect="
+            + URLEncoder.encode(url + HistoryUtil.paramsMapToString(params), "UTF-8"));
 
   }
 
@@ -135,14 +135,12 @@ public class HistoryFilter implements Filter {
     SessionBean session = getSessionBean(request, resp);
     if (session != null) {
       checkSpaceMatching(request, session, hs);
-      // System.out.println("In dofilterImpl= "+session.getSpaceId());
       String h = request.getParameter("h");
-      String url =
-          nav.getApplicationUri()
-              + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+      String url = nav.getApplicationUri()
+          + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
       Map<String, String[]> params =
           PrettyContext.getCurrentInstance(request).getRequestQueryString().getParameterMap();
-      if(params.containsKey("h")){
+      if (params.containsKey("h")) {
         params.remove("h");
       }
       HistoryPage p = new HistoryPage(url, params, session.getUser());
@@ -246,8 +244,8 @@ public class HistoryFilter implements Filter {
     }
   }
 
-  private void checkSpaceMatching(HttpServletRequest request, SessionBean session, HistorySession hs)
-      throws NotFoundException, ImejiException {
+  private void checkSpaceMatching(HttpServletRequest request, SessionBean session,
+      HistorySession hs) throws NotFoundException, ImejiException {
     // TODO CHANGE ME
     String spaceHome = "space_home";
 
@@ -260,17 +258,17 @@ public class HistoryFilter implements Filter {
       // System.out.println("URL IS MAPPED "+matchingUrl);
       UrlMapping myMap =
           pc.getMappingForUrl(PrettyContext.getCurrentInstance(request).getRequestURL());
-      // System.out.println("URL IS MAPPED with pattern "+myMap.getPattern()+" and id "+myMap.getId());
+      // System.out.println("URL IS MAPPED with pattern "+myMap.getPattern()+" and id
+      // "+myMap.getId());
 
       if (myMap.getId().startsWith("space_")) {
         String mySpaceId = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
         // System.out.println("PreCalculated mySpaceId= "+mySpaceId+" 2");
         // System.out.println(StringUtils.substringAfter(matchingUrl,
         // "/space/"));
-        mySpaceId =
-            spaceHome.equals(myMap.getId()) ? StringUtils.substringAfter(matchingUrl, "/space/")
-                : StringUtils.substringBefore(StringUtils.substringAfter(matchingUrl, "/space/"),
-                    "/");
+        mySpaceId = spaceHome.equals(myMap.getId())
+            ? StringUtils.substringAfter(matchingUrl, "/space/")
+            : StringUtils.substringBefore(StringUtils.substringAfter(matchingUrl, "/space/"), "/");
         // System.out.println("Calculated mySpaceId= "+mySpaceId+
         // " sessopmSüace= "+session.getSpaceId());
         if (!mySpaceId.equals(session.getSpaceId())) {

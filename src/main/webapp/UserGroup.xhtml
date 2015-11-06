@@ -107,7 +107,7 @@
 													<h:form>
 														<ui:repeat  var="user" value="#{UserGroup.users}" rows="0">
 															<div class="imj_userGrantList">
-																<h:outputText value="#{user.name} (#{user.email})" />
+																<h:outputText value="#{user.person.completeName} (#{user.email})" />
 																<h:commandButton value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
 															</div>
 															<br/>

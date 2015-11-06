@@ -39,10 +39,10 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class User implements Serializable {
   private static final long serialVersionUID = -8961821901552709120L;
-  @j2jLiteral("http://xmlns.com/foaf/0.1/name")
-  private String name;
-  @j2jLiteral("http://xmlns.com/foaf/0.1/nickname")
-  private String nick;
+  // @j2jLiteral("http://xmlns.com/foaf/0.1/name")
+  // private String name;
+  // @j2jLiteral("http://xmlns.com/foaf/0.1/nickname")
+  // private String nick;
   @j2jLiteral("http://xmlns.com/foaf/0.1/email")
   private String email;
   @j2jLiteral("http://xmlns.com/foaf/0.1/password")
@@ -53,6 +53,9 @@ public class User implements Serializable {
   private Collection<Grant> grants = new ArrayList<Grant>();
   @j2jLiteral("http://imeji.org/terms/quota")
   private long quota;
+  @j2jLiteral("http://imeji.org/terms/apiKey")
+  private String apiKey;
+
 
   private URI id = IdentifierUtil.newURI(User.class);
   private List<UserGroup> groups = new ArrayList<>();
@@ -106,8 +109,8 @@ public class User implements Serializable {
           clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
       }
     }
-    clone.name = name;
-    clone.nick = nick;
+    // clone.name = name;
+    // clone.nick = nick;
     // Updates group references
     for (UserGroup group : groups) {
       UserGroupController c = new UserGroupController();
@@ -131,22 +134,22 @@ public class User implements Serializable {
     this.email = email;
     // this.id = ObjectHelper.getURI(User.class, this.email);
   }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getNick() {
-    return nick;
-  }
-
-  public void setNick(String nick) {
-    this.nick = nick;
-  }
+  //
+  // public String getName() {
+  // return name;
+  // }
+  //
+  // public void setName(String name) {
+  // this.name = name;
+  // }
+  //
+  // public String getNick() {
+  // return nick;
+  // }
+  //
+  // public void setNick(String nick) {
+  // this.nick = nick;
+  // }
 
   public void setEncryptedPassword(String encryptedPassword) {
     this.encryptedPassword = encryptedPassword;
@@ -335,5 +338,14 @@ public class User implements Serializable {
   public void setModified(Calendar modified) {
     this.modified = modified;
   }
+
+  public String getApiKey() {
+    return apiKey;
+  }
+
+  public void setApiKey(String apiKey) {
+    this.apiKey = apiKey;
+  }
+
 
 }

@@ -4,6 +4,8 @@
 package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,10 +13,12 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.authentication.APIKeyAuthentication;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
@@ -59,12 +63,9 @@ public class UserBean {
   private void init(String id) {
     try {
       this.id = id;
-
       newPassword = null;
       repeatedPassword = null;
-
       retrieveUser();
-
       if (user != null) {
         this.roles = AuthUtil.getAllRoles(user, session.getUser());
         this.setEdit(false);
@@ -108,6 +109,23 @@ public class UserBean {
 
   public void toggleEdit() {
     this.edit = edit ? false : true;
+  }
+
+  /**
+   * Generate a new API Key, and update the user
+   * 
+   * @throws ImejiException
+   * @throws NoSuchAlgorithmException
+   * @throws UnsupportedEncodingException
+   * @throws JoseException
+   */
+  public void generateNewApiKey()
+      throws ImejiException, NoSuchAlgorithmException, UnsupportedEncodingException, JoseException {
+    user.setApiKey(APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE));
+    // user.setApiKey(IdentifierUtil.newUniversalUniqueId());
+    if (user != null) {
+      new UserController(session.getUser()).update(user, session.getUser());
+    }
   }
 
   /**
@@ -188,9 +206,9 @@ public class UserBean {
           BeanHelper.error(session.getMessage(errorM));
         }
       }
-    }  
+    }
   }
-  
+
   /**
    * Reload the page with the current user
    * 

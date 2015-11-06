@@ -91,6 +91,9 @@ public abstract class MetadataEditor {
       return true;
 
     } catch (Exception e) {
+      for(EditorItemBean eib: this.items){
+        eib.getMds().setTree(eib.getMds().getUncutTree());
+      }
       BeanHelper.cleanMessages();
       BeanHelper.error(sb.getMessage("error_metadata_edit"));
       List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));

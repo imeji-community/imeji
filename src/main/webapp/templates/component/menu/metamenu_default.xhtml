@@ -44,7 +44,7 @@ All rights reserved. Use is subject to license terms.
 			<!-- Username if logged in -->
 			<ui:fragment rendered="#{Auth.loggedIn}">
 				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationSpaceUrl}user?id=#{Auth.sessionUser.email}">
-					<h:outputText value="#{Auth.sessionUser.name}"/>
+					<h:outputText value="#{Auth.sessionUser.person.completeName}"/>
 				</h:outputLink>
 				
 				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>

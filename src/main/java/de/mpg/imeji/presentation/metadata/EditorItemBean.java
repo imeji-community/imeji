@@ -57,6 +57,9 @@ public class EditorItemBean {
    */
   public void removeMetadata(SuperMetadataBean smb) {
     mds.getTree().remove(smb);
+    if(smb.getParent() != null){
+      smb.getParent().getChilds().remove(smb);
+    }  
     mds.addEmtpyValues();
   }
 

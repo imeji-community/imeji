@@ -317,34 +317,24 @@ public class SuperMetadataTree implements Serializable {
    * @param md
    * @param list
    * @return
-   */
+   */  
   private SuperMetadataBean findBestParent(SuperMetadataBean child, List<SuperMetadataBean> list) {
     // If the statement has no parent, the metadata doens't as well
     if (child.getStatement().getParent() == null)
       return null;
     // The possible parents
     List<SuperMetadataBean> candidates = new ArrayList<SuperMetadataBean>();
-    // the position in the list of metadata with the same statement
-    int position = 0;
-    // When the current statement (i.e the child for which we are searching
-    // the parent) is found in the list, set to
-    // true
-    boolean found = false;
     // Find all candidates
     for (SuperMetadataBean md : list) {
-      if (child.getMetadata().getId().compareTo(md.getMetadata().getId()) == 0)
-        found = true;
       if (child.getStatement().getParent().compareTo(md.getStatement().getId()) == 0)
         candidates.add(md);
-      if (child.getStatement().getId().compareTo(md.getStatement().getId()) == 0 && !found)
-        position++;
     }
     // Return the best candidate
-    if (position < candidates.size())
-      return candidates.get(position);
-    else if (!candidates.isEmpty())
-      return candidates.get(candidates.size() - 1);
-    // nothing found...
+    for(int i = candidates.size()-1; i>=0; i--){
+      if(candidates.get(i).getPos() < child.getPos()){
+        return candidates.get(i);
+      }
+    }
     return null;
   }
 }

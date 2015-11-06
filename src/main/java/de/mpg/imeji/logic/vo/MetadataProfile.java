@@ -105,5 +105,14 @@ public class MetadataProfile extends Properties implements Cloneable {
 
     return clone;
   }
+  
+  public Statement getStatement(String statementId){
+    for(Statement st : statements){
+      if(statementId.equals(st.getId().toString())){
+        return st;
+      }
+    }
+    return null;
+  }
 
 }

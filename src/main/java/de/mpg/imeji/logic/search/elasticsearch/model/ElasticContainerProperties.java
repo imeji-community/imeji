@@ -1,5 +1,6 @@
 package de.mpg.imeji.logic.search.elasticsearch.model;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ElasticContainerProperties extends ElasticProperties {
 
   private String name;
   private String description;
+  private String space;
   private List<ElasticPerson> author = new ArrayList<>();
 
   /**
@@ -70,4 +72,17 @@ public class ElasticContainerProperties extends ElasticProperties {
     this.author = author;
   }
 
+  /**
+   * @return the space
+   */
+  public String getSpace() {
+    return space;
+  }
+
+  /**
+   * @param space the space to set
+   */
+  public void setSpace(String space) {
+    this.space = space;
+  }
 }

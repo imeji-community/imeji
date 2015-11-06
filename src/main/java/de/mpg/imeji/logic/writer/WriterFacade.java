@@ -80,7 +80,13 @@ public class WriterFacade {
           SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
               .getIndexer();
 
-    } else {
+    }
+    else if (modelURI.equals(Imeji.spaceModel)) {
+      indexer =
+          SearchFactory.create(SearchObjectTypes.SPACE, SEARCH_IMPLEMENTATIONS.ELASTIC)
+              .getIndexer();
+    }
+    else {
       indexer = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA).getIndexer();
     }
   }

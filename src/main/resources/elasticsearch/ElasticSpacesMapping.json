@@ -1,5 +1,5 @@
 {
-  "folders":{
+  "spaces":{
     "properties":{
       "created":{
         "type":"long"
@@ -29,11 +29,14 @@
       "description":{
         "type":"string"
       },
-      "space":{
+      "title":{
+        "type":"string"
+      },
+      "collectionsinspace":{
         "type":"string",
         "index":"not_analyzed"
       },
-      "profile":{
+      "slug":{
         "type":"string",
         "index":"not_analyzed"
       },

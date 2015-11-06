@@ -48,6 +48,9 @@ public class ElasticSearch implements Search {
       case ALBUM:
         this.type = ElasticTypes.albums;
         break;
+      case SPACE:
+        this.type = ElasticTypes.spaces;
+        break;
       default:
         this.type = null;
         break;

@@ -40,7 +40,7 @@ public class ElasticService {
    * 
    */
   public enum ElasticTypes {
-    items, folders, albums;
+    items, folders, albums, spaces;
   }
 
   public static void start() throws IOException, URISyntaxException {
@@ -50,6 +50,7 @@ public class ElasticService {
     new ElasticIndexer(ElasticIndex.data, ElasticTypes.items).addMapping();
     new ElasticIndexer(ElasticIndex.data, ElasticTypes.folders).addMapping();
     new ElasticIndexer(ElasticIndex.data, ElasticTypes.albums).addMapping();
+    new ElasticIndexer(ElasticIndex.data, ElasticTypes.spaces).addMapping();
   }
 
   /**

@@ -1,27 +1,38 @@
 package de.mpg.imeji.logic.search.elasticsearch;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
+import org.elasticsearch.action.get.GetResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchIndexer;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticIndex;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticAlbum;
+import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFolder;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticItem;
+import de.mpg.imeji.logic.search.elasticsearch.model.ElasticSpace;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
@@ -30,6 +41,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties;
+import de.mpg.imeji.logic.vo.Space;
 
 /**
  * Indexer for ElasticSearch
@@ -54,21 +66,63 @@ public class ElasticIndexer implements SearchIndexer {
 
   @Override
   public void index(Object obj) {
+    List<String> collectionsToReindex = new ArrayList<String>();
     try {
-      indexJSON(getId(obj), toJson(obj));
-      commit();
-    } catch (UnprocessableError e) {
+      
+       if (dataType.equals(ElasticTypes.folders.name())) {
+          //reindex items and collections in Space (check first if this has been changed)
+         if ( isSpaceCollectionChanged((CollectionImeji)obj, dataType, index)){
+           collectionsToReindex.add(getId(obj));
+         }
+       
+       }
+
+       indexJSON(getId(obj), toJson(obj, dataType, index));
+      
+       commit();
+       
+       //Note: there is no need to explicitly index collections, as these actually are updated whenever they are assigned to a space, 
+       // thus the indexing is automatically triggered.
+       if (collectionsToReindex.size() >0 ) {
+           logger.info("There has been a collections space change, items in "+collectionsToReindex.size()+" collections will be reindexed! ");
+           for (String collectionR:collectionsToReindex) {
+               reindexItemsInContainer(collectionR);
+           }
+       }
+       
+    } catch (Exception e) {
       logger.error("Error indexing object ", e);
     }
   }
 
   @Override
   public void indexBatch(List<?> l) {
+    List<String> collectionsToReindex = new ArrayList<String>();
     try {
       for (Object obj : l) {
-        indexJSON(getId(obj), toJson(obj));
+        
+        if (dataType.equals(ElasticTypes.folders.name())) {
+            //reindex items and collections in Space (check first if this has been changed)
+            if ( isSpaceCollectionChanged((CollectionImeji)obj, dataType, index)){
+                  collectionsToReindex.add(getId(obj));
+            }
+        }
+        
+        indexJSON(getId(obj), toJson(obj, dataType, index));
+
       }
       commit();
+      
+      //Note: there is no need to explicitly index collections, as these actually are updated whenever they are assigned to a space, 
+      // thus the indexing is automatically triggered with collection update.
+      //here we get list of all collections with changed space to reindex in items
+      if (collectionsToReindex.size() >0 ) {
+          logger.info("There has been a collections space change, items in "+collectionsToReindex.size()+" collections will be reindexed! ");
+          for (String collectionR:collectionsToReindex) {
+              reindexItemsInContainer(collectionR);
+          }
+      }
+     
     } catch (Exception e) {
       logger.error("error indexing object ", e);
       e.printStackTrace();
@@ -97,9 +151,9 @@ public class ElasticIndexer implements SearchIndexer {
    * @return
    * @throws UnprocessableError
    */
-  public static String toJson(Object obj) throws UnprocessableError {
+  public static String toJson(Object obj, String dataType, String index) throws UnprocessableError {
     try {
-      return mapper.writeValueAsString(toESEntity(obj));
+      return mapper.writeValueAsString(toESEntity(obj, dataType, index));
     } catch (JsonProcessingException e) {
       e.printStackTrace();
       throw new UnprocessableError("Error serializing object to json", e);
@@ -115,6 +169,7 @@ public class ElasticIndexer implements SearchIndexer {
   public void indexJSON(String id, String json) {
     ElasticService.client.prepareIndex(index, dataType).setId(id).setSource(json).execute()
         .actionGet();
+    
   }
 
   /**
@@ -143,15 +198,21 @@ public class ElasticIndexer implements SearchIndexer {
    * @param obj
    * @return
    */
-  private static Object toESEntity(Object obj) {
+  private static Object toESEntity(Object obj, String dataType, String index) {
     if (obj instanceof Item) {
       obj = setAlbums((Item) obj);
-      return new ElasticItem((Item) obj);
+      ElasticItem es = new ElasticItem((Item) obj);
+      es.setSpace(getSpace((Item)obj));
+      return es;
     } else if (obj instanceof CollectionImeji) {
-      return new ElasticFolder((CollectionImeji) obj);
+      ElasticFolder ef = new ElasticFolder((CollectionImeji) obj);
+      return ef;
     } else if (obj instanceof Album) {
       return new ElasticAlbum((Album) obj);
+    } else if (obj instanceof Space) {
+      return new ElasticSpace((Space) obj);
     }
+    
     return obj;
   }
 
@@ -204,5 +265,65 @@ public class ElasticIndexer implements SearchIndexer {
       e.printStackTrace();
     }
   }
+  
+  
+  /**
+   * Retrieve the space of the Item
+   * 
+   * @param item
+   * @return
+   */
+  //TODO: this method at the moment goes to the controller and there it fetches the space from Jena. This 
+  //check should accordingly be replaced with a cached Map object, containing URIs of all existing collections and spaces - or other
+  //type of optimization
+  private static String getSpace(Item item) {
+    CollectionController c = new CollectionController();
+      return c.retrieveSpaceOfCollection(item.getCollection());
+  }
+  
+  private  static boolean isSpaceCollectionChanged (CollectionImeji ef, String dataType, String index)
+  {
+    
+      GetResponse gr = ElasticService.client.prepareGet(index, dataType, ef.getId().toString()).setFetchSource(true).execute().actionGet();
+      Map<String, Object> fieldMap = gr.getSourceAsMap();
 
+      String oldSpaceInCollection =  fieldMap != null ? 
+            (String)fieldMap.get(ElasticFields.SPACE.name().toLowerCase()): "";
+        
+      String newSpaceInCollection = ef.getSpace() != null? ef.getSpace().toString()   :"";
+      
+      if (!oldSpaceInCollection.equals(newSpaceInCollection)) {
+                logger.info("Collection space for "+ef.getId().toString()+" has been changed! Items will be reindexed! ");
+                return true;
+        }
+
+      return false;
+  }
+  
+  
+  /**
+   * Reindex all {@link Item} stored in the database
+   * 
+   * @throws ImejiException
+   * @throws URISyntaxException 
+   * @throws IOException 
+   * 
+   */
+  //TODO - this probably should be done solely via Elastic Index, without any need to retrieve Items again  
+  
+  private void reindexItemsInContainer(String containerUri) throws ImejiException, IOException, URISyntaxException {
+    logger.info("Indexing Items in container  ..."+containerUri);
+    
+    ElasticIndexer indexer = new ElasticIndexer(ElasticIndex.data, ElasticTypes.items);
+    indexer.addMapping();
+    
+    ItemController controller = new ItemController();
+    List<Item> items = controller.searchAndRetrieve(new URI(containerUri), (SearchQuery)null, null, Imeji.adminUser, null, -1, -1);
+    logger.info("+++ " + items.size() + " items in Collection to reindex +++");
+    indexer.indexBatch(items);
+    indexer.commit();
+
+    logger.info("Items in container "+containerUri+" are reindexed!");
+  }
+  
 }

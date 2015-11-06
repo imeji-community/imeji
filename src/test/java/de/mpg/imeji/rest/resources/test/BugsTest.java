@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
@@ -42,8 +43,9 @@ public class BugsTest {
     when(mockedSession.getMessage("items_count")).thenReturn("items count");
 
     User mockedToUser = mock(User.class);
-    when(mockedToUser.getPerson().getCompleteName()).thenReturn("User Name");
-
+    Person mockedPerson = mock(Person.class);
+    when(mockedToUser.getPerson()).thenReturn(mockedPerson);
+    when(mockedPerson.getCompleteName()).thenReturn("User Name");
     EmailMessages em = new EmailMessages();
     assertThat(
         em.getEmailOnZipDownload_Body(mockedToUser, null, UrlHelper.encodeQuery(url), url,

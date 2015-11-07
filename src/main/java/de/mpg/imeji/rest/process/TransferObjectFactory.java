@@ -9,6 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -309,14 +310,19 @@ public class TransferObjectFactory {
       return;
     }
 
+    //get all statements of the Profile!
+    int mdPosition = 0;
     for (Metadata md : voMds) {
       md.getId();
       MetadataSetTO mdTO = new MetadataSetTO();
       // mdTO.setPosition(md.getPos());
       mdTO.setStatementUri(md.getStatement());
       mdTO.setTypeUri(URI.create(md.getTypeNamespace()));
+      //NB
+      mdTO.setPosition(mdPosition);
 
       if (profile.getStatements().size() > 0) {
+        
         List<LabelTO> ltos = new ArrayList<LabelTO>();
         for (Statement s : profile.getStatements()) {
           if (s.getId().toString().equals(md.getStatement().toString())) {
@@ -324,17 +330,18 @@ public class TransferObjectFactory {
               LabelTO lto = new LabelTO(ls.getLang(), ls.getValue());
               ltos.add(lto);
             }
+            
+            if (s.getParent() != null ){
+              mdTO.setParentStatementUri(s.getParent().toString());
+            }
+            
+            break;
           }
         }
+
         mdTO.setLabels(ltos);
       }
 
-      // if(md.getClass().isInstance(Text.class))
-      // {
-      // Text mdText = (Text) md;
-      //
-      //
-      // }
       switch (md.getClass().getName()) {
         case "de.mpg.imeji.logic.vo.predefinedMetadata.Text":
           Text mdText = (Text) md;

@@ -41,6 +41,7 @@ public class MetadataSetTO implements Serializable {
     }
     this.statementUri = ObjectHelper.getURI(Statement.class, statement.getId());
     this.typeUri = statement.getType();
+    this.parentStatementUri = statement.getParentStatementId();
   }
 
   @JsonIgnore
@@ -53,6 +54,8 @@ public class MetadataSetTO implements Serializable {
   private URI statementUri;
 
   private URI typeUri;
+  
+  private String parentStatementUri;
 
   public int getPosition() {
     return position;
@@ -95,5 +98,12 @@ public class MetadataSetTO implements Serializable {
     this.typeUri = typeUri;
   }
 
+  public String getParentStatementUri() {
+    return parentStatementUri;
+  }
+
+  public void setParentStatementUri(String statementUri) {
+    this.parentStatementUri = statementUri;
+  }
 
 }

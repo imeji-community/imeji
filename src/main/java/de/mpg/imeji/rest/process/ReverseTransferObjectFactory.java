@@ -121,8 +121,9 @@ public class ReverseTransferObjectFactory {
 
   public static void transferItemMetadata(ItemTO to, Item vo, User u, TRANSFER_MODE mode)
       throws ImejiException {
-
-    Collection<Metadata> voMDs = vo.getMetadataSet().getMetadata();
+    
+    
+    List <Metadata> voMDs = (List<Metadata>) vo.getMetadataSet().getMetadata();
     // Collection<Metadata> copyOfvoMDs = ImmutableList.copyOf(voMDs);
     voMDs.clear();
 
@@ -130,112 +131,122 @@ public class ReverseTransferObjectFactory {
 
     validateMetadata(to, mp);
 
-    for (Statement st : mp.getStatements()) {
-      final URI stURI = st.getId();
-
-      Collection<MetadataSetTO> mdsList = lookUpMetadata(to, st);
-      // Metadata mdVOPrev = lookUpMetadata(copyOfvoMDs, stURI,
-      // st.getType());
-      if (mdsList.isEmpty()) {
-        {
-          final String message =
-              "Statement { type: \"" + st.getType() + "\", id: \"" + stURI
-                  + "\" } has not been found for item id: \"" + vo.getId() + "\"";
-          // throw new RuntimeException(message);
-          LOGGER.debug(message);
-        }
-      } /*else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
-        throw new BadRequestException("Statement { type: \"" + st.getType() + "\", id: \"" + stURI
-            + "\" } for item id: \"" + vo.getId() + "\" occurs more then once");
-      } */else
-        for (MetadataSetTO md : mdsList)
-          switch (st.getType().toString()) {
+//    for (Statement st : mp.getStatements()) {
+//      final URI stURI = st.getId();
+//
+//      Collection<MetadataSetTO> mdsList = lookUpMetadata(to, st);
+//      // Metadata mdVOPrev = lookUpMetadata(copyOfvoMDs, stURI,
+//      // st.getType());
+//      if (mdsList.isEmpty()) {
+//        {
+//          final String message =
+//              "Statement { type: \"" + st.getType() + "\", id: \"" + stURI
+//                  + "\" } has not been found for item id: \"" + vo.getId() + "\"";
+//          // throw new RuntimeException(message);
+//          LOGGER.debug(message);
+//        }
+//      } /*else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
+//        throw new BadRequestException("Statement { type: \"" + st.getType() + "\", id: \"" + stURI
+//            + "\" } for item id: \"" + vo.getId() + "\" occurs more then once");
+//      } */else
+        int i = 0;
+        for (MetadataSetTO mds : to.getMetadata()) {
+          switch (mds.getTypeUri().toString()) {
             case "http://imeji.org/terms/metadata#text":
-              TextTO textTO = (TextTO) md.getValue();
+              TextTO textTO = (TextTO)mds.getValue();
               if (!isNullOrEmpty(textTO.getText())) {
                 Text mdVO = new Text();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 mdVO.setText(textTO.getText());
+                mdVO.setPos(i); i++;
                 voMDs.add(mdVO);
               }
               break;
             case "http://imeji.org/terms/metadata#geolocation":
-              GeolocationTO geoTO = (GeolocationTO) md.getValue();
+              GeolocationTO geoTO = (GeolocationTO) mds.getValue();
               if (geoTO != null) {
                 Geolocation mdVO = new Geolocation();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 mdVO.setName(geoTO.getName());
                 mdVO.setLatitude(geoTO.getLatitude());
                 mdVO.setLongitude(geoTO.getLongitude());
+                mdVO.setPos(i); i++;
                 voMDs.add(mdVO);
               }
               break;
             case "http://imeji.org/terms/metadata#number":
-              NumberTO numberTO = (NumberTO) md.getValue();
+              NumberTO numberTO = (NumberTO) mds.getValue();
               if (numberTO != null) {
                 Number mdVO = new Number();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 mdVO.setNumber(numberTO.getNumber());
+                mdVO.setPos(i);i++;
                 voMDs.add(mdVO);
               }
               break;
             case "http://imeji.org/terms/metadata#conePerson":
-              ConePersonTO personTO = (ConePersonTO) md.getValue();
+              ConePersonTO personTO = (ConePersonTO) mds.getValue();
               if (personTO != null) {
                 ConePerson mdVO = new ConePerson();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 mdVO.setPerson(new Person());
                 transferPerson(personTO.getPerson(), mdVO.getPerson(), mode);
+                mdVO.setPos(i);i++;
                 voMDs.add(mdVO);
               }
               break;
             case "http://imeji.org/terms/metadata#date":
-              DateTO dateTO = (DateTO) md.getValue();
+              DateTO dateTO = (DateTO) mds.getValue();
               if (!isNullOrEmpty(dateTO.getDate())) {
                 de.mpg.imeji.logic.vo.predefinedMetadata.Date mdVO =
                     new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 mdVO.setDate(dateTO.getDate());
+                mdVO.setPos(i);i++;
                 voMDs.add(mdVO);
               }
               break;
             case "http://imeji.org/terms/metadata#license":
-              LicenseTO licenseTO = (LicenseTO) md.getValue();
+              LicenseTO licenseTO = (LicenseTO) mds.getValue();
               final String lic = licenseTO.getLicense();
               final String url = licenseTO.getUrl();
               if (!isNullOrEmpty(lic) || !isNullOrEmpty(url)) {
                 License mdVO = new License();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 // set license to uri if empty
                 mdVO.setLicense(isNullOrEmpty(lic) ? url : lic);
                 if (!isNullOrEmpty(url))
                   mdVO.setExternalUri(URI.create(url));
+                mdVO.setPos(i);i++;
                 voMDs.add(mdVO);
               }
               break;
             case "http://imeji.org/terms/metadata#publication":
-              PublicationTO pubTO = (PublicationTO) md.getValue();
+              PublicationTO pubTO = (PublicationTO) mds.getValue();
               if (!isNullOrEmpty(pubTO.getPublication())) {
                 Publication mdVO = new Publication();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 mdVO.setUri(URI.create(pubTO.getPublication()));
                 mdVO.setExportFormat(pubTO.getFormat());
                 mdVO.setCitation(pubTO.getCitation());
+                mdVO.setPos(i);i++;
                 voMDs.add(mdVO);
               }
               break;
             case "http://imeji.org/terms/metadata#link":
-              LinkTO linkTO = (LinkTO) md.getValue();
+              LinkTO linkTO = (LinkTO) mds.getValue();
               if (!isNullOrEmpty(linkTO.getUrl())) {
                 Link mdVO = new Link();
-                mdVO.setStatement(stURI);
+                mdVO.setStatement(mds.getStatementUri());
                 mdVO.setLabel(linkTO.getLink());
                 mdVO.setUri(URI.create(linkTO.getUrl()));
+                mdVO.setPos(i);i++;
                 voMDs.add(mdVO);
               }
               break;
           }
     }
+//    }
   }
 
   /**

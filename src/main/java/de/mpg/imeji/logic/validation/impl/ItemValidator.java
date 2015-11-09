@@ -62,6 +62,9 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
           Statement preStatement = ProfileHelper.getStatement(((Metadata) itemMetadataList[i-1]).getStatement(), p);
           if(parentStatement.getId().equals(preStatement.getId()) && MetadataHelper.isEmpty((Metadata)itemMetadataList[i-1])){
             throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
+          //Statement has to be preceded by same statement (multiple childs) or parent statement or a descendant statement (multiple statement with childs)
+          }else if(!parentStatement.getId().equals(preStatement.getId()) && !s.getId().equals(preStatement.getId()) && !isSuccessor(s, preStatement, p)){
+            throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
           }
         }
 
@@ -113,6 +116,17 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
     }
 
   }
+  private boolean isSuccessor(Statement ancestor, Statement successor, MetadataProfile p){
+    Statement current = successor;
+    while(current.getParent() != null){
+      current = ProfileHelper.getStatement(current.getParent(), p);
+      if(current.getId().toString().equals(ancestor.getId().toString())){
+        return true;
+      }
+    }
+    return false;
+  }
+  
   
   /**
    * @param s {@link Statement}

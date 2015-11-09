@@ -13,7 +13,7 @@
 	
 	<ui:define name="actionsMenu">
 		
-		<ui:fragment rendered="#{metadataBean.collection != null and Auth.read(metadataBean.collection)}">
+		<ui:fragment>
 				<menu:context_subNavigation contextId="#{metadataBean.collection.idString}" 
 											contextUrl="#{Navigation.collectionUrl}" 
 											curMainMenu="#{currentMainMenu}" 

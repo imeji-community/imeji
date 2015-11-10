@@ -55,7 +55,7 @@ public class ElasticSearch implements Search {
         this.type = null;
         break;
     }
-    this.indexer = new ElasticIndexer(ElasticIndex.data, this.type);;
+    this.indexer = new ElasticIndexer(ElasticService.INDEX, this.type);;
   }
 
   @Override
@@ -71,27 +71,26 @@ public class ElasticSearch implements Search {
     if (size == -1) {
       size = Integer.MAX_VALUE;
     }
-    SearchResponse resp =
-        ElasticService.client.prepareSearch(ElasticIndex.data.name()).setNoFields()
-            .setPostFilter(f).setTypes(getTypes()).setSize(size).setFrom(from)
-            .addSort(ElasticSortFactory.build(sortCri)).execute().actionGet();
+    SearchResponse resp = ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)
+        .setNoFields().setPostFilter(f).setTypes(getTypes()).setSize(size).setFrom(from)
+        .addSort(ElasticSortFactory.build(sortCri)).execute().actionGet();
     return toSearchResult(resp);
   }
 
   @Override
-  public SearchResult search(SearchQuery query, SortCriterion sortCri, User user,
-      List<String> uris, String spaceId) {
+  public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, List<String> uris,
+      String spaceId) {
     // Not needed for Elasticsearch. This method is used for sparql search
     return null;
   }
 
   @Override
-  public SearchResult searchString(String query, SortCriterion sort, User user, int from, int size) {
+  public SearchResult searchString(String query, SortCriterion sort, User user, int from,
+      int size) {
     QueryBuilder q = QueryBuilders.queryStringQuery(query);
-    SearchResponse resp =
-        ElasticService.client.prepareSearch(ElasticIndex.data.name()).setNoFields()
-            .setTypes(getTypes()).setQuery(q).setSize(size).setFrom(from)
-            .addSort(ElasticSortFactory.build(sort)).execute().actionGet();
+    SearchResponse resp = ElasticService.client.prepareSearch(ElasticIndex.data.name())
+        .setNoFields().setTypes(getTypes()).setQuery(q).setSize(size).setFrom(from)
+        .addSort(ElasticSortFactory.build(sort)).execute().actionGet();
     return toSearchResult(resp);
   }
 

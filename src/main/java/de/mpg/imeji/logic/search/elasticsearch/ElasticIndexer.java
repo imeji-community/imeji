@@ -55,8 +55,8 @@ public class ElasticIndexer implements SearchIndexer {
   private String mappingFile = "elasticsearch/Elastic_TYPE_Mapping.json";
 
 
-  public ElasticIndexer(ElasticIndex index, ElasticTypes dataType) {
-    this.index = index.name();
+  public ElasticIndexer(String indexName, ElasticTypes dataType) {
+    this.index = indexName;
     this.dataType = dataType.name();
     this.mappingFile = mappingFile.replace("_TYPE_", StringUtils.capitalize(this.dataType));
   }
@@ -67,7 +67,7 @@ public class ElasticIndexer implements SearchIndexer {
     List<String> collectionsToReindex = new ArrayList<String>();
     try {
       addSpaceForldersToRedindex(collectionsToReindex, obj);
-      indexJSON(getId(obj), toJson(obj, dataType, index));
+      indexJSON(getId(obj), toJson(obj, dataType));
       commit();
       reindexFoldersItems(collectionsToReindex);
     } catch (Exception e) {
@@ -82,7 +82,7 @@ public class ElasticIndexer implements SearchIndexer {
     try {
       for (Object obj : l) {
         addSpaceForldersToRedindex(collectionsToReindex, obj);
-        indexJSON(getId(obj), toJson(obj, dataType, index));
+        indexJSON(getId(obj), toJson(obj, dataType));
       }
       commit();
       reindexFoldersItems(collectionsToReindex);
@@ -111,9 +111,9 @@ public class ElasticIndexer implements SearchIndexer {
    * @return
    * @throws UnprocessableError
    */
-  public static String toJson(Object obj, String dataType, String index) throws UnprocessableError {
+  public static String toJson(Object obj, String dataType) throws UnprocessableError {
     try {
-      return mapper.writeValueAsString(toESEntity(obj, dataType, index));
+      return mapper.writeValueAsString(toESEntity(obj, dataType));
     } catch (JsonProcessingException e) {
       e.printStackTrace();
       throw new UnprocessableError("Error serializing object to json", e);
@@ -156,7 +156,7 @@ public class ElasticIndexer implements SearchIndexer {
    * @param obj
    * @return
    */
-  private static Object toESEntity(Object obj, String dataType, String index) {
+  private static Object toESEntity(Object obj, String dataType) {
     if (obj instanceof Item) {
       obj = setAlbums((Item) obj);
       ElasticItem es = new ElasticItem((Item) obj);
@@ -248,7 +248,7 @@ public class ElasticIndexer implements SearchIndexer {
   private static boolean isSpaceCollectionChanged(CollectionImeji col, String dataType,
       String index) {
     String indexedValue = ElasticSearchUtil.readFieldAsString(col.getId().toString(),
-        ElasticFields.SPACE, ElasticTypes.folders.name(), ElasticIndex.data.name());
+        ElasticFields.SPACE, ElasticTypes.folders.name(), index);
     String newValue = col.getSpace() != null ? col.getSpace().toString() : "";
     return !indexedValue.equals(newValue);
   }
@@ -282,7 +282,7 @@ public class ElasticIndexer implements SearchIndexer {
    */
   private void reindexItemsInContainer(String containerUri)
       throws ImejiException, IOException, URISyntaxException {
-    ElasticIndexer indexer = new ElasticIndexer(ElasticIndex.data, ElasticTypes.items);
+    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items);
     ItemController controller = new ItemController();
     List<Item> items = controller.searchAndRetrieve(new URI(containerUri), (SearchQuery) null, null,
         Imeji.adminUser, null, -1, -1);

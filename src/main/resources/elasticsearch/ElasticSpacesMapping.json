@@ -32,7 +32,7 @@
       "title":{
         "type":"string"
       },
-      "collectionsinspace":{
+      "folder":{
         "type":"string",
         "index":"not_analyzed"
       },

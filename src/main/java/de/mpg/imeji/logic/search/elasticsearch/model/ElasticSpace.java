@@ -1,6 +1,7 @@
 package de.mpg.imeji.logic.search.elasticsearch.model;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Space;
@@ -14,11 +15,12 @@ import de.mpg.imeji.logic.vo.Space;
  * 
  */
 public class ElasticSpace extends ElasticProperties {
-  
-  private String collectionsinspace;
+
+  private List<String> folder;
   private String slug;
   private String title;
   private String description;
+
   /**
    * Constructor with an {@link Item}
    * 
@@ -26,60 +28,60 @@ public class ElasticSpace extends ElasticProperties {
    */
   public ElasticSpace(Space space) {
     super(space);
-    this.collectionsinspace = StringUtils.join(space.getSpaceCollections().toArray(), ",");
+    folder = new ArrayList<>(space.getSpaceCollections());
     this.slug = space.getSlug();
-    this.title = space.getTitle(); 
+    this.title = space.getTitle();
     this.description = space.getDescription();
   }
-  /**
-   * @return the collectionsinspace
-   */
-  public String getCollectionsinspace() {
-    return collectionsinspace;
-  }
-  /**
-   * @param collectionsinspace the collectionsinspace to set
-   */
-  public void setCollectionsinspace(String collectionsinspace) {
-    this.collectionsinspace = collectionsinspace;
-  }
+
   /**
    * @return the slug
    */
   public String getSlug() {
     return slug;
   }
+
   /**
    * @param slug the slug to set
    */
   public void setSlug(String slug) {
     this.slug = slug;
   }
+
   /**
    * @return the title
    */
   public String getTitle() {
     return title;
   }
+
   /**
    * @param title the title to set
    */
   public void setTitle(String title) {
     this.title = title;
   }
+
   /**
    * @return the description
    */
   public String getDescription() {
     return description;
   }
+
   /**
    * @param description the description to set
    */
   public void setDescription(String description) {
     this.description = description;
   }
-  
-  
+
+  public List<String> getFolder() {
+    return folder;
+  }
+
+  public void setFolder(List<String> folder) {
+    this.folder = folder;
+  }
 
 }

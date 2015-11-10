@@ -45,7 +45,8 @@ public class ElasticQueryFactory {
    * @param query
    * @return
    */
-  public static FilterBuilder build(SearchQuery query, String folderUri, String spaceId, User user) {
+  public static FilterBuilder build(SearchQuery query, String folderUri, String spaceId,
+      User user) {
     return FilterBuilders.boolFilter().must(buildSearchQuery(query))
         .must(buildContainerFilter(folderUri)).must(buildSecurityQuery(user, folderUri))
         .must(buildSpaceQuery(spaceId)).must(buildStatusQuery(query, user));
@@ -74,13 +75,15 @@ public class ElasticQueryFactory {
   private static FilterBuilder buildStatusQuery(SearchQuery query, User user) {
     if (user == null) {
       // Not Logged in: can only view release objects
-      return fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false);
+      return fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS,
+          false);
     } else if (query != null && hasStatusQuery(query.getElements())) {
       // Don't filter, since it is done later via the searchquery
       return FilterBuilders.matchAllFilter();
     } else {
       // Default = don't view discarded objects
-      return fieldQuery(ElasticFields.STATUS, Status.WITHDRAWN.name(), SearchOperators.EQUALS, true);
+      return fieldQuery(ElasticFields.STATUS, Status.WITHDRAWN.name(), SearchOperators.EQUALS,
+          true);
     }
 
   }
@@ -114,7 +117,7 @@ public class ElasticQueryFactory {
       return FilterBuilders.matchAllFilter();
     } else {
       // TODO: implements when folder are indexed as well
-      return fieldQuery(ElasticFields.SPACE, spaceId, SearchOperators.EQUALS , false);
+      return fieldQuery(ElasticFields.SPACE, spaceId, SearchOperators.EQUALS, false);
     }
   }
 
@@ -135,9 +138,8 @@ public class ElasticQueryFactory {
           q.must(termQuery((SearchPair) el));
         }
       } else if (el instanceof SearchLogicalRelation) {
-        OR =
-            ((SearchLogicalRelation) el).getLogicalRelation() == LOGICAL_RELATIONS.OR ? true
-                : false;
+        OR = ((SearchLogicalRelation) el).getLogicalRelation() == LOGICAL_RELATIONS.OR ? true
+            : false;
       } else if (el instanceof SearchGroup) {
         if (OR) {
           q.should(buildSearchQuery(((SearchGroup) el).getElements()));
@@ -196,7 +198,8 @@ public class ElasticQueryFactory {
   private static FilterBuilder buildReadGrantQuery(Collection<Grant> grants) {
     BoolFilterBuilder q = FilterBuilders.boolFilter();
     // Add query for all release objects
-    q.should(fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false));
+    q.should(
+        fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false));
     // Add query for each read grant
     for (Grant g : grants) {
       if (g.asGrantType() == GrantType.READ) {
@@ -225,26 +228,21 @@ public class ElasticQueryFactory {
       case alb:
         break;
       case all:
-        BoolFilterBuilder f =
-            FilterBuilders.boolFilter()
-                .should(
-                    fieldQuery(ElasticFields.NAME, pair.getValue(), SearchOperators.REGEX, false),
-                    fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), SearchOperators.REGEX,
-                        false),
-                    fieldQuery(ElasticFields.METADATA_FAMILYNAME, pair.getValue(),
-                        SearchOperators.REGEX, false),
-                    fieldQuery(ElasticFields.METADATA_GIVENNAME, pair.getValue(),
-                        SearchOperators.REGEX, false),
-                    fieldQuery(ElasticFields.METADATA_URI, pair.getValue(), SearchOperators.REGEX,
-                        false),
-                    fieldQuery(ElasticFields.FILENAME, pair.getValue(), SearchOperators.REGEX,
-                        false),
-                    fieldQuery(ElasticFields.DESCRIPTION, pair.getValue(), SearchOperators.REGEX,
-                        false),
-                    fieldQuery(ElasticFields.AUTHOR_COMPLETENAME, pair.getValue(),
-                        SearchOperators.REGEX, false),
-                    fieldQuery(ElasticFields.AUTHOR_ORGANIZATION_NAME, pair.getValue(),
-                        SearchOperators.REGEX, false));
+        BoolFilterBuilder f = FilterBuilders.boolFilter()
+            .should(fieldQuery(ElasticFields.NAME, pair.getValue(), SearchOperators.REGEX,
+                false),
+            fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), SearchOperators.REGEX, false),
+            fieldQuery(ElasticFields.METADATA_FAMILYNAME, pair.getValue(), SearchOperators.REGEX,
+                false),
+            fieldQuery(ElasticFields.METADATA_GIVENNAME, pair.getValue(), SearchOperators.REGEX,
+                false),
+            fieldQuery(ElasticFields.METADATA_URI, pair.getValue(), SearchOperators.REGEX, false),
+            fieldQuery(ElasticFields.FILENAME, pair.getValue(), SearchOperators.REGEX, false),
+            fieldQuery(ElasticFields.DESCRIPTION, pair.getValue(), SearchOperators.REGEX, false),
+            fieldQuery(ElasticFields.AUTHOR_COMPLETENAME, pair.getValue(), SearchOperators.REGEX,
+                false),
+            fieldQuery(ElasticFields.AUTHOR_ORGANIZATION_NAME, pair.getValue(),
+                SearchOperators.REGEX, false));
 
         if (NumberUtils.isNumber(pair.getValue())) {
           f.should(fieldQuery(ElasticFields.METADATA_NUMBER, pair.getValue(),
@@ -252,7 +250,8 @@ public class ElasticQueryFactory {
         }
         return negate(f, pair.isNot());
       case checksum:
-        return fieldQuery(ElasticFields.CHECKSUM, pair.getValue(), pair.getOperator(), pair.isNot());
+        return fieldQuery(ElasticFields.CHECKSUM, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case citation:
         return fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), pair.getOperator(),
             pair.isNot());
@@ -300,7 +299,8 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case filename:
-        return fieldQuery(ElasticFields.FILENAME, pair.getValue(), pair.getOperator(), pair.isNot());
+        return fieldQuery(ElasticFields.FILENAME, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case filetype:
         BoolFilterBuilder q = FilterBuilders.boolFilter();
         for (String ext : SearchUtils.parseFileTypesAsExtensionList(pair.getValue())) {
@@ -409,6 +409,8 @@ public class ElasticQueryFactory {
       case visibility:
         // not indexed
         break;
+      case coordinates:
+        break;
       default:
         break;
     }
@@ -506,14 +508,10 @@ public class ElasticQueryFactory {
    */
   private static FilterBuilder metadataQuery(ElasticFields field, String value,
       SearchOperators operator, URI statement, boolean not) {
-    return FilterBuilders.nestedFilter(
-        ElasticFields.METADATA.field(),
-        FilterBuilders
-            .boolFilter()
-            .must(fieldQuery(field, value, operator, not))
-            .must(
-                fieldQuery(ElasticFields.METADATA_STATEMENT, ObjectHelper.getId(statement),
-                    SearchOperators.EQUALS, false)));
+    return FilterBuilders.nestedFilter(ElasticFields.METADATA.field(),
+        FilterBuilders.boolFilter().must(fieldQuery(field, value, operator, not))
+            .must(fieldQuery(ElasticFields.METADATA_STATEMENT, ObjectHelper.getId(statement),
+                SearchOperators.EQUALS, false)));
 
   }
 
@@ -536,8 +534,8 @@ public class ElasticQueryFactory {
    * @return
    */
   private static FilterBuilder matchFieldQuery(ElasticFields field, String value) {
-    return FilterBuilders.queryFilter(QueryBuilders.queryStringQuery(value).defaultField(
-        field.field()));
+    return FilterBuilders
+        .queryFilter(QueryBuilders.queryStringQuery(value).defaultField(field.field()));
   }
 
   /**

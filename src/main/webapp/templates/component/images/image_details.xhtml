@@ -8,7 +8,7 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 
 	<!-- MediaDisplayContainer - START -->
-	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}">
+	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}" id="topPanel">
 		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
 			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
 				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
@@ -65,7 +65,7 @@
 					<h:outputText value="#{lbl.remove}"/>
 				</h:outputLink>
 				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and SessionBean.activeAlbum != null and Auth.update(SessionBean.activeAlbum.id)}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.isInActiveAlbum and itemBean.navigationString == 'pretty:albumItem' and SessionBean.activeAlbum != null and Auth.update(SessionBean.activeAlbum.id)}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
 				
@@ -215,6 +215,17 @@
 										<h:outputText value="#{itemBean.image.fileSizeHumanReadable}"/>
 								</div>
 							</h:panelGroup>
+							
+							<!-- MetaDataList - image dimension Size -->
+							<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{itemBean.image.width &gt; 0 and itemBean.image.height &gt; 0}">
+								<div class="imj_metadataLabel">
+									<h:outputText value="#{lbl.width} x #{lbl.height}"/>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_metadataValue">
+										<h:outputText value="#{itemBean.image.width} x #{itemBean.image.height}"/>
+								</div>
+							</h:panelGroup>
 						</h:panelGroup>
 
 						<!-- MetaDataList - further metadata - single edit panel - Wrapper -->				
@@ -267,29 +278,11 @@
 											</div>
 										</div>
 									</ui:repeat>
-									<ui:fragment rendered="#{ empty item.mds.tree.list}">
+									<ui:fragment rendered="#{empty item.mds.tree.list and Auth.update(itemBean.profile)}">
 										<h3 class="imj_headline">#{msg.error_collection_profile_not_exist}
-											<h:outputLink value="#{Navigation.profileUrl}#{itemBean.profile.idString}/#{Navigation.editPath}?init=1&amp;col=#{itemBean.collection.idString}" title="#{lbl.create_now}">
-												<h:outputText value="#{lbl.create_now}"/>
+											<h:outputLink value="#{Navigation.applicationUrl}createprofile?redirect=back&amp;col=#{itemBean.collection.idString}" title="#{lbl.add_profile}">
+												<h:outputText value="#{lbl.add_profile}"/>
 											</h:outputLink>
-											
-											<!-- CHANGE ME HERE  
-											
-												<h3 class="imj_headline imj_messageInfo">#{msg.error_collection_profile_not_exist}
-													<br/>
-													<h:outputLink value="#{Navigation.collectionUrl}#{itemBean.collectionId}/#{Navigation.editPath}?profileSelect=1" title="#{lbl.create_now_from_template}" rendered="#{logicBean.hasProfiles}">
-															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-															<h:outputText value="#{lbl.create_now_from_template}"/>
-													</h:outputLink>
-													<br/>
-													<h:outputLink value="#{Navigation.profileUrl}#{logicBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{logicBean.id}" title="#{lbl.create_now_new}">
-															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-															<h:outputText value="#{lbl.create_now}"/>
-													</h:outputLink>
-												</h3>
-												 -->
-											
-											
 										</h3>
 									</ui:fragment>
 								</ui:repeat>
@@ -302,14 +295,15 @@
 										<f:ajax execute="@this" render="@form"/>
 										<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
-									<h:commandButton type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}">
-									</h:commandButton>
+									<h:commandLink type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}">
+										<f:ajax execute="@form" render=":topPanel :imj_pageMessageArea"/>
+									</h:commandLink>
 								</h:panelGroup>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->
 						</h:panelGroup> <!-- MetaDataList - further metadata - single edit panel - Wrapper END -->
 					</h:panelGroup> <!-- MetaDataList - media data Wrapper END -->
 				</h:form>
-				<script type="text/javascript">highlighter();</script>
+				<script type="text/javascript">$(function(){highlighter();});</script>
 			</ui:fragment>
 	
 	
@@ -353,7 +347,7 @@
 							<span class="imj_invisible">: </span>
 						</span>
 						<span class="imj_infodataValue">
-							<h:outputText value="#{itemBean.imageUploader.name}"/>
+							<h:outputText value="#{itemBean.imageUploader}"/>
 						</span>
 					</h:panelGroup>
 					
@@ -394,7 +388,7 @@
 						</div>
 					</div>				
 					
-					<!-- InfoDataList - Image Album Info -->
+					<!-- InfoDataList -  Image Album Info -->
 					<ui:fragment rendered="#{itemBean.relatedAlbums != null}">
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">
@@ -467,7 +461,7 @@
 						</div>
 						<ui:fragment rendered="#{itemBean.image.status == 'PENDING'}">
 							<h:outputText value="#{ShareBean.initShareItem}" />
-							<imjc:share id="share" roles="#{SessionBean.shareItemGrantItems}" type="item"/>
+							<imjc:share id="share" roles="#{ShareBean.shareItemGrantItems}" type="item"/>
 						</ui:fragment>
 					</h:panelGroup>
 				</h:panelGroup>

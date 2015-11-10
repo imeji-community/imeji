@@ -13,7 +13,6 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @version $Revision$ $LastChangedDate$
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface j2jModel
-{
-    public String value();
+public @interface j2jModel {
+  public String value();
 }

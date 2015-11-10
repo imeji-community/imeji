@@ -1,36 +1,29 @@
 {
-"ez_metadata":
-{
-"Title": "new Title",
-"Ort":
-{
-"name":"München",
-"longitude": 11,
-"latitude": 45
-},
-"NumberLabel": 1,
-"AuthorLabel":
-{
-"familyName": "familyName",
-"givenName": "givenName"
-},
-"DateLabel": "2015-05-01",
-"LicenseLabel":
-{
-"license": "license...",
-"url": "license url..."
-},
-"LinkLabel":
-{
-"link": "link...",
-"url": "link url..."
-},
-"Publicationlabel":
-{
-"format": "format...",
-"publication": "publication...",
-"citation": "citation..."
-}
-
-}
+  "ez_metadata": {
+    "Title": "new Title",
+    "Ort": {
+      "name": "München",
+      "longitude": 11,
+      "latitude": 45
+    },
+    "NumberLabel": 1,
+    "AuthorLabel": {
+      "familyName": "familyName",
+      "givenName": "givenName"
+    },
+    "DateLabel": "2015-05-01",
+    "LicenseLabel": {
+      "license": "license...",
+      "url": "license url..."
+    },
+    "LinkLabel": {
+      "link": "link...",
+      "url": "link url..."
+    },
+    "Publicationlabel": {
+      "format": "format...",
+      "publication": "publication...",
+      "citation": "citation..."
+    }
+  }
 }

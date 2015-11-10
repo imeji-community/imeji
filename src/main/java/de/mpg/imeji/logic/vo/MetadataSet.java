@@ -38,76 +38,63 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms/")
-public class MetadataSet implements Serializable
-{
-    private static final long serialVersionUID = 6306551656394348422L;
-    @j2jList(ImejiNamespaces.METADATA)
-    private Collection<Metadata> metadata = new ArrayList<Metadata>();
-    @j2jResource("http://imeji.org/terms/mdprofile")
-    private URI profile;
-    private URI id;
-    
-	private static Logger logger = Logger.getLogger(MetadataSet.class);
+public class MetadataSet implements Serializable {
+  private static final long serialVersionUID = 6306551656394348422L;
+  @j2jList(ImejiNamespaces.METADATA)
+  private Collection<Metadata> metadata = new ArrayList<Metadata>();
+  @j2jResource("http://imeji.org/terms/mdprofile")
+  private URI profile;
+  private URI id;
 
-    public MetadataSet()
-    {
-    }
+  private static Logger logger = Logger.getLogger(MetadataSet.class);
 
-    @XmlElement(name = "metadata", namespace = "http://imeji.org/terms/")
-    public Collection<Metadata> getMetadata()
-    {
-        sortMetadata();
-        return metadata;
-    }
+  public MetadataSet() {}
 
-    public void setMetadata(Collection<Metadata> metadata)
-    {
-        this.metadata = metadata;
-    }
+  @XmlElement(name = "metadata", namespace = "http://imeji.org/terms/")
+  public Collection<Metadata> getMetadata() {
+    sortMetadata();
+    return metadata;
+  }
 
-    @XmlElement(name = "profile", namespace = "http://imeji.org/terms/")
-    public URI getProfile()
-    {
-        return profile;
-    }
+  public void setMetadata(Collection<Metadata> metadata) {
+    this.metadata = metadata;
+  }
 
-    public void setProfile(URI profile)
-    {
-        this.profile = profile;
-    }
+  @XmlElement(name = "profile", namespace = "http://imeji.org/terms/")
+  public URI getProfile() {
+    return profile;
+  }
 
-    public void setId(URI id)
-    {
-        this.id = id;
-    }
+  public void setProfile(URI profile) {
+    this.profile = profile;
+  }
 
-    @XmlAttribute(name = "id")
-    public URI getId()
-    {
-        return id;
-    }
+  public void setId(URI id) {
+    this.id = id;
+  }
 
-    /**
-     * sort the {@link Metadata} according to their position
-     */
-    public void sortMetadata()
-    {
-        Collections.sort((List<Metadata>)metadata);
-    }
+  @XmlAttribute(name = "id")
+  public URI getId() {
+    return id;
+  }
 
-    public Object getValueFromMethod(String methodName)
-    {
-        Method method;
-        Object ret = null;
-        try
-        {
-            method = this.getClass().getMethod(methodName);
-            ret = method.invoke(this);
-        }
-        catch (SecurityException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
-        {
-        	logger.error("Some issues with getValueFromMethod ", e);
-        }
-        return ret;
+  /**
+   * sort the {@link Metadata} according to their position
+   */
+  public void sortMetadata() {
+    Collections.sort((List<Metadata>) metadata);
+  }
+
+  public Object getValueFromMethod(String methodName) {
+    Method method;
+    Object ret = null;
+    try {
+      method = this.getClass().getMethod(methodName);
+      ret = method.invoke(this);
+    } catch (SecurityException | NoSuchMethodException | IllegalArgumentException
+        | IllegalAccessException | InvocationTargetException e) {
+      logger.error("Some issues with getValueFromMethod ", e);
     }
+    return ret;
+  }
 }

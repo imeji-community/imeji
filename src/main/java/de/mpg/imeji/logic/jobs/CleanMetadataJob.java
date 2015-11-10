@@ -2,31 +2,35 @@ package de.mpg.imeji.logic.jobs;
 
 import java.util.concurrent.Callable;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 
 /**
- * Clean the {@link Metadata} which have a {@link Statement} which doesn't exist
- * anymore
+ * Clean the {@link Metadata} which have a {@link Statement} which doesn't exist anymore
  * 
  * @author saquet
  *
  */
 public class CleanMetadataJob implements Callable<Integer> {
+  private static final Logger logger = Logger.getLogger(CleanMetadataJob.class);
 
-	private MetadataProfile p;
+  private MetadataProfile p;
 
-	public CleanMetadataJob(MetadataProfile p) {
-		this.p = p;
-	}
+  public CleanMetadataJob(MetadataProfile p) {
+    this.p = p;
+  }
 
-	@Override
-	public Integer call() throws Exception {
-		ProfileController pc = new ProfileController();
-		pc.removeMetadataWithoutStatement(p);
-		return 1;
-	}
+  @Override
+  public Integer call() throws Exception {
+    logger.info("Cleaning Metadata...");
+    ProfileController pc = new ProfileController();
+    pc.removeMetadataWithoutStatement(p);
+    logger.info("...done!");
+    return 1;
+  }
 
 }

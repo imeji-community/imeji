@@ -1,0 +1,22 @@
+package de.mpg.imeji.logic.jobs;
+
+import java.util.concurrent.Callable;
+
+import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
+
+/**
+ * Read the IP Mapping for the Max Planck Planck Institutes
+ * 
+ * @author bastiens
+ *
+ */
+public class ReadMaxPlanckIPMappingJob implements Callable<Integer> {
+
+  @Override
+  public Integer call() throws Exception {
+    MaxPlanckInstitutUtils.initMPINameMap();
+    MaxPlanckInstitutUtils.initIdMap();
+    return 1;
+  }
+
+}

@@ -19,154 +19,146 @@ import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static org.junit.Assert.assertEquals;
 
 public class ItemDeleteTest extends ImejiTestBase {
-	
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(ItemCreateTest.class);
 
-    private static String itemJSON;
-    private static final String pathPrefix = "/rest/items";
+  private static final Logger LOGGER = LoggerFactory.getLogger(ItemCreateTest.class);
 
-    @BeforeClass
-    public static void specificSetup() throws Exception {
-        initCollection();
-        initItem();
-        itemJSON = getStringFromPath("src/test/resources/rest/createItem.json");
-    }
+  private static String itemJSON;
+  private static final String pathPrefix = "/rest/items";
 
-	@Test
-	public void test_1_deleteItem_WithNonAuth() throws Exception {
+  @BeforeClass
+  public static void specificSetup() throws Exception {
+    initCollection();
+    initItem();
+    itemJSON = getStringFromPath("src/test/resources/rest/createItem.json");
+  }
 
-		initCollection();
-		initItem();
-		ItemService s = new ItemService();
-		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
-		
-		Form form= new Form();
-		form.param("id", itemId);
-		Response response = target(pathPrefix)
-				.path("/" + itemId)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
+  @Test
+  public void test_1_deleteItem_WithNonAuth() throws Exception {
 
-		assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-	 }
+    initCollection();
+    initItem();
+    ItemService s = new ItemService();
+    assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
-	@Test
-	public void test_2_deleteItem_NotAllowed() throws Exception {
-		initCollection();
-		initItem();
-		ItemService s = new ItemService();
-		System.out.println("ITEM STATUS = "+s.read(itemId, JenaUtil.testUser).getStatus());
-		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
-		
-		Form form= new Form();
-		form.param("id", itemId);
-		Response response = target(pathPrefix).register(authAsUser2)
-				.path("/" + itemId)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
+    Form form = new Form();
+    form.param("id", itemId);
+    Response response =
+        target(pathPrefix).path("/" + itemId).request(MediaType.APPLICATION_JSON_TYPE).delete();
 
-		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-	 }
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+  }
 
-	@Test
-	public void test_3_deleteItem_NotExist() throws Exception {
+  @Test
+  public void test_2_deleteItem_NotAllowed() throws Exception {
+    initCollection();
+    initItem();
+    ItemService s = new ItemService();
+    System.out.println("ITEM STATUS = " + s.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
-		initItem();
-		ItemService s = new ItemService();
-		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
-		
-		Form form= new Form();
-		form.param("id", itemId+"i_do_not_exist");
-		Response response = target(pathPrefix).register(authAsUser)
-				.path("/" + itemId+"i_do_not_exist")
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
+    Form form = new Form();
+    form.param("id", itemId);
+    Response response =
+        target(pathPrefix).register(authAsUser2).path("/" + itemId)
+            .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-	 }
+    assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+  }
 
-	@Test
-	public void test_2_deleteItem_Released() throws Exception {
-		initCollection();
-		initItem();
-		ItemService s = new ItemService();
-		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
-		CollectionService cs = new CollectionService();
-		cs.release(s.read(itemId, JenaUtil.testUser).getCollectionId(), JenaUtil.testUser);
-		assertEquals("RELEASED", s.read(itemId, JenaUtil.testUser).getStatus());
-		
-		Form form= new Form();
-		form.param("id", itemId);
-		Response response = target(pathPrefix).register(authAsUser)
-				.path("/" + itemId)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
+  @Test
+  public void test_3_deleteItem_NotExist() throws Exception {
 
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
-	 }
+    initItem();
+    ItemService s = new ItemService();
+    assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
-	@Test
-	public void test_2_deleteItem_Withdrawn() throws Exception {
-		initCollection();
-		initItem();
-		ItemService s = new ItemService();
-		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
-		CollectionService cs = new CollectionService();
-		cs.release(s.read(itemId, JenaUtil.testUser).getCollectionId(), JenaUtil.testUser);
-		assertEquals("RELEASED", s.read(itemId, JenaUtil.testUser).getStatus());
-		cs.withdraw(s.read(itemId, JenaUtil.testUser).getCollectionId(), JenaUtil.testUser, "ItemDeleteTest.test_2_deleteItemWithdrawn");
-		assertEquals("WITHDRAWN", s.read(itemId, JenaUtil.testUser).getStatus());
-		
-		Form form= new Form();
-		form.param("id", itemId);
-		Response response = target(pathPrefix).register(authAsUser)
-				.path("/" + itemId)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
+    Form form = new Form();
+    form.param("id", itemId + "i_do_not_exist");
+    Response response =
+        target(pathPrefix).register(authAsUser).path("/" + itemId + "i_do_not_exist")
+            .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
-	 }
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+  }
 
-	@Test
-	public void test_3_deleteItem() throws Exception {
-		initCollection();
-		initItem();
-		ItemService s = new ItemService();
-		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
-		
-		Form form= new Form();
-		form.param("id", itemId);
-		Response response = target(pathPrefix).register(authAsUser)
-				.path("/" + itemId)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
+  @Test
+  public void test_2_deleteItem_Released() throws Exception {
+    initCollection();
+    initItem();
+    ItemService s = new ItemService();
+    assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
+    CollectionService cs = new CollectionService();
+    cs.release(s.read(itemId, JenaUtil.testUser).getCollectionId(), JenaUtil.testUser);
+    assertEquals("RELEASED", s.read(itemId, JenaUtil.testUser).getStatus());
 
-		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-		
-	 }
-	@Test
-	public void test_3_deleteItemTwice() throws Exception {
-		initCollection();
-		initItem();
-		ItemService s = new ItemService();
-		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
-		
-		Form form= new Form();
-		form.param("id", itemId);
-		Response response = target(pathPrefix).register(authAsUser)
-				.path("/" + itemId)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
+    Form form = new Form();
+    form.param("id", itemId);
+    Response response =
+        target(pathPrefix).register(authAsUser).path("/" + itemId)
+            .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
-		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-		
-		Response response2 = target(pathPrefix).register(authAsUser)
-				.path("/" + itemId)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.delete();
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
-	 }
-	
+    assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+  }
+
+  @Test
+  public void test_2_deleteItem_Withdrawn() throws Exception {
+    initCollection();
+    initItem();
+    ItemService s = new ItemService();
+    assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
+    CollectionService cs = new CollectionService();
+    cs.release(s.read(itemId, JenaUtil.testUser).getCollectionId(), JenaUtil.testUser);
+    assertEquals("RELEASED", s.read(itemId, JenaUtil.testUser).getStatus());
+    cs.withdraw(s.read(itemId, JenaUtil.testUser).getCollectionId(), JenaUtil.testUser,
+        "ItemDeleteTest.test_2_deleteItemWithdrawn");
+    assertEquals("WITHDRAWN", s.read(itemId, JenaUtil.testUser).getStatus());
+
+    Form form = new Form();
+    form.param("id", itemId);
+    Response response =
+        target(pathPrefix).register(authAsUser).path("/" + itemId)
+            .request(MediaType.APPLICATION_JSON_TYPE).delete();
+
+    assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+  }
+
+  @Test
+  public void test_3_deleteItem() throws Exception {
+    initCollection();
+    initItem();
+    ItemService s = new ItemService();
+    assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
+
+    Form form = new Form();
+    form.param("id", itemId);
+    Response response =
+        target(pathPrefix).register(authAsUser).path("/" + itemId)
+            .request(MediaType.APPLICATION_JSON_TYPE).delete();
+
+    assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+  }
+
+  @Test
+  public void test_3_deleteItemTwice() throws Exception {
+    initCollection();
+    initItem();
+    ItemService s = new ItemService();
+    assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
+
+    Form form = new Form();
+    form.param("id", itemId);
+    Response response =
+        target(pathPrefix).register(authAsUser).path("/" + itemId)
+            .request(MediaType.APPLICATION_JSON_TYPE).delete();
+
+    assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+    Response response2 =
+        target(pathPrefix).register(authAsUser).path("/" + itemId)
+            .request(MediaType.APPLICATION_JSON_TYPE).delete();
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
+  }
+
 
 }

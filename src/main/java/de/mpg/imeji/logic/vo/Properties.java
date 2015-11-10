@@ -33,164 +33,162 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/properties")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "properties", namespace = "http://imeji.org/terms/")
-@XmlSeeAlso({ Item.class, MetadataProfile.class })
+@XmlSeeAlso({Item.class, MetadataProfile.class})
 public class Properties implements Serializable {
-	private static final long serialVersionUID = 6874979775433576816L;
-	private URI id;
-	@j2jResource(ImejiNamespaces.CREATOR)
-	private URI createdBy;
-	@j2jResource(ImejiNamespaces.MODIFIED_BY)
-	private URI modifiedBy;
-	@j2jLiteral(ImejiNamespaces.DATE_CREATED)
-	private Calendar created;
-	@j2jLiteral(ImejiNamespaces.LAST_MODIFICATION_DATE)
-	private Calendar modified;
-	@j2jLiteral(ImejiNamespaces.VERSION_DATE)
-	private Calendar versionDate;
-	@j2jResource(ImejiNamespaces.STATUS)
-	private URI status = URI.create(Status.PENDING.getUriString());
-	@j2jLiteral(ImejiNamespaces.VERSION)
-	private int version = 0;
-	@j2jLiteral(ImejiNamespaces.DISCARD_COMMENT)
-	private String discardComment;
+  private static final long serialVersionUID = 6874979775433576816L;
+  private URI id;
+  @j2jResource(ImejiNamespaces.CREATOR)
+  private URI createdBy;
+  @j2jResource(ImejiNamespaces.MODIFIED_BY)
+  private URI modifiedBy;
+  @j2jLiteral(ImejiNamespaces.DATE_CREATED)
+  private Calendar created;
+  @j2jLiteral(ImejiNamespaces.LAST_MODIFICATION_DATE)
+  private Calendar modified;
+  @j2jLiteral(ImejiNamespaces.VERSION_DATE)
+  private Calendar versionDate;
+  @j2jResource(ImejiNamespaces.STATUS)
+  private URI status = URI.create(Status.PENDING.getUriString());
+  @j2jLiteral(ImejiNamespaces.VERSION)
+  private int version = 0;
+  @j2jLiteral(ImejiNamespaces.DISCARD_COMMENT)
+  private String discardComment;
 
-	private static Logger logger = Logger.getLogger(Properties.class);
+  private static Logger logger = Logger.getLogger(Properties.class);
 
-	@XmlEnum(String.class)
-	public enum Status {
-		PENDING(new String(ImejiNamespaces.STATUS + "#PENDING")), RELEASED(
-				new String(ImejiNamespaces.STATUS + "#RELEASED")), WITHDRAWN(
-				new String(ImejiNamespaces.STATUS + "#WITHDRAWN"));
-		private String uri;
+  @XmlEnum(String.class)
+  public enum Status {
+    PENDING(new String(ImejiNamespaces.STATUS + "#PENDING")), RELEASED(new String(
+        ImejiNamespaces.STATUS + "#RELEASED")), WITHDRAWN(new String(ImejiNamespaces.STATUS
+        + "#WITHDRAWN"));
+    private String uri;
 
-		private Status(String uri) {
-			this.uri = uri;
-		}
+    private Status(String uri) {
+      this.uri = uri;
+    }
 
-		public String getUriString() {
-			return uri;
-		}
+    public String getUriString() {
+      return uri;
+    }
 
-		public URI getURI() {
-			return URI.create(uri);
-		}
-	}
+    public URI getURI() {
+      return URI.create(uri);
+    }
+  }
 
-	public Properties() {
-		// TODO Auto-generated constructor stub
-	}
+  public Properties() {
+    // TODO Auto-generated constructor stub
+  }
 
-	public void setCreatedBy(URI createdBy) {
-		this.createdBy = createdBy;
-	}
+  public void setCreatedBy(URI createdBy) {
+    this.createdBy = createdBy;
+  }
 
-	@XmlElement(name = "creator", namespace = "http://purl.org/dc/terms/")
-	public URI getCreatedBy() {
-		return createdBy;
-	}
+  @XmlElement(name = "creator", namespace = "http://purl.org/dc/terms/")
+  public URI getCreatedBy() {
+    return createdBy;
+  }
 
-	public void setModifiedBy(URI modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+  public void setModifiedBy(URI modifiedBy) {
+    this.modifiedBy = modifiedBy;
+  }
 
-	@XmlElement(name = "modifiedBy", namespace = "http://imeji.org/terms/")
-	public URI getModifiedBy() {
-		return modifiedBy;
-	}
+  @XmlElement(name = "modifiedBy", namespace = "http://imeji.org/terms/")
+  public URI getModifiedBy() {
+    return modifiedBy;
+  }
 
-	public void setStatus(Status status) {
-		this.status = URI.create(status.getUriString());
-	}
+  public void setStatus(Status status) {
+    this.status = URI.create(status.getUriString());
+  }
 
-	@XmlElement(name = "status", namespace = "http://imeji.org/terms/")
-	public Status getStatus() {
-		return Status.valueOf(status.getFragment());
-	}
+  @XmlElement(name = "status", namespace = "http://imeji.org/terms/")
+  public Status getStatus() {
+    return Status.valueOf(status.getFragment());
+  }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+  public void setVersion(int version) {
+    this.version = version;
+  }
 
-	@XmlElement(name = "version", namespace = "http://imeji.org/terms/")
-	public int getVersion() {
-		return version;
-	}
+  @XmlElement(name = "version", namespace = "http://imeji.org/terms/")
+  public int getVersion() {
+    return version;
+  }
 
-	@XmlElement(name = "discardComment", namespace = "http://imeji.org/terms/")
-	public String getDiscardComment() {
-		return discardComment;
-	}
+  @XmlElement(name = "discardComment", namespace = "http://imeji.org/terms/")
+  public String getDiscardComment() {
+    return discardComment;
+  }
 
-	public void setDiscardComment(String discardComment) {
-		this.discardComment = discardComment;
-	}
+  public void setDiscardComment(String discardComment) {
+    this.discardComment = discardComment;
+  }
 
-	@XmlElement(name = "created", namespace = "http://purl.org/dc/terms/")
-	public Calendar getCreated() {
-		return created;
-	}
+  @XmlElement(name = "created", namespace = "http://purl.org/dc/terms/")
+  public Calendar getCreated() {
+    return created;
+  }
 
-	public void setCreated(Calendar created) {
-		this.created = created;
-	}
+  public void setCreated(Calendar created) {
+    this.created = created;
+  }
 
-	@XmlElement(name = "modified", namespace = "http://purl.org/dc/terms/")
-	public Calendar getModified() {
-		return modified;
-	}
+  @XmlElement(name = "modified", namespace = "http://purl.org/dc/terms/")
+  public Calendar getModified() {
+    return modified;
+  }
 
-	public void setModified(Calendar modified) {
-		this.modified = modified;
-	}
+  public void setModified(Calendar modified) {
+    this.modified = modified;
+  }
 
-	@XmlElement(name = "issued", namespace = "http://purl.org/dc/terms/")
-	public Calendar getVersionDate() {
-		return versionDate;
-	}
+  @XmlElement(name = "issued", namespace = "http://purl.org/dc/terms/")
+  public Calendar getVersionDate() {
+    return versionDate;
+  }
 
-	public void setVersionDate(Calendar versionDate) {
-		this.versionDate = versionDate;
-	}
+  public void setVersionDate(Calendar versionDate) {
+    this.versionDate = versionDate;
+  }
 
-	public void setId(URI id) {
-		this.id = id;
-	}
+  public void setId(URI id) {
+    this.id = id;
+  }
 
-	@XmlAttribute(name = "id")
-	public URI getId() {
-		return id;
-	}
+  @XmlAttribute(name = "id")
+  public URI getId() {
+    return id;
+  }
 
-	/**
-	 * return the id of this object defined in the last number in its
-	 * {@link URI}.
-	 * 
-	 * @return
-	 */
-	public String getIdString() {
-		if (id != null) {
-			return id.getPath().substring(id.getPath().lastIndexOf("/") + 1);
-		}
-		return "";
-	}
+  /**
+   * return the id of this object defined in the last number in its {@link URI}.
+   * 
+   * @return
+   */
+  public String getIdString() {
+    if (id != null) {
+      return id.getPath().substring(id.getPath().lastIndexOf("/") + 1);
+    }
+    return "";
+  }
 
-	/**
-	 * TODO : check this method
-	 * 
-	 * @param methodName
-	 * @return
-	 */
-	public Object getValueFromMethod(String methodName) {
-		Method method;
-		Object ret = null;
-		try {
-			method = this.getClass().getMethod(methodName);
-			ret = method.invoke(this);
-		} catch (SecurityException | NoSuchMethodException
-				| IllegalArgumentException | IllegalAccessException
-				| InvocationTargetException e) {
-			logger.error("Some issues with getValueFromMethod ", e);
-		}
-		return ret;
-	}
+  /**
+   * TODO : check this method
+   * 
+   * @param methodName
+   * @return
+   */
+  public Object getValueFromMethod(String methodName) {
+    Method method;
+    Object ret = null;
+    try {
+      method = this.getClass().getMethod(methodName);
+      ret = method.invoke(this);
+    } catch (SecurityException | NoSuchMethodException | IllegalArgumentException
+        | IllegalAccessException | InvocationTargetException e) {
+      logger.error("Some issues with getValueFromMethod ", e);
+    }
+    return ret;
+  }
 }

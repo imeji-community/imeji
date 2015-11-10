@@ -80,7 +80,7 @@
 							<h:outputText value="#{cc.attrs.item.description.trim()}"/>
 							
 							<ui:fragment rendered="#{cc.attrs.item.descriptionFull.trim().length() &gt; cc.attrs.item.description.trim().length()}">
-								<button class="imj_expand imj_iconExpand_16 imj_containerDescExpand" onclick="$(this).parent().hide(); $(this).parent().next().show();">
+								<button class="imj_expand imj_iconExpand_16 imj_containerDescExpand" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().next().show();">
 									<h:outputText value="&#160;"/>
 								</button>
 							</ui:fragment>
@@ -90,7 +90,7 @@
 							<p class="imj_descriptionArea imj_additionalInfoArea">
 								<h:outputText value="#{cc.attrs.item.descriptionFull.trim()}"/>
 								
-								<button class="imj_collapse imj_iconCollapse_16" onclick="$(this).parent().hide(); $(this).parent().prev().show();" >
+								<button class="imj_collapse imj_iconCollapse_16" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().prev().show();" >
 									<h:outputText value="&#160;"/>
 								</button>
 							</p>
@@ -124,17 +124,26 @@
 									</h:outputLink>
 								</li>
 							</ui:fragment>
+
+							<ui:fragment rendered="#{cc.attrs.item.sizeDiscarded > 0}">
+								<li>
+									<h:outputLink value='#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=status="WITHDRAWN"'>
+										<h:outputText value="#{lbl.view_discarded_images}"/>
+									</h:outputLink>
+								</li>
+							</ui:fragment>
+
 							<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes'}">
 								<li>
 									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">
-										<h:form>
-											<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
-												<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
-											</h:commandButton>
-											<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
-												<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
-											</h:commandButton>
-										</h:form>
+										
+										<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
+											<f:ajax execute="@this" render=":imj_pageMessageArea :ajaxWrapper"/>
+										</h:commandButton>
+										<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
+											<f:ajax execute="@this" render=":imj_pageMessageArea :ajaxWrapper"/>
+										</h:commandButton>
+										
 									</ui:fragment>
 									<ui:fragment rendered="#{!Auth.create(cc.attrs.item) and !cc.attrs.item.active}">
 										<h:outputText value="#{lbl.only_view_allowed}"/>

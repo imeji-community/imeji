@@ -7,24 +7,23 @@ package de.mpg.imeji.logic.search;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public interface FulltextIndex
-{
-    /**
-     * Setter
-     * 
-     * @param fulltext
-     */
-    public void setFulltextIndex(String fulltext);
+public interface FulltextIndex {
+  /**
+   * Setter
+   * 
+   * @param fulltext
+   */
+  public void setFulltextIndex(String fulltext);
 
-    /**
-     * Getter
-     * 
-     * @return
-     */
-    public String getFulltextIndex();
+  /**
+   * Getter
+   * 
+   * @return
+   */
+  public String getFulltextIndex();
 
-    /**
-     * Perform operation to create fulltext seach value add set the value
-     */
-    public void indexFulltext();
+  /**
+   * Perform operation to create fulltext seach value add set the value
+   */
+  public void indexFulltext();
 }

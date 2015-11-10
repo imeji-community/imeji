@@ -1,4 +1,4 @@
-<ui:composition template="templates/template_site.xhtml"
+	<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -125,7 +125,40 @@
 											<h:inputTextarea value="#{Configuration.impressumText}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
 										</div>
 										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
-									</div>	
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.registration_enable}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:selectOneRadio value="#{Configuration.registrationEnabled}">
+												<f:selectItem itemLabel="#{lbl.no}" itemValue="false"/>
+												<f:selectItem itemLabel="#{lbl.yes}" itemValue="true"/>
+											</h:selectOneRadio>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.registration_token_expiry}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.registrationTokenExpiry}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.default_disk_space_quota}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.defaultDiskSpaceQuota}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
 									
 									
 								</div>
@@ -183,6 +216,39 @@
 										</div>
 										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" "/>
 									</h:panelGroup>
+																		<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.startPageFooterLogos} (#{lbl.html})"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputTextarea value="#{Configuration.startPageFooterLogos}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</h:panelGroup>
+
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.faviconUrl}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.faviconUrl}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</h:panelGroup>
+
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.logoUrl}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.logoUrl}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</h:panelGroup>
+
 								</div>
 							</div>
 							
@@ -300,10 +366,10 @@
 															</td>
 															<td>
 																<h:inputText value="#{type.extensions}" class="imj_fileTypeValueInput"/>
-																<input type="button" data-target="tr .imj_fileTypeValueInput" class="imj_clearInput imj_iconErase_16" value=" "/>
-															</td>
-															<td>
 																
+															</td>
+															<td class="imj_inlineButtonGroup">
+																<input type="button" data-target="tr .imj_fileTypeValueInput" class="imj_clearInput imj_iconErase_16" value=" "/>
 																<h:commandLink value=" " title="#{lbl.remove}" styleClass="imj_buttonRemove_16" action="#{Configuration.fileTypes.removeType(var.index)}" >
 																	<f:ajax execute="@this" render="@form"/>
 																</h:commandLink>
@@ -402,16 +468,7 @@
 										</div>
 										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
 									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="imj_admindataSet">
-										<div class="imj_admindataLabel">
-											<h:outputText value="#{lbl.startPageFooterLogos} (#{lbl.html})"/>
-											<span class="imj_noDisplay">: </span>
-										</div>
-										<div class="imj_admindataValue">
-											<h:inputTextarea value="#{Configuration.startPageFooterLogos}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
-										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
-									</h:panelGroup>
+
 								</div> 
 							</div>
 

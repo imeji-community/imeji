@@ -8,36 +8,32 @@ import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
 @j2jDataType("http://imeji.org/terms/metadata#license")
-@XmlType (propOrder = {
-		"license",
-		"url"
-		})
-public class LicenseTO extends MetadataTO{
-	private static final long serialVersionUID = 5493360284361097587L;
+@XmlType(propOrder = {"license", "url"})
+public class LicenseTO extends MetadataTO {
+  private static final long serialVersionUID = 5493360284361097587L;
 
-	private String license;
-	
-	private String url;
+  private String license;
+
+  private String url;
 
 
 
-	public String getLicense() {
-		return license;
-	}
+  public String getLicense() {
+    return license;
+  }
 
-	public void setLicense(String license) {
-		this.license = license;
-	}
+  public void setLicense(String license) {
+    this.license = license;
+  }
 
-	public String getUrl() {
-		return url;
-	}
+  public String getUrl() {
+    return url;
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
 
-	
 
 }

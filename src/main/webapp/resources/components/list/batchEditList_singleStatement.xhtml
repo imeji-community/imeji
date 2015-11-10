@@ -42,9 +42,8 @@
 			<!-- METADATA TYPE NUMBER -->
 			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#number'}">
 				<div class="imj_metadataSet">
-					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
-					
-					<h:inputText onfocus="this.select();"  onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>	
+					<h:inputText onfocus="this.select();"  onchange="validateInputNumber(this);" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<f:converter converterId="DoubleConverter"/>
 					</h:inputText>
 					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
@@ -86,7 +85,9 @@
 			<!-- METADATA TYPE PUBLICATION -->
 			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
 				<div class="imj_metadataSet">
-					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
+					<h4 class="imj_sectionHeadline">
+						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
+					</h4>
 					
 					<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<h:outputLabel value="#{lbl.link}" styleClass="imj_metadataLabel"/>

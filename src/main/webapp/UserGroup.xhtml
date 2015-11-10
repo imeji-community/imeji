@@ -123,19 +123,17 @@
 									</div>	
 									<div class="imj_admindataSetEdit"></div>
 								</h:form>
+								
+								<h3 class="imj_headline"><h:outputText value="#{lbl.grant_for_group}" styleClass="imj_admindataValueEntry"/></h3>
 								<div class="imj_admindataSetEdit">
-									<div>
-										<h:outputText value="#{UserGroup.userGroup.name} #{lbl.grants_has_following}:"/>
-									</div>
-									<div class="imj_admindataLabel"></div>
 									<div class="imj_admindataValue">
 										<div class="imj_admindataValueEntry">
 											<h:form>
 												<ui:repeat var="sh" value="#{UserGroup.roles}">
-													<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
-													<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
+													<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
+													<ui:param name="roles" value="#{sh.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
 													<div>
-														<h:outputText value="Grant for #{sh.title}" styleClass="imj_admindataValueEntry"/>
+														<h:outputText value=" #{SessionBean.getLabel(sh.type)}: #{sh.title}" styleClass="imj_admindataValueEntry"/>
 														<h:commandButton action="#{UserGroup.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton"/>
 														<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
 															<f:selectItems value="#{roles}" />

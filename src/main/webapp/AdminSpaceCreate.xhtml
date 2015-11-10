@@ -1,12 +1,15 @@
-<ui:composition template="templates/template_site.xhtml"  
+<ui:composition template="templates/sub_template/template_space.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:param name="headline" value="#{lbl.admin_space_create}"/>
+	<ui:param name="metadataBean" value="#{CreateSpaceBean}"/>
+	<ui:param name="metadataContextBean" value="#{metadataBean.space}"/>
+	<ui:param name="headline" value="#{lbl.space_create}"/>
 	<ui:param name="currentMainMenu" value="admin"/>
+	<ui:param name="containerHeadline" value="#{lbl.space_info}"/>
 	
 	<ui:define name="actionsMenu">
 		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
@@ -14,177 +17,5 @@
 								 downloadEnabled="false"
 								 actionEnabled="false"
 								 navBean="#{Navigation}"/>
-	</ui:define>
-	
-	<ui:define name="additonalFooterScripts">
-		<script type="text/javascript">
-		/* <![CDATA[ */
-			function clearToSlug(str) {
-				str = str.replace(/ /g, "_");
-				str = str.replace(/#/g, "_");
-				str = str.replace(/ä/g, "ae");
-				str = str.replace(/ö/g, "oe");
-				str = str.replace(/ü/g, "ue");
-				str = str.replace(/ß/g, "ss");
-				return str;
-			}
-			function updateSlug(str) {
-				var protocoll, tmp, spaceSlugString;
-				tmp = clearToSlug(str);
-				protocoll = location.protocoll || 'http:';
-				spaceSlugString = location.href;
-				$('input[id$="spaceSlug"]').val(tmp);
-				$('#previewSpaceSlugUrl').text(spaceSlugString.replace("createspace", "space/") + tmp );
-			}
-			function initSlugUpdate() {
-				$('input[id$="spaceTitle"], input[id$="spaceSlug"]').keyup(function(evt){
-					updateSlug($(this).val());
-				});
-			}
-			initSlugUpdate();
-		/*	]]> */
-		</script>
-	</ui:define>
-	
-	<ui:define name="mainContent">
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>
-		
-		<!-- Are You Admin? -->	
-		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
-			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
-			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
-		</h:panelGroup>
-		
-		<div class="imj_spaceConfigPage">
-			<div class="imj_administrationTiledList imj_maxWidth">
-				
-				<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
-					<h:form id="spaceForm">
-						<div class="imj_adminPanel">
-							<div class="imj_headline">
-								<h2>
-									<h:outputText value="#{lbl.admin_space_global_information}"/>
-		<ui:remove>
-		<!-- TODO: BEAN-ACTION -->
-									<h:commandButton action="" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
-		</ui:remove>
-								</h2>
-							</div>
-							<div class="imj_content">
-								<!-- title description logo slug -->
-								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">#{lbl.title} / #{lbl.name}</label>
-									<h:inputText id="spaceTitle" styleClass="imj_metadataValue"  value="#{CreateSpaceBean.space.title}" required="true" requiredMessage="#{msg.error_space_need_title}"/>
-								</div>
-								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">#{lbl.space_welcome_text}</label>
-									<h:inputTextarea id="spaceWelcomeText" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
-								</div>
-								
-
-								<div class="imj_metadataSet">
-								
-									<label class="imj_metadataLabel">#{lbl.logo}</label>
-									<div class="imj_metadataValue">
-										<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
-											<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-							
-											<div id="container">
-											    <a id="pickfiles" href="javascript:;">[#{lbl.uploadFile}]</a>
-											</div>
-						
-											<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
-											<script type="text/javascript">
-												var uploader = new plupload.Uploader({
-													runtimes : 'html5,flash,silverlight,html4',
-													browse_button : 'pickfiles', // you can pass in id...
-													container: document.getElementById('container'), // ... or DOM Element itself
-													url : location.pathname  + "?start=1",
-													max_file_size : '#{Configuration.uploadMaxFileSize}kb',
-													multi_selection : false,
-													init: {
-														PostInit: function() {
-															document.getElementById('filelist').innerHTML = '';					
-														},
-														
-														FilesAdded: function(up, files) {
-															
-															plupload.each(files, function(file) {
-																if(up.files.length > 1)
-																{
-																	up.removeFile(file);
-																}
-																
-																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-															});
-															uploader.start();
-															
-														},
-														
-														UploadProgress: function(up, file) {
-															document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-														},
-														 StateChanged: function(up) {
-																// Called when the state of the queue is changed
-																if( up.state == plupload.STOPPED)
-																	report();
-														},
-													}
-												});
-												
-												uploader.init();
-												function report(){
-													//window.location.href = location.pathname ;
-												}
-											</script>
-										</div>
-									</div>
-								</div>
-
-								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">#{lbl.related_collections}</label>
-									
-									<h:selectManyMenu value="#{CreateSpaceBean.selectedCollections}" id="selectSpaceCollections" style="height:150px; width:100%;" class="imj_metadataValue">
-										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}"/>
-									</h:selectManyMenu>								
-								</div>
-							</div>
-						</div>
-						
-						<div class="imj_adminPanel">
-							<div class="imj_headline">
-								<h2>
-									<h:outputText value="#{lbl.admin_space_seo}"/>
-<ui:remove>
-									<h:commandButton action="" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
-</ui:remove>							
-								</h2>
-							</div>
-							<div class="imj_content">
-								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">#{lbl.url_slug}</label>
-									<span class="imj_metadataValue">
-										<h:inputText id="spaceSlug" value="#{CreateSpaceBean.space.slug}" requiredMessage="#{msg.error_space_needs_slug}"/>
-										<span id="previewSpaceSlugUrl"></span>
-									</span>
-								</div>
-								
-
-
-							</div>
-						</div>
-						
-						
-						<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
-							<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
-								<h:outputText value="#{lbl.cancel}"/>
-							</h:outputLink>
-							<h:commandButton action="#{CreateSpaceBean.save}" value="#{lbl.save}" styleClass="imj_submitButton"/>
-						</h:panelGroup>
-					</h:form>
-				</h:panelGroup>
-			</div>
-		</div>
 	</ui:define>
 </ui:composition>

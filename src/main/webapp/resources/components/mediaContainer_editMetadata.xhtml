@@ -11,13 +11,12 @@
 	<composite:attribute name="formularBean" required="true" />
 	<composite:attribute name="formularContextBean" required="true" />
 	<composite:attribute name="headline" required="true" />
+	<composite:attribute name="showProfileSelector" default="false"/>
 </composite:interface>
 
 <composite:implementation>
-
 	<h:panelGroup layout="block" class="imj_mediaContainerEditMD">
 		<h:form id="mediaContainerForm">
-		
 			<div class="imj_headline">
 				<br/>
 			</div>
@@ -102,7 +101,7 @@
 									<div class="imj_metadataValue">
 										<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
 											<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-							
+											<div class="imj_messageError" id="console"></div>
 											<div id="container">
 											    <a id="pickfiles" href="javascript:;">[#{lbl.uploadLogo}]</a>
 											</div>
@@ -122,14 +121,32 @@
 														},
 														
 														FilesAdded: function(up, files) {
-															
-															plupload.each(files, function(file) {
+															plupload.each(files, function(file) {																
 																if(up.files.length > 1)
 																{
 																	up.removeFile(file);
 																}
 																
 																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">'+ file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+															});
+															document.getElementById('console').innerHTML = "";
+															uploader.bind('Error', function(up, err) {
+															    document.getElementById('console').innerHTML = "\nError " + err.code + ": " + err.message;
+															    
+															});
+															uploader.bind('FileUploaded', function(up, file, response) {
+
+															    response = jQuery.parseJSON( response.response );
+
+															    if (response.error.code){
+															        uploader.trigger('Error', {
+															            code : response.error.code,
+															            message : response.error.message,
+															            details : response.details,
+															            file : file
+															        });
+															        }
+
 															});
 															uploader.start();
 															
@@ -146,86 +163,58 @@
 													}
 												});
 												
-												uploader.init();													
+												uploader.init();
+												
 
 												function report(){
 													//window.location.href = location.pathname ;
+													
+													//reset uploader 
+													uploader.splice();
 												}
 											</script>
+											</div>
+											</div>
 										</div>
-									</div>
-								</div>
-								<ui:fragment rendered= "#{cc.attrs.formularBean.container.logoUrl!=null}">
-									<div class="imj_metadataValue">
-										<img alt="Logo" src="#{cc.attrs.formularBean.container.logoUrl}" height="50em" class="imj_community_logo"/>
-										<span class="imj_inlineButtonGroup"> 
-											<h:outputText value="#{lbl.removeLogo}"/>
-											<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
-													<f:ajax execute="@form" render="@form" />
-										    </h:commandButton>
-									    </span>
-									</div>
+										<ui:fragment rendered= "#{cc.attrs.formularBean.container.logoUrl!=null}">
+											<div class="imj_metadataValue">
+												<img alt="Logo" src="#{cc.attrs.formularBean.container.logoUrl}" height="50em" class="imj_community_logo"/>
+												<span class="imj_inlineButtonGroup"> 
+													<h:outputText value="#{lbl.removeLogo}"/>
+													<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
+															<f:ajax execute="@form" render="@form" />
+												    </h:commandButton>
+											    </span>
+											</div>
+										</ui:fragment>
+										
+										
+									</h:panelGroup>
 								</ui:fragment>
-								
-								
-							</h:panelGroup>
+						<br/>
+				</c:if> 
+				<!-- END profileSelectMode, basicInfoAria -->
+				<!-- Select Profile-->
+				<c:if test="#{cc.attrs.showProfileSelector}">
+					<h:selectOneRadio value="#{cc.attrs.formularBean.createProfile}">
+						<f:ajax execute="@this" render="editContainer:mediaContainerForm:profileSelectorArea" />
+						<f:selectItem itemLabel="#{lbl.skip_create_profile}" itemValue="false" />
+						<f:selectItem itemLabel="#{lbl.profile_select_existing_profile}" itemValue="true" />
+					</h:selectOneRadio>
+					<h:panelGroup id="profileSelectorArea" layout="block">
+						<ui:fragment rendered="#{cc.attrs.formularBean.createProfile}">
+							<mdprofile:profileSelector profileSelector="#{cc.attrs.formularBean.profileSelector}"/>
 						</ui:fragment>
-				<br/>
-		</c:if> <!-- END profileSelectMode, basicInfoAria -->
-
-		<!-- START NEW FEATURE -->
-			<c:if test="#{cc.attrs.formularBean.collectionType}">
-				<h:panelGroup layout="block" id="previewArea"  rendered="#{cc.attrs.formularBean.profileItems.size()>0 and cc.attrs.formularBean.collectionCreateMode}">
-						<div class="imj_sectionHeadline">
-							<h4>
-								<h:outputText value=" #{lbl.metadata_profile}" />
-								<span class="imj_noDisplay">: </span>
-							</h4>
-						</div>
-					<h:selectBooleanCheckbox  id="useTemplate" value="#{cc.attrs.formularBean.useMDProfileTemplate}">
-						<f:ajax event="change" execute="@this" render="previewArea selectProfilesPanel profileCreationMethodPanel submitButtonPanel" />
-					</h:selectBooleanCheckbox>
-					<h:outputLabel styleClass="imj_metadataLabel" for="useTemplate">
-						<h:outputText value="#{lbl.profile_use_template}"/>
-						<span class="imj_noDisplay">: </span>
-					</h:outputLabel>
-				</h:panelGroup>
-				<h:panelGroup layout="block" id="selectProfilesPanel">
-					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
-						<div>
-							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}" >
-									<f:ajax  execute="@this" render="previewArea selectProfilesPanel" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
-								<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
-							</h:selectOneMenu> 
-						</div>														
-
-						<mdprofile:profile_preview statementWrappers="#{cc.attrs.formularBean.statementWrappers}" profileDescription="#{cc.attrs.formularBean.profileTemplate.description}"/> 
-					</ui:fragment>
-				</h:panelGroup>
-				<h:panelGroup layout="block" id="profileCreationMethodPanel">
-					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
-					<div>
-						<h:outputText value="#{lbl.copy_or_reference_metadata_profile}"/>
-					</div>
-					<div>
-							<h:selectOneRadio value="#{cc.attrs.formularBean.selectedCreationMethod}">
-											<f:ajax  execute="@this" render="submitButtonPanel" />
-									<f:selectItems value="#{cc.attrs.formularBean.profileCreationMethod}"/>
-							</h:selectOneRadio>
-					</div>
-					</ui:fragment>
-				</h:panelGroup>
-			</c:if>
-		<!-- START END FEATURE -->
-
-			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
-				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
-					<h:outputText value="#{lbl.cancel}"/>
-				</h:outputLink>
-				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.collectionType and cc.attrs.formularBean.useMDProfileTemplate and cc.attrs.formularBean.copyProfileMethod}"/>
-				<h:commandButton action="#{cc.attrs.formularBean.save()}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
-			</h:panelGroup>
+					</h:panelGroup>
+				</c:if>
 		
+				<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
+					<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+						<h:outputText value="#{lbl.cancel}"/>
+					</h:outputLink>
+					<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.collectionType and cc.attrs.showProfileSelector and cc.attrs.formularBean.createProfile and cc.attrs.formularBean.profileSelector.copyProfile}"/>
+					<h:commandButton action="#{cc.attrs.formularBean.save()}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
+				</h:panelGroup>
 			</div>
 		</h:form>
 	</h:panelGroup>

@@ -3,21 +3,16 @@
  */
 package de.mpg.imeji.presentation.image;
 
+import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
@@ -28,371 +23,288 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
- * Bean for Thumbnail list elements. Each element of a list with thumbnail is an
- * instance of a {@link ThumbnailBean}
+ * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
+ * {@link ThumbnailBean}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ThumbnailBean {
-	private String link = "";
-	private String filename = "";
-	private String caption = "";
-	private URI uri = null;
-	private String id;
-	// private URI profile = null;
-	private List<Metadata> metadata = new ArrayList<Metadata>();
-	private List<Statement> statements = new ArrayList<Statement>();
-	private boolean selected = false;
-	private boolean isInActiveAlbum = false;
-	private SessionBean sessionBean;
-	private static Logger logger = Logger.getLogger(ThumbnailBean.class);
-	private MetadataSetBean mds;
-	private CollectionImeji collection;
-	private String collectionName = "";
-	private MetadataProfile profile;
-	
-	/**
-	 * Emtpy {@link ThumbnailBean}
-	 */
-	public ThumbnailBean() {
+public class ThumbnailBean implements Serializable {
+  private static final long serialVersionUID = -8084039496592141508L;
+  private String link = "";
+  private String filename = "";
+  private String caption = "";
+  private URI uri = null;
+  private String id;
+  private boolean selected = false;
+  private boolean isInActiveAlbum = false;
+  private MetadataSetBean mds;
+  private MetadataProfile profile;
+  private MetadataSet mdSet;
+  private URI collectionUri;
+  private boolean isPrivate = true;
 
-	}
+  /**
+   * Emtpy {@link ThumbnailBean}
+   */
+  public ThumbnailBean() {
 
-	/**
-	 * Bean for Thumbnail list elements. Each element of a list with thumbnail
-	 * is an instance of a {@link ThumbnailBean}
-	 * 
-	 * @param item
-	 * @throws Exception
-	 */
-	public ThumbnailBean(Item item) throws Exception {
-		this.sessionBean = (SessionBean) BeanHelper
-				.getSessionBean(SessionBean.class);
-		this.uri = item.getId();
-		Navigation navigation = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
-		this.id = ObjectHelper.getId(uri);
-		link = ( Status.WITHDRAWN != item.getStatus()) ? 
-				navigation.getFileUrl() + item.getThumbnailImageUrl().toString() :
-				navigation.applicationUrl+"resources/icon/discarded.png";
-		if (AuthUtil.canReadItemButNotCollection(sessionBean.getUser(), item)) {
-			this.profile = ObjectLoader.loadProfile(item.getMetadataSet()
-					.getProfile(), Imeji.adminUser);
-			this.collection = ObjectLoader.loadCollection(item.getCollection(),
-					Imeji.adminUser);
-		} else {
-			this.profile = ObjectCachedLoader.loadProfile(item.getMetadataSet()
-					.getProfile());
-			this.collection = ObjectCachedLoader.loadCollection(item
-					.getCollection());
-		}
-		this.filename = item.getFilename();
-		this.metadata = (List<Metadata>) item.getMetadataSet().getMetadata();
-		this.statements = loadStatements(item.getMetadataSet().getProfile());
-		this.collectionName = this.collection.getMetadata().getTitle();
-		this.caption = findCaption();
-		this.selected = sessionBean.getSelected().contains(uri.toString());
-		if (sessionBean.getActiveAlbum() != null) {
-			this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages()
-					.contains(item.getId());
-		}
-		this.mds = new MetadataSetBean(item.getMetadataSet(), profile, false);
-	}
+  }
 
-	/**
-	 * Inititialize the popup with the metadata for this image. The method is
-	 * called directly from xhtml
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public String getInitPopup() throws Exception {
-		List<Item> l = new ArrayList<Item>();
-		Item im = new Item();
-		im.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-		l.add(im);
-		return "";
-	}
+  /**
+   * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
+   * {@link ThumbnailBean}
+   * 
+   * @param item
+   * @throws Exception
+   */
+  public ThumbnailBean(Item item) throws Exception {
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    this.uri = item.getId();
+    this.collectionUri = item.getCollection();
+    this.id = ObjectHelper.getId(getUri());
+    this.link =
+        Status.WITHDRAWN != item.getStatus() ? navigation.getFileUrl()
+            + item.getThumbnailImageUrl().toString() : navigation.getApplicationUrl()
+            + "resources/icon/discarded.png";
+    this.filename = item.getFilename();
+    this.mdSet = item.getMetadataSet();
 
-	/**
-	 * Load the statements of a {@link MetadataProfile} according to its id (
-	 * {@link URI} )
-	 * 
-	 * @param uri
-	 * @return
-	 */
-	private List<Statement> loadStatements(URI uri) {
-		try {
-			if (profile != null) {
-				return (List<Statement>) profile.getStatements();
-			}
-		} catch (Exception e) {
-			BeanHelper.error(sessionBean.getMessage("error_profile_load") + " "
-					+ uri + "  " + sessionBean.getLabel("of") + " " + uri);
-			// TODO
-			logger.error("Error load profile " + uri + " of item " + uri, e);
-		}
-		return new ArrayList<Statement>();
-	}
+    this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet.getProfile());
+    this.caption = findCaption();
 
-	/**
-	 * Find the caption for this {@link ThumbnailBean} as defined in the
-	 * {@link MetadataProfile}. If none defined in the {@link MetadataProfile}
-	 * return the filename
-	 * 
-	 * @return
-	 */
-	private String findCaption() {
-		for (Statement s : statements) {
-			if (s.isDescription()) {
-				for (Metadata md : metadata) {
-					if (md.getStatement().equals(s.getId())) {
-						String str = "";
-						if (md instanceof Link)
-							str = ((Link) md).getLabel();
-						else if (md instanceof Publication)
-							str = CommonUtils.removeTags(((Publication) md)
-									.getCitation());
-						else
-							str = md.asFulltext();
-						if (!"".equals(str.trim()))
-							return str;
-					}
-				}
-			}
-		}
-		return filename;
-	}
+    this.selected = sessionBean.getSelected().contains(uri.toString());
+    if (sessionBean.getActiveAlbum() != null) {
+      this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
+    }
+    this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false);
 
-	/**
-	 * Listener for the select box of this {@link ThumbnailBean}
-	 * 
-	 * @param event
-	 */
-	public void selectedChanged(ValueChangeEvent event) {
-		SessionObjectsController soc = new SessionObjectsController();
-		if (event.getNewValue().toString().equals("true")) {
-			setSelected(true);
-			soc.selectItem(uri.toString());
-		} else if (event.getNewValue().toString().equals("false")) {
-			setSelected(false);
-			soc.unselectItem(uri.toString());
-		}
-	}
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getLink() {
-		return link;
-	}
+  /**
+   * Initialize the {@link MetadataSetBean} which is used in the Popup
+   */
+  public void initPopup() {
+    if (getMds() == null) {
+      setMds(new MetadataSetBean(mdSet, getProfile(), false));
+      // Commented out, statements have to be filled in for sake of
+      // Caption
+      // setStatements(loadStatements(getProfile().getId()));
+    }
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param link
-	 */
-	public void setLink(String link) {
-		this.link = link;
-	}
+  /**
+   * Find the caption for this {@link ThumbnailBean} as defined in the {@link MetadataProfile}. If
+   * none defined in the {@link MetadataProfile} return the filename
+   * 
+   * @return
+   */
+  private String findCaption() {
+    for (Statement s : profile.getStatements()) {
+      if (s.isDescription()) {
+        for (Metadata md : mdSet.getMetadata()) {
+          if (md.getStatement().equals(s.getId())) {
+            String str = "";
+            if (md instanceof Link)
+              str = ((Link) md).getLabel();
+            else if (md instanceof Publication)
+              str = CommonUtils.removeTags(((Publication) md).getCitation());
+            else
+              str = md.asFulltext();
+            if (!"".equals(str.trim()))
+              return str;
+          }
+        }
+      }
+    }
+    return getFilename();
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getFilename() {
-		return filename;
-	}
+  /**
+   * Listener for the select box of this {@link ThumbnailBean}
+   * 
+   * @param event
+   */
+  public void selectedChanged(ValueChangeEvent event) {
+    SessionObjectsController soc = new SessionObjectsController();
+    if (event.getNewValue().toString().equals("true")) {
+      setSelected(true);
+      soc.selectItem(getUri().toString());
+    } else if (event.getNewValue().toString().equals("false")) {
+      setSelected(false);
+      soc.unselectItem(getUri().toString());
+    }
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param filename
-	 */
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getLink() {
+    return link;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getCaption() {
-		return caption;
-	}
+  /**
+   * setter
+   * 
+   * @param link
+   */
+  public void setLink(String link) {
+    this.link = link;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param caption
-	 */
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getFilename() {
+    return filename;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public URI getUri() {
-		return uri;
-	}
+  /**
+   * setter
+   * 
+   * @param filename
+   */
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param id
-	 */
-	public void setUri(URI id) {
-		this.uri = id;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getCaption() {
+    return caption;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public List<Metadata> getMetadata() {
-		return metadata;
-	}
+  /**
+   * setter
+   * 
+   * @param caption
+   */
+  public void setCaption(String caption) {
+    this.caption = caption;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param metadata
-	 */
-	public void setMetadata(List<Metadata> metadata) {
-		this.metadata = metadata;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public URI getUri() {
+    return uri;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public List<Statement> getStatements() {
-		return statements;
-	}
+  /**
+   * setter
+   * 
+   * @param id
+   */
+  public void setUri(URI id) {
+    this.uri = id;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param statements
-	 */
-	public void setStatements(List<Statement> statements) {
-		this.statements = statements;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public boolean isSelected() {
+    return selected;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public boolean isSelected() {
-		return selected;
-	}
+  /**
+   * setter
+   * 
+   * @param selected
+   */
+  public void setSelected(boolean selected) {
+    this.selected = selected;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param selected
-	 */
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public boolean isInActiveAlbum() {
+    return isInActiveAlbum;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public boolean isInActiveAlbum() {
-		return isInActiveAlbum;
-	}
+  /**
+   * setter
+   * 
+   * @param isInActiveAlbum
+   */
+  public void setInActiveAlbum(boolean isInActiveAlbum) {
+    this.isInActiveAlbum = isInActiveAlbum;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param isInActiveAlbum
-	 */
-	public void setInActiveAlbum(boolean isInActiveAlbum) {
-		this.isInActiveAlbum = isInActiveAlbum;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getId() {
+    return id;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getId() {
-		return id;
-	}
+  /**
+   * @param id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	/**
-	 * @param id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+  /**
+   * getter
+   * 
+   * @return the mds
+   */
+  public MetadataSetBean getMds() {
+    return mds;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return the mds
-	 */
-	public MetadataSetBean getMds() {
-		return mds;
-	}
+  /**
+   * setter
+   * 
+   * @param mds the mds to set
+   */
+  public void setMds(MetadataSetBean mds) {
+    this.mds = mds;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param mds
-	 *            the mds to set
-	 */
-	public void setMds(MetadataSetBean mds) {
-		this.mds = mds;
-	}
+  public URI getCollectionUri() {
+    return collectionUri;
+  }
 
-	/**
-	 * @return the collection
-	 */
-	public CollectionImeji getCollection() {
-		return collection;
-	}
+  public void setCollectionUri(URI colUri) {
+    this.collectionUri = colUri;
+  }
 
-	/**
-	 * @param collection
-	 *            the collection to set
-	 */
-	public void setCollection(CollectionImeji collection) {
-		this.collection = collection;
-	}
+  public MetadataProfile getProfile() {
+    return profile;
+  }
 
-	/**
-	 * @return the collectionName
-	 */
-	public String getCollectionName() {
-		return collectionName;
-	}
+  public void setProfile(MetadataProfile profile) {
+    this.profile = profile;
+  }
 
-	/**
-	 * @param collectionName
-	 *            the collectionName to set
-	 */
-	public void setCollectionName(String collectionName) {
-		this.collectionName = collectionName;
-	}
+  public boolean isPrivate() {
+    return isPrivate;
+  }
+
+  public void setPrivate(boolean isPrivate) {
+    this.isPrivate = isPrivate;
+  }
+
 }

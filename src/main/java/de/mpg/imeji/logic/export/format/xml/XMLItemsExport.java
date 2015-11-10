@@ -23,23 +23,21 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author hnguyen
  */
 public class XMLItemsExport extends XMLExport {
-	@Override
-	public void init() {
-		// No initialization so far
-	}
+  @Override
+  public void init() {
+    // No initialization so far
+  }
 
-	@Override
-	public void export(OutputStream out, SearchResult sr) {
-		SessionBean session = (SessionBean) BeanHelper
-				.getSessionBean(SessionBean.class);
-		ItemController ic = new ItemController();
-		Collection<Item> itemList = ic.retrieve(sr.getResults(), -1, 0,
-				session.getUser());
-		Items items = new Items(itemList);
-		try {
-			JaxbUtil.writeToOutputStream(items, out);
-		} catch (JAXBException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  @Override
+  public void export(OutputStream out, SearchResult sr) {
+    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    ItemController ic = new ItemController();
+    Collection<Item> itemList = ic.retrieve(sr.getResults(), -1, 0, session.getUser());
+    Items items = new Items(itemList);
+    try {
+      JaxbUtil.writeToOutputStream(items, out);
+    } catch (JAXBException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }

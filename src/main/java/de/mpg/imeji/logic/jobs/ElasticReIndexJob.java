@@ -32,7 +32,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
     logger.info("Reindex started!");
-    String index = ElasticService.createIndex();
+    String index = ElasticService.initializeIndex();
     reindexAlbums(index);
     reindexItems(index);
     reindexFolders(index);

@@ -107,6 +107,7 @@ public class JenaUtil {
     TDBMaker.releaseLocation(new Location(TDB_PATH));
     logger.info("TDB Location released!");
     deleteTDBDirectory();
+    ElasticService.reset();
     ElasticService.shutdown();
   }
 

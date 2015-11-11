@@ -13,7 +13,6 @@ import org.elasticsearch.search.SearchHit;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchIndexer;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticIndex;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
 import de.mpg.imeji.logic.search.elasticsearch.factory.ElasticQueryFactory;
 import de.mpg.imeji.logic.search.elasticsearch.factory.ElasticSortFactory;
@@ -55,7 +54,7 @@ public class ElasticSearch implements Search {
         this.type = null;
         break;
     }
-    this.indexer = new ElasticIndexer(ElasticService.INDEX, this.type);;
+    this.indexer = new ElasticIndexer(ElasticService.DATA_ALIAS, this.type);;
   }
 
   @Override
@@ -88,7 +87,7 @@ public class ElasticSearch implements Search {
   public SearchResult searchString(String query, SortCriterion sort, User user, int from,
       int size) {
     QueryBuilder q = QueryBuilders.queryStringQuery(query);
-    SearchResponse resp = ElasticService.client.prepareSearch(ElasticIndex.data.name())
+    SearchResponse resp = ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)
         .setNoFields().setTypes(getTypes()).setQuery(q).setSize(size).setFrom(from)
         .addSort(ElasticSortFactory.build(sort)).execute().actionGet();
     return toSearchResult(resp);

@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 
@@ -23,7 +22,6 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchIndexer;
-import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticIndex;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticAlbum;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
@@ -142,9 +140,9 @@ public class ElasticIndexer implements SearchIndexer {
   /**
    * Remove all indexed data
    */
-  public static void clear(ElasticIndex index) {
-    DeleteIndexResponse delete = ElasticService.client.admin().indices()
-        .delete(new DeleteIndexRequest(index.name())).actionGet();
+  public static void clear(String index) {
+    DeleteIndexResponse delete =
+        ElasticService.client.admin().indices().delete(new DeleteIndexRequest(index)).actionGet();
     if (!delete.isAcknowledged()) {
       // Error
     }
@@ -160,7 +158,7 @@ public class ElasticIndexer implements SearchIndexer {
     if (obj instanceof Item) {
       obj = setAlbums((Item) obj);
       ElasticItem es = new ElasticItem((Item) obj);
-      es.setSpace(getSpace((Item) obj, ElasticTypes.folders.name(), ElasticIndex.data.name()));
+      es.setSpace(getSpace((Item) obj, ElasticTypes.folders.name(), ElasticService.DATA_ALIAS));
       return es;
     } else if (obj instanceof CollectionImeji) {
       ElasticFolder ef = new ElasticFolder((CollectionImeji) obj);
@@ -211,12 +209,6 @@ public class ElasticIndexer implements SearchIndexer {
           Files.readAllBytes(
               Paths.get(ElasticIndexer.class.getClassLoader().getResource(mappingFile).toURI())),
           "UTF-8");
-      try {
-        ElasticService.client.admin().indices().create(new CreateIndexRequest(this.index))
-            .actionGet();
-      } catch (Exception e) {
-        logger.info("Index already existing");
-      }
       ElasticService.client.admin().indices().preparePutMapping(this.index).setType(dataType)
           .setSource(jsonMapping).execute().actionGet();
     } catch (Exception e) {

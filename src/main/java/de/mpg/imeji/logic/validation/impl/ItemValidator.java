@@ -63,9 +63,9 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
           if(parentStatement.getId().equals(preStatement.getId()) && MetadataHelper.isEmpty((Metadata)itemMetadataList[i-1])){
             throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
           //Statement has to be preceded by same statement (multiple childs) or parent statement or a descendant statement (multiple statement with childs)
-          }else if(!parentStatement.getId().equals(preStatement.getId()) && !s.getId().equals(preStatement.getId()) && !isSuccessor(s, preStatement, p)){
+          }/*else if(!parentStatement.getId().equals(preStatement.getId()) && !s.getId().equals(preStatement.getId()) && !isSuccessor(s, preStatement, p)){
             throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
-          }
+          }*/
         }
 
       }

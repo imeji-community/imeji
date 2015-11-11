@@ -54,10 +54,10 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
   public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception {
     CollectionController controller = new CollectionController();
     Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-    int myOffset = offset;
-    myOffset = prepareList(offset);
+    search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-    collections = controller.retrieveBatchLazy(searchResult.getResults(), limit, myOffset, sb.getUser());
+    collections =
+        controller.retrieveBatchLazy(searchResult.getResults(), limit, offset, sb.getUser());
     return ImejiFactory.collectionListToListItem(collections, sb.getUser());
   }
 
@@ -131,9 +131,8 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.SearchQuery
-   * , de.mpg.imeji.logic.search.vo.SortCriterion)
+   * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.
+   * SearchQuery , de.mpg.imeji.logic.search.vo.SortCriterion)
    * 
    * @param searchQuery
    * 
@@ -142,9 +141,10 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
    * @return
    */
   @Override
-  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
+  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion, int offset,
+      int limit) {
     CollectionController controller = new CollectionController();
-    return controller.search(searchQuery, sortCriterion, -1, 0, sb.getUser(),
+    return controller.search(searchQuery, sortCriterion, limit, offset, sb.getUser(),
         sb.getSelectedSpaceString());
   }
 

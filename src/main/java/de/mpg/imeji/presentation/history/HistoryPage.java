@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.history;
 import java.net.URI;
 import java.util.Map;
 
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -60,7 +61,7 @@ public class HistoryPage {
       } else if (ImejiPages.ALBUM_HOME.matches(uriStr)) {
         return ObjectLoader.loadAlbumLazy(uri, user).getMetadata().getTitle();
       } else if (ImejiPages.ITEM_DETAIL.matches(uriStr)) {
-        return ObjectLoader.loadItem(uri, user).getFilename();
+        return new ItemController().retrieveLazy(uri, user).getFilename();
       } else if (ImejiPages.USER_GROUP == imejiPage) {
         String groupUri = UrlHelper.decode(ObjectHelper.getId(uri));
         return ObjectLoader.loadUserGroupLazy(URI.create(groupUri), user).getName();

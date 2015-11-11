@@ -57,9 +57,9 @@ public class StartPageBean implements Serializable {
    * @throws ImejiException
    */
   public StartPageBean() throws IOException, URISyntaxException, ImejiException {
-     SearchQuery query = readSearchQueryInProperty();
-     SortCriterion order = readSortCriterionInProperty();
-     SearchResult result = searchItems(query, order);
+    SearchQuery query = readSearchQueryInProperty();
+    SortCriterion order = readSortCriterionInProperty();
+    SearchResult result = searchItems(query, order);
     loadItemInCaroussel(result, order == null);// if order is null, then it
     // is random
   }
@@ -72,9 +72,8 @@ public class StartPageBean implements Serializable {
    * @throws IOException
    */
   private SearchQuery readSearchQueryInProperty() throws IOException, URISyntaxException {
-    String prop =
-        ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-            .getStartPageCarouselQuery();
+    String prop = ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
+        .getStartPageCarouselQuery();
     if (prop != null) {
       return SearchQueryParser.parseStringQuery(prop);
     }
@@ -90,12 +89,11 @@ public class StartPageBean implements Serializable {
    */
   private SortCriterion readSortCriterionInProperty() throws IOException, URISyntaxException {
     try {
-      String[] prop =
-          ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-              .getStartPageCarouselQueryOrder().split("-");
+      String[] prop = ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
+          .getStartPageCarouselQueryOrder().split("-");
       if ("".equals(prop[0]) && "".equals(prop[1]))
-        return new SortCriterion(JenaSearch.getIndex(prop[0]), SortOrder.valueOf(prop[1]
-            .toUpperCase()));
+        return new SortCriterion(JenaSearch.getIndex(prop[0]),
+            SortOrder.valueOf(prop[1].toUpperCase()));
     } catch (Exception e) {
       // no sort order defined
     }
@@ -115,8 +113,10 @@ public class StartPageBean implements Serializable {
       // Search for item which have been for less than n hours
       sq.addPair(new SearchPair(SearchFields.created, SearchOperators.GREATER,
           getTimeforNDaybeforeNow(searchforItemCreatedForLessThan), false));
-      return new SearchResult(ic.search(null, sq, sc, session.getUser(), session.getSelectedSpaceString(),
-          -1, 0).getResults(), null);
+      return new SearchResult(
+          ic.search(null, sq, sc, session.getUser(), session.getSelectedSpaceString(), -1, 0)
+              .getResults(),
+          null);
     }
     return ic.search(null, sq, sc, session.getUser(), session.getSelectedSpaceString(), -1, 0);
   }
@@ -156,7 +156,7 @@ public class StartPageBean implements Serializable {
       if (sublistSize > 0)
         uris = sr.getResults().subList(0, sublistSize);
     }
-    List<Item> items = (List<Item>) ic.retrieve(uris, -1, 0, session.getUser());
+    List<Item> items = (List<Item>) ic.retrieveBatchLazy(uris, -1, 0, session.getUser());
     carousselImages = ImejiFactory.imageListToThumbList(items);
   }
 

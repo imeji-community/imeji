@@ -92,10 +92,8 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
    * @return
    */
   public String getInit() {
-
     setSelectedFilterSearch(null);
     setSearchQuery(null);
-
     if (UrlHelper.getParameterValue("f") != null && !UrlHelper.getParameterValue("f").equals("")) {
       selectedFilter = UrlHelper.getParameterValue("f");
     }
@@ -103,12 +101,10 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         && !UrlHelper.getParameterValue("tab").equals("")) {
       selectedMenu = UrlHelper.getParameterValue("tab");
     }
-
     if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .containsKey("q")) {
       query = UrlHelper.getParameterValue("q");
     }
-
     if (selectedFilter == null || UrlHelper.getParameterBoolean("login") || sb.getUser() == null) {
       if (sb.getUser() != null) {
         selectedFilter = "my";
@@ -403,30 +399,32 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     return false;
   }
 
-
-  public int prepareList(int offset) throws Exception {
-
+  /**
+   * Search for containers, according to the current queries
+   * 
+   * @param offset
+   * @param limit
+   * @return
+   * @throws Exception
+   */
+  public int search(int offset, int limit) throws Exception {
     SearchQuery searchQuery = new SearchQuery();
     int myOffset = offset;
-
     if (!"".equals(getQuery())) {
       searchQuery = SearchQueryParser.parseStringQuery(getQuery());
     }
     // get Filters for Collections
     SearchPair sp = getFilter();
-
-
     if (sp != null) {
       searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
       searchQuery.addPair(sp);
     }
-
     if (getSearchQuery() == null || changedFilters(sp, getSelectedFilterSearch())) {
       SortCriterion sortCriterion = new SortCriterion();
       sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
       sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 
-      searchResult = search(searchQuery, sortCriterion);
+      searchResult = search(searchQuery, sortCriterion, offset, limit);
       setSearchQuery(searchQuery);
       setSelectedFilterSearch(sp);
       searchResult.setQuery(getQuery());
@@ -443,11 +441,15 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     return myOffset;
   }
 
-  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
-    SearchResult sr = null;
-    return sr;
-
-  }
+  /**
+   * Search for the container
+   * 
+   * @param searchQuery
+   * @param sortCriterion
+   * @return
+   */
+  public abstract SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion,
+      int offset, int limit);
 
   /*
    * (non-Javadoc)

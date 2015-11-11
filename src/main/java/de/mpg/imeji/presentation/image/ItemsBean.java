@@ -123,14 +123,14 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public void initMenus() {
     sortMenu = new ArrayList<SelectItem>();
     sortMenu.add(new SelectItem(null, "--"));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.created, session
-        .getLabel("sort_img_date_created")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified, session
-        .getLabel("sort_date_mod")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.title, session
-        .getLabel("sort_img_collection")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, session
-        .getLabel("sort_img_filename")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.created,
+        session.getLabel("sort_img_date_created")));
+    sortMenu
+        .add(new SelectItem(SearchIndex.SearchFields.modified, session.getLabel("sort_date_mod")));
+    sortMenu.add(
+        new SelectItem(SearchIndex.SearchFields.title, session.getLabel("sort_img_collection")));
+    sortMenu.add(
+        new SelectItem(SearchIndex.SearchFields.filename, session.getLabel("sort_img_filename")));
   }
 
   @Override
@@ -176,7 +176,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public Collection<Item> loadImages(List<String> uris) throws ImejiException {
     ItemController controller = new ItemController();
-    return controller.retrieve(uris, -1, 0, session.getUser());
+    return controller.retrieveBatchLazy(uris, -1, 0, session.getUser());
   }
 
   /**

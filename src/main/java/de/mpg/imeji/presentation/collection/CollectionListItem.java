@@ -16,10 +16,6 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
-import de.mpg.imeji.logic.search.model.SearchOperators;
-import de.mpg.imeji.logic.search.model.SearchPair;
-import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -44,7 +40,6 @@ public class CollectionListItem {
   private String descriptionFull = "";
   private String authors = "";
   private int size = 0;
-  private int discardedSize = 0;
   private String status = Status.PENDING.toString();
   private String id = null;
   private URI uri = null;
@@ -97,7 +92,7 @@ public class CollectionListItem {
       // initializations
       initThumbnail(collection, user);
       initSize(collection, user);
-      initDiscardedSize(collection, user);
+      // initDiscardedSize(collection, user);
       initSelected();
       if (user != null) {
         isOwner = collection.getCreatedBy().equals(user.getId());
@@ -126,7 +121,7 @@ public class CollectionListItem {
       if (searchedContainer.getImages().iterator().hasNext()) {
         URI uri = searchedContainer.getImages().iterator().next();
         if (uri != null) {
-          this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));
+          this.thumbnail = new ThumbnailBean(ic.retrieveLazy(uri, user), false);
         }
       }
     }
@@ -143,17 +138,6 @@ public class CollectionListItem {
         ic.search(collection.getId(), null, null, Imeji.adminUser, null, 0, 0).getNumberOfRecords();
   }
 
-  private void initDiscardedSize(CollectionImeji collection, User user) {
-    ItemController ic = new ItemController();
-    SearchQuery q = new SearchQuery();
-    q.addPair(new SearchPair(SearchFields.status, SearchOperators.EQUALS,
-        Status.WITHDRAWN.getUriString(), false));
-    discardedSize = ic.search(collection.getId(), q, null, user, null, -1, 0).getNumberOfRecords();
-  }
-
-  public int getSizeDiscarded() {
-    return discardedSize;
-  }
 
   /**
    * Chek if the {@link CollectionImeji} is selected in the {@link SessionBean}

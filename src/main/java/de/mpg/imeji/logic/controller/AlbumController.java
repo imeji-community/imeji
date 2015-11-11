@@ -53,8 +53,8 @@ import de.mpg.j2j.helper.J2JHelper;
 public class AlbumController extends ImejiController {
   private static ReaderFacade reader = new ReaderFacade(Imeji.albumModel);
   private static WriterFacade writer = new WriterFacade(Imeji.albumModel);
-  private Search search = SearchFactory.create(SearchObjectTypes.ALBUM,
-      SEARCH_IMPLEMENTATIONS.ELASTIC);
+  private Search search =
+      SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC);
 
   private static Logger logger = Logger.getLogger(AlbumController.class);
 
@@ -184,8 +184,8 @@ public class AlbumController extends ImejiController {
     if (album.getImages().isEmpty()) {
       throw new UnprocessableError("An empty album can not be released!");
     } else if (album.getStatus().equals(Status.RELEASED)) {
-      throw new UnprocessableError("The status of album is " + album.getStatus()
-          + " and can not be released again!");
+      throw new UnprocessableError(
+          "The status of album is " + album.getStatus() + " and can not be released again!");
     } else {
       writeReleaseProperty(album, user);
       update(album, user);
@@ -239,7 +239,7 @@ public class AlbumController extends ImejiController {
     // Add Items which are not already in the album
     Set<String> albumItemsSet = new HashSet<>(albumItems);
     // Retrieve the uris, to check that the items all exist
-    List<Item> items = (List<Item>) itemController.retrieve(uris, -1, 0, user);
+    List<Item> items = (List<Item>) itemController.retrieveBatch(uris, -1, 0, user);
     for (String uri : uris) {
       albumItemsSet.add(uri);
     }
@@ -272,7 +272,7 @@ public class AlbumController extends ImejiController {
         itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0).getResults();
     int beforeSize = albumItems.size();
     // Retrieving Items to check if there will be some not existing item
-    List<Item> items = (List<Item>) itemController.retrieve(toDelete, -1, 0, user);
+    List<Item> items = (List<Item>) itemController.retrieveBatch(toDelete, -1, 0, user);
     for (String uri : toDelete) {
       albumItems.remove(uri);
     }
@@ -288,9 +288,8 @@ public class AlbumController extends ImejiController {
     // Update the removed items, to remove the relation item -> album in the index
     itemController.updateBatch(items, Imeji.adminUser);
     // Get the new size of the album
-    int afterSize =
-        itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
-            .getNumberOfRecords();
+    int afterSize = itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
+        .getNumberOfRecords();
     // Return how many items have been deleted
     return beforeSize - afterSize;
   }
@@ -318,8 +317,8 @@ public class AlbumController extends ImejiController {
    * @return
    * @throws ImejiException
    */
-  public List<Album> searchAndretrieveLazy(User user, String q, String spaceId, int offset, int size)
-      throws ImejiException {
+  public List<Album> searchAndretrieveLazy(User user, String q, String spaceId, int offset,
+      int size) throws ImejiException {
     List<Album> aList = new ArrayList<>();
     try {
       List<String> results =
@@ -343,9 +342,8 @@ public class AlbumController extends ImejiController {
    */
   private List<Album> prepareBatchRetrieve(List<String> uris, int limit, int offset) {
     List<Album> albums = new ArrayList<Album>();
-    uris =
-        uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
-            : uris;
+    uris = uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
+        : uris;
     for (String s : uris) {
       albums.add((Album) J2JHelper.setId(new Album(), URI.create(s)));
     }
@@ -385,8 +383,8 @@ public class AlbumController extends ImejiController {
    * @param hasgrant
    * @throws ImejiException
    */
-  public void updateLogo(Album album, File f, User u) throws ImejiException, IOException,
-      URISyntaxException {
+  public void updateLogo(Album album, File f, User u)
+      throws ImejiException, IOException, URISyntaxException {
     album = (Album) updateFile(album, f, u);
     if (f != null && f.exists()) {
       // Update the collection as a patch only with collection Logo Triple

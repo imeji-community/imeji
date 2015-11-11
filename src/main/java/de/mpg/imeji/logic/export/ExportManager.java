@@ -99,7 +99,7 @@ public class ExportManager {
     if (!selectedItemsToExport.isEmpty()) {
       ItemController itemController = new ItemController();
       List<Item> itemResult =
-          (List<Item>) itemController.retrieve(selectedItemsToExport, 500, 0, user);
+          (List<Item>) itemController.retrieveBatch(selectedItemsToExport, 500, 0, user);
       List<String> sr = new ArrayList<String>();
       for (Item it : itemResult) {
         sr.add(it.getId().toString());

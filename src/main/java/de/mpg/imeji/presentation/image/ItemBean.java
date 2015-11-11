@@ -213,7 +213,8 @@ public class ItemBean {
    * @throws Exception
    */
   public void loadImage() throws Exception {
-    item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
+    item =
+        new ItemController().retrieve(ObjectHelper.getURI(Item.class, id), sessionBean.getUser());
     if (item == null) {
       throw new NotFoundException("LoadImage: empty");
     }

@@ -32,7 +32,7 @@ public class XMLItemsExport extends XMLExport {
     ItemController ic = new ItemController();
 
     try {
-      Collection<Item> itemList = ic.retrieve(sr.getResults(), -1, 0, session.getUser());
+      Collection<Item> itemList = ic.retrieveBatch(sr.getResults(), -1, 0, session.getUser());
       Items items = new Items(itemList);
       JaxbUtil.writeToOutputStream(items, out);
     } catch (Exception e) {

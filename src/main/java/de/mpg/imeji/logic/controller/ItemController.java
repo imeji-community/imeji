@@ -306,8 +306,13 @@ public class ItemController extends ImejiController {
     return (Item) reader.read(imgUri.toString(), user, new Item());
   }
 
+  public Item retrieveLazy(URI imgUri, User user) throws ImejiException {
+    return (Item) reader.readLazy(imgUri.toString(), user, new Item());
+
+  }
+
   /**
-   * Load the {@link List} of {@link Item}
+   * Retrieve the items lazy (without the metadata)
    * 
    * @param uris
    * @param limit
@@ -315,8 +320,39 @@ public class ItemController extends ImejiController {
    * @return
    * @throws ImejiException
    */
-  public Collection<Item> retrieve(List<String> uris, int limit, int offset, User user)
+  public Collection<Item> retrieveBatch(List<String> uris, int limit, int offset, User user)
       throws ImejiException {
+    List<Item> items = uris2Items(uris, limit, offset);
+    reader.read(J2JHelper.cast2ObjectList(items), user);
+    return items;
+  }
+
+  /**
+   * Retrieve the items fully (with all metadata)
+   * 
+   * @param uris
+   * @param limit
+   * @param offset
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public Collection<Item> retrieveBatchLazy(List<String> uris, int limit, int offset, User user)
+      throws ImejiException {
+    List<Item> items = uris2Items(uris, limit, offset);
+    reader.readLazy(J2JHelper.cast2ObjectList(items), user);
+    return items;
+  }
+
+  /**
+   * Transform a list of uris into a list of Item
+   * 
+   * @param uris
+   * @param limit
+   * @param offset
+   * @return
+   */
+  private List<Item> uris2Items(List<String> uris, int limit, int offset) {
     List<String> retrieveUris;
     if (limit < 0) {
       retrieveUris = uris;
@@ -328,10 +364,8 @@ public class ItemController extends ImejiController {
     for (String s : retrieveUris) {
       items.add((Item) J2JHelper.setId(new Item(), URI.create(s)));
     }
-    reader.readLazy(J2JHelper.cast2ObjectList(items), user);
     return items;
   }
-
 
 
   /**
@@ -342,7 +376,7 @@ public class ItemController extends ImejiController {
    */
   public Collection<Item> retrieveAll(User user) throws ImejiException {
     List<String> uris = ImejiSPARQL.exec(JenaCustomQueries.selectItemAll(), Imeji.imageModel);
-    return retrieve(uris, -1, 0, user);
+    return retrieveBatch(uris, -1, 0, user);
   }
 
   /**
@@ -571,7 +605,7 @@ public class ItemController extends ImejiController {
     try {
       List<String> results =
           search(containerUri, q, sort, user, spaceId, size, offset).getResults();
-      itemList = (List<Item>) retrieve(results, -1, 0, user);
+      itemList = (List<Item>) retrieveBatch(results, -1, 0, user);
     } catch (Exception e) {
       throw new UnprocessableError("Cannot retrieve items:", e);
     }

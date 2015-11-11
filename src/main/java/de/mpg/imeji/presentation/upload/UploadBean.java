@@ -371,13 +371,16 @@ public class UploadBean implements Serializable {
     List<String> sr =
         s.searchString(JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
             FilenameUtils.getBaseName(filename)), null, null, 0, -1).getResults();
-    if (sr.size() == 0)
+    if (sr.size() == 0) {
       throw new RuntimeException(
           "No item found with the filename " + FilenameUtils.getBaseName(filename));
-    if (sr.size() > 1)
+    }
+    if (sr.size() > 1) {
       throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename) + " not unique ("
+
           + sr.size() + " found).");
-    return ObjectLoader.loadItem(URI.create(sr.get(0)), user);
+    }
+    return new ItemController().retrieveLazy(URI.create(sr.get(0)), user);
   }
 
   /**

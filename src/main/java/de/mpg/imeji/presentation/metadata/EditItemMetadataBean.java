@@ -284,7 +284,7 @@ public class EditItemMetadataBean {
    */
   public List<Item> loaditems(List<String> uris) throws ImejiException {
     ItemController itemController = new ItemController();
-    return (List<Item>) itemController.retrieve(uris, -1, 0, session.getUser());
+    return (List<Item>) itemController.retrieveBatch(uris, -1, 0, session.getUser());
   }
 
   /**

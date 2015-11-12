@@ -10,6 +10,7 @@ import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -51,7 +52,9 @@ public class ThumbnailBean implements Serializable {
   private URI collectionUri;
   private boolean isPrivate = true;
   private String fileType;
+  private String shortFileType;
   private String fileSize;
+  private String modified;
 
   /**
    * Emtpy {@link ThumbnailBean}
@@ -76,6 +79,7 @@ public class ThumbnailBean implements Serializable {
     this.fileType = item.getFiletype();
     this.fileSize = item.getFileSizeHumanReadable();
     this.modified = DateHelper.printDate(item.getModified());
+    this.shortFileType = StorageUtils.getExtension(fileType);
     if (initMetadata) {
       SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
       this.mdSet = item.getMetadataSet();
@@ -349,7 +353,12 @@ public class ThumbnailBean implements Serializable {
     this.modified = modified;
   }
 
-  private String modified;
+  public String getShortFileType() {
+    return shortFileType;
+  }
 
+  public void setShortFileType(String shortFileType) {
+    this.shortFileType = shortFileType;
+  }
 
 }

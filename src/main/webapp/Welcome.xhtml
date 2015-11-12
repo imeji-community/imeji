@@ -11,7 +11,7 @@
 	<ui:param name="currentMainMenu" value="welcome"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"

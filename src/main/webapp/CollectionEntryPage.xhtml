@@ -24,7 +24,7 @@
 										navBean="#{Navigation}" 
 										activeMenu="start"/>
 
-			<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+			<menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
 										curMainMenu="#{currentMainMenu}" 
 										navBean="#{Navigation}" 
 										collectionStatus="#{logicBean.collection.status}" 

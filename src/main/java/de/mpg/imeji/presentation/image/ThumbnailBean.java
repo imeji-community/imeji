@@ -26,6 +26,7 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
@@ -49,6 +50,8 @@ public class ThumbnailBean implements Serializable {
   private MetadataSet mdSet;
   private URI collectionUri;
   private boolean isPrivate = true;
+  private String fileType;
+  private String fileSize;
 
   /**
    * Emtpy {@link ThumbnailBean}
@@ -70,6 +73,9 @@ public class ThumbnailBean implements Serializable {
     this.link = initThumbnailLink(item);
     this.filename = item.getFilename();
     this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false);
+    this.fileType = item.getFiletype();
+    this.fileSize = item.getFileSizeHumanReadable();
+    this.modified = DateHelper.printDate(item.getModified());
     if (initMetadata) {
       SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
       this.mdSet = item.getMetadataSet();
@@ -318,5 +324,32 @@ public class ThumbnailBean implements Serializable {
   public void setPrivate(boolean isPrivate) {
     this.isPrivate = isPrivate;
   }
+
+  public String getFileType() {
+    return fileType;
+  }
+
+  public void setFileType(String fileType) {
+    this.fileType = fileType;
+  }
+
+  public String getFileSize() {
+    return fileSize;
+  }
+
+  public void setFileSize(String fileSize) {
+    this.fileSize = fileSize;
+  }
+
+  public String getModified() {
+    return modified;
+  }
+
+  public void setModified(String modified) {
+    this.modified = modified;
+  }
+
+  private String modified;
+
 
 }

@@ -1,0 +1,124 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:imjc="http://java.sun.com/jsf/composite/components">
+
+    <composite:interface>
+        <composite:attribute name="listBean" required="true" shortDescription="The bean for all items"/>
+    </composite:interface>
+
+    <composite:implementation>
+        <style type="text/css">
+            .fa-th, .fa-list-alt { font-size: 150%; }
+            .imj_detailList {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+            .imj_detailList thead th {
+                border-bottom: solid 1px #ccc;
+            }
+            .imj_detailList tfoot td {
+                border-top: solid 1px #ccc;
+            }
+            .imj_detailList th,
+            .imj_detailList td {
+                padding: 0.5em;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .imj_detailList thead .imj_colFiletype,
+            .imj_detailList thead .imj_colFilesize,
+            .imj_detailList tfoot .imj_colFiletype,
+            .imj_detailList tfoot .imj_colFilesize{
+                text-align: center;
+            }
+            .imj_detailList .imj_colCheckbox {
+                width: 5%;
+            }
+            .imj_detailList .imj_colFileIcon {
+                width: 5%;
+                text-align: center;
+            }
+            .imj_detailList .imj_colFilename{
+                width: 60%;
+            }
+            .imj_detailList td.imj_colFiletype{
+                width: 5%;
+                max-width: 6em;
+            }
+            .imj_detailList .imj_colFilesize{
+                width: 15%;
+                text-align: right;
+            }
+            .imj_detailList .imj_colDate {
+                width: 25%;
+            }
+        </style>
+        <h:form>
+            <h:dataTable value="#{cc.attrs.listBean.currentPartList}" var="o"
+                         styleClass="order-table imj_detailList"
+                         headerClass="order-table-header"
+                         rowClasses="order-table-odd-row,order-table-even-row"
+                         columnClasses="imj_colCheckbox, imj_colFileIcon, imj_colFilename, imj_colFiletype, imj_colFilesize, imj_colDate">
+
+                <h:column rendered="#{Auth.loggedIn}">
+                    <f:facet name="header">
+                        <!-- TODO: LOGIC FOR CHECKBOX SELECTION -->
+                        <!-- h:selectBooleanCheckbox onclick="#{cc.attrs.listBean.areAllSelected() ? cc.attrs.listBean.selectNone() : cc.attrs.listBean.selectAll()}" value="#{cc.attrs.listBean.areAllSelected()}"/ -->
+                        &#160;
+                    </f:facet>
+                    <f:facet name="footer">
+                        <!-- TODO: LOGIC FOR CHECKBOX SELECTION -->
+                        <!-- h:selectBooleanCheckbox onclick="#{cc.attrs.listBean.areAllSelected() ? cc.attrs.listBean.selectNone() : cc.attrs.listBean.selectAll()}" value="#{cc.attrs.listBean.areAllSelected()}"/ -->
+                    </f:facet>
+                    <h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="pictureCheckbox" value="#{o.selected}" valueChangeListener="#{o.selectedChanged}">
+                        <f:ajax event="change" execute="@this" render="@form"/>
+                    </h:selectBooleanCheckbox>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">&#160;</f:facet>
+                    <f:facet name="footer">&#160;</f:facet>
+                    <h:panelGroup styleClass="fa fa-file-image-o" rendered="#{o.fileType.startsWith('image')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-text-o" rendered="#{o.fileType.startsWith('text')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-pdf-o" rendered="#{o.fileType.endsWith('pdf')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-word-o" rendered="#{o.fileType.endsWith('msword')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-word-o" rendered="#{o.fileType.endsWith('mspowerpoint')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-word-o" rendered="#{o.fileType.endsWith('msexcel')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-simplybuilt" rendered="#{o.fileType.endsWith('octet-stream')}">&#160;</h:panelGroup>
+
+                    <h:panelGroup styleClass="fa fa-file" rendered="#{!(o.fileType.startsWith('image') || o.fileType.startsWith('text') || o.fileType.endsWith('pdf') || o.fileType.endsWith('msword') || o.fileType.endsWith('mspowerpoint') || o.fileType.endsWith('msexcel') || o.fileType.endsWith('octet-stream'))}">&#160;</h:panelGroup>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Filename</f:facet>
+                    <f:facet name="footer">Filename</f:facet>
+                    <span title="#{o.filename}">#{o.filename}</span>
+                </h:column>
+
+                <h:column headerClass="imj_colFiletype" footerClass="imj_colFiletype">
+                    <f:facet name="header">Filetype</f:facet>
+                    <f:facet name="footer">Filetype</f:facet>
+                    <span title="#{o.fileType}">#{o.fileType}</span>
+                </h:column>
+
+                <h:column headerClass="imj_colFilesize" footerClass="imj_colFilesize">
+                    <f:facet name="header">Filesize</f:facet>
+                    <f:facet name="footer">Filesize</f:facet>
+                    <span title="#{o.fileSize}">#{o.fileSize}</span>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Last Modified</f:facet>
+                    <f:facet name="footer">Last Modified</f:facet>
+                    <span title="#{o.modified}">#{o.modified}</span>
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+    </composite:implementation>
+</html>

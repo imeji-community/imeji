@@ -1,68 +1,82 @@
 <ui:composition template="../template_site.xhtml"
-				xmlns="http://www.w3.org/1999/xhtml"
-				xmlns:ui="http://java.sun.com/jsf/facelets"
-				xmlns:h="http://java.sun.com/jsf/html"
-				xmlns:imjc="http://java.sun.com/jsf/composite/components">
-	
-	<ui:define name="init">
-		<h:outputText value="#{paginatorListSessionBean.initPage}"/>
-	</ui:define>
-	
-	<ui:define name="modalDialogs_from_template">
-		<!-- Confirmation Pages -->
-		<ui:include src="../../confirmationPages/AllDelete.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-		<ui:include src="../../confirmationPages/AllWithdraw.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-		<ui:include src="../../confirmationPages/SelectedDelete.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-		<ui:include src="../../confirmationPages/SelectedWithdraw.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-	</ui:define>
-	
-	<!-- Main Content - Image tiled list - START -->
-	<ui:define name="mainContent">
-		<!-- Breadcrumb - History -->
-		<ui:include src="../../include/History.xhtml"></ui:include>
-		<h:panelGroup layout="block" id ="ajaxWrapper">
-			<h:outputText value="#{paginatorListSessionBean.urlParameters}" styleClass="imj_noDisplay"/>
-			<h:outputText value="#{paginatorListSessionBean.initPaginator}" styleClass="imj_noDisplay"/>
-			<!-- Selection Info Panel -->
-			<imjc:selectionInfoPanel 	id="selPanel" 
-										fSession="#{FiltersSession}" 
-										facetBean="#{paginatorListSessionBean}" 
-										currentMainMenu="mediaEntry" 
-									 	browseToAllUrl="#{browseToAllItemsUrl}" 
-									 	numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"
-									 	containerId="#{containerId}"/>
-			
-			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
-			
-			<!-- Media List -->
-			<imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}"/>
-			
-			<!-- Facets -->
-			<h:panelGroup layout="block" id="imj_ajaxFacets">
-				<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
-			</h:panelGroup>
-				
-			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
-		</h:panelGroup>
-	</ui:define>
-	<!-- Main Content - END -->
-	<script>
-	$('form input[type=text]').die('keydown').keydown(function(e){
-	    if(e.keyCode == 13 ) {
-	        $('form\\:submitButton').click();
-	        return false;
-	    }
-	});
-	</script>
-	
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:imjc="http://java.sun.com/jsf/composite/components"
+                xmlns:list="http://java.sun.com/jsf/composite/components/list">
+
+    <ui:define name="init">
+        <h:outputText value="#{paginatorListSessionBean.initPage}"/>
+    </ui:define>
+
+    <ui:define name="modalDialogs_from_template">
+        <!-- Confirmation Pages -->
+        <ui:include src="../../confirmationPages/AllDelete.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+        <ui:include src="../../confirmationPages/AllWithdraw.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+        <ui:include src="../../confirmationPages/SelectedDelete.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+        <ui:include src="../../confirmationPages/SelectedWithdraw.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="additonalHeaderScripts">
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+    </ui:define>
+
+    <!-- Main Content - Image tiled list - START -->
+    <ui:define name="mainContent">
+        <!-- Breadcrumb - History -->
+        <ui:include src="../../include/History.xhtml"></ui:include>
+        <h:panelGroup layout="block" id ="ajaxWrapper">
+            <h:outputText value="#{paginatorListSessionBean.urlParameters}" styleClass="imj_noDisplay"/>
+            <h:outputText value="#{paginatorListSessionBean.initPaginator}" styleClass="imj_noDisplay"/>
+            <!-- Selection Info Panel -->
+            <imjc:selectionInfoPanel 	id="selPanel" 
+                                      fSession="#{FiltersSession}" 
+                                      facetBean="#{paginatorListSessionBean}" 
+                                      currentMainMenu="mediaEntry" 
+                                      browseToAllUrl="#{browseToAllItemsUrl}" 
+                                      numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"
+                                      containerId="#{containerId}"/>
+
+            <!-- Page Browser GotoBox -->
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+
+            <!-- Media List -->
+            <div style="text-align: right;">
+                view:
+                <h:form>
+                    <h:commandLink title="thumbnail list" styleClass="fa fa-th" value="&#160;" disabled="true"/>
+                <h:commandLink title="detail list" styleClass="fa fa-list-alt" value="&#160;"/>
+                </h:form>
+            </div>
+            <!-- TODO: add render conditions for the different list styles -->
+            <imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}" rendered="false"/>
+            <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}"/>
+
+            <!-- Facets -->
+            <h:panelGroup layout="block" id="imj_ajaxFacets">
+                <imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
+            </h:panelGroup>
+
+            <!-- Page Browser GotoBox -->
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+        </h:panelGroup>
+    </ui:define>
+    <!-- Main Content - END -->
+    <script>
+        $('form input[type=text]').die('keydown').keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('form\\:submitButton').click();
+                return false;
+            }
+        });
+    </script>
+
 </ui:composition>

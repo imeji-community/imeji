@@ -172,6 +172,19 @@ public abstract class CollectionBean extends ContainerBean {
     }
     return "pretty:";
   }
+  
+  public String createDOI(){
+    CollectionController cc = new CollectionController();
+    try {
+      cc.createDOI(collection, sessionBean.getUser());
+      BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
+    } catch (ImejiException e) {
+      BeanHelper.error(sessionBean.getMessage("error_doi_creation: " + e.getMessage()));
+      logger.error("Error during doi creation", e);
+      e.printStackTrace();
+    }
+    return "pretty:";
+  }
 
   /**
    * Delete the {@link CollectionImeji}

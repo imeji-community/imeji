@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -168,6 +169,19 @@ public class CollectionItemsBean extends ItemsBean {
       BeanHelper.error(sb.getMessage("error_collection_release"));
       BeanHelper.error(e.getMessage());
       logger.error("Error releasing collection", e);
+    }
+    return "pretty:";
+  }
+  
+  public String createDOI(){
+    CollectionController cc = new CollectionController();
+    try {
+      cc.createDOI(collection, sb.getUser());
+      BeanHelper.info(sb.getMessage("success_doi_creation"));
+    } catch (ImejiException e) {
+      BeanHelper.error(sb.getMessage("error_doi_creation: " + e.getMessage()));
+      logger.error("Error during doi creation", e);
+      e.printStackTrace();
     }
     return "pretty:";
   }

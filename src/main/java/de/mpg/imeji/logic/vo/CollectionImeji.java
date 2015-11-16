@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -28,9 +29,12 @@ public class CollectionImeji extends Container implements Serializable {
   private URI profile = null;
   @j2jResource("http://imeji.org/terms/metadataSet")
   private MetadataSet metadataSet = new MetadataSet();
-
+  @j2jLiteral("http://imeji.org/terms/doi")
+  private String doi;
   @j2jResource("http://imeji.org/terms/space")
   private URI space;
+  
+
 
   private Collection<URI> images = new ArrayList<URI>();
 
@@ -66,6 +70,14 @@ public class CollectionImeji extends Container implements Serializable {
 
   public void setSpace(URI space) {
     this.space = space;
+  }
+  
+  public void setDOI(String doi){
+    this.doi = doi;
+  }
+  
+  public String getDOI(){
+    return doi;
   }
 
 }

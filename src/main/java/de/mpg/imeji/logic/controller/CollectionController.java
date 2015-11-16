@@ -43,6 +43,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
@@ -384,6 +385,29 @@ public class CollectionController extends ImejiController {
         pc.release(pc.retrieve(collection.getProfile(), user), user);
       }
     }
+  }
+  
+  public void createDOI(CollectionImeji coll, User user) throws ImejiException {
+    if (user == null) {
+      throw new AuthenticationError("User must be signed-in");
+    }
+
+    if (coll == null) {
+      throw new NotFoundException("Collection does not exists");
+    }
+    
+    if (!Status.RELEASED.equals(coll.getStatus())){
+      throw new ImejiException("Collection has to be released to create a DOI");
+    }
+    
+    DoiController doicontr = new DoiController();
+    
+    String doiUser = ConfigurationBean.getDoiUserStatic();
+    String doiPassword = ConfigurationBean.getDoiPasswordStatic();
+    
+    String doi = doicontr.getNewDoi(coll, doiUser, doiPassword);
+    coll.setDOI(doi);
+    update(coll, user);
   }
 
   /**

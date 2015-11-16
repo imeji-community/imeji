@@ -24,6 +24,8 @@ public class ElasticService {
   private static Node node;
   public static Client client;
   private static String CLUSTER_NAME = "name of my cluster";
+  private static boolean CLUSTER_LOCAL = true;
+  private static boolean CLUSTER_DATA = true;
   private static final Logger logger = Logger.getLogger(ElasticService.class);
 
   /**
@@ -43,7 +45,10 @@ public class ElasticService {
 
   public static void start() throws IOException, URISyntaxException {
     CLUSTER_NAME = PropertyReader.getProperty("elastic.cluster.name");
-    node = NodeBuilder.nodeBuilder().clusterName(CLUSTER_NAME).node();
+    CLUSTER_DATA = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.data"));
+    CLUSTER_LOCAL = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.local"));
+    node = NodeBuilder.nodeBuilder().data(CLUSTER_DATA).local(CLUSTER_LOCAL)
+        .clusterName(CLUSTER_NAME).node();
     client = node.client();
     new ElasticIndexer(DATA_ALIAS, ElasticTypes.items).addMapping();
     new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders).addMapping();
@@ -58,6 +63,9 @@ public class ElasticService {
    * @return
    */
   public synchronized static String initializeIndex() {
+    System.out.println(node.settings().get("node.master"));
+    System.out.println(node.settings().get("node.data"));
+    node.settings();
     logger.info("Initializing ElasticSearch index.");
     String indexName = getIndexNameFromAliasName(DATA_ALIAS);
     if (indexName != null) {

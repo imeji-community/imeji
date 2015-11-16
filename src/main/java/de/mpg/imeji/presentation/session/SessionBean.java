@@ -85,6 +85,7 @@ public class SessionBean implements Serializable {
   private String spaceId;
   private URI selectedSpace;
   private String selectedSpaceLogoURL;
+  private String selectedBrowseListView;
 
   /*
    * Cookies name
@@ -93,6 +94,8 @@ public class SessionBean implements Serializable {
   public final static String langCookieName = "IMEJI_LANG";
   public final static String numberOfItemsPerPageCookieName = "IMEJI_ITEMS_PER_PAGE";
   public final static String numberOfContainersPerPageCookieName = "IMEJI_CONTAINERS_PER_PAGE";
+  public final static String browseViewCookieName = "IMEJI_BROWSE_VIEW";
+
   /*
    * Specific variables for the May Planck Inistute
    */
@@ -118,6 +121,7 @@ public class SessionBean implements Serializable {
     initApplicationUrl();
     initNumberOfItemsPerPageWithCookieOrProperties();
     initNumberOfContainersPerPageWithCookieOrProperties();
+    initBrowseViewWithCookieOrConfig();
     institute = findInstitute();
     instituteId = findInstituteId();
   }
@@ -133,6 +137,16 @@ public class SessionBean implements Serializable {
     this.numberOfItemsPerPage =
         Integer.parseInt(initWithCookieAndProperty(Integer.toString(numberOfItemsPerPage),
             numberOfItemsPerPageCookieName, "imeji.image.list.size"));
+  }
+
+  /**
+   * Init the default browse view. If a cookie is set, use it, otherwise use config value
+   */
+  private void initBrowseViewWithCookieOrConfig() {
+    ConfigurationBean config =
+        (ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class);
+    this.selectedBrowseListView =
+        CookieUtils.readNonNull(browseViewCookieName, config.getDefaultBrowseView());
   }
 
   /**
@@ -772,6 +786,14 @@ public class SessionBean implements Serializable {
       setUser(null);
       setShowLogin(false);
     }
+  }
+
+  public String getSelectedBrowseListView() {
+    return selectedBrowseListView;
+  }
+
+  public void setSelectedBrowseListView(String selectedBrowseListView) {
+    this.selectedBrowseListView = selectedBrowseListView;
   }
 
 }

@@ -37,6 +37,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.ConfigurationBean.BROWSE_VIEW;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.upload.IngestImage;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -796,4 +797,9 @@ public class SessionBean implements Serializable {
     this.selectedBrowseListView = selectedBrowseListView;
   }
 
+  public void toggleBrowseView() {
+    selectedBrowseListView = selectedBrowseListView.equals(BROWSE_VIEW.LIST.name())
+        ? BROWSE_VIEW.THUMBNAIL.name() : BROWSE_VIEW.LIST.name();
+    CookieUtils.updateCookieValue(browseViewCookieName, selectedBrowseListView);
+  }
 }

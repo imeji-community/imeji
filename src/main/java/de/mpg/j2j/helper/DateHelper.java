@@ -16,6 +16,8 @@ import java.util.Locale;
 public class DateHelper {
   private static SimpleDateFormat format =
       new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault());
+  private static SimpleDateFormat formatSmall =
+      new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
   /**
    * Return the current {@link Calendar} from the system
@@ -54,6 +56,6 @@ public class DateHelper {
    * @return
    */
   public static String printDate(Calendar c) {
-    return format.format(c.getTime());
+    return formatSmall.format(c.getTime());
   }
 }

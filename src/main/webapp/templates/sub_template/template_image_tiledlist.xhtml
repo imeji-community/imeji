@@ -2,6 +2,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:imjc="http://java.sun.com/jsf/composite/components"
                 xmlns:list="http://java.sun.com/jsf/composite/components/list">
 
@@ -50,15 +51,18 @@
 
             <!-- Media List -->
             <div style="text-align: right;">
-                view:
+                #{lbl.view}:
                 <h:form>
-                    <h:commandLink title="thumbnail list" styleClass="fa fa-th" value="&#160;" disabled="true"/>
-                <h:commandLink title="detail list" styleClass="fa fa-list-alt" value="&#160;"/>
+                    <h:commandLink title="thumbnail list" styleClass="fa fa-th" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}">
+                    	<f:ajax execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
+                    </h:commandLink>
+                	<h:commandLink title="detail list" styleClass="fa fa-list-alt" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'LIST'}">
+                	    <f:ajax execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
+                	</h:commandLink>
                 </h:form>
             </div>
-            <!-- TODO: add render conditions for the different list styles -->
-            <imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}" rendered="false"/>
-            <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}"/>
+            <imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}"/>
+            <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'LIST'}"/>
 
             <!-- Facets -->
             <h:panelGroup layout="block" id="imj_ajaxFacets">

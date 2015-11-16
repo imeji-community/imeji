@@ -58,12 +58,16 @@
                 width: 25%;
             }
         </style>
+        <!-- param to control the classes for every column, in case of logged in / out -->
+        <ui:param name="colClasses" value="#{Auth.loggedIn ? 'imj_colCheckbox,imj_colFileIcon,imj_colFilename,imj_colFiletype,imj_colFilesize,imj_colDate' : 'imj_colFileIcon,imj_colFilename,imj_colFiletype,imj_colFilesize,imj_colDate'}"/>
+
         <h:form>
+            
             <h:dataTable value="#{cc.attrs.listBean.currentPartList}" var="o"
                          styleClass="order-table imj_detailList"
                          headerClass="order-table-header"
                          rowClasses="order-table-odd-row,order-table-even-row"
-                         columnClasses="imj_colCheckbox, imj_colFileIcon, imj_colFilename, imj_colFiletype, imj_colFilesize, imj_colDate">
+                         columnClasses="#{colClasses}">
 
                 <h:column rendered="#{Auth.loggedIn}">
                     <f:facet name="header">
@@ -72,9 +76,11 @@
                         &#160;
                     </f:facet>
                     <f:facet name="footer">
+                        &#160;
                         <!-- TODO: LOGIC FOR CHECKBOX SELECTION -->
                         <!-- h:selectBooleanCheckbox onclick="#{cc.attrs.listBean.areAllSelected() ? cc.attrs.listBean.selectNone() : cc.attrs.listBean.selectAll()}" value="#{cc.attrs.listBean.areAllSelected()}"/ -->
                     </f:facet>
+
                     <h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="pictureCheckbox" value="#{o.selected}" valueChangeListener="#{o.selectedChanged}">
                         <f:ajax event="change" execute="@this" render="@form"/>
                     </h:selectBooleanCheckbox>
@@ -97,7 +103,10 @@
                 <h:column>
                     <f:facet name="header">Filename</f:facet>
                     <f:facet name="footer">Filename</f:facet>
-                    <span title="#{o.filename}">#{o.filename}</span>
+                    <h:outputLink id="lnkPicDetailBrowse" value="#{cc.attrs.listBean.imageBaseUrl}item/#{o.id}" title="#{o.filename}">
+                        #{o.filename}
+                    </h:outputLink>
+
                 </h:column>
 
                 <h:column headerClass="imj_colFiletype" footerClass="imj_colFiletype">

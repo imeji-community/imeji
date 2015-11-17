@@ -37,21 +37,21 @@
 						<span class="imj_statusArea">
 							<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'PENDING'}">
 								<span class="imj_statusIconArea">
-									<h:panelGroup styleClass="imj_icoStatusPending_32"/>
+									<h:panelGroup styleClass="fa fa-lock fa-size-3"/>
 								</span>
 								<h:outputText value="#{lbl['private']}"/>
 							</ui:fragment>
 							
 							<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'RELEASED'}">
 								<span class="imj_statusIconArea">
-									<h:panelGroup styleClass="imj_icoStatusReleased_32"/>
+									<h:panelGroup styleClass="fa fa-globe fa-size-3"/>
 								</span>
 								<h:outputText value="#{lbl.published}"/>
 							</ui:fragment>
 							
 							<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'WITHDRAWN'}">
 								<span class="imj_statusIconArea">
-									<h:panelGroup styleClass="imj_icoStatusWithdrawn_32"/>
+									<h:panelGroup styleClass="fa fa-trash-o fa-size-3"/>
 								</span>
 								<h:outputText value="#{lbl.withdrawn}"/>
 							</ui:fragment>

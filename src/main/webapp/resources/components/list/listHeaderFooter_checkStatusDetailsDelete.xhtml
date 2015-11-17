@@ -48,10 +48,10 @@
 						<h:outputText styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
 						<h:outputText value="#{lbl.state}"/>
 						<ui:fragment rendered="#{(cc.attrs.mediaList.selectedSortOrder != 'ASCENDING')}">
-							<span class="imj_buttonSortDescending_16">&#160;</span>
+							<span class="fa fa-sort-desc">&#160;</span>
 						</ui:fragment>
 						<ui:fragment rendered="#{(cc.attrs.mediaList.selectedSortOrder == 'ASCENDING')}">
-							<span class="imj_buttonSortAscending_16">&#160;</span>
+							<span class="fa fa-sort-asc">&#160;</span>
 						</ui:fragment>
 					</h:commandLink>
 				</h:form>
@@ -60,12 +60,12 @@
 			 <div class="imj_globalDisplaySwitchArea">
 				<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $('.imj_globalDisplaySwitchArea .imj_collapse').hide().next().show();">
 					<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-					<span class="imj_buttonRemove_16">&#160;</span>
+					<span class="fa fa-minus-square-o">&#160;</span>
 					<h:outputText value="#{lbl.short_view} (#{cc.attrs.displayLinkText})"/>
 				</button>
 				<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $('.imj_globalDisplaySwitchArea .imj_expand').hide().prev().show();">
 					<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-					<span class="imj_buttonAdd_16">&#160;</span>
+					<span class="fa fa-plus-square-o">&#160;</span>
 					<h:outputText value="#{lbl.medium_view} (#{cc.attrs.displayLinkText})"/>
 				</button>
 				

@@ -36,28 +36,14 @@
 							<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
 										rendered="#{cc.attrs.item.thumbnail.link == null}" title="#{lbl.ContainerEmpty}"/>
 						</ui:fragment>
-					</h:outputLink>	
+					</h:outputLink>
 					<h:outputText value="#{cc.attrs.item.size} #{lbl.images}" class="imj_itemCount"/>
 
 				</div>
 			</div>
 			<div class="imj_statusArea">
-				<ui:fragment rendered="#{cc.attrs.item.status == 'PENDING'}">
-					<span class="imj_iconStatusPrivate_24" title="#{lbl.privateContent}">
-						<h:outputText value="&#160;"/>
-					</span>
-				</ui:fragment>
-				
-<!-- 				<ui:fragment rendered="#{!cc.attrs.item.owner and cc.attrs.item.status=='RELEASED'}">
-					<span class="imj_iconStatusShareable_24" title="#{lbl.sharedContent}">
-						<h:outputText value="&#160;"/>
-					</span>
-				</ui:fragment>
- -->				<ui:fragment rendered="#{cc.attrs.item.status=='WITHDRAWN'}">
-					<span class="imj_iconStatusWithdrawn_24" title="#{lbl.discardedContent}">
-						<h:outputText value="&#160;"/>
-					</span>
-				</ui:fragment>
+                <h:outputText value="&#160;" styleClass="fa fa-lock fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'PENDING'}"/>
+                <h:outputText value="&#160;" styleClass="fa fa-trash-o fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}"/>
 			</div>
 
 			<div class="imj_itemContent">
@@ -80,7 +66,7 @@
 							<h:outputText value="#{cc.attrs.item.description.trim()}"/>
 							
 							<ui:fragment rendered="#{cc.attrs.item.descriptionFull.trim().length() &gt; cc.attrs.item.description.trim().length()}">
-								<button class="imj_expand imj_iconExpand_16 imj_containerDescExpand" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().next().show();">
+								<button class="imj_expand fa fa-plus imj_containerDescExpand" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().next().show();">
 									<h:outputText value="&#160;"/>
 								</button>
 							</ui:fragment>
@@ -90,7 +76,7 @@
 							<p class="imj_descriptionArea imj_additionalInfoArea">
 								<h:outputText value="#{cc.attrs.item.descriptionFull.trim()}"/>
 								
-								<button class="imj_collapse imj_iconCollapse_16" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().prev().show();" >
+								<button class="imj_collapse fa fa-minus" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().prev().show();" >
 									<h:outputText value="&#160;"/>
 								</button>
 							</p>

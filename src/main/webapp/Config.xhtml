@@ -14,7 +14,7 @@
 								 actionEnabled="false"
 								 navBean="#{Navigation}"/>
 	</ui:define>
-	
+
 	<ui:define name="additonalFooterScripts">
 		<script type="text/javascript">
 			$('.imj_clearInput').click(function(evt){
@@ -84,7 +84,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.instanceName}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -94,7 +94,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.contactEmail}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -104,7 +104,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.languages}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -114,7 +114,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.impressumUrl}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -124,7 +124,7 @@
 										<div class="imj_admindataValue">
 											<h:inputTextarea value="#{Configuration.impressumText}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -137,7 +137,7 @@
 												<f:selectItem itemLabel="#{lbl.yes}" itemValue="true"/>
 											</h:selectOneRadio>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -147,7 +147,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.registrationTokenExpiry}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -157,7 +157,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.defaultDiskSpaceQuota}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									
 									
@@ -187,7 +187,7 @@
 												</h:selectOneRadio>
 											</div>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<!-- Admin - Snippet Insert -->	
 									<div class="imj_admindataSet">
@@ -198,7 +198,7 @@
 										<div class="imj_admindataValue">
 											<h:inputTextarea value="#{Configuration.snippet}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -208,7 +208,7 @@
 										<div class="imj_admindataValue">
 											<h:inputTextarea value="#{Configuration.metaDescription}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput fa fa-times"> </a>
 									</div>	
 									<!-- Admin - Snippet Insert -->	
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -219,7 +219,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.defaultCss}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" "/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{Configuration.defaultCss != null and Configuration.defaultCss != ''}">
 										<div class="imj_admindataLabel">
@@ -229,7 +229,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.alternativeCss}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" "/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</h:panelGroup>
 																		<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -239,7 +239,7 @@
 										<div class="imj_admindataValue">
 											<h:inputTextarea value="#{Configuration.startPageFooterLogos}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput fa fa-times"> </a>
 									</h:panelGroup>
 
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -250,7 +250,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.faviconUrl}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</h:panelGroup>
 
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -261,7 +261,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.logoUrl}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</h:panelGroup>
 
 								</div>
@@ -288,7 +288,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.emailServer}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -298,7 +298,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.emailServerPort}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -308,7 +308,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.emailServerSender}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -321,7 +321,7 @@
 												<f:selectItem itemLabel="#{lbl.yes}" itemValue="true"/>
 											</h:selectOneRadio>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -331,7 +331,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.emailServerUser}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -341,7 +341,7 @@
 										<div class="imj_admindataValue">
 											<h:inputSecret value="#{Configuration.emailServerPassword}" styleClass="imj_admindataEdit" autocomplete="off"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</div>
 								</div>
 							</div>
@@ -384,8 +384,8 @@
 																
 															</td>
 															<td class="imj_inlineButtonGroup">
-																<input type="button" data-target="tr .imj_fileTypeValueInput" class="imj_clearInput imj_iconErase_16" value=" "/>
-																<h:commandLink value=" " title="#{lbl.remove}" styleClass="imj_buttonRemove_16" action="#{Configuration.fileTypes.removeType(var.index)}" >
+																<a href="javascript: void(0);" data-target="tr .imj_fileTypeValueInput" class="imj_clearInput fa fa-times"> </a>
+																<h:commandLink value=" " title="#{lbl.remove}" styleClass="fa fa-trash" action="#{Configuration.fileTypes.removeType(var.index)}" >
 																	<f:ajax execute="@this" render="@form"/>
 																</h:commandLink>
 															</td>
@@ -460,7 +460,7 @@
 											<div class="imj_admindataValue">
 												<h:inputTextarea value="#{snippet.html}" styleClass="imj_admindataEdit imj_additionalCodeSnippet" valueChangeListener="#{snippet.listener}"/>
 											</div>
-											<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+											<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput fa fa-times"> </a>
 										</h:panelGroup>
 									</ui:repeat>
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -471,7 +471,7 @@
 										<div class="imj_admindataValue">
 											<h:inputTextarea value="#{Configuration.startPageCarouselQuery}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput fa fa-times"> </a>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -481,7 +481,7 @@
 										<div class="imj_admindataValue">
 											<h:inputText value="#{Configuration.startPageCarouselQueryOrder}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 									</h:panelGroup>
 
 								</div> 
@@ -503,7 +503,7 @@
 										<div class="imj_admindataValue">
 												<h:inputText value="#{Configuration.dataViewerUrl}" styleClass="imj_admindataEdit"/>
 										</div>
-										<input type="button" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput imj_iconErase_16" value=" "/>
+										<a href="javascript: void(0);" data-target=".imj_admindataSet .imj_admindataValue input" class="imj_clearInput fa fa-times"> </a>
 										<div class="imj_submitPanel">
 											<h:commandButton action="#{Configuration.fetchDataViewerFormats}" value="#{lbl.fetch_from_data_viewer}" styleClass="imj_editButton">
 												<f:ajax execute="@form" render=":configForm:dataViewerFormatListString"/>

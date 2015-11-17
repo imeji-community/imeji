@@ -107,7 +107,7 @@
 					<div class="imj_infodataWrapper">
 						<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
 							<div class="imj_listHeader">
-								<span class="imj_iconExpand_16"> </span>
+                                <a href="javascript: void(0);" class="imj_toggleView fa fa-expand fa-pull-right"> </a>
 								<h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{lbl.metadata}: #{SingleUploadBean.ingestImage.name}</h3>
 							</div>
 							<div class="imj_listBody imj_minHeight">
@@ -157,7 +157,7 @@
 							<h3 class="imj_sectionHeadline">#{lbl.metadata_profile}</h3>
 						</div>
 						<div class="imj_listBody imj_noBorder">
-							<ui:repeat id="metadata" var="metadata" value="#{SingleUploadBean.mdSetBean.tree.list}" rows="0" varStatus="indexMetadata">	
+							<ui:repeat id="metadata" var="metadata" value="#{SingleUploadBean.mdSetBean.tree.list}" varStatus="indexMetadata">	
 									<!-- MetaDataList - edit panel container set -->   
 									<div class="imj_metadataSet">
 										<div class="imj_metadataLabel">
@@ -168,10 +168,10 @@
 											<!-- MetaDataInput -->
 											<list:batchEditList_singleStatement itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>											
 											<div class="imj_metadataEditButtonArea">
-												<h:commandButton type="submit" styleClass="imj_buttonAdd_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{SingleUploadBean.addMetadata(metadata)}" value="">
+												<h:commandButton type="submit" styleClass="fa fa-plus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{SingleUploadBean.addMetadata(metadata)}" value="">
 													<f:ajax execute="@form" render="@form"/>
 												</h:commandButton>
-												<h:commandButton type="submit" styleClass="imj_buttonRemove_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{SingleUploadBean.removeMetadata(metadata)}" value="">
+												<h:commandButton type="submit" styleClass="fa fa-minus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{SingleUploadBean.removeMetadata(metadata)}" value="">
 													<f:ajax execute="@form" render="@form"/>
 												</h:commandButton>
 											</div>
@@ -197,14 +197,14 @@
 	<ui:define name="additonalFooterScripts">
 		<script type="text/javascript">
 			$(function(){
-				$('.imj_techdataList .imj_listHeader span').click(function(evt){ 
+				$('.imj_techdataList .imj_listHeader .imj_toggleView').click(function(evt){ 
 					var toggleIcon = $(this);
 					var list = $('.imj_techdataList .imj_listBody');
 					if (list.hasClass('imj_maxHeight')) {
-						toggleIcon.removeClass("imj_iconCollapse_16").addClass("imj_iconExpand_16");
+						toggleIcon.removeClass("fa-compress").addClass("fa-expand");
 						list.removeClass('imj_maxHeight').addClass('imj_minHeight');
 					} else {
-						toggleIcon.removeClass("imj_iconExpand_16").addClass("imj_iconCollapse_16");
+						toggleIcon.removeClass("fa-expand").addClass("fa-compress");
 						list.removeClass('imj_minHeight').addClass('imj_maxHeight');
 					}
 				});

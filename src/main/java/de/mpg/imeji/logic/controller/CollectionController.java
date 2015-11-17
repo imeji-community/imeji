@@ -316,7 +316,7 @@ public class CollectionController extends ImejiController {
         throw new UnprocessableError("Collection is not pending and can not be deleted!");
       }
       // Delete images
-      List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+      List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
 
       itemController.delete(items, user);
 
@@ -377,7 +377,7 @@ public class CollectionController extends ImejiController {
           + " and can not be released again!");
     } else {
       writeReleaseProperty(collection, user);
-      List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+      List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.release(items, user);
       update(collection, user);
       if (AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
@@ -435,7 +435,7 @@ public class CollectionController extends ImejiController {
     } else if (!Status.RELEASED.equals(coll.getStatus())) {
       throw new UnprocessableError("Withdraw collection: Collection must be released");
     } else {
-      List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+      List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.withdraw(items, coll.getDiscardComment(), user);
       writeWithdrawProperties(coll, null);
       update(coll, user);
@@ -499,7 +499,7 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(ic.getId(), null, null, user, null, -1, 0).getResults();
 
-    List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+    List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
     itemController.updateItemsProfile(items, user, newProfileUri.toString());
   }
 

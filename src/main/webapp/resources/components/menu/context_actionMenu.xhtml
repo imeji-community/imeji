@@ -117,9 +117,9 @@
 					</div>
 				</h:panelGroup>
 			
-				<ui:fragment rendered="#{cc.attrs.actionEnabled and (cc.attrs.isAdmin or cc.attrs.isDeletable) and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
-					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
-						<div class="imj_menuHeader">
+				<ui:fragment  rendered="#{cc.attrs.actionEnabled and (cc.attrs.isAdmin or cc.attrs.isDeletable) and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
+					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
+						<div class="imj_menuHeader" >
 							<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
 						</div>
 						<div class="imj_menuBody">
@@ -127,11 +127,10 @@
 								
 								<ui:fragment rendered="#{cc.attrs.allowedToShare}">
 									<li class="#{curMenuClass}Item">
-									
-										<h:outputLink rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/share" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
+										<h:outputLink  id="actionMenuShareAlbum" rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/share" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
 											<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
 										</h:outputLink>
-										<h:outputLink rendered="#{cc.attrs.curMainMenu == 'collection'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/share" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
+										<h:outputLink   id="actionMenuShareCollection" rendered="#{cc.attrs.curMainMenu == 'collection'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/share" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
 											<h:outputText value="#{lbl.collection_share}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
 										</h:outputLink>
 									</li>
@@ -139,7 +138,7 @@
 
 								<ui:fragment rendered="#{cc.attrs.isAdmin and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
 									<li>
-										<h:outputLink value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">
+										<h:outputLink id="actionMenuRelease" value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">
 											<h:outputText value="#{lbl.collection_release}"/>
 										</h:outputLink>
 									</li>
@@ -147,7 +146,7 @@
 								
 								<ui:fragment rendered="#{cc.attrs.isAdmin and cc.attrs.collectionStatus.trim().toUpperCase() == 'RELEASED'}">
 									<li>
-										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
+										<h:outputLink id="actionMenuDiscard" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
 											<h:outputText value="#{lbl.withdraw}"/>
 										</h:outputLink>
 									</li>
@@ -161,7 +160,7 @@
 								
 								<ui:fragment rendered="#{cc.attrs.isDeletable}">
 									<li>
-										<h:outputLink value="#" onclick="openDialog('deleteMenuItemDialog');">
+										<h:outputLink id="actionMenuDelete" value="#" onclick="openDialog('deleteMenuItemDialog');">
 											<h:outputText value="#{lbl.delete}"/>
 										</h:outputLink>
 									</li>

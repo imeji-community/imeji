@@ -24,13 +24,13 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * SErvlet to call Data viewer service
@@ -50,14 +50,13 @@ public class DataViewerServlet extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-      IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException {
     try {
       SessionBean sb =
           (SessionBean) req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
-      Item item =
-          ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, req.getParameter("id")),
-              sb.getUser());
+      Item item = new ItemController()
+          .retrieveLazy(ObjectHelper.getURI(Item.class, req.getParameter("id")), sb.getUser());
       boolean isPublicItem = Status.RELEASED.equals(item.getStatus());
 
       String fileExtensionName = FilenameUtils.getExtension(item.getFilename());
@@ -72,8 +71,8 @@ public class DataViewerServlet extends HttpServlet {
       if (isPublicItem) {
         // if item is public, simply send the URL to the Data Viewer,
         // along with the fileExtensionName
-        resp.sendRedirect(viewGenericUrl(item.getFullImageUrl().toString(), fileExtensionName,
-            dataViewerUrl));
+        resp.sendRedirect(
+            viewGenericUrl(item.getFullImageUrl().toString(), fileExtensionName, dataViewerUrl));
       } else
 
       {
@@ -111,10 +110,9 @@ public class DataViewerServlet extends HttpServlet {
     Client client = ClientBuilder.newClient();
     WebTarget target = client.target(dataViewerServiceTargetURL);
 
-    Response response =
-        target.register(MultiPartFeature.class)
-            .request(MediaType.MULTIPART_FORM_DATA_TYPE, MediaType.TEXT_HTML_TYPE)
-            .post(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target.register(MultiPartFeature.class)
+        .request(MediaType.MULTIPART_FORM_DATA_TYPE, MediaType.TEXT_HTML_TYPE)
+        .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
     String theHTML = "";
     if (response.bufferEntity()) {
@@ -128,8 +126,8 @@ public class DataViewerServlet extends HttpServlet {
   }
 
   private String viewGenericUrl(String originalUrl, String fileType,
-      String dataViewerServiceTargetURL) throws FileNotFoundException, IOException,
-      URISyntaxException {
+      String dataViewerServiceTargetURL)
+          throws FileNotFoundException, IOException, URISyntaxException {
     // System.out.println(dataViewerServiceTargetURL+"?"+"mimetype="+fileType+"&url="+originalUrl);
     return dataViewerServiceTargetURL + "?" + "mimetype=" + fileType + "&url=" + originalUrl;
   }

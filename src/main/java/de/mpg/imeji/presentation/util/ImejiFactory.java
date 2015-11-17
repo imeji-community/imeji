@@ -74,8 +74,8 @@ public class ImejiFactory {
       String firstAuthorGivenName, String firstAuthorOrganization) {
     ContainerMetadata cm = new ContainerMetadata();
     cm.setTitle(title);
-    cm.getPersons().add(
-        newPerson(firstAuthorFamilyName, firstAuthorGivenName, firstAuthorOrganization));
+    cm.getPersons()
+        .add(newPerson(firstAuthorFamilyName, firstAuthorGivenName, firstAuthorOrganization));
     return cm;
   }
 
@@ -263,10 +263,9 @@ public class ImejiFactory {
    */
   public static List<ThumbnailBean> imageListToThumbList(Collection<Item> itemList) {
     List<ThumbnailBean> beanList = new ArrayList<ThumbnailBean>();
-
     for (Item img : itemList) {
       try {
-        beanList.add(new ThumbnailBean(img));
+        beanList.add(new ThumbnailBean(img, true));
       } catch (Exception e) {
         logger.error("Error creating ThumbnailBean list", e);
       }

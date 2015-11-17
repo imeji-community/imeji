@@ -134,7 +134,7 @@ public class ShareBean implements Serializable {
     this.shareTo = null;
     this.uri =
         HistoryUtil.extractURI(PrettyContext.getCurrentInstance().getRequestURL().toString());
-    Item item = ObjectLoader.loadItem(uri, user);
+    Item item = new ItemController().retrieveLazy(uri, user);
     if (item != null) {
       this.shareTo = item;
       this.title = item.getFilename();

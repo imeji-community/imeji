@@ -14,8 +14,6 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
@@ -34,8 +32,6 @@ public class ViewCollectionBean extends CollectionBean {
   private static final long serialVersionUID = 6473181109648137472L;
   private List<Person> persons = null;
   private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
-  private String email;
-  private String encryptedPassword;
   /**
    * Maximum number of items displayed on collection start page
    */
@@ -57,32 +53,15 @@ public class ViewCollectionBean extends CollectionBean {
     try {
       User user = super.sessionBean.getUser();
       String id = getId();
-
-
       CollectionImeji requestedCollection = null;
       URI uRIID = ObjectHelper.getURI(CollectionImeji.class, id);
-
       requestedCollection = ObjectLoader.loadCollectionLazy(uRIID, user);
-      if (user != null) {
-        for (Grant g : user.getGrants()) {
-          if (g.getGrantFor().equals(requestedCollection.getId())
-              && (g.asGrantType() == GrantType.ADMIN || g.asGrantType() == GrantType.CREATE)) {
-            this.email = user.getEmail();
-            this.encryptedPassword = user.getEncryptedPassword();
-            break;
-          }
-        }
-
-      }
-
       setCollection(requestedCollection);
-
       if (getCollection() != null && getCollection().getId() != null) {
         findItems(user, MAX_ITEM_NUM_VIEW);
-        loadItems(user);
+        loadItems(user, MAX_ITEM_NUM_VIEW);
         countItems();
       }
-
       if (sessionBean.getUser() != null) {
         setSendEmailNotification(sessionBean.getUser().getObservedCollections().contains(id));
       }
@@ -103,27 +82,11 @@ public class ViewCollectionBean extends CollectionBean {
       }
     } catch (Exception e) {
       logger.error("", e);
-      // Has to be in try/catch block, otherwise redirct from
+      // Has to be in try/catch block, otherwise redirect from
       // HistoryFilter will not work.
       // Here simply do nothing
     }
 
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getEncryptedPassword() {
-    return encryptedPassword;
-  }
-
-  public void setEncryptedPassword(String encryptedPassword) {
-    this.encryptedPassword = encryptedPassword;
   }
 
   public List<Person> getPersons() {

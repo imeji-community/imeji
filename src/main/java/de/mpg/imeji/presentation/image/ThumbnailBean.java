@@ -8,6 +8,9 @@ import java.net.URI;
 
 import javax.faces.event.ValueChangeEvent;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -24,6 +27,7 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
@@ -47,55 +51,73 @@ public class ThumbnailBean implements Serializable {
   private MetadataSet mdSet;
   private URI collectionUri;
   private boolean isPrivate = true;
+  private String fileType;
+  private String shortFileType;
+  private String fileSize;
+  private String modified;
 
   /**
    * Emtpy {@link ThumbnailBean}
    */
-  public ThumbnailBean() {
-
-  }
+  public ThumbnailBean() {}
 
   /**
    * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
    * {@link ThumbnailBean}
    * 
    * @param item
+   * @param initMetadata if true, will read the metadata
    * @throws Exception
    */
-  public ThumbnailBean(Item item) throws Exception {
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+  public ThumbnailBean(Item item, boolean initMetadata) throws Exception {
     this.uri = item.getId();
     this.collectionUri = item.getCollection();
     this.id = ObjectHelper.getId(getUri());
-    this.link =
-        Status.WITHDRAWN != item.getStatus() ? navigation.getFileUrl()
-            + item.getThumbnailImageUrl().toString() : navigation.getApplicationUrl()
-            + "resources/icon/discarded.png";
+    this.link = initThumbnailLink(item);
     this.filename = item.getFilename();
-    this.mdSet = item.getMetadataSet();
-
-    this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet.getProfile());
-    this.caption = findCaption();
-
-    this.selected = sessionBean.getSelected().contains(uri.toString());
-    if (sessionBean.getActiveAlbum() != null) {
-      this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
-    }
     this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false);
-
+    this.fileType = item.getFiletype();
+    this.fileSize = item.getFileSizeHumanReadable();
+    this.modified = DateHelper.printDate(item.getModified());
+    this.shortFileType = StorageUtils.getExtension(fileType);
+    if (initMetadata) {
+      SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+      this.mdSet = item.getMetadataSet();
+      this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet.getProfile());
+      this.caption = filename;// findCaption();
+      this.selected = sessionBean.getSelected().contains(uri.toString());
+      if (sessionBean.getActiveAlbum() != null) {
+        this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
+      }
+    }
   }
+
 
   /**
    * Initialize the {@link MetadataSetBean} which is used in the Popup
+   * 
+   * @throws ImejiException
    */
-  public void initPopup() {
+  public void initPopup() throws ImejiException {
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     if (getMds() == null) {
+      ItemController controller = new ItemController();
+      mdSet = controller.retrieve(uri, sessionBean.getUser()).getMetadataSet();
       setMds(new MetadataSetBean(mdSet, getProfile(), false));
-      // Commented out, statements have to be filled in for sake of
-      // Caption
-      // setStatements(loadStatements(getProfile().getId()));
     }
+  }
+
+  /**
+   * Find the link (url) to the Thumbnail
+   * 
+   * @param item
+   * @return
+   */
+  private String initThumbnailLink(Item item) {
+    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    return Status.WITHDRAWN != item.getStatus()
+        ? navigation.getFileUrl() + item.getThumbnailImageUrl().toString()
+        : navigation.getApplicationUrl() + "resources/icon/discarded.png";
   }
 
   /**
@@ -305,6 +327,38 @@ public class ThumbnailBean implements Serializable {
 
   public void setPrivate(boolean isPrivate) {
     this.isPrivate = isPrivate;
+  }
+
+  public String getFileType() {
+    return fileType;
+  }
+
+  public void setFileType(String fileType) {
+    this.fileType = fileType;
+  }
+
+  public String getFileSize() {
+    return fileSize;
+  }
+
+  public void setFileSize(String fileSize) {
+    this.fileSize = fileSize;
+  }
+
+  public String getModified() {
+    return modified;
+  }
+
+  public void setModified(String modified) {
+    this.modified = modified;
+  }
+
+  public String getShortFileType() {
+    return shortFileType;
+  }
+
+  public void setShortFileType(String shortFileType) {
+    this.shortFileType = shortFileType;
   }
 
 }

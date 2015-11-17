@@ -259,21 +259,21 @@ public class AuthUtil {
       if (sharedWith.contains("/collection/")) {
         CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
         if (c != null) {
-          roles.add(new SharedHistory(user, SharedObjectType.COLLECTION, sharedWith, c.getProfile()
-              .toString(), c.getMetadata().getTitle()));
+          roles.add(new SharedHistory(user, SharedObjectType.COLLECTION, sharedWith,
+              c.getProfile().toString(), c.getMetadata().getTitle()));
         }
       } else if (sharedWith.contains("/album/")) {
         Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
         if (a != null) {
-          roles.add(new SharedHistory(user, SharedObjectType.ALBUM, sharedWith, null, a
-              .getMetadata().getTitle()));
+          roles.add(new SharedHistory(user, SharedObjectType.ALBUM, sharedWith, null,
+              a.getMetadata().getTitle()));
         }
       } else if (sharedWith.contains("/item/")) {
         ItemController c = new ItemController();
-        Item it = c.retrieve(URI.create(sharedWith), sessionUser);
+        Item it = c.retrieveLazy(URI.create(sharedWith), sessionUser);
         if (it != null) {
-          roles.add(new SharedHistory(user, SharedObjectType.ITEM, sharedWith, null, it
-              .getFilename()));
+          roles.add(
+              new SharedHistory(user, SharedObjectType.ITEM, sharedWith, null, it.getFilename()));
         }
       }
     }
@@ -286,7 +286,8 @@ public class AuthUtil {
    * @return
    * @throws Exception
    */
-  public static List<SharedHistory> getAllRoles(UserGroup group, User sessionUser) throws Exception {
+  public static List<SharedHistory> getAllRoles(UserGroup group, User sessionUser)
+      throws Exception {
     List<String> shareToList = new ArrayList<String>();
     for (Grant g : group.getGrants()) {
       if (!shareToList.contains(g.getGrantFor().toString()))
@@ -296,17 +297,17 @@ public class AuthUtil {
     for (String sharedWith : shareToList) {
       if (sharedWith.contains("/collection/")) {
         CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
-        roles.add(new SharedHistory(group, SharedObjectType.COLLECTION, sharedWith, c.getProfile()
-            .toString(), c.getMetadata().getTitle()));
+        roles.add(new SharedHistory(group, SharedObjectType.COLLECTION, sharedWith,
+            c.getProfile().toString(), c.getMetadata().getTitle()));
       } else if (sharedWith.contains("/album/")) {
         Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
-        roles.add(new SharedHistory(group, SharedObjectType.ALBUM, sharedWith, null, a
-            .getMetadata().getTitle()));
+        roles.add(new SharedHistory(group, SharedObjectType.ALBUM, sharedWith, null,
+            a.getMetadata().getTitle()));
       } else if (sharedWith.contains("/item/")) {
         ItemController c = new ItemController();
-        Item it = c.retrieve(URI.create(sharedWith), sessionUser);
-        roles.add(new SharedHistory(group, SharedObjectType.ITEM, sharedWith, null, it
-            .getFilename()));
+        Item it = c.retrieveLazy(URI.create(sharedWith), sessionUser);
+        roles.add(
+            new SharedHistory(group, SharedObjectType.ITEM, sharedWith, null, it.getFilename()));
       }
     }
     return roles;

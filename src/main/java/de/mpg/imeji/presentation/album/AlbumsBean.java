@@ -44,10 +44,9 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
   public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
     AlbumController controller = new AlbumController();
     Collection<Album> albums = new ArrayList<Album>();
-    int myOffset = offset;
-    myOffset = prepareList(offset);
+    search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-    albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), limit, myOffset);
+    albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), limit, offset);
     return ImejiFactory.albumListToBeanList(albums);
   }
 
@@ -103,9 +102,10 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
    * SearchQuery , de.mpg.imeji.logic.search.vo.SortCriterion)
    */
   @Override
-  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
+  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion, int offset,
+      int limit) {
     AlbumController controller = new AlbumController();
-    return controller.search(searchQuery, sb.getUser(), sortCriterion, -1, 0,
+    return controller.search(searchQuery, sb.getUser(), sortCriterion, limit, offset,
         sb.getSelectedSpaceString());
   }
 

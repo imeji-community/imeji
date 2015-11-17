@@ -47,8 +47,6 @@ import javax.ws.rs.client.WebTarget;
 public class DoiController {
   
   private Client client = ClientBuilder.newClient();
-  private String doiUser; ;
-  private String doiPassword;
   
   public static CollectionDO transformToDO(CollectionImeji col){
     CollectionDO dcol = new CollectionDO();
@@ -115,10 +113,16 @@ public class DoiController {
     // throw Exception if the DOI service request fails
     if (statusCode != 201) {
         String responseBody = response.readEntity(String.class);
-        throw new ImejiException(
-                "Error occured, when contacting DOxI. StatusCode="
-                        + statusCode + "\nServer responded with: "
-                        + responseBody);
+        if(statusCode == 401){
+          throw new ImejiException("Error occured, when contacting DOxI. StatusCode="
+              + statusCode + "\nServer responded with: "
+              + responseBody + ". Please contact your admin");
+        }else{
+          throw new ImejiException(
+              "Error occured, when contacting DOxI. StatusCode="
+                      + statusCode + "\nServer responded with: "
+                      + responseBody);
+        }
     }   
     
     doi = response.readEntity(String.class);

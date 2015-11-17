@@ -188,6 +188,21 @@ public class CollectionListItem {
     return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
         .getPrettySpacePage("pretty:collections");
   }
+  
+  public String createDOI(){
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    CollectionController cc = new CollectionController();
+    try {
+      CollectionImeji c = cc.retrieve(uri, sessionBean.getUser());
+      cc.createDOI(c, sessionBean.getUser());
+      BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
+    } catch (ImejiException e) {
+      BeanHelper.error(sessionBean.getMessage("error_doi_creation: " + e.getMessage()));
+      logger.error("Error during doi creation", e);
+      e.printStackTrace();
+    }
+    return "pretty:";
+  }
 
   /**
    * Withdraw the {@link CollectionImeji} of the list

@@ -295,6 +295,7 @@
 			</ui:fragment> <!-- end: no space resource is given -->
 				
 			<!-- carousel -->
+			<ui:fragment rendered="#{StartPageBean.carouselEnabled}">
 			<div class="imj_startpage_carouselWrapper">
 				<div class="imj_startpage_carousel">
 					<div class="imj_startpage_carouselContainer">							
@@ -312,7 +313,9 @@
 						</div>
 					</div>
 				</div>
-			</div> <!-- end right content -->
+			</div>
+			</ui:fragment>
+			 <!-- end right content -->
 			
 			
 			

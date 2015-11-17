@@ -145,6 +145,20 @@
 						</span>
 					</div>
 				</ui:fragment>
+				
+				<!-- DOI -->
+				<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'RELEASED' and cc.attrs.metadata.type == 'COLLECTION'}">
+					<div class="imj_metadataSet">
+						<label class="imj_metadataLabel">
+							<h:outputText value="#{lbl.doi}"/>
+							<h:outputText value=": " styleClass="imj_noDisplay"/>
+						</label>
+						<span class="imj_metadataValue">
+							<h:outputText value="#{cc.attrs.metadataContextBean.DOI}"/>
+						</span>
+					</div>
+				</ui:fragment>
+				
 				<ui:fragment rendered="#{cc.attrs.metadata.type == 'COLLECTION'}">
 	                <ui:fragment rendered="#{cc.attrs.metadata.sendEmailNotification}">
 	                    <div class="imj_metadataSet">

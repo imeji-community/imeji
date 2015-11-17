@@ -10,54 +10,7 @@
     </composite:interface>
 
     <composite:implementation>
-        <style type="text/css">
-            .fa-th, .fa-list-alt { font-size: 150%; }
-            .imj_detailList {
-                width: 100%;
-                border-collapse: separate;
-                border-spacing: 0;
-            }
-            .imj_detailList thead th {
-                border-bottom: solid 1px #ccc;
-            }
-            .imj_detailList tfoot td {
-                border-top: solid 1px #ccc;
-            }
-            .imj_detailList th,
-            .imj_detailList td {
-                padding: 0.5em;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-            .imj_detailList thead .imj_colFiletype,
-            .imj_detailList thead .imj_colFilesize,
-            .imj_detailList tfoot .imj_colFiletype,
-            .imj_detailList tfoot .imj_colFilesize{
-                text-align: center;
-            }
-            .imj_detailList .imj_colCheckbox {
-                width: 5%;
-            }
-            .imj_detailList .imj_colFileIcon {
-                width: 5%;
-                text-align: center;
-            }
-            .imj_detailList .imj_colFilename{
-                width: 60%;
-            }
-            .imj_detailList td.imj_colFiletype{
-                width: 5%;
-                max-width: 6em;
-            }
-            .imj_detailList .imj_colFilesize{
-                width: 15%;
-                text-align: right;
-            }
-            .imj_detailList .imj_colDate {
-                width: 25%;
-            }
-        </style>
+        
         <!-- param to control the classes for every column, in case of logged in / out -->
         <ui:param name="colClasses" value="#{Auth.loggedIn ? 'imj_colCheckbox,imj_colFileIcon,imj_colFilename,imj_colFiletype,imj_colFilesize,imj_colDate' : 'imj_colFileIcon,imj_colFilename,imj_colFiletype,imj_colFilesize,imj_colDate'}"/>
 

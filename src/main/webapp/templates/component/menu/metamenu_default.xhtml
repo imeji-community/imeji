@@ -97,8 +97,9 @@ All rights reserved. Use is subject to license terms.
 			<h:form id="langForm">
 				<div class="imj_customSelectbox">
 					<div class="imj_showSelection">
-						<div class="imj_selectionText"></div>
-						<div class="imj_buttonSortDescending_16"></div>
+						
+                        <div class="imj_selectionText"></div>
+                        <a href="javascript:void(0);" class="fa fa-angle-down"> </a>
 					</div>
 					<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItemSelect">
 						<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>

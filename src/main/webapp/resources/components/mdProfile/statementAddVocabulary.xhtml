@@ -28,7 +28,7 @@
 			<div class="imj_metadataValue">
 				<div class="imj_metadataSet">
 					<ui:fragment rendered="#{!cc.attrs.hasElements}">
-						<h:commandButton styleClass="imj_buttonAdd_16" action="#{cc.attrs.bean[cc.attrs.submitAction]}">
+						<h:commandButton styleClass="fa fa-plus-square-o" action="#{cc.attrs.bean[cc.attrs.submitAction]}">
 							<f:setPropertyActionListener value="#{cc.attrs.insertPosition}" target="#{cc.attrs.bean[cc.attrs.insertTarget]}"/>
 							<f:ajax execute="@form" render="#{cc.attrs.rerenderId}"/>
 						</h:commandButton>
@@ -39,7 +39,7 @@
 						<h:selectOneMenu id="selectVocabulary" value="#{cc.attrs.selectionBean.vocabularyString}">
 							<f:selectItems value="#{cc.attrs.selectionBean.vocabularyHelper.vocabularies}"/>
 						</h:selectOneMenu>
-						<h:commandButton id="btnRemoveVocabulary" styleClass="imj_buttonRemove_16" action="#{cc.attrs.bean[cc.attrs.deleteAction]}">
+						<h:commandButton id="btnRemoveVocabulary" styleClass="fa fa-minus-square-o" action="#{cc.attrs.bean[cc.attrs.deleteAction]}">
 							<f:setPropertyActionListener value="#{cc.attrs.insertPosition}" target="#{cc.attrs.bean[cc.attrs.insertTarget]}"/>
 							<f:ajax execute="@form" render="#{cc.attrs.rerenderId}"/>
 						</h:commandButton>

@@ -48,6 +48,7 @@ public class StartPageBean implements Serializable {
   private final static int CAROUSSEL_SIZE = 6;
   // in hours
   private int searchforItemCreatedForLessThan = 0;
+  private boolean carouselEnabled = ConfigurationBean.getStartPageCarouselEnabledStatic();
 
   /**
    * Constructor for the bean
@@ -210,6 +211,14 @@ public class StartPageBean implements Serializable {
       scc.setDescription("Space Not Found");
       return scc;
     }
+  }
+
+  public boolean isCarouselEnabled() {
+    return carouselEnabled;
+  }
+
+  public void setCarouselEnabled(boolean carouselEnabled) {
+    this.carouselEnabled = carouselEnabled;
   }
 
 }

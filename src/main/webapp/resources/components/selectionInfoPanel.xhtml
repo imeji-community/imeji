@@ -38,14 +38,10 @@
 						<h:outputText value="/" styleClass="imj_facetSeparator"/>
 						<h:outputText value="#{filter.internationalizedLabel}"/>
 						<h:outputText value="(#{filter.notDefineType})" rendered="#{filter.notDefine}"/>
-						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == SessionBean.getPrettySpacePage('pretty:browse')}">
-							<h:outputText value="[x]"/>
-						</h:outputLink>
-						<ui:fragment rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}">
-							<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}">
-								<h:outputText value="[x]"/>
-							</h:outputLink>
-						</ui:fragment>
+                        
+						<h:outputLink styleClass="imj_removeFacetButton fa fa-times" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == SessionBean.getPrettySpacePage('pretty:browse')}"/>
+						<h:outputLink styleClass="imj_removeFacetButton fa fa-times" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}"/>
+						
 					</ui:repeat>
 					
 					<ui:fragment rendered="#{!Auth.loggedIn}">
@@ -62,7 +58,7 @@
 							<div class="imj_menuHeader">
 								<h:outputText value="( "/>
 								<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.images}"/>
-								<span class="imj_iconTriangleBottomRight_16"/>
+								<span class="fa fa-angle-down"/>
 								<h:outputText value=" )"/>
 							</div>
 							<div class="imj_menuBody">
@@ -71,7 +67,7 @@
 										<!-- No active album selected -->
 										<li class="imj_overlayMenuListItem">
 											<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
-												<h:panelGroup styleClass="imj_iconMagnifier_16"/>
+												<h:panelGroup styleClass="fa fa-search"/>
 												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
 											</h:outputLink>
 										</li>
@@ -128,7 +124,7 @@
 					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_overlayMenu imj_selectionInfoPanelItemSelect" rendered="#{Auth.loggedIn}">
 						<h:panelGroup layout="block"  styleClass="imj_menuHeader">
 							<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}"/>
-							<span class="imj_iconTriangleBottomRight_16"/>
+							<span class="fa fa-angle-down"/>
 						</h:panelGroup>
 						
 						<h:panelGroup layout="block" styleClass="imj_menuBody">
@@ -141,7 +137,7 @@
 										<li class="imj_overlayMenuListItem">
 											<!-- No active album selected -->
 											<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
-												<h:panelGroup styleClass="imj_iconMagnifier_16"/>
+												<h:panelGroup styleClass="fa fa-search"/>
 												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
 											</h:outputLink>
 										</li>

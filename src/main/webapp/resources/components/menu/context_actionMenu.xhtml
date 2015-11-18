@@ -150,6 +150,12 @@
 											<h:outputText value="#{lbl.withdraw}"/>
 										</h:outputLink>
 									</li>
+									
+									<li>
+										<h:outputLink id="lnkCreateDOI" value="#" onclick="openDialog('createDOIDialog');" title="#{lbl.createDOI}">
+											<h:outputText value="#{lbl.createDOI}"/>
+										</h:outputLink>
+									</li>
 								</ui:fragment>
 								
 								<ui:fragment rendered="#{cc.attrs.isDeletable}">
@@ -173,8 +179,8 @@
 					
 					<h:form>
 						<h:outputText value="#{lbl.sort_by}: " styleClass="imj_active"/>
-						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="imj_buttonOrderByAsc_16" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
-						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="imj_buttonOrderByDesc_16" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
+						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="fa fa-sort-asc" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
+						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="fa fa-sort-desc" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
 						
 						<ul>
 							<ui:repeat var="sortItem" value="#{cc.attrs.sortBean.sortMenu}" varStatus="spos">

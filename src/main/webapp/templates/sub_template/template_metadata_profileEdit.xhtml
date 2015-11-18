@@ -81,14 +81,14 @@
 												<h:panelGroup layout="block" styleClass="imj_itemHeader">
 													<span class="imj_inlineButtonGroup">
 														<!-- Buttons to add new or remove current metadata statement -->
-														<h:commandButton styleClass="imj_buttonAdd_16"  title="#{lbl.add_metadata}" type="submit" action="#{metadataBean.addStatement}">
+														<h:commandLink styleClass="fa fa-plus-square-o"  title="#{lbl.add_metadata}" type="submit" action="#{metadataBean.addStatement}">
 															<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 															<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-														</h:commandButton>
-														<h:commandButton styleClass="imj_buttonRemove_16" type="submit"  rendered="#{metadataBean.size &gt; 1}" title="#{lbl.statement_remove}" action="#{metadataBean.removeStatement}">
+                                                        </h:commandLink>
+														<h:commandLink styleClass="fa fa-minus-square-o" type="submit"  rendered="#{metadataBean.size &gt; 1}" title="#{lbl.statement_remove}" action="#{metadataBean.removeStatement}">
 															<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 															<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-														</h:commandButton>
+                                                        </h:commandLink>
 													</span>
 													<h:outputText value="#{lbl.metadata}"/>
 													<h:outputText value=": " styleClass="imj_noDisplay"/>
@@ -149,15 +149,15 @@
 																			
 																			
 																			<span class="imj_inlineButtonGroup">
-																				<h:commandButton id="addLabel" type="submit" styleClass="imj_buttonAdd_16" action="#{metadataBean.addLabel}" title="#{lbl.label_add}">
+																				<h:commandLink id="addLabel" type="submit" styleClass="fa fa-plus-square-o" action="#{metadataBean.addLabel}" title="#{lbl.label_add}">
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																				</h:commandButton>
-																				<h:commandButton styleClass="imj_buttonRemove_16" type="submit" action="#{metadataBean.removeLabel}" title="#{lbl.label_remove}" rendered="#{wrapper.labelsCount > 1}">
+                                                                                </h:commandLink>
+																				<h:commandLink styleClass="fa fa-minus-square-o" type="submit" action="#{metadataBean.removeLabel}" title="#{lbl.label_remove}" rendered="#{wrapper.labelsCount > 1}">
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:setPropertyActionListener value="#{labelPosition.index}" target="#{metadataBean.labelPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																				</h:commandButton>
+                                                                                </h:commandLink>
 																			</span>
 																		</h:panelGroup>
 																	</ui:repeat>
@@ -177,10 +177,10 @@
 																									and wrapper.statement.type !='http://imeji.org/terms/metadata#publication'
 																									and wrapper.statement.type !='http://imeji.org/terms/metadata#date'
 																									and wrapper.statement.type !='http://imeji.org/terms/metadata#number'}">
-																				<h:commandButton styleClass="imj_buttonAdd_16" type="submit" action="#{metadataBean.addVocabulary}">
+																				<h:commandLink styleClass="fa fa-plus-square-o" type="submit" action="#{metadataBean.addVocabulary}">
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																				</h:commandButton>
+                                                                                </h:commandLink>
 																				<h:outputLabel value="#{lbl.add_vocabulary}"/>
 																			</ui:fragment>
 																			
@@ -188,10 +188,10 @@
 																				<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}">
 																					<f:selectItems value="#{metadataBean.vocabularyHelper.vocabularies}"/>
 																				</h:selectOneMenu>
-																				<h:commandButton id="btnRemoveVocabulary" type="submit" styleClass="imj_buttonRemove_16" action="#{metadataBean.removeVocabulary}">
+																				<h:commandLink id="btnRemoveVocabulary" type="submit" styleClass="fa fa-minus-square-o" action="#{metadataBean.removeVocabulary}">
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																				</h:commandButton>
+                                                                                </h:commandLink>
 																			</ui:fragment>
 																		</div>
 																	</div><!-- END - add vocabulary constraints -->
@@ -213,10 +213,10 @@
 																							  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
 																							  and wrapper.statement.type !='http://imeji.org/terms/metadata#license'
 																							  and wrapper.vocabularyString == null}">
-																				<h:commandButton styleClass="imj_buttonAdd_16" type="submit" action="#{metadataBean.addConstraint}">
+																				<h:commandLink styleClass="fa fa-plus-square-o" type="submit" action="#{metadataBean.addConstraint}">
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																				</h:commandButton>
+                                                                                </h:commandLink>
 																				<h:outputLabel value="#{lbl.add_constraint}"/>
 																			</ui:fragment>
 																		</ui:fragment>
@@ -229,16 +229,16 @@
 																					</h:inputText>
 																				
 																					<span class="imj_inlineButtonGroup">
-																						<h:commandButton rendered="#{constraintPosition.index == wrapper.statement.literalConstraints.size()-1}" styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
+																						<h:commandLink rendered="#{constraintPosition.index == wrapper.statement.literalConstraints.size()-1}" styleClass="fa fa-plus-square-o" type="submit" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
 																							<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
 																							<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																							<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																						</h:commandButton>
-																						<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_constraint}" action="#{metadataBean.removeConstraint}">
+																						</h:commandLink>
+																						<h:commandLink styleClass="fa fa-minus-square-o" type="submit" title="#{lbl.remove_constraint}" action="#{metadataBean.removeConstraint}">
 																							<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
 																							<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																							<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																						</h:commandButton>
+                                                                                        </h:commandLink>
 																					</span>
 																				</div>
 																			</ui:repeat>

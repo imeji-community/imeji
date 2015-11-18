@@ -139,6 +139,17 @@
 							</span>
 						</h:panelGroup>
 						
+						<!-- DOI -->
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION' and cc.attrs.infoLogicBean.collection.status == 'RELEASED'}">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.doi}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.collection.DOI}"/>
+							</span>
+						</h:panelGroup>
+						
 						<!-- Tab Utilities - QR-Tag -->
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">

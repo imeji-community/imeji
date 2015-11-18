@@ -52,10 +52,10 @@
 								<h4> <!-- TODO NB: sectionHeadlines please not additionally style with h4, this should be in the class definition -->
 									<!-- Add/Remove Author buttons -->
 									<span class="imj_inlineButtonGroup"> 
-										<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
+										<h:commandButton styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
 											<f:ajax execute="@form" render="@form" />
 										</h:commandButton>
-										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
+										<h:commandButton styleClass="fa fa-minus-square-o" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
 											<f:ajax execute="@form" render="@form" />
 										</h:commandButton>
 									</span>
@@ -181,7 +181,7 @@
 												<img alt="Logo" src="#{cc.attrs.formularBean.container.logoUrl}" height="50em" class="imj_community_logo"/>
 												<span class="imj_inlineButtonGroup"> 
 													<h:outputText value="#{lbl.removeLogo}"/>
-													<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
+													<h:commandButton styleClass="fa fa-minus-square-o" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
 															<f:ajax execute="@form" render="@form" />
 												    </h:commandButton>
 											    </span>

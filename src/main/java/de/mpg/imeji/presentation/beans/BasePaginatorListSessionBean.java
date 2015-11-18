@@ -107,15 +107,13 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   public String getUrlParameters() {
     if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .containsKey("page")) {
-      currentPageNumber =
-          Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-              .getRequestParameterMap().get("page"));
+      currentPageNumber = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+          .getRequestParameterMap().get("page"));
     }
     if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .containsKey("el")) {
-      elementsPerPage =
-          Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-              .getRequestParameterMap().get("el"));
+      elementsPerPage = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+          .getRequestParameterMap().get("el"));
     }
     return "";
   }
@@ -145,7 +143,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
       logger.error("Error paginator list update ", e);
-      e.printStackTrace();
     }
   }
 

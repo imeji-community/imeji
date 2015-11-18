@@ -6,10 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.log4j.Logger;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
@@ -37,30 +35,28 @@ import de.mpg.imeji.logic.vo.User;
  */
 public class ElasticQueryFactory {
 
-  private static final Logger logger = Logger.getLogger(ElasticQueryFactory.class);
-
   /**
-   * Build a {@link FilterBuilder} from a {@link SearchQuery}
+   * Build a {@link QueryBuilder} from a {@link SearchQuery}
    * 
    * @param query
    * @return
+   * @return
    */
-  public static FilterBuilder build(SearchQuery query, String folderUri, String spaceId,
-      User user) {
-    return FilterBuilders.boolFilter().must(buildSearchQuery(query))
+  public static QueryBuilder build(SearchQuery query, String folderUri, String spaceId, User user) {
+    return QueryBuilders.boolQuery().must(buildSearchQuery(query))
         .must(buildContainerFilter(folderUri)).must(buildSecurityQuery(user, folderUri))
         .must(buildSpaceQuery(spaceId)).must(buildStatusQuery(query, user));
   }
 
   /**
-   * The {@link FilterBuilder} with the search query
+   * The {@link QueryBuilder} with the search query
    * 
    * @param query
    * @return
    */
-  private static FilterBuilder buildSearchQuery(SearchQuery query) {
+  private static QueryBuilder buildSearchQuery(SearchQuery query) {
     if (query == null || query.getElements().isEmpty()) {
-      return FilterBuilders.matchAllFilter();
+      return QueryBuilders.matchAllQuery();
     }
     return buildSearchQuery(query.getElements());
   }
@@ -72,14 +68,14 @@ public class ElasticQueryFactory {
    * @param user
    * @return
    */
-  private static FilterBuilder buildStatusQuery(SearchQuery query, User user) {
+  private static QueryBuilder buildStatusQuery(SearchQuery query, User user) {
     if (user == null) {
       // Not Logged in: can only view release objects
       return fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS,
           false);
     } else if (query != null && hasStatusQuery(query.getElements())) {
       // Don't filter, since it is done later via the searchquery
-      return FilterBuilders.matchAllFilter();
+      return QueryBuilders.matchAllQuery();
     } else {
       // Default = don't view discarded objects
       return fieldQuery(ElasticFields.STATUS, Status.WITHDRAWN.name(), SearchOperators.EQUALS,
@@ -112,9 +108,9 @@ public class ElasticQueryFactory {
    * @param spaceId
    * @return
    */
-  private static FilterBuilder buildSpaceQuery(String spaceId) {
+  private static QueryBuilder buildSpaceQuery(String spaceId) {
     if (spaceId == null || "".equals(spaceId)) {
-      return FilterBuilders.matchAllFilter();
+      return QueryBuilders.matchAllQuery();
     } else {
       // TODO: implements when folder are indexed as well
       return fieldQuery(ElasticFields.SPACE, spaceId, SearchOperators.EQUALS, false);
@@ -122,14 +118,14 @@ public class ElasticQueryFactory {
   }
 
   /**
-   * Build a {@link FilterBuilder} from a list of {@link SearchElement}
+   * Build a {@link QueryBuilder} from a list of {@link SearchElement}
    * 
    * @param elements
    * @return
    */
-  private static FilterBuilder buildSearchQuery(List<SearchElement> elements) {
+  private static QueryBuilder buildSearchQuery(List<SearchElement> elements) {
     boolean OR = true;
-    BoolFilterBuilder q = FilterBuilders.boolFilter();
+    BoolQueryBuilder q = QueryBuilders.boolQuery();
     for (SearchElement el : elements) {
       if (el instanceof SearchPair) {
         if (OR) {
@@ -157,17 +153,17 @@ public class ElasticQueryFactory {
    * @param user
    * @return
    */
-  private static FilterBuilder buildSecurityQuery(User user, String folderUri) {
+  private static QueryBuilder buildSecurityQuery(User user, String folderUri) {
     if (user != null) {
       if (user.isAdmin()) {
         // Admin: can view everything
-        return FilterBuilders.matchAllFilter();
+        return QueryBuilders.matchAllQuery();
       } else {
         // normal user
         return buildReadGrantQuery(user.getGrants());
       }
     }
-    return FilterBuilders.matchAllFilter();
+    return QueryBuilders.matchAllQuery();
   }
 
   /**
@@ -177,7 +173,7 @@ public class ElasticQueryFactory {
    * @param containerUri
    * @return
    */
-  private static FilterBuilder buildContainerFilter(String containerUri) {
+  private static QueryBuilder buildContainerFilter(String containerUri) {
     if (containerUri != null) {
       if (isFolderUri(containerUri)) {
         return fieldQuery(ElasticFields.FOLDER, containerUri, SearchOperators.EQUALS, false);
@@ -185,7 +181,7 @@ public class ElasticQueryFactory {
         return fieldQuery(ElasticFields.ALBUM, containerUri, SearchOperators.EQUALS, false);
       }
     }
-    return FilterBuilders.matchAllFilter();
+    return QueryBuilders.matchAllQuery();
   }
 
 
@@ -195,8 +191,8 @@ public class ElasticQueryFactory {
    * @param grants
    * @return
    */
-  private static FilterBuilder buildReadGrantQuery(Collection<Grant> grants) {
-    BoolFilterBuilder q = FilterBuilders.boolFilter();
+  private static QueryBuilder buildReadGrantQuery(Collection<Grant> grants) {
+    BoolQueryBuilder q = QueryBuilders.boolQuery();
     // Add query for all release objects
     q.should(
         fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false));
@@ -213,13 +209,13 @@ public class ElasticQueryFactory {
   }
 
   /**
-   * Create a FilterBuilder with a term filter (see
+   * Create a QueryBuilder with a term filter (see
    * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-filter.html)
    * 
    * @param pair
    * @return
    */
-  private static FilterBuilder termQuery(SearchPair pair) {
+  private static QueryBuilder termQuery(SearchPair pair) {
     if (pair instanceof SearchMetadata) {
       return metadataFilter((SearchMetadata) pair);
     }
@@ -228,20 +224,23 @@ public class ElasticQueryFactory {
       case alb:
         break;
       case all:
-        BoolFilterBuilder f = FilterBuilders.boolFilter()
-            .should(fieldQuery(ElasticFields.NAME, pair.getValue(), SearchOperators.REGEX,
-                false),
-            fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), SearchOperators.REGEX, false),
-            fieldQuery(ElasticFields.METADATA_FAMILYNAME, pair.getValue(), SearchOperators.REGEX,
-                false),
-            fieldQuery(ElasticFields.METADATA_GIVENNAME, pair.getValue(), SearchOperators.REGEX,
-                false),
-            fieldQuery(ElasticFields.METADATA_URI, pair.getValue(), SearchOperators.REGEX, false),
-            fieldQuery(ElasticFields.FILENAME, pair.getValue(), SearchOperators.REGEX, false),
-            fieldQuery(ElasticFields.DESCRIPTION, pair.getValue(), SearchOperators.REGEX, false),
-            fieldQuery(ElasticFields.AUTHOR_COMPLETENAME, pair.getValue(), SearchOperators.REGEX,
-                false),
-            fieldQuery(ElasticFields.AUTHOR_ORGANIZATION_NAME, pair.getValue(),
+        BoolQueryBuilder f = QueryBuilders.boolQuery()
+            .should(fieldQuery(ElasticFields.NAME, pair.getValue(), SearchOperators.REGEX, false))
+            .should(fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), SearchOperators.REGEX,
+                false))
+            .should(fieldQuery(ElasticFields.METADATA_FAMILYNAME, pair.getValue(),
+                SearchOperators.REGEX, false))
+            .should(fieldQuery(ElasticFields.METADATA_GIVENNAME, pair.getValue(),
+                SearchOperators.REGEX, false))
+            .should(fieldQuery(ElasticFields.METADATA_URI, pair.getValue(), SearchOperators.REGEX,
+                false))
+            .should(
+                fieldQuery(ElasticFields.FILENAME, pair.getValue(), SearchOperators.REGEX, false))
+            .should(fieldQuery(ElasticFields.DESCRIPTION, pair.getValue(), SearchOperators.REGEX,
+                false))
+            .should(fieldQuery(ElasticFields.AUTHOR_COMPLETENAME, pair.getValue(),
+                SearchOperators.REGEX, false))
+            .should(fieldQuery(ElasticFields.AUTHOR_ORGANIZATION_NAME, pair.getValue(),
                 SearchOperators.REGEX, false));
 
         if (NumberUtils.isNumber(pair.getValue())) {
@@ -302,7 +301,7 @@ public class ElasticQueryFactory {
         return fieldQuery(ElasticFields.FILENAME, pair.getValue(), pair.getOperator(),
             pair.isNot());
       case filetype:
-        BoolFilterBuilder q = FilterBuilders.boolFilter();
+        BoolQueryBuilder q = QueryBuilders.boolQuery();
         for (String ext : SearchUtils.parseFileTypesAsExtensionList(pair.getValue())) {
           q.should(fieldQuery(ElasticFields.FILENAME, "*." + ext, SearchOperators.REGEX, false));
         }
@@ -418,12 +417,12 @@ public class ElasticQueryFactory {
   }
 
   /**
-   * Create a {@link FilterBuilder} for a {@link SearchMetadata}
+   * Create a {@link QueryBuilder} for a {@link SearchMetadata}
    * 
    * @param md
    * @return
    */
-  private static FilterBuilder metadataFilter(SearchMetadata md) {
+  private static QueryBuilder metadataFilter(SearchMetadata md) {
     switch (md.getField()) {
       case text:
         return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
@@ -460,16 +459,16 @@ public class ElasticQueryFactory {
   }
 
   /**
-   * Create a {@link FilterBuilder}
+   * Create a {@link QueryBuilder}
    * 
    * @param index
    * @param value
    * @param operator
    * @return
    */
-  private static FilterBuilder fieldQuery(ElasticFields field, String value,
+  private static QueryBuilder fieldQuery(ElasticFields field, String value,
       SearchOperators operator, boolean not) {
-    FilterBuilder q = null;
+    QueryBuilder q = null;
     if (operator == null) {
       operator = SearchOperators.REGEX;
     }
@@ -498,7 +497,7 @@ public class ElasticQueryFactory {
   }
 
   /**
-   * Create a {@link FilterBuilder} - used to sarch for metadata which are defined with a statement
+   * Create a {@link QueryBuilder} - used to sarch for metadata which are defined with a statement
    * 
    * @param index
    * @param value
@@ -506,10 +505,10 @@ public class ElasticQueryFactory {
    * @param statement
    * @return
    */
-  private static FilterBuilder metadataQuery(ElasticFields field, String value,
+  private static QueryBuilder metadataQuery(ElasticFields field, String value,
       SearchOperators operator, URI statement, boolean not) {
-    return FilterBuilders.nestedFilter(ElasticFields.METADATA.field(),
-        FilterBuilders.boolFilter().must(fieldQuery(field, value, operator, not))
+    return QueryBuilders.nestedQuery(ElasticFields.METADATA.field(),
+        QueryBuilders.boolQuery().must(fieldQuery(field, value, operator, not))
             .must(fieldQuery(ElasticFields.METADATA_STATEMENT, ObjectHelper.getId(statement),
                 SearchOperators.EQUALS, false)));
 
@@ -522,8 +521,8 @@ public class ElasticQueryFactory {
    * @param value
    * @return
    */
-  private static FilterBuilder exactFieldQuery(ElasticFields field, String value) {
-    return FilterBuilders.termFilter(field.fieldExact(), value);
+  private static QueryBuilder exactFieldQuery(ElasticFields field, String value) {
+    return QueryBuilders.termQuery(field.fieldExact(), value);
   }
 
   /**
@@ -533,9 +532,8 @@ public class ElasticQueryFactory {
    * @param value
    * @return
    */
-  private static FilterBuilder matchFieldQuery(ElasticFields field, String value) {
-    return FilterBuilders
-        .queryFilter(QueryBuilders.queryStringQuery(value).defaultField(field.field()));
+  private static QueryBuilder matchFieldQuery(ElasticFields field, String value) {
+    return QueryBuilders.matchQuery(field.field(), value);
   }
 
   /**
@@ -545,9 +543,9 @@ public class ElasticQueryFactory {
    * @param value
    * @return
    */
-  private static FilterBuilder greaterThanQuery(ElasticFields field, String value) {
+  private static QueryBuilder greaterThanQuery(ElasticFields field, String value) {
     if (NumberUtils.isNumber(value)) {
-      return FilterBuilders.rangeFilter(field.field()).gte(Double.parseDouble(value));
+      return QueryBuilders.rangeQuery(field.field()).gte(Double.parseDouble(value));
     }
     return matchNothing();
   }
@@ -559,14 +557,14 @@ public class ElasticQueryFactory {
    * @param value
    * @return
    */
-  private static FilterBuilder lessThanQuery(ElasticFields field, String value) {
+  private static QueryBuilder lessThanQuery(ElasticFields field, String value) {
     if (NumberUtils.isNumber(value)) {
-      return FilterBuilders.rangeFilter(field.field()).lte(Double.parseDouble(value));
+      return QueryBuilders.rangeQuery(field.field()).lte(Double.parseDouble(value));
     }
     return matchNothing();
   }
 
-  private static FilterBuilder geoQuery(String value) {
+  private static QueryBuilder geoQuery(String value) {
     String[] values = value.split(",");
     String distance = "1km";
     double lat = Double.parseDouble(values[0]);
@@ -574,7 +572,7 @@ public class ElasticQueryFactory {
     if (values.length == 3) {
       distance = values[2];
     }
-    return FilterBuilders.geoDistanceFilter(ElasticFields.METADATA_LOCATION.field())
+    return QueryBuilders.geoDistanceQuery(ElasticFields.METADATA_LOCATION.field())
         .distance(distance).point(lat, lon);
   }
 
@@ -585,8 +583,8 @@ public class ElasticQueryFactory {
    * @param not
    * @return
    */
-  private static FilterBuilder negate(FilterBuilder f, boolean not) {
-    return not ? FilterBuilders.notFilter(f) : f;
+  private static QueryBuilder negate(QueryBuilder f, boolean not) {
+    return not ? QueryBuilders.notQuery(f) : f;
   }
 
   /**
@@ -594,8 +592,8 @@ public class ElasticQueryFactory {
    * 
    * @return
    */
-  private static FilterBuilder matchNothing() {
-    return FilterBuilders.notFilter(FilterBuilders.matchAllFilter());
+  private static QueryBuilder matchNothing() {
+    return QueryBuilders.notQuery(QueryBuilders.matchAllQuery());
   }
 
   /**

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -65,14 +64,17 @@ public class ElasticSearch implements Search {
   @Override
   public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, String folderUri,
       String spaceId, int from, int size) {
-    FilterBuilder f = ElasticQueryFactory.build(query, folderUri, spaceId, user);
+    QueryBuilder f = ElasticQueryFactory.build(query, folderUri, spaceId, user);
     // System.out.println(f.buildAsBytes().toUtf8());
     if (size == -1) {
       size = Integer.MAX_VALUE;
     }
+    ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)
+        .setQuery(QueryBuilders.matchAllQuery()).execute().actionGet();
     SearchResponse resp = ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)
-        .setNoFields().setPostFilter(f).setTypes(getTypes()).setSize(size).setFrom(from)
-        .addSort(ElasticSortFactory.build(sortCri)).execute().actionGet();
+        .setNoFields().setQuery(QueryBuilders.matchAllQuery()).setPostFilter(f).setTypes(getTypes())
+        .setSize(size).setFrom(from).addSort(ElasticSortFactory.build(sortCri)).execute()
+        .actionGet();
     return toSearchResult(resp);
   }
 

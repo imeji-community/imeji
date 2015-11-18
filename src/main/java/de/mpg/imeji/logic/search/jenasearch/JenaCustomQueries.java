@@ -27,7 +27,6 @@ package de.mpg.imeji.logic.search.jenasearch;
 import java.net.URI;
 
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
-import org.opensaml.ws.wssecurity.Username;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
@@ -527,9 +526,10 @@ public class JenaCustomQueries {
     return "SELECT DISTINCT ?s WHERE{ ?s <http://imeji.org/terms/space> " + "<" + id.toString()
         + "> " + " . ?s a <http://imeji.org/terms/collection> }";
   }
-  
+
   public static String selectSpaceOfCollection(URI id) {
-    return "SELECT DISTINCT ?s WHERE{  <" + id.toString() + "> <http://imeji.org/terms/space> " + "?s " + " . ?s a <http://imeji.org/terms/space> } LIMIT 1";
+    return "SELECT DISTINCT ?s WHERE{  <" + id.toString() + "> <http://imeji.org/terms/space> "
+        + "?s " + " . ?s a <http://imeji.org/terms/space> } LIMIT 1";
   }
 
   public static String selectCollectionsNotInSpace() {

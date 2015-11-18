@@ -182,109 +182,107 @@
 				<filtering>true</filtering>
 			</testResource>
 		</testResources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-			</plugin>
-			<!-- -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<!-- Exclude imeji.properties from war file, because it should be copied 
-						to application server conf directory -->
-					<packagingExcludes>**/imeji.properties</packagingExcludes>
-					<warName>${project.warName}</warName>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<Implementation-Build>${buildNumber}</Implementation-Build>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18</version>
-				<configuration>
-					<!-- if there are no tests, don't bail out -->
-					<failIfNoTests>false</failIfNoTests>
-					<!-- avoid the out of memory exception thrown in some test scenarios -->
-					<argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
-					<systemPropertyVariables>
-						<catalina.base>${test.catalina.base}</catalina.base>
-					</systemPropertyVariables>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<skip>false</skip>
-							<test>Initializer</test>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>process-resources</id>
-						<phase>process-resources</phase>
-						<configuration>
-							<tasks>
-								<!-- copying the jaxb files into the build directories, because of 
-									the xml schema handling issue (marshalling and unmarshalling) -->
-								<!-- those files will not be copied into the build directories, Maven 
-									does not copy them automatically!!! -->
-								<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.3</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
-					<items>
-						<item>timestamp</item>
-					</items>
-				</configuration>
-			</plugin>
-		</plugins>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+				</plugin>
+				<!-- -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.1.1</version>
+					<configuration>
+						<!-- Exclude imeji.properties from war file, because it should be copied 
+							to application server conf directory -->
+						<packagingExcludes>**/imeji.properties</packagingExcludes>
+						<warName>${project.warName}</warName>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Implementation-Build>${buildNumber}</Implementation-Build>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.18</version>
+					<configuration>
+						<!-- if there are no tests, don't bail out -->
+						<failIfNoTests>false</failIfNoTests>
+						<!-- avoid the out of memory exception thrown in some test scenarios -->
+						<argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+						<systemPropertyVariables>
+							<catalina.base>${test.catalina.base}</catalina.base>
+						</systemPropertyVariables>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>integration-test</phase>
+							<goals>
+								<goal>test</goal>
+							</goals>
+							<configuration>
+								<skip>false</skip>
+								<test>Initializer</test>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>process-resources</id>
+							<phase>process-resources</phase>
+							<configuration>
+								<tasks>
+									<!-- copying the jaxb files into the build directories, because of 
+										the xml schema handling issue (marshalling and unmarshalling) -->
+									<!-- those files will not be copied into the build directories, Maven 
+										does not copy them automatically!!! -->
+									<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
+									<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
+									<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
+									<copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
+								</tasks>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>buildnumber-maven-plugin</artifactId>
+					<version>1.3</version>
+					<executions>
+						<execution>
+							<phase>validate</phase>
+							<goals>
+								<goal>create</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
+						<items>
+							<item>timestamp</item>
+						</items>
+					</configuration>
+				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
@@ -344,11 +342,6 @@
 			<artifactId>apache-jena-libs</artifactId>
 			<type>pom</type>
 			<version>2.13.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.escidoc.core</groupId>
-			<artifactId>escidoc-ijc</artifactId>
-			<version>1.3.2</version>
 		</dependency>
 		<!-- PrettyFaces for JSF 2.x -->
 		<dependency>
@@ -528,7 +521,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
-			<version>1.8</version>
+			<version>1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>xml-apis</groupId>
@@ -631,16 +624,21 @@
 		</dependency>
 		
 		<dependency>
-		    <groupId>org.elasticsearch</groupId>
-		    <artifactId>elasticsearch</artifactId>
-		    <version>1.7.1</version>
+		  <groupId>org.elasticsearch</groupId>
+		  <artifactId>elasticsearch</artifactId>
+		  <version>2.0.0</version>
 		</dependency>
-		
 		
 		<dependency>
 		  <groupId>commons-validator</groupId>
 		  <artifactId>commons-validator</artifactId>
 		  <version>1.4.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava</artifactId>
+		  <version>18.0</version>
 		</dependency>
 	</dependencies>
 	<profiles>

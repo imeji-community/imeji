@@ -2,13 +2,15 @@ package de.mpg.imeji.logic.search.elasticsearch;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
 
@@ -26,6 +28,7 @@ public class ElasticService {
   private static String CLUSTER_NAME = "name of my cluster";
   private static boolean CLUSTER_LOCAL = true;
   private static boolean CLUSTER_DATA = true;
+  private static String CLUSTER_DIR = "null";
   private static final Logger logger = Logger.getLogger(ElasticService.class);
 
   /**
@@ -47,8 +50,13 @@ public class ElasticService {
     CLUSTER_NAME = PropertyReader.getProperty("elastic.cluster.name");
     CLUSTER_DATA = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.data"));
     CLUSTER_LOCAL = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.local"));
-    node = NodeBuilder.nodeBuilder().data(CLUSTER_DATA).local(CLUSTER_LOCAL)
-        .clusterName(CLUSTER_NAME).node();
+    CLUSTER_DIR = PropertyReader.getProperty("elastic.cluster.home");
+    logger.info("Connecting Node to " + CLUSTER_NAME + " (local=" + CLUSTER_LOCAL + ", data="
+        + CLUSTER_DATA + ")");
+    node =
+        NodeBuilder.nodeBuilder().data(CLUSTER_DATA).local(CLUSTER_LOCAL).clusterName(CLUSTER_NAME)
+            .settings(Settings.builder().put("path.home", CLUSTER_DIR)).node();
+
     client = node.client();
     new ElasticIndexer(DATA_ALIAS, ElasticTypes.items).addMapping();
     new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders).addMapping();
@@ -63,9 +71,6 @@ public class ElasticService {
    * @return
    */
   public synchronized static String initializeIndex() {
-    System.out.println(node.settings().get("node.master"));
-    System.out.println(node.settings().get("node.data"));
-    node.settings();
     logger.info("Initializing ElasticSearch index.");
     String indexName = getIndexNameFromAliasName(DATA_ALIAS);
     if (indexName != null) {
@@ -83,19 +88,18 @@ public class ElasticService {
    * @return
    */
   public synchronized static String getIndexNameFromAliasName(final String aliasName) {
-    ImmutableOpenMap<String, AliasMetaData> indexToAliasesMap =
-        client.admin().cluster().state(Requests.clusterStateRequest()).actionGet().getState()
-            .getMetaData().aliases().get(aliasName);
-    if (indexToAliasesMap != null && !indexToAliasesMap.isEmpty()) {
-      if (indexToAliasesMap.size() > 1) {
-        logger.error("Alias " + aliasName
-            + " has more than one index. This is forbidden: All indexes will be removed, please reindex!!!");
-        reset();
-        return null;
-      }
-      return indexToAliasesMap.keys().iterator().next().value;
+    ImmutableOpenMap<String, List<AliasMetaData>> map = client.admin().indices()
+        .getAliases(new GetAliasesRequest(aliasName)).actionGet().getAliases();
+    if (map.keys().size() > 1) {
+      logger.error("Alias " + aliasName
+          + " has more than one index. This is forbidden: All indexes will be removed, please reindex!!!");
+      reset();
+      return null;
+    } else if (map.keys().size() == 1) {
+      return map.keys().iterator().next().value;
+    } else {
+      return null;
     }
-    return null;
   }
 
   /**
@@ -160,7 +164,7 @@ public class ElasticService {
   public static void reset() {
     logger.warn("Resetting ElasticSearch!!!");
     logger.warn("Deleting all indexes...");
-    ElasticService.client.admin().indices().prepareDelete("_all").execute().actionGet();
+    ElasticService.client.admin().indices().prepareDelete(DATA_ALIAS).execute().actionGet();
     logger.warn("...done!");
     initializeIndex();
   }

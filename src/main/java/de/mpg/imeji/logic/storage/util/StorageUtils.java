@@ -321,7 +321,7 @@ public class StorageUtils {
     FileInputStream fis = null;
     try {
       fis = new FileInputStream(file);
-      return DigestUtils.md5Hex(fis);
+      return DigestUtils.md5Hex(toBytes(fis));
     } catch (IOException e) {
       throw new UnprocessableError("Error calculating the cheksum of the file: ", e);
     }

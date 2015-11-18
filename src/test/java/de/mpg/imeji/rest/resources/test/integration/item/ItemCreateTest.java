@@ -23,8 +23,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.apache.commons.httpclient.HttpStatus;
 import org.codehaus.jettison.json.JSONException;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -36,12 +34,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.JenaUtil;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+import util.JenaUtil;
 
 /**
  * Created by vlad on 09.12.14.
@@ -85,17 +84,16 @@ public class ItemCreateTest extends ItemTestBase {
         new FileDataBodyPart("file", new File("src/test/resources/storage/test"));
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart.field(
-        "json",
-        itemJSON.replace("___COLLECTION_ID___", collectionId).replaceAll(
-            "\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,", ""));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replaceAll("\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,", ""));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(CREATED.getStatusCode(), response.getStatus());
     ItemTO createdItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
 
-    assertThat(createdItem.getFileUrl().toString(), allOf(not(endsWith(".null")), endsWith(".png")));
+    assertThat(createdItem.getFileUrl().toString(),
+        allOf(not(endsWith(".null")), endsWith(".png")));
 
   }
 
@@ -106,10 +104,8 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart.field(
-        "json",
-        itemJSON.replace("___COLLECTION_ID___", collectionId).replaceAll(
-            "\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,", ""));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replaceAll("\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,", ""));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -126,11 +122,8 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart
-        .field(
-            "json",
-            itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___",
-                "test.png"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.png"));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -157,8 +150,7 @@ public class ItemCreateTest extends ItemTestBase {
   public void createItemWithoutFile() throws IOException {
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
-    multiPart.field(
-        "json",
+    multiPart.field("json",
         itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___", "test.png")
             .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
             .replaceAll("\"referenceUrl\"\\s*:\\s*\"___REFERENCE_URL___\",", ""));
@@ -174,10 +166,8 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart.field(
-        "json",
-        itemJSON.replace("___COLLECTION_ID___", collectionId + "i_do_not_exist").replace(
-            "___FILENAME___", "test.png"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId + "i_do_not_exist")
+        .replace("___FILENAME___", "test.png"));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -190,17 +180,13 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart
-        .field(
-            "json",
-            itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___",
-                "test.png"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.png"));
 
-    Response response =
-        target(pathPrefix).register(MultiPartFeature.class)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
-            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
-            .post(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(pathPrefix).register(MultiPartFeature.class)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
+        .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
+        .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
   }
@@ -216,11 +202,8 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart
-        .field(
-            "json",
-            itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___",
-                "test.png"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.png"));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -243,11 +226,8 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart
-        .field(
-            "json",
-            itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___",
-                "test.png"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.png"));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -261,18 +241,14 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart
-        .field(
-            "json",
-            itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___",
-                "test.png"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.png"));
 
-    Response response =
-        target(pathPrefix).register(authAsUser2)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .post(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(pathPrefix).register(authAsUser2)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
@@ -286,9 +262,8 @@ public class ItemCreateTest extends ItemTestBase {
     multiPart.bodyPart(filePart);
     String wrongJSON = getStringFromPath("src/test/resources/rest/wrongSyntax.json");
 
-    multiPart.field("json",
-        wrongJSON.replace("___COLLECTION_ID___", collectionId)
-            .replace("___FILENAME___", "test.png"));
+    multiPart.field("json", wrongJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.png"));
 
     LOGGER.info(multiPart.getField("json").getValue());
 
@@ -322,9 +297,8 @@ public class ItemCreateTest extends ItemTestBase {
     final String fileURL = target().getUri() + STATIC_CONTEXT_PATH.substring(1) + "/test2.jpg";
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
-    multiPart.field("json",
-        itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FETCH_URL___", fileURL)
-            .replace("___FILENAME___", ""));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FETCH_URL___", fileURL).replace("___FILENAME___", ""));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -336,17 +310,13 @@ public class ItemCreateTest extends ItemTestBase {
   public void createItem_WithFile_Referenced() throws IOException {
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
-    multiPart
-        .field(
-            "json",
-            itemJSON
-                .replace("___COLLECTION_ID___", collectionId)
-                .replace("___FILENAME___", "test.png")
-                .replace("___REFERENCE_URL___",
-                    "http://th03.deviantart.net/fs71/PRE/i/2012/242/1/f/png_moon_by_paradise234-d5czhdo.png")
-                .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
+    multiPart.field("json",
+        itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___", "test.png")
+            .replace("___REFERENCE_URL___",
+                "http://th03.deviantart.net/fs71/PRE/i/2012/242/1/f/png_moon_by_paradise234-d5czhdo.png")
+        .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
 
-        );
+    );
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -359,10 +329,8 @@ public class ItemCreateTest extends ItemTestBase {
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
 
-    multiPart.field(
-        "json",
-        itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FETCH_URL___",
-            "invalid url")
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FETCH_URL___", "invalid url")
 
     );
 
@@ -377,10 +345,8 @@ public class ItemCreateTest extends ItemTestBase {
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
 
-    multiPart.field(
-        "json",
-        itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FETCH_URL___",
-            "www.google.de")
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FETCH_URL___", "www.google.de")
 
     );
 
@@ -399,11 +365,8 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart
-        .field(
-            "json",
-            itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___",
-                "test.png"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.png"));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
@@ -424,11 +387,8 @@ public class ItemCreateTest extends ItemTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart
-        .field(
-            "json",
-            itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___",
-                "test.exe"));
+    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___FILENAME___", "test.exe"));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 

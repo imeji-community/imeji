@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -430,6 +431,21 @@ public class UploadBean implements Serializable {
       throw new UnprocessableError(sessionBean.getMessage("error_collection_discarded_upload"));
     }
   }
+  
+  public String createDOI(){
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    CollectionController cc = new CollectionController();
+    try {
+      cc.createDOI(collection, user);
+      BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
+    } catch (ImejiException e) {
+      BeanHelper.error(sessionBean.getMessage("error_doi_creation: " + e.getMessage()));
+      logger.error("Error during doi creation", e);
+      e.printStackTrace();
+    }
+    return "pretty:";
+  }
+  
 
   /**
    * release the {@link CollectionImeji}

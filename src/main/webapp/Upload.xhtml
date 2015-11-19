@@ -37,6 +37,7 @@
         <dialog:confirmationDialog submitAction="release" bean="#{UploadBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" />
         <dialog:confirmationDialog submitAction="delete" bean="#{UploadBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog"/>
         <dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{UploadBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" />
+    	<dialog:confirmationDialog submitAction="createDOI" bean="#{UploadBean}" confirmationText="#{msg.confirmation_create_DOI}" submitLabel="#{lbl.createDOI}" dialogId="createDOIDialog" rendered="#{Auth.update(metadataBean.collection) and metadataBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
     </ui:define>
 
     <ui:define name="additonalFooterScripts">

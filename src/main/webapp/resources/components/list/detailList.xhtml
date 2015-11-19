@@ -35,7 +35,7 @@
                     </f:facet>
 
                     <h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="pictureCheckbox" value="#{o.selected}" valueChangeListener="#{o.selectedChanged}">
-                        <f:ajax event="change" execute="@this" render="@form"/>
+                        <f:ajax event="change" execute="@this" render="@form :selPanel:preListForm:preListHeaderSelected"/>
                     </h:selectBooleanCheckbox>
                 </h:column>
 

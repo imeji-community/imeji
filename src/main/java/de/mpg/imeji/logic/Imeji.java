@@ -159,6 +159,11 @@ public class Imeji {
     initDefaultMetadataProfile();
   }
 
+  public static void reset() {
+    TDBFactory.reset();
+    ElasticService.reset();
+  }
+
   /**
    * Initialize (Create when not existing) a {@link Model} with a given name
    * 
@@ -193,8 +198,8 @@ public class Imeji {
       adminUser.setPerson(ImejiFactory.newPerson("Admin", "imeji", "imeji community"));
       adminUser.setEmail(ADMIN_EMAIL_INIT);
       adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));
-      adminUser.getGrants().addAll(
-          AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
+      adminUser.getGrants()
+          .addAll(AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
       // create
       UserController uc = new UserController(Imeji.adminUser);
       List<User> admins = uc.retrieveAllAdmins();
@@ -202,8 +207,8 @@ public class Imeji {
         try {
           uc.retrieve(Imeji.adminUser.getEmail());
         } catch (NotFoundException e) {
-          logger
-              .info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
+          logger.info(
+              "!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
           uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
           logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
         }
@@ -236,8 +241,8 @@ public class Imeji {
     if (defaultMetadataProfile != null) {
       logger.info("Default metadata profile is set-up to " + defaultMetadataProfile.getId());
     } else {
-      logger
-          .info("Checking for default metadata profile is finished: no default metadata profile has been set.");
+      logger.info(
+          "Checking for default metadata profile is finished: no default metadata profile has been set.");
 
     }
   }

@@ -88,14 +88,16 @@ public class JenaUtil {
       initTestUser();
       // init imeji configuration
       new ConfigurationBean();
-      // Start Elasticsearch
-      ElasticService.start();
+      // ElasticService.start();
+
     } catch (Exception e) {
       throw new RuntimeException("Error initialiting Jena for testing: ", e);
     }
   }
 
+
   public static void closeJena() throws InterruptedException {
+    // Imeji.executor.shutdownNow();
     logger.info("Closing Jena:");
     TDB.sync(Imeji.dataset);
     logger.info("Jena Sync done! ");
@@ -108,7 +110,6 @@ public class JenaUtil {
     logger.info("TDB Location released!");
     deleteTDBDirectory();
     ElasticService.reset();
-    ElasticService.shutdown();
   }
 
   private static void initTestUser() throws Exception {

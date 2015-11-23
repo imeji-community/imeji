@@ -47,7 +47,11 @@ public class ElasticService {
   }
 
   public static void start() throws IOException, URISyntaxException {
-    CLUSTER_NAME = PropertyReader.getProperty("elastic.cluster.name");
+    start(PropertyReader.getProperty("elastic.cluster.name"));
+  }
+
+  public static void start(String clusterName) throws IOException, URISyntaxException {
+    CLUSTER_NAME = clusterName;
     CLUSTER_DATA = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.data"));
     CLUSTER_LOCAL = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.local"));
     CLUSTER_DIR = PropertyReader.getProperty("elastic.cluster.home");
@@ -58,6 +62,7 @@ public class ElasticService {
             .settings(Settings.builder().put("path.home", CLUSTER_DIR)).node();
 
     client = node.client();
+    initializeIndex();
     new ElasticIndexer(DATA_ALIAS, ElasticTypes.items).addMapping();
     new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders).addMapping();
     new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums).addMapping();
@@ -74,6 +79,7 @@ public class ElasticService {
     logger.info("Initializing ElasticSearch index.");
     String indexName = getIndexNameFromAliasName(DATA_ALIAS);
     if (indexName != null) {
+      logger.info("Using existing index: " + indexName);
       return indexName;
     } else {
       return createIndexWithAlias();
@@ -163,10 +169,21 @@ public class ElasticService {
    */
   public static void reset() {
     logger.warn("Resetting ElasticSearch!!!");
+    clear();
+    initializeIndex();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces).addMapping();
+  }
+
+  /**
+   * Remove everything from ES
+   */
+  public static void clear() {
     logger.warn("Deleting all indexes...");
     ElasticService.client.admin().indices().prepareDelete(DATA_ALIAS).execute().actionGet();
     logger.warn("...done!");
-    initializeIndex();
   }
 
   public static void shutdown() {

@@ -22,20 +22,24 @@
                          rowClasses="order-table-odd-row,order-table-even-row"
                          columnClasses="#{colClasses}">
 
-                <h:column rendered="#{Auth.loggedIn}">
+                <h:column id="test" rendered="#{Auth.loggedIn}">
                     <f:facet name="header">
                         <!-- TODO: LOGIC FOR CHECKBOX SELECTION -->
-                        <!-- h:selectBooleanCheckbox onclick="#{cc.attrs.listBean.areAllSelected() ? cc.attrs.listBean.selectNone() : cc.attrs.listBean.selectAll()}" value="#{cc.attrs.listBean.areAllSelected()}"/ -->
+                        <h:selectBooleanCheckbox  value="#{cc.attrs.listBean.allSelected}" valueChangeListener="#{cc.attrs.listBean.changeAllSelected}">
+                        	<f:ajax event="change" execute="@this" render="@all :selPanel:preListForm:preListHeaderSelected"/>
+                        </h:selectBooleanCheckbox>
                         &#160;
                     </f:facet>
                     <f:facet name="footer">
                         &#160;
                         <!-- TODO: LOGIC FOR CHECKBOX SELECTION -->
-                        <!-- h:selectBooleanCheckbox onclick="#{cc.attrs.listBean.areAllSelected() ? cc.attrs.listBean.selectNone() : cc.attrs.listBean.selectAll()}" value="#{cc.attrs.listBean.areAllSelected()}"/ -->
+                         <h:selectBooleanCheckbox  value="#{cc.attrs.listBean.allSelected}" valueChangeListener="#{cc.attrs.listBean.changeAllSelected}">
+                        	<f:ajax event="change" execute="@this" render="@all :selPanel:preListForm:preListHeaderSelected"/>
+                        </h:selectBooleanCheckbox>
                     </f:facet>
 
                     <h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="pictureCheckbox" value="#{o.selected}" valueChangeListener="#{o.selectedChanged}">
-                        <f:ajax event="change" execute="@this" render="@form"/>
+                        <f:ajax event="change" execute="@this" render="@form :selPanel:preListForm:preListHeaderSelected"/>
                     </h:selectBooleanCheckbox>
                 </h:column>
 

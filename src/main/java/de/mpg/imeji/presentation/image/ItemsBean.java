@@ -606,5 +606,28 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public String getTypeLabel() {
     return session.getLabel("type_" + getType().toLowerCase());
   }
+  
+  public void changeAllSelected(ValueChangeEvent event) {
+    if (isAllSelected()) {
+      selectNone();
+    }else{
+      selectAll();
+    }
+  }
+
+  public boolean isAllSelected() {
+    boolean result = true;
+    for (ThumbnailBean bean : getCurrentPartList()) {
+      if(bean.isSelected() == false){
+        result = false;
+        break;
+      }
+    }
+    return result;
+  }
+
+  public void setAllSelected(boolean allSelected) {
+
+  }
 
 }

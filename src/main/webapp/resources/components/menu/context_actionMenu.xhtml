@@ -37,6 +37,7 @@
 			<ui:fragment rendered="#{cc.attrs.isUserLoggedIn}">
 				<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 					<div class="imj_menuHeader">
+                        <span class="fa fa-plus">&#160;</span>
 						<h:outputText value="#{lbl.new_menu}" styleClass="imj_headerEntry"/>
 					</div>
 					<div class="imj_menuBody">
@@ -73,6 +74,7 @@
 			<ui:fragment rendered="#{cc.attrs.navBean != null and cc.attrs.downloadEnabled}">					
 					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 						<div class="imj_menuHeader">
+                            <span class="fa fa-download">&#160;</span>
 							<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry" title="#{lbl.download_selected}"/>
 						</div>
 						<div class="imj_menuBody">
@@ -101,6 +103,7 @@
 				
 				<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.filterBean != null}">
 					<div class="imj_menuHeader">
+                        <span class="fa fa-filter">&#160;</span>
 						<h:outputText id="txtFilter" value="#{lbl.filter}" styleClass="imj_headerEntry"/>
 					</div>
 					<div class="imj_menuBody">
@@ -120,6 +123,7 @@
 				<ui:fragment  rendered="#{cc.attrs.actionEnabled and (cc.attrs.isAdmin or cc.attrs.isDeletable) and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
 					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
 						<div class="imj_menuHeader" >
+                            <span class="fa fa-exchange">&#160;</span>
 							<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
 						</div>
 						<div class="imj_menuBody">
@@ -173,14 +177,15 @@
 			
 			<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.sortBean != null}">
 				<div class="imj_menuHeader">
+                    <span class="fa fa-sort">&#160;</span>
 					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
 				</div>
 				<div class="imj_menuBody">
 					
 					<h:form>
 						<h:outputText value="#{lbl.sort_by}: " styleClass="imj_active"/>
-						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="fa fa-sort-asc" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
-						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="fa fa-sort-desc" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
+						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="fa fa-sort-asc fa-pull-right" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
+						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="fa fa-sort-desc fa-pull-right" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
 						
 						<ul>
 							<ui:repeat var="sortItem" value="#{cc.attrs.sortBean.sortMenu}" varStatus="spos">

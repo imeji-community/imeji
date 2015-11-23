@@ -553,7 +553,7 @@ function updateCustomSelectbox(selectbox) {
     customSelectbox.width(select.width());
 
     text = customSelectbox.find(".imj_selectionText");
-    icon = customSelectbox.find(".imj_buttonSortDescending_16");
+    icon = customSelectbox.find(".fa.fa-angle-down");
 
     val = select.val(); // is the logic value of the current selectbox, but not the text which is displayed
 
@@ -564,7 +564,7 @@ function updateCustomSelectbox(selectbox) {
         }
     });
     text.text(val);
-    textWidth = select.width() - icon.width() - Math.round(Number(icon.css("margin-left").replace("px", ""))) + 2;
+    textWidth = select.width() - icon.width() - Math.round(Number(icon.css("margin-left").replace("px", "")));
     text.width(textWidth);
 }
 

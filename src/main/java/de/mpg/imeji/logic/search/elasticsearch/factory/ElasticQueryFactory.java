@@ -43,7 +43,8 @@ public class ElasticQueryFactory {
    * @return
    */
   public static QueryBuilder build(SearchQuery query, String folderUri, String spaceId, User user) {
-    return QueryBuilders.boolQuery().must(buildSearchQuery(query))
+    buildSearchQuery(query, user);
+    return QueryBuilders.boolQuery().must(buildSearchQuery(query, user))
         .must(buildContainerFilter(folderUri)).must(buildSecurityQuery(user, folderUri))
         .must(buildSpaceQuery(spaceId)).must(buildStatusQuery(query, user));
   }
@@ -54,11 +55,11 @@ public class ElasticQueryFactory {
    * @param query
    * @return
    */
-  private static QueryBuilder buildSearchQuery(SearchQuery query) {
+  private static QueryBuilder buildSearchQuery(SearchQuery query, User user) {
     if (query == null || query.getElements().isEmpty()) {
       return QueryBuilders.matchAllQuery();
     }
-    return buildSearchQuery(query.getElements());
+    return buildSearchQuery(query.getElements(), user);
   }
 
   /**
@@ -123,24 +124,24 @@ public class ElasticQueryFactory {
    * @param elements
    * @return
    */
-  private static QueryBuilder buildSearchQuery(List<SearchElement> elements) {
+  private static QueryBuilder buildSearchQuery(List<SearchElement> elements, User user) {
     boolean OR = true;
     BoolQueryBuilder q = QueryBuilders.boolQuery();
     for (SearchElement el : elements) {
       if (el instanceof SearchPair) {
         if (OR) {
-          q.should(termQuery((SearchPair) el));
+          q.should(termQuery((SearchPair) el, user));
         } else {
-          q.must(termQuery((SearchPair) el));
+          q.must(termQuery((SearchPair) el, user));
         }
       } else if (el instanceof SearchLogicalRelation) {
         OR = ((SearchLogicalRelation) el).getLogicalRelation() == LOGICAL_RELATIONS.OR ? true
             : false;
       } else if (el instanceof SearchGroup) {
         if (OR) {
-          q.should(buildSearchQuery(((SearchGroup) el).getElements()));
+          q.should(buildSearchQuery(((SearchGroup) el).getElements(), user));
         } else {
-          q.must(buildSearchQuery(((SearchGroup) el).getElements()));
+          q.must(buildSearchQuery(((SearchGroup) el).getElements(), user));
         }
       }
     }
@@ -160,7 +161,7 @@ public class ElasticQueryFactory {
         return QueryBuilders.matchAllQuery();
       } else {
         // normal user
-        return buildReadGrantQuery(user.getGrants());
+        return buildGrantQuery(user.getGrants(), GrantType.READ);
       }
     }
     return QueryBuilders.matchAllQuery();
@@ -191,14 +192,16 @@ public class ElasticQueryFactory {
    * @param grants
    * @return
    */
-  private static QueryBuilder buildReadGrantQuery(Collection<Grant> grants) {
+  private static QueryBuilder buildGrantQuery(Collection<Grant> grants, GrantType grantType) {
     BoolQueryBuilder q = QueryBuilders.boolQuery();
     // Add query for all release objects
-    q.should(
-        fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false));
+    if (grantType == GrantType.READ) {
+      q.should(
+          fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false));
+    }
     // Add query for each read grant
     for (Grant g : grants) {
-      if (g.asGrantType() == GrantType.READ) {
+      if (g.asGrantType() == grantType) {
         q.should(fieldQuery(ElasticFields.FOLDER, g.getGrantFor().toString(),
             SearchOperators.EQUALS, false));
         q.should(fieldQuery(ElasticFields.ID, g.getGrantFor().toString(), SearchOperators.EQUALS,
@@ -208,6 +211,8 @@ public class ElasticQueryFactory {
     return q;
   }
 
+
+
   /**
    * Create a QueryBuilder with a term filter (see
    * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-filter.html)
@@ -215,7 +220,7 @@ public class ElasticQueryFactory {
    * @param pair
    * @return
    */
-  private static QueryBuilder termQuery(SearchPair pair) {
+  private static QueryBuilder termQuery(SearchPair pair, User user) {
     if (pair instanceof SearchMetadata) {
       return metadataFilter((SearchMetadata) pair);
     }
@@ -307,14 +312,18 @@ public class ElasticQueryFactory {
         }
         return q;
       case grant:
-        // not indexed
-        break;
+        // same as grant_type
+        GrantType grant = pair.getValue().equals("upload") ? GrantType.CREATE
+            : GrantType.valueOf(pair.getValue().toUpperCase());
+        return buildGrantQuery(user.getGrants(), grant);
       case grant_for:
         // not indexed
         break;
       case grant_type:
-        // not indexed
-        break;
+        // same as grant
+        GrantType grantType = pair.getValue().equals("upload") ? GrantType.CREATE
+            : GrantType.valueOf(pair.getValue().toUpperCase());
+        return buildGrantQuery(user.getGrants(), grantType);
       case member:
         return fieldQuery(ElasticFields.MEMBER, pair.getValue(), pair.getOperator(), pair.isNot());
       case label:

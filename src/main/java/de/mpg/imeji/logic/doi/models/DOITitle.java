@@ -1,16 +1,16 @@
-package de.mpg.imeji.rest.doi;
+package de.mpg.imeji.logic.doi.models;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class TitleDO {
+public class DOITitle {
 
   private String title;
   
-  public TitleDO(){
+  public DOITitle(){
   };
   
-  public TitleDO(String title){
+  public DOITitle(String title){
     this.title = title;
   }
 

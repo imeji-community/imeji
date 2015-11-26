@@ -402,12 +402,31 @@ public class CollectionController extends ImejiController {
     
     DoiController doicontr = new DoiController();
     
+    String doiServiceUrl = ConfigurationBean.getDoiServiceUrlStatic();
     String doiUser = ConfigurationBean.getDoiUserStatic();
     String doiPassword = ConfigurationBean.getDoiPasswordStatic();
     
-    String doi = doicontr.getNewDoi(coll, doiUser, doiPassword);
+    String doi = doicontr.getNewDoi(coll, doiServiceUrl, doiUser, doiPassword);
     coll.setDOI(doi);
     update(coll, user);
+  }
+  
+  public void createDOIManually(String doi, CollectionImeji collection, User user) throws ImejiException{
+    if (user == null) {
+      throw new AuthenticationError("User must be signed-in");
+    }
+
+    if (collection == null) {
+      throw new NotFoundException("Collection does not exists");
+    }
+    
+    if (!Status.RELEASED.equals(collection.getStatus())){
+      throw new ImejiException("Collection has to be released to create a DOI");
+    }
+    
+    collection.setDOI(doi);
+    update(collection, user);
+    
   }
 
   /**

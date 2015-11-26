@@ -8,6 +8,7 @@ import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectio
 import java.net.URI;
 import java.util.Collection;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
@@ -191,10 +192,16 @@ public class CollectionListItem {
   
   public String createDOI(){
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    String doi = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
     CollectionController cc = new CollectionController();
-    try {
-      CollectionImeji c = cc.retrieve(uri, sessionBean.getUser());
-      cc.createDOI(c, sessionBean.getUser());
+    
+    try{
+      CollectionImeji collection = cc.retrieve(uri, sessionBean.getUser());
+      if(doi != null){
+        cc.createDOIManually(doi, collection, sessionBean.getUser());
+      }else{
+        cc.createDOI(collection, sessionBean.getUser());
+      } 
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sessionBean.getMessage("error_doi_creation: " + e.getMessage()));

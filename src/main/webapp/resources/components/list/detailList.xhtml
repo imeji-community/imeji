@@ -22,7 +22,7 @@
                          rowClasses="order-table-odd-row,order-table-even-row"
                          columnClasses="#{colClasses}">
 
-                <h:column id="test" rendered="#{Auth.loggedIn}">
+                <h:column rendered="#{Auth.loggedIn}">
                     <f:facet name="header">
                         <!-- TODO: LOGIC FOR CHECKBOX SELECTION -->
                         <h:selectBooleanCheckbox  value="#{cc.attrs.listBean.allSelected}" valueChangeListener="#{cc.attrs.listBean.changeAllSelected}">

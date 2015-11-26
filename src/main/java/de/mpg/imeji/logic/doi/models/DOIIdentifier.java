@@ -1,11 +1,11 @@
-package de.mpg.imeji.rest.doi;
+package de.mpg.imeji.logic.doi.models;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 @XmlType
-public class IdentifierDO {
+public class DOIIdentifier {
 
   
   private String identifierType ="DOI";
@@ -14,7 +14,7 @@ public class IdentifierDO {
   private String identifier = "1";
   
   
-  public IdentifierDO(){
+  public DOIIdentifier(){
   }
   
   

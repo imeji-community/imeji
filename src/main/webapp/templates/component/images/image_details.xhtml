@@ -480,7 +480,7 @@
 					document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
 				};
 				var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
-					var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'M');
+					var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'L');
 					qr.addData(text);
 					qr.make();
 					// return qr.createTableTag();

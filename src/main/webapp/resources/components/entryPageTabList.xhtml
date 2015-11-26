@@ -156,7 +156,7 @@
 								<h:outputText value="#{lbl.qrcode}"/>
 								<span class="imj_invisible">: </span>
 							</span>
-							<span class="imj_infodataValue" id="qr"> </span>
+							<span class="imj_infodataValue qr" id="qr"></span>
 						</h:panelGroup>
 						
 					</h:panelGroup>
@@ -165,6 +165,26 @@
 				
 			</h:panelGroup> <!-- END LIST BODY -->
 		</div> <!-- END LIST -->
-
+		
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"></script>
+		<script type="text/javascript">
+				jQuery(document).ready(function() {
+					var qrHtml = document.getElementById('qr');
+					if (qrHtml != null) {
+						qrHtml.innerHTML = create_qrcode('{key:"#{SessionBean.user.apiKey}",col:"#{cc.attrs.infoLogicBean.collection.id}"}');
+					}
+				});
+				
+				var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+					document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+				};
+				var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+					var qr = qrcode(typeNumber || 20, errorCorrectLevel || 'M');
+					qr.addData(text);
+					qr.make();
+					// return qr.createTableTag();
+					return qr.createImgTag();
+				};
+			</script>
 	</composite:implementation>
 </html>

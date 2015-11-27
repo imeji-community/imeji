@@ -16,8 +16,8 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
  */
 public class ElasticSortFactory {
 
-  private static SortBuilder defaultSort = SortBuilders.fieldSort(ElasticFields.CREATED.field())
-      .order(SortOrder.ASC);
+  private static SortBuilder defaultSort =
+      SortBuilders.fieldSort(ElasticFields.CREATED.field()).order(SortOrder.ASC);
 
   /**
    * Build a {@link SortBuilder} from a {@link SortCriterion}
@@ -39,6 +39,12 @@ public class ElasticSortFactory {
             .order(getSortOrder(sort));
       case modified:
         return SortBuilders.fieldSort(ElasticFields.MODIFIED.field()).order(getSortOrder(sort));
+      case filename:
+        return SortBuilders.fieldSort(ElasticFields.FILENAME.field()).order(getSortOrder(sort));
+      case filetype:
+        return SortBuilders.fieldSort(ElasticFields.FILETYPE.field()).order(getSortOrder(sort));
+      case filesize:
+        return SortBuilders.fieldSort(ElasticFields.SIZE.field()).order(getSortOrder(sort));
       default:
         return defaultSort;
     }
@@ -51,7 +57,7 @@ public class ElasticSortFactory {
    * @return
    */
   private static SortOrder getSortOrder(SortCriterion sort) {
-    return sort.getSortOrder() == de.mpg.imeji.logic.search.model.SortCriterion.SortOrder.ASCENDING ? SortOrder.ASC
-        : SortOrder.DESC;
+    return sort.getSortOrder() == de.mpg.imeji.logic.search.model.SortCriterion.SortOrder.ASCENDING
+        ? SortOrder.ASC : SortOrder.DESC;
   }
 }

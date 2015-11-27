@@ -122,15 +122,15 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initMenus() {
     sortMenu = new ArrayList<SelectItem>();
-    sortMenu.add(new SelectItem(null, "--"));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.created,
-        session.getLabel("sort_img_date_created")));
+    if (selectedSortCriterion == null) {
+      this.selectedSortCriterion = SearchIndex.SearchFields.modified.name();
+    }
     sortMenu
         .add(new SelectItem(SearchIndex.SearchFields.modified, session.getLabel("sort_date_mod")));
     sortMenu.add(
-        new SelectItem(SearchIndex.SearchFields.title, session.getLabel("sort_img_collection")));
-    sortMenu.add(
         new SelectItem(SearchIndex.SearchFields.filename, session.getLabel("sort_img_filename")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filetype, session.getLabel("file_type")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filesize, session.getLabel("file_size")));
   }
 
   @Override
@@ -475,6 +475,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   }
 
   public void setSelectedSortCriterion(String selectedSortCriterion) {
+    if (selectedSortCriterion.equals(this.selectedSortCriterion)) {
+      toggleSortOrder();
+    }
     this.selectedSortCriterion = selectedSortCriterion;
   }
 
@@ -606,11 +609,11 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public String getTypeLabel() {
     return session.getLabel("type_" + getType().toLowerCase());
   }
-  
+
   public void changeAllSelected(ValueChangeEvent event) {
     if (isAllSelected()) {
       selectNone();
-    }else{
+    } else {
       selectAll();
     }
   }
@@ -618,7 +621,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public boolean isAllSelected() {
     boolean result = true;
     for (ThumbnailBean bean : getCurrentPartList()) {
-      if(bean.isSelected() == false){
+      if (bean.isSelected() == false) {
         result = false;
         break;
       }

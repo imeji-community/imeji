@@ -127,10 +127,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     }
     sortMenu
         .add(new SelectItem(SearchIndex.SearchFields.modified, session.getLabel("sort_date_mod")));
-    sortMenu.add(
-        new SelectItem(SearchIndex.SearchFields.filename, session.getLabel("sort_img_filename")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filetype, session.getLabel("file_type")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, session.getLabel("filename")));
     sortMenu.add(new SelectItem(SearchIndex.SearchFields.filesize, session.getLabel("file_size")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filetype, session.getLabel("file_type")));
   }
 
   @Override

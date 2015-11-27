@@ -30,7 +30,7 @@ public class DoiControllerTest extends ControllerTest{
   @Ignore
   public void getNewDoiTest() throws ImejiException{
     DoiController dc = new DoiController();
-    String doi = dc.getNewDoi(collection, "bastien", "test");
+    String doi = dc.getNewDoi(collection, "https://test.doi.mpdl.mpg.de/doxi/rest/doi", "bastien", "test");
     assert(doi != null);
   }  
 }

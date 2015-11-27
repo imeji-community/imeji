@@ -1,9 +1,9 @@
-package de.mpg.imeji.rest.doi;
+package de.mpg.imeji.logic.doi.models;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class CreatorDO {
+public class DOICreator {
   
   private String creatorName;
 

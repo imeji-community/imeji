@@ -174,9 +174,14 @@ public class CollectionItemsBean extends ItemsBean {
   }
   
   public String createDOI(){
+    String doi = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
     CollectionController cc = new CollectionController();
     try {
-      cc.createDOI(collection, sb.getUser());
+      if(doi != null){
+        cc.createDOIManually(doi, collection, sb.getUser());
+      }else{
+        cc.createDOI(collection, sb.getUser());
+      } 
       BeanHelper.info(sb.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sb.getMessage("error_doi_creation: " + e.getMessage()));

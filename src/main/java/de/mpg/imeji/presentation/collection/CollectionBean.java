@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.collection;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
@@ -174,9 +175,14 @@ public abstract class CollectionBean extends ContainerBean {
   }
   
   public String createDOI(){
+    String doi = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
     CollectionController cc = new CollectionController();
     try {
-      cc.createDOI(collection, sessionBean.getUser());
+      if(doi != null){
+        cc.createDOIManually(doi, collection, sessionBean.getUser());
+      }else{
+        cc.createDOI(collection, sessionBean.getUser());
+      }      
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sessionBean.getMessage("error_doi_creation: " + e.getMessage()));

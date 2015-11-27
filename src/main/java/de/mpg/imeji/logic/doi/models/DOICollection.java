@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.doi;
+package de.mpg.imeji.logic.doi.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,27 +7,27 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "resource")
-public class CollectionDO {
+public class DOICollection {
 
-    private IdentifierDO identifier;
-    private List<CreatorsDO> creators = new ArrayList<CreatorsDO>();    
-    private List<TitleDO> titles = new ArrayList<TitleDO>();
+    private DOIIdentifier identifier;
+    private List<DOICreators> creators = new ArrayList<DOICreators>();    
+    private List<DOITitle> titles = new ArrayList<DOITitle>();
     private String publisher;
     private String publicationYear;
  
     @XmlElement(name = "creators")
-    public List<CreatorsDO> getCreators() {
+    public List<DOICreators> getCreators() {
       return creators;
     }
-    public void setCreators(List<CreatorsDO> creators) {
+    public void setCreators(List<DOICreators> creators) {
       this.creators = creators;
     }
     
     @XmlElement(name = "titles")
-    public List<TitleDO> getTitles() {
+    public List<DOITitle> getTitles() {
       return titles;
     }
-    public void setTitles(List<TitleDO> titles) {
+    public void setTitles(List<DOITitle> titles) {
       this.titles = titles;
     }
     public String getPublisher() {
@@ -42,10 +42,10 @@ public class CollectionDO {
     public void setPublicationYear(String publicationYear) {
       this.publicationYear = publicationYear;
     }
-    public IdentifierDO getIdentifier() {
+    public DOIIdentifier getIdentifier() {
       return identifier;
     }
-    public void setIdentifier(IdentifierDO identifier) {
+    public void setIdentifier(DOIIdentifier identifier) {
       this.identifier = identifier;
     }
     

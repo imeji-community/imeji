@@ -43,7 +43,7 @@
 			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#number'}">
 				<div class="imj_metadataSet">
 					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>	
-					<h:inputText onfocus="this.select();"  onchange="validateInputNumber(this);" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:inputText id="inputNumber" onfocus="this.select();"  onchange="validateInputNumber(this);" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<f:converter converterId="DoubleConverter"/>
 					</h:inputText>
 					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
@@ -126,7 +126,7 @@
 				<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 					<div class="imj_metadataSet " >
 						<h:outputLabel value="YYYY-MM-DD" styleClass="imj_metadataLabel "/>
-						<h:inputText styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}"/>
+						<h:inputText id="inputDate" styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}"/>
 					</div>
 				</ui:fragment>
 				<ui:fragment rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
@@ -173,7 +173,7 @@
 						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
 					</h4>
 				</ui:fragment>
-				<imjc:person person="#{cc.attrs.itemBean.person}" bean="#{cc.attrs.itemBean}" position="0" userSource="#{cc.attrs.itemStatement.vocabulary}"/>
+				<imjc:person id="inputPerson" person="#{cc.attrs.itemBean.person}" bean="#{cc.attrs.itemBean}" position="0" userSource="#{cc.attrs.itemStatement.vocabulary}"/>
 			</ui:fragment>
 			
 			<!-- METADATA TYPE GEOLOCATION -->

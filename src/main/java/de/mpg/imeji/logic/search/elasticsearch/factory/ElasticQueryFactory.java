@@ -542,7 +542,7 @@ public class ElasticQueryFactory {
    * @return
    */
   private static QueryBuilder matchFieldQuery(ElasticFields field, String value) {
-    return QueryBuilders.wildcardQuery(field.field(), value);
+    return QueryBuilders.queryStringQuery(field.field() + ":" + value);
   }
 
   /**

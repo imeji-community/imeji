@@ -166,7 +166,7 @@
 										</div>
 										<div class="imj_metadataValue" style="margin-left: #{smdb.hierarchyLevel}em;">
 											<!-- MetaDataInput -->
-											<list:batchEditList_singleStatement itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>											
+											<list:batchEditList_singleStatement id="editMd" itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>											
 											<div class="imj_metadataEditButtonArea">
 												<h:commandLink type="submit" styleClass="fa fa-plus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{SingleUploadBean.addMetadata(metadata)}" value="">
 													<f:ajax execute="@form" render="@form"/>

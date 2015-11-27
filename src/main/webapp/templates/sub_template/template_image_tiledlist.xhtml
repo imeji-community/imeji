@@ -43,20 +43,9 @@
                                       containerId="#{containerId}"/>
 
             <!-- Page Browser GotoBox -->
-            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
 
             <!-- Media List -->
-            <div style="text-align: right;">
-                #{lbl.view}:
-                <h:form>
-                    <h:commandLink title="thumbnail list" styleClass="fa fa-th fa-size-2" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}">
-                    	<f:ajax execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
-                    </h:commandLink>
-                	<h:commandLink title="detail list" styleClass="fa fa-list-alt fa-size-2" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'LIST'}">
-                	    <f:ajax execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
-                	</h:commandLink>
-                </h:form>
-            </div>
             <imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}"/>
             <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'LIST'}"/>
 
@@ -66,7 +55,7 @@
             </h:panelGroup>
 
             <!-- Page Browser GotoBox -->
-            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
         </h:panelGroup>
     </ui:define>
     <!-- Main Content - END -->

@@ -19,7 +19,6 @@ import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Java Bean managing language features
@@ -39,8 +38,8 @@ public class InternationalizationBean {
   private String[] supportedLanguages;
   public static final String LABEL_BUNDLE = "labels";
   public static final String MESSAGES_BUNDLE = "messages";
-  private Locale userLocale = FacesContext.getCurrentInstance().getExternalContext()
-      .getRequestLocale();
+  private Locale userLocale =
+      FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
 
   /**
    * Constructor
@@ -91,13 +90,7 @@ public class InternationalizationBean {
    * @return
    */
   public void readSupportedLanguagesProperty() {
-    try {
-      supportedLanguages = PropertyReader.getProperty("imeji.i18n.languages").split(",");
-      supportedLanguages = ConfigurationBean.getLanguagesStatic().split(",");
-    } catch (Exception e) {
-      throw new RuntimeException(
-          "Error reading property imeji.i18n.languages. Check Propety file: " + e);
-    }
+    supportedLanguages = ConfigurationBean.getLanguagesStatic().split(",");
   }
 
   /**

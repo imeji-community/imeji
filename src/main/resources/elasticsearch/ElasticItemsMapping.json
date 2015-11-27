@@ -114,6 +114,9 @@
       },
       "width":{
         "type":"long"
+      },
+      "size":{
+        "type":"long"
       }
     }
   }

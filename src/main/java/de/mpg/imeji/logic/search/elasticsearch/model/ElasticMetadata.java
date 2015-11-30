@@ -53,9 +53,8 @@ public class ElasticMetadata extends ElasticPerson {
       this.location = ((Geolocation) md).getLatitude() + "," + ((Geolocation) md).getLongitude();
     } else if (md instanceof License) {
       this.text = ((License) md).getLicense();
-      this.uri =
-          ((License) md).getExternalUri() == null ? null : ((License) md).getExternalUri()
-              .toString();
+      this.uri = ((License) md).getExternalUri() == null ? null
+          : ((License) md).getExternalUri().toString();
     } else if (md instanceof Publication) {
       this.text = ((Publication) md).getCitation();
       this.uri =

@@ -77,8 +77,9 @@ public class SearchQueryParser {
     // isn't any bracket
     int bracketsOpened = 0;
     int bracketsClosed = 0;
-    if (query == null)
+    if (query == null) {
       query = "";
+    }
     StringReader reader = new StringReader(query);
     int c = 0;
     while ((c = reader.read()) != -1) {
@@ -95,8 +96,8 @@ public class SearchQueryParser {
         scString = "";
       }
       if (scString.trim().equals("AND") || scString.trim().equals("OR")) {
-        searchQuery.getElements().add(
-            new SearchLogicalRelation(LOGICAL_RELATIONS.valueOf(scString.trim())));
+        searchQuery.getElements()
+            .add(new SearchLogicalRelation(LOGICAL_RELATIONS.valueOf(scString.trim())));
         scString = "";
       }
       if (scString.trim().equals("NOT")) {
@@ -124,8 +125,8 @@ public class SearchQueryParser {
         SearchFields field =
             SearchFields.valueOf(scString.substring(indexIndex + 1, indexOp).trim());
         SearchOperators operator = stringOperator2SearchOperator(op);
-        searchQuery.addPair(new SearchMetadata(field, operator, value, ObjectHelper.getURI(
-            Statement.class, scString.substring(0, indexIndex).trim()), not));
+        searchQuery.addPair(new SearchMetadata(field, operator, value,
+            ObjectHelper.getURI(Statement.class, scString.substring(0, indexIndex).trim()), not));
         not = false;
         scString = "";
       } else if (matchSearchPairPattern(scString)) {
@@ -144,8 +145,8 @@ public class SearchQueryParser {
       }
     }
     if (!"".equals(query) && searchQuery.isEmpty()) {
-      searchQuery.addPair(new SearchPair(SearchFields.all, SearchOperators.REGEX, query.trim(),
-          false));
+      searchQuery
+          .addPair(new SearchPair(SearchFields.all, SearchOperators.REGEX, query.trim(), false));
     }
     return searchQuery;
   }
@@ -263,21 +264,18 @@ public class SearchQueryParser {
           if (((SearchPair) se).isNot()) {
             query += " NOT";
           }
-          query +=
-              logical + ((SearchPair) se).getField()
-                  + operator2URL(((SearchPair) se).getOperator())
-                  + searchValue2URL(((SearchPair) se));
+          query += logical + ((SearchPair) se).getField()
+              + operator2URL(((SearchPair) se).getOperator()) + searchValue2URL(((SearchPair) se));
           break;
         case METADATA:
           if (((SearchMetadata) se).isNot()) {
             query += " NOT";
           }
-          query +=
-              logical
-                  + transformStatementToIndex(((SearchMetadata) se).getStatement(),
-                      ((SearchPair) se).getField())
-                  + operator2URL(((SearchMetadata) se).getOperator())
-                  + searchValue2URL(((SearchMetadata) se));
+          query += logical
+              + transformStatementToIndex(((SearchMetadata) se).getStatement(),
+                  ((SearchPair) se).getField())
+              + operator2URL(((SearchMetadata) se).getOperator())
+              + searchValue2URL(((SearchMetadata) se));
           break;
         default:
           break;
@@ -534,47 +532,39 @@ public class SearchQueryParser {
    * @return
    */
   private static String searchMetadata2PrettyQuery(SearchMetadata md) {
-    String label =
-        ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-            .getInternationalizedLabels().get(md.getStatement());
+    String label = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
+        .getInternationalizedLabels().get(md.getStatement());
     if (label == null) {
       label = "Metadata-" + indexNamespace2PrettyQuery(md.getStatement().toString());
     }
     switch (md.getField()) {
       case coordinates:
-        label +=
-            "("
-                + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("geolocation_location") + ")";
+        label += "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+            .getLabel("geolocation_location") + ")";
         break;
       case person_family:
-        label +=
-            "("
-                + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("family_name") + ")";
+        label += "("
+            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("family_name")
+            + ")";
         break;
       case person_given:
-        label +=
-            "("
-                + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("first_name") + ")";
+        label += "("
+            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("first_name")
+            + ")";
         break;
       case person_id:
-        label +=
-            "( "
-                + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("identifier") + ")";
+        label += "( "
+            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("identifier")
+            + ")";
         break;
       case person_org_name:
-        label +=
-            "("
-                + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("organization") + ")";
+        label += "("
+            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("organization")
+            + ")";
         break;
       case url:
-        label +=
-            "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("url")
-                + ")";
+        label += "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("url")
+            + ")";
         break;
       default:
         break;

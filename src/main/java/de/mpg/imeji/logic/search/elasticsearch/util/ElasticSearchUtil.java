@@ -2,6 +2,8 @@ package de.mpg.imeji.logic.search.elasticsearch.util;
 
 import java.util.Map;
 
+import org.apache.lucene.queryparser.classic.QueryParser;
+
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
 
@@ -33,4 +35,13 @@ public class ElasticSearchUtil {
     return "";
   }
 
+  /**
+   * Escape input to avoid error in Elasticsearch. * and ? are unescaped, to allow wildcard search
+   * 
+   * @param s
+   * @return
+   */
+  public static String escape(String s) {
+    return QueryParser.escape(s).replace("\\*", "*".replace("\\?", "?"));
+  }
 }

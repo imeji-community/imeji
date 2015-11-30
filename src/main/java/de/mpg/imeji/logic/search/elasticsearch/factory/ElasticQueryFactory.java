@@ -10,7 +10,10 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+import com.hp.hpl.jena.util.iterator.Filter;
+
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
+import de.mpg.imeji.logic.search.elasticsearch.util.ElasticSearchUtil;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
@@ -478,12 +481,13 @@ public class ElasticQueryFactory {
   private static QueryBuilder fieldQuery(ElasticFields field, String value,
       SearchOperators operator, boolean not) {
     QueryBuilder q = null;
+
     if (operator == null) {
       operator = SearchOperators.REGEX;
     }
     switch (operator) {
       case REGEX:
-        q = matchFieldQuery(field, value);
+        q = matchFieldQuery(field, ElasticSearchUtil.escape(value));
         break;
       case EQUALS:
         q = exactFieldQuery(field, value);
@@ -614,4 +618,5 @@ public class ElasticQueryFactory {
   private static boolean isFolderUri(String uri) {
     return uri.contains("/collection/") ? true : false;
   }
+
 }

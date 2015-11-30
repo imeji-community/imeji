@@ -68,6 +68,7 @@ public class ElasticSearch implements Search {
     if (size == -1) {
       size = Integer.MAX_VALUE;
     }
+    System.out.println(f.buildAsBytes().toUtf8());
     ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)
         .setQuery(QueryBuilders.matchAllQuery()).execute().actionGet();
     SearchResponse resp = ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)

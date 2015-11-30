@@ -33,6 +33,17 @@
 					}
 				}
 			});
+			$('.imj_administrationTiledList .imj_adminPanel .imj_content').css({"display":"none"});
+			
+			$('.imj_administrationTiledList .imj_adminPanel .imj_config_headline').click(function(evt){
+				if($(this).next('.imj_content').css("display") === "none"){
+					$('.imj_administrationTiledList .imj_adminPanel .imj_content').css({"display":"none"});
+					$(this).next('.imj_content').css({"display" : "block"});
+				}else{
+					$('.imj_administrationTiledList .imj_adminPanel .imj_content').css({"display":"none"});
+				}
+				
+			});
 		</script>
 	</ui:define>
 	
@@ -67,16 +78,16 @@
 							
 							<div class="imj_adminPanel">
 							
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.config_general}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 													
 								<div class="imj_content">
 									<!-- Admin - Snippet Insert -->	
 									<div class="imj_admindataSet">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.instance_name}"/>
 											<span class="imj_noDisplay">: </span>
@@ -166,15 +177,15 @@
 							
 							
 							<div class="imj_adminPanel">
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.config_appearance}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 												
 								<div class="imj_content">
 									<div class="imj_admindataSet">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.browse_default_view}"/>
 											<span class="imj_noDisplay">: </span>
@@ -271,16 +282,16 @@
 							<!-- EMAIL SERVER -->
 							<div class="imj_adminPanel">
 							
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.email_server}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 													
 								<div class="imj_content">
 									<!-- Admin - Snippet Insert -->	
 									<div class="imj_admindataSet">
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.server_address}"/>
 											<span class="imj_noDisplay">: </span>
@@ -347,15 +358,15 @@
 							</div>
 							
 							<div class="imj_adminPanel">
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.search}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								
 								<div class="imj_content">
 									<h3 class="imj_sectionHeadline">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<h:outputText value="#{lbl.file_types}"/><span class="imj_noDisplay">: </span>
 									</h3>
 									<!-- Admin - Snippet Insert -->	
@@ -404,14 +415,14 @@
 							</div>
 								
 							<div class="imj_adminPanel">
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.upload}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.upload_max_file_size}"/>
 											<span class="imj_noDisplay">: </span>
@@ -443,13 +454,13 @@
 							</div>
 								
 							<div class="imj_adminPanel">
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.start_page}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									<ui:repeat value="#{Configuration.snippets}" var="snippet">
 										<h:panelGroup layout="block" styleClass="imj_admindataSet">
 											<div class="imj_admindataLabel">
@@ -505,14 +516,14 @@
 							</div>
 
 							<div class="imj_adminPanel">
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.data_viewer}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.data_viewer_url}"/>
 											<span class="imj_noDisplay">: </span>
@@ -541,14 +552,14 @@
 							
 							<!--DOI-->
 							<div class="imj_adminPanel">
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.doiService}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.doiService}"/>
 											<span class="imj_noDisplay">: </span>
@@ -582,14 +593,14 @@
 														
 								
 							<div class="imj_adminPanel">
-								<div class="imj_headline">
+								<div class="imj_config_headline">
 									<h2>
 										<h:outputText value="#{lbl.autosuggest}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
 									<div class="imj_admindataSet">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.enable_autosuggest_for_users}"/>
 											<span class="imj_noDisplay">: </span>

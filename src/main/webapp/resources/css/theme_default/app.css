@@ -97,13 +97,13 @@ p { display: block; margin: 1em 0; }
 .imj_shareForm, .imj_legalPage, .imj_aboutPage, .imj_helpPage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
 
 .imj_collectionEntryPage, .imj_albumEntryPage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
-.imj_collectionEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow { float: none; margin-right: 0.5em; vertical-align: bottom; }
-.imj_collectionEntryPage .imj_headline.imj_messageInfo, .imj_albumEntryPage .imj_headline.imj_messageInfo { margin-bottom: 1em; }
+.imj_collectionEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_collectionEntryPage .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_administrationTiledList .imj_adminPanel .imj_collectionEntryPage .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_administrationTiledList .imj_adminPanel .imj_albumEntryPage .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow { float: none; margin-right: 0.5em; vertical-align: bottom; }
+.imj_collectionEntryPage .imj_headline.imj_messageInfo, .imj_collectionEntryPage .imj_administrationTiledList .imj_adminPanel .imj_messageInfo.imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_collectionEntryPage .imj_messageInfo.imj_config_headline, .imj_albumEntryPage .imj_headline.imj_messageInfo, .imj_albumEntryPage .imj_administrationTiledList .imj_adminPanel .imj_messageInfo.imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_albumEntryPage .imj_messageInfo.imj_config_headline { margin-bottom: 1em; }
 
 .imj_organisation { width: 100%; padding: 0 4%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 .imj_editMetadataProfilePage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
-.imj_editMetadataProfilePage h2.imj_headline { margin-bottom: 1em; }
+.imj_editMetadataProfilePage h2.imj_headline, .imj_editMetadataProfilePage .imj_administrationTiledList .imj_adminPanel h2.imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_editMetadataProfilePage h2.imj_config_headline { margin-bottom: 1em; }
 
 .imj_pageMessageArea, .imj_contentMessageArea { width: 87.95%; display: inline-block; color: #F0F0F0; margin: 1em 0; padding: 0 6%; }
 
@@ -175,15 +175,15 @@ button.imj_removeButton { color: #6CAE2F; background-color: inherit; }
 .imj_removeButton:active { color: #F0F0F0; background-color: #990000; }
 .imj_removeButton:focus { color: #F0F0F0; background-color: #990000; }
 
-.imj_headline h2, h2.imj_headline { padding: 0.454545em 0.81818181em; font-size: 140%; line-height: normal; }
+.imj_headline h2, .imj_administrationTiledList .imj_adminPanel .imj_config_headline h2, h2.imj_headline, .imj_administrationTiledList .imj_adminPanel h2.imj_config_headline { padding: 0.454545em 0.81818181em; font-size: 140%; line-height: normal; }
 
-.imj_headline h3, h3.imj_headline { padding: 0.272727em 0.545454em; font-size: 125%; line-height: normal; }
+.imj_headline h3, .imj_administrationTiledList .imj_adminPanel .imj_config_headline h3, h3.imj_headline, .imj_administrationTiledList .imj_adminPanel h3.imj_config_headline { padding: 0.272727em 0.545454em; font-size: 125%; line-height: normal; }
 
 .imj_sectionHeadline h2, h2.imj_sectionHeadline { font-size: 140%; line-height: normal; }
 
 .imj_sectionHeadline h3, h3.imj_sectionHeadline { padding: 0.272727em 0.545454em; font-size: 120%; line-height: normal; }
 
-.imj_headline h4, h4.imj_headline { padding: 0.181818em 0.363636em; font-size: 110%; line-height: normal; }
+.imj_headline h4, .imj_administrationTiledList .imj_adminPanel .imj_config_headline h4, h4.imj_headline, .imj_administrationTiledList .imj_adminPanel h4.imj_config_headline { padding: 0.181818em 0.363636em; font-size: 110%; line-height: normal; }
 
 .imj_sectionHeadline h4, h4.imj_sectionHeadline { padding: 0.181818em 0.363636em; font-size: 110%; font-style: italic; line-height: normal; }
 
@@ -400,7 +400,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_welcomeInfo .id_tabs .imj_tabContent { min-height: 30em; }
 .imj_welcomeInfo .id_tabs .imj_tabContent ul { margin-bottom: 3em; }
 .imj_welcomeInfo .id_tabs .imj_tabContent li { display: block; padding-left: 2%; background-color: #313131; }
-.imj_welcomeInfo .id_tabs .imj_tabContent .imj_headline, .imj_welcomeInfo .id_tabs .imj_tabContent .imj_sectionHeadline { margin-top: 1em; }
+.imj_welcomeInfo .id_tabs .imj_tabContent .imj_headline, .imj_welcomeInfo .id_tabs .imj_tabContent .imj_administrationTiledList .imj_adminPanel .imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_welcomeInfo .id_tabs .imj_tabContent .imj_config_headline, .imj_welcomeInfo .id_tabs .imj_tabContent .imj_sectionHeadline { margin-top: 1em; }
 .imj_welcomeInfo .id_tabs div.ui-tabs-hide { display: none; }
 
 .imj_startpage_carouselWrapper { float: right; margin-top: 2em; width: 48%; display: inline-block; vertical-align: top; }
@@ -428,8 +428,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_mediaEditPanel .imj_metadataEditButtonArea { display: inline-block; }
 
 .imj_mediaContainerEditMD { margin-bottom: 0.5em; padding: 0 4%; width: 91.75%; border-top: 0.1em solid #6CAE2F; }
-.imj_mediaContainerEditMD .imj_headline { width: 100%; }
-.imj_mediaContainerEditMD .imj_headline .imj_headline h3 { margin: 1% 0; }
+.imj_mediaContainerEditMD .imj_headline, .imj_mediaContainerEditMD .imj_administrationTiledList .imj_adminPanel .imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_config_headline { width: 100%; }
+.imj_mediaContainerEditMD .imj_headline .imj_headline h3, .imj_mediaContainerEditMD .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_headline h3, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_config_headline .imj_headline h3, .imj_mediaContainerEditMD .imj_headline .imj_administrationTiledList .imj_adminPanel .imj_config_headline h3, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_headline .imj_config_headline h3, .imj_mediaContainerEditMD .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_config_headline h3, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_config_headline .imj_config_headline h3 { margin: 1% 0; }
 .imj_mediaContainerEditMD .imj_authorMetadataSet { background-color: #292929; margin-bottom: 1.363636em; padding: 0.5em 1%; }
 .imj_mediaContainerEditMD .imj_sectionHeadline { margin-bottom: 0.545454em; }
 
@@ -448,7 +448,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_ingestMessageArea { width: 100%; border-bottom: 0.1em solid #6CAE2F; margin-bottom: 3em; }
 
-.imj_uploadDropArea + .imj_headline { border-top: 0.1em dashed #6CAE2F; border-bottom: 0.1em dashed #6CAE2F; margin: 2em 0 1em 0; }
+.imj_uploadDropArea + .imj_headline, .imj_administrationTiledList .imj_adminPanel .imj_uploadDropArea + .imj_config_headline { border-top: 0.1em dashed #6CAE2F; border-bottom: 0.1em dashed #6CAE2F; margin: 2em 0 1em 0; }
 .imj_uploadDropArea + .imj_uploadUrlReference { margin-top: 4em; }
 
 .imj_upload { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
@@ -463,7 +463,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_uploadUrlReference .submitPanel { padding: 0.545454em 0; }
 
 .imj_uploadOptionsArea { width: 27%; margin: 0 0 0 1.5%; padding: 0.5% 0.5%; display: inline-block; vertical-align: top; background-color: #444444; }
-.imj_uploadOptionsArea .imj_headline, .imj_uploadOptionsArea .imj_sectionHeadline { margin-bottom: 1em; }
+.imj_uploadOptionsArea .imj_headline, .imj_uploadOptionsArea .imj_administrationTiledList .imj_adminPanel .imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_uploadOptionsArea .imj_config_headline, .imj_uploadOptionsArea .imj_sectionHeadline { margin-bottom: 1em; }
 
 .imj_uploadMessageArea { width: 100%; margin-top: 4em; }
 .imj_uploadMessageArea .imj_fileErrorMessageArea, .imj_uploadMessageArea .imj_fileSuccessMessageArea { width: 48%; padding: 1% 0.8%; display: inline-block; vertical-align: top; }
@@ -500,8 +500,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_userConfig .imj_connectedUserGroups .imj_admindataValueEntry { display: block; }
 
 .imj_setupConfig .imj_admindataValue .imj_admindataEdit { width: 100%; box-sizing: border-box; }
-.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton { float: right; }
-.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton:after { clear: both; content: ""; }
+.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton, .imj_setupConfig .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_submitButton, .imj_administrationTiledList .imj_setupConfig .imj_adminPanel .imj_config_headline .imj_submitButton { float: right; }
+.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton:after, .imj_setupConfig .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_submitButton:after, .imj_administrationTiledList .imj_setupConfig .imj_adminPanel .imj_config_headline .imj_submitButton:after { clear: both; content: ""; }
 
 .imj_mainMenuStandard { display: inline-block; padding: 0 3%; font-size: 135%; letter-spacing: 0.090909em; text-align: left; text-transform: uppercase; }
 .imj_mainMenuStandard .imj_mainMenuStandardItem { display: inline-block; padding: 0.272727em 0.181818em 0.272727em 0.272727em; margin-right: 0.454545em; text-decoration: none; background-color: #313131; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
@@ -604,7 +604,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_metadataProfilePreviewList .imj_listBody .imj_listItem { margin-top: 1em; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 .imj_metadataProfilePreviewList .imj_listBody .imj_listItem > dl { padding-left: 2%; padding-top: 0.25em; padding-bottom: 0.25em; border: 0.1em dashed rgba(255, 255, 255, 0.15); }
-.imj_metadataProfilePreviewList .imj_listBody .imj_listItem .imj_headline { font-size: 115%; padding: 0.25em 0; }
+.imj_metadataProfilePreviewList .imj_listBody .imj_listItem .imj_headline, .imj_metadataProfilePreviewList .imj_listBody .imj_listItem .imj_administrationTiledList .imj_adminPanel .imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_metadataProfilePreviewList .imj_listBody .imj_listItem .imj_config_headline { font-size: 115%; padding: 0.25em 0; }
 .imj_metadataProfilePreviewList .imj_listBody .imj_listItem .imj_metadataBox { display: inline-block; margin-left: 1em; vertical-align: top; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 .imj_metadataProfilePreviewList .imj_listBody .imj_listItem .imj_metadataBox dt, .imj_metadataProfilePreviewList .imj_listBody .imj_listItem .imj_metadataBox dd { display: inline; }
 
@@ -648,7 +648,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_metadataProfileList .imj_listHeader, .imj_metadataListMediaContainer .imj_listHeader { padding: 1% 0; }
 .imj_metadataProfileList .imj_listHeader .imj_listHeaderMenu, .imj_metadataListMediaContainer .imj_listHeader .imj_listHeaderMenu { float: right; display: inline-block; }
 .imj_metadataProfileList .imj_listHeader .imj_listHeaderMenu a, .imj_metadataListMediaContainer .imj_listHeader .imj_listHeaderMenu a { margin: 0.363636em 0.27272727em 0.363636em; padding: 0 0.363636em; }
-.imj_metadataProfileList .imj_listHeader .imj_headline, .imj_metadataListMediaContainer .imj_listHeader .imj_headline { display: inline-block; margin-right: 1em; }
+.imj_metadataProfileList .imj_listHeader .imj_headline, .imj_metadataProfileList .imj_listHeader .imj_administrationTiledList .imj_adminPanel .imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_metadataProfileList .imj_listHeader .imj_config_headline, .imj_metadataListMediaContainer .imj_listHeader .imj_headline, .imj_metadataListMediaContainer .imj_listHeader .imj_administrationTiledList .imj_adminPanel .imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_metadataListMediaContainer .imj_listHeader .imj_config_headline { display: inline-block; margin-right: 1em; }
 .imj_metadataProfileList .imj_sectionHeadline, .imj_metadataListMediaContainer .imj_sectionHeadline { width: 100%; display: inline-block; /* IE9 SVG, needs conditional override of 'filter' to 'none' */ background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuNSIgeDI9IjEuMCIgeTI9IjAuNSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI5MjkyOSIvPjxzdG9wIG9mZnNldD0iNjAlIiBzdG9wLWNvbG9yPSIjMzEzMTMxIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g'); background-size: 100%; background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #292929), color-stop(60%, #313131)); background-image: -moz-linear-gradient(left, #292929 0%, #313131 60%); background-image: -webkit-linear-gradient(left, #292929 0%, #313131 60%); background-image: linear-gradient(to right, #292929 0%, #313131 60%); }
 .imj_metadataProfileList .imj_metadataProfileItem, .imj_metadataListMediaContainer .imj_metadataProfileItem { margin-top: 0.545454em; }
 
@@ -696,8 +696,10 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_administrationTiledList .imj_adminPanel { display: inline-block; max-width: 23%; padding: 0 2%; vertical-align: top; margin-bottom: 2em; text-align: left; }
 .imj_administrationTiledList .imj_adminPanel h2 { font-size: 140%; line-height: normal; }
 .imj_administrationTiledList .imj_adminPanel ul { line-height: 150%; }
-.imj_administrationTiledList .imj_adminPanel .imj_headline { text-align: center; background-color: #292929; -moz-border-radius: 0.90909em 0.90909em 0 0; -webkit-border-radius: 0.90909em; border-radius: 0.90909em 0.90909em 0 0; border: 0.1em solid #292929; }
+.imj_administrationTiledList .imj_adminPanel .imj_headline, .imj_administrationTiledList .imj_adminPanel .imj_config_headline { text-align: center; background-color: #292929; -moz-border-radius: 0.90909em 0.90909em 0 0; -webkit-border-radius: 0.90909em; border-radius: 0.90909em 0.90909em 0 0; border: 0.1em solid #292929; }
+.imj_administrationTiledList .imj_adminPanel .imj_config_headline { cursor: pointer; border-color: rgba(108, 174, 47, 0.36); }
 .imj_administrationTiledList .imj_adminPanel .imj_content { padding: 0.454545em 0.81818181em; min-height: 10em; -moz-border-radius: 0 0 0.90909em 0.90909em; -webkit-border-radius: 0; border-radius: 0 0 0.90909em 0.90909em; border: 0.1em solid #292929; }
+.imj_administrationTiledList .imj_adminPanel .imj_content .imj_submitButton { float: right; }
 .imj_administrationTiledList .imj_adminPanel.imj_storageInformation { max-width: 33em; }
 .imj_administrationTiledList .imj_adminPanel.imj_storageInformation .imj_admindataLabel { width: 33%; }
 .imj_administrationTiledList .imj_adminPanel.imj_storageInformation .imj_admindataValue { width: 61%; }

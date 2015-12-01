@@ -8,8 +8,8 @@
 		<h:outputText value="#{itemBean.init}"/>
 	</ui:define>
 	
-	<ui:param name="backwardClass" value="#{itemBean.browse.previous == null ? 'fa fa-chevron-left imj_deactivated' : 'fa fa-chevron-left'}"/>
-	<ui:param name="forwardClass" value="#{itemBean.browse.next == null ? 'fa fa-chevron-right imj_deactivated' : 'fa fa-chevron-right'}"/>
+	<ui:param name="backwardClass" value="#{itemBean.browse.previous == null ? 'previousItem imj_deactivated' : 'previousItem'}"/>
+	<ui:param name="forwardClass" value="#{itemBean.browse.next == null ? 'nextItem imj_deactivated' : 'nextItem'}"/>
 	
 	<!-- Main Content - Image Detail View -->
 	<ui:define name="mainContent">

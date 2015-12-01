@@ -55,6 +55,7 @@
           },
           "text":{
             "type":"string",
+            "analyzer": "XXX_ANALYSER_XXX",
             "fields":{
               "exact":{
                 "type":"string",
@@ -75,13 +76,16 @@
             "lat_lon":"true"
           },
            "familyname":{
-            "type":"string"
+            "type":"string",
+            "analyzer": "XXX_ANALYSER_XXX"
           },
           "givenname":{
-            "type":"string"
+            "type":"string",
+            "analyzer": "XXX_ANALYSER_XXX"
           },
           "completename":{
-            "type":"string"
+            "type":"string",
+            "analyzer": "XXX_ANALYSER_XXX"
           },
           "identifier":{
             "type":"string",
@@ -90,16 +94,19 @@
           "organization":{
             "properties":{
               "name":{
-                "type":"string"
+                "type":"string",
+                "analyzer": "XXX_ANALYSER_XXX"
               },
               "description":{
                 "type":"string"
               },
               "city":{
-                "type":"string"
+                "type":"string",
+                "analyzer": "XXX_ANALYSER_XXX"
               },
               "country":{
-                "type":"string"
+                "type":"string",
+                "analyzer": "XXX_ANALYSER_XXX"
               }
             }
           }

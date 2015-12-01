@@ -2,11 +2,12 @@ package de.mpg.imeji.logic.search.elasticsearch;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
@@ -29,7 +30,9 @@ public class ElasticService {
   private static boolean CLUSTER_LOCAL = true;
   private static boolean CLUSTER_DATA = true;
   private static String CLUSTER_DIR = "null";
+  public static ElasticAnalysers ANALYSER;
   private static final Logger logger = Logger.getLogger(ElasticService.class);
+  private static final String SETTINGS = "elasticsearch/Settings.json";
 
   /**
    * The Index where all data are indexed
@@ -46,6 +49,10 @@ public class ElasticService {
     items, folders, albums, spaces;
   }
 
+  public enum ElasticAnalysers {
+    standard, ducet_sort, simple;
+  }
+
   public static void start() throws IOException, URISyntaxException {
     start(PropertyReader.getProperty("elastic.cluster.name"));
   }
@@ -55,6 +62,7 @@ public class ElasticService {
     CLUSTER_DATA = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.data"));
     CLUSTER_LOCAL = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.local"));
     CLUSTER_DIR = PropertyReader.getProperty("elastic.cluster.home");
+    ANALYSER = ElasticAnalysers.valueOf(PropertyReader.getProperty("elastic.analyser"));
     logger.info("Connecting Node to " + CLUSTER_NAME + " (local=" + CLUSTER_LOCAL + ", data="
         + CLUSTER_DATA + ")");
     node =
@@ -63,10 +71,10 @@ public class ElasticService {
 
     client = node.client();
     initializeIndex();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces, ANALYSER).addMapping();
   }
 
   /**
@@ -85,6 +93,7 @@ public class ElasticService {
       return createIndexWithAlias();
     }
   }
+
 
   /**
    * Get the First Index pointed by the Alias. This method should be used, when there is only one
@@ -136,7 +145,12 @@ public class ElasticService {
 
       String indexName = DATA_ALIAS + "-" + System.currentTimeMillis();
       logger.info("Creating a new index " + indexName);
-      ElasticService.client.admin().indices().create(new CreateIndexRequest(indexName)).actionGet();
+      String settingsJson = new String(
+          Files.readAllBytes(
+              Paths.get(ElasticIndexer.class.getClassLoader().getResource(SETTINGS).toURI())),
+          "UTF-8");
+      ElasticService.client.admin().indices().prepareCreate(indexName).setSettings(settingsJson)
+          .execute().actionGet();
       return indexName;
     } catch (Exception e) {
       logger.info("Index +" + "+ already existing");
@@ -171,10 +185,10 @@ public class ElasticService {
     logger.warn("Resetting ElasticSearch!!!");
     clear();
     initializeIndex();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces, ANALYSER).addMapping();
   }
 
   /**

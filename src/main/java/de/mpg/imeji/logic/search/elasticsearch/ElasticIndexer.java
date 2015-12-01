@@ -22,6 +22,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchIndexer;
+import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticAnalysers;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticAlbum;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
@@ -50,12 +51,14 @@ public class ElasticIndexer implements SearchIndexer {
   private static final ObjectMapper mapper = new ObjectMapper();
   private String index = "data";
   private String dataType;
+  private ElasticAnalysers analyser;
   private String mappingFile = "elasticsearch/Elastic_TYPE_Mapping.json";
 
 
-  public ElasticIndexer(String indexName, ElasticTypes dataType) {
+  public ElasticIndexer(String indexName, ElasticTypes dataType, ElasticAnalysers analyser) {
     this.index = indexName;
     this.dataType = dataType.name();
+    this.analyser = analyser;
     this.mappingFile = mappingFile.replace("_TYPE_", StringUtils.capitalize(this.dataType));
   }
 
@@ -205,10 +208,11 @@ public class ElasticIndexer implements SearchIndexer {
    */
   public void addMapping() {
     try {
-      String jsonMapping = new String(
-          Files.readAllBytes(
-              Paths.get(ElasticIndexer.class.getClassLoader().getResource(mappingFile).toURI())),
-          "UTF-8");
+      String jsonMapping =
+          new String(
+              Files.readAllBytes(Paths
+                  .get(ElasticIndexer.class.getClassLoader().getResource(mappingFile).toURI())),
+          "UTF-8").replace("XXX_ANALYSER_XXX", analyser.name());
       ElasticService.client.admin().indices().preparePutMapping(this.index).setType(dataType)
           .setSource(jsonMapping).execute().actionGet();
     } catch (Exception e) {
@@ -274,7 +278,7 @@ public class ElasticIndexer implements SearchIndexer {
    */
   private void reindexItemsInContainer(String containerUri)
       throws ImejiException, IOException, URISyntaxException {
-    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items);
+    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items, analyser);
     ItemController controller = new ItemController();
     List<Item> items = controller.searchAndRetrieve(new URI(containerUri), (SearchQuery) null, null,
         Imeji.adminUser, null, -1, -1);

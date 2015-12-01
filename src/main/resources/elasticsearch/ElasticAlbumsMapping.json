@@ -28,21 +28,26 @@
        "index":"not_analyzed"
       },
       "name":{
-      	"type":"string"
+      	"type":"string",
+      	"analyzer": "XXX_ANALYSER_XXX"
       },
       "description":{
-      	"type":"string"
+      	"type":"string",
+      	"analyzer": "XXX_ANALYSER_XXX"
       },
       "author":{
         "properties":{
           "familyname":{
-            "type":"string"
+            "type":"string",
+            "analyzer": "XXX_ANALYSER_XXX"
           },
           "givenname":{
-            "type":"string"
+            "type":"string",
+            "analyzer": "XXX_ANALYSER_XXX"
           },
           "completename":{
-            "type":"string"
+            "type":"string",
+            "analyzer": "XXX_ANALYSER_XXX"
           },
           "identifier":{
             "type":"string",
@@ -51,16 +56,20 @@
           "organization":{
             "properties":{
               "name":{
-                "type":"string"
+                "type":"string",
+                "analyzer": "XXX_ANALYSER_XXX"
               },
               "description":{
-                "type":"string"
+                "type":"string",
+                "analyzer": "XXX_ANALYSER_XXX"
               },
               "city":{
-                "type":"string"
+                "type":"string",
+                "analyzer": "XXX_ANALYSER_XXX"
               },
               "country":{
-                "type":"string"
+                "type":"string",
+                "analyzer": "XXX_ANALYSER_XXX"
               }
             }
           }

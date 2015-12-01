@@ -537,12 +537,6 @@
 
 		<!-- REST -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 			<version>2.0.1</version>
@@ -631,6 +625,13 @@
 		  <artifactId>elasticsearch</artifactId>
 		  <version>2.0.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch-analysis-icu</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		
 		
 		<dependency>
 		  <groupId>commons-validator</groupId>

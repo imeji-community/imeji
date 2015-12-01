@@ -34,6 +34,8 @@ public class ElasticSortFactory {
       case text:
         return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field())
             .order(getSortOrder(sort));
+      case title:
+        return SortBuilders.fieldSort(ElasticFields.NAME.field()).order(getSortOrder(sort));
       case date:
         return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field())
             .order(getSortOrder(sort));
@@ -45,6 +47,11 @@ public class ElasticSortFactory {
         return SortBuilders.fieldSort(ElasticFields.FILETYPE.field()).order(getSortOrder(sort));
       case filesize:
         return SortBuilders.fieldSort(ElasticFields.SIZE.field()).order(getSortOrder(sort));
+      case creator:
+        return SortBuilders.fieldSort(ElasticFields.AUTHOR_COMPLETENAME.field())
+            .order(getSortOrder(sort));
+      case status:
+        return SortBuilders.fieldSort(ElasticFields.STATUS.field()).order(getSortOrder(sort));
       default:
         return defaultSort;
     }

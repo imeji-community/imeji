@@ -127,21 +127,17 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     sortMenu.add(new SelectItem(SearchIndex.SearchFields.title.name(), sb.getLabel("sort_title")));
     sortMenu.add(
         new SelectItem(SearchIndex.SearchFields.modified.name(), sb.getLabel("sort_date_mod")));
-    sortMenu.add(
-        new SelectItem(SearchIndex.SearchFields.created, sb.getLabel("sort_img_date_created")));
     sortMenu
         .add(new SelectItem(SearchIndex.SearchFields.creator.name(), sb.getLabel("sort_author")));
-    filterMenu = new ArrayList<SelectItem>();
-    filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
-
     if (sb.getUser() != null) {
-      sortMenu
-          .add(new SelectItem(SearchIndex.SearchFields.status.name(), sb.getLabel("sort_status")));
+      filterMenu = new ArrayList<SelectItem>();
+      filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
       filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
       filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
+      filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
+      filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
     }
-    filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
-    filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
+
   }
 
   /**

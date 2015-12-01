@@ -142,18 +142,17 @@ public class ElasticService {
    */
   public static String createIndex() {
     try {
-
       String indexName = DATA_ALIAS + "-" + System.currentTimeMillis();
       logger.info("Creating a new index " + indexName);
-      String settingsJson = new String(
+      String settingsJson = ANALYSER == ElasticAnalysers.ducet_sort ? new String(
           Files.readAllBytes(
               Paths.get(ElasticIndexer.class.getClassLoader().getResource(SETTINGS).toURI())),
-          "UTF-8");
+          "UTF-8") : "";
       ElasticService.client.admin().indices().prepareCreate(indexName).setSettings(settingsJson)
           .execute().actionGet();
       return indexName;
     } catch (Exception e) {
-      logger.info("Index +" + "+ already existing");
+      logger.info("Error creating index", e);
     }
     return null;
   }

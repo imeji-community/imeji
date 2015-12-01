@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -54,6 +55,7 @@ import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * JavaBean managing the imeji configuration which is made directly by the administrator from the
@@ -74,7 +76,7 @@ public class ConfigurationBean {
    * @version $Revision$ $LastChangedDate$
    */
   private enum CONFIGURATION {
-    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_DISK_SPACE_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD;
+    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_DISK_SPACE_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS;
   }
 
   private static Properties config;
@@ -916,6 +918,40 @@ public class ConfigurationBean {
 
   public void setDefaultBrowseView(String string) {
     config.put(CONFIGURATION.BROWSE_DEFAULT_VIEW, BROWSE_VIEW.valueOf(string).name());
+  }
+  
+  public void setQuotaLimits(String limits){
+    try {
+      String[] limitArray = limits.split(",");
+      for(int i= 0; i<limitArray.length; i++){
+        Double.parseDouble(limitArray[i]);
+      }   
+      setProperty(CONFIGURATION.QUOTA_LIMITS.name(), limits);
+    } catch (NumberFormatException e) {
+      logger.info(
+          "Wrong format for quota definition! Has to be comma separated list");
+      BeanHelper.error("Wrong format for quota definition! Has to be comma separated list. " + "Wrong input " + e.getMessage());
+    }
+  }
+  
+  public String getQuotaLimits(){
+    return (String) config.get(CONFIGURATION.QUOTA_LIMITS.name());
+  }
+  
+  public static LinkedHashMap<String, Long> getQuotaLimitsStatic(){
+    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    int bytesPerGigabyte = 1073741824;
+    
+    String limits = (String) config.get(CONFIGURATION.QUOTA_LIMITS.name()); 
+    String[] limitArray = limits != null ? limits.split(",") : new String[0];
+
+    LinkedHashMap<String, Long> quotaLimits = new LinkedHashMap<String, Long>();
+    quotaLimits.put(sb.getLabel("unlimited"), Long.MAX_VALUE);
+    for(int i=0; i<limitArray.length; i++){
+      quotaLimits.put(limitArray[i], (long) ((Double.parseDouble(limitArray[i]))*bytesPerGigabyte));
+    }
+    return quotaLimits;
+    
   }
 
 }

@@ -13,6 +13,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
@@ -20,6 +21,8 @@ import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -269,6 +272,15 @@ public class User implements Serializable {
    */
   public long getQuota() {
     return quota;
+  }
+  
+  public String getQuotaHumanReadable(){
+    if(quota == Long.MAX_VALUE){
+      return  ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("unlimited");
+    }else{
+      return FileUtils.byteCountToDisplaySize(quota);
+    }
+    
   }
 
   /**

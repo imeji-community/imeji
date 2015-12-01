@@ -64,7 +64,7 @@ p { display: block; margin: 1em 0; }
 .imj_siteWrapper .imj_logo { width: 13em; height: 5em; padding: 0; display: inline-block; background: transparent url("../../resources/imj_iconset/logo_imeji.gif") -1.90909em 0 no-repeat; }
 .imj_siteWrapper .imj_logo_alt { max-height: 154px; margin-top: -25px; margin-bottom: -25px; }
 .imj_siteWrapper .imj_spaceLogo { max-height: 5em; margin-left: 3%; }
-.imj_siteWrapper .imj_siteContentHeadline { clear: both; float: right; max-width: 24em; margin: 0; padding: 0.5% 6.5% 0.5% 1%; color: #F0F0F0; background-color: #313131; text-align: right; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+.imj_siteWrapper .imj_siteContentHeadline { clear: both; float: right; max-width: 24em; margin: 0; padding: 0.5% 3% 0.5% 1%; color: #F0F0F0; background-color: #313131; text-align: right; }
 .imj_siteWrapper .imj_siteContentHeadline:after { content: ""; content: none; clear: right; }
 .imj_siteWrapper .imj_siteContentHeadline h1 { font-size: 160%; font-weight: bold; letter-spacing: 0.045em; line-height: normal; }
 .imj_siteWrapper .imj_siteFooter { clear: both; width: 100%; padding: 2em 0; text-align: center; }
@@ -292,7 +292,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_submitPanel .imj_submitPanelSeparator + .imj_submitButton { margin-left: 0; }
 .imj_submitPanel a, .imj_submitPanel input { vertical-align: baseline; }
 
-.imj_mainContentWrapper { clear: both; float: left; display: inline; overflow: hidden; width: 93.95%; padding: 0 3%; margin: 2em 0.090909em 0 0; background-color: #313131; }
+.imj_mainContentWrapper { clear: both; float: left; display: inline; overflow: hidden; width: 93.95%; padding: 0 3%; margin: 0.2em 0.090909em 0 0; background-color: #313131; }
 
 .imj_breadcrumpHistory { width: 91.75%; padding: 0 4%; margin-bottom: 0.5em; }
 .imj_breadcrumpHistory .imj_breadcrumpTitle { margin-right: 0.363636em; font-size: 1.090909em; line-height: 2em; vertical-align: top; }
@@ -630,12 +630,12 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_detailList tfoot td { border-top: solid 1px #CCCCCC; }
 .imj_detailList thead .imj_colFiletype, .imj_detailList thead .imj_colFilesize, .imj_detailList tfoot .imj_colFiletype, .imj_detailList tfoot .imj_colFilesize { text-align: center; }
 .imj_detailList th, .imj_detailList td { padding: 0.5em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-.imj_detailList td .imj_colFiletype { width: 5%; max-width: 6em; }
+.imj_detailList .imj_colFiletype { width: 10%; text-align: center; }
 .imj_detailList .imj_colCheckbox { width: 5%; }
 .imj_detailList .imj_colFileIcon { width: 5%; text-align: center; }
 .imj_detailList .imj_colFilename { width: 60%; }
 .imj_detailList .imj_colFilesize { width: 15%; text-align: right; }
-.imj_detailList .imj_colDate { width: 25%; }
+.imj_detailList .imj_colDate { width: 20%; text-align: center; }
 
 .imj_entryPagePreviewTiledList { margin-bottom: 0.5em; }
 .imj_entryPagePreviewTiledList .imj_thumbnailsPreview { display: inline; }

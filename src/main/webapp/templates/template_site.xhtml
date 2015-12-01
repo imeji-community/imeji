@@ -60,9 +60,10 @@ All rights reserved. Use is subject to license terms.
                 <ui:insert name="actionsMenu"/>
                 
                 <!-- headline -->
-                <h:panelGroup layout="block" styleClass="imj_siteContentHeadline" rendered="#{headline.toString().trim().length() > 0}">
+                <h:panelGroup layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
                     <h1>
                         <h:outputText value="#{headline.toString().trim()}"/>
+                        <h:outputText value="imeji" rendered="#{headline.toString().trim().length() == 0}"/>
                         <ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
                             <br/>
                             <h:outputText value="#{headlineSecondRow.toString().trim()}"/>

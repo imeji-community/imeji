@@ -86,7 +86,6 @@
 	
 	<ui:define name="mainContent">
 		
-		<div class="imj_mainContentWrapper">
 		
 			<!-- in case of space, the welcome get only one text with the carousel on right hand side -->
 			<ui:fragment rendered="#{StartPageBean.selectedSpaceResource.id != '' and not empty StartPageBean.selectedSpaceResource.id and StartPageBean.selectedSpaceResource.description.trim() != ''}">
@@ -100,7 +99,7 @@
 		
 			<ui:fragment rendered="#{StartPageBean.selectedSpaceResource.id == '' or empty StartPageBean.selectedSpaceResource.description or StartPageBean.selectedSpaceResource.description == ''}">
 				<!-- Main Content -->							
-				<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo" style="#{Configuration.startPageCarouselEnabled? '' : 'width: 100%'}">
+				<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo" style="#{Configuration.startPageCarouselEnabled? '' : 'width: 98%'}">
 					
 					
 					
@@ -337,7 +336,7 @@
 		
 			<!-- end: footer section -->
 			</div>
-		</div>
+	
 	</ui:define>	
 </ui:composition>
 					

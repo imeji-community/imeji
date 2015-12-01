@@ -13,25 +13,15 @@
 					<div class="imj_overlayMenu">
 						<h:form id="selectMenuForm">
 							<div class="imj_menuHeader">
-								<h:outputText value="#{lbl.select}:&#160;"/>
-								<span class="fa fa-angle-down"/>
-							</div>
-							<div class="imj_menuBody">
-								<ul class="imj_overlayMenuList">
-									<li>
-										<h:outputText value="#{lbl.select_item}:"/>
-									</li>
-									<li>
-										<h:commandLink action="#{cc.attrs.picList.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="selectAll">
-											<h:outputText value="#{lbl.all_on_page}"/>
-										</h:commandLink>
-									</li>
-									<li>
-										<h:commandLink action="#{cc.attrs.picList.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="selectNone">
-											<h:outputText value="#{lbl.none}"/>
-										</h:commandLink>
-									</li>
-								</ul>
+								<h:panelGroup class="fa fa-check" rendered="#{!cc.attrs.picList.allSelected}">&#160;</h:panelGroup>
+								<h:panelGroup class="fa fa-times" rendered="#{cc.attrs.picList.allSelected}">&#160;</h:panelGroup>
+								<h:commandLink action="#{cc.attrs.picList.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="selectAll" rendered="#{!cc.attrs.picList.allSelected}">
+									<h:outputText value="#{lbl.select_all}"/>
+								</h:commandLink>
+								<h:commandLink action="#{cc.attrs.picList.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="selectNone" rendered="#{cc.attrs.picList.allSelected}">
+									<h:outputText value="#{lbl.select_none}"/>
+								</h:commandLink>
+		                        &#160;
 							</div>
 						</h:form>
 					</div>

@@ -13,9 +13,7 @@
 					<div class="imj_overlayMenu">
 						<h:form id="selectMenuForm">
 							<div class="imj_menuHeader">
-								<h:panelGroup class="fa fa-check" rendered="#{!cc.attrs.picList.allSelected}">&#160;</h:panelGroup>
-								<h:panelGroup class="fa fa-times" rendered="#{cc.attrs.picList.allSelected}">&#160;</h:panelGroup>
-								<h:commandLink action="#{cc.attrs.picList.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="selectAll" rendered="#{!cc.attrs.picList.allSelected}">
+								<h:commandLink action="#{cc.attrs.picList.selectAll}"  id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="selectAll" rendered="#{!cc.attrs.picList.allSelected}">
 									<h:outputText value="#{lbl.select_all}"/>
 								</h:commandLink>
 								<h:commandLink action="#{cc.attrs.picList.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="selectNone" rendered="#{cc.attrs.picList.allSelected}">

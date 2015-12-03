@@ -534,6 +534,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_overlayMenu { display: inline-block; padding: 0.125em 0.25em; }
 .imj_overlayMenu .imj_menuHeader { text-align: left; color: #6CAE2F; cursor: pointer; }
+.imj_overlayMenu .imj_menuHeader .selectAll:before { font-family: FontAwesome; content: "\f00c"; padding-right: 0.1em; }
+.imj_overlayMenu .imj_menuHeader .selectNone:before { font-family: FontAwesome; content: "\f00d "; padding-right: 0.1em; }
 .imj_overlayMenu .imj_menuBody { display: none; position: absolute; padding: 0.272727em 1em; background-color: #444444; }
 .imj_overlayMenu:hover .imj_menuHeader { color: #F0F0F0; }
 .imj_overlayMenu:hover .imj_menuBody { display: block; }

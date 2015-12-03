@@ -41,20 +41,21 @@
                                       currentMainMenu="mediaEntry" 
                                       browseToAllUrl="#{browseToAllItemsUrl}" 
                                       numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"
-                                      containerId="#{containerId}"/>
+                                      containerId="#{containerId}" showSortMenu="true" objectLabel="#{lbl.images}"/>
 
            
             <!-- Media List -->
             <imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}"/>
             <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'LIST'}"/>
 
+			<!-- Page Browser GotoBox -->
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
             <!-- Facets -->
             <h:panelGroup layout="block" id="imj_ajaxFacets">
                 <imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
             </h:panelGroup>
 
-            <!-- Page Browser GotoBox -->
-            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
+            
         </h:panelGroup>
     </ui:define>
     <!-- Main Content - END -->

@@ -33,6 +33,8 @@
 									contextId="#{paginatorListSessionBean.id}" 
 									isDeletable="#{Auth.delete(paginatorListSessionBean.collection)}" 
 									isEditable="#{Auth.update(paginatorListSessionBean.collection)}" 
+									isContentEditable="#{Auth.updateContent(paginatorListSessionBean.collection)}"
+									isContentDeletable="#{Auth.deleteContent(paginatorListSessionBean.collection)}"
 									isAdmin="#{Auth.admin(paginatorListSessionBean.collection)}" 
 									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}"
 									contextDownloadParam="&amp;col=#{paginatorListSessionBean.id}" 

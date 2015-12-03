@@ -27,7 +27,9 @@
 			
 			<!-- Selection Info Panel -->
 			<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
-									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" filterBeanHasQuery="#{filterBeanHasQuery}"/>
+									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" 
+									 filterBeanHasQuery="#{filterBeanHasQuery}"
+									 objectLabel="#{objectLabel}"/>
 			
 			
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords == 0}">

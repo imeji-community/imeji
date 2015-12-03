@@ -8,6 +8,7 @@
 	
 	<ui:param name="paginatorListSessionBean" value="#{CollectionsBean}"/>
 	<ui:param name="headline" value=""/>
+	<ui:param name="displayQuery" value="#{paginatorListSessionBean.simpleQuery != ''}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="browseToAllItemsUrl" value="?q=&amp;f=all"/>
 	<ui:param name="releaseItemConfirmationText" value="#{msg.confirmation_release_collection}?"/>
@@ -19,6 +20,7 @@
 	<ui:param name="globalDisplayLinkText" value="#{lbl.all_items}"/>
 	<ui:param name="globalDeleteLinkText" value="#{lbl.delete_selected_collections}"/>
 	<ui:param name="metadataNavigationURL" value="#{Navigation.collectionUrl}"/>
+	<ui:param name="objectLabel" value="#{lbl.collections}"/>
 	
 	
 	<ui:define name="actionsMenu">

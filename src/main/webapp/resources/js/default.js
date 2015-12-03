@@ -618,6 +618,17 @@ $(function() {
 		}
 	});
 });
+/*
+ * For menu on the right side: set the margin of the body to avoid to be out of page
+ */
+$(function() {
+	$('.imj_overlayMenu.imj_menuRight').each(function(i, obj) {
+		var menuHeaderWidth = $(this).find(".imj_menuHeader").width();
+		var menuBodyWidth = $(this).find(".imj_menuBody").width();
+		var width = menuHeaderWidth - menuBodyWidth;
+		$(this).find(".imj_menuBody").css("margin-left",width + "px");
+	});
+});
 jQuery(document).ready(function() {
 	customSelectbox();
 	/**

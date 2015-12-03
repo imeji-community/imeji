@@ -29,6 +29,7 @@
 				<ul id="imj_listBody">
 					<!-- Images -->
 					<h:outputText value="#{msg.no_images_found}!" rendered="#{cc.attrs.picList.totalNumberOfElements == 0}"/>
+					
 					<ui:repeat id="pictureList" var="item" value="#{cc.attrs.picList.currentPartList}" offset="0" varStatus="index">
 						<li class="imj_tileItem">
 							<h:form id="itemSelectForm">

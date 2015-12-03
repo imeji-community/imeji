@@ -21,6 +21,8 @@
 		
 		<composite:attribute name="isEditable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to release, delete, withdraw item"/>
 		<composite:attribute name="isDeletable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if item is deletable"/>
+		<composite:attribute name="isContentEditable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if item are editable"/>
+		<composite:attribute name="isContentDeletable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if item are deletable"/>
 		<composite:attribute name="isAdmin" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if user is admin of container"/>
 		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. start page, content page)"/>
 		<composite:attribute name="downloadEnabled" type="java.lang.Boolean" default="true" required="false" shortDescription="@type: Boolean, param to disable the download menu on special pages (e.g. on collection overview, ...))"/>
@@ -120,48 +122,59 @@
 					</div>
 				</h:panelGroup>
 				
-				
-				
-				<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
-					<div class="imj_menuHeader">
-                        <span class="fa fa-history">&#160;</span>
-						<h:outputText id="txtHistory" value="#{lbl.history}" styleClass="imj_headerEntry"/>
-					</div>
-					<div class="imj_menuBody">
-						<ul class="imj_overlayMenuList">
-							<ui:repeat var="page" value="#{HistorySession.pages}" rows="0" varStatus="pos">
-								<ui:fragment rendered="#{pos.index + 10 &gt; HistorySession.historySize}">
-									<li class="#{curMenuClass}Item">
-										<h:outputText value="#{pos.index}. "/>
-										<h:outputLink value="#{page.completeUrlWithHistory}" title="#{page.internationalizedName.trim()}">
-											<h:outputText value="#{page.internationalizedName}"/>
-										</h:outputLink>
-									</li>
-								</ui:fragment>
-							</ui:repeat>
-						</ul>
-					</div>
-				</h:panelGroup>
-				
 				<ui:fragment  rendered="#{cc.attrs.actionEnabled and (cc.attrs.isAdmin or cc.attrs.isDeletable) and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
+					<ui:fragment rendered="#{cc.attrs.allowedToShare}">
+						<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="sharingMenu">
+							<div class="imj_menuHeader" >
+	                            <span class="fa fa-share">&#160;</span>
+								<h:outputText value="#{lbl.share}" styleClass="imj_headerEntry"/>
+							</div>
+							<div class="imj_menuBody">
+								<ul class="imj_overlayMenuList">							
+									<li class="#{curMenuClass}Item">
+										<h:outputLink  id="actionMenuShareAlbum" rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/share" >
+											<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
+										</h:outputLink>
+										<h:outputLink   id="actionMenuShareCollection" rendered="#{cc.attrs.curMainMenu == 'collection'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/share">
+											<h:outputText value="#{lbl.collection_share}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
+										</h:outputLink>
+									</li>							
+								</ul>
+							</div>
+						</div>
+					</ui:fragment>
+					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="editMenu">
+						<div class="imj_menuHeader" >
+                            <span class="fa fa-pencil">&#160;</span>
+							<h:outputText value="#{lbl.edit}" styleClass="imj_headerEntry"/>
+						</div>
+						<div class="imj_menuBody">
+							<ul class="imj_overlayMenuList">							
+								<li class="#{curMenuClass}Item">
+									<h:outputLink  id="actionMenuEditCollection" rendered="#{cc.attrs.curMainMenu == 'collection'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/edit?init=1">
+										<h:outputText value="#{lbl.collection_edit_metadata}"/>
+									</h:outputLink>
+									<h:outputLink  id="actionMenuEditAlbum" rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/edit?init=1">
+										<h:outputText value="#{lbl.album_share_album_edit}"/>
+									</h:outputLink>
+								</li>
+								<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and cc.attrs.isContentEditable}">	
+								<li class="#{curMenuClass}Item">
+									<h:outputLink  value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
+										<h:outputText value="#{lbl.edit_all}"/>
+									</h:outputLink>
+								</li>
+								</ui:fragment>					
+							</ul>
+						</div>
+					</div>
 					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
 						<div class="imj_menuHeader" >
-                            <span class="fa fa-exchange">&#160;</span>
+                            <span class="fa fa-bars">&#160;</span>
 							<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
 						</div>
 						<div class="imj_menuBody">
-							<ul class="imj_overlayMenuList">
-								
-								<ui:fragment rendered="#{cc.attrs.allowedToShare}">
-									<li class="#{curMenuClass}Item">
-										<h:outputLink  id="actionMenuShareAlbum" rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/share" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
-											<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
-										</h:outputLink>
-										<h:outputLink   id="actionMenuShareCollection" rendered="#{cc.attrs.curMainMenu == 'collection'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/share" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
-											<h:outputText value="#{lbl.collection_share}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
-										</h:outputLink>
-									</li>
-								</ui:fragment>
+							<ul class="imj_overlayMenuList">		
 
 								<ui:fragment rendered="#{cc.attrs.isAdmin and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
 									<li>
@@ -192,32 +205,44 @@
 										</h:outputLink>
 									</li>
 								</ui:fragment>
+								<ui:fragment rendered="#{cc.attrs.isContentDeletable}">
+									<li>
+										<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" 
+															rendered="#{cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING'}">
+											<h:outputText value="#{lbl.delete_all}"/>
+										</h:outputLink>
+										<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawAll')"
+														rendered="#{cc.attrs.collectionStatus.trim().toUpperCase() == 'RELEASED'}">
+											<h:outputText value="#{lbl.withdraw_all}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
 							</ul>
 						</div>
 					</div>
 				</ui:fragment>
 			</ui:fragment> <!-- END if user logged in -->
 			
-			<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.sortBean != null}">
+			<!-- Right side -->
+						
+			<h:panelGroup layout="block" styleClass="imj_overlayMenu imj_menuRight #{cc.attrs.menuClass.trim()}Item">
 				<div class="imj_menuHeader">
-                    <span class="fa fa-sort">&#160;</span>
-					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
+                       <span class="fa fa-history">&#160;</span>
+					<h:outputText id="txtHistory" value="#{lbl.history}" styleClass="imj_headerEntry"/>
 				</div>
 				<div class="imj_menuBody">
-					
-					<h:form>
-						<h:outputText value="#{lbl.sort_by}: " styleClass="imj_active"/>
-						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="fa fa-sort-asc fa-pull-right" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
-						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="fa fa-sort-desc fa-pull-right" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
-						
-						<ul>
-							<ui:repeat var="sortItem" value="#{cc.attrs.sortBean.sortMenu}" varStatus="spos">
-								<li>
-									<h:commandLink action="#{cc.attrs.sortBean.setSelectedSortCriterion(sortItem.value)}" value="#{sortItem.label}" styleClass="#{(cc.attrs.sortBean.selectedSortCriterion == sortItem.value) ? 'imj_active' : ''}"/>
+					<ul class="imj_overlayMenuList">
+						<ui:repeat var="page" value="#{HistorySession.pages}" rows="0" varStatus="pos">
+							<ui:fragment rendered="#{pos.index + 10 &gt; HistorySession.historySize}">
+								<li class="#{curMenuClass}Item">
+									<h:outputText value="#{pos.index}. "/>
+									<h:outputLink value="#{page.completeUrlWithHistory}" title="#{page.internationalizedName.trim()}">
+										<h:outputText value="#{page.internationalizedName}"/>
+									</h:outputLink>
 								</li>
-							</ui:repeat>
-						</ul>
-					</h:form>
+							</ui:fragment>
+						</ui:repeat>
+					</ul>
 				</div>
 			</h:panelGroup>
 			

@@ -10,6 +10,7 @@
 		<composite:attribute name="numberOfElements" required="true"/>
 		<composite:attribute name="containerId" required="false"/>
 		<composite:attribute name="showSelectMenu" required="false" default="true"/>
+		<composite:attribute name="showSortMenu" required="false" default="false"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -17,104 +18,26 @@
 			
 			<ui:fragment rendered="#{cc.attrs.showSelectMenu}">
 				<h:form id="preListForm">
-					
+
 					<ui:repeat id="filterList" var="filter" value="#{cc.attrs.fSession.filters}" offset="0" varStatus="index">
-						<h:outputText value="/" styleClass="imj_facetSeparator"/>
+						<h:outputText value="/" styleClass="imj_facetSeparator" rendered="#{index.index > 0}"/>
 						<h:outputText value="#{filter.internationalizedLabel}"/>
 						<h:outputText value="(#{filter.notDefineType})" rendered="#{filter.notDefine}"/>
-                        
 						<h:outputLink styleClass="imj_removeFacetButton fa fa-times" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == SessionBean.getPrettySpacePage('pretty:browse')}"/>
-						<h:outputLink styleClass="imj_removeFacetButton fa fa-times" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}"/>
-						
+						<h:outputLink styleClass="imj_removeFacetButton fa fa-times" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}"/>	
 					</ui:repeat>
 					
-					<ui:fragment rendered="#{!Auth.loggedIn}">
-						<div class="imj_overlayMenu imj_menuHeader">
-							<h:outputText value="( "/>
-							<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.images}"/>
-							<h:outputText value=" )"/>
-						</div>
-					</ui:fragment>
+					<h:panelGroup layout="block" styleClass="imj_overlayMenu">
+						<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.items}"/>
+					</h:panelGroup>
 					
-					<!-- Select menu for all images [LEFT] -->
-					<ui:fragment rendered="#{Auth.loggedIn}">
-						<h:panelGroup layout="block" styleClass="imj_overlayMenu" rendered="#{cc.attrs.numberOfElements > 0}">
-							<div class="imj_menuHeader">
-								<h:outputText value="( "/>
-								<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.images}"/>
-								<span class="fa fa-angle-down"/>
-								<h:outputText value=" )"/>
-							</div>
-							<div class="imj_menuBody">
-								<ul class="imj_overlayMenuList">
-									<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
-										<!-- No active album selected -->
-										<li class="imj_overlayMenuListItem">
-											<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
-												<h:panelGroup styleClass="fa fa-search"/>
-												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
-											</h:outputLink>
-										</li>
-									</ui:fragment>
-									<!-- Add all to active album -->
-									
-									<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.containerId}">
-										<li>
-											<h:commandLink action="#{cc.attrs.facetBean.addAllToActiveAlbum}">
-												<h:outputText value="#{lbl.add_to_active_album_all}"/>
-											</h:commandLink>
-										</li>
-									</ui:fragment>
-									
-									<!-- Edit all -->
-									
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.profile.statements.size() > 0}">
-										<li>
-											<h:outputLink value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
-												<h:outputText value="#{lbl.edit_all}"/>
-											</h:outputLink>
-										</li>
-									</ui:fragment>
-									
-									<!-- Delete/Discard all from collection-->
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null}">
-										<li>
-											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" 
-															rendered="#{Auth.deleteContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'PENDING'}">
-												<h:outputText value="#{lbl.delete_all}"/>
-											</h:outputLink>
-											
-											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawAll')"
-															rendered="#{cc.attrs.facetBean.collection != null and Auth.update(cc.attrs.facetBean.collection)  and cc.attrs.facetBean.collection.status == 'RELEASED'}">
-												<h:outputText value="#{lbl.withdraw_all}"/>
-											</h:outputLink>
-										</li>
-									</ui:fragment>
-									
-									<!-- Remove all from album -->
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.createContent(cc.attrs.facetBean.album)}">
-										<li>
-											<h:commandLink value="#{lbl.remove_from_album_all}" action="#{cc.attrs.facetBean.removeAllFromAlbum}">
-											</h:commandLink>
-										</li>
-									</ui:fragment>
-								</ul>
-							</div>
-						</h:panelGroup>
-					</ui:fragment>
-					
-					
-					<!-- Select menu for selected images [RIGHT] -->
-					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_overlayMenu imj_selectionInfoPanelItemSelect" rendered="#{Auth.loggedIn}">
-						<h:panelGroup layout="block"  styleClass="imj_menuHeader">
-							<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}"/>
-							<span class="fa fa-angle-down"/>
+					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_overlayMenu" rendered="#{Auth.loggedIn }">
+						<h:panelGroup layout="block"  styleClass="imj_menuHeader" rendered="#{SessionBean.selectedSize > 0}">
+							<h:outputText id="lblSelectedSize" value=" #{SessionBean.selectedSize} #{lbl.selected}"/>
+							<span class="fa fa-chevron-circle-down"/>
 						</h:panelGroup>
 						
-						<h:panelGroup layout="block" styleClass="imj_menuBody">
-							
-							<h:outputText styleClass="free_area0" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
-							
+						<h:panelGroup layout="block" styleClass="imj_menuBody">							
 							<ui:fragment rendered="#{SessionBean.selectedSize > 0}">
 								<ul class="imj_overlayMenuList">
 									<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
@@ -169,10 +92,30 @@
 							</ui:fragment>
 						</h:panelGroup>
 					</h:panelGroup>
-				</h:form>
+				</h:form>		
 			</ui:fragment>
+			<h:panelGroup layout="block" styleClass="imj_overlayMenu imj_menuRight #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.facetBean != null and cc.attrs.showSortMenu}">
+				<div class="imj_menuHeader">
+                    <span class="fa fa-sort">&#160;</span>
+					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
+				</div>
+				<div class="imj_menuBody">
+					
+					<h:form>
+						<h:outputText value="#{lbl.sort_by}: " styleClass="imj_active"/>
+						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="fa fa-sort-asc fa-pull-right" action="#{cc.attrs.facetBean.toggleSortOrder}" rendered="#{cc.attrs.facetBean.selectedSortOrder == 'ASCENDING'}"/>
+						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="fa fa-sort-desc fa-pull-right" action="#{cc.attrs.facetBean.toggleSortOrder}" rendered="#{cc.attrs.facetBean.selectedSortOrder != 'ASCENDING'}"/>
+						
+						<ul>
+							<ui:repeat var="sortItem" value="#{cc.attrs.facetBean.sortMenu}" varStatus="spos">
+								<li>
+									<h:commandLink action="#{cc.attrs.facetBean.setSelectedSortCriterion(sortItem.value)}" value="#{sortItem.label}" styleClass="#{(cc.attrs.facetBean.selectedSortCriterion == sortItem.value) ? 'imj_active' : ''}"/>
+								</li>
+							</ui:repeat>
+						</ul>
+					</h:form>
+				</div>
+			</h:panelGroup>
 		</h:panelGroup>
-		
-		
 	</composite:implementation>
 </html>

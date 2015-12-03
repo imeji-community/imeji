@@ -24,8 +24,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-	
-		<ui:include src="./include/History.xhtml"/>
 		<!-- ID must not be changed. The share page would not work anymore -->
 		<imjc:share id="share" roles="#{ShareBean.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
 		

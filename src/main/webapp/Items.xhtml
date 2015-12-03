@@ -9,12 +9,13 @@
 	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 
 	<ui:param name="paginatorListSessionBean" value="#{ItemsBean}" />
-	<ui:param name="headline" value="#{lbl.images}" />
+	<ui:param name="headline" value=" " />
+	<ui:param name="displayQuery" value="#{paginatorListSessionBean.searchFilter != null}"/>
 	<ui:param name="currentMainMenu" value="mediaEntry" />
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q=" />
 
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}"
+		<menu:context_actionMenu id="action" isUserLoggedIn="#{Auth.loggedIn}"
 			curMainMenu="#{currentMainMenu}"
 			sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"
 			actionEnabled="false" exportQuery="#{paginatorListSessionBean.query}" />

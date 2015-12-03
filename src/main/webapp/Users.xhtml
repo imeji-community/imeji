@@ -19,10 +19,6 @@
 	
 	
 	<ui:define name="mainContent">
-	
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>
-		
 		<!-- Are You Admin? -->	
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>

@@ -18,18 +18,17 @@
 	
 	<!-- Main Content - bibliographic grid list - START -->
 	<ui:define name="mainContent">
-		
-		<!-- Breadcrumb - History -->
-		<ui:include src="../../include/History.xhtml"></ui:include>
 		<h:panelGroup layout="block" id ="ajaxWrapper">
 		
 			<h:outputText value="#{paginatorListSessionBean.initPaginator}"/>
+			
+			<!-- Page Browser GotoBox -->
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+			
 			<!-- Selection Info Panel -->
 			<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
 									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" filterBeanHasQuery="#{filterBeanHasQuery}"/>
 			
-			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
 			
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords == 0}">
 				<div class="imj_bibliographicList">

@@ -55,12 +55,11 @@ All rights reserved. Use is subject to license terms.
             <!-- global page wrapper -->
             <div class="#{siteWrapperClass}">
                 <ui:insert name="init"/>
-                
                 <ui:include src="component/header/header_default.xhtml"/>
-                <ui:insert name="actionsMenu"/>
-                
-                <!-- headline -->
-                <h:panelGroup layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
+                <!-- Search Query -->
+                <ui:insert name="searchQuery"/>
+                 <!-- headline -->
+                <h:panelGroup rendered="#{!displayQuery}" layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
                     <h1>
                         <h:outputText value="#{headline.toString().trim()}"/>
                         <h:outputText value="imeji" rendered="#{headline.toString().trim().length() == 0}"/>
@@ -70,8 +69,9 @@ All rights reserved. Use is subject to license terms.
                         </ui:fragment>
                     </h1>
                 </h:panelGroup>
-                
-                <!-- message area -->
+                <!-- Actions Menu -->
+                <ui:insert name="actionsMenu"/>   
+                <!-- Message area -->
                 <h:panelGroup id="imj_pageMessageArea">
                     <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help')}">
 
@@ -112,7 +112,6 @@ All rights reserved. Use is subject to license terms.
 
                 <!-- content wrapper -->
                 <div class="imj_mainContentWrapper">
-                    <ui:insert name="searchQuery"/>
                     <ui:insert name="mainContent"/>
                 </div>
                 
@@ -128,7 +127,7 @@ All rights reserved. Use is subject to license terms.
             
             <!-- scripts -->
             <ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
-                <script type="text/javascript">var placeholder_simpleSearch = 'search for ...';</script>
+                <script type="text/javascript">var placeholder_simpleSearch = 'Search for ...';</script>
             </ui:fragment>
             <ui:fragment rendered="#{SessionBean.locale == 'de'}">
                 <script type="text/javascript">var placeholder_simpleSearch = 'Suche nach ...';</script>

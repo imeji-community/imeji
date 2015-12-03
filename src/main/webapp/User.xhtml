@@ -21,9 +21,6 @@
 	
 	<ui:define name="mainContent">
 		<h:outputText value="#{UserBean.init}"/>
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>
-		
 		<!-- If User has no right to view the page -->
 		<ui:fragment rendered="#{!Auth.admin(UserBean.user)}">
 			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">

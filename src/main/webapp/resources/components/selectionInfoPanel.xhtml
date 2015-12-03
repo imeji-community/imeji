@@ -14,23 +14,7 @@
 	
 	<composite:implementation>
 		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'mediaEntry' }">
-				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.images_all}">
-					<h:outputText value="#{lbl.images_all}"/>
-				</h:outputLink>
-			</ui:fragment>
 			
-			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'album' and SessionBean.activeAlbum!=null}">
-				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.album_back_to_images}">
-					<h:outputText value="#{lbl.album_back_to_images}"/>
-				</h:outputLink>
-			</ui:fragment>
-			
-			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'collection'}">
-				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.collection_back_to_images}">
-					<h:outputText value="#{lbl.collection_back_to_images}"/>
-				</h:outputLink>
-			</ui:fragment>
 			<ui:fragment rendered="#{cc.attrs.showSelectMenu}">
 				<h:form id="preListForm">
 					

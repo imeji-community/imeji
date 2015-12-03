@@ -5,7 +5,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:imjc="http://java.sun.com/jsf/composite/components"
                 xmlns:list="http://java.sun.com/jsf/composite/components/list">
-
+	
     <ui:define name="init">
         <h:outputText value="#{paginatorListSessionBean.initPage}"/>
     </ui:define>
@@ -28,11 +28,12 @@
 
     <!-- Main Content - Image tiled list - START -->
     <ui:define name="mainContent">
-        <!-- Breadcrumb - History -->
-        <ui:include src="../../include/History.xhtml"></ui:include>
         <h:panelGroup layout="block" id ="ajaxWrapper">
-            <h:outputText value="#{paginatorListSessionBean.urlParameters}" styleClass="imj_noDisplay"/>
+        	<h:outputText value="#{paginatorListSessionBean.urlParameters}" styleClass="imj_noDisplay"/>
             <h:outputText value="#{paginatorListSessionBean.initPaginator}" styleClass="imj_noDisplay"/>
+        	 <!-- Page Browser GotoBox -->
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
+        	
             <!-- Selection Info Panel -->
             <imjc:selectionInfoPanel id="selPanel" 
                                       fSession="#{FiltersSession}" 
@@ -42,9 +43,7 @@
                                       numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"
                                       containerId="#{containerId}"/>
 
-            <!-- Page Browser GotoBox -->
-            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
-
+           
             <!-- Media List -->
             <imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}"/>
             <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'LIST'}"/>

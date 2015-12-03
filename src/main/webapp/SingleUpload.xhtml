@@ -6,7 +6,7 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:param name="headline" value="#{lbl.singleUploadPageTitle}"/>
+	<ui:param name="headline" value=""/>
 	<ui:param name="currentMainMenu" value="upload"/>
 	
 	<f:metadata>
@@ -22,10 +22,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		
-		<!-- Breadcrumb - History -->
-		<ui:include src="./include/History.xhtml"/>
-		
  		<!-- If User is not logged in -->
 		<ui:fragment rendered="#{!Auth.loggedIn}">
 			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
@@ -44,7 +40,7 @@
 						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 		
 						<div id="container">
-						    <a id="pickfiles" href="javascript:;">[#{lbl.uploadFile}]</a>
+							<a id="pickfiles" href="javascript:;">[#{lbl.uploadFile}]</a>
 						</div>
 	
 						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>

@@ -23,10 +23,10 @@
 		<div class="imj_paginator">
 			<h:form>
 				<h:panelGroup rendered="#{cc.attrs.showSwitchListView}" class="imj_rangeSelector">
-				 	<h:commandLink id="switchListView" title="thumbnail list" styleClass="fa fa-th fa-size-3" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}">
+				 	<h:commandLink id="switchListView" title="thumbnail list" styleClass="fa fa-th fa-size-2" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}">
                     	<f:ajax execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
                     </h:commandLink>
-                	<h:commandLink title="detail list" styleClass="fa fa-list-alt fa-size-3" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'LIST'}">
+                	<h:commandLink title="detail list" styleClass="fa fa-list-alt fa-size-2" value="&#160;" action="#{SessionBean.toggleBrowseView}" disabled="#{SessionBean.selectedBrowseListView == 'LIST'}">
                 	    <f:ajax execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
                 	</h:commandLink>
                 	&#160;
@@ -97,11 +97,10 @@
 			 </h:form>			
 			 <div class="imj_gotoBox">
 			 	<h:form>
-			 		<h:outputLabel for="inpGoToPageTop" value="#{lbl.paginator_goToPage}"/>
 			 		<h:inputText id="inpGoToPageTop" styleClass="imj_pageInput" value="#{cc.attrs.paginatorBean.goToPage}"/>
 			 		<h:outputText id="lblItemList_of" value="#{lbl.paginator_of} "/>
 			 		<h:outputText id="lblPaginatorPageSize" value="#{cc.attrs.paginatorBean.paginatorPageSize}"/>
-			 		<h:commandButton type="submit" id="btList_btGo" styleClass="imj_submitButton" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{cc.attrs.paginatorBean.goToPage}" onclick="setContentLoadingStatus();">
+			 		<h:commandButton type="submit" id="btList_btGo" styleClass="imj_noDisplay" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{cc.attrs.paginatorBean.goToPage}" onclick="setContentLoadingStatus();">
 			 			<f:ajax execute="@form" render=":ajaxWrapper :imj_pageMessageArea"/>
 			 		</h:commandButton>
 			 	</h:form>

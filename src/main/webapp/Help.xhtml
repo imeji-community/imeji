@@ -7,8 +7,6 @@
 	<ui:param name="headline" value="#{lbl.help}"/>
 	
 	<ui:define name="mainContent">
-		<ui:include src="./include/History.xhtml"/>
-		
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_helpPage">
 			<h:outputText escape="false" value="#{StaticContent.helpContent}" rendered="#{SessionBean.locale.language == 'en'}"/>
 			<h:outputText escape="false" value="#{StaticContent.helpContent}" rendered="#{SessionBean.locale.language == 'de'}"/>

@@ -4,7 +4,7 @@
 				xmlns:h="http://java.sun.com/jsf/html"
 				xmlns:f="http://java.sun.com/jsf/core">
 	
-	<ui:param name="headline" value="#{lbl.search_advanced}"/>
+	<ui:param name="headline" value=""/>
 		
 	<ui:define name="init">
 		<h:outputText value="#{AdvancedSearchBean.newSearch}"/>
@@ -20,9 +20,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		
-		<ui:include src="./include/History.xhtml"/>
-		
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_advancedSearch">
 			<h:form id="advancedSearchForm" onkeypress="if (event.keyCode == 13) return false;">

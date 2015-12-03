@@ -101,17 +101,11 @@
 
 
     <ui:define name="mainContent">
-        <!-- Breadcrumb - History -->
-        <ui:include src="./include/History.xhtml"/>
-
         <!-- AJAX Wrapper - START -->
         <h:panelGroup layout="block" id="imj_ajaxWrapper">
             <!-- START UPLOAD -->
             <div class="imj_upload">
                 <ui:fragment rendered="#{Auth.createContent(UploadBean.collection)}">
-                    <h2 class="imj_headline">
-                        <h:outputText value="#{lbl.uploadFiles}"/>
-                    </h2>
 
                     <div class="imj_uploadInputWrapper">
                         <div id="tabsUpload" class="id_tabs imj_tabList">

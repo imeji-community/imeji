@@ -29,37 +29,37 @@
 			<div class="#{curMenuClass}">
 				<ul>
 					
-						<li class="#{curMenuClass}Item">
-							<h:outputLink value="#{curContextUrl}" title="#{lbl.startpage}" styleClass="#{(activeMenuValue == 'start') ? 'imj_active' : ''}">
+						<li class="#{curMenuClass}Item #{(activeMenuValue == 'start') ? 'imj_active' : ''}">
+							<h:outputLink value="#{curContextUrl}" title="#{lbl.startpage}" styleClass="">
 								<h:outputText value="#{lbl.startpage}"/>
 							</h:outputLink>
 						</li>
 					<ui:fragment rendered="#{cc.attrs.hasContent and cc.attrs.navBean != null}">
-						<li class="#{curMenuClass}Item">
-							<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.browsePath}?q=" title="#{lbl.view_images}" styleClass="#{(activeMenuValue == 'content') ? 'imj_active' : ''}">
+						<li class="#{curMenuClass}Item #{(activeMenuValue == 'content') ? 'imj_active' : ''}">
+							<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.browsePath}?q=" title="#{lbl.view_images}" styleClass="">
 								<h:outputText value="#{lbl.view_images}"/>
 							</h:outputLink>
 						</li>
 					</ui:fragment>
 					
-					<li class="#{curMenuClass}Item">
-						<h:outputLink value="#{curContextUrl}/infos?init=1" title="#{lbl.metadata}" styleClass="#{(activeMenuValue == 'metadata') ? 'imj_active' : ''}">
+					<li class="#{curMenuClass}Item #{(activeMenuValue == 'metadata') ? 'imj_active' : ''}">
+						<h:outputLink value="#{curContextUrl}/infos?init=1" title="#{lbl.metadata}" styleClass="">
 							<h:outputText value="#{lbl.metadata}"/>
 						</h:outputLink>
 					</li>
 					
 					<ui:fragment rendered="#{cc.attrs.curMainMenu.trim().toLowerCase() == 'collection'}">
 						<ui:fragment rendered="#{cc.attrs.userHasUploadRights and cc.attrs.navBean != null}">
-							<li class="#{curMenuClass}Item">
-								<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.uploadPath}?init=1" title="#{lbl.upload_images}" styleClass="#{(activeMenuValue == 'upload') ? ' imj_active' : ''}">
+							<li class="#{curMenuClass}Item #{(activeMenuValue == 'upload') ? ' imj_active' : ''}">
+								<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.uploadPath}?init=1" title="#{lbl.upload_images}" styleClass="">
 									<h:outputText value="#{lbl.upload_images}"/>
 								</h:outputLink>
 							</li>
 						</ui:fragment>
 						
 						<ui:fragment rendered="#{Auth.admin and cc.attrs.userHasUploadRights}">
-							<li class="#{curMenuClass}Item">
-								<h:outputLink value="#{curContextUrl}/ingest?init=1" title="#{lbl.ingest}" styleClass="#{(activeMenuValue == 'ingest') ? 'imj_active' : ''}">
+							<li class="#{curMenuClass}Item #{(activeMenuValue == 'ingest') ? 'imj_active' : ''}">
+								<h:outputLink value="#{curContextUrl}/ingest?init=1" title="#{lbl.ingest}" styleClass="">
 									<h:outputText value="#{lbl.ingest}"/>
 								</h:outputLink>
 							</li>

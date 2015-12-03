@@ -17,11 +17,7 @@
 							 navBean="#{Navigation}"/>
 	</ui:define>
 
-	<ui:define name="mainContent">
-		
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>
-					
+	<ui:define name="mainContent">			
 		<!-- AdminDataList - Back Button -->
 		<h:panelGroup layout="block" styleClass="imj_backPanel">
 			<h:outputLink value="#{Navigation.adminUrl}">

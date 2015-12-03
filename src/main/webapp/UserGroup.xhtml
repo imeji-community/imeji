@@ -17,9 +17,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		
-		<ui:include src="include/History.xhtml"></ui:include>			
-		
 		<ui:fragment rendered="#{!Auth.admin}">
 			<ui:include src="./include/LoginFormular.xhtml" />
 		</ui:fragment>

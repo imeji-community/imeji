@@ -7,16 +7,11 @@
 	<ui:param name="currentMainMenu" value="admin"/>
 
 	<ui:define name="mainContent">
-			<!-- AdminDataList - Back Button -->
-		
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>			
-		
-			<h:panelGroup layout="block" styleClass="imj_backPanel">
-				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}"/>
-				</h:outputLink>
-			</h:panelGroup>					
+		<h:panelGroup layout="block" styleClass="imj_backPanel">
+			<h:outputLink value="#{Navigation.adminUrl}">
+				<h:outputText value="#{lbl.back_to_admin}"/>
+			</h:outputLink>
+		</h:panelGroup>					
 						
 		
 		<!-- Are You Admin? -->	

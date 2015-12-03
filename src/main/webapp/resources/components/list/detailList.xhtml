@@ -37,15 +37,17 @@
 
                 <h:column>
                     <f:facet name="header">&#160;</f:facet>
-                    <h:panelGroup styleClass="fa fa-file-image-o" rendered="#{o.fileType.startsWith('image')}">&#160;</h:panelGroup>
-                    <h:panelGroup styleClass="fa fa-file-text-o" rendered="#{o.fileType.startsWith('text')}">&#160;</h:panelGroup>
-                    <h:panelGroup styleClass="fa fa-file-pdf-o" rendered="#{o.fileType.endsWith('pdf')}">&#160;</h:panelGroup>
-                    <h:panelGroup styleClass="fa fa-file-word-o" rendered="#{o.fileType.endsWith('msword')}">&#160;</h:panelGroup>
-                    <h:panelGroup styleClass="fa fa-file-word-o" rendered="#{o.fileType.endsWith('mspowerpoint')}">&#160;</h:panelGroup>
-                    <h:panelGroup styleClass="fa fa-file-word-o" rendered="#{o.fileType.endsWith('msexcel')}">&#160;</h:panelGroup>
-                    <h:panelGroup styleClass="fa fa-simplybuilt" rendered="#{o.fileType.endsWith('octet-stream')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-camera fa-size-2" rendered="#{o.fileType.startsWith('image')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-text-o fa-size-2" rendered="#{o.fileType.startsWith('text')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-pdf-o fa-size-2" rendered="#{o.fileType.endsWith('pdf')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-word-o fa-size-2" rendered="#{o.shortFileType.startsWith('doc')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-powerpoint-o fa-size-2" rendered="#{o.shortFileType.startsWith('ppt')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-table fa-size-2" rendered="#{o.shortFileType.startsWith('xls')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-simplybuilt fa-size-2" rendered="#{o.fileType.endsWith('octet-stream')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-music fa-size-2" rendered="#{o.fileType.startsWith('audio')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-film fa-size-2" rendered="#{o.fileType.startsWith('video')}">&#160;</h:panelGroup>
 
-                    <h:panelGroup styleClass="fa fa-file" rendered="#{!(o.fileType.startsWith('image') || o.fileType.startsWith('text') || o.fileType.endsWith('pdf') || o.fileType.endsWith('msword') || o.fileType.endsWith('mspowerpoint') || o.fileType.endsWith('msexcel') || o.fileType.endsWith('octet-stream'))}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file fa-size-2" rendered="#{!(o.fileType.startsWith('image') || o.fileType.startsWith('text') || o.fileType.endsWith('pdf') || o.shortFileType.startsWith('doc') || o.shortFileType.startsWith('ppt') || o.shortFileType.startsWith('xls') || o.fileType.endsWith('octet-stream') || o.fileType.startsWith('video') || o.fileType.startsWith('audio'))}">&#160;</h:panelGroup>
                 </h:column>
 
                 <h:column>

@@ -13,6 +13,21 @@
 	
 	<composite:implementation>
 	
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"></script>
+		<script type="text/javascript">
+				
+				var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+					document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+				};
+				var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+					var qr = qrcode(typeNumber || 20, errorCorrectLevel || 'M');
+					qr.addData(text);
+					qr.make();
+					// return qr.createTableTag();
+					return qr.createImgTag();
+				};
+			</script>
+	
 		<!-- MetaDataList - START -->
 		<div class="imj_metadataList">
 		
@@ -151,12 +166,13 @@
 						</h:panelGroup>
 						
 						<!-- Tab Utilities - QR-Tag -->
-						<h:panelGroup styleClass="imj_infodataSet">
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION'}">
 							<span class="imj_infodataLabel">
 								<h:outputText value="#{lbl.qrcode}"/>
 								<span class="imj_invisible">: </span>
 							</span>
 							<span class="imj_infodataValue qr" id="qr"></span>
+							<h:outputScript>var qrHtml = document.getElementById('qr'); qrHtml.innerHTML = create_qrcode('{key:"#{SessionBean.user.apiKey}",col:"#{cc.attrs.infoLogicBean.collection.id}"}');</h:outputScript>
 						</h:panelGroup>
 						
 					</h:panelGroup>
@@ -166,25 +182,6 @@
 			</h:panelGroup> <!-- END LIST BODY -->
 		</div> <!-- END LIST -->
 		
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"></script>
-		<script type="text/javascript">
-				jQuery(document).ready(function() {
-					var qrHtml = document.getElementById('qr');
-					if (qrHtml != null) {
-						qrHtml.innerHTML = create_qrcode('{key:"#{SessionBean.user.apiKey}",col:"#{cc.attrs.infoLogicBean.collection.id}"}');
-					}
-				});
-				
-				var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
-					document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
-				};
-				var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
-					var qr = qrcode(typeNumber || 20, errorCorrectLevel || 'M');
-					qr.addData(text);
-					qr.make();
-					// return qr.createTableTag();
-					return qr.createImgTag();
-				};
-			</script>
+
 	</composite:implementation>
 </html>

@@ -35,6 +35,7 @@ public class UserCreationBean {
   private boolean sendEmail = false;
   private static Logger logger = Logger.getLogger(UserCreationBean.class);
   private boolean allowedToCreateCollection = true;
+  private long quota = ConfigurationBean.getDefaultDiskSpaceQuotaStatic();
 
   /**
    * Construct new bean
@@ -81,7 +82,9 @@ public class UserCreationBean {
     PasswordGenerator generator = new PasswordGenerator();
     String password = generator.generatePassword();
     user.setEncryptedPassword(StringHelper.convertToMD5(password));
-    uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT : USER_TYPE.RESTRICTED);
+    User newUser = uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT : USER_TYPE.RESTRICTED);
+    newUser.setQuota(getQuota());    
+    uc.update(newUser, user);
     return password;
   }
 
@@ -192,5 +195,13 @@ public class UserCreationBean {
    */
   public void setAllowedToCreateCollection(boolean allowedToCreateCollection) {
     this.allowedToCreateCollection = allowedToCreateCollection;
+  }
+
+  public long getQuota() {
+    return quota;
+  }
+
+  public void setQuota(long quota) {
+    this.quota = quota;
   }
 }

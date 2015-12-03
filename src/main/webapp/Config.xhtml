@@ -82,8 +82,8 @@
 													
 								<div class="imj_content">
 									<!-- Admin - Snippet Insert -->	
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									<div class="imj_admindataSet">
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.instance_name}"/>
 											<span class="imj_noDisplay">: </span>
@@ -180,8 +180,8 @@
 								</div>
 												
 								<div class="imj_content">
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									<div class="imj_admindataSet">
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.browse_default_view}"/>
 											<span class="imj_noDisplay">: </span>
@@ -286,8 +286,8 @@
 													
 								<div class="imj_content">
 									<!-- Admin - Snippet Insert -->	
-									<div class="imj_admindataSet">
 									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.server_address}"/>
 											<span class="imj_noDisplay">: </span>
@@ -361,8 +361,8 @@
 								</div>
 								
 								<div class="imj_content">
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									<h3 class="imj_sectionHeadline">
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<h:outputText value="#{lbl.file_types}"/><span class="imj_noDisplay">: </span>
 									</h3>
 									<!-- Admin - Snippet Insert -->	
@@ -417,8 +417,8 @@
 									</h2>
 								</div>
 								<div class="imj_content">
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.upload_max_file_size}"/>
 											<span class="imj_noDisplay">: </span>
@@ -518,8 +518,8 @@
 									</h2>
 								</div>
 								<div class="imj_content">
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.data_viewer_url}"/>
 											<span class="imj_noDisplay">: </span>
@@ -554,8 +554,8 @@
 									</h2>
 								</div>
 								<div class="imj_content">
-									<h:panelGroup layout="block" styleClass="imj_admindataSet">
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+									<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">	
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{lbl.doiService}"/>
 											<span class="imj_noDisplay">: </span>
@@ -585,6 +585,28 @@
 									
 								</div>
 									
+							</div>
+							
+							<!-- QUOTA -->
+							<div class="imj_adminPanel">
+								<div class="imj_config_headline">
+									<h2>
+										<h:outputText value="#{lbl.quota}"/>
+									</h2>
+								</div>
+								
+								<div class="imj_content">
+									<h3 class="imj_sectionHeadline">
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+										<h:outputText value="#{lbl.define_quotaLimits}"/><span class="imj_noDisplay">: </span>
+									</h3>
+									<!-- Admin - Snippet Insert -->	
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataSet imj_fileTypeConfig">
+											<h:inputText value="#{Configuration.quotaLimits}" styleClass="imj_admindataEdit"/>
+										</div>
+									</h:panelGroup>											
+								</div>
 							</div>
 														
 								

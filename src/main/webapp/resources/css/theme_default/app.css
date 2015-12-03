@@ -122,7 +122,7 @@ p { display: block; margin: 1em 0; }
 
 .imj_modalDialogBackground { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #444444; opacity: 0.5; filter: alpha(opacity=50); /* IE 6, 7, 8 */ -ms-filter: "alpha(opacity = 50)"; }
 
-.imj_modalDialogBox { position: absolute; top: 22.7272727272em; padding: 0.72727272em; background-color: #444444; display: none; z-index: 5000; -moz-box-shadow: 0.54545em 0.54545em 0.54545em #292929; -webkit-box-shadow: 0.54545em 0.54545em 0.54545em #292929; box-shadow: 0.54545em 0.54545em 0.54545em #292929; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+.imj_modalDialogBox { max-width: 50em; position: absolute; top: 22.7272727272em; padding: 0.72727272em; background-color: #444444; display: none; z-index: 5000; -moz-box-shadow: 0.54545em 0.54545em 0.54545em #292929; -webkit-box-shadow: 0.54545em 0.54545em 0.54545em #292929; box-shadow: 0.54545em 0.54545em 0.54545em #292929; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 .imj_modalDialogBox .imj_submitPanel { display: block; }
 .imj_modalDialogBox .imj_confirmationReasonTextarea label { display: block; }
 .imj_modalDialogBox .imj_dialogReasonText { width: 50em; resize: vertical; }
@@ -328,6 +328,10 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_filterInfoPanel .imj_removeFilterButton { margin: 0 0.272727em; }
 
 .imj_paginator { width: 99%; background-color: #292929; margin: 0; padding: 0.636363em 1%; text-align: center; }
+.imj_paginator .previousItem { padding-right: 0.5em; }
+.imj_paginator .previousItem:before { font-family: FontAwesome; content: "\f053"; padding-right: 0.5em; }
+.imj_paginator .nextItem { padding-left: 0.5em; }
+.imj_paginator .nextItem:after { font-family: FontAwesome; content: "\f054"; padding-left: 0.5em; }
 .imj_paginator .imj_rangeSelector { float: left; }
 .imj_paginator .imj_rangeSelector .imj_rangeSelectorLabel { margin-left: 0.363636em; vertical-align: baseline; }
 .imj_paginator .imj_gotoBox { float: right; }
@@ -496,7 +500,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton, .imj_setupConfig .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_submitButton, .imj_administrationTiledList .imj_setupConfig .imj_adminPanel .imj_config_headline .imj_submitButton { float: right; }
 .imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton:after, .imj_setupConfig .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_submitButton:after, .imj_administrationTiledList .imj_setupConfig .imj_adminPanel .imj_config_headline .imj_submitButton:after { clear: both; content: ""; }
 
-.imj_mainMenuStandard { display: inline-block; padding: 0 3%; font-size: 135%; letter-spacing: 0.090909em; text-align: left; text-transform: uppercase; }
+.imj_mainMenuStandard { display: inline-block; padding: 0 3% 1em 3%; font-size: 135%; letter-spacing: 0.090909em; text-align: left; text-transform: uppercase; }
 .imj_mainMenuStandard .imj_mainMenuStandardItem { display: inline-block; padding: 0.272727em 0.181818em 0.272727em 0.272727em; margin-right: 0.454545em; text-decoration: none; background-color: #313131; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 
 .imj_metaMenuStandardSingleLine { width: 100%; margin-top: 0.363636em; text-align: right; }
@@ -526,6 +530,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_overlayMenu { display: inline-block; padding: 0.125em 0.25em; }
 .imj_overlayMenu .imj_menuHeader { text-align: left; color: #6CAE2F; cursor: pointer; }
+.imj_overlayMenu .imj_menuHeader .selectAll:before { font-family: FontAwesome; content: "\f00c"; padding-right: 0.1em; }
+.imj_overlayMenu .imj_menuHeader .selectNone:before { font-family: FontAwesome; content: "\f00d "; padding-right: 0.1em; }
 .imj_overlayMenu .imj_menuText { text-align: left; line-height: 175%; padding: 0.272727em 1em; }
 .imj_overlayMenu .imj_menuBody, .imj_overlayMenu .imj_menuSimpleSearch { display: none; position: absolute; background-color: #444444; }
 .imj_overlayMenu:hover .imj_menuHeader { color: #F0F0F0; }

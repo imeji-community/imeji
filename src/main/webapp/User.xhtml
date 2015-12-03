@@ -106,15 +106,18 @@
 										<!-- Disk space quota -->
 										<div class="imj_admindataSet">
 											<div class="imj_admindataLabel">
-												<h:outputText value="#{lbl.quota}"/>
+												<h:outputText value="#{lbl.quota}" rendered="#{!UserBean.edit or !SessionBean.user.admin}"/>
+												<h:outputText value="#{lbl.quota_input}" rendered="#{UserBean.edit and SessionBean.user.admin}"/>
 												<span class="imj_invisible">: </span>
 											</div>
 											<div class="imj_admindataValue">
 												<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit or !SessionBean.user.admin}">
-													<h:outputText value="#{UserBean.user.quota}"/>
+													<h:outputText value="#{UserBean.user.getQuotaHumanReadable()}"/>
 												</h:panelGroup>
 												<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit and SessionBean.user.admin}" >
-													<h:inputText value="#{UserBean.user.quota}"/>
+													<h:selectOneMenu value="#{UserBean.user.quota}" >
+														<f:selectItems value="#{ConfigurationBean.getQuotaLimitsStatic()}"/>
+													</h:selectOneMenu>
 												</h:panelGroup>
 											</div>
 										</div>

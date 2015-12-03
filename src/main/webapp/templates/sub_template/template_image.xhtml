@@ -9,10 +9,10 @@
  	<ui:define name="init">
 		<h:outputText value="#{itemBean.init}"/>
 	</ui:define>
-	
-	
-	<ui:param name="backwardClass" value="#{itemBean.browse.previous == null ? 'fa fa-chevron-left imj_deactivated' : 'fa fa-chevron-left'}"/>
-	<ui:param name="forwardClass" value="#{itemBean.browse.next == null ? 'fa fa-chevron-right imj_deactivated' : 'fa fa-chevron-right'}"/>
+
+	<ui:param name="backwardClass" value="#{itemBean.browse.previous == null ? 'previousItem imj_deactivated' : 'previousItem'}"/>
+	<ui:param name="forwardClass" value="#{itemBean.browse.next == null ? 'nextItem imj_deactivated' : 'nextItem'}"/>
+
 	
 	<!-- Main Content - Image Detail View -->
 	<ui:define name="mainContent">
@@ -31,19 +31,19 @@
 					<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
 						<span class="imj_backPanel">
 							<ui:fragment rendered="#{currentMainMenu == 'mediaEntry' }">
-								<h:outputLink value="#{browseToAllUrl}" title="#{lbl.images_all}">
+								<h:outputLink value="#{browseToAllItemsUrl}" title="#{lbl.images_all}">
 									<h:outputText value="#{lbl.images_all}"/>
 								</h:outputLink>
 							</ui:fragment>
 							
 							<ui:fragment rendered="#{currentMainMenu == 'album' and SessionBean.activeAlbum!=null}">
-								<h:outputLink value="#{browseToAllUrl}" title="#{lbl.album_back_to_images}">
+								<h:outputLink value="#{browseToAllItemsUrl}" title="#{lbl.album_back_to_images}">
 									<h:outputText value="#{lbl.album_back_to_images}"/>
 								</h:outputLink>
 							</ui:fragment>
 							
 							<ui:fragment rendered="#{currentMainMenu == 'collection'}">
-								<h:outputLink value="#{browseToAllUrl}" title="#{lbl.collection_back_to_images}">
+								<h:outputLink value="#{browseToAllItemsUrl}" title="#{lbl.collection_back_to_images}">
 									<h:outputText value="#{lbl.collection_back_to_images}"/>
 								</h:outputLink>
 							</ui:fragment>

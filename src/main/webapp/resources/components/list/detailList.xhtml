@@ -16,11 +16,15 @@
 
         <h:form>
         	<div id="imj_listBody">
+        	<h:panelGroup rendered="#{cc.attrs.listBean.totalNumberOfElements == 0}" style="font-size:130%">
+				<span class="fa fa-exclamation-triangle"/>
+				<h:outputText value=" #{msg.no_images_found}!"/>
+			</h:panelGroup>
             <h:dataTable value="#{cc.attrs.listBean.currentPartList}" var="o"
                          styleClass="order-table imj_detailList"
                          headerClass="order-table-header"
                          rowClasses="order-table-odd-row,order-table-even-row"
-                         columnClasses="#{colClasses}">
+                         columnClasses="#{colClasses}" rendered="#{cc.attrs.listBean.totalNumberOfElements != 0}">
 
                 <h:column rendered="#{Auth.loggedIn}">
                     <f:facet name="header">

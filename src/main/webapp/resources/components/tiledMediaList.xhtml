@@ -7,7 +7,11 @@
 		<composite:attribute name="picList"/>
 	</composite:interface>
 	<composite:implementation>
-		<h:panelGroup layout="block" styleClass="imj_tiledMediaList">
+		<h:panelGroup rendered="#{cc.attrs.picList.totalNumberOfElements == 0}" style="font-size:130%">
+			<span class="fa fa-exclamation-triangle"/>
+			<h:outputText value=" #{msg.no_images_found}!"/>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="imj_tiledMediaList" rendered="#{cc.attrs.picList.totalNumberOfElements != 0}">
 			<ui:fragment rendered="#{Auth.loggedIn}">
 				<div class="imj_listHeader">
 					<div class="imj_overlayMenu">
@@ -27,9 +31,7 @@
 			</ui:fragment>
 			<div class="imj_listBody">
 				<ul id="imj_listBody">
-					<!-- Images -->
-					<h:outputText value="#{msg.no_images_found}!" rendered="#{cc.attrs.picList.totalNumberOfElements == 0}"/>
-					
+					<!-- Images -->		
 					<ui:repeat id="pictureList" var="item" value="#{cc.attrs.picList.currentPartList}" offset="0" varStatus="index">
 						<li class="imj_tileItem">
 							<h:form id="itemSelectForm">

@@ -49,7 +49,7 @@
             <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'LIST'}"/>
 
 			<!-- Page Browser GotoBox -->
-            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true" rendered="#{paginatorListSessionBean.totalNumberOfElements != 0}"/>
             <!-- Facets -->
             <h:panelGroup layout="block" id="imj_ajaxFacets">
                 <imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>

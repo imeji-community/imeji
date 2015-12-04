@@ -42,6 +42,6 @@ public class ElasticSearchUtil {
    * @return
    */
   public static String escape(String s) {
-    return QueryParser.escape(s).replace("\\*", "*".replace("\\?", "?"));
+    return QueryParser.escape(s).replace("\\*", "*").replace("\\?", "?").replace("\\\"", "\"");
   }
 }

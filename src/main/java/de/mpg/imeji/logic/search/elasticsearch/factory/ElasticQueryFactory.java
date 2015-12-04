@@ -233,24 +233,7 @@ public class ElasticQueryFactory {
         break;
       case all:
         BoolQueryBuilder f = QueryBuilders.boolQuery()
-            .should(fieldQuery(ElasticFields.NAME, pair.getValue(), SearchOperators.REGEX, false))
-            .should(fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), SearchOperators.REGEX,
-                false))
-            .should(fieldQuery(ElasticFields.METADATA_FAMILYNAME, pair.getValue(),
-                SearchOperators.REGEX, false))
-            .should(fieldQuery(ElasticFields.METADATA_GIVENNAME, pair.getValue(),
-                SearchOperators.REGEX, false))
-            .should(fieldQuery(ElasticFields.METADATA_URI, pair.getValue(), SearchOperators.REGEX,
-                false))
-            .should(
-                fieldQuery(ElasticFields.FILENAME, pair.getValue(), SearchOperators.REGEX, false))
-            .should(fieldQuery(ElasticFields.DESCRIPTION, pair.getValue(), SearchOperators.REGEX,
-                false))
-            .should(fieldQuery(ElasticFields.AUTHOR_COMPLETENAME, pair.getValue(),
-                SearchOperators.REGEX, false))
-            .should(fieldQuery(ElasticFields.AUTHOR_ORGANIZATION_NAME, pair.getValue(),
-                SearchOperators.REGEX, false));
-
+            .should(fieldQuery(ElasticFields.ALL, pair.getValue(), SearchOperators.REGEX, false));
         if (NumberUtils.isNumber(pair.getValue())) {
           f.should(fieldQuery(ElasticFields.METADATA_NUMBER, pair.getValue(),
               SearchOperators.EQUALS, false));
@@ -546,6 +529,9 @@ public class ElasticQueryFactory {
    * @return
    */
   private static QueryBuilder matchFieldQuery(ElasticFields field, String value) {
+    if (field == ElasticFields.ALL) {
+      return QueryBuilders.queryStringQuery(value);
+    }
     return QueryBuilders.queryStringQuery(field.field() + ":" + value);
   }
 

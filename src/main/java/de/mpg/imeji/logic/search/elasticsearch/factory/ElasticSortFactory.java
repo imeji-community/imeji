@@ -32,23 +32,25 @@ public class ElasticSortFactory {
     SearchFields index = SearchFields.valueOf(sort.getIndex().getName());
     switch (index) {
       case text:
-        return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field())
+        return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field() + ".sort")
             .order(getSortOrder(sort));
       case title:
-        return SortBuilders.fieldSort(ElasticFields.NAME.field()).order(getSortOrder(sort));
+        return SortBuilders.fieldSort(ElasticFields.NAME.field() + ".sort")
+            .order(getSortOrder(sort));
       case date:
-        return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field())
+        return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field() + ".sort")
             .order(getSortOrder(sort));
       case modified:
         return SortBuilders.fieldSort(ElasticFields.MODIFIED.field()).order(getSortOrder(sort));
       case filename:
-        return SortBuilders.fieldSort(ElasticFields.FILENAME.field()).order(getSortOrder(sort));
+        return SortBuilders.fieldSort(ElasticFields.FILENAME.field() + ".sort")
+            .order(getSortOrder(sort));
       case filetype:
         return SortBuilders.fieldSort(ElasticFields.FILETYPE.field()).order(getSortOrder(sort));
       case filesize:
         return SortBuilders.fieldSort(ElasticFields.SIZE.field()).order(getSortOrder(sort));
       case creator:
-        return SortBuilders.fieldSort(ElasticFields.AUTHOR_COMPLETENAME.field())
+        return SortBuilders.fieldSort(ElasticFields.AUTHOR_COMPLETENAME.field() + ".sort")
             .order(getSortOrder(sort));
       case status:
         return SortBuilders.fieldSort(ElasticFields.STATUS.field()).order(getSortOrder(sort));

@@ -30,11 +30,11 @@
 				<ul>
 					
 						<li class="#{curMenuClass}Item #{(activeMenuValue == 'start') ? 'imj_active' : ''}">
-							<h:outputLink value="#{curContextUrl}" title="#{lbl.startpage}" styleClass="">
-								<h:outputText value="#{lbl.startpage}"/>
+							<h:outputLink value="#{curContextUrl}" title="#{lbl.about}" styleClass="">
+								<h:outputText value="#{lbl.about}"/>
 							</h:outputLink>
 						</li>
-					<ui:fragment rendered="#{cc.attrs.hasContent and cc.attrs.navBean != null}">
+					<ui:fragment rendered="#{(activeMenuValue == 'content')  or (cc.attrs.hasContent and cc.attrs.navBean != null)}">
 						<li class="#{curMenuClass}Item #{(activeMenuValue == 'content') ? 'imj_active' : ''}">
 							<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.browsePath}?q=" title="#{lbl.view_images}" styleClass="">
 								<h:outputText value="#{lbl.view_images}"/>
@@ -42,13 +42,13 @@
 						</li>
 					</ui:fragment>
 					
-					<li class="#{curMenuClass}Item #{(activeMenuValue == 'metadata') ? 'imj_active' : ''}">
-						<h:outputLink value="#{curContextUrl}/infos?init=1" title="#{lbl.metadata}" styleClass="">
-							<h:outputText value="#{lbl.metadata}"/>
-						</h:outputLink>
-					</li>
-					
 					<ui:fragment rendered="#{cc.attrs.curMainMenu.trim().toLowerCase() == 'collection'}">
+						<li class="#{curMenuClass}Item #{(activeMenuValue == 'metadata') ? 'imj_active' : ''}">
+							<h:outputLink value="#{curContextUrl}/infos?init=1" title="#{lbl.metadata_profile}" styleClass="">
+								<h:outputText value="#{lbl.metadata_profile}"/>
+							</h:outputLink>
+						</li>
+					
 						<ui:fragment rendered="#{cc.attrs.userHasUploadRights and cc.attrs.navBean != null}">
 							<li class="#{curMenuClass}Item #{(activeMenuValue == 'upload') ? ' imj_active' : ''}">
 								<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.uploadPath}?init=1" title="#{lbl.upload_images}" styleClass="">

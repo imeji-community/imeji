@@ -27,7 +27,7 @@
 										navBean="#{Navigation}" 
 										activeMenu="metadata" />
 			
-			<menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
+			<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 										curMainMenu="#{currentMainMenu}" 
 										navBean="#{Navigation}" 
 										collectionStatus="#{metadataContextBean.status}" 
@@ -36,13 +36,15 @@
 										isEditable="#{Auth.update(metadataBean.collection)}" 
 										isAdmin="#{Auth.admin(metadataBean.collection)}" 
 										hasContent="#{metadataBean.size > 0}" 
-										downloadEnabled="#{metadataBean.size > 0}"
+										downloadEnabled="true"
 										contextDownloadParam="&amp;col=#{metadataBean.id}" 
-										allowedToShare="#{metadataContextBean.status != 'WITHDRAWN' and Auth.admin(metadataBean.collection)}"/>
+										allowedToShare="false"
+										profileEditable="#{Auth.update(metadataBean.profile) and metadataContextBean.status != 'WITHDRAWN'}"
+										activeMenu="metadata"/>
 		</ui:fragment>
 	</ui:define>
 			
-	<ui:define name="metadataProfile">
+	<ui:define name="mainContent">
 		<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{metadataBean}" metadataContextBean="#{metadataContextBean}" 
 		metadataProfile="#{metadataBean.profile}" 
 		profileUrl="#{Navigation.profileUrl}#{metadataBean.profile.idString}" 

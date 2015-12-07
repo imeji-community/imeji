@@ -38,27 +38,6 @@
 					<h3 class="imj_headline">
 						<h:outputText value="#{cc.attrs.headline}: #{cc.attrs.metadataProfile.title}"/>
 					</h3>
-					
-					<div class="imj_listHeaderMenu">
-						<!-- EDIT -->
-						<h:outputLink styleClass="imj_metadataValue" value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}" disabled="#{!cc.attrs.editable}" rendered="#{cc.attrs.collectionStatus != 'WITHDRAWN'}">
-							<h:outputText value="#{lbl.edit}"/>
-						</h:outputLink>
-						
-						<h:outputLink styleClass="imj_metadataValue" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}" rendered="#{cc.attrs.adminable}">
-							<h:outputText value="#{lbl.change}"/>
-						</h:outputLink>
-						
-						<!-- Related collections -->
-						<h:outputLink value="#{cc.attrs.relatedCollectionsUrl.trim()}" rendered="#{cc.attrs.relatedCollectionsUrl.trim().length() > 0}">
-							<h:outputText value="#{lbl.profile_related_collection}"/>
-						</h:outputLink>
-						
-						<!-- Export -->
-						<h:outputLink value="#{cc.attrs.exportUrl.trim()}" target="_blank" rendered="#{cc.attrs.exportUrl.trim().length() > 0 and cc.attrs.metadataProfile.status != 'WITHDRAWN' }">
-							<h:outputText value="#{lbl.metadata_profile_view}"/>
-						</h:outputLink>
-					</div>
 				</div>
 			
 				<div class="imj_listHeader">

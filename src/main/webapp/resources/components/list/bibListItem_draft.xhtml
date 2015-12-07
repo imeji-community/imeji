@@ -87,22 +87,23 @@
 						<ul>
 							<li>
 								<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">
-									<h:outputText value="#{lbl.startpage}"/>
+									<h:outputText value="#{lbl.about}"/>
 								</h:outputLink>
 							</li>	
-							<ui:fragment rendered="#{cc.attrs.item.size > 0 and (cc.attrs.item.type != 'ALBUM' or cc.attrs.item.size != cc.attrs.item.privateCount)}">
+							<ui:fragment rendered="#{cc.attrs.item.size > 0}">
 								<li>
 									<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">
 										<h:outputText value="#{lbl.view_images}"/>
 									</h:outputLink>
 								</li>
 							</ui:fragment>
+							<ui:fragment rendered="#{cc.attrs.item.type != 'ALBUM'}">
 							<li>
 								<h:outputLink id="lnkViewMetadataDetail" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.infosPath}?init=1">
-									<h:outputText value="#{lbl.view_md}"/>
+									<h:outputText value="#{lbl.metadata_profile}"/>
 								</h:outputLink>
 							</li>
-							
+							</ui:fragment>
 							<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.create(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
 								<li>
 									<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">

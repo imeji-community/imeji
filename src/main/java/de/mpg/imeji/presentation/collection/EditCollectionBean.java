@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 @ManagedBean(name = "EditCollectionBean")
@@ -85,10 +86,9 @@ public class EditCollectionBean extends CollectionBean {
 
   public String save() throws Exception {
     if (saveEditedCollection()) {
-      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
       FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(navigation.getCollectionUrl() + ObjectHelper.getId(getCollection().getId())
-              + "/" + navigation.getInfosPath() + "?init=1");
+          .redirect(((HistorySession) BeanHelper.getSessionBean(HistorySession.class))
+              .getPreviousPage().getCompleteUrl());
     }
 
     return "";
@@ -125,8 +125,7 @@ public class EditCollectionBean extends CollectionBean {
         BeanHelper.error(sessionBean.getMessage(errorM));
       }
       return false;
-    }
-     catch (IOException e) {
+    } catch (IOException e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_logo_save"));
       return false;
     } catch (URISyntaxException e) {

@@ -4,7 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 
-	<div class="imj_loginFormSite">
+	<ui:param name="headline" value="#{lbl.view_page_disallowed}"/>
+	<div>
 		<h3 class="imj_headline">
 			<h:outputText rendered="#{!Auth.loggedIn}" value="#{lbl.view_page_disallowed}"/>
 			<h:outputText rendered="#{Auth.loggedIn}" value="#{lbl.view_page_disallowed2}"/>

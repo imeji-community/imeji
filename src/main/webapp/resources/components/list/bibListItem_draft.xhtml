@@ -117,10 +117,10 @@
 									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">
 										
 										<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
-											<f:ajax execute="@this" render=":imj_pageMessageArea :ajaxWrapper"/>
+											<f:ajax execute="@this" render=":actionsMenuArea :ajaxWrapper"/>
 										</h:commandButton>
 										<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
-											<f:ajax execute="@this" render=":imj_pageMessageArea :ajaxWrapper"/>
+											<f:ajax execute="@this" render=":actionsMenuArea :ajaxWrapper"/>
 										</h:commandButton>
 										
 									</ui:fragment>

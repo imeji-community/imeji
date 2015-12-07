@@ -95,14 +95,16 @@ public class ElasticIndexer implements SearchIndexer {
 
   @Override
   public void delete(Object obj) {
-    ElasticService.client.prepareDelete(index, dataType, getId(obj)).execute();
+    ElasticService.client.prepareDelete(index, dataType, getId(obj)).execute().actionGet();
+    commit();
   }
 
   @Override
   public void deleteBatch(List<?> l) {
     for (Object obj : l) {
-      ElasticService.client.prepareDelete(index, dataType, getId(obj)).execute();
+      ElasticService.client.prepareDelete(index, dataType, getId(obj)).execute().actionGet();
     }
+    commit();
   }
 
   /**

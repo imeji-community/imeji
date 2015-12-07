@@ -84,7 +84,7 @@
 						</div>
 						<div class="imj_menuBody">
 							<ul class="imj_overlayMenuList">
-								<ui:fragment rendered="#{cc.attrs.activeMenu != 'metadata'}">
+								<ui:fragment rendered="#{cc.attrs.activeMenu != 'metadata' and cc.attrs.activeMenu != 'item'}">
 									<li>
 										<h:outputLink title="#{lbl.export_zip}" value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;space=#{SessionBean.selectedSpace}#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 											<h:outputText value="#{lbl.export_zip}"/>
@@ -105,6 +105,13 @@
 									<li>
 										<h:outputLink value="#{Navigation.applicationSpaceUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{metadataContextBean.profile}&quot;" target="_blank">
 											<h:outputText value="#{lbl.download_profile_xml}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
+								<ui:fragment rendered="#{cc.attrs.activeMenu == 'item'}">
+									<li>
+										<h:outputLink value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
+											<h:outputText value="#{lbl.download_original_file}"/>
 										</h:outputLink>
 									</li>
 								</ui:fragment>
@@ -163,11 +170,14 @@
 						<div class="imj_menuBody">
 							<ul class="imj_overlayMenuList">							
 								<li class="#{curMenuClass}Item">
-									<h:outputLink  id="actionMenuEditCollection" rendered="#{cc.attrs.curMainMenu == 'collection'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/edit?init=1">
+									<h:outputLink  id="actionMenuEditCollection" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/edit?init=1">
 										<h:outputText value="#{lbl.collection_edit_metadata}"/>
 									</h:outputLink>
-									<h:outputLink  id="actionMenuEditAlbum" rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/edit?init=1">
+									<h:outputLink  id="actionMenuEditAlbum" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/edit?init=1">
 										<h:outputText value="#{lbl.album_share_album_edit}"/>
+									</h:outputLink>
+									<h:outputLink rendered="#{cc.attrs.activeMenu == 'item'}" value="?edit=1#itemMetadata">
+										<h:outputText value="#{lbl.metadata_edit}"/>
 									</h:outputLink>
 								</li>
 								<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and cc.attrs.profileEditable and metadataBean.profile == null or metadataBean.profile.statements.size() > 0}">	
@@ -194,8 +204,7 @@
 							<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
 						</div>
 						<div class="imj_menuBody">
-							<ul class="imj_overlayMenuList">		
-
+							<ul class="imj_overlayMenuList">
 								<ui:fragment rendered="#{cc.attrs.isAdmin and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
 									<li>
 										<h:outputLink id="actionMenuRelease" value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">
@@ -223,21 +232,27 @@
 								<ui:fragment rendered="#{cc.attrs.isDeletable}">
 									<li>
 										<h:outputLink id="actionMenuDelete" value="#" onclick="openDialog('deleteMenuItemDialog');">
-											<h:outputText value="#{lbl.collection_delete}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
-											<h:outputText value="#{lbl.album_delete}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
+											<h:outputText value="#{lbl.collection_delete}" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}"/>
+											<h:outputText value="#{lbl.album_delete}" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}"/>
+											<h:outputText value="#{lbl.delete_item}" rendered="#{cc.attrs.activeMenu == 'item'}"/>
 										</h:outputLink>
 									</li>
 								</ui:fragment>
 								<ui:fragment rendered="#{cc.attrs.isContentDeletable}">
 									<li>
 										<h:outputLink  value="#" onclick="openDialog('dialogDeleteAll')" 
-															rendered="#{cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING'}">
+															rendered="#{cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and itemBean.navigationString != 'pretty:albumItem'}">
 											<h:outputText value="#{lbl.delete_all}"/>
 										</h:outputLink>
 										<h:outputLink value="#" onclick="openDialog('dialogWithdrawAll')"
-														rendered="#{cc.attrs.collectionStatus.trim().toUpperCase() == 'RELEASED'}">
+														rendered="#{cc.attrs.collectionStatus.trim().toUpperCase() == 'RELEASED' and itemBean.navigationString != 'pretty:albumItem'}" >
 											<h:outputText value="#{lbl.withdraw_all}"/>
 										</h:outputLink>
+										<h:form>
+										<h:commandLink id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem'}">
+												<h:outputText value="#{lbl.remove_from_album}"/>
+										</h:commandLink>
+										</h:form>
 									</li>
 								</ui:fragment>
 								<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection'  and cc.attrs.profileEditable}">
@@ -250,6 +265,44 @@
 										</h:outputLink>
 									</li>
 								</ui:fragment>
+							</ul>
+						</div>
+					</div>
+				</ui:fragment>
+				<ui:fragment rendered="#{SessionBean.activeAlbum != null}">
+					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
+						<div class="imj_menuHeader">
+	                        <span class="fa fa-star">&#160;</span>
+							<h:outputText value="#{lbl.active_album}: #{SessionBean.activeAlbum.metadata.title}" styleClass="imj_headerEntry"/>
+						</div>
+						<div class="imj_menuBody">
+							<ul class="imj_overlayMenuList">
+							<h:form>
+								<h:outputText styleClass="imj_menuText" value="#{lbl.size}: #{SessionBean.activeAlbum.images.size()} #{lbl.items} "/>
+								<li>
+									<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbum.idString}" title="#{lbl.view}">
+										<h:outputText value="#{lbl.album_view} "/>
+										<span class="fa fa-external-link"/>
+									</h:outputLink>					
+								</li>
+								<li>
+									<ui:fragment rendered="#{cc.attrs.activeMenu == 'item'}">
+										<h:commandLink  id="lnkPicFullResolution2" action="#{itemBean.addToActiveAlbum}" rendered="#{!itemBean.isInActiveAlbum and SessionBean.activeAlbum != null and Auth.update(SessionBean.activeAlbum.id)}">
+											<h:outputText value="#{lbl.add_to_active_album}"/>
+										</h:commandLink>
+										<h:commandLink id="lnkPicRemoveFromAvtiveAlbum" action="#{itemBean.removeFromActiveAlbum}" rendered="#{itemBean.isInActiveAlbum and SessionBean.activeAlbum != null and !itemBean.activeAlbum and Auth.update(SessionBean.activeAlbum.id)}">
+											<h:outputText value="#{lbl.remove_from_active}"/>
+										</h:commandLink>
+									</ui:fragment>
+								</li>
+								<ui:fragment rendered="">
+									<li>
+										<a href="#{Navigation.applicationSpaceUrl}createuser" title="#{lbl.remove_from_active}">
+											<h:outputText value="#{lbl.admin_user_new}"/>
+										</a>
+									</li>
+								</ui:fragment>
+								</h:form>
 							</ul>
 						</div>
 					</div>

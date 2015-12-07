@@ -38,56 +38,19 @@
 		<ui:fragment rendered='#{itemBean.swcFile}'>
     		<imjc:swcViewer itemBean="#{itemBean}" swcID="swc3d" loadJSLibraries="true"/>
 	    </ui:fragment>
-		
-		
-		<!-- MediaEditPanel - select, add, remove media items -->
-		<h:panelGroup id="image" layout="block" rendered="#{itemBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
+		<div style="float:right">
+			<h:outputLink id="lnkDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" rendered="#{itemBean.viewInDataViewer}" target="_blank">
+				<span class="fa fa-expand fa-size-4 imj_mediaEditPanelItem" />
+			</h:outputLink>
 			
-			<h:form id="itemForm">
-				
-				<h:outputLink id="lnkDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" rendered="#{itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton" target="_blank">
-					<h:outputText value="#{lbl.view}"/>
-				</h:outputLink>
-				
-				<h:outputLink id="lnkDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}" styleClass="imj_mediaEditPanelItem imj_submitButton">
-					<h:outputText value="#{lbl.view}"/>
-				</h:outputLink>
-				
-				<h:outputLink id="lnkOriginalData" value="#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton">
-					<h:outputText value="#{lbl.view}"/>
-				</h:outputLink>
-				
-				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
-					<h:outputText value="#{lbl.download}"/>
-				</h:outputLink>
-				
-				<h:outputLink value="#" styleClass="imj_mediaEditPanelItem imj_cancelButton" onclick="openDialog('deleteMenuItemDialog');" rendered="#{Auth.delete(itemBean.image)}">
-					<h:outputText value="#{lbl.remove}"/>
-				</h:outputLink>
-				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.isInActiveAlbum and itemBean.navigationString == 'pretty:albumItem' and SessionBean.activeAlbum != null and Auth.update(SessionBean.activeAlbum.id)}">
-					<h:outputText value="#{lbl.remove_from_album}"/>
-				</h:commandLink>
-				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_addMedia" id="lnkPicFullResolution2" action="#{itemBean.addToActiveAlbum}" rendered="#{!itemBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
-					<h:outputText value="#{lbl.add_to_active_album}"/>
-				</h:commandLink>
-				
-				<h:panelGroup rendered="#{itemBean.isInActiveAlbum and SessionBean.activeAlbum != null and !itemBean.activeAlbum}">
-					<h:outputText styleClass="imj_mediaEditPanelItem" value="(Item in"/>
-					<h:outputText value=":" styleClass="imj_invisible"/>
-					<h:outputLink styleClass="imj_activeMedia" value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}">
-						<h:outputText value="#{lbl.active_album}"/>
-					</h:outputLink>
-					<h:outputText value=" - "/>
-					<h:commandLink id="lnkPicRemoveFromAvtiveAlbum" action="#{itemBean.removeFromActiveAlbum}">
-						<h:outputText value="#{lbl.remove}" styleClass="imj_removeButton"/>
-					</h:commandLink>
-					<h:outputText value=")"/>
-				</h:panelGroup>
-				
-			</h:form>
-		</h:panelGroup>
+			<h:outputLink id="lnkDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
+				<span class="fa fa-expand fa-size-4 imj_mediaEditPanelItem" />
+			</h:outputLink>
+			
+			<h:outputLink id="lnkOriginalData" value="#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" >
+				<span class="fa fa-expand fa-size-4 imj_mediaEditPanelItem" />
+			</h:outputLink>
+		</div>
 		
 		<dialog:confirmationDialog submitAction="delete" bean="#{itemBean}" confirmationText="#{msg.confirmation_delete_item}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(itemBean.image)}"/>
 		
@@ -101,7 +64,7 @@
 	</h:panelGroup>
 
 		
-	
+	<span id="itemMetadata"/>
 	<!-- MetaDataList - START -->
 	<div class="imj_metadataList">
 	
@@ -141,18 +104,7 @@
 		<h:panelGroup id="metadata" layout="block" styleClass="imj_listBody">
 			<ui:fragment rendered="#{itemBean.tab == null}">
 				<h:form onkeypress="if(event.keyCode == 13) return false;">
-					<!-- For future - panel / sub action menu - link to edit metadata -->
-					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
-						<span class="imj_metadataSubPanelItem">
-							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} "/>
-							<h:commandLink rendered="#{Auth.updateContent(itemBean.image) and itemBean.image.status != 'WITHDRAWN'  and !itemBean.locked and itemBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{itemBean.edit.showEditor}">
-								<f:ajax execute="@this" render="@form"/>
-							</h:commandLink>
-						</span>
-							<h:outputText value="Item locked " rendered="#{Auth.updateContent(itemBean.image) and itemBean.locked}"/>
-							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{Auth.updateContent(itemBean.image) and itemBean.locked}">[info]</h:outputLink>
-					</h:panelGroup>
-					
+					<br/>
 					<!-- MetaDataList - media data Wrapper START -->
 					<h:panelGroup layout="block" styleClass="imj_metadataWrapper">
 			
@@ -322,11 +274,8 @@
 		
 			<!-- Utilities List Body - info data list - show MD5, album name, QR-Tag, link to image versions in blank page -->		
 			<ui:fragment rendered="#{itemBean.tab == 'util' and itemBean.image.status!='WITHDRAWN'}">
-				<h:panelGroup id="util" layout="block" styleClass="imj_infodataWrapper">
-					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
-						<h:outputText id="lblViewItemFull_lblUtil" styleClass="imj_metadataSubPanelItem" value="#{lbl.imageUtil}"/>
-					</h:panelGroup>				
-	
+				<h:panelGroup id="util" layout="block" styleClass="imj_infodataWrapper">			
+					<br/>
 					<!-- InfoDataList - MD5 -->
 					<h:panelGroup styleClass="imj_infodataSet">
 						<span class="imj_infodataLabel">

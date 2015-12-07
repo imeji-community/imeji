@@ -294,7 +294,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_breadcrumpHistory .imj_breadcrumpItem:hover .imj_breadcrumpLongDescription { position: absolute; display: block; z-index: 10; }
 .imj_breadcrumpHistory .imj_breadcrumpSeparator { margin-left: 0.363636em; margin-right: 0.363636em; line-height: 2em; font-size: 1.090909em; vertical-align: top; }
 
-.imj_advancedSearch { width: 100%; padding: 0; border-top: 0.1em solid #6CAE2F; }
+.imj_advancedSearch { width: 100%; padding: 0; }
 .imj_advancedSearch .imj_logicalSearchGroup { white-space: nowrap; margin-right: 1.8%; }
 .imj_advancedSearch .imj_searchUnit { width: 100%; margin-top: 1em; }
 .imj_advancedSearch .imj_searchUnit > div { display: inline-block; }
@@ -417,7 +417,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_mediaEntryDetailPage > .imj_metadataList, .imj_mediaEntryDetailPage > .imj_mediaDisplayContainer { width: 91.25%; margin: 1% 4%; }
 .imj_mediaEntryDetailPage .highlight_area.imj_highlightDependencies { background-color: #444444; }
-.imj_mediaEntryDetailPage .imj_mediaDisplayContainer { padding: 1em 0; margin-bottom: 0.545454em; text-align: center; border-bottom: 0.1em solid #6CAE2F; }
+.imj_mediaEntryDetailPage .imj_mediaDisplayContainer { text-align: center; }
 .imj_mediaEntryDetailPage .imj_mediaDisplayContainer .imj_optionSet .imj_optionCheckbox { vertical-align: bottom; }
 
 .imj_mediaEditPanel { width: 100%; margin-top: 0.545454em; }

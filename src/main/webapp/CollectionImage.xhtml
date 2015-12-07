@@ -9,17 +9,5 @@
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.collectionUrl}#{CollectionItemBean.collectionId}/browse?q="/>
 	
-	<ui:define name="actionsMenu">
-		<ui:fragment rendered="#{Auth.read(itemBean.image)}">
-			<menu:context_subNavigation contextId="#{CollectionItemBean.collectionId}" 
-									contextUrl="#{Navigation.collectionUrl}" 
-									curMainMenu="#{currentMainMenu}" 
-									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.createContent(itemBean.image)}" 
-									hasContent="true" 
-									navBean="#{Navigation}" 
-									activeMenu="item"/>
-		</ui:fragment>
-	</ui:define>
 	
 </ui:composition>

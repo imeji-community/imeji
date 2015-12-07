@@ -82,9 +82,20 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
       //throw new UnprocessableError("error_collection_need_one_author");
     }
     
+    String doi = collection.getDOI();
+    if(doi != null && !doi.equals("")){
+      String pattern = "10\\.\\d+\\/\\S+";
+      if(!doi.matches(pattern)){
+        valid=false;
+        errorMessage+="error_doi_format";
+      }
+    }
+    
     if (!valid) {
       throw new UnprocessableError(errorMessage);
     }
+    
+
 
   }
 

@@ -204,7 +204,7 @@ public class CollectionListItem {
       } 
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
-      BeanHelper.error(sessionBean.getMessage("error_doi_creation: " + e.getMessage()));
+      BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
       logger.error("Error during doi creation", e);
       e.printStackTrace();
     }

@@ -114,7 +114,7 @@
 						</h:panelGroup>
 					</div>
 					
-					<ui:fragment rendered="#{SingleUploadBean.techMd.size()>0}">
+					<ui:fragment rendered="#{SingleUploadBean.techMd.size()>0 and empty SingleUploadBean.collection}">
 						<div class="imj_submitPanel">
 							<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 								<h:outputText value="#{lbl.cancel}" />

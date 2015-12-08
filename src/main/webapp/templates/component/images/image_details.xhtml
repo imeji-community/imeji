@@ -70,13 +70,6 @@
 	
 		<!-- MetaDataTypes ListHeader - show media meta data, tech., other -->
 		<div class="imj_listHeader">
-			<h:outputLink id="lnkShareItem" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=share" rendered="#{ itemBean.tab == 'share' and itemBean.image.status!='WITHDRAWN'}">
-				<h:outputText value="#{lbl.share}"/>
-			</h:outputLink>
-			<h:outputLink id="lnkShareItem2" value="#{itemBean.pageUrl}?tab=share" rendered="#{Auth.admin(itemBean.image) and itemBean.tab != 'share' and itemBean.image.status!='WITHDRAWN'}">
-				<h:outputText value="#{lbl.share}"/>
-			</h:outputLink>
-			<h:panelGroup styleClass="imj_separator" rendered="#{Auth.admin(itemBean.image) and itemBean.image.status!='WITHDRAWN'}"/>
 			<h:outputLink id="lnkViewItemUtilPage" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=util" rendered="#{itemBean.tab == 'util' and itemBean.image.status!='WITHDRAWN'}">
 				<h:outputText value="#{lbl.view_util}"/>
 			</h:outputLink>

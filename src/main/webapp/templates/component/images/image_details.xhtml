@@ -237,11 +237,9 @@
 								<!-- MetaDataList - EDIT - imj_submitPanel - cancel + submit command buttons -->
 								<h:panelGroup layout="block" styleClass="imj_submitPanel">
 									<h:commandLink styleClass="imj_cancelButton" action="#{itemBean.edit.cancel}">
-										<f:ajax execute="@this" render="@form"/>
 										<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
 									<h:commandLink type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}">
-										<f:ajax execute="@form" render=":topPanel :imj_pageMessageArea"/>
 									</h:commandLink>
 								</h:panelGroup>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->

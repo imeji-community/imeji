@@ -154,8 +154,11 @@
 										<h:outputLink  id="actionMenuShareAlbum" rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/share" >
 											<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
 										</h:outputLink>
-										<h:outputLink   id="actionMenuShareCollection" rendered="#{cc.attrs.curMainMenu == 'collection'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/share">
-											<h:outputText value="#{lbl.collection_share}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
+										<h:outputLink   id="actionMenuShareCollection" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/share">
+											<h:outputText value="#{lbl.collection_share}"/>
+										</h:outputLink>
+										<h:outputLink   id="actionMenuShareItem" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu == 'item' and itemBean.image.status!='WITHDRAWN'}" value="?tab=share#itemMetadata">
+											<h:outputText value="#{lbl.item_share}"/>
 										</h:outputLink>
 									</li>							
 								</ul>

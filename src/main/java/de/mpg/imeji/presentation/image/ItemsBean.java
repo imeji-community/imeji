@@ -473,10 +473,15 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     return selectedSortCriterion;
   }
 
-  public void setSelectedSortCriterion(String selectedSortCriterion) {
+  public String changeSortCriterion(String selectedSortCriterion) {
     if (selectedSortCriterion.equals(this.selectedSortCriterion)) {
       toggleSortOrder();
     }
+    this.selectedSortCriterion = selectedSortCriterion;
+    return "";
+  }
+
+  public void setSelectedSortCriterion(String selectedSortCriterion) {
     this.selectedSortCriterion = selectedSortCriterion;
   }
 

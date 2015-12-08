@@ -267,7 +267,7 @@ select.imj_metadataEditText { min-height: 0; }
 
 .imj_simpleSearch { float: right; display: inline-block; overflow: visible; }
 .imj_simpleSearch .imj_simpleSearchInputWrapper { display: inline-block; vertical-align: middle; }
-.imj_simpleSearch .imj_simpleSearchInput { border: solid transparent 0.1em; -moz-border-radius: 0.45455em 0 0 0.45455em; -webkit-border-radius: 0.45455em; border-radius: 0.45455em 0 0 0.45455em; vertical-align: top; width: 17em; }
+.imj_simpleSearch .imj_simpleSearchInput { border: solid transparent 0.1em; -moz-border-radius: 0.45455em 0 0 0.45455em; -webkit-border-radius: 0.45455em; border-radius: 0.45455em 0 0 0.45455em; vertical-align: top; width: 15em; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit { margin-left: 0; padding-left: 0.5em; padding-right: 0.5em; -moz-border-radius: 0 0.45455em 0.45455em 0; -webkit-border-radius: 0; border-radius: 0 0.45455em 0.45455em 0; vertical-align: top; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit:hover { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit:active { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
@@ -533,7 +533,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_overlayMenu .imj_menuHeader .selectAll:before { font-family: FontAwesome; content: "\f00c"; padding-right: 0.1em; }
 .imj_overlayMenu .imj_menuHeader .selectNone:before { font-family: FontAwesome; content: "\f00d "; padding-right: 0.1em; }
 .imj_overlayMenu .imj_menuText { text-align: left; line-height: 175%; padding: 0.5em 1em; display: block; }
-.imj_overlayMenu .imj_menuSimpleSearch { box-shadow: 0.54545em 0.54545em 0.54545em #292929; width: 17em; }
+.imj_overlayMenu .imj_menuSimpleSearch { box-shadow: 0.54545em 0.54545em 0.54545em #292929; width: 15em; }
 .imj_overlayMenu .imj_menuSimpleSearch li { border-top: 1px dashed #292929; padding: 0.5em 1em; }
 .imj_overlayMenu .imj_menuBody, .imj_overlayMenu .imj_menuSimpleSearch { display: none; position: absolute; background-color: #444444; }
 .imj_overlayMenu:hover .imj_menuHeader { color: #F0F0F0; }
@@ -642,7 +642,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_detailList .imj_colFiletype { width: 10%; text-align: center; }
 .imj_detailList .imj_colCheckbox { width: 5%; }
 .imj_detailList .imj_colFileIcon { width: 5%; text-align: center; }
-.imj_detailList .imj_colFilename { width: 60%; }
+.imj_detailList .imj_colFilename { width: 55%; }
 .imj_detailList .imj_colFilesize { width: 15%; text-align: right; }
 .imj_detailList .imj_colDate { width: 20%; text-align: center; }
 

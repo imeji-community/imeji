@@ -151,13 +151,13 @@
 							<div class="imj_menuBody">
 								<ul class="imj_overlayMenuList">							
 									<li class="#{curMenuClass}Item">
-										<h:outputLink  id="actionMenuShareAlbum" rendered="#{cc.attrs.curMainMenu == 'album'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/share" >
+										<h:outputLink  id="actionMenuShareAlbum" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}" value="#{cc.attrs.navBean.albumUrl}#{cc.attrs.contextId}/share" >
 											<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
 										</h:outputLink>
 										<h:outputLink   id="actionMenuShareCollection" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}" value="#{cc.attrs.navBean.collectionUrl}#{cc.attrs.contextId}/share">
 											<h:outputText value="#{lbl.collection_share}"/>
 										</h:outputLink>
-										<h:outputLink   id="actionMenuShareItem" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu == 'item' and itemBean.image.status!='WITHDRAWN'}" value="?tab=share#itemMetadata">
+										<h:outputLink   id="actionMenuShareItem" rendered="#{cc.attrs.activeMenu == 'item' and itemBean.image.status!='WITHDRAWN'}" value="?tab=share#itemMetadata">
 											<h:outputText value="#{lbl.item_share}"/>
 										</h:outputLink>
 									</li>							

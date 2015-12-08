@@ -96,7 +96,7 @@ p { display: block; margin: 1em 0; }
 
 .imj_shareForm, .imj_legalPage, .imj_aboutPage, .imj_helpPage { width: 100%; padding: 1% 0%; border-top: 0.1em solid #6CAE2F; }
 
-.imj_collectionEntryPage, .imj_albumEntryPage { width: 100%; padding: 1% 0%; }
+.imj_collectionEntryPage, .imj_albumEntryPage { width: 100%; padding: 1% 0%; display: block; }
 .imj_collectionEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_collectionEntryPage .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_administrationTiledList .imj_adminPanel .imj_collectionEntryPage .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_administrationTiledList .imj_adminPanel .imj_albumEntryPage .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow { float: none; margin-right: 0.5em; vertical-align: bottom; }
 .imj_collectionEntryPage .imj_headline.imj_messageInfo, .imj_collectionEntryPage .imj_administrationTiledList .imj_adminPanel .imj_messageInfo.imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_collectionEntryPage .imj_messageInfo.imj_config_headline, .imj_albumEntryPage .imj_headline.imj_messageInfo, .imj_albumEntryPage .imj_administrationTiledList .imj_adminPanel .imj_messageInfo.imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_albumEntryPage .imj_messageInfo.imj_config_headline { margin-bottom: 1em; }
 
@@ -532,7 +532,9 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_overlayMenu .imj_menuHeader { text-align: left; color: #6CAE2F; cursor: pointer; }
 .imj_overlayMenu .imj_menuHeader .selectAll:before { font-family: FontAwesome; content: "\f00c"; padding-right: 0.1em; }
 .imj_overlayMenu .imj_menuHeader .selectNone:before { font-family: FontAwesome; content: "\f00d "; padding-right: 0.1em; }
-.imj_overlayMenu .imj_menuText { text-align: left; line-height: 175%; padding: 0.272727em 1em; }
+.imj_overlayMenu .imj_menuText { text-align: left; line-height: 175%; padding: 0.5em 1em; display: block; }
+.imj_overlayMenu .imj_menuSimpleSearch { box-shadow: 0.54545em 0.54545em 0.54545em #292929; width: 17em; }
+.imj_overlayMenu .imj_menuSimpleSearch li { border-top: 1px dashed #292929; padding: 0.5em 1em; }
 .imj_overlayMenu .imj_menuBody, .imj_overlayMenu .imj_menuSimpleSearch { display: none; position: absolute; background-color: #444444; }
 .imj_overlayMenu:hover .imj_menuHeader { color: #F0F0F0; }
 .imj_overlayMenu:hover .imj_menuBody { display: block; z-index: 100; }
@@ -650,7 +652,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewPicture { padding: 0.25em; width: 100%; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink { float: right; width: 8em; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink:after { clear: both; content: ""; }
-.imj_entryPagePreviewTiledList + .imj_metadataList { clear: both; }
+
+.imj_metadataList { clear: both; }
 
 .imj_metadataProfileList .imj_listHeader, .imj_metadataListMediaContainer .imj_listHeader { padding: 1% 0; }
 .imj_metadataProfileList .imj_listHeader .imj_listHeaderMenu, .imj_metadataListMediaContainer .imj_listHeader .imj_listHeaderMenu { float: right; display: inline-block; }

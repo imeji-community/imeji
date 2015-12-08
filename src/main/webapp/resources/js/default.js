@@ -685,38 +685,41 @@ $(".imj_simpleSearchInput").focusin(function() {
 		selectedSearch = 1;
 		highlightSearch();
 	}
-}).keydown(function(event) {
-	if ($(this).val() != '') {
-		$(".imj_menuSimpleSearch").show();
-	}
+}).keyup(function(event) {
 	if (event.which == 40) {
 		incrementSelectedSearch();
 		highlightSearch();
 	}
-	if (event.which == 38) {
+	else if (event.which == 38) {
 		decrementSelectedSearch();
 		highlightSearch();
 	}
+	else if ($(this).val() != '') {
+		$(".imj_menuSimpleSearch").show();
+	}
+	
+	
+	
 }).focusout(function() {
 
 });
 $(".imj_simpleSearch").focusout(function() {
 	$(".imj_menuSimpleSearch").delay(200).hide(0);
 });
-$("ul.imj_overlayMenuList li").mouseover(function() {
+$("ul.imj_overlayMenu li").mouseover(function() {
 	$(".defaultSearchType").removeClass("hovered");
 });
 
 function highlightSearch() {
-	$("ul.imj_overlayMenuList li").removeClass("hovered");
+	$("ul.imj_bodyContextSearch li").removeClass("hovered");
 	if (selectedSearch == 1) {
-		$("ul.imj_overlayMenuList li:nth-child(1)").addClass("hovered");
+		$("ul.imj_bodyContextSearch li:nth-child(1)").addClass("hovered");
 	}
 	if (selectedSearch == 2) {
-		$("ul.imj_overlayMenuList li:nth-child(2)").addClass("hovered");
+		$("ul.imj_bodyContextSearch li:nth-child(2)").addClass("hovered");
 	}
 	if (selectedSearch == 3) {
-		$("ul.imj_overlayMenuList li:nth-child(3)").addClass("hovered");
+		$("ul.imj_bodyContextSearch li:nth-child(3)").addClass("hovered");
 	}
 }
 function incrementSelectedSearch() {

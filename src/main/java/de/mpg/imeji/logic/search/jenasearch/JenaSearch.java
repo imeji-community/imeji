@@ -138,8 +138,8 @@ public class JenaSearch implements Search {
    * @param user
    * @return
    */
-  private List<String> advanced(List<String> previousResults, SearchQuery sq,
-      SortCriterion sortCri, User user, String spaceId) {
+  private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri,
+      User user, String spaceId) {
     // indexes = SearchIndexInitializer.init();
     // Set null parameters
     if (sq == null)
@@ -162,24 +162,20 @@ public class JenaSearch implements Search {
       List<String> subResults = new ArrayList<String>();
       switch (se.getType()) {
         case GROUP:
-          subResults =
-              new ArrayList<String>(advanced(new SearchQuery(((SearchGroup) se).getGroup()),
-                  sortCri, user, spaceId));
-          results =
-              doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
-                  SortHelper.removeSortValue(results));
+          subResults = new ArrayList<String>(
+              advanced(new SearchQuery(((SearchGroup) se).getGroup()), sortCri, user, spaceId));
+          results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
+              SortHelper.removeSortValue(results));
           break;
         case PAIR:
           subResults = new ArrayList<String>(simple((SearchPair) se, sortCri, user, spaceId));
-          results =
-              doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
-                  SortHelper.removeSortValue(results));
+          results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
+              SortHelper.removeSortValue(results));
           break;
         case METADATA:
           subResults = new ArrayList<String>(simple((SearchPair) se, sortCri, user, spaceId));
-          results =
-              doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
-                  SortHelper.removeSortValue(results));
+          results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
+              SortHelper.removeSortValue(results));
           break;
         case LOGICAL_RELATIONS:
           logic = ((SearchLogicalRelation) se).getLogicalRelation();
@@ -212,9 +208,8 @@ public class JenaSearch implements Search {
    * @return
    */
   private List<String> simple(SearchPair pair, SortCriterion sortCri, User user, String spaceId) {
-    String sparqlQuery =
-        JenaQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,
-            (containerURI != null), getSpecificQuery(user), spaceId);
+    String sparqlQuery = JenaQueryFactory.getQuery(getModelName(type), getRDFType(type), pair,
+        sortCri, user, (containerURI != null), getSpecificQuery(user), spaceId);
     return ImejiSPARQL.exec(sparqlQuery, null);
   }
 
@@ -227,7 +222,8 @@ public class JenaSearch implements Search {
    * @return
    */
   @SuppressWarnings("unchecked")
-  private List<String> doLogicalOperation(List<String> l1, LOGICAL_RELATIONS logic, List<String> l2) {
+  private List<String> doLogicalOperation(List<String> l1, LOGICAL_RELATIONS logic,
+      List<String> l2) {
     switch (logic) {
       case AND:
         l1 = (List<String>) CollectionUtils.intersection(l1, l2);

@@ -94,7 +94,7 @@ p { display: block; margin: 1em 0; }
 
 .imj_errorPage { width: 100; padding: 1% 0%; }
 
-.imj_shareForm, .imj_legalPage, .imj_aboutPage, .imj_helpPage { width: 100%; padding: 1% 0%; border-top: 0.1em solid #6CAE2F; }
+.imj_shareForm, .imj_legalPage, .imj_aboutPage, .imj_helpPage { width: 100%; padding: 1% 0%; }
 
 .imj_collectionEntryPage, .imj_albumEntryPage { width: 100%; padding: 1% 0%; display: block; }
 .imj_collectionEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_collectionEntryPage .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_administrationTiledList .imj_adminPanel .imj_collectionEntryPage .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_administrationTiledList .imj_adminPanel .imj_albumEntryPage .imj_config_headline .imj_entryPagePreviewTiledListLinkArrow { float: none; margin-right: 0.5em; vertical-align: bottom; }

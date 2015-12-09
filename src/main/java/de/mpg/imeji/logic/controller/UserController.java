@@ -364,7 +364,7 @@ public class UserController {
    * @return
    */
   public Collection<User> searchByGrantFor(String grantFor) {
-    Search search = SearchFactory.create();
+    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
     return loadUsers(
         search.searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null, null, 0, -1)
             .getResults());

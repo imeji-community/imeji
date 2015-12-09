@@ -122,7 +122,7 @@
 								<ui:repeat id="users" var="sh" value="#{ShareBean.sharedWith}" rows="0" varStatus="pos">
 									<tr>
 										<td>
-											<h:outputText value="#{sh.user.name}" rendered="#{sh.user != null}"/>
+											<h:outputText value="#{sh.user.person.completeName}" rendered="#{sh.user != null}"/>
 											<h:outputText value="#{sh.group.name}" rendered="#{sh.group != null}"/>
 										</td>
 										<td colspan="#{cc.attrs.roles.size()}">

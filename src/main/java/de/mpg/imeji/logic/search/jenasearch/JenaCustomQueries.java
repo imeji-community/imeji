@@ -228,7 +228,7 @@ public class JenaCustomQueries {
   public static String selectUserWithGrantFor(String uri) {
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
         + uri
-        + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
+        + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?name } ORDER BY DESC(?name)";
   }
 
   /**

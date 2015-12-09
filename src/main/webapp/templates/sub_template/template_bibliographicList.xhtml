@@ -33,8 +33,9 @@
 			
 			
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords == 0}">
-				<div class="imj_bibliographicList">
-					<h:outputText value="#{msg.no_collection_found}" styleClass="imj_bibliographicListItem"/>
+				<div class="imj_bibliographicList" style="font-size:130%">
+					<span class="fa fa-exclamation-triangle"/>
+					<h:outputText value=" #{msg.no_collection_found}"/>
 				</div>
 			</ui:fragment>
 			
@@ -58,7 +59,9 @@
 			</h:form>
 			
 			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords > 0}">
+				<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			</ui:fragment>
 			
 		</h:panelGroup>
 	</ui:define>

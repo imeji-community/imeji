@@ -18,6 +18,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -181,25 +182,22 @@ public class AdvancedSearchBean {
    */
   public void goToResultPage() throws IOException {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    errorQuery = false;
     try {
-      errorQuery = false;
+      formular.validate();
       String q = SearchQueryParser.transform2UTF8URL(formular.getFormularAsSearchQuery());
-      if (!"".equals(q)) {
-        FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(navigation.getBrowseUrl() + "?q=" + q);
-      } else
-        BeanHelper.error(session.getMessage("error_search_query_emtpy"));
-    } catch (Exception e) {
-      errorQuery = true;
       FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(navigation.getSearchUrl() + "?error=1&types=" + getFileTypesQuery());
+          .redirect(navigation.getBrowseUrl() + "?q=" + q);
+    } catch (UnprocessableError e1) {
+      for (String m : e1.getMessages()) {
+        BeanHelper.error(session.getMessage(m));
+      }
     }
   }
 
   @SuppressWarnings("unchecked")
   public void fileTypeListener(ValueChangeEvent event) {
     fileTypesSelected = (List<String>) event.getNewValue();
-    System.out.println(getFileTypesQuery());
     formular.getFileTypeSearch().setValue(getFileTypesQuery());
     Arrays.asList(formular.getFileTypeSearch().getValue().split("|"));
   }
@@ -306,15 +304,7 @@ public class AdvancedSearchBean {
    * @return
    */
   public String getSimpleQuery() {
-    try {
-      errorQuery = false;
-      return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
-    } catch (Exception e) {
-      errorQuery = true;
-      if ("Wrong date format".equals(e.getMessage()))
-        return session.getMessage("error_date_format");
-      return e.getMessage();
-    }
+    return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
   }
 
   /**

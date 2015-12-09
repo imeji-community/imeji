@@ -43,9 +43,9 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   @Override
   public void validate(Metadata md, MetadataProfile p) throws UnprocessableError {
-    if (isDelete())
+    if (isDelete()) {
       return;
-
+    }
     Statement s = ProfileHelper.getStatement(md.getStatement(), p);
     if (!validataMetadata(md, s))
       throw new UnprocessableError("Invalid value provided for metadata of type " + getTypeLabel(md)

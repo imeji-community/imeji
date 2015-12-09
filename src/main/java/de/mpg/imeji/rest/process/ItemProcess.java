@@ -275,7 +275,7 @@ public class ItemProcess {
         case DEFAULT:
           // extract metadata node
           Map<String, Object> itemMap = jsonToPOJO(json);
-          HashMap<String, Object> metadata =
+          Map<String, Object> metadata =
               (LinkedHashMap<String, Object>) itemMap.remove(METADATA_KEY);
           // parse as normal ItemTO
           to =

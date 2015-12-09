@@ -9,7 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -271,7 +270,8 @@ public class TransferObjectFactory {
     to.setFileUrl(vo.getFullImageUrl());
     transferItemMetadataDefault(profile, vo.getMetadataSet().getMetadata(), to);
   }
-
+  
+ 
   public static int getPosition(Map<Integer, String> positions, String statement) {
     if (!positions.containsValue(statement)) {
       positions.put(0, statement);

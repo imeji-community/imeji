@@ -2,7 +2,7 @@ package de.mpg.imeji.rest.defaultTO;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -48,7 +48,11 @@ public class DefaultItemTO extends PropertiesTO implements Serializable {
 
   private long fileSize;
 
-  private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
+  /* ORIGINAL EASY METADATA
+   * 
+   * private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
+   */
+  private Map<String, JsonNode> metadata = new LinkedHashMap<String, JsonNode>();
 
   public String getCollectionId() {
     return collectionId;

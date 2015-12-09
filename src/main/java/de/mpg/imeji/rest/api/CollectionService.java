@@ -27,8 +27,10 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
@@ -110,9 +112,15 @@ public class CollectionService implements API<CollectionTO> {
           profileCache.read(vo.getMetadataSet().getProfile()));
       tos.add(to);
     }
-    return tos;
+    
+   return tos;
   }
-
+  
+  public Object readItemTemplate(String id, User u)
+      throws ImejiException, IOException {
+    return MetadataTransferHelper.readItemTemplateForProfile(id, null, u);
+  }
+ 
   public List<CollectionTO> readAll(User u, String q, int offset, int size)
       throws ImejiException, IOException {
     CollectionController cc = new CollectionController();
@@ -137,11 +145,8 @@ public class CollectionService implements API<CollectionTO> {
     MetadataProfile mp = null;
     String profileId = to.getProfile().getId();
     String method = to.getProfile().getMethod();
-    String newId = null;
+
     // create new profile (take default)
-    // if (isNullOrEmpty(profileId))
-    // mp = pc.create(ImejiFactory.newProfile(), u);
-    // set reference to existed profile
     if (!isNullOrEmpty(profileId)) {
       try {
         mp = pc.retrieve(ObjectHelper.getURI(MetadataProfile.class, profileId), u);

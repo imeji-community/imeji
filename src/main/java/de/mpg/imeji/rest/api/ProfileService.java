@@ -1,6 +1,8 @@
 package de.mpg.imeji.rest.api;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -8,10 +10,16 @@ import com.google.common.collect.Lists;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 
@@ -119,6 +127,12 @@ public class ProfileService implements API<MetadataProfileTO> {
   private MetadataProfile getMetadataProfileVO(ProfileController cc, String id, User u)
       throws ImejiException {
     return cc.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+  }
+  
+  public Object readItemTemplate(String id, User u)
+      throws ImejiException, IOException {
+    
+    return MetadataTransferHelper.readItemTemplateForProfile(null, id, u);
   }
 
 }

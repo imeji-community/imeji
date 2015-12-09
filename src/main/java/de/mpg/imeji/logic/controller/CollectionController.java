@@ -101,6 +101,16 @@ public class CollectionController extends ImejiController {
       }
       p = pc.create(p.clone(), user);
     }
+
+    // Check in controller if Profile is released and is created by user
+    if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
+      if (!(p.getCreatedBy().equals(user.getId()) || Status.RELEASED.equals(p.getStatus()))) {
+        throw new UnprocessableError("You can not reference the metadata profile with Id="
+            + p.getIdString()
+            + "The profile you reference must be released or must be created by you!");
+      }
+    }
+
     c.setProfile(p.getId());
     writeCreateProperties(c, user);
     c.setProfile(p.getId());

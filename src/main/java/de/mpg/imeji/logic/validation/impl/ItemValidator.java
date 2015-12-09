@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 
+
+
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * {@link Validator} for an {@link Item}. Only working when {@link MetadataProfile} is passed
@@ -50,17 +51,17 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
     
     //Validate that every child has its parent filled
     for (int i=0; i<itemMetadataList.length; i++) {
-      Statement s = ProfileHelper.getStatement(((Metadata) itemMetadataList[i]).getStatement(), p);
+      Statement s = MetadataAndProfileHelper.getStatement(((Metadata) itemMetadataList[i]).getStatement(), p);
       if(s.getParent()!=null){
-        Statement parentStatement = ProfileHelper.getStatement(s.getParent(), p);
+        Statement parentStatement = MetadataAndProfileHelper.getStatement(s.getParent(), p);
         //First element can not have a parent
         if(i==0){
           
           throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
         
         }else{
-          Statement preStatement = ProfileHelper.getStatement(((Metadata) itemMetadataList[i-1]).getStatement(), p);
-          if(parentStatement.getId().equals(preStatement.getId()) && MetadataHelper.isEmpty((Metadata)itemMetadataList[i-1])){
+          Statement preStatement = MetadataAndProfileHelper.getStatement(((Metadata) itemMetadataList[i-1]).getStatement(), p);
+          if(parentStatement.getId().equals(preStatement.getId()) && MetadataAndProfileHelper.isEmpty((Metadata)itemMetadataList[i-1])){
             throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
           //Statement has to be preceded by same statement (multiple childs) or parent statement or a descendant statement (multiple statement with childs)
           }/*else if(!parentStatement.getId().equals(preStatement.getId()) && !s.getId().equals(preStatement.getId()) && !isSuccessor(s, preStatement, p)){
@@ -72,7 +73,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
     }
     
     for (Metadata md : item.getMetadataSet().getMetadata()) {
-      Statement s = ProfileHelper.getStatement(md.getStatement(), p);
+      Statement s = MetadataAndProfileHelper.getStatement(md.getStatement(), p);
       try {
         mdValidator.validate(md, p);
       } catch (UnprocessableError e) {
@@ -119,7 +120,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
   private boolean isSuccessor(Statement ancestor, Statement successor, MetadataProfile p){
     Statement current = successor;
     while(current.getParent() != null){
-      current = ProfileHelper.getStatement(current.getParent(), p);
+      current = MetadataAndProfileHelper.getStatement(current.getParent(), p);
       if(current.getId().toString().equals(ancestor.getId().toString())){
         return true;
       }
@@ -144,7 +145,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
           else
           {
              return ( (s.getMaxOccurs()!= null && !s.getMaxOccurs().equals("1"))
-                      || isMultipleStatement(ProfileHelper.getStatement(s.getParent(), p), p) );
+                      || isMultipleStatement(MetadataAndProfileHelper.getStatement(s.getParent(), p), p) );
           }
   }
 

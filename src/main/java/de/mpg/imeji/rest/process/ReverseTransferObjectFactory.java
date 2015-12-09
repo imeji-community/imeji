@@ -3,6 +3,7 @@ package de.mpg.imeji.rest.process;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,12 +13,14 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -455,8 +458,38 @@ public class ReverseTransferObjectFactory {
    * @throws JsonParseException
    * @throws JsonMappingException
    */
-
+  //NEW EASY METADATA
   public static void transferDefaultItemTOtoItemTO(MetadataProfileTO profileTO,
+      DefaultItemTO defaultTO, ItemTO itemTO, boolean updatedAll) throws UnprocessableError,
+      JsonParseException, JsonMappingException {
+    if (defaultTO.getMetadata() == null) {
+      itemTO.getMetadata().clear();
+    } else {
+      
+      for (String label : defaultTO.getMetadata().keySet()) {
+        // Get statement according to the label - Note: this is always the toplevel
+        StatementTO statement = ProfileTransferHelper.findStatementByLabel(label, profileTO);
+        
+        List<MetadataSetTO> newMetadata = new ArrayList<MetadataSetTO>();
+
+        // Get the new metadata according to the json and the statement
+        boolean isParent = ProfileTransferHelper.hasChildStatement(statement.getId(), profileTO);
+        newMetadata.addAll(MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label), statement, isParent, "", profileTO));
+        // add/replace the metadata to the itemto
+        if (!newMetadata.isEmpty()) {
+          // remove all the metadata with the same statement
+          itemTO.clearMetadata(newMetadata.get(0).getStatementUri());
+          // add the new metadata
+          itemTO.getMetadata().addAll(newMetadata);
+        }
+        }
+    }
+  }
+  
+  
+  /*ORIGINAL simple EasyMD
+   * 
+   *   public static void transferDefaultItemTOtoItemTO(MetadataProfileTO profileTO,
       DefaultItemTO defaultTO, ItemTO itemTO, boolean updatedAll) throws BadRequestException,
       JsonParseException, JsonMappingException {
     if (defaultTO.getMetadata() == null) {
@@ -480,4 +513,16 @@ public class ReverseTransferObjectFactory {
 
     }
   }
+   * 
+   */
+  
+  //NEW EASY METADATA
+  private List<MetadataSetTO> getChildsAsList(String parentLabel, Object parentValue, StatementTO parentStatement, MetadataProfileTO profile){
+          List<MetadataSetTO>newMetadata = new ArrayList<MetadataSetTO>(); 
+          ArrayNode parValueNode = (ArrayNode)parentValue;
+          
+          //newMetadata.addAll(MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label), statement));
+          return newMetadata;
+  }
 }
+

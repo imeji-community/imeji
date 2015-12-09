@@ -173,5 +173,29 @@ public class CollectionProcess {
     }
     return resp;
   }
+  
+  /**
+   * Returns an item template of a {@link CollectionImeji}
+   * 
+   * @param req
+   * @param id
+   * @return
+   */
+  public static JSONResponse readItemTemplate(HttpServletRequest req, String id) {
+    JSONResponse resp = null;
+
+    User u = BasicAuthentication.auth(req);
+
+    CollectionService ccrud = new CollectionService();
+    try {
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
+                  ccrud.readItemTemplate(id, u)); 
+    } catch (Exception e) {
+      resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+    }
+    return resp;
+  }
+
 
 }

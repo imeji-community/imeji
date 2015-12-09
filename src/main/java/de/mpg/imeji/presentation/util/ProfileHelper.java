@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -56,11 +57,7 @@ public class ProfileHelper {
    * @return
    */
   public static Statement getStatement(URI uri, MetadataProfile profile) {
-    for (Statement st : profile.getStatements()) {
-      if (st.getId().toString().equals(uri.toString()))
-        return st;
-    }
-    return null;
+    return MetadataAndProfileHelper.getStatement(uri, profile);
   }
 
   /**

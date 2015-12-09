@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.JSONResponse;
 
@@ -86,6 +88,29 @@ public class ProfileProcess {
       resp =
           RestProcessUtils.buildResponse(OK.getStatusCode(),
               service.withdraw(id, u, discardComment));
+    } catch (Exception e) {
+      resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+    }
+    return resp;
+  }
+  
+  /**
+   * Returns an item template of a {@link CollectionImeji}
+   * 
+   * @param req
+   * @param id
+   * @return
+   */
+  public static JSONResponse readItemTemplate(HttpServletRequest req, String id) {
+    JSONResponse resp = null;
+
+    User u = BasicAuthentication.auth(req);
+
+    ProfileService pcrud = new ProfileService();
+    try {
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
+                  pcrud.readItemTemplate(id, u));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }

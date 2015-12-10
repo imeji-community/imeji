@@ -29,67 +29,60 @@
 			</h:panelGroup>
 		</ui:fragment>
 
-			
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.loggedIn and SingleUploadSession.canUpload}">
-
-			<h:panelGroup layout="block" styleClass="imj_upload">
-				
-				<h:form id="singleUpload">
-					
-					<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
-						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-		
-						<div id="container">
-							<a id="pickfiles" href="javascript:;">[#{lbl.uploadFile}]</a>
-						</div>
 	
-						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
-						<script type="text/javascript">
-							var uploader = new plupload.Uploader({
-								runtimes : 'html5,flash,silverlight,html4',
-								browse_button : 'pickfiles', // you can pass in id...
-								container: document.getElementById('container'), // ... or DOM Element itself
-								url : location.pathname  + "?start=1",
-								max_file_size : '#{Configuration.uploadMaxFileSize}kb',
-								multi_selection : false,
-								init: {
-									PostInit: function() {
-										document.getElementById('filelist').innerHTML = '';					
-									},
-									
-									FilesAdded: function(up, files) {
+			<h:panelGroup layout="block" styleClass="imj_upload">
+				<div id="container" class="imj_noDisplay"/>			
+				<div id="uploader" class="imj_fileUploadContainer imj_singleUpload imj_uploadDropArea">
+					<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+					<span id="uploadTitle"><span class="fa fa-upload" /> #{lbl.uploadFile}</span>	
+					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+					<script type="text/javascript">
+						var uploader = new plupload.Uploader({
+							runtimes : 'html5,flash,silverlight,html4',
+							browse_button : 'uploader', // you can pass in id...
+							container: document.getElementById('container'), // ... or DOM Element itself
+							url : location.pathname  + "?start=1",
+							max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+							multi_selection : false,
+							dragdrop: true,
+							drop_element: 'uploader',
+							init: {
+								PostInit: function() {
+									document.getElementById('filelist').innerHTML = '';					
+								},				
+								FilesAdded: function(up, files) {
+									document.getElementById('uploadTitle').innerHTML = '';		
+									plupload.each(files, function(file) {
+										if(up.files.length > 1)
+										{
+											up.removeFile(file);
+										}
 										
-										plupload.each(files, function(file) {
-											if(up.files.length > 1)
-											{
-												up.removeFile(file);
-											}
-											
-											document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-										});
-										uploader.start();
-										
-									},
-									
-									UploadProgress: function(up, file) {
-										document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-									},
-									 StateChanged: function(up) {
-											// Called when the state of the queue is changed
-											if( up.state == plupload.STOPPED)
-												report();
-		
-									},
-								}
-							});
-							
-							uploader.init();
-							function report(){
-								window.location.href = location.pathname + "?done=1";
+										document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+									});
+									uploader.start();
+								},
+								
+								UploadProgress: function(up, file) {
+									document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+								},
+								 StateChanged: function(up) {
+									// Called when the state of the queue is changed
+									if( up.state == plupload.STOPPED){
+										report();
+									}
+								},
 							}
-						</script>
-					</div>
-					
+						});
+						
+						uploader.init();
+						function report(){
+							window.location.href = location.pathname + "?done=1";
+						}
+					</script>
+				</div>
+				<h:form id="singleUpload">
 					<h:panelGroup layout="block" id="selCols" styleClass="imj_inlineSelectionGroup" rendered="#{not empty SingleUploadBean.ingestImage}">
 						<span class="imj_selectionLabel">
 							<h:outputText value="#{lbl.select_collection}"/>

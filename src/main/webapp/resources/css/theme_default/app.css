@@ -451,7 +451,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_upload { width: 100%; padding: 1em 0; }
 .imj_upload .imj_uploadInputWrapper { width: 70%; min-width: 30em; display: inline-block; }
 .imj_upload .imj_uploadDropArea { width: 100%; }
-.imj_upload .imj_fileUploadContainer { margin-top: 2em; margin-bottom: 2em; margin-right: 2em; display: inline-block; }
+.imj_upload .imj_fileUploadContainer { margin-bottom: 2em; margin-right: 2em; display: inline-block; }
+.imj_upload .imj_fileUploadContainer.imj_singleUpload { border: 3px dashed #292929; line-height: 10em; font-size: 150%; text-align: center; cursor: pointer; }
 .imj_upload .imj_fileUploadContainer.imj_singleUpload .imj_submitPanel { text-align: left; }
 
 .imj_uploadUrlReference { width: 98%; min-width: 30em; padding: 0.5% 1%; }

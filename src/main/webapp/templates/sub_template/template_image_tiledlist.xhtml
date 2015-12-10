@@ -1,68 +1,71 @@
 <ui:composition template="../template_site.xhtml"
-				xmlns="http://www.w3.org/1999/xhtml"
-				xmlns:ui="http://java.sun.com/jsf/facelets"
-				xmlns:h="http://java.sun.com/jsf/html"
-				xmlns:imjc="http://java.sun.com/jsf/composite/components">
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:imjc="http://java.sun.com/jsf/composite/components"
+                xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
-	<ui:define name="init">
-		<h:outputText value="#{paginatorListSessionBean.initPage}"/>
-	</ui:define>
-	
-	<ui:define name="modalDialogs_from_template">
-		<!-- Confirmation Pages -->
-		<ui:include src="../../confirmationPages/AllDelete.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-		<ui:include src="../../confirmationPages/AllWithdraw.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-		<ui:include src="../../confirmationPages/SelectedDelete.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-		<ui:include src="../../confirmationPages/SelectedWithdraw.xhtml">
-			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
-		</ui:include>
-	</ui:define>
-	
-	<!-- Main Content - Image tiled list - START -->
-	<ui:define name="mainContent">
-		<!-- Breadcrumb - History -->
-		<ui:include src="../../include/History.xhtml"></ui:include>
-		<h:panelGroup layout="block" id ="ajaxWrapper">
-			<h:outputText value="#{paginatorListSessionBean.urlParameters}" styleClass="imj_noDisplay"/>
-			<h:outputText value="#{paginatorListSessionBean.initPaginator}" styleClass="imj_noDisplay"/>
-			<!-- Selection Info Panel -->
-			<imjc:selectionInfoPanel 	id="selPanel" 
-										fSession="#{FiltersSession}" 
-										facetBean="#{paginatorListSessionBean}" 
-										currentMainMenu="mediaEntry" 
-									 	browseToAllUrl="#{browseToAllItemsUrl}" 
-									 	numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"
-									 	containerId="#{containerId}"/>
-			
+    <ui:define name="init">
+        <h:outputText value="#{paginatorListSessionBean.initPage}"/>
+    </ui:define>
+
+    <ui:define name="modalDialogs_from_template">
+        <!-- Confirmation Pages -->
+        <ui:include src="../../confirmationPages/AllDelete.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+        <ui:include src="../../confirmationPages/AllWithdraw.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+        <ui:include src="../../confirmationPages/SelectedDelete.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+        <ui:include src="../../confirmationPages/SelectedWithdraw.xhtml">
+            <ui:param name="bean" value="#{paginatorListSessionBean}"/>
+        </ui:include>
+    </ui:define>
+
+    <!-- Main Content - Image tiled list - START -->
+    <ui:define name="mainContent">
+        <h:panelGroup layout="block" id ="ajaxWrapper">
+        	<h:outputText value="#{paginatorListSessionBean.urlParameters}" styleClass="imj_noDisplay"/>
+            <h:outputText value="#{paginatorListSessionBean.initPaginator}" styleClass="imj_noDisplay"/>
+        	 <!-- Page Browser GotoBox -->
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true"/>
+        	
+            <!-- Selection Info Panel -->
+            <imjc:selectionInfoPanel id="selPanel" 
+                                      fSession="#{FiltersSession}" 
+                                      facetBean="#{paginatorListSessionBean}" 
+                                      currentMainMenu="mediaEntry" 
+                                      browseToAllUrl="#{browseToAllItemsUrl}" 
+                                      numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"
+                                      containerId="#{containerId}" showSortMenu="true" objectLabel="#{lbl.images}"/>
+
+           
+            <!-- Media List -->
+            <imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'THUMBNAIL'}"/>
+            <list:detailList id="browseContentDL" listBean="#{paginatorListSessionBean}" rendered="#{SessionBean.selectedBrowseListView == 'LIST'}"/>
+
 			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
-			
-			<!-- Media List -->
-			<imjc:tiledMediaList  id="browseContent" picList="#{paginatorListSessionBean}"/>
-			
-			<!-- Facets -->
-			<h:panelGroup layout="block" id="imj_ajaxFacets">
-				<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
-			</h:panelGroup>
-				
-			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
-		</h:panelGroup>
-	</ui:define>
-	<!-- Main Content - END -->
-	<script>
-	$('form input[type=text]').die('keydown').keydown(function(e){
-	    if(e.keyCode == 13 ) {
-	        $('form\\:submitButton').click();
-	        return false;
-	    }
-	});
-	</script>
-	
+            <imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes" showSwitchListView="true" rendered="#{paginatorListSessionBean.totalNumberOfElements != 0}"/>
+            <!-- Facets -->
+            <h:panelGroup layout="block" id="imj_ajaxFacets">
+                <imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
+            </h:panelGroup>
+
+            
+        </h:panelGroup>
+    </ui:define>
+    <!-- Main Content - END -->
+    <script>
+        $('form input[type=text]').die('keydown').keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('form\\:submitButton').click();
+                return false;
+            }
+        });
+    </script>
+
 </ui:composition>

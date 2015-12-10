@@ -9,7 +9,7 @@
 		<composite:attribute name="formObject" required="false"/>
 		<composite:attribute name="navBean" required="true"/>
 		<composite:attribute name="suggestBean" required="true"/>
-		<composite:attribute name="listItem" required="true"/>
+		<composite:attribute name="listItem" required="false"/>
 		<composite:attribute name="itemBean" required="true"/>
 		<composite:attribute name="itemStatement" required="true"/>
 		<composite:attribute name="itemLabelBean" required="true"/>
@@ -43,7 +43,7 @@
 			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#number'}">
 				<div class="imj_metadataSet">
 					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>	
-					<h:inputText onfocus="this.select();"  onchange="validateInputNumber(this);" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:inputText id="inputNumber" onfocus="this.select();"  onchange="validateInputNumber(this);" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<f:converter converterId="DoubleConverter"/>
 					</h:inputText>
 					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
@@ -126,7 +126,7 @@
 				<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 					<div class="imj_metadataSet " >
 						<h:outputLabel value="YYYY-MM-DD" styleClass="imj_metadataLabel "/>
-						<h:inputText styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}"/>
+						<h:inputText id="inputDate" styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}"/>
 					</div>
 				</ui:fragment>
 				<ui:fragment rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
@@ -173,7 +173,7 @@
 						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
 					</h4>
 				</ui:fragment>
-				<imjc:person person="#{cc.attrs.itemBean.person}" bean="#{cc.attrs.itemBean}" position="0" userSource="#{cc.attrs.itemStatement.vocabulary}"/>
+				<imjc:person id="inputPerson" person="#{cc.attrs.itemBean.person}" bean="#{cc.attrs.itemBean}" position="0" userSource="#{cc.attrs.itemStatement.vocabulary}"/>
 			</ui:fragment>
 			
 			<!-- METADATA TYPE GEOLOCATION -->
@@ -213,10 +213,10 @@
 			<ui:fragment rendered="#{cc.attrs.formObject != null and cc.attrs.formObject != '' and cc.attrs.listItem != null and cc.attrs.itemBean.statement.maxOccurs != '1'}">
 				<!-- BUTTONS -->
 				<h:panelGroup styleClass="imj_inlineButtonGroup">
-					<h:commandLink id="add" type="submit" styleClass="imj_buttonAdd_16" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}">
+					<h:commandLink id="add" type="submit" styleClass="fa fa-plus-square-o" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}">
 						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
 					</h:commandLink>
-					<h:commandLink  id="remove" type="submit" styleClass="imj_buttonRemove_16" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}">
+					<h:commandLink  id="remove" type="submit" styleClass="fa fa-minus-square-o" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}">
 						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
 					</h:commandLink>
 				</h:panelGroup>

@@ -27,7 +27,6 @@ package de.mpg.imeji.logic.search.jenasearch;
 import java.net.URI;
 
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
-import org.opensaml.ws.wssecurity.Username;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
@@ -229,7 +228,7 @@ public class JenaCustomQueries {
   public static String selectUserWithGrantFor(String uri) {
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
         + uri
-        + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
+        + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?name } ORDER BY DESC(?name)";
   }
 
   /**
@@ -527,9 +526,10 @@ public class JenaCustomQueries {
     return "SELECT DISTINCT ?s WHERE{ ?s <http://imeji.org/terms/space> " + "<" + id.toString()
         + "> " + " . ?s a <http://imeji.org/terms/collection> }";
   }
-  
+
   public static String selectSpaceOfCollection(URI id) {
-    return "SELECT DISTINCT ?s WHERE{  <" + id.toString() + "> <http://imeji.org/terms/space> " + "?s " + " . ?s a <http://imeji.org/terms/space> } LIMIT 1";
+    return "SELECT DISTINCT ?s WHERE{  <" + id.toString() + "> <http://imeji.org/terms/space> "
+        + "?s " + " . ?s a <http://imeji.org/terms/space> } LIMIT 1";
   }
 
   public static String selectCollectionsNotInSpace() {

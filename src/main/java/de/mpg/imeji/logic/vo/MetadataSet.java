@@ -24,7 +24,7 @@ import com.hp.hpl.jena.ontology.Profile;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jList;
+import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jResource;
 
 /**
@@ -40,7 +40,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms/")
 public class MetadataSet implements Serializable {
   private static final long serialVersionUID = 6306551656394348422L;
-  @j2jList(ImejiNamespaces.METADATA)
+  @j2jLazyList(ImejiNamespaces.METADATA)
   private Collection<Metadata> metadata = new ArrayList<Metadata>();
   @j2jResource("http://imeji.org/terms/mdprofile")
   private URI profile;

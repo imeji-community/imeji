@@ -5,11 +5,14 @@ package de.mpg.imeji.presentation.search;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
@@ -83,8 +86,8 @@ public class SearchGroupForm {
           // metadata search
           elements.add(new SearchMetadataForm((SearchGroup) se, profile));
         } else if (elements.size() > 0 && se.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS)) {
-          elements.get(elements.size() - 1).setLogicalRelation(
-              ((SearchLogicalRelation) se).getLogicalRelation());
+          elements.get(elements.size() - 1)
+              .setLogicalRelation(((SearchLogicalRelation) se).getLogicalRelation());
         }
       }
       initStatementsMenu(profile);
@@ -97,7 +100,6 @@ public class SearchGroupForm {
    * @return
    */
   public SearchGroup getAsSearchGroup() {
-
     SearchGroup groupWithAllMetadata = new SearchGroup();
     for (SearchMetadataForm e : elements) {
       groupWithAllMetadata.addGroup(e.getAsSearchGroup());
@@ -105,13 +107,32 @@ public class SearchGroupForm {
     }
     if (collectionId != null && !"".equals(collectionId)) {
       SearchGroup searchGroup = new SearchGroup();
-      searchGroup.addPair(new SearchPair(SearchFields.col, SearchOperators.EQUALS, collectionId
-          .toString(), false));
+      searchGroup.addPair(
+          new SearchPair(SearchFields.col, SearchOperators.EQUALS, collectionId.toString(), false));
       searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
       searchGroup.addGroup(groupWithAllMetadata);
       return searchGroup;
     }
     return groupWithAllMetadata;
+  }
+
+  /**
+   * Validate the Search Group according to the user entries
+   * 
+   * @throws UnprocessableError
+   */
+  public void validate() throws UnprocessableError {
+    Set<String> messages = new HashSet<>();
+    for (SearchMetadataForm el : elements) {
+      try {
+        el.validate();
+      } catch (UnprocessableError e) {
+        messages.addAll(e.getMessages());
+      }
+    }
+    if (!messages.isEmpty()) {
+      throw new UnprocessableError(messages);
+    }
   }
 
   /**
@@ -124,9 +145,8 @@ public class SearchGroupForm {
     if (p != null) {
       if (p.getStatements() != null) {
         for (Statement st : p.getStatements()) {
-          String stName =
-              ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-                  .getInternationalizedLabels().get(st.getId());
+          String stName = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
+              .getInternationalizedLabels().get(st.getId());
           statementMenu.add(new SelectItem(st.getId().toString(), stName));
         }
       }
@@ -148,12 +168,13 @@ public class SearchGroupForm {
   private List<SelectItem> getCollectionsMenu(MetadataProfile p) throws ImejiException {
     CollectionController cc = new CollectionController();
     SearchQuery q = new SearchQuery();
-    q.addPair(new SearchPair(SearchFields.prof, SearchOperators.EQUALS, p.getId().toString(), false));
+    q.addPair(
+        new SearchPair(SearchFields.prof, SearchOperators.EQUALS, p.getId().toString(), false));
     List<SelectItem> l = new ArrayList<SelectItem>();
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     l.add(new SelectItem(null, session.getLabel("adv_search_collection_restrict")));
-    for (String uri : cc
-        .search(q, null, -1, 0, session.getUser(), session.getSelectedSpaceString()).getResults()) {
+    for (String uri : cc.search(q, null, -1, 0, session.getUser(), session.getSelectedSpaceString())
+        .getResults()) {
       CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(uri), session.getUser());
       l.add(new SelectItem(c.getId().toString(), c.getMetadata().getTitle()));
     }

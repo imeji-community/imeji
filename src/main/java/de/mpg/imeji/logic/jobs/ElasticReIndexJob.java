@@ -32,7 +32,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
     logger.info("Reindex started!");
-    String index = ElasticService.initializeIndex();
+    String index = ElasticService.createIndex();
     reindexAlbums(index);
     reindexItems(index);
     reindexFolders(index);
@@ -50,7 +50,8 @@ public class ElasticReIndexJob implements Callable<Integer> {
    */
   private void reindexFolders(String index) throws ImejiException {
     logger.info("Indexing Folders...");
-    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.folders);
+    ElasticIndexer indexer =
+        new ElasticIndexer(index, ElasticTypes.folders, ElasticService.ANALYSER);
     indexer.addMapping();
     CollectionController c = new CollectionController();
     List<CollectionImeji> collections = (List<CollectionImeji>) c.retrieveAll(Imeji.adminUser);
@@ -66,7 +67,8 @@ public class ElasticReIndexJob implements Callable<Integer> {
    */
   private void reindexAlbums(String index) throws ImejiException {
     logger.info("Indexing Albums...");
-    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.albums);
+    ElasticIndexer indexer =
+        new ElasticIndexer(index, ElasticTypes.albums, ElasticService.ANALYSER);
     indexer.addMapping();
     AlbumController controller = new AlbumController();
     List<Album> albums = controller.retrieveAll(Imeji.adminUser);
@@ -83,7 +85,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
    */
   private void reindexItems(String index) throws ImejiException {
     logger.info("Indexing Items...");
-    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items);
+    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items, ElasticService.ANALYSER);
     indexer.addMapping();
     ItemController controller = new ItemController();
     List<Item> items = (List<Item>) controller.retrieveAll(Imeji.adminUser);
@@ -101,7 +103,8 @@ public class ElasticReIndexJob implements Callable<Integer> {
    */
   private void reindexSpaces(String index) throws ImejiException {
     logger.info("Indexing Spaces...");
-    ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.spaces);
+    ElasticIndexer indexer =
+        new ElasticIndexer(index, ElasticTypes.spaces, ElasticService.ANALYSER);
     indexer.addMapping();
     SpaceController controller = new SpaceController();
     List<Space> items = (List<Space>) controller.retrieveAll();

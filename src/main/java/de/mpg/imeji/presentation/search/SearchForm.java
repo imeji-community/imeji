@@ -5,10 +5,14 @@ package de.mpg.imeji.presentation.search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -29,8 +33,8 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 public class SearchForm {
   private Map<String, MetadataProfile> profilesMap;
   private List<SearchGroupForm> groups;
-  private SearchPair fileTypeSearch = new SearchPair(SearchFields.filetype, SearchOperators.REGEX,
-      "", false);
+  private SearchPair fileTypeSearch =
+      new SearchPair(SearchFields.filetype, SearchOperators.REGEX, "", false);
 
 
   /**
@@ -62,14 +66,34 @@ public class SearchForm {
       }
       if (se.getType().equals(SEARCH_ELEMENTS.PAIR)) {
         if (((SearchPair) se).getField() == SearchFields.filetype) {
-          fileTypeSearch =
-              new SearchPair(SearchFields.filetype, SearchOperators.REGEX,
-                  ((SearchPair) se).getValue(), false);
+          fileTypeSearch = new SearchPair(SearchFields.filetype, SearchOperators.REGEX,
+              ((SearchPair) se).getValue(), false);
         }
       }
     }
   }
 
+  /**
+   * Validate the Search form according the user input
+   * 
+   * @throws UnprocessableError
+   */
+  public void validate() throws UnprocessableError {
+    Set<String> messages = new HashSet<>();
+    for (SearchGroupForm g : groups) {
+      try {
+        g.validate();
+      } catch (UnprocessableError e) {
+        messages.addAll(e.getMessages());
+      }
+    }
+    if (!messages.isEmpty()) {
+      throw new UnprocessableError(messages);
+    }
+    if ("".equals(SearchQueryParser.transform2UTF8URL(getFormularAsSearchQuery()))) {
+      throw new UnprocessableError("error_search_query_emtpy");
+    }
+  }
 
   /**
    * Transform the {@link SearchForm} in a {@link SearchQuery}

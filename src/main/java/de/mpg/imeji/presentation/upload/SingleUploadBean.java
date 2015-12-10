@@ -321,7 +321,7 @@ public class SingleUploadBean implements Serializable {
     // If there is no collection where the user can upload, send error
     if (collectionItems.isEmpty()) {
       throw new BadRequestException(sb.getMessage("cannot_create_collection"));
-    } else if (collectionItems.size() > 1) {
+    } else if (collectionItems.size() >= 1) {
       collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
     }
     setSelectedCollection(collectionItems.get(0).getValue().toString());

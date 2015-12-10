@@ -8,9 +8,6 @@
 	<!-- Main Content - bibliographic grid list - START -->
 	<ui:define name="mainContent">
 		
-		<!-- Breadcrumb - History -->
-		<ui:include src="../../include/History.xhtml"/>
-		
 		<!-- EntryPagePreviewTiledList -->
 		<ui:fragment rendered="#{metadataContextBean.id == null or Auth.read(metadataContextBean)}">
 			

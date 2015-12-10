@@ -232,12 +232,12 @@
 				<ui:fragment rendered="#{!cc.attrs.minimized}">
 					<h5 class="imj_sectionHeadline">
 						<span class="imj_inlineButtonGroup"> 
-							<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{PersonBean.addOrganization(index.index + 1)}">
+							<h:commandLink styleClass="fa fa-plus-square-o" type="submit" title="#{lbl.add_organization}" action="#{PersonBean.addOrganization(index.index + 1)}">
 								<f:ajax execute="@form" render="@form"/>
-							</h:commandButton> 
-							<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{PersonBean.removeOrganization(index.index)}">
+							</h:commandLink> 
+							<h:commandLink styleClass="fa fa-minus-square-o" type="submit" title="#{lbl.remove_organization}" action="#{PersonBean.removeOrganization(index.index)}">
 								<f:ajax execute="@form" render="@form"/>
-							</h:commandButton>
+							</h:commandLink>
 						</span>
 					</h5>
 				</ui:fragment>

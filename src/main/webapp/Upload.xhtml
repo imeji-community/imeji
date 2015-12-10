@@ -19,7 +19,7 @@
                                     activeMenu="upload" 
                                     hasContent="#{UploadBean.collectionSize > 0}"/>
 
-        <menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+        <menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
                                   curMainMenu="#{currentMainMenu}" 
                                   navBean="#{Navigation}" 
                                   collectionStatus="#{UploadBean.collection.status}" 
@@ -37,6 +37,10 @@
         <dialog:confirmationDialog submitAction="release" bean="#{UploadBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" />
         <dialog:confirmationDialog submitAction="delete" bean="#{UploadBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog"/>
         <dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{UploadBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" />
+		<dialog:dialogOptionDialog submitId1="doiInput" submitId2="getDOIDialog" confirmationText="" submitLabel1="#{lbl.createDOI_manually}" submitLabel2="#{lbl.createDOI_from_service}" dialogId="createDOIDialog" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:confirmationDialog submitAction="createDOI" bean="#{UploadBean}" confirmationText="#{msg.confirmation_create_DOI}" submitLabel="#{lbl.createDOI}" dialogId="getDOIDialog" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>	
+		<dialog:doiInputDialog col="#{UploadBean.collection}" bean="#{UploadBean}" submitLabel="#{lbl.save}" dialogId="doiInput" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+    	
     </ui:define>
 
     <ui:define name="additonalFooterScripts">
@@ -97,17 +101,11 @@
 
 
     <ui:define name="mainContent">
-        <!-- Breadcrumb - History -->
-        <ui:include src="./include/History.xhtml"/>
-
         <!-- AJAX Wrapper - START -->
         <h:panelGroup layout="block" id="imj_ajaxWrapper">
             <!-- START UPLOAD -->
             <div class="imj_upload">
                 <ui:fragment rendered="#{Auth.createContent(UploadBean.collection)}">
-                    <h2 class="imj_headline">
-                        <h:outputText value="#{lbl.uploadFiles}"/>
-                    </h2>
 
                     <div class="imj_uploadInputWrapper">
                         <div id="tabsUpload" class="id_tabs imj_tabList">

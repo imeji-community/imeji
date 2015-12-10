@@ -2,13 +2,16 @@ package de.mpg.imeji.logic.search.elasticsearch;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.Requests;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
 
@@ -24,7 +27,12 @@ public class ElasticService {
   private static Node node;
   public static Client client;
   private static String CLUSTER_NAME = "name of my cluster";
+  private static boolean CLUSTER_LOCAL = true;
+  private static boolean CLUSTER_DATA = true;
+  private static String CLUSTER_DIR = "null";
+  public static ElasticAnalysers ANALYSER;
   private static final Logger logger = Logger.getLogger(ElasticService.class);
+  private static final String SETTINGS = "elasticsearch/Settings.json";
 
   /**
    * The Index where all data are indexed
@@ -41,14 +49,32 @@ public class ElasticService {
     items, folders, albums, spaces;
   }
 
+  public enum ElasticAnalysers {
+    standard, ducet_sort, simple;
+  }
+
   public static void start() throws IOException, URISyntaxException {
-    CLUSTER_NAME = PropertyReader.getProperty("elastic.cluster.name");
-    node = NodeBuilder.nodeBuilder().clusterName(CLUSTER_NAME).node();
+    start(PropertyReader.getProperty("elastic.cluster.name"));
+  }
+
+  public static void start(String clusterName) throws IOException, URISyntaxException {
+    CLUSTER_NAME = clusterName;
+    CLUSTER_DATA = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.data"));
+    CLUSTER_LOCAL = Boolean.parseBoolean(PropertyReader.getProperty("elastic.cluster.local"));
+    CLUSTER_DIR = PropertyReader.getProperty("elastic.cluster.home");
+    ANALYSER = ElasticAnalysers.valueOf(PropertyReader.getProperty("elastic.analyser"));
+    logger.info("Connecting Node to " + CLUSTER_NAME + " (local=" + CLUSTER_LOCAL + ", data="
+        + CLUSTER_DATA + ")");
+    node =
+        NodeBuilder.nodeBuilder().data(CLUSTER_DATA).local(CLUSTER_LOCAL).clusterName(CLUSTER_NAME)
+            .settings(Settings.builder().put("path.home", CLUSTER_DIR)).node();
+
     client = node.client();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums).addMapping();
-    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces).addMapping();
+    initializeIndex();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces, ANALYSER).addMapping();
   }
 
   /**
@@ -61,11 +87,13 @@ public class ElasticService {
     logger.info("Initializing ElasticSearch index.");
     String indexName = getIndexNameFromAliasName(DATA_ALIAS);
     if (indexName != null) {
+      logger.info("Using existing index: " + indexName);
       return indexName;
     } else {
       return createIndexWithAlias();
     }
   }
+
 
   /**
    * Get the First Index pointed by the Alias. This method should be used, when there is only one
@@ -75,19 +103,18 @@ public class ElasticService {
    * @return
    */
   public synchronized static String getIndexNameFromAliasName(final String aliasName) {
-    ImmutableOpenMap<String, AliasMetaData> indexToAliasesMap =
-        client.admin().cluster().state(Requests.clusterStateRequest()).actionGet().getState()
-            .getMetaData().aliases().get(aliasName);
-    if (indexToAliasesMap != null && !indexToAliasesMap.isEmpty()) {
-      if (indexToAliasesMap.size() > 1) {
-        logger.error("Alias " + aliasName
-            + " has more than one index. This is forbidden: All indexes will be removed, please reindex!!!");
-        reset();
-        return null;
-      }
-      return indexToAliasesMap.keys().iterator().next().value;
+    ImmutableOpenMap<String, List<AliasMetaData>> map = client.admin().indices()
+        .getAliases(new GetAliasesRequest(aliasName)).actionGet().getAliases();
+    if (map.keys().size() > 1) {
+      logger.error("Alias " + aliasName
+          + " has more than one index. This is forbidden: All indexes will be removed, please reindex!!!");
+      reset();
+      return null;
+    } else if (map.keys().size() == 1) {
+      return map.keys().iterator().next().value;
+    } else {
+      return null;
     }
-    return null;
   }
 
   /**
@@ -115,13 +142,17 @@ public class ElasticService {
    */
   public static String createIndex() {
     try {
-
       String indexName = DATA_ALIAS + "-" + System.currentTimeMillis();
       logger.info("Creating a new index " + indexName);
-      ElasticService.client.admin().indices().create(new CreateIndexRequest(indexName)).actionGet();
+      String settingsJson = ANALYSER == ElasticAnalysers.ducet_sort ? new String(
+          Files.readAllBytes(
+              Paths.get(ElasticIndexer.class.getClassLoader().getResource(SETTINGS).toURI())),
+          "UTF-8") : "";
+      ElasticService.client.admin().indices().prepareCreate(indexName).setSettings(settingsJson)
+          .execute().actionGet();
       return indexName;
     } catch (Exception e) {
-      logger.info("Index +" + "+ already existing");
+      logger.info("Error creating index", e);
     }
     return null;
   }
@@ -151,10 +182,21 @@ public class ElasticService {
    */
   public static void reset() {
     logger.warn("Resetting ElasticSearch!!!");
-    logger.warn("Deleting all indexes...");
-    ElasticService.client.admin().indices().prepareDelete("_all").execute().actionGet();
-    logger.warn("...done!");
+    clear();
     initializeIndex();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.items, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.folders, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.albums, ANALYSER).addMapping();
+    new ElasticIndexer(DATA_ALIAS, ElasticTypes.spaces, ANALYSER).addMapping();
+  }
+
+  /**
+   * Remove everything from ES
+   */
+  public static void clear() {
+    logger.warn("Deleting all indexes...");
+    ElasticService.client.admin().indices().prepareDelete(DATA_ALIAS).execute().actionGet();
+    logger.warn("...done!");
   }
 
   public static void shutdown() {

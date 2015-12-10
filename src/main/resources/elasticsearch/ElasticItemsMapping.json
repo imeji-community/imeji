@@ -17,7 +17,13 @@
          "index":"not_analyzed"
       },
       "filename":{
-        "type":"string"
+        "type":"string",
+        "fields":{
+          "sort":{
+            "type":"string",
+            "analyzer":"XXX_ANALYSER_XXX"
+          }
+        }
       },
       "filetype":{
         "type":"string",
@@ -59,7 +65,11 @@
               "exact":{
                 "type":"string",
                 "index":"not_analyzed"
-              }
+              },
+              "sort":{
+	            "type":"string",
+	            "analyzer":"XXX_ANALYSER_XXX"
+	          }
             }
           },
           "uri":{
@@ -75,13 +85,31 @@
             "lat_lon":"true"
           },
            "familyname":{
-            "type":"string"
+            "type":"string",
+            "fields":{
+	          "sort":{
+	            "type":"string",
+	            "analyzer":"XXX_ANALYSER_XXX"
+	          }
+	        }
           },
           "givenname":{
-            "type":"string"
+            "type":"string",
+            "fields":{
+	          "sort":{
+	            "type":"string",
+	            "analyzer":"XXX_ANALYSER_XXX"
+	          }
+	        }
           },
           "completename":{
-            "type":"string"
+            "type":"string",
+            "fields":{
+	          "sort":{
+	            "type":"string",
+	            "analyzer":"XXX_ANALYSER_XXX"
+	          }
+	        }
           },
           "identifier":{
             "type":"string",
@@ -90,16 +118,40 @@
           "organization":{
             "properties":{
               "name":{
-                "type":"string"
+                "type":"string",
+                "fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               },
               "description":{
-                "type":"string"
+                "type":"string",
+                "fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               },
               "city":{
-                "type":"string"
+                "type":"string",
+                "fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               },
               "country":{
-                "type":"string"
+                "type":"string",
+                "fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               }
             }
           }
@@ -113,6 +165,9 @@
         "index":"not_analyzed"
       },
       "width":{
+        "type":"long"
+      },
+      "size":{
         "type":"long"
       }
     }

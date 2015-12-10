@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -278,7 +277,7 @@ public class ShareController extends ImejiController {
     UserController c = new UserController(fromUser);
     try {
       c.update(toUser, Imeji.adminUser);
-      writer.delete(new ArrayList<Object>(removedGrants), fromUser);
+      writer.delete(new ArrayList<Object>(removedGrants), Imeji.adminUser);
     } catch (Exception e) {
       logger.error(e);
     }
@@ -377,8 +376,8 @@ public class ShareController extends ImejiController {
       if (!current.contains(g) && !newGrants.contains(g) && isAllowedToAddGrant(user, g)) {
         newGrants.add(g);
       } else if (!current.contains(g) && !newGrants.contains(g) && !isAllowedToAddGrant(user, g)) {
-        logger.error(user.getPerson().getCompleteName() + " NOT ALLOWED TO share "
-            + g.getGrantFor());
+        logger
+            .error(user.getPerson().getCompleteName() + " NOT ALLOWED TO share " + g.getGrantFor());
       }
     }
     return newGrants;
@@ -395,9 +394,8 @@ public class ShareController extends ImejiController {
     if (g.getGrantFor().toString().contains("/item/")) {
       // If the grantFor is an Item, the collection is needed to know if
       // the user can administrate it
-      List<String> c =
-          ImejiSPARQL
-              .exec(JenaCustomQueries.selectCollectionIdOfItem(g.getGrantFor().toString()), null);
+      List<String> c = ImejiSPARQL
+          .exec(JenaCustomQueries.selectCollectionIdOfItem(g.getGrantFor().toString()), null);
       if (!c.isEmpty())
         return AuthUtil.staticAuth().administrate(user, c.get(0));
 

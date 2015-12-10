@@ -6,19 +6,16 @@ package de.mpg.imeji.presentation.collection;
 import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -86,17 +83,6 @@ public class CollectionItemsBean extends ItemsBean {
     return controller.search(uri, searchQuery, sortCriterion, sb.getUser(), null, limit, offset);
   }
 
-  @Override
-  public void initMenus() {
-    List<SelectItem> sortMenu = new ArrayList<SelectItem>();
-    sortMenu.add(new SelectItem(null, "--"));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.created, sb
-        .getLabel("sort_img_date_created")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified, sb.getLabel("sort_date_mod")));
-    sortMenu
-        .add(new SelectItem(SearchIndex.SearchFields.filename, sb.getLabel("sort_img_filename")));
-    setSortMenu(sortMenu);
-  }
 
   @Override
   public String getNavigationString() {
@@ -168,6 +154,25 @@ public class CollectionItemsBean extends ItemsBean {
       BeanHelper.error(sb.getMessage("error_collection_release"));
       BeanHelper.error(e.getMessage());
       logger.error("Error releasing collection", e);
+    }
+    return "pretty:";
+  }
+
+  public String createDOI() {
+    String doi =
+        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
+    CollectionController cc = new CollectionController();
+    try {
+      if (doi != null) {
+        cc.createDOIManually(doi, collection, sb.getUser());
+      } else {
+        cc.createDOI(collection, sb.getUser());
+      }
+      BeanHelper.info(sb.getMessage("success_doi_creation"));
+    } catch (ImejiException e) {
+      BeanHelper.error(sb.getMessage("error_doi_creation_" + e.getMessage()));
+      logger.error("Error during doi creation", e);
+      e.printStackTrace();
     }
     return "pretty:";
   }

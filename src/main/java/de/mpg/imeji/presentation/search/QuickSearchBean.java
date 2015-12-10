@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import javax.faces.context.FacesContext;
@@ -36,26 +37,25 @@ public class QuickSearchBean implements Serializable {
    * @throws IOException
    */
   public String search() throws IOException {
+    return search(null);
+  }
+
+  public String search(String type) throws UnsupportedEncodingException, IOException {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     if ("".equals(searchString)) {
       BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
           .getMessage("error_search_query_emtpy"));
       return "pretty:";
     }
-    if (getSelectedSearchType() == null)
-      setSelectedSearchType("images");
-    if (getSelectedSearchType().equals("collections")) {
-      FacesContext
-          .getCurrentInstance()
-          .getExternalContext()
-          .redirect(
-              navigation.getCollectionsUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
-    } else if (getSelectedSearchType().equals("images")) {
-      FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(navigation.getBrowseUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
-    } else if (getSelectedSearchType().equals("albums")) {
+    if ("collections".equals(type)) {
+      FacesContext.getCurrentInstance().getExternalContext().redirect(
+          navigation.getCollectionsUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
+    } else if ("albums".equals(type)) {
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(navigation.getAlbumsUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
+    } else {
+      FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(navigation.getBrowseUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
     }
     return "";
   }

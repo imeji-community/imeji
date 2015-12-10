@@ -125,16 +125,14 @@ public class DigilibServlet extends Scaler {
       String url = req.getParameter("id");
       String fn = req.getParameter("fn");
       if (url != null) {
-        String path =
-            internalStorageBase
-                + url.replaceAll(navigation.getApplicationUrl() + FileServlet.SERVLET_PATH, "");
+        String path = internalStorageBase
+            + url.replaceAll(navigation.getApplicationUrl() + FileServlet.SERVLET_PATH, "");
         path = path.replace("\\", "/");
         resp.sendRedirect(req.getRequestURL().toString() + "?fn=" + path + "&dw=1000");
       } else if (fn != null) {
         SessionBean session = getSession(req);
-        url =
-            navigation.getApplicationUrl() + FileServlet.SERVLET_PATH
-                + fn.replace(internalStorageBase, "");
+        url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH
+            + fn.replace(internalStorageBase, "");
 
         if (authorization.read(getUser(session), loadItem(url, session))) {
           super.doGet(req, resp);
@@ -201,10 +199,11 @@ public class DigilibServlet extends Scaler {
 
   private Item loadItem(String url, SessionBean session) throws ImejiException {
     Search s = SearchFactory.create();
-    List<String> r = s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
+    List<String> r =
+        s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
-      return c.retrieve(URI.create(r.get(0)), session.getUser());
+      return c.retrieveLazy(URI.create(r.get(0)), session.getUser());
     } else {
       throw new NotFoundException("Can not find the resource requested");
     }
@@ -223,7 +222,8 @@ public class DigilibServlet extends Scaler {
     } else {
       Search s = SearchFactory.create();
       List<String> r =
-          s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1).getResults();
+          s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1)
+              .getResults();
       if (!r.isEmpty())
         return URI.create(r.get(0));
       else

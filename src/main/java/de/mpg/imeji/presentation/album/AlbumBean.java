@@ -90,9 +90,6 @@ public class AlbumBean extends ContainerBean {
     this.album = album;
     if (album != null) {
       this.id = ObjectHelper.getId(album.getId());
-      // album =
-      // ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id),
-      // sessionBean.getUser());
       sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
       if (sessionBean.getActiveAlbum() != null
           && sessionBean.getActiveAlbum().getId().equals(album.getId())) {
@@ -100,10 +97,8 @@ public class AlbumBean extends ContainerBean {
       }
       if (album.getId() != null) {
         findItems(sessionBean.getUser(), 1);
-        loadItems(sessionBean.getUser());
+        loadItems(sessionBean.getUser(), 1);
         countItems();
-        countAllowedItems();
-        countDiscardedItems(sessionBean.getUser());
         description = album.getMetadata().getDescription();
         descriptionFull = description;
         description = CommonUtils.removeTags(description);
@@ -117,7 +112,7 @@ public class AlbumBean extends ContainerBean {
           thumbnail = new ThumbnailBean();
           thumbnail.setLink(album.getLogoUrl().toString());
         } else if (!getItems().isEmpty()) {
-          thumbnail = new ThumbnailBean(getItems().get(0));
+          thumbnail = new ThumbnailBean(getItems().get(0), false);
         }
       }
     }
@@ -143,7 +138,7 @@ public class AlbumBean extends ContainerBean {
             ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
         if (album != null) {
           findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
-          loadItems(sessionBean.getUser());
+          loadItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
           countItems();
           countAllowedItems();
           countDiscardedItems(sessionBean.getUser());
@@ -155,8 +150,8 @@ public class AlbumBean extends ContainerBean {
 
           int myPrivateCount = getPrivateCount();
           if (myPrivateCount != 0) {
-            BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace(
-                "XXX_COUNT_XXX", myPrivateCount + ""));
+            BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX",
+                myPrivateCount + ""));
           }
         }
 
@@ -176,22 +171,12 @@ public class AlbumBean extends ContainerBean {
     AlbumController ac = new AlbumController();
     try {
       setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-      findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
-      loadItems(sessionBean.getUser());
-      countItems();
-
-      if (sessionBean.getActiveAlbum() != null
-          && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString())) {
-        active = true;
-      }
-
       sessionBean.setSpaceLogoIngestImage(null);
       setIngestImage(null);
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
       logger.error("Error init album edit", e);
     }
-
     if (UrlHelper.getParameterBoolean("start")) {
       try {
         upload();
@@ -201,7 +186,6 @@ public class AlbumBean extends ContainerBean {
         BeanHelper.error("Could not upload the image " + e.getMessage());
       }
     }
-
   }
 
   /**
@@ -296,12 +280,8 @@ public class AlbumBean extends ContainerBean {
   public String save() throws Exception {
     if (update()) {
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-      FacesContext
-          .getCurrentInstance()
-          .getExternalContext()
-          .redirect(
-              navigation.getAlbumUrl() + ObjectHelper.getId(getAlbum().getId()) + "/"
-                  + navigation.getInfosPath() + "?init=1");
+      FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getAlbumUrl()
+          + ObjectHelper.getId(getAlbum().getId()) + "/" + navigation.getInfosPath() + "?init=1");
 
     }
     return "";
@@ -661,8 +641,7 @@ public class AlbumBean extends ContainerBean {
    */
   private void countAllowedItems() {
     ItemController ic = new ItemController();
-    this.allowedItemsSize =
-        ic.search(getContainer().getId(), null, null, sessionBean.getUser(), sessionBean.getSpaceId(),
-            -1, 0).getNumberOfRecords();
+    this.allowedItemsSize = ic.search(getContainer().getId(), null, null, sessionBean.getUser(),
+        sessionBean.getSpaceId(), -1, 0).getNumberOfRecords();
   }
 }

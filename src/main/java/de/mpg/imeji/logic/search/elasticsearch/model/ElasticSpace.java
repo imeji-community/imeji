@@ -18,7 +18,7 @@ public class ElasticSpace extends ElasticProperties {
 
   private List<String> folder;
   private String slug;
-  private String title;
+  private String name;
   private String description;
 
   /**
@@ -30,7 +30,7 @@ public class ElasticSpace extends ElasticProperties {
     super(space);
     folder = new ArrayList<>(space.getSpaceCollections());
     this.slug = space.getSlug();
-    this.title = space.getTitle();
+    this.name = space.getTitle();
     this.description = space.getDescription();
   }
 
@@ -46,20 +46,6 @@ public class ElasticSpace extends ElasticProperties {
    */
   public void setSlug(String slug) {
     this.slug = slug;
-  }
-
-  /**
-   * @return the title
-   */
-  public String getTitle() {
-    return title;
-  }
-
-  /**
-   * @param title the title to set
-   */
-  public void setTitle(String title) {
-    this.title = title;
   }
 
   /**
@@ -82,6 +68,14 @@ public class ElasticSpace extends ElasticProperties {
 
   public void setFolder(List<String> folder) {
     this.folder = folder;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
 }

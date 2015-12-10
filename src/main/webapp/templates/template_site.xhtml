@@ -41,6 +41,7 @@ All rights reserved. Use is subject to license terms.
 
         <h:head>
             <ui:include src="component/header/html_head_default.xhtml"/>
+            <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
         </h:head>
 
         <h:body lang="#{SessionBean.locale}">
@@ -54,24 +55,27 @@ All rights reserved. Use is subject to license terms.
             <!-- global page wrapper -->
             <div class="#{siteWrapperClass}">
                 <ui:insert name="init"/>
-                
                 <ui:include src="component/header/header_default.xhtml"/>
-                <ui:insert name="actionsMenu"/>
-                
-                <!-- headline -->
-                <h:panelGroup layout="block" styleClass="imj_siteContentHeadline" rendered="#{headline.toString().trim().length() > 0}">
+                <!-- Search Query -->
+                <ui:insert name="searchQuery"/>
+                 <!-- headline -->
+                <h:panelGroup rendered="#{!displayQuery}" layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
                     <h1>
                         <h:outputText value="#{headline.toString().trim()}"/>
+                        <h:outputText value="imeji" rendered="#{headline.toString().trim().length() == 0}"/>
                         <ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
                             <br/>
                             <h:outputText value="#{headlineSecondRow.toString().trim()}"/>
                         </ui:fragment>
                     </h1>
                 </h:panelGroup>
-                
-                <!-- message area -->
+                <!-- Actions Menu -->
+                <h:panelGroup id="actionsMenuArea">
+                <ui:insert name="actionsMenu"/>   
+                </h:panelGroup>
+                <!-- Message area -->
                 <h:panelGroup id="imj_pageMessageArea">
-                    <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help')}">
+                    <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages}">
 
                         <ui:fragment rendered="#{MessagesBean.hasMessages}">
                             <ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
@@ -96,21 +100,11 @@ All rights reserved. Use is subject to license terms.
                                 </ui:fragment>
                             </ui:fragment>
                         </ui:fragment>
-
-                        <ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help'}">
-                            <h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="imj_messageStatus">
-                                <h:outputText value="#{lbl.active_album}: "/>
-                                <h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
-                                    <h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
-                                </h:outputLink>
-                            </h:panelGroup>
-                        </ui:fragment>
                     </h:panelGroup>
                 </h:panelGroup>
 
                 <!-- content wrapper -->
                 <div class="imj_mainContentWrapper">
-                    <ui:insert name="searchQuery"/>
                     <ui:insert name="mainContent"/>
                 </div>
                 
@@ -126,7 +120,7 @@ All rights reserved. Use is subject to license terms.
             
             <!-- scripts -->
             <ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
-                <script type="text/javascript">var placeholder_simpleSearch = 'search for ...';</script>
+                <script type="text/javascript">var placeholder_simpleSearch = 'Search for ...';</script>
             </ui:fragment>
             <ui:fragment rendered="#{SessionBean.locale == 'de'}">
                 <script type="text/javascript">var placeholder_simpleSearch = 'Suche nach ...';</script>
@@ -137,7 +131,7 @@ All rights reserved. Use is subject to license terms.
 
             <script type="text/javascript">var homeURL = '#{Navigation.applicationUrl}';</script>
 
-            <h:outputScript library="js/" name="default.min.js"></h:outputScript>
+            <h:outputScript library="js/" name="default.js"></h:outputScript>
 
             <script type="text/javascript">
                 $(function () {

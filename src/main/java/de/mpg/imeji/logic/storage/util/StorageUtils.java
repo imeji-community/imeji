@@ -45,6 +45,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
@@ -66,7 +67,7 @@ public class StorageUtils {
   public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
   public final static String BAD_FORMAT = "bad-extension/other";
   private static Tika tika = new Tika();
-  private static MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
+  public final static MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
 
   /**
    * Transform an {@link InputStream} to a {@link Byte} array
@@ -149,6 +150,20 @@ public class StorageUtils {
    */
   public static boolean hasExtension(String filename) {
     return !FilenameUtils.getExtension(filename).equals("");
+  }
+
+  /**
+   * Return the extension as String
+   * 
+   * @param mimeType
+   * @return
+   */
+  public static String getExtension(String mimeType) {
+    try {
+      return allTypes.forName(mimeType).getExtension().substring(1);
+    } catch (MimeTypeException e) {
+      return mimeType;
+    }
   }
 
   /**
@@ -306,7 +321,7 @@ public class StorageUtils {
     FileInputStream fis = null;
     try {
       fis = new FileInputStream(file);
-      return DigestUtils.md5Hex(fis);
+      return DigestUtils.md5Hex(toBytes(fis));
     } catch (IOException e) {
       throw new UnprocessableError("Error calculating the cheksum of the file: ", e);
     }

@@ -147,9 +147,8 @@ public abstract class ContainerBean implements Serializable {
    */
   protected void countItems() {
     ItemController ic = new ItemController();
-    size =
-        ic.search(getContainer().getId(), null, null, Imeji.adminUser, null, 0, 0)
-            .getNumberOfRecords();
+    size = ic.search(getContainer().getId(), null, null, Imeji.adminUser, null, 0, 0)
+        .getNumberOfRecords();
   }
 
   /**
@@ -157,7 +156,7 @@ public abstract class ContainerBean implements Serializable {
    * 
    * @throws ImejiException
    */
-  protected void loadItems(User user) throws ImejiException {
+  protected void loadItems(User user, int size) throws ImejiException {
     setItems(new ArrayList<Item>());
     if (getContainer() != null) {
       List<String> uris = new ArrayList<String>();
@@ -165,7 +164,7 @@ public abstract class ContainerBean implements Serializable {
         uris.add(uri.toString());
       }
       ItemController ic = new ItemController();
-      setItems((List<Item>) ic.retrieve(uris, -1, 0, user));
+      setItems((List<Item>) ic.retrieveBatch(uris, size, 0, user));
     }
   }
 
@@ -177,10 +176,10 @@ public abstract class ContainerBean implements Serializable {
     if (getContainer() != null) {
       ItemController ic = new ItemController();
       SearchQuery q = new SearchQuery();
-      q.addPair(new SearchPair(SearchFields.status, SearchOperators.EQUALS, Status.WITHDRAWN
-          .getUriString(), false));
-      setSizeDiscarded(ic.search(getContainer().getId(), q, null, user, null, -1, 0)
-          .getNumberOfRecords());
+      q.addPair(new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+          Status.WITHDRAWN.getUriString(), false));
+      setSizeDiscarded(
+          ic.search(getContainer().getId(), q, null, user, null, -1, 0).getNumberOfRecords());
     } else {
       setSizeDiscarded(0);
     }
@@ -370,8 +369,8 @@ public abstract class ContainerBean implements Serializable {
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     if (getContainer() != null && getContainer().getCreatedBy() != null
         && sessionBean.getUser() != null) {
-      return getContainer().getCreatedBy().equals(
-          ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+      return getContainer().getCreatedBy()
+          .equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
     }
     return false;
   }
@@ -395,8 +394,8 @@ public abstract class ContainerBean implements Serializable {
   }
 
 
-  private IngestImage getUploadedIngestFile(HttpServletRequest request, HttpServletResponse response)
-      throws FileUploadException, TypeNotAllowedException {
+  private IngestImage getUploadedIngestFile(HttpServletRequest request,
+      HttpServletResponse response) throws FileUploadException, TypeNotAllowedException {
     File tmp = null;
     boolean isMultipart = ServletFileUpload.isMultipartContent(request);
     IngestImage ii = new IngestImage();
@@ -409,14 +408,11 @@ public abstract class ContainerBean implements Serializable {
           FileItemStream fis = iter.next();
           InputStream in = fis.openStream();
 
-          tmp =
-              TempFileUtil.createTempFile("containerlogo",
-                  "." + FilenameUtils.getExtension(fis.getName()));
+          tmp = TempFileUtil.createTempFile("containerlogo",
+              "." + FilenameUtils.getExtension(fis.getName()));
           if (fis.getName() != null && extensionNotAllowed(tmp)) {
-            response
-                .getWriter()
-                .print(
-                    "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}");
+            response.getWriter().print(
+                "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}");
             FacesContext.getCurrentInstance().responseComplete();
             throw new TypeNotAllowedException(
                 ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))

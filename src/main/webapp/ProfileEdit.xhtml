@@ -7,23 +7,15 @@
 	
 	<ui:param name="metadataBean" value="#{EditMdProfileBean}"/>
 	
-	<ui:param name="headline" value="#{lbl.metadata_profile} #{lbl.edit.toString().toLowerCase()}"/>
+	<ui:param name="headline" value="#{metadataBean.profile.title}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
-	<ui:param name="containerHeadline" value="#{lbl.collection_info}"/>
 	
 	<ui:define name="actionsMenu">
 		
 		<ui:fragment>
-				<menu:context_subNavigation contextId="#{metadataBean.collection.idString}" 
-											contextUrl="#{Navigation.collectionUrl}" 
-											curMainMenu="#{currentMainMenu}" 
-											userHasAdminRights="#{Auth.admin}" 
-											userHasUploadRights="#{Auth.createContent(metadataBean.collection) and metadataBean.collection.status != 'WITHDRAWN'}" 
-											hasContent="#{metadataBean.collection.images.size() > 0}" 
-											navBean="#{Navigation}" 
-											activeMenu="metadata"/>
+		
 											
-			<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+			<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 									 curMainMenu="#{currentMainMenu}" 
 									 downloadEnabled="false"
 									 actionEnabled="false"

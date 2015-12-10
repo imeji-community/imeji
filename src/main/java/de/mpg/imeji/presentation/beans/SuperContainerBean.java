@@ -92,10 +92,8 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
    * @return
    */
   public String getInit() {
-
     setSelectedFilterSearch(null);
     setSearchQuery(null);
-
     if (UrlHelper.getParameterValue("f") != null && !UrlHelper.getParameterValue("f").equals("")) {
       selectedFilter = UrlHelper.getParameterValue("f");
     }
@@ -103,12 +101,10 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         && !UrlHelper.getParameterValue("tab").equals("")) {
       selectedMenu = UrlHelper.getParameterValue("tab");
     }
-
     if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .containsKey("q")) {
       query = UrlHelper.getParameterValue("q");
     }
-
     if (selectedFilter == null || UrlHelper.getParameterBoolean("login") || sb.getUser() == null) {
       if (sb.getUser() != null) {
         selectedFilter = "my";
@@ -131,21 +127,17 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     sortMenu.add(new SelectItem(SearchIndex.SearchFields.title.name(), sb.getLabel("sort_title")));
     sortMenu.add(
         new SelectItem(SearchIndex.SearchFields.modified.name(), sb.getLabel("sort_date_mod")));
-    sortMenu.add(
-        new SelectItem(SearchIndex.SearchFields.created, sb.getLabel("sort_img_date_created")));
     sortMenu
         .add(new SelectItem(SearchIndex.SearchFields.creator.name(), sb.getLabel("sort_author")));
-    filterMenu = new ArrayList<SelectItem>();
-    filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
-
     if (sb.getUser() != null) {
-      sortMenu
-          .add(new SelectItem(SearchIndex.SearchFields.status.name(), sb.getLabel("sort_status")));
+      filterMenu = new ArrayList<SelectItem>();
+      filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
       filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
       filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
+      filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
+      filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
     }
-    filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
-    filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
+
   }
 
   /**
@@ -403,30 +395,32 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     return false;
   }
 
-
-  public int prepareList(int offset) throws Exception {
-
+  /**
+   * Search for containers, according to the current queries
+   * 
+   * @param offset
+   * @param limit
+   * @return
+   * @throws Exception
+   */
+  public int search(int offset, int limit) throws Exception {
     SearchQuery searchQuery = new SearchQuery();
     int myOffset = offset;
-
     if (!"".equals(getQuery())) {
       searchQuery = SearchQueryParser.parseStringQuery(getQuery());
     }
     // get Filters for Collections
     SearchPair sp = getFilter();
-
-
     if (sp != null) {
       searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
       searchQuery.addPair(sp);
     }
-
     if (getSearchQuery() == null || changedFilters(sp, getSelectedFilterSearch())) {
       SortCriterion sortCriterion = new SortCriterion();
       sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
       sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 
-      searchResult = search(searchQuery, sortCriterion);
+      searchResult = search(searchQuery, sortCriterion, offset, limit);
       setSearchQuery(searchQuery);
       setSelectedFilterSearch(sp);
       searchResult.setQuery(getQuery());
@@ -443,11 +437,15 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     return myOffset;
   }
 
-  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
-    SearchResult sr = null;
-    return sr;
-
-  }
+  /**
+   * Search for the container
+   * 
+   * @param searchQuery
+   * @param sortCriterion
+   * @return
+   */
+  public abstract SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion,
+      int offset, int limit);
 
   /*
    * (non-Javadoc)

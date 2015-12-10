@@ -12,7 +12,7 @@
 	<ui:param name="currentMainMenu" value="admin"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"
@@ -21,9 +21,6 @@
 	
 	<ui:define name="mainContent">
 		<h:outputText value="#{UserBean.init}"/>
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>
-		
 		<!-- If User has no right to view the page -->
 		<ui:fragment rendered="#{!Auth.admin(UserBean.user)}">
 			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
@@ -35,7 +32,7 @@
 		<ui:fragment rendered="#{Auth.admin(UserBean.user)}">
 			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin}">
 				<a href="#{Navigation.applicationSpaceUrl}users" title="#{lbl.admin_user_view}">
-					<h:outputText value="#{lbl.admin_user_view}" styleClass="imj_backButton" />
+					<h:outputText value="#{lbl.admin_user_view}" />
 				</a>
 			</h:panelGroup>
 		
@@ -109,15 +106,18 @@
 										<!-- Disk space quota -->
 										<div class="imj_admindataSet">
 											<div class="imj_admindataLabel">
-												<h:outputText value="#{lbl.quota}"/>
+												<h:outputText value="#{lbl.quota}" rendered="#{!UserBean.edit or !SessionBean.user.admin}"/>
+												<h:outputText value="#{lbl.quota_input}" rendered="#{UserBean.edit and SessionBean.user.admin}"/>
 												<span class="imj_invisible">: </span>
 											</div>
 											<div class="imj_admindataValue">
 												<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit or !SessionBean.user.admin}">
-													<h:outputText value="#{UserBean.user.quota}"/>
+													<h:outputText value="#{UserBean.user.getQuotaHumanReadable()}"/>
 												</h:panelGroup>
 												<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit and SessionBean.user.admin}" >
-													<h:inputText value="#{UserBean.user.quota}"/>
+													<h:selectOneMenu value="#{UserBean.user.quota}" >
+														<f:selectItems value="#{ConfigurationBean.getQuotaLimitsStatic()}"/>
+													</h:selectOneMenu>
 												</h:panelGroup>
 											</div>
 										</div>

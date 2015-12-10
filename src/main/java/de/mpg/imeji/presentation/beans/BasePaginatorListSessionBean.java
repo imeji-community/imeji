@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together
@@ -64,7 +63,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
    * filters). corresponding BaseListRetrieverRequestBean.
    */
   private int totalNumberOfElements = 0;
-  private boolean ajaxMode = true;
 
   /**
    * Types of paginators
@@ -83,11 +81,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   public BasePaginatorListSessionBean() {
     paginatorPageList = new ArrayList<PaginatorPage>();
     currentPartList = new ArrayList<ListElementType>();
-    try {
-      ajaxMode = Boolean.valueOf(PropertyReader.getProperty("imeji.pagination.ajaxmodus"));
-    } catch (Exception e) {
-      logger.error("Error reading property imeji.pagination.ajaxmodus", e);
-    }
     elementsPerPageSelectItems = new ArrayList<SelectItem>();
   }
 
@@ -107,15 +100,13 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   public String getUrlParameters() {
     if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .containsKey("page")) {
-      currentPageNumber =
-          Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-              .getRequestParameterMap().get("page"));
+      currentPageNumber = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+          .getRequestParameterMap().get("page"));
     }
     if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .containsKey("el")) {
-      elementsPerPage =
-          Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-              .getRequestParameterMap().get("el"));
+      elementsPerPage = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+          .getRequestParameterMap().get("el"));
     }
     return "";
   }
@@ -145,7 +136,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
       logger.error("Error paginator list update ", e);
-      e.printStackTrace();
     }
   }
 
@@ -378,7 +368,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
    */
   public String goToNextPage() {
     currentPageNumber += 1;
-    return getPrettyNavigation();
+    return "";
   }
 
   /**
@@ -388,7 +378,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
    */
   public String goToPreviousPage() {
     currentPageNumber -= 1;
-    return getPrettyNavigation();
+    return "";
   }
 
   /**
@@ -398,7 +388,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
    */
   public String goToFirstPage() {
     currentPageNumber = 1;
-    return getPrettyNavigation();
+    return "";
   }
 
   /**
@@ -408,7 +398,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
    */
   public String goToLastPage() {
     currentPageNumber = getPaginatorPageSize();
-    return getPrettyNavigation();
+    return "";
   }
 
   /**
@@ -466,16 +456,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   public abstract String getNavigationString();
 
-  public String getPrettyNavigation() {
-    if (ajaxMode)
-      return "";
-    else
-      return getNavigationString();
-  }
 
-  public boolean isAjaxMode() {
-    return ajaxMode;
-  }
 
   /**
    * return the {@link PAGINATOR_TYPE} of the current bean

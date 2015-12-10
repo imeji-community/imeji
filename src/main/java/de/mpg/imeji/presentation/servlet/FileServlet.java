@@ -280,7 +280,8 @@ public class FileServlet extends HttpServlet {
     } else {
       Search s = SearchFactory.create();
       List<String> r =
-          s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1).getResults();
+          s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1)
+              .getResults();
       if (!r.isEmpty())
         return URI.create(r.get(0));
       else
@@ -297,10 +298,11 @@ public class FileServlet extends HttpServlet {
    */
   private Item getItem(String url, User user) throws Exception {
     Search s = SearchFactory.create();
-    List<String> r = s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
+    List<String> r =
+        s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
-      return c.retrieve(URI.create(r.get(0)), user);
+      return c.retrieveLazy(URI.create(r.get(0)), user);
     } else {
       throw new NotFoundException("Can not find the resource requested");
     }

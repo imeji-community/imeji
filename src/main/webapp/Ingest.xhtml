@@ -19,7 +19,7 @@
 									activeMenu="ingest" 
 									hasContent="#{IngestBean.collectionSize > 0}"/>
 		
-		<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
 									curMainMenu="#{currentMainMenu}" 
 									navBean="#{Navigation}" 
 									collectionStatus="#{IngestBean.collection.status}" 
@@ -114,10 +114,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-	
-		<!-- Breadcrumb - History -->
-		<ui:include src="./include/History.xhtml"/>
-		
 		<h:panelGroup layout="block" rendered="#{!Auth.admin}">
 			<h2>
 				<h:outputText value="#{lbl.view_page_disallowed2}"/>

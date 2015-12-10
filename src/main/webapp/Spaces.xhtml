@@ -10,7 +10,7 @@
 	<ui:param name="currentMainMenu" value="admin"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"
@@ -19,10 +19,6 @@
 	
 	
 	<ui:define name="mainContent">
-	
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>
-		
 		<!-- Are You Admin? -->	
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
@@ -34,7 +30,7 @@
 			<!-- AdminDataList - Back Button -->
 			<h:panelGroup layout="block" styleClass="imj_backPanel">
 				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+					<h:outputText value="#{lbl.back_to_admin}"/>
 				</h:outputLink>
 			</h:panelGroup>
 			

@@ -9,7 +9,7 @@
 	<ui:param name="currentMainMenu" value="admin"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"
@@ -17,9 +17,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		
-		<ui:include src="include/History.xhtml"></ui:include>			
-		
 		<ui:fragment rendered="#{!Auth.admin}">
 			<ui:include src="./include/LoginFormular.xhtml" />
 		</ui:fragment>
@@ -28,7 +25,7 @@
 		<ui:fragment rendered="#{Auth.admin}">
 			<h:panelGroup layout="block" styleClass="imj_backPanel">
 				<a href="#{Navigation.applicationSpaceUrl}usergroups" title="#{lbl.admin_groups_view}">
-					<h:outputText value="#{lbl.admin_userGroups_view}" styleClass="imj_backButton"/>
+					<h:outputText value="#{lbl.admin_userGroups_view}"/>
 				</a>
 			</h:panelGroup>
 		

@@ -2,47 +2,84 @@
   "albums":{
     "properties":{
       "created":{
-        "type":"long"
+        "type":"long",
+         "include_in_all": false
       }, 
       "creator":{
         "type":"string",
-         "index":"not_analyzed"
+         "index":"not_analyzed",
+          "include_in_all": false
       },
        "lasteditor":{
         "type":"string",
-         "index":"not_analyzed"
+         "index":"not_analyzed",
+          "include_in_all": false
       },
       "id":{
         "type":"string",
-         "index":"not_analyzed"
+         "index":"not_analyzed", "include_in_all": false
       },
       "modified":{
-        "type":"long"
+        "type":"long", "include_in_all": false
       },
       "status":{
         "type":"string",
-        "index":"not_analyzed"
+        "index":"not_analyzed", "include_in_all": false
       },
       "member":{
        "type":"string",
-       "index":"not_analyzed"
+       "index":"not_analyzed", "include_in_all": false
       },
       "name":{
-      	"type":"string"
+      	"type":"string",
+      	"fields":{
+          "sort":{
+            "type":"string",
+            "analyzer":"XXX_ANALYSER_XXX"
+          }
+        }
       },
       "description":{
-      	"type":"string"
+      	"type":"string",
+      	
+      	"fields":{
+          "sort":{
+            "type":"string",
+            "analyzer":"XXX_ANALYSER_XXX"
+          }
+        }
       },
       "author":{
         "properties":{
           "familyname":{
-            "type":"string"
+            "type":"string",
+            
+            "fields":{
+	          "sort":{
+	            "type":"string",
+	            "analyzer":"XXX_ANALYSER_XXX"
+	          }
+	        }
           },
           "givenname":{
-            "type":"string"
+            "type":"string",
+            
+            "fields":{
+	          "sort":{
+	            "type":"string",
+	            "analyzer":"XXX_ANALYSER_XXX"
+	          }
+	        }
           },
           "completename":{
-            "type":"string"
+            "type":"string",
+            
+            "fields":{
+	          "sort":{
+	            "type":"string",
+	            "analyzer":"XXX_ANALYSER_XXX"
+	          }
+	        }
           },
           "identifier":{
             "type":"string",
@@ -51,16 +88,44 @@
           "organization":{
             "properties":{
               "name":{
-                "type":"string"
+                "type":"string",
+                
+                "fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               },
               "description":{
-                "type":"string"
+                "type":"string",
+                
+                "fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               },
               "city":{
-                "type":"string"
+                "type":"string",
+                
+              	"fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               },
               "country":{
-                "type":"string"
+                "type":"string",
+                
+                "fields":{
+		          "sort":{
+		            "type":"string",
+		            "analyzer":"XXX_ANALYSER_XXX"
+		          }
+		        }
               }
             }
           }

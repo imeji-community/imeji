@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -371,13 +372,16 @@ public class UploadBean implements Serializable {
     List<String> sr =
         s.searchString(JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
             FilenameUtils.getBaseName(filename)), null, null, 0, -1).getResults();
-    if (sr.size() == 0)
+    if (sr.size() == 0) {
       throw new RuntimeException(
           "No item found with the filename " + FilenameUtils.getBaseName(filename));
-    if (sr.size() > 1)
+    }
+    if (sr.size() > 1) {
       throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename) + " not unique ("
+
           + sr.size() + " found).");
-    return ObjectLoader.loadItem(URI.create(sr.get(0)), user);
+    }
+    return new ItemController().retrieveLazy(URI.create(sr.get(0)), user);
   }
 
   /**
@@ -427,7 +431,27 @@ public class UploadBean implements Serializable {
       throw new UnprocessableError(sessionBean.getMessage("error_collection_discarded_upload"));
     }
   }
-
+  
+  public String createDOI(){
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    String doi = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
+    CollectionController cc = new CollectionController();
+    try{
+      if(doi != null){
+        cc.createDOIManually(doi, collection, sessionBean.getUser());
+      }else{
+        cc.createDOI(collection, sessionBean.getUser());
+      } 
+      BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
+    } catch (ImejiException e) {
+      BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
+      logger.error("Error during doi creation", e);
+      e.printStackTrace();
+    }
+    return "";
+  }
+  
+  
   /**
    * release the {@link CollectionImeji}
    * 

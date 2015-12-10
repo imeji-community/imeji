@@ -43,6 +43,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
@@ -325,7 +326,7 @@ public class CollectionController extends ImejiController {
         throw new UnprocessableError("Collection is not pending and can not be deleted!");
       }
       // Delete images
-      List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+      List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
 
       itemController.delete(items, user);
 
@@ -386,7 +387,7 @@ public class CollectionController extends ImejiController {
           + " and can not be released again!");
     } else {
       writeReleaseProperty(collection, user);
-      List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+      List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.release(items, user);
       update(collection, user);
       if (AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
@@ -394,6 +395,48 @@ public class CollectionController extends ImejiController {
         pc.release(pc.retrieve(collection.getProfile(), user), user);
       }
     }
+  }
+  
+  public void createDOI(CollectionImeji coll, User user) throws ImejiException {
+    if (user == null) {
+      throw new AuthenticationError("User must be signed-in");
+    }
+
+    if (coll == null) {
+      throw new NotFoundException("Collection does not exists");
+    }
+    
+    if (!Status.RELEASED.equals(coll.getStatus())){
+      throw new ImejiException("Collection has to be released to create a DOI");
+    }
+    
+    DoiController doicontr = new DoiController();
+    
+    String doiServiceUrl = ConfigurationBean.getDoiServiceUrlStatic();
+    String doiUser = ConfigurationBean.getDoiUserStatic();
+    String doiPassword = ConfigurationBean.getDoiPasswordStatic();
+    
+    String doi = doicontr.getNewDoi(coll, doiServiceUrl, doiUser, doiPassword);
+    coll.setDOI(doi);
+    update(coll, user);
+  }
+  
+  public void createDOIManually(String doi, CollectionImeji collection, User user) throws ImejiException{
+    if (user == null) {
+      throw new AuthenticationError("User must be signed-in");
+    }
+
+    if (collection == null) {
+      throw new NotFoundException("Collection does not exists");
+    }
+    
+    if (!Status.RELEASED.equals(collection.getStatus())){
+      throw new ImejiException("Collection has to be released to create a DOI");
+    }
+    
+    collection.setDOI(doi);
+    update(collection, user);
+    
   }
 
   /**
@@ -421,7 +464,7 @@ public class CollectionController extends ImejiController {
     } else if (!Status.RELEASED.equals(coll.getStatus())) {
       throw new UnprocessableError("Withdraw collection: Collection must be released");
     } else {
-      List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+      List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.withdraw(items, coll.getDiscardComment(), user);
       writeWithdrawProperties(coll, null);
       update(coll, user);
@@ -485,7 +528,7 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(ic.getId(), null, null, user, null, -1, 0).getResults();
 
-    List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
+    List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
     itemController.updateItemsProfile(items, user, newProfileUri.toString());
   }
 

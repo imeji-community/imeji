@@ -78,8 +78,8 @@ public class PropertyReader {
     try {
       solution = PropertyReader.class.getClassLoader().getResource("solution.properties");
     } catch (Exception e) {
-      Logger.getLogger(PropertyReader.class).warn(
-          "WARNING: solution.properties not found: " + e.getMessage());
+      Logger.getLogger(PropertyReader.class)
+          .warn("WARNING: solution.properties not found: " + e.getMessage());
     }
     if (solution != null) {
       Logger.getLogger(PropertyReader.class).info("Solution URI is " + solution.toString());
@@ -91,8 +91,8 @@ public class PropertyReader {
     } else {
       // Use Default location of properties file
       propertiesFile = DEFAULT_PROPERTY_FILE;
-      Logger.getLogger(PropertyReader.class).debug(
-          "solution.properties file not found. Trying default.");
+      Logger.getLogger(PropertyReader.class)
+          .debug("solution.properties file not found. Trying default.");
     }
     InputStream instream = getInputStream(propertiesFile);
     properties = new Properties();
@@ -118,6 +118,8 @@ public class PropertyReader {
       String serverConfDirectory;
       if (System.getProperty("jboss.server.config.dir") != null) {
         serverConfDirectory = System.getProperty("jboss.server.config.dir");
+      } else if (System.getProperty("catalina.base") != null) {
+        serverConfDirectory = System.getProperty("catalina.base") + "/conf";
       } else if (System.getProperty("catalina.home") != null) {
         serverConfDirectory = System.getProperty("catalina.home") + "/conf";
       } else {

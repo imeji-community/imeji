@@ -99,7 +99,7 @@ public class CookieUtils {
    * @param c
    */
   public static void setCookieProperties(Cookie c) {
-    c.setMaxAge((int) (TimeUnit.SECONDS.convert(30, TimeUnit.DAYS)));
+    c.setMaxAge((int) (TimeUnit.SECONDS.convert(365, TimeUnit.DAYS)));
     c.setPath("/");
   }
 }

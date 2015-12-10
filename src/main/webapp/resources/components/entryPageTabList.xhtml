@@ -13,6 +13,21 @@
 	
 	<composite:implementation>
 	
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"></script>
+		<script type="text/javascript">
+				
+				var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+					document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+				};
+				var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+					var qr = qrcode(typeNumber || 20, errorCorrectLevel || 'M');
+					qr.addData(text);
+					qr.make();
+					// return qr.createTableTag();
+					return qr.createImgTag();
+				};
+			</script>
+	
 		<!-- MetaDataList - START -->
 		<div class="imj_metadataList">
 		
@@ -139,36 +154,26 @@
 							</span>
 						</h:panelGroup>
 						
+						<!-- DOI -->
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION' and cc.attrs.infoLogicBean.collection.status == 'RELEASED'}">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.doi}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.collection.DOI}"/>
+							</span>
+						</h:panelGroup>
+						
 						<!-- Tab Utilities - QR-Tag -->
-						<h:panelGroup styleClass="imj_infodataSet">
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION'}">
 							<span class="imj_infodataLabel">
 								<h:outputText value="#{lbl.qrcode}"/>
 								<span class="imj_invisible">: </span>
 							</span>
-							<span class="imj_infodataValue" id="qr"> </span>
+							<span class="imj_infodataValue qr" id="qr"></span>
+							<h:outputScript>var qrHtml = document.getElementById('qr'); qrHtml.innerHTML = create_qrcode('{key:"#{SessionBean.user.apiKey}",col:"#{cc.attrs.infoLogicBean.collection.id}"}');</h:outputScript>
 						</h:panelGroup>
-						
-						<!-- Tab Utilities - QR-Tag for android app
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.email != null}">
-							<h:commandButton value="#{lbl.generate_QrCode_for_app}" styleClass="imj_submitButton" title="#{lbl.generate_QrCode_for_app}" onclick="generateAppLoginQrcode(); openDialog('appLoginQrcode');">
-								<f:ajax  execute="@form" render="@none"/>
-							</h:commandButton>
-
-							<div id="appLoginQrcode" class="imj_dialogWait imj_modalDialogBox">
-						        <h2 class="imj_headline">
-						        	<span class="imj_infodataLabel">
-										<h:outputText value="#{lbl.qrcode} testing (for android app)"/>
-										<span class="imj_invisible">: </span>
-									</span>
-						        	<span class="imj_infodataValue" id="qr_app"> </span>	
-						        	<a href="#" class="imj_submitButton" onclick="closeDialog('appLoginQrcode');"> 
-										<h:outputText value="#{lbl.confirm}"/>
-									</a>
-						        </h2>
-							</div>
-
-						</h:panelGroup>
-						-->
 						
 					</h:panelGroup>
 					
@@ -177,36 +182,6 @@
 			</h:panelGroup> <!-- END LIST BODY -->
 		</div> <!-- END LIST -->
 		
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"> </script>
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				var qrHtml = document.getElementById('qr');
-				if (qrHtml != null){
-					if('#{cc.attrs.infoLogicBean.email}' != '')
-						qrHtml.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}');
-					else
-						qrHtml.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}');
-				}
-			});
-			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
-				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
-			};
-			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
-
-				var qr = qrcode(typeNumber || 9, errorCorrectLevel || 'M');
-				qr.addData(text);
-				qr.make();
-				// return qr.createTableTag();
-				return qr.createImgTag();
-			};
-			
-			function generateAppLoginQrcode() {
-				var qrHtmlForApp = document.getElementById('qr_app');
-				if (qrHtmlForApp != null){
-					qrHtmlForApp.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}');
-				}
-			}
-		</script>
 
 	</composite:implementation>
 </html>

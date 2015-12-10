@@ -18,6 +18,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -150,7 +151,8 @@ public class AdvancedSearchBean {
     profilesMenu.add(new SelectItem(null, session.getLabel("select_profile")));
     ProfileController controller = new ProfileController();
     Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
-    for (MetadataProfile p : controller.search(session.getUser(), session.getSelectedSpaceString())) {
+    for (MetadataProfile p : controller.search(session.getUser(),
+        session.getSelectedSpaceString())) {
       if (p != null && p.getStatements() != null && p.getStatements().size() > 0) {
         map.put(p.getId().toString(), p);
         profilesMenu.add(new SelectItem(p.getId().toString(), p.getTitle()));
@@ -180,18 +182,16 @@ public class AdvancedSearchBean {
    */
   public void goToResultPage() throws IOException {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    errorQuery = false;
     try {
-      errorQuery = false;
+      formular.validate();
       String q = SearchQueryParser.transform2UTF8URL(formular.getFormularAsSearchQuery());
-      if (!"".equals(q)) {
-        FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(navigation.getBrowseUrl() + "?q=" + q);
-      } else
-        BeanHelper.error(session.getMessage("error_search_query_emtpy"));
-    } catch (Exception e) {
-      errorQuery = true;
       FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(navigation.getSearchUrl() + "?error=1&types=" + getFileTypesQuery());
+          .redirect(navigation.getBrowseUrl() + "?q=" + q);
+    } catch (UnprocessableError e1) {
+      for (String m : e1.getMessages()) {
+        BeanHelper.error(session.getMessage(m));
+      }
     }
   }
 
@@ -224,9 +224,8 @@ public class AdvancedSearchBean {
    * @throws ImejiException
    */
   public void changeGroup() throws ImejiException {
-    int gPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("gPos"));
+    int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("gPos"));
     formular.changeSearchGroup(gPos);
   }
 
@@ -234,9 +233,8 @@ public class AdvancedSearchBean {
    * Add a new {@link SearchGroupForm}
    */
   public void addGroup() {
-    int gPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("gPos"));
+    int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("gPos"));
     formular.addSearchGroup(gPos);
   }
 
@@ -244,9 +242,8 @@ public class AdvancedSearchBean {
    * Remove a {@link SearchGroupForm}
    */
   public void removeGroup() {
-    int gPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("gPos"));
+    int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("gPos"));
     formular.removeSearchGroup(gPos);
     if (formular.getGroups().size() == 0) {
       formular.addSearchGroup(0);
@@ -257,12 +254,10 @@ public class AdvancedSearchBean {
    * Change a {@link SearchMetadataForm}. The search value is removed
    */
   public void changeElement() {
-    int gPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("gPos"));
-    int elPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("elPos"));
+    int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("gPos"));
+    int elPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("elPos"));
     formular.changeElement(gPos, elPos, false);
   }
 
@@ -270,12 +265,10 @@ public class AdvancedSearchBean {
    * Update a {@link SearchMetadataForm}. The search value is keeped
    */
   public void updateElement() {
-    int gPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("gPos"));
-    int elPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("elPos"));
+    int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("gPos"));
+    int elPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("elPos"));
     formular.changeElement(gPos, elPos, true);
   }
 
@@ -283,12 +276,10 @@ public class AdvancedSearchBean {
    * Add a new {@link SearchMetadataForm}
    */
   public void addElement() {
-    int gPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("gPos"));
-    int elPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("elPos"));
+    int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("gPos"));
+    int elPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("elPos"));
     formular.addElement(gPos, elPos);
   }
 
@@ -296,12 +287,10 @@ public class AdvancedSearchBean {
    * Remove a new {@link SearchMetadataForm}
    */
   public void removeElement() {
-    int gPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("gPos"));
-    int elPos =
-        Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get("elPos"));
+    int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("gPos"));
+    int elPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("elPos"));
     formular.removeElement(gPos, elPos);
     if (formular.getGroups().get(gPos).getSearchElementForms().size() == 0) {
       formular.removeSearchGroup(gPos);
@@ -315,15 +304,7 @@ public class AdvancedSearchBean {
    * @return
    */
   public String getSimpleQuery() {
-    try {
-      errorQuery = false;
-      return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
-    } catch (Exception e) {
-      errorQuery = true;
-      if ("Wrong date format".equals(e.getMessage()))
-        return session.getMessage("error_date_format");
-      return e.getMessage();
-    }
+    return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
   }
 
   /**

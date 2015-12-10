@@ -24,7 +24,7 @@
 									navBean="#{Navigation}" 
 									activeMenu="content" />
 		
-			<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+			<menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
 									sortBean="#{paginatorListSessionBean}" 
 									curMainMenu="#{currentMainMenu}" 
 									navBean="#{Navigation}" 
@@ -33,6 +33,8 @@
 									contextId="#{paginatorListSessionBean.id}" 
 									isDeletable="#{Auth.delete(paginatorListSessionBean.collection)}" 
 									isEditable="#{Auth.update(paginatorListSessionBean.collection)}" 
+									isContentEditable="#{Auth.updateContent(paginatorListSessionBean.collection)}"
+									isContentDeletable="#{Auth.deleteContent(paginatorListSessionBean.collection)}"
 									isAdmin="#{Auth.admin(paginatorListSessionBean.collection)}" 
 									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}"
 									contextDownloadParam="&amp;col=#{paginatorListSessionBean.id}" 
@@ -45,6 +47,10 @@
 		<dialog:confirmationDialog submitAction="release" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{Auth.update(paginatorListSessionBean.collection) and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'PENDING' and paginatorListSessionBean.totalNumberOfElements > 0}"/>
 		<dialog:confirmationDialog submitAction="delete" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(paginatorListSessionBean.collection)}"/>
 		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{Auth.update(paginatorListSessionBean.collection) and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:dialogOptionDialog submitId1="doiInput" submitId2="getDOIDialog" confirmationText="" submitLabel1="#{lbl.createDOI_manually}" submitLabel2="#{lbl.createDOI_from_service}" dialogId="createDOIDialog" rendered="#{Auth.update(paginatorListSessionBean.collection) and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:confirmationDialog submitAction="createDOI" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_create_DOI}" submitLabel="#{lbl.createDOI}" dialogId="getDOIDialog" rendered="#{Auth.update(paginatorListSessionBean.collection) and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>	
+		<dialog:doiInputDialog col="#{paginatorListSessionBean.collection}" bean="#{paginatorListSessionBean}" submitLabel="#{lbl.save}" dialogId="doiInput" rendered="#{Auth.update(paginatorListSessionBean.collection) and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+
 	</ui:define>
 	
 </ui:composition>

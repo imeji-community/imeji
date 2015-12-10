@@ -122,15 +122,14 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initMenus() {
     sortMenu = new ArrayList<SelectItem>();
-    sortMenu.add(new SelectItem(null, "--"));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.created, session
-        .getLabel("sort_img_date_created")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified, session
-        .getLabel("sort_date_mod")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.title, session
-        .getLabel("sort_img_collection")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, session
-        .getLabel("sort_img_filename")));
+    if (selectedSortCriterion == null) {
+      this.selectedSortCriterion = SearchIndex.SearchFields.modified.name();
+    }
+    sortMenu
+        .add(new SelectItem(SearchIndex.SearchFields.modified, session.getLabel("sort_date_mod")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, session.getLabel("filename")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filesize, session.getLabel("file_size")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filetype, session.getLabel("file_type")));
   }
 
   @Override
@@ -176,7 +175,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public Collection<Item> loadImages(List<String> uris) throws ImejiException {
     ItemController controller = new ItemController();
-    return controller.retrieve(uris, -1, 0, session.getUser());
+    return controller.retrieveBatchLazy(uris, -1, 0, session.getUser());
   }
 
   /**
@@ -474,6 +473,14 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     return selectedSortCriterion;
   }
 
+  public String changeSortCriterion(String selectedSortCriterion) {
+    if (selectedSortCriterion.equals(this.selectedSortCriterion)) {
+      toggleSortOrder();
+    }
+    this.selectedSortCriterion = selectedSortCriterion;
+    return "";
+  }
+
   public void setSelectedSortCriterion(String selectedSortCriterion) {
     this.selectedSortCriterion = selectedSortCriterion;
   }
@@ -605,6 +612,29 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   public String getTypeLabel() {
     return session.getLabel("type_" + getType().toLowerCase());
+  }
+
+  public void changeAllSelected(ValueChangeEvent event) {
+    if (isAllSelected()) {
+      selectNone();
+    } else {
+      selectAll();
+    }
+  }
+
+  public boolean isAllSelected() {
+    boolean result = true;
+    for (ThumbnailBean bean : getCurrentPartList()) {
+      if (bean.isSelected() == false) {
+        result = false;
+        break;
+      }
+    }
+    return result;
+  }
+
+  public void setAllSelected(boolean allSelected) {
+
   }
 
 }

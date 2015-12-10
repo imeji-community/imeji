@@ -5,7 +5,8 @@
 				xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:param name="paginatorListSessionBean" value="#{AlbumsBean}"/>
-	<ui:param name="headline" value="#{msg.albums_headline}"/>
+	<ui:param name="headline" value=""/>
+	<ui:param name="displayQuery" value="#{paginatorListSessionBean.simpleQuery != ''}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="browseToAllItemsUrl" value="?q=&amp;f=all"/>
 	<ui:param name="releaseItemConfirmationText" value="#{msg.confirmation_release_album}?"/>
@@ -17,10 +18,11 @@
 	<ui:param name="globalDisplayLinkText" value="#{lbl.all_on_page}"/>
 	<ui:param name="globalDeleteLinkText" value="#{lbl.delete_selected_albums}"/>
 	<ui:param name="metadataNavigationURL" value="#{Navigation.albumUrl}"/>
+	<ui:param name="objectLabel" value="#{lbl.albums}"/>
 	
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
 									curMainMenu="#{currentMainMenu}" 
 									downloadEnabled="false" 
 									filterBean="#{paginatorListSessionBean}" 

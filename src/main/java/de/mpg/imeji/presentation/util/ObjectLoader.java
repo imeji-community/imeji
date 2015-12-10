@@ -139,6 +139,7 @@ public class ObjectLoader {
     return null;
   }
 
+
   /**
    * Load an {@link UserGroup}
    * 
@@ -224,12 +225,10 @@ public class ObjectLoader {
    * @param id
    */
   private static void writeErrorNotFound(String objectType, URI id) {
-    BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-        .getLabel(objectType)
-        + " "
-        + id
-        + " "
-        + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("not_found"));
+    BeanHelper
+        .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel(objectType)
+            + " " + id + " "
+            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("not_found"));
   }
 
   /**

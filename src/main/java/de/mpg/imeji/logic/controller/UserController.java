@@ -145,17 +145,45 @@ public class UserController {
    * @throws ImejiException
    */
   public User retrieve(String email) throws ImejiException {
-    Search search = SearchFactory.create();
+    return retrieve(email, user);
+  }
+
+
+  public User retrieve(String email, User currentUser) throws ImejiException {
+    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
     SearchResult result =
         search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
-    if (result.getNumberOfRecords() > 0) {
-      String id = result.getResults().get(0);
-      User u = (User) reader.read(id, user, new User());
-      UserGroupController ugc = new UserGroupController();
-      u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
-      return u;
+    if (result.getNumberOfRecords() == 1) {
+      return retrieve(URI.create(result.getResults().get(0)), currentUser);
     }
     throw new NotFoundException("User with email " + email + " not found");
+  }
+
+  /**
+   * Retrieve a {@link User} according to its uri (id)
+   * 
+   * @param uri
+   * @return
+   * @throws ImejiException
+   */
+  public User retrieve(URI uri) throws ImejiException {
+    return retrieve(uri, user);
+  }
+
+  /**
+   * Retrieve a {@link User} according to its uri (id)
+   * 
+   * @param uri
+   * @return
+   * @throws ImejiException
+   */
+  public User retrieve(URI uri, User currentUser) throws ImejiException {
+    User u = (User) reader.read(uri.toString(), currentUser, new User());
+    if (u.isActive()) {
+      UserGroupController ugc = new UserGroupController();
+      u.setGroups((List<UserGroup>) ugc.searchByUser(u, currentUser));
+    }
+    return u;
   }
 
 
@@ -208,43 +236,6 @@ public class UserController {
     throw new NotFoundException("Invalid registration token!");
   }
 
-  public User retrieve(String email, User currentUser) throws ImejiException {
-    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
-    SearchResult result =
-        search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
-    if (result.getNumberOfRecords() == 1) {
-      return retrieve(URI.create(result.getResults().get(0)), currentUser);
-    }
-    throw new NotFoundException("User with email " + email + " not found");
-  }
-
-  /**
-   * Retrieve a {@link User} according to its uri (id)
-   * 
-   * @param uri
-   * @return
-   * @throws ImejiException
-   */
-  public User retrieve(URI uri) throws ImejiException {
-    return retrieve(uri, user);
-  }
-
-  /**
-   * Retrieve a {@link User} according to its uri (id)
-   * 
-   * @param uri
-   * @return
-   * @throws ImejiException
-   */
-  public User retrieve(URI uri, User retrieveAsUser) throws ImejiException {
-    User u = (User) reader.read(uri.toString(), retrieveAsUser, new User());
-    if (u.isActive()) {
-      UserGroupController ugc = new UserGroupController();
-      u.setGroups((List<UserGroup>) ugc.searchByUser(u, retrieveAsUser));
-    }
-    return u;
-  }
-
   /**
    * Update a {@link User}
    * 
@@ -254,17 +245,6 @@ public class UserController {
    * @return
    */
   public User update(User updatedUser, User currentUser) throws ImejiException {
-    this.user = currentUser;
-    try {
-      retrieve(updatedUser.getEmail());
-    } catch (NotFoundException e) {
-      // fine, user can be updated
-    }
-
-    // if quota is set to 0, set it to default disk space quota
-    if (updatedUser.getQuota() == 0) {
-      updatedUser.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
-    }
     updatedUser.setModified(DateHelper.getCurrentDate());
     writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
     return updatedUser;
@@ -294,7 +274,6 @@ public class UserController {
    * @return
    */
   public User activate(String registrationToken) throws ImejiException {
-
     try {
       User activateUser = retrieveRegisteredUser(registrationToken);
 
@@ -334,13 +313,10 @@ public class UserController {
    *         be returned for unlimited quota
    */
   public long checkQuota(File file, CollectionImeji col) throws ImejiException {
-
     // do not check quota for admin
-    if (this.user.isAdmin())
-      // switch off feature!!!!
-      // if (true)
+    if (this.user.isAdmin()) {
       return -1L;
-
+    }
     User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user
         : retrieve(col.getCreatedBy(), Imeji.adminUser);
 
@@ -388,7 +364,7 @@ public class UserController {
    * @return
    */
   public Collection<User> searchByGrantFor(String grantFor) {
-    Search search = SearchFactory.create();
+    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
     return loadUsers(
         search.searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null, null, 0, -1)
             .getResults());
@@ -540,7 +516,6 @@ public class UserController {
     Collection<User> users = new ArrayList<User>();
     for (String uri : uris) {
       try {
-
         users.add((User) reader.read(uri, user, new User()));
       } catch (ImejiException e) {
         logger.info("Could not find user with URI " + uri, e);

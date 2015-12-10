@@ -37,21 +37,21 @@
 						<span class="imj_statusArea">
 							<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'PENDING'}">
 								<span class="imj_statusIconArea">
-									<h:panelGroup styleClass="imj_icoStatusPending_32"/>
+									<h:panelGroup styleClass="fa fa-lock fa-size-3"/>
 								</span>
 								<h:outputText value="#{lbl['private']}"/>
 							</ui:fragment>
 							
 							<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'RELEASED'}">
 								<span class="imj_statusIconArea">
-									<h:panelGroup styleClass="imj_icoStatusReleased_32"/>
+									<h:panelGroup styleClass="fa fa-globe fa-size-3"/>
 								</span>
 								<h:outputText value="#{lbl.published}"/>
 							</ui:fragment>
 							
 							<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'WITHDRAWN'}">
 								<span class="imj_statusIconArea">
-									<h:panelGroup styleClass="imj_icoStatusWithdrawn_32"/>
+									<h:panelGroup styleClass="fa fa-trash-o fa-size-3"/>
 								</span>
 								<h:outputText value="#{lbl.withdrawn}"/>
 							</ui:fragment>
@@ -145,6 +145,20 @@
 						</span>
 					</div>
 				</ui:fragment>
+				
+				<!-- DOI -->
+				<ui:fragment rendered="#{cc.attrs.metadataContextBean.status == 'RELEASED' and cc.attrs.metadata.type == 'COLLECTION'}">
+					<div class="imj_metadataSet">
+						<label class="imj_metadataLabel">
+							<h:outputText value="#{lbl.doi}"/>
+							<h:outputText value=": " styleClass="imj_noDisplay"/>
+						</label>
+						<span class="imj_metadataValue">
+							<h:outputText value="#{cc.attrs.metadataContextBean.DOI}"/>
+						</span>
+					</div>
+				</ui:fragment>
+				
 				<ui:fragment rendered="#{cc.attrs.metadata.type == 'COLLECTION'}">
 	                <ui:fragment rendered="#{cc.attrs.metadata.sendEmailNotification}">
 	                    <div class="imj_metadataSet">

@@ -37,24 +37,45 @@ All rights reserved. Use is subject to license terms.
 </ui:remove>
 
 	<h:panelGroup  styleClass="imj_simpleSearch">
-		<h:form>
+		<h:form id="simpleSearch" onsubmit="return submitSimpleSearch();">
 			<h:panelGroup styleClass="imj_simpleSearchInputWrapper">
-				<h:inputText id="quickSearchString" styleClass="imj_simpleSearchInput" value="#{QuickSearchBean.searchString}"/>
-				<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="imj_simpleSearchButtonSubmit" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
+				<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
+					<div class="imj_menuHeader">
+						<h:inputText id="quickSearchString" styleClass="imj_simpleSearchInput" value="#{QuickSearchBean.searchString}" autocomplete="off" onfocus="initSimpleSearch('#{Navigation.albumsUrl}', '#{Navigation.collectionsUrl}', '#{Navigation.browseUrl}')">
+						</h:inputText>
+						<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="imj_simpleSearchButtonSubmit" value="#{lbl.paginator_go}" action="#"/>	
+					</div>
+					<div class="imj_menuSimpleSearch"  >
+						<span class="imj_menuText" style="display: block;"> #{lbl.search_for} ...</span>
+						<ul class="imj_bodyContextSearch">
+							<li class="defaultSearchType hovered">...  
+								<a href="#" onclick="goToSearch('items');">
+									 #{lbl.search_for_items}
+								</a>
+							</li>
+							<li>... 
+								<a href="#" onclick="goToSearch('collections');">
+									 #{lbl.search_for_collections}
+								</a>
+							</li>
+							<li>...
+								<a href="#" onclick="goToSearch('albums');">
+									 #{lbl.search_for_albums}
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			
 				<h:outputLink id="lnkAdvancedSearch" title="#{lbl.goto_adv_search}" styleClass="imj_simpleSearchLinkAdvancedsearch" value="#{Navigation.searchUrl}">
 		   			<h:outputText value="#{lbl.advanced_search}"/>
 		   		</h:outputLink>
+		   		<h:outputLink id="lnkBrowse" title="#{lbl.browse}" styleClass="imj_simpleSearchLinkAdvancedsearch" value="#{Navigation.browseUrl}?q=">
+		   			<h:outputText value="#{lbl.browse}"/>
+		   		</h:outputLink>
 			</h:panelGroup>
-			<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}"
-							  valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}" >
-				<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images" itemEscaped="false"/>
-				<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections" itemEscaped="false"/>
-				<c:if test="#{empty SessionBean.spaceId}">
-					<f:selectItem id="selAlb" itemLabel="#{lbl.history_albums}" itemValue="albums" itemEscaped="false"/>
-				</c:if>
-			</h:selectOneRadio>
 		</h:form>
 	</h:panelGroup>
-	
+
 </ui:composition>
 

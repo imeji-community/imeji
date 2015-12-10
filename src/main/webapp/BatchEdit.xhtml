@@ -18,9 +18,6 @@
 	<ui:define name="actionsMenu"></ui:define>
 	
 	<ui:define name="mainContent">
-		<!-- Breadcrumb - History -->
-		<ui:include src="./include/History.xhtml"/>
-		
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			<!-- Initialize the Edit form -->
@@ -71,7 +68,7 @@
 									<ui:repeat id="metadata" var="md" value="#{EditItemMetadataBean.editorItem.mds.tree.list}" varStatus="indexMetadata">
 			        					<ui:fragment rendered="#{EditItemMetadataBean.isEditableStatement(md.statement)}">
 			        						<!-- Field -->
-			        						<list:batchEditList_singleStatement itemBean="#{md}" itemStatement="#{md.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="false" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>
+			        						<list:batchEditList_singleStatement id="editBatchMd" itemBean="#{md}" itemStatement="#{md.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="false" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>
 			        					</ui:fragment>
 			        				</ui:repeat>
 									
@@ -144,7 +141,7 @@
 					        				<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" varStatus="indexMetadata">
 					        					<h:panelGroup rendered="#{EditItemMetadataBean.isEditableStatement(md.statement)}">
 					        						<!-- Field -->
-					        						<list:batchEditList_singleStatement listItem="#{item}" itemBean="#{md}" itemStatement="#{md.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="false" navBean="#{Navigation}" suggestBean="#{SuggestBean}" formObject="@form"/>
+					        						<list:batchEditList_singleStatement id="editMd" listItem="#{item}" itemBean="#{md}" itemStatement="#{md.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="false" navBean="#{Navigation}" suggestBean="#{SuggestBean}" formObject="@form"/>
 					        					</h:panelGroup>
 					        				</ui:repeat>
 				        				</h:panelGroup>

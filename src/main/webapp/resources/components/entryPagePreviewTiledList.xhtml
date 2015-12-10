@@ -35,7 +35,7 @@
 						<h:panelGroup styleClass="imj_entryPagePreviewTiledListLink">
 							<h:outputText value ="#{cc.attrs.lbl.collection_view_all_images}" rendered="#{cc.attrs.mediaLogicBean.type == 'COLLECTION'}"/>
 							<h:outputText value ="#{cc.attrs.lbl.album_view_all_images}" rendered="#{cc.attrs.mediaLogicBean.type == 'ALBUM'}"/>
-							<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+							<span class="fa fa-arrow-right "> </span>
 						</h:panelGroup>
 					</div>
 				</h:outputLink>
@@ -68,9 +68,9 @@
 			</ui:fragment>
 			<ui:fragment rendered="#{cc.attrs.mediaLogicBean.container.status == 'WITHDRAWN'}">
 				<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.container.discardComment.toString().length() > 0 and cc.attrs.mediaLogicBean.container.status.toString().toUpperCase() == 'WITHDRAWN'}">
-						<span class="imj_statusArea">						
+						<span class="imj_statusArea">
 							<span class="imj_statusIconArea">
-								<h:panelGroup styleClass="imj_icoStatusWithdrawn_32"/>
+								<h:panelGroup styleClass="fa fa-trash-o fa-size-3"/>
 							</span>
 						</span>
 						<br/>

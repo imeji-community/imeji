@@ -1,6 +1,7 @@
 <ui:composition template="templates/template_site.xhtml"
 				xmlns="http://www.w3.org/1999/xhtml"
 				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
 				xmlns:h="http://java.sun.com/jsf/html"
 				xmlns:imjc="http://java.sun.com/jsf/composite/components"
 				xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
@@ -10,7 +11,7 @@
 	<ui:param name="currentMainMenu" value="admin" />
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"
@@ -19,10 +20,6 @@
 
 
 	<ui:define name="mainContent">
-	
-		<!-- Breadcrumb - History -->
-	    <ui:include src="include/History.xhtml"></ui:include>
-	    
 		<!-- Are You Admin? -->
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea"
 			rendered="#{!Auth.admin}">
@@ -84,10 +81,10 @@
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:inputText id="inputQuotaText"
-															 styleClass="imj_admindataEdit"
-															 value="#{UserCreationBean.user.quota}" />
-											</div>
+												<h:selectOneMenu value="#{UserCreationBean.quota}" >
+													<f:selectItems value="#{ConfigurationBean.getQuotaLimitsStatic()}"/>
+												</h:selectOneMenu>
+										   </div>
 										</div>
 									</h:panelGroup>
 

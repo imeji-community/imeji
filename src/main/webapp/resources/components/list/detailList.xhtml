@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:imjc="http://java.sun.com/jsf/composite/components">
+
+    <composite:interface>
+        <composite:attribute name="listBean" required="true" shortDescription="The bean for all items"/>
+    </composite:interface>
+
+    <composite:implementation>
+        
+        <!-- param to control the classes for every column, in case of logged in / out -->
+        <ui:param name="colClasses" value="#{Auth.loggedIn ? 'imj_colCheckbox,imj_colFileIcon,imj_colFilename,imj_colFiletype,imj_colFiletype,imj_colDate' : 'imj_colFileIcon,imj_colFilename,imj_colFiletype,imj_colFiletype,imj_colDate'}"/>
+
+        <h:form>
+        	<div id="imj_listBody">
+        	<h:panelGroup rendered="#{cc.attrs.listBean.totalNumberOfElements == 0}" style="font-size:130%">
+				<span class="fa fa-exclamation-triangle"/>
+				<h:outputText value=" #{msg.no_images_found}!"/>
+			</h:panelGroup>
+            <h:dataTable value="#{cc.attrs.listBean.currentPartList}" var="o"
+                         styleClass="order-table imj_detailList"
+                         headerClass="order-table-header"
+                         rowClasses="order-table-odd-row,order-table-even-row"
+                         columnClasses="#{colClasses}" rendered="#{cc.attrs.listBean.totalNumberOfElements != 0}">
+
+                <h:column rendered="#{Auth.loggedIn}">
+                    <f:facet name="header">
+                        <h:selectBooleanCheckbox  value="#{cc.attrs.listBean.allSelected}" valueChangeListener="#{cc.attrs.listBean.changeAllSelected}">
+                        	<f:ajax event="change" execute="@this" render="@all :selPanel:preListForm:preListHeaderSelected"/>
+                        </h:selectBooleanCheckbox>
+                        &#160;
+                    </f:facet>
+
+                    <h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="pictureCheckbox" value="#{o.selected}" valueChangeListener="#{o.selectedChanged}">
+                        <f:ajax event="change" execute="@this" render="@form :selPanel:preListForm:preListHeaderSelected"/>
+                    </h:selectBooleanCheckbox>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">&#160;</f:facet>
+                    <h:panelGroup styleClass="fa fa-camera fa-size-2" rendered="#{o.fileType.startsWith('image')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-text-o fa-size-2" rendered="#{o.fileType.startsWith('text')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-pdf-o fa-size-2" rendered="#{o.fileType.endsWith('pdf')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-word-o fa-size-2" rendered="#{o.shortFileType.startsWith('doc')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-file-powerpoint-o fa-size-2" rendered="#{o.shortFileType.startsWith('ppt')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-table fa-size-2" rendered="#{o.shortFileType.startsWith('xls')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-simplybuilt fa-size-2" rendered="#{o.fileType.endsWith('octet-stream')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-music fa-size-2" rendered="#{o.fileType.startsWith('audio')}">&#160;</h:panelGroup>
+                    <h:panelGroup styleClass="fa fa-film fa-size-2" rendered="#{o.fileType.startsWith('video')}">&#160;</h:panelGroup>
+
+                    <h:panelGroup styleClass="fa fa-file fa-size-2" rendered="#{!(o.fileType.startsWith('image') || o.fileType.startsWith('text') || o.fileType.endsWith('pdf') || o.shortFileType.startsWith('doc') || o.shortFileType.startsWith('ppt') || o.shortFileType.startsWith('xls') || o.fileType.endsWith('octet-stream') || o.fileType.startsWith('video') || o.fileType.startsWith('audio'))}">&#160;</h:panelGroup>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                    	<h:commandLink action="#{cc.attrs.listBean.changeSortCriterion('filename')}" value="#{lbl.filename}" styleClass="#{(cc.attrs.listBean.selectedSortCriterion == 'filename') ? 'imj_active' : ''}"/>
+                    	 &#160;
+                    	<h:outputText value="&#160;" styleClass="#{cc.attrs.listBean.selectedSortOrder == 'ASCENDING' ? 'fa fa-sort-asc fa-push-right' : 'fa fa-sort-desc fa-push-left'}" rendered="#{cc.attrs.listBean.selectedSortCriterion == 'filename'}"/>
+                    </f:facet>
+                    <h:outputLink id="lnkPicDetailBrowse" value="#{cc.attrs.listBean.imageBaseUrl}item/#{o.id}" title="#{o.filename}">
+                        #{o.filename}
+                    </h:outputLink>
+
+                </h:column>
+
+                <h:column headerClass="imj_colFiletype">
+                    <f:facet name="header"><h:commandLink action="#{cc.attrs.listBean.changeSortCriterion('filetype')}" value="#{lbl.file_type}" styleClass="#{(cc.attrs.listBean.selectedSortCriterion == 'filetype') ? 'imj_active' : ''}"/>
+                    	 &#160;
+                    	<h:outputText value="&#160;" styleClass="#{cc.attrs.listBean.selectedSortOrder == 'ASCENDING' ? 'fa fa-sort-asc fa-push-right' : 'fa fa-sort-desc fa-push-left'}" rendered="#{cc.attrs.listBean.selectedSortCriterion == 'filetype'}"/>
+                    </f:facet>
+                    <span title="#{o.fileType}">#{o.shortFileType}</span>
+                </h:column>
+
+                <h:column headerClass="imj_colFiletype">
+                    <f:facet name="header">
+                    	 <h:commandLink action="#{cc.attrs.listBean.changeSortCriterion('filesize')}" value="#{lbl.file_size}" styleClass="#{(cc.attrs.listBean.selectedSortCriterion == 'filesize') ? 'imj_active' : ''}"/>
+                    	 &#160;
+                    	<h:outputText value="&#160;" styleClass="#{cc.attrs.listBean.selectedSortOrder == 'ASCENDING' ? 'fa fa-sort-asc fa-push-right' : 'fa fa-sort-desc fa-push-left'}" rendered="#{cc.attrs.listBean.selectedSortCriterion == 'filesize'}"/>
+					</f:facet>
+                    <span title="#{o.fileSize}">#{o.fileSize}</span>
+                </h:column>
+
+                <h:column headerClass="imj_colDate">
+                    <f:facet name="header" > 
+                    	<h:commandLink action="#{cc.attrs.listBean.changeSortCriterion('modified')}" value="#{lbl.last_modified}" styleClass="#{(cc.attrs.listBean.selectedSortCriterion == 'modified') ? 'imj_active' : ''}"/>
+                    	 &#160;
+                    	<h:outputText value="&#160;" styleClass="#{cc.attrs.listBean.selectedSortOrder == 'ASCENDING' ? 'fa fa-sort-asc fa-push-right' : 'fa fa-sort-desc fa-push-left'}" rendered="#{cc.attrs.listBean.selectedSortCriterion == 'modified'}"/>
+					</f:facet>
+                    <span title="#{o.modified}">#{o.modified}</span>
+                </h:column>
+
+            </h:dataTable>
+            </div>
+        </h:form>
+    </composite:implementation>
+</html>

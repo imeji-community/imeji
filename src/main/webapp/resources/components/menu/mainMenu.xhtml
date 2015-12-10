@@ -20,11 +20,6 @@
 					<h:outputText value="#{lbl.home}"/>
 				</h:outputLink>
 			</li>
-			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'mediaEntry') ? ' imj_active' : ''}">
-				<h:outputLink id="lnkBrowse" title="#{lbl.goto_images}" value="#{cc.attrs.navBean.browseUrl}?q=">
-			  		<h:outputText value="#{lbl.header_browse}"/>
-			  	</h:outputLink>
-			</li>
 			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'collection') ? ' imj_active' : ''}">
 				<h:outputLink id="lnkCollections" title="#{lbl.goto_collections}" value="#{cc.attrs.navBean.collectionsUrl}?q=">
 					<h:outputText value="#{lbl.header_collections}"/>

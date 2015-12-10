@@ -100,6 +100,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     browseContext = getNavigationString();
     browseInit();
     isSimpleSearch = SearchQueryParser.isSimpleSearch(searchQuery);
+    if (UrlHelper.getParameterBoolean("add_selected")) {
+      addSelectedToActiveAlbum();
+    }
     return "";
   }
 

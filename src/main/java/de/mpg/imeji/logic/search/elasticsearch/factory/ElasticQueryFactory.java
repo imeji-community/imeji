@@ -168,10 +168,10 @@ public class ElasticQueryFactory {
         // normal user
         Collection<Grant> grants = new ArrayList<Grant>();
         grants.addAll(user.getGrants());
-        for(UserGroup g : user.getGroups()){
+        for (UserGroup g : user.getGroups()) {
           grants.addAll(g.getGrants());
         }
-        return buildGrantQuery(grants, GrantType.READ);
+        return buildGrantQuery(grants, null);
       }
     }
     return QueryBuilders.matchAllQuery();
@@ -205,10 +205,12 @@ public class ElasticQueryFactory {
   private static QueryBuilder buildGrantQuery(Collection<Grant> grants, GrantType grantType) {
     BoolQueryBuilder q = QueryBuilders.boolQuery();
     // Add query for all release objects
-    if (grantType == GrantType.READ) {
+    if (grantType == null) {
       q.should(
           fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false));
     }
+    // if granttype is null, set it to READ
+    grantType = grantType == null ? GrantType.READ : grantType;
     // Add query for each read grant
     for (Grant g : grants) {
       if (g.asGrantType() == grantType) {

@@ -11,6 +11,7 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
@@ -27,6 +28,8 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  */
 public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
+  private boolean addSelected = false;
+
   /**
    * Bean for the Albums page
    */
@@ -42,6 +45,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
   @Override
   public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
+    addSelected = UrlHelper.getParameterBoolean("add_selected");
     AlbumController controller = new AlbumController();
     Collection<Album> albums = new ArrayList<Album>();
     search(offset, limit);
@@ -111,5 +115,13 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
   public String getTypeLabel() {
     return sb.getLabel("type_" + getType().toLowerCase());
+  }
+
+  public boolean isAddSelected() {
+    return addSelected;
+  }
+
+  public void setAddSelected(boolean addSelected) {
+    this.addSelected = addSelected;
   }
 }

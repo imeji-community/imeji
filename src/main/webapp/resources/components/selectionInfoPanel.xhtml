@@ -43,8 +43,7 @@
 									<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
 										<li class="imj_overlayMenuListItem">
 											<!-- No active album selected -->
-											<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
-												<h:panelGroup styleClass="fa fa-search"/>
+											<h:outputLink value="#{Navigation.albumsUrl}?q=grant=%22upload%22&amp;add_selected=1" title="#{lbl.activate}">
 												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
 											</h:outputLink>
 										</li>

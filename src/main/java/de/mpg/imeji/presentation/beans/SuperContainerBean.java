@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -157,8 +158,8 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
   public SearchPair getFilter() {
     SearchPair pair = null;
     if ("my".equals(selectedFilter)) {
-      pair = new SearchPair(SearchFields.hasgrant, SearchOperators.EQUALS,
-          sb.getUser().getId().toString(), false);
+      pair =
+          new SearchPair(SearchFields.grant, SearchOperators.EQUALS, GrantType.READ.name(), false);
     } else if ("private".equals(selectedFilter)) {
       pair = new SearchPair(SearchFields.status, SearchOperators.EQUALS,
           Status.PENDING.getUriString(), false);

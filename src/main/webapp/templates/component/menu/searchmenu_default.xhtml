@@ -48,20 +48,14 @@ All rights reserved. Use is subject to license terms.
 					<div class="imj_menuSimpleSearch"  >
 						<span class="imj_menuText" style="display: block;"> #{lbl.search_for} ...</span>
 						<ul class="imj_bodyContextSearch">
-							<li class="defaultSearchType hovered">...  
-								<a href="#" onclick="goToSearch('items');">
-									 #{lbl.search_for_items}
-								</a>
+							<li id="simpleSearchForItems" class="defaultSearchType hovered">...  
+								<a href="#"> #{lbl.search_for_items}</a>
 							</li>
-							<li>... 
-								<a href="#" onclick="goToSearch('collections');">
-									 #{lbl.search_for_collections}
-								</a>
+							<li id="simpleSearchForCollections">... 
+								<a href="#"> #{lbl.search_for_collections}</a>
 							</li>
-							<li>...
-								<a href="#" onclick="goToSearch('albums');">
-									 #{lbl.search_for_albums}
-								</a>
+							<li id="simpleSearchForAlbums">...
+								 <a href="#"> #{lbl.search_for_albums}</a>
 							</li>
 						</ul>
 					</div>

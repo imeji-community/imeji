@@ -651,20 +651,45 @@ function initSimpleSearch(albumsUrlValue, collectionsUrlValue, browseUrlValue) {
 	browseUrl = browseUrlValue;
 }
 
+function getSearchSelectedName() {
+	if (selectedSearch == 1) {
+		return 'items';
+	}
+	if (selectedSearch == 2) {
+		return 'collections';
+	}
+	if (selectedSearch == 3) {
+		return 'albums';
+	}
+}
+/**
+ * Trigger the simple search, according to the currently selected context
+ * @returns {Boolean}
+ */
 function submitSimpleSearch() {
 	if ($('.imj_simpleSearchInput').val() != '') {
-		if (selectedSearch == 1) {
-			goToSearch('items');
-		}
-		if (selectedSearch == 2) {
-			goToSearch('collections');
-		}
-		if (selectedSearch == 3) {
-			goToSearch('albums');
-		}
+		goToSearch(getSearchSelectedName());
 	}
 	return false;
 };
+
+/**
+ * Click on Menu -> Trigger simple search
+ */
+$("#simpleSearchForAlbums").click(function(){
+	goToSearch('albums');
+});
+$("#simpleSearchForCollections").click(function(){
+	goToSearch('collections');
+});
+$("#simpleSearchForItems").click(function(){
+	goToSearch('items');
+});
+
+/**
+ * Open a search page according to the type 
+ * @param type
+ */
 function goToSearch(type) {
 	if (type == 'items') {
 		window.open(browseUrl + '?q=' + $('.imj_simpleSearchInput').val(),
@@ -679,6 +704,10 @@ function goToSearch(type) {
 				"_self");
 	}
 };
+
+/**
+ * Actions for the search menu: open, navigate with array keys
+ */
 $(".imj_simpleSearchInput").focusin(function() {
 	if ($(this).val() != '') {
 		$(".imj_menuSimpleSearch").show();
@@ -697,19 +726,23 @@ $(".imj_simpleSearchInput").focusin(function() {
 	else if ($(this).val() != '') {
 		$(".imj_menuSimpleSearch").show();
 	}
-	
-	
-	
-}).focusout(function() {
-
 });
+
+/**
+ * Close the search menu
+ */
 $(".imj_simpleSearch").focusout(function() {
 	$(".imj_menuSimpleSearch").delay(200).hide(0);
 });
-$("ul.imj_overlayMenu li").mouseover(function() {
-	$(".defaultSearchType").removeClass("hovered");
+/**
+ * On mouse over, unselect the previously selected menu
+ */
+$("ul.imj_bodyContextSearch li").mouseover(function() {
+	$(".hovered").removeClass("hovered");
 });
-
+/**
+ * Highlight the currently selected search
+ */
 function highlightSearch() {
 	$("ul.imj_bodyContextSearch li").removeClass("hovered");
 	if (selectedSearch == 1) {
@@ -722,25 +755,20 @@ function highlightSearch() {
 		$("ul.imj_bodyContextSearch li:nth-child(3)").addClass("hovered");
 	}
 }
+/**
+ * Select the next search 
+ */
 function incrementSelectedSearch() {
 	if (selectedSearch < 3) {
 		selectedSearch = selectedSearch + 1;
 	}
 }
+/**
+ * SElect the previous search
+ */
 function decrementSelectedSearch() {
 	if (selectedSearch > 1) {
 		selectedSearch = selectedSearch - 1;
-	}
-}
-function getSearchSelectedName() {
-	if (selectedSearch == 1) {
-		return 'items';
-	}
-	if (selectedSearch == 2) {
-		return 'collections';
-	}
-	if (selectedSearch == 3) {
-		return 'albums';
 	}
 }
 

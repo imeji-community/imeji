@@ -56,8 +56,7 @@ All rights reserved. Use is subject to license terms.
             <div class="#{siteWrapperClass}">
                 <ui:insert name="init"/>
                 <ui:include src="component/header/header_default.xhtml"/>
-                <!-- Search Query -->
-                <ui:insert name="searchQuery"/>
+                
                  <!-- headline -->
                 <h:panelGroup rendered="#{!displayQuery}" layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
                     <h1>
@@ -69,6 +68,8 @@ All rights reserved. Use is subject to license terms.
                         </ui:fragment>
                     </h1>
                 </h:panelGroup>
+                <!-- Search Query -->
+                <ui:insert name="searchQuery"/>
                 <!-- Actions Menu -->
                 <h:panelGroup id="actionsMenuArea">
                 <ui:insert name="actionsMenu"/>   

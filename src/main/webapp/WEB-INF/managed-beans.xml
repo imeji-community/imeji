@@ -181,11 +181,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>QuickSearchBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.search.QuickSearchBean</managed-bean-class>
-		<managed-bean-scope>view</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>AdminBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.admin.AdminBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>

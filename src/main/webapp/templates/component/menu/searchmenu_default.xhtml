@@ -36,14 +36,13 @@ All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
 
-	<h:panelGroup  styleClass="imj_simpleSearch">
-		<h:form id="simpleSearch" onsubmit="return submitSimpleSearch();">
-			<h:panelGroup styleClass="imj_simpleSearchInputWrapper">
+	<div class="imj_simpleSearch">
+		<form id="simpleSearch" onsubmit="return submitSimpleSearch();">
+			<div class="imj_simpleSearchInputWrapper">
 				<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 					<div class="imj_menuHeader">
-						<h:inputText id="quickSearchString" styleClass="imj_simpleSearchInput" value="#{QuickSearchBean.searchString}" autocomplete="off" onfocus="initSimpleSearch('#{Navigation.albumsUrl}', '#{Navigation.collectionsUrl}', '#{Navigation.browseUrl}')">
-						</h:inputText>
-						<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="imj_simpleSearchButtonSubmit" value="#{lbl.paginator_go}" action="#"/>	
+						<input type="search" id="quickSearchString" class="imj_simpleSearchInput" value="#{QuickSearchBean.searchString}" autocomplete="off" onfocus="initSimpleSearch('#{Navigation.albumsUrl}', '#{Navigation.collectionsUrl}', '#{Navigation.browseUrl}')"/>
+						<input type="submit" id="btnQuickSearchStart" title="#{lbl.search_for}" class="imj_simpleSearchButtonSubmit" value="#{lbl.paginator_go}" formaction="#"/>	
 					</div>
 					<div class="imj_menuSimpleSearch"  >
 						<span class="imj_menuText" style="display: block;"> #{lbl.search_for} ...</span>
@@ -67,9 +66,9 @@ All rights reserved. Use is subject to license terms.
 		   		<h:outputLink id="lnkBrowse" title="#{lbl.browse}" styleClass="imj_simpleSearchLinkAdvancedsearch" value="#{Navigation.browseUrl}?q=">
 		   			<h:outputText value="#{lbl.browse}"/>
 		   		</h:outputLink>
-			</h:panelGroup>
-		</h:form>
-	</h:panelGroup>
+			</div>
+		</form>
+	</div>
 
 </ui:composition>
 

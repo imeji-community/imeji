@@ -72,7 +72,7 @@
 											<h:outputText value="#{lbl.view_detail}"/>
 										</h:outputLink>
 																					<!-- AdminDataList - Delete User -->
-										<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.user_admin_delete}" onclick="openDialog('deleteUserGroup#{row.index}');">
+										<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.user_admin_delete}" onclick="openDialog('deleteUserGroup#{row.index}');" rendered="#{Auth.admin}">
 											<h:outputText value="#{lbl.delete}"/>
 										</h:outputLink>
 										<dialog:confirmationDialog submitAction="remove" bean="#{UserGroups}" confirmationText="#{msg.confirmation_delete_user_group}" submitLabel="#{lbl.delete}" dialogId="deleteUserGroup#{row.index}" identifierName="group" identifierValue="#{group.id}"/>

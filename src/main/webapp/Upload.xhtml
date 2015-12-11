@@ -232,7 +232,7 @@
                                 </ui:repeat>
                             </ol>
                             <!-- Edit selected -->
-                            <ui:fragment rendered="#{UploadBean.getsFiles().size() > 0}">
+                            <ui:fragment rendered="#{UploadBean.getsFiles().size() > 0 and Auth.updateContent(UploadBean.collection)}">
                                 <h:outputLink value="#{Navigation.collectionUrl}#{UploadBean.id}/upload?edituploaded=1" id="lnkSelectEdit">
                                     <h:outputText value="#{lbl.edit_uploaded_images}"/>
                                 </h:outputLink>

@@ -122,7 +122,7 @@ p { display: block; margin: 1em 0; }
 
 .imj_modalDialogBackground { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #444444; opacity: 0.5; filter: alpha(opacity=50); /* IE 6, 7, 8 */ -ms-filter: "alpha(opacity = 50)"; }
 
-.imj_modalDialogBox { max-width: 50em; position: absolute; top: 22.7272727272em; padding: 0.72727272em; background-color: #444444; display: none; z-index: 5000; -moz-box-shadow: 0.54545em 0.54545em 0.54545em #292929; -webkit-box-shadow: 0.54545em 0.54545em 0.54545em #292929; box-shadow: 0.54545em 0.54545em 0.54545em #292929; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+.imj_modalDialogBox { max-width: 60em; position: absolute; top: 22.7272727272em; padding: 0.72727272em; background-color: #444444; display: none; z-index: 5000; -moz-box-shadow: 0.54545em 0.54545em 0.54545em #292929; -webkit-box-shadow: 0.54545em 0.54545em 0.54545em #292929; box-shadow: 0.54545em 0.54545em 0.54545em #292929; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 .imj_modalDialogBox .imj_submitPanel { display: block; }
 .imj_modalDialogBox .imj_confirmationReasonTextarea label { display: block; }
 .imj_modalDialogBox .imj_dialogReasonText { width: 50em; resize: vertical; }
@@ -430,7 +430,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_mediaContainerEditMD .imj_authorMetadataSet { background-color: #292929; margin-bottom: 1.363636em; padding: 0.5em 1%; }
 .imj_mediaContainerEditMD .imj_sectionHeadline { margin-bottom: 0.545454em; }
 
-.imj_editGlobalAssignment { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
+.imj_editGlobalAssignment { width: 91.25%; padding: 1% 4%; }
 .imj_editGlobalAssignment > .imj_metadataSet > .imj_metadataLabel label { display: inline-block; width: 100%; }
 .imj_editGlobalAssignment > .imj_metadataSet > .imj_metadataValue { width: 69.25%; max-width: 69.25%; }
 .imj_editGlobalAssignment > .imj_metadataSet > .imj_metadataValue > .imj_singleStatementEdit > textarea.imj_metadataValue { width: 100%; }
@@ -538,7 +538,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_overlayMenu .imj_menuSimpleSearch li { border-top: 1px dashed #292929; padding: 0.5em 1em; }
 .imj_overlayMenu .imj_menuBody, .imj_overlayMenu .imj_menuSimpleSearch { display: none; position: absolute; background-color: #444444; }
 .imj_overlayMenu:hover .imj_menuHeader { color: #F0F0F0; }
-.imj_overlayMenu:hover .imj_menuBody { display: block; z-index: 100; }
+.imj_overlayMenu:hover > .imj_menuBody { display: block; z-index: 100; }
 .imj_overlayMenu .imj_criticalItem:hover { background-color: #D80000; }
 .imj_overlayMenu .imj_listItemSeparator { padding-top: 0.181818em; border-top: 0.1em solid #6CAE2F; }
 .imj_overlayMenu li { line-height: 175%; padding: 0.272727em 1em; }

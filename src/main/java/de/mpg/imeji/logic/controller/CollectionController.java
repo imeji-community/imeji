@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
@@ -91,16 +92,19 @@ public class CollectionController extends ImejiController {
     validator.validate(c);
     ProfileController pc = new ProfileController();
     String metadataProfileName = " (Metadata profile)";
-    if (p == null || method.equals(MetadataProfileCreationMethod.NEW)) {
+    if (p == null || method == MetadataProfileCreationMethod.NEW) {
       p = new MetadataProfile();
       p.setDescription(c.getMetadata().getDescription());
       p.setTitle(c.getMetadata().getTitle() + metadataProfileName);
       p = pc.create(p, user);
-    } else if (p != null && !method.equals(MetadataProfileCreationMethod.REFERENCE)) {
-      if (method.equals(MetadataProfileCreationMethod.COPY)) {
-        p.setTitle(c.getMetadata().getTitle() + metadataProfileName);
-      }
+    } else if (p != null && method == MetadataProfileCreationMethod.COPY) {
+      p.setTitle(c.getMetadata().getTitle() + metadataProfileName);
       p = pc.create(p.clone(), user);
+    } else if (p != null && method == MetadataProfileCreationMethod.REFERENCE
+        && !AuthUtil.staticAuth().administrate(user, p) && p.getStatus() != Status.RELEASED) {
+      // User must be allowed to release the profile: otherwise, he might not be allowed to release
+      // his collection (if profile is already released, no problems)
+      throw new NotAllowedError("Not allowed to reference this profile");
     }
     c.setProfile(p.getId());
     writeCreateProperties(c, user);
@@ -386,7 +390,7 @@ public class CollectionController extends ImejiController {
       }
     }
   }
-  
+
   public void createDOI(CollectionImeji coll, User user) throws ImejiException {
     if (user == null) {
       throw new AuthenticationError("User must be signed-in");
@@ -395,23 +399,24 @@ public class CollectionController extends ImejiController {
     if (coll == null) {
       throw new NotFoundException("Collection does not exists");
     }
-    
-    if (!Status.RELEASED.equals(coll.getStatus())){
+
+    if (!Status.RELEASED.equals(coll.getStatus())) {
       throw new ImejiException("Collection has to be released to create a DOI");
     }
-    
+
     DoiController doicontr = new DoiController();
-    
+
     String doiServiceUrl = ConfigurationBean.getDoiServiceUrlStatic();
     String doiUser = ConfigurationBean.getDoiUserStatic();
     String doiPassword = ConfigurationBean.getDoiPasswordStatic();
-    
+
     String doi = doicontr.getNewDoi(coll, doiServiceUrl, doiUser, doiPassword);
     coll.setDOI(doi);
     update(coll, user);
   }
-  
-  public void createDOIManually(String doi, CollectionImeji collection, User user) throws ImejiException{
+
+  public void createDOIManually(String doi, CollectionImeji collection, User user)
+      throws ImejiException {
     if (user == null) {
       throw new AuthenticationError("User must be signed-in");
     }
@@ -419,14 +424,14 @@ public class CollectionController extends ImejiController {
     if (collection == null) {
       throw new NotFoundException("Collection does not exists");
     }
-    
-    if (!Status.RELEASED.equals(collection.getStatus())){
+
+    if (!Status.RELEASED.equals(collection.getStatus())) {
       throw new ImejiException("Collection has to be released to create a DOI");
     }
-    
+
     collection.setDOI(doi);
     update(collection, user);
-    
+
   }
 
   /**
@@ -544,15 +549,15 @@ public class CollectionController extends ImejiController {
     return ImejiSPARQL.exec(JenaCustomQueries.selectCollectionImejiOfSpace(spaceId.toString()),
         Imeji.collectionModel);
   }
-  
-  // TODO Remove and replace with method checking the cache, related to ElasticIndexer.java (see comment there as well) 
+
+  // TODO Remove and replace with method checking the cache, related to ElasticIndexer.java (see
+  // comment there as well)
   public String retrieveSpaceOfCollection(URI collectionId) {
-    List<String> collectionSpace = ImejiSPARQL.exec(JenaCustomQueries.selectSpaceOfCollection(collectionId), null);
-    if ( collectionSpace.isEmpty() ){ 
+    List<String> collectionSpace =
+        ImejiSPARQL.exec(JenaCustomQueries.selectSpaceOfCollection(collectionId), null);
+    if (collectionSpace.isEmpty()) {
       return null;
-    }
-    else
-    {
+    } else {
       return collectionSpace.get(0);
     }
   }

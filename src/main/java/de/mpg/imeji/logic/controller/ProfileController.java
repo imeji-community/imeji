@@ -190,7 +190,7 @@ public class ProfileController extends ImejiController {
     // First check if there are empty metadata records
     if ((isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp.getId().toString()))
         || !isNullOrEmpty(collectionId)
-        && isReferencedByOtherResources(mdp.getId().toString(), collectionId)) {
+            && isReferencedByOtherResources(mdp.getId().toString(), collectionId)) {
       throw new UnprocessableError("error_profile_is_referenced_cannot_be_deleted");
     } else if (mdp.getDefault()) {
       throw new UnprocessableError("error_profile_is_default_cannot_be_deleted");
@@ -238,9 +238,8 @@ public class ProfileController extends ImejiController {
   public SearchResult search(SearchQuery query, User user, String spaceId) {
     Search search = SearchFactory.create(SearchObjectTypes.PROFILE, SEARCH_IMPLEMENTATIONS.JENA);
     // Automatically sort by profile title
-    SortCriterion sortCri =
-        new SortCriterion(JenaSearch.getIndex(SearchIndex.SearchFields.prof.name()),
-            SortOrder.ASCENDING);
+    SortCriterion sortCri = new SortCriterion(
+        JenaSearch.getIndex(SearchIndex.SearchFields.prof.name()), SortOrder.ASCENDING);
     SearchResult result = search.search(query, sortCri, user, null, spaceId, 0, -1);
     return result;
   }
@@ -288,8 +287,8 @@ public class ProfileController extends ImejiController {
     if (uris.size() == 1) {
       return retrieve(URI.create(uris.get(0)), Imeji.adminUser);
     } else if (uris.size() > 1) {
-      throw new ImejiException("Data inconsistency: " + uris.size()
-          + " + default metadata profile have been found.");
+      throw new ImejiException(
+          "Data inconsistency: " + uris.size() + " + default metadata profile have been found.");
     } else {
       logger.info("Cannot find default metadata profile...");
     }
@@ -312,22 +311,20 @@ public class ProfileController extends ImejiController {
       String profileJSON = null;
       MetadataProfileTO mdpTO = null;
       try {
-        path =
-            new File(this.getClass().getClassLoader()
-                .getResource(DEFAULT_METADATA_PROFILE_PATH_PROPERTY).toURI()).getAbsolutePath();
+        path = new File(this.getClass().getClassLoader()
+            .getResource(DEFAULT_METADATA_PROFILE_PATH_PROPERTY).toURI()).getAbsolutePath();
         if (isNullOrEmpty(path)) {
-          logger
-              .info("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!"
+          logger.info(
+              "There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!"
                   + "Check more about it at the IMEJI Documentation.");
           return null;
         }
         profileJSON = getStringFromPath(path);
-        mdpTO =
-            (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(profileJSON,
-                MetadataProfileTO.class);
+        mdpTO = (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(profileJSON,
+            MetadataProfileTO.class);
       } catch (UnrecognizedPropertyException e) {
-        throw new ImejiException("Error reading property " + DEFAULT_METADATA_PROFILE_PATH_PROPERTY
-            + ": " + e);
+        throw new ImejiException(
+            "Error reading property " + DEFAULT_METADATA_PROFILE_PATH_PROPERTY + ": " + e);
       } catch (JsonProcessingException e) {
         throw new ImejiException("Cannot process json: " + e);
       } catch (IOException | URISyntaxException e) {
@@ -357,9 +354,8 @@ public class ProfileController extends ImejiController {
   public boolean isReferencedByOtherResources(String profileUri, String resourceUri) {
     Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     List<String> r =
-        s.searchString(
-            JenaCustomQueries.hasOtherMetadataProfileReferences(profileUri, resourceUri), null,
-            null, 0, -1).getResults();
+        s.searchString(JenaCustomQueries.hasOtherMetadataProfileReferences(profileUri, resourceUri),
+            null, null, 0, -1).getResults();
     if (r.size() > 0) {
       return true;
     }
@@ -368,9 +364,9 @@ public class ProfileController extends ImejiController {
 
   public boolean isReferencedByAnyResources(String profileUri) {
     Search s = new JenaSearch(SearchObjectTypes.ALL, null);
-    List<String> r =
-        s.searchString(JenaCustomQueries.hasMetadataProfileReferences(profileUri), null, null, 0,
-            -1).getResults();
+    List<String> r = s
+        .searchString(JenaCustomQueries.hasMetadataProfileReferences(profileUri), null, null, 0, -1)
+        .getResults();
     if (r.size() > 0) {
       return true;
     }
@@ -401,9 +397,8 @@ public class ProfileController extends ImejiController {
     if (limit < 0) {
       retrieveUris = uris;
     } else {
-      retrieveUris =
-          uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
-              : new ArrayList<String>();
+      retrieveUris = uris.size() > 0 && limit > 0
+          ? uris.subList(offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
     }
 
     for (String s : retrieveUris) {

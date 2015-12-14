@@ -9,7 +9,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +52,7 @@ public class ProfileIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
-  @Ignore
+
   // Everybody ca read any profiles
   @Test
   public void test_1_ReadProfiles_Unauthorized() {
@@ -79,7 +78,7 @@ public class ProfileIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
-  @Ignore
+
   // Everybody ca read any profiles
   @Test
   public void test_1_ReadProfiles_NotAllowedUser() {

@@ -40,6 +40,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
@@ -87,6 +88,10 @@ public class AdminBean {
    */
   public String getDefaultProfileId() throws ImejiException {
     ProfileController c = new ProfileController();
+    MetadataProfile p = c.retrieveDefaultProfile();
+    if (p.getStatus() == Status.PENDING) {
+      c.release(p, sb.getUser());
+    }
     return c.retrieveDefaultProfile().getIdString();
   }
 
@@ -226,9 +231,8 @@ public class AdminBean {
   private void cleanStatement() throws Exception {
     logger.info("Searching for statement without profile...");
     Search search = SearchFactory.create();
-    List<String> uris =
-        search.searchString(JenaCustomQueries.selectStatementUnbounded(), null, null, 0, -1)
-            .getResults();
+    List<String> uris = search
+        .searchString(JenaCustomQueries.selectStatementUnbounded(), null, null, 0, -1).getResults();
     logger.info("...found " + uris.size());
     cleanDatabaseReport += "Statement without any profile " + uris.size() + " found  <br/> ";
     removeResources(uris, Imeji.profileModel, new Statement());
@@ -248,13 +252,11 @@ public class AdminBean {
     }
     logger.info("Searching for problematic grants...");
     Search search = SearchFactory.create();
-    List<String> uris =
-        search.searchString(JenaCustomQueries.selectGrantWithoutUser(), null, null, 0, -1)
-            .getResults();
+    List<String> uris = search
+        .searchString(JenaCustomQueries.selectGrantWithoutUser(), null, null, 0, -1).getResults();
     cleanDatabaseReport += "Grants without users: " + uris.size() + " found  <br/>";
-    uris =
-        search.searchString(JenaCustomQueries.selectGrantWithoutObjects(), null, null, 0, -1)
-            .getResults();
+    uris = search.searchString(JenaCustomQueries.selectGrantWithoutObjects(), null, null, 0, -1)
+        .getResults();
     cleanDatabaseReport += "Grants on non existing objects: " + uris.size() + " found <br/>";
     uris =
         search.searchString(JenaCustomQueries.selectGrantEmtpy(), null, null, 0, -1).getResults();

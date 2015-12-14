@@ -69,8 +69,9 @@ public class Authorization {
       return true; // everybody is allowed to create albums
     if (hasGrant(user,
         toGrant(getRelevantURIForSecurity(obj, false, true, false), GrantType.CREATE))
-        && !isDiscarded(obj))
+        && !isDiscarded(obj)) {
       return true;
+    }
     return false;
   }
 
@@ -83,14 +84,15 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean read(User user, Object obj) {
-    if (isPublic(obj) || obj instanceof MetadataProfile)
+    if (isPublic(obj) /* || obj instanceof MetadataProfile */) {
       return true;
-    else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
-        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+    } else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
+        getGrantTypeAccordingToObjectType(obj, GrantType.READ)))) {
       return true;
-    else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
-        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+    } else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
+        getGrantTypeAccordingToObjectType(obj, GrantType.READ)))) {
       return true;
+    }
     return false;
   }
 
@@ -104,8 +106,9 @@ public class Authorization {
    */
   public boolean update(User user, Object obj) {
     if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
-        getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
+        getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE)))) {
       return true;
+    }
     return false;
   }
 

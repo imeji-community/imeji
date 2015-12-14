@@ -194,9 +194,9 @@
 											</h:outputLink>
 										</li>
 									</ui:fragment>
-									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and cc.attrs.isContentEditable}">	
+									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and cc.attrs.isContentEditable and !(paginatorListSessionBean.profile == null or paginatorListSessionBean.profile.statements.size() == 0)}">	
 										<li class="#{curMenuClass}Item">
-											<h:outputLink  value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
+											<h:outputLink  value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2">
 												<h:outputText value="#{lbl.edit_all}"/>
 											</h:outputLink>
 										</li>

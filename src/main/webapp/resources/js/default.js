@@ -692,15 +692,15 @@ $("#simpleSearchForItems").click(function(){
  */
 function goToSearch(type) {
 	if (type == 'items') {
-		window.open(browseUrl + '?q=' + $('.imj_simpleSearchInput').val(),
+		window.open(browseUrl + '?q=' + encodeURIComponent($('.imj_simpleSearchInput').val()),
 				"_self");
 	}
 	if (type == 'collections') {
-		window.open(collectionsUrl + '?q=' + $('.imj_simpleSearchInput').val(),
+		window.open(collectionsUrl + '?q=' + encodeURIComponent($('.imj_simpleSearchInput').val()),
 				"_self");
 	}
 	if (type == 'albums') {
-		window.open(albumsUrl + '?q=' + $('.imj_simpleSearchInput').val(),
+		window.open(albumsUrl + '?q=' + encodeURIComponent($('.imj_simpleSearchInput').val()),
 				"_self");
 	}
 };

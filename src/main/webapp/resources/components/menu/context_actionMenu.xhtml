@@ -187,7 +187,7 @@
 											</h:outputLink>
 										</li>
 									</ui:fragment>
-									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and cc.attrs.profileEditable and (metadataBean.profile != null or metadataBean.profile.statements.size() > 0)}">	
+									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.profileEditable and (metadataBean.profile != null or metadataBean.profile.statements.size() > 0)}">	
 										<li class="#{curMenuClass}Item">
 											<h:outputLink  value="#{Navigation.profileUrl}#{metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{metadataBean.id}" id="lnkSelectEdit3">
 												<h:outputText value="#{lbl.profile_edit}"/>

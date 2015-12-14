@@ -45,6 +45,7 @@
 
                         <h:outputText value="* #{lbl.mandatory}" />
 
+						<h:panelGroup id="authors">
                         <!-- Author data -->
                         <ui:repeat id="persons" var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
                             <h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
@@ -53,10 +54,10 @@
                                         <!-- Add/Remove Author buttons -->
                                         <span class="imj_inlineButtonGroup"> 
                                             <h:commandLink styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
-                                                <f:ajax execute="@form" render="@form" />
+                                                <f:ajax execute="@this" render="editContainer:mediaContainerForm:authors" />
                                             </h:commandLink>
                                             <h:commandLink styleClass="fa fa-minus-square-o" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
-                                                <f:ajax execute="@form" render="@form" />
+                                                <f:ajax execute="@this" render="editContainer:mediaContainerForm:authors" />
                                             </h:commandLink>
                                         </span>
                                         <h:outputText value=" #{lbl.authors}" />
@@ -69,6 +70,7 @@
 
                             </h:panelGroup>
                         </ui:repeat>
+                        </h:panelGroup>
 
 
                         <!-- Notifications -->

@@ -132,19 +132,20 @@
 																	<ui:repeat id="labels" var="label" value="#{wrapper.statement.labels}" varStatus="labelPosition">
 																		<h:panelGroup styleClass="imj_metadataSet">
 																			<h:inputText id="inputLabel" value="#{label.value}"/>
-																			<select onfocus="write_language_options(this, this.value);" class="imj_metadataLanguageSelection" 
-																					onchange="document.getElementById('profileForm:profile:#{position.index}:labels:#{labelPosition.index}:inHiddenLang').value = this.value;
-																						$(this).parents('.imj_metadataSet').find('.imj_ajaxButton').click();">
-																				<option value="#{label.lang}" selected="selected">#{Internationalization.getLanguageLabel(label.lang)}</option>
-																			</select>
-																			<h:commandButton id="btnChangeLang" action="#{wrapper.select()}" value="#{wrapper.statement.type}" type="submit" styleClass="imj_noDisplay imj_ajaxButton">
-																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																			</h:commandButton>
-																			<h:inputHidden id="inHiddenLang" value="#{label.lang}"/>
-																			
+																			<ui:fragment rendered="#{Internationalization.languages.size() > 1}">
+																				<select onfocus="write_language_options(this, this.value);" class="imj_metadataLanguageSelection" 
+																						onchange="document.getElementById('profileForm:profile:#{position.index}:labels:#{labelPosition.index}:inHiddenLang').value = this.value;
+																							$(this).parents('.imj_metadataSet').find('.imj_ajaxButton').click();">
+																					<option value="#{label.lang}" selected="selected">#{Internationalization.getLanguageLabel(label.lang)}</option>
+																				</select>
+																				<h:commandButton id="btnChangeLang" action="#{wrapper.select()}" value="#{wrapper.statement.type}" type="submit" styleClass="imj_noDisplay imj_ajaxButton">
+																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																				</h:commandButton>
+																				<h:inputHidden id="inHiddenLang" value="#{label.lang}"/>
+																			</ui:fragment>
 																			
 																			<span class="imj_inlineButtonGroup">
-																				<h:commandLink id="addLabel" type="submit" styleClass="fa fa-plus-square-o" action="#{metadataBean.addLabel}" title="#{lbl.label_add}">
+																				<h:commandLink id="addLabel" type="submit" styleClass="fa fa-plus-square-o" action="#{metadataBean.addLabel}" title="#{lbl.label_add}" rendered="#{Internationalization.languages.size() > wrapper.labelsCount}">
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
                                                                                 </h:commandLink>

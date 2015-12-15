@@ -121,9 +121,8 @@ public class UserBean {
    */
   public void generateNewApiKey()
       throws ImejiException, NoSuchAlgorithmException, UnsupportedEncodingException, JoseException {
-    user.setApiKey(APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE));
-    // user.setApiKey(IdentifierUtil.newUniversalUniqueId());
     if (user != null) {
+      user.setApiKey(APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE));
       new UserController(session.getUser()).update(user, session.getUser());
     }
   }

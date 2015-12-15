@@ -1,8 +1,5 @@
 package de.mpg.imeji.logic.validation.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
@@ -27,10 +24,9 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
 
   @Override
   public void validate(User user) throws UnprocessableError {
-    if (isDelete())
+    if (isDelete()) {
       return;
-
-    List<String> errorMessages = new ArrayList<String>();
+    }
     StringBuilder builder = new StringBuilder();
     boolean hasError = false;
 
@@ -58,8 +54,9 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
       builder.append("error_user_organization_unfilled" + ";");
     }
 
-    if (hasError)
+    if (hasError) {
       throw new UnprocessableError(builder.toString());
+    }
 
   }
 

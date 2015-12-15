@@ -35,7 +35,7 @@ public class SearchQuery extends SearchElement {
   /**
    * Clone a {@link SearchQuery}
    */
-  public SearchQuery clone() {
+  public SearchQuery copy() {
     SearchQuery q = new SearchQuery();
     q.setElements(new ArrayList<>(elements));
     return q;

@@ -39,10 +39,10 @@ public class TechnicalFacets extends Facets {
   private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
   private List<List<Facet>> facets = new ArrayList<List<Facet>>();
   private SearchQuery searchQuery;
-  private SearchResult allImages = ((ItemsBean) BeanHelper.getSessionBean(ItemsBean.class))
-      .getSearchResult();
-  private String baseURI = ((Navigation) BeanHelper.getApplicationBean(Navigation.class))
-      .getBrowseUrl() + "?q=";
+  private SearchResult allImages =
+      ((ItemsBean) BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
+  private String baseURI =
+      ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getBrowseUrl() + "?q=";
 
   /**
    * Constructor
@@ -81,47 +81,48 @@ public class TechnicalFacets extends Facets {
              */
           }
           if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images")) {
-            SearchPair privatePair =
-                new SearchPair(SearchFields.status, SearchOperators.EQUALS,
-                    Status.PENDING.getUriString(), false);
+            SearchPair privatePair = new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+                Status.PENDING.getUriString(), false);
             count = getCount(searchQuery, privatePair, allImages.getResults());
             if (count > 0) {
-              techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair,
-                  "pending_images", FacetType.TECHNICAL), "pending_images", count,
-                  FacetType.TECHNICAL, null));
+              techFacets
+                  .add(new Facet(
+                      uriFactory.createFacetURI(baseURI, privatePair, "pending_images",
+                          FacetType.TECHNICAL),
+                      "pending_images", count, FacetType.TECHNICAL, null));
             }
           }
           if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images")) {
-            SearchPair publicPair =
-                new SearchPair(SearchFields.status, SearchOperators.EQUALS, Status.RELEASED
-                    .getUriString().toString(), false);
+            SearchPair publicPair = new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+                Status.RELEASED.getUriString().toString(), false);
             count = getCount(searchQuery, publicPair, allImages.getResults());
             if (count > 0) {
-              techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicPair,
-                  "released_images", FacetType.TECHNICAL), "released_images", count,
-                  FacetType.TECHNICAL, null));
+              techFacets
+                  .add(new Facet(
+                      uriFactory.createFacetURI(baseURI, publicPair, "released_images",
+                          FacetType.TECHNICAL),
+                      "released_images", count, FacetType.TECHNICAL, null));
             }
           }
         }
 
         boolean showFacet = false;
         for (Metadata.Types t : Metadata.Types.values()) {
-          showFacet =
-              (Metadata.Types.GEOLOCATION.name().equals(t.name())
-                  || Metadata.Types.LICENSE.name().equals(t.name()) || Metadata.Types.PUBLICATION
-                  .name().equals(t.name()));
+          showFacet = (Metadata.Types.GEOLOCATION.name().equals(t.name())
+              || Metadata.Types.LICENSE.name().equals(t.name())
+              || Metadata.Types.PUBLICATION.name().equals(t.name()));
           if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()) && showFacet) {
 
-            SearchPair pair =
-                new SearchPair(SearchFields.metadatatype, SearchOperators.EQUALS,
-                    t.getClazzNamespace(), false);
+            SearchPair pair = new SearchPair(SearchFields.metadatatype, SearchOperators.EQUALS,
+                t.getClazzNamespace(), false);
             count = getCount(searchQuery, pair, allImages.getResults());
             if (count > 0 && count < allImages.getNumberOfRecords()) {
-              techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(),
-                  FacetType.TECHNICAL), t.toString(), count, FacetType.TECHNICAL, null));
+              techFacets.add(
+                  new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(), FacetType.TECHNICAL),
+                      t.toString(), count, FacetType.TECHNICAL, null));
             } else {
-              fs.getNoResultsFilters().add(
-                  new Filter(t.toString(), "", 0, FacetType.TECHNICAL, null));
+              fs.getNoResultsFilters()
+                  .add(new Filter(t.toString(), "", 0, FacetType.TECHNICAL, null));
             }
             count = 0;
           }
@@ -129,8 +130,8 @@ public class TechnicalFacets extends Facets {
       }
       facets.add(techFacets);
     } catch (UnsupportedEncodingException e) {
-      Logger.getLogger(TechnicalFacets.class).error(
-          "There had been some issues with the technical facets", e);
+      Logger.getLogger(TechnicalFacets.class)
+          .error("There had been some issues with the technical facets", e);
     }
   }
 
@@ -154,7 +155,7 @@ public class TechnicalFacets extends Facets {
    */
   public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages) {
     ItemController ic = new ItemController();
-    SearchQuery q = searchQuery.clone();
+    SearchQuery q = searchQuery.copy();
     q.addLogicalRelation(LOGICAL_RELATIONS.AND);
     q.addPair(pair);
     return ic.search(null, q, null, sb.getUser(), sb.getSelectedSpaceString(), -1, 0)

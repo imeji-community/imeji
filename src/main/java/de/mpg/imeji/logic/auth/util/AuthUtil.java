@@ -31,8 +31,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
-
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.Album;

@@ -1,5 +1,6 @@
 package de.mpg.imeji.exceptions;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public class UnprocessableError extends ImejiException {
   }
 
   public UnprocessableError(Set<String> messages) {
-    super(messages.toArray().toString());
+    super(Arrays.toString(messages.toArray()));
     this.messages = messages;
   }
 

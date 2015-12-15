@@ -346,8 +346,10 @@ public class SearchQueryParser {
    * @return
    */
   private static String searchPair2PrettyQuery(SearchPair pair) {
-    if (pair == null || pair.getField() == null || pair.getValue() == null || pair.getValue() == "")
+    if (pair == null || pair.getField() == null || pair.getValue() == null
+        || pair.getValue().equals("")) {
       return "";
+    }
     if (pair.getField() == SearchFields.all) {
       return pair.getValue();
     } else {

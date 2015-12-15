@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -199,7 +198,6 @@ public class AdvancedSearchBean {
   public void fileTypeListener(ValueChangeEvent event) {
     fileTypesSelected = (List<String>) event.getNewValue();
     formular.getFileTypeSearch().setValue(getFileTypesQuery());
-    Arrays.asList(formular.getFileTypeSearch().getValue().split("|"));
   }
 
   /**
@@ -210,8 +208,9 @@ public class AdvancedSearchBean {
   private String getFileTypesQuery() {
     String qf = "";
     for (String type : fileTypesSelected) {
-      if (!qf.equals(""))
+      if (!qf.equals("")) {
         qf += "|";
+      }
       qf += type;
     }
     return qf;

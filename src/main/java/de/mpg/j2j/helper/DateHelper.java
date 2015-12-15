@@ -14,9 +14,9 @@ import java.util.Locale;
  * @version $Revision$ $LastChangedDate$
  */
 public class DateHelper {
-  private static SimpleDateFormat format =
+  private static final SimpleDateFormat format =
       new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault());
-  private static SimpleDateFormat formatSmall =
+  private static final SimpleDateFormat formatSmall =
       new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
   /**

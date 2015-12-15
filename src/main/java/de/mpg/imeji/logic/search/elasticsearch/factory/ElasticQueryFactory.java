@@ -7,12 +7,14 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import com.hp.hpl.jena.util.iterator.Filter;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
 import de.mpg.imeji.logic.search.elasticsearch.util.ElasticSearchUtil;
 import de.mpg.imeji.logic.search.model.SearchElement;
@@ -39,6 +41,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
  * 
  */
 public class ElasticQueryFactory {
+  private static final Logger logger = Logger.getLogger(ElasticQueryFactory.class);
 
   /**
    * Build a {@link QueryBuilder} from a {@link SearchQuery}
@@ -453,9 +456,14 @@ public class ElasticQueryFactory {
         return metadataQuery(ElasticFields.METADATA_LOCATION, md.getValue(), SearchOperators.GEO,
             md.getStatement(), md.isNot());
       case time:
-        return metadataQuery(ElasticFields.METADATA_NUMBER,
-            Long.toString(SearchUtils.parseDateAsTime(md.getValue())), md.getOperator(),
-            md.getStatement(), md.isNot());
+        try {
+          return metadataQuery(ElasticFields.METADATA_NUMBER,
+              Long.toString(SearchUtils.parseDateAsTime(md.getValue())), md.getOperator(),
+              md.getStatement(), md.isNot());
+        } catch (UnprocessableError e) {
+          logger.error("Wrong date format (can not be search): " + md.getValue());
+          return QueryBuilders.matchAllQuery();
+        }
       default:
         return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
             md.getStatement(), md.isNot());

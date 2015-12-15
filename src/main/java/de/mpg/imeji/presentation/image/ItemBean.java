@@ -111,7 +111,6 @@ public class ItemBean {
     } catch (Exception e) {
       FacesContext.getCurrentInstance().getExternalContext().responseSendError(404,
           "404_NOT_FOUND");
-
     }
 
     if (item != null) {

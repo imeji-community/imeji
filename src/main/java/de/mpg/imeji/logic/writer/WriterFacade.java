@@ -71,22 +71,17 @@ public class WriterFacade {
       indexer =
           SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.ELASTIC).getIndexer();
     } else if (modelURI.equals(Imeji.collectionModel)) {
-      indexer =
-          SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC)
-              .getIndexer();
+      indexer = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC)
+          .getIndexer();
 
     } else if (modelURI.equals(Imeji.albumModel)) {
-      indexer =
-          SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
-              .getIndexer();
+      indexer = SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
+          .getIndexer();
 
-    }
-    else if (modelURI.equals(Imeji.spaceModel)) {
-      indexer =
-          SearchFactory.create(SearchObjectTypes.SPACE, SEARCH_IMPLEMENTATIONS.ELASTIC)
-              .getIndexer();
-    }
-    else {
+    } else if (modelURI.equals(Imeji.spaceModel)) {
+      indexer = SearchFactory.create(SearchObjectTypes.SPACE, SEARCH_IMPLEMENTATIONS.ELASTIC)
+          .getIndexer();
+    } else {
       indexer = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA).getIndexer();
     }
   }
@@ -176,10 +171,12 @@ public class WriterFacade {
 
   }
 
+  @SuppressWarnings("unchecked")
   private void validate(List<Object> list, MetadataProfile profile, Validator.Method method)
       throws UnprocessableError {
-    if (list.isEmpty())
+    if (list.isEmpty()) {
       return;
+    }
     Validator<Object> validator =
         (Validator<Object>) ValidatorFactory.newValidator(list.get(0), method);
     for (Object o : list) {
@@ -200,23 +197,23 @@ public class WriterFacade {
     for (Object o : list) {
       messageHelper = " not allowed to " + Grant.getGrantTypeName(gt) + " " + extractID(o);
       if (gt == GrantType.CREATE) {
-        throwAuthorizationException(AuthUtil.staticAuth().create(user, o), user.getEmail()
-            + messageHelper);
+        throwAuthorizationException(AuthUtil.staticAuth().create(user, o),
+            user.getEmail() + messageHelper);
       } else if (gt == GrantType.UPDATE) {
-        throwAuthorizationException(AuthUtil.staticAuth().update(user, o), user.getEmail()
-            + messageHelper);
+        throwAuthorizationException(AuthUtil.staticAuth().update(user, o),
+            user.getEmail() + messageHelper);
 
       } else if (gt == GrantType.DELETE) {
-        throwAuthorizationException(AuthUtil.staticAuth().delete(user, o), user.getEmail()
-            + messageHelper);
+        throwAuthorizationException(AuthUtil.staticAuth().delete(user, o),
+            user.getEmail() + messageHelper);
 
       } else if (gt == GrantType.UPDATE_CONTENT) {
-        throwAuthorizationException(AuthUtil.staticAuth().updateContent(user, o), user.getEmail()
-            + messageHelper);
+        throwAuthorizationException(AuthUtil.staticAuth().updateContent(user, o),
+            user.getEmail() + messageHelper);
 
       } else if (gt == GrantType.ADMIN_CONTENT) {
-        throwAuthorizationException(AuthUtil.staticAuth().adminContent(user, o), user.getEmail()
-            + messageHelper);
+        throwAuthorizationException(AuthUtil.staticAuth().adminContent(user, o),
+            user.getEmail() + messageHelper);
 
       }
     }

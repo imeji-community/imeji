@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>imeji</artifactId>
 	<groupId>org.imeji</groupId>
@@ -19,11 +20,11 @@
 		<url>http://www.mpdl.mpg.de/</url>
 	</organization>
 	<scm>
-             <url>https://github.com/imeji-community/imeji</url>
-             <connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
-             <developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
-             <tag>develop</tag>
-     </scm>
+		<url>https://github.com/imeji-community/imeji</url>
+		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
+		<developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
+		<tag>develop</tag>
+	</scm>
 	<issueManagement>
 		<system>Github</system>
 		<url>https://github.com/imeji-community/imeji/issues</url>
@@ -182,142 +183,122 @@
 				<filtering>true</filtering>
 			</testResource>
 		</testResources>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.0</version>
-				</plugin>
-				<!-- -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.1.1</version>
-					<configuration>
-						<!-- Exclude imeji.properties from war file, because it should be copied 
-							to application server conf directory -->
-						<packagingExcludes>**/imeji.properties</packagingExcludes>
-						<warName>${project.warName}</warName>
-						<archive>
-							<manifest>
-								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							</manifest>
-							<manifestEntries>
-								<Implementation-Build>${buildNumber}</Implementation-Build>
-							</manifestEntries>
-						</archive>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.18</version>
-					<configuration>
-						<!-- if there are no tests, don't bail out -->
-						<failIfNoTests>false</failIfNoTests>
-						<!-- avoid the out of memory exception thrown in some test scenarios -->
-						<argLine>-Xms1024m -Xmx1024m -XX:MaxPermSize=512m</argLine>
-						<includes>
-	                        <include>**/de/mpg/imeji/test/**/*.java</include>
-	                    </includes>
-						<systemPropertyVariables>
-							<catalina.base>${test.catalina.base}</catalina.base>
-						</systemPropertyVariables>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>integration-test</phase>
-							<goals>
-								<goal>test</goal>
-							</goals>
-							<configuration>
-								<skip>false</skip>
-								<test>Initializer</test>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>process-resources</id>
-							<phase>process-resources</phase>
-							<configuration>
-								<tasks>
-									<!-- copying the jaxb files into the build directories, because of 
-										the xml schema handling issue (marshalling and unmarshalling) -->
-									<!-- those files will not be copied into the build directories, Maven 
-										does not copy them automatically!!! -->
-									<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
-									<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
-									<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
-									<copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
-								</tasks>
-							</configuration>
-							<goals>
-								<goal>run</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>buildnumber-maven-plugin</artifactId>
-					<version>1.3</version>
-					<executions>
-						<execution>
-							<phase>validate</phase>
-							<goals>
-								<goal>create</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
-						<items>
-							<item>timestamp</item>
-						</items>
-					</configuration>
-				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-antrun-plugin</artifactId>
-										<versionRange>[1.3,)</versionRange>
-										<goals>
-											<goal>run</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
+					<items>
+						<item>timestamp</item>
+					</items>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<!-- Exclude imeji.properties from war file, because it should be copied 
+						to application server conf directory -->
+					<packagingExcludes>**/imeji.properties</packagingExcludes>
+					<warName>${project.warName}</warName>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18</version>
+				<configuration>
+					<!-- if there are no tests, don't bail out -->
+					<failIfNoTests>false</failIfNoTests>
+					<!-- avoid the out of memory exception thrown in some test scenarios -->
+					<argLine>-Xms1024m -Xmx1024m -XX:MaxPermSize=512m</argLine>
+					<includes>
+						<include>**/de/mpg/imeji/test/**/*.java</include>
+					</includes>
+					<systemPropertyVariables>
+						<catalina.base>${test.catalina.base}</catalina.base>
+					</systemPropertyVariables>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+							<test>Initializer</test>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- <plugin> <artifactId>maven-antrun-plugin</artifactId> <executions> 
+				<execution> <id>process-resources</id> <phase>process-resources</phase> <configuration> 
+				<tasks> <copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" 
+				/> <copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" 
+				/> <copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" 
+				/> <copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" 
+				tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" 
+				/> </tasks> </configuration> <goals> <goal>run</goal> </goals> </execution> 
+				</executions> </plugin> -->
+			<!--This plugin's configuration is used to store Eclipse m2e settings 
+				only. It has no influence on the Maven build itself. -->
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-antrun-plugin</artifactId>
+									<versionRange>[1.3,)</versionRange>
+									<goals>
+										<goal>run</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore />
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
+		</plugins>
+
 	</build>
-	<!-- <dependencyManagement> <dependencies> <dependency> <groupId>org.richfaces</groupId> 
-		<artifactId>richfaces-bom</artifactId> <version>${org.richfaces.bom.version}</version> 
-		<scope>import</scope> <type>pom</type> </dependency> </dependencies> </dependencyManagement> -->
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -334,12 +315,6 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.3.2</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-tdb</artifactId> 
-			<version>0.9.4-SNAPSHOT</version> </dependency> <dependency> <groupId>org.apache.jena</groupId> 
-			<artifactId>apache-jena</artifactId> <version>2.10.1</version> <type>pom</type> 
-			</dependency> -->
-		<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-tdb</artifactId> 
-			<version>0.10.1</version> </dependency> -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
@@ -392,7 +367,7 @@
 			<version>1.3</version>
 		</dependency>
 		<!-- START JSF 2 -->
-	  <dependency>
+		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
 			<version>2.2.12</version>
@@ -408,9 +383,9 @@
 			<version>3.1.0</version>
 		</dependency>
 		<dependency>
-		  <groupId>javax.enterprise</groupId>
-		  <artifactId>cdi-api</artifactId>
-		  <version>1.2</version>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<!-- END JSF 2 -->
 		<!-- json simple: to read vocabularies -->
@@ -443,16 +418,6 @@
 			<artifactId>im4java</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		<!-- Start: bio formats dependencies -->
-		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>bio-formats</artifactId> 
-			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
-			<artifactId>loci-common</artifactId> <version>4.4.8</version> </dependency> 
-			<dependency> <groupId>openmicroscopy</groupId> <artifactId>ome-xml</artifactId> 
-			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
-			<artifactId>scifio</artifactId> <version>4.4.8</version> </dependency> -->
-		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>loci-tools</artifactId> 
-			<version>4.4.8</version> <type>pom</type> </dependency> -->
-		<!-- End: bio formats dependencies -->
 		<!-- pdf handling -->
 		<dependency>
 			<groupId>org.swinglabs</groupId>
@@ -514,13 +479,11 @@
 			<version>1.9</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.jai-imageio</groupId>
-		    <artifactId>jai-imageio-core</artifactId>
-		    <version>1.3.0</version>
+			<groupId>com.github.jai-imageio</groupId>
+			<artifactId>jai-imageio-core</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 		<!-- END: Digilib integration -->
-		<!-- <dependency> <groupId>org.apache.tika</groupId> <artifactId>tika-server</artifactId> 
-			<version>1.5</version> </dependency> -->
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
@@ -531,10 +494,6 @@
 			<artifactId>xml-apis</artifactId>
 			<version>1.4.01</version>
 		</dependency>
-		<!-- <dependency> <groupId>com.drewnoakes</groupId> <artifactId>metadata-extractor</artifactId> 
-			<version>2.8.0</version> </dependency> -->
-
-
 		<!-- REST -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -586,63 +545,45 @@
 			<artifactId>jersey-media-json-jettison</artifactId>
 			<version>2.13</version>
 		</dependency>
-
-
-
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
 			<version>2.13</version>
 		</dependency>
-
-		<!-- <dependency> <groupId>com.sun.jersey</groupId> <artifactId>jersey-json</artifactId> 
-			<version>1.8</version> </dependency> -->
-
-		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
-			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
-			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
-			<scope>compile</scope> </dependency> -->
 		<dependency>
 			<groupId>de.mpg.mpdl.service.connector</groupId>
 			<artifactId>java-connector</artifactId>
 			<version>0.1</version>
 		</dependency>
-
-		 <dependency>
-		    <groupId>org.bitbucket.b_c</groupId>
-		    <artifactId>jose4j</artifactId>
-		    <version>0.4.4</version>
-		  </dependency>
-
+		<dependency>
+			<groupId>org.bitbucket.b_c</groupId>
+			<artifactId>jose4j</artifactId>
+			<version>0.4.4</version>
+		</dependency>
 		<dependency>
 			<groupId>com.wordnik</groupId>
 			<artifactId>swagger-jersey2-jaxrs_2.10</artifactId>
 			<version>1.3.8</version>
 		</dependency>
-		
-	    <dependency>
-		  <groupId>org.elasticsearch</groupId>
-		  <artifactId>elasticsearch</artifactId>
-		  <version>2.0.0</version>
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>2.0.0</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch-analysis-icu</artifactId>
 			<version>2.7.0</version>
 		</dependency>
-		
-		
 		<dependency>
-		  <groupId>commons-validator</groupId>
-		  <artifactId>commons-validator</artifactId>
-		  <version>1.4.0</version>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.0</version>
 		</dependency>
-		
 		<dependency>
-		  <groupId>com.google.guava</groupId>
-		  <artifactId>guava</artifactId>
-		  <version>18.0</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
 		</dependency>
 	</dependencies>
 	<profiles>
@@ -657,106 +598,90 @@
 				<jdk.version>1.7</jdk.version>
 			</properties>
 			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.zeroturnaround</groupId>
-						<artifactId>javarebel-maven-plugin</artifactId>
-						<configuration>
-							<packaging>war</packaging>
-							<classpath>
-								<fallback>default</fallback>
-								<resources>
-									<resource>
-										<directory>target/classes</directory>
-										<excludes>
-											<exclude>log4j.xml</exclude>
-										</excludes>
-									</resource>
-								</resources>
-							</classpath>
-						</configuration>
-						<executions>
-							<execution>
-								<id>generate-rebel-xml</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>org.codehaus.plexus</groupId>
-								<artifactId>plexus-utils</artifactId>
-								<version>1.4.1</version>
-								<scope>runtime</scope>
-							</dependency>
-						</dependencies>
-					</plugin>
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
-							<execution>
-								<id>install</id>
-								<phase>install</phase>
-								<configuration>
-									<tasks>
-										<delete quiet="true" file="${tomcat.webapps}/${project.warName}.war" />
-										<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
-										<copy overwrite="true" file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
-									</tasks>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.zeroturnaround</groupId>
-						<artifactId>jrebel-maven-plugin</artifactId>
-						<version>1.1.5</version>
-						<executions>
-							<execution>
-								<id>generate-rebel-xml</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-
-				</plugins>
 				<pluginManagement>
 					<plugins>
 						<plugin>
-							<groupId>org.eclipse.m2e</groupId>
-							<artifactId>lifecycle-mapping</artifactId>
-							<version>1.0.0</version>
+							<groupId>org.zeroturnaround</groupId>
+							<artifactId>javarebel-maven-plugin</artifactId>
 							<configuration>
-								<lifecycleMappingMetadata>
-									<pluginExecutions>
-										<pluginExecution>
-											<pluginExecutionFilter>
-												<groupId>org.zeroturnaround</groupId>
-												<artifactId>jrebel-maven-plugin</artifactId>
-												<versionRange>1.1</versionRange>
-												<goals>
-													<goal>generate</goal>
-												</goals>
-											</pluginExecutionFilter>
-											<action>
-												<execute />
-											</action>
-										</pluginExecution>
-									</pluginExecutions>
-								</lifecycleMappingMetadata>
+								<packaging>war</packaging>
+								<classpath>
+									<fallback>default</fallback>
+									<resources>
+										<resource>
+											<directory>target/classes</directory>
+											<excludes>
+												<exclude>log4j.xml</exclude>
+											</excludes>
+										</resource>
+									</resources>
+								</classpath>
 							</configuration>
+							<executions>
+								<execution>
+									<id>generate-rebel-xml</id>
+									<phase>process-resources</phase>
+									<goals>
+										<goal>generate</goal>
+									</goals>
+								</execution>
+							</executions>
+							<dependencies>
+								<dependency>
+									<groupId>org.codehaus.plexus</groupId>
+									<artifactId>plexus-utils</artifactId>
+									<version>1.4.1</version>
+									<scope>runtime</scope>
+								</dependency>
+							</dependencies>
 						</plugin>
+						<plugin>
+							<artifactId>maven-antrun-plugin</artifactId>
+							<executions>
+								<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
+								<execution>
+									<id>install</id>
+									<phase>install</phase>
+									<configuration>
+										<tasks>
+											<delete quiet="true"
+												file="${tomcat.webapps}/${project.warName}.war" />
+											<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
+											<copy overwrite="true"
+												file="${project.build.directory}/${project.warName}.war"
+												tofile="${tomcat.webapps}/${project.warName}.war" />
+										</tasks>
+									</configuration>
+									<goals>
+										<goal>run</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+						<plugin>
+							<groupId>org.zeroturnaround</groupId>
+							<artifactId>jrebel-maven-plugin</artifactId>
+							<version>1.1.5</version>
+							<executions>
+								<execution>
+									<id>generate-rebel-xml</id>
+									<phase>process-resources</phase>
+									<goals>
+										<goal>generate</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+
 					</plugins>
 				</pluginManagement>
+				<!-- <plugins> <plugin> <groupId>org.eclipse.m2e</groupId> <artifactId>lifecycle-mapping</artifactId> 
+					<version>1.0.0</version> <configuration> <lifecycleMappingMetadata> <pluginExecutions> 
+					<pluginExecution> <pluginExecutionFilter> <groupId>org.zeroturnaround</groupId> 
+					<artifactId>jrebel-maven-plugin</artifactId> <versionRange>1.1</versionRange> 
+					<goals> <goal>generate</goal> </goals> </pluginExecutionFilter> <action> 
+					<execute /> </action> </pluginExecution> </pluginExecutions> </lifecycleMappingMetadata> 
+					</configuration> </plugin> </plugins> </pluginManagement> -->
 			</build>
 		</profile>
 		<profile>

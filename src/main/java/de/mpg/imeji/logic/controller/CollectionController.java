@@ -46,6 +46,7 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -87,6 +88,12 @@ public class CollectionController extends ImejiController {
   public URI create(CollectionImeji c, MetadataProfile p, User user,
       MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
     // First validate the collection, to avoid to create a zombie profile...
+    
+    //Code provided here in order not to try to create a profile etc.. 
+    if (user == null) {
+      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
+    }
+
     CollectionValidator validator = new CollectionValidator(Method.CREATE);
     validator.validate(c);
     ProfileController pc = new ProfileController();

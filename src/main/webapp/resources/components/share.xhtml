@@ -27,19 +27,19 @@
 				<div id="shareGroup" class="imj_noDisplay">
 					<h2 class="imj_sectionHeadline">
 						<h:outputText value="#{lbl.admin_userGroups}"/>
-					</h2>					
-						<ui:repeat var="group" value="#{ShareBean.userGroups}" rows="0" varStatus="row">
-								<!-- AdminDataList - Users List - Name -->								
-									<div class="imj_headline">
-										<span class="imj_invisible">: </span>
-										<h2>
-											<h:outputText value="#{group.name}"/>
-										</h2>
-										<h:outputLink value="share?group=#{group.id}" styleClass="imj_editButton">
-											<h:outputText value="#{lbl.share_with}"/>
-										</h:outputLink>					
-									</div>
-						</ui:repeat>
+					</h2>
+					<ui:repeat var="group" value="#{ShareBean.userGroupsBean.userGroups}" rows="0" varStatus="row" rendered="#{ShareBean.userGroupsBean != null}">
+						<!-- AdminDataList - Users List - Name -->								
+						<div class="imj_headline">
+							<span class="imj_invisible">: </span>
+							<h2>
+								<h:outputText value="#{group.name}"/>
+							</h2>
+							<h:outputLink value="share?group=#{group.id}" styleClass="imj_editButton">
+								<h:outputText value="#{lbl.share_with}"/>
+							</h:outputLink>					
+						</div>
+					</ui:repeat>
 				
 				</div>
 				<ui:fragment rendered="#{ShareBean.userGroup != null}">

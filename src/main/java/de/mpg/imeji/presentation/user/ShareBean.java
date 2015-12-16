@@ -74,7 +74,8 @@ public class ShareBean implements Serializable {
   // The url of the current share page (used for back link)
   private String pageUrl;
   private boolean hasContent = false;
-  private UserGroupsBean ugroupsBean;
+  @ManagedProperty("#{UserGroups}")
+  private UserGroupsBean userGroupsBean;
   @ManagedProperty("#{SessionBean}")
   private SessionBean sb;
 
@@ -160,8 +161,8 @@ public class ShareBean implements Serializable {
         + PrettyContext.getCurrentInstance().getRequestQueryString();
     this.pageUrl = this.pageUrl.split("[&\\?]group=")[0];
     this.initShareWithGroup();
-    this.ugroupsBean = new UserGroupsBean();
-    ugroupsBean.init();
+    // this.ugroupsBean = new UserGroupsBean();
+    // ugroupsBean.init();
   }
 
   /**
@@ -221,10 +222,8 @@ public class ShareBean implements Serializable {
     // init();
     reloadPage();
   }
-  
-  public Collection<UserGroup> getUserGroups(){
-    return ugroupsBean.getUserGroups();
-  }
+
+
 
   /**
    * Reload the current page
@@ -811,4 +810,12 @@ public class ShareBean implements Serializable {
     return itemList;
   }
 
+
+  public UserGroupsBean getUserGroupsBean() {
+    return userGroupsBean;
+  }
+
+  public void setUserGroupsBean(UserGroupsBean ugroupsBean) {
+    this.userGroupsBean = ugroupsBean;
+  }
 }

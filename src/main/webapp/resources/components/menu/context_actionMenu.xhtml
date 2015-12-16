@@ -31,8 +31,7 @@
 		
 		<composite:attribute name="actionEnabled" type="java.lang.Boolean" default="true" required="false" shortDescription="@type: Boolean: check if action menu should be displayed"/>
 		<composite:attribute name="activeMenu" type="java.lang.String" default="" required="false" shortDescription="@type String, e.g. active sub navigation Menu"/>
-		
-		
+		<composite:attribute name="hasDoi" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean: check if the container has already a doi"/>		
 	</composite:interface>
 	
 	<composite:implementation>
@@ -233,7 +232,8 @@
 										
 										<li>
 											<h:outputLink id="lnkCreateDOI" value="#" onclick="openDialog('createDOIDialog');" title="#{lbl.createDOI}">
-												<h:outputText value="#{lbl.createDOI}"/>
+												<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
+												<h:outputText value="#{lbl.change_doi}" rendered="#{cc.attrs.hasDoi}"/>
 											</h:outputLink>
 										</li>
 									</ui:fragment>

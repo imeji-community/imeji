@@ -29,6 +29,8 @@ public abstract class Container extends Properties implements FulltextIndex, Ser
   private ContainerMetadata metadata = new ContainerMetadata();
   @j2jLiteral("http://imeji.org/terms/fulltext")
   private String fulltext;
+  @j2jLiteral("http://imeji.org/terms/doi")
+  private String doi;
 
   // same property used as in Space
   // property is provided on Container level, in order to fit both Collection and Album
@@ -77,5 +79,13 @@ public abstract class Container extends Properties implements FulltextIndex, Ser
 
   public void setLogoUrl(URI logoUrl) {
     this.logoUrl = logoUrl;
+  }
+
+  public void setDoi(String doi) {
+    this.doi = doi;
+  }
+
+  public String getDoi() {
+    return doi;
   }
 }

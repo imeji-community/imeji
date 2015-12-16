@@ -39,8 +39,7 @@ public class NightlyExecutor {
     // Execute first job (by imeji start)
     executor.execute(new NightlyJob());
     // Schedule the next executions
-    executor.scheduleAtFixedRate(new NightlyJob(), getDelay(),
-        TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS), TimeUnit.MILLISECONDS);
+    executor.scheduleAtFixedRate(new NightlyJob(), getDelay(), 1, TimeUnit.DAYS);
     logger.info(
         "Nightly Executor started. First job planned at " + NEXT_JOB_DATE.getTime().toString());
 

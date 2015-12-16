@@ -411,7 +411,7 @@ public class CollectionController extends ImejiController {
     String doiPassword = ConfigurationBean.getDoiPasswordStatic();
 
     String doi = doicontr.getNewDoi(coll, doiServiceUrl, doiUser, doiPassword);
-    coll.setDOI(doi);
+    coll.setDoi(doi);
     update(coll, user);
   }
 
@@ -429,7 +429,7 @@ public class CollectionController extends ImejiController {
       throw new ImejiException("Collection has to be released to create a DOI");
     }
 
-    collection.setDOI(doi);
+    collection.setDoi(doi);
     update(collection, user);
 
   }

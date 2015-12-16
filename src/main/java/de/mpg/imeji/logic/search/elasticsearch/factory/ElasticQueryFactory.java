@@ -417,6 +417,8 @@ public class ElasticQueryFactory {
         break;
       case coordinates:
         break;
+      case pid:
+        return fieldQuery(ElasticFields.PID, pair.getValue(), pair.getOperator(), pair.isNot());
       default:
         break;
     }

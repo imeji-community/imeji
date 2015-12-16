@@ -49,6 +49,9 @@
           }
         }
       },
+      "pid":{
+      	"type":"string"
+      },
       "author":{
         "properties":{
           "familyname":{

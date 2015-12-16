@@ -48,11 +48,11 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
-import de.mpg.imeji.test.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
+import de.mpg.imeji.test.rest.resources.test.integration.ImejiTestBase;
 import util.JenaUtil;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

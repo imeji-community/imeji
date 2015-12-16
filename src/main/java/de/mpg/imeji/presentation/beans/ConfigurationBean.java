@@ -53,9 +53,9 @@ import org.codehaus.jettison.json.JSONException;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * JavaBean managing the imeji configuration which is made directly by the administrator from the
@@ -112,8 +112,9 @@ public class ConfigurationBean {
    */
   public ConfigurationBean() throws IOException, URISyntaxException {
     configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
-    if (!configFile.exists())
+    if (!configFile.exists()) {
       configFile.createNewFile();
+    }
     readConfig();
   }
 
@@ -135,8 +136,9 @@ public class ConfigurationBean {
     Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
     if (ft == null) {
       fileTypes = new FileTypes(predefinedFileTypes);
-    } else
+    } else {
       fileTypes = new FileTypes((String) ft);
+    }
 
     Object o = config.get(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name());
     if (o == null)
@@ -146,7 +148,8 @@ public class ConfigurationBean {
     initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, predefinedUploadBlackList);
     initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, predefinedLanguages);
     initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
-    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, predefinedCarouselConfig);
+    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED,
+        predefinedCarouselConfig);
     saveConfig();
     return "";
   }
@@ -172,10 +175,9 @@ public class ConfigurationBean {
    */
   public void saveConfig() {
     try {
-      if (fileTypes != null)
-        setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
-      if (dataViewerUrl != null)
+      if (dataViewerUrl != null) {
         setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
+      }
       config.storeToXML(new FileOutputStream(configFile), "imeji configuration File", "UTF-8");
       logger.info("saving imeji config");
       // BeanHelper.removeBeanFromMap(this.getClass());
@@ -295,8 +297,9 @@ public class ConfigurationBean {
    */
   public String getUploadMaxFileSize() {
     String size = (String) config.get(CONFIGURATION.MAX_FILE_SIZE.name());
-    if (size == null || size.equals(""))
+    if (size == null || size.equals("")) {
       return "0";
+    }
     return size;
   }
 
@@ -315,7 +318,7 @@ public class ConfigurationBean {
    * @param types
    */
   public void setFileTypes(FileTypes types) {
-    fileTypes = types;
+    setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
   }
 
   /**
@@ -326,16 +329,16 @@ public class ConfigurationBean {
   public static FileTypes getFileTypesStatic() {
     return fileTypes;
   }
-  
-  public static boolean getStartPageCarouselEnabledStatic(){
+
+  public static boolean getStartPageCarouselEnabledStatic() {
     return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()));
   }
-  
-  public void setStartPageCarouselEnabled(boolean input){
+
+  public void setStartPageCarouselEnabled(boolean input) {
     setProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name(), String.valueOf(input));
   }
-  
-  public boolean getStartPageCarouselEnabled(){
+
+  public boolean getStartPageCarouselEnabled() {
     return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()));
   }
 
@@ -751,43 +754,43 @@ public class ConfigurationBean {
     // // internationalizationBean.readSupportedLanguagesProperty();
     // // internationalizationBean.initLanguagesMenu();
   }
-  
-  public static String getDoiUserStatic(){
+
+  public static String getDoiUserStatic() {
     return (String) config.get(CONFIGURATION.DOI_USER.name());
   }
-  
-  public String getDoiUser(){
+
+  public String getDoiUser() {
     return (String) config.get(CONFIGURATION.DOI_USER.name());
   }
-  
-  public void setDoiUser(String s){
+
+  public void setDoiUser(String s) {
     setProperty(CONFIGURATION.DOI_USER.name(), s);
   }
 
-  public static String getDoiPasswordStatic(){
+  public static String getDoiPasswordStatic() {
     return (String) config.get(CONFIGURATION.DOI_PASSWORD.name());
   }
-  
-  public String getDoiPassword(){   
-    return (String) config.get(CONFIGURATION.DOI_PASSWORD.name());  
+
+  public String getDoiPassword() {
+    return (String) config.get(CONFIGURATION.DOI_PASSWORD.name());
   }
-  
-  public void setDoiPassword(String s){
+
+  public void setDoiPassword(String s) {
     setProperty(CONFIGURATION.DOI_PASSWORD.name(), s);
   }
-  
-  public static String getDoiServiceUrlStatic(){
+
+  public static String getDoiServiceUrlStatic() {
     return (String) config.get(CONFIGURATION.DOI_SERVICE_URL.name());
-  } 
-  
-  public String getDoiServiceUrl(){   
-    return (String) config.get(CONFIGURATION.DOI_SERVICE_URL.name());  
   }
-  
-  public void setDoiServiceUrl(String s){
+
+  public String getDoiServiceUrl() {
+    return (String) config.get(CONFIGURATION.DOI_SERVICE_URL.name());
+  }
+
+  public void setDoiServiceUrl(String s) {
     setProperty(CONFIGURATION.DOI_SERVICE_URL.name(), s);
   }
-  
+
   public void setImpressumUrl(String s) {
     setProperty(CONFIGURATION.IMPRESSUM_URL.name(), s);
   }
@@ -919,39 +922,40 @@ public class ConfigurationBean {
   public void setDefaultBrowseView(String string) {
     config.put(CONFIGURATION.BROWSE_DEFAULT_VIEW, BROWSE_VIEW.valueOf(string).name());
   }
-  
-  public void setQuotaLimits(String limits){
+
+  public void setQuotaLimits(String limits) {
     try {
       String[] limitArray = limits.split(",");
-      for(int i= 0; i<limitArray.length; i++){
+      for (int i = 0; i < limitArray.length; i++) {
         Double.parseDouble(limitArray[i]);
-      }   
+      }
       setProperty(CONFIGURATION.QUOTA_LIMITS.name(), limits);
     } catch (NumberFormatException e) {
-      logger.info(
-          "Wrong format for quota definition! Has to be comma separated list");
-      BeanHelper.error("Wrong format for quota definition! Has to be comma separated list. " + "Wrong input " + e.getMessage());
+      logger.info("Wrong format for quota definition! Has to be comma separated list");
+      BeanHelper.error("Wrong format for quota definition! Has to be comma separated list. "
+          + "Wrong input " + e.getMessage());
     }
   }
-  
-  public String getQuotaLimits(){
+
+  public String getQuotaLimits() {
     return (String) config.get(CONFIGURATION.QUOTA_LIMITS.name());
   }
-  
-  public static LinkedHashMap<String, Long> getQuotaLimitsStatic(){
+
+  public static LinkedHashMap<String, Long> getQuotaLimitsStatic() {
     SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     int bytesPerGigabyte = 1073741824;
-    
-    String limits = (String) config.get(CONFIGURATION.QUOTA_LIMITS.name()); 
+
+    String limits = (String) config.get(CONFIGURATION.QUOTA_LIMITS.name());
     String[] limitArray = limits != null ? limits.split(",") : new String[0];
 
     LinkedHashMap<String, Long> quotaLimits = new LinkedHashMap<String, Long>();
     quotaLimits.put(sb.getLabel("unlimited"), Long.MAX_VALUE);
-    for(int i=0; i<limitArray.length; i++){
-      quotaLimits.put(limitArray[i], (long) ((Double.parseDouble(limitArray[i]))*bytesPerGigabyte));
+    for (int i = 0; i < limitArray.length; i++) {
+      quotaLimits.put(limitArray[i],
+          (long) ((Double.parseDouble(limitArray[i])) * bytesPerGigabyte));
     }
     return quotaLimits;
-    
+
   }
 
 }

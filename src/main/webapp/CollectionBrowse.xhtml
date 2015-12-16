@@ -38,7 +38,8 @@
 									isAdmin="#{Auth.admin(paginatorListSessionBean.collection)}" 
 									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}"
 									contextDownloadParam="&amp;col=#{paginatorListSessionBean.id}" 
-									allowedToShare="#{paginatorListSessionBean.collection.status !='WITHDRAWN' and Auth.admin(paginatorListSessionBean.collection)}"/>
+									allowedToShare="#{paginatorListSessionBean.collection.status !='WITHDRAWN' and Auth.admin(paginatorListSessionBean.collection)}"
+									hasDoi="#{paginatorListSessionBean.collection != null}"/>
 		</ui:fragment>
 	</ui:define>
 	

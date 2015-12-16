@@ -30,7 +30,8 @@
                                   isAdmin="#{Auth.admin(UploadBean.collection)}" 
                                   contextDownloadParam="&amp;col=#{UploadBean.id}"
                                   downloadEnabled="#{UploadBean.collectionSize > 0}"
-                                  allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"/>
+                                  allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"
+                                  hasDoi="#{UploadBean.collection != null}"/>
     </ui:define>
 
     <ui:define name="modalDialogs_from_site">

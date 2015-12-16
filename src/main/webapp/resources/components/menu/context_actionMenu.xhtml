@@ -231,7 +231,11 @@
 										</li>
 										
 										<li>
-											<h:outputLink id="lnkCreateDOI" value="#" onclick="openDialog('createDOIDialog');" title="#{lbl.createDOI}">
+											<h:outputLink id="lnkCreateDOI" value="#" onclick="openDialog('createDOIDialog');" title="#{lbl.createDOI}" rendered="#{Config.doiServiceUrl != null and Config.doiServiceUrl != ''}">
+												<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
+												<h:outputText value="#{lbl.change_doi}" rendered="#{cc.attrs.hasDoi}"/>
+											</h:outputLink>
+											<h:outputLink id="lnkInputDOI" value="#" onclick="openDialog('doiInput');" title="#{lbl.createDOI}" rendered="#{Config.doiServiceUrl == null or Config.doiServiceUrl == ''}">
 												<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
 												<h:outputText value="#{lbl.change_doi}" rendered="#{cc.attrs.hasDoi}"/>
 											</h:outputLink>

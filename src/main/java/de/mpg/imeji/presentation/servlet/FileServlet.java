@@ -20,11 +20,9 @@ import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.search.Search;
@@ -39,10 +37,10 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -116,7 +114,7 @@ public class FileServlet extends HttpServlet {
         if (download) {
           downloadFile(resp, url, session, user);
         } else {
-          readFile(url, resp, false);
+          readFile(url, resp, false, user);
         }
       }
     } catch (Exception e) {
@@ -153,7 +151,7 @@ public class FileServlet extends HttpServlet {
       NotificationUtils.notifyByItemDownload(user, fileItem, session);
       isExternalStorage = StringHelper.isNullOrEmptyTrim(fileItem.getStorageId());
     }
-    readFile(url, resp, isExternalStorage);
+    readFile(url, resp, isExternalStorage, user);
 
   }
 
@@ -166,12 +164,12 @@ public class FileServlet extends HttpServlet {
    * @throws ImejiException
    * @throws IOException
    */
-  private void readFile(String url, HttpServletResponse resp, boolean isExternalStorage)
+  private void readFile(String url, HttpServletResponse resp, boolean isExternalStorage, User user)
       throws ImejiException, IOException {
     if (isExternalStorage) {
       readExternalFile(url, resp);
     } else {
-      readStorageFile(url, resp);
+      readStorageFile(url, resp, user);
     }
   }
 
@@ -183,9 +181,40 @@ public class FileServlet extends HttpServlet {
    * @throws ImejiException
    * @throws IOException
    */
-  private void readStorageFile(String url, HttpServletResponse resp)
+  private void readStorageFile(String url, HttpServletResponse resp, User user)
       throws ImejiException, IOException {
+    checkSecurity(url, user);
     storageController.read(url, resp.getOutputStream(), true);
+  }
+
+  /**
+   * Exeption if the user is not allowed to read the file
+   * 
+   * @param url
+   * @param user
+   * @return
+   * @throws NotAllowedError
+   */
+  private void checkSecurity(String url, User user) throws NotAllowedError {
+    URI uri = getCollectionURI(url);
+    if (authorization.read(user, uri) || isPublicCollection(uri)) {
+      // ok!
+    } else {
+      throw new NotAllowedError("You are not allowed to read this file");
+    }
+  }
+
+
+  /**
+   * True if the collection is public
+   * 
+   * @param collectionId
+   * @return
+   */
+  private boolean isPublicCollection(URI collectionId) {
+    List<String> r =
+        ImejiSPARQL.exec(JenaCustomQueries.selectCollectionStatus(collectionId.toString()), null);
+    return !r.isEmpty() && r.get(0).equals(Status.RELEASED.getUriString());
   }
 
 
@@ -204,31 +233,6 @@ public class FileServlet extends HttpServlet {
   }
 
 
-  /**
-   * Load a {@link CollectionImeji} from the session if possible, otherwise from jena
-   * 
-   * @param url
-   * @param session
-   * @return
-   */
-  private CollectionImeji loadCollection(String url, SessionBean session) {
-    if (session == null)
-      return loadCollection(url);
-    URI collectionURI = getCollectionURI(url);
-    if (collectionURI == null)
-      return null;
-    CollectionImeji collection = session.getCollectionCached().get(collectionURI);
-    if (collection == null) {
-      try {
-        // important to use lazy load, otherwise high performance issue
-        collection = ObjectLoader.loadCollectionLazy(collectionURI, Imeji.adminUser);
-        session.getCollectionCached().put(collection.getId(), collection);
-      } catch (Exception e) {
-        /* user is not allowed to view this collection */
-      }
-    }
-    return collection;
-  }
 
   /**
    * Return the {@link User} of the request. Check first is a user is send with the request. If not,
@@ -239,32 +243,14 @@ public class FileServlet extends HttpServlet {
    */
   private User getUser(HttpServletRequest req, SessionBean session) {
     User user = AuthenticationFactory.factory(req).doLogin();
-    if (user != null)
+    if (user != null) {
       return user;
+    }
     if (session != null) {
       return session.getUser();
     }
     return null;
 
-  }
-
-  /**
-   * Load a {@link CollectionImeji} when the session is null
-   * 
-   * @param url
-   * @return
-   */
-  private CollectionImeji loadCollection(String url) {
-    List<String> l = ImejiSPARQL.exec(JenaCustomQueries.selectCollectionIdOfFile(url), null);
-    if (l.size() == 0)
-      throw new RuntimeException("File " + url + " couldn't be found");
-    CollectionController c = new CollectionController();
-    try {
-      return c.retrieve(URI.create(l.get(0)), null);
-    } catch (Exception e) {
-      logger.error(e);
-    }
-    return null;
   }
 
   /**
@@ -282,10 +268,11 @@ public class FileServlet extends HttpServlet {
       List<String> r =
           s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1)
               .getResults();
-      if (!r.isEmpty())
+      if (!r.isEmpty()) {
         return URI.create(r.get(0));
-      else
+      } else {
         return null;
+      }
     }
   }
 

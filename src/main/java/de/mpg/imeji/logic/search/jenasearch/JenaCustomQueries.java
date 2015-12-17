@@ -493,14 +493,23 @@ public class JenaCustomQueries {
     return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/album>}";
   }
 
+  // /**
+  // * Check if {@link CollectionImeji} status is not WITHDRAWN
+  // *
+  // * @return
+  // */
+  // public static String getAllowedUpdateByStatus(String collectionId) {
+  // return "SELECT * WHERE { " + collectionId + " " + ImejiNamespaces.STATUS + " <"
+  // + Status.WITHDRAWN.getUriString() + "> }";
+  // }
+
   /**
-   * Check if {@link CollectionImeji} status is not WITHDRAWN
+   * select {@link CollectionImeji} status
    * 
    * @return
    */
-  public static String getAllowedUpdateByStatus(String collectionId) {
-    return "SELECT * WHERE { " + collectionId + " " + ImejiNamespaces.STATUS + " <"
-        + Status.WITHDRAWN.getUriString() + "> }";
+  public static String selectCollectionStatus(String collectionId) {
+    return "SELECT ?s WHERE { <" + collectionId + "> <" + ImejiNamespaces.STATUS + "> ?s}";
   }
 
   /**

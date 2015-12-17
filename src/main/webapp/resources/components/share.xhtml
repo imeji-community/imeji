@@ -35,7 +35,10 @@
 							<h2>
 								<h:outputText value="#{group.name}"/>
 							</h2>
-							<h:outputLink value="share?group=#{group.id}" styleClass="imj_editButton">
+							<h:outputLink value="share?group=#{group.id}" styleClass="imj_editButton" rendered="#{cc.attrs.type != 'item'}">
+								<h:outputText value="#{lbl.share_with}"/>
+							</h:outputLink>	
+							<h:outputLink value="?tab=share&amp;group=#{group.id}" styleClass="imj_editButton" rendered="#{cc.attrs.type == 'item'}">
 								<h:outputText value="#{lbl.share_with}"/>
 							</h:outputLink>					
 						</div>

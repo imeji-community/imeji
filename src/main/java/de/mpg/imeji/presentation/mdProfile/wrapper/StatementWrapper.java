@@ -113,10 +113,11 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
    * @return
    */
   public Statement getAsStatement() {
-    if (vocabularyString != null)
+    if (vocabularyString != null) {
       statement.setVocabulary(URI.create(vocabularyString));
-    else
+    } else {
       statement.setVocabulary(null);
+    }
     return statement;
   }
 

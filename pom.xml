@@ -4,7 +4,7 @@
 	<groupId>org.imeji</groupId>
 	<name>imeji</name>
 	<packaging>war</packaging>
-	<version>3.1.0.0</version>
+	<version>3.1.0.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
 	<description>The imeji open source software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</description>
 	<licenses>
@@ -22,7 +22,7 @@
 		<url>https://github.com/imeji-community/imeji</url>
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
-		<tag>imeji-3.1.0.0</tag>
+		<tag>develop</tag>
 	</scm>
 	<issueManagement>
 		<system>Github</system>
@@ -262,8 +262,7 @@
 			</plugin>
 			<!-- <plugin> <artifactId>maven-antrun-plugin</artifactId> <executions> 
 				<execution> <id>process-resources</id> <phase>process-resources</phase> <configuration> 
-				<tasks> <copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" /> <copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" /> <copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" /> <copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" 
-				 /> </tasks> </configuration> <goals> <goal>run</goal> </goals> </execution> 
+				<tasks> <copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" /> <copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" /> <copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" /> <copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" /> </tasks> </configuration> <goals> <goal>run</goal> </goals> </execution> 
 				</executions> </plugin> -->
 			<!--This plugin's configuration is used to store Eclipse m2e settings 
 				only. It has no influence on the Maven build itself. -->

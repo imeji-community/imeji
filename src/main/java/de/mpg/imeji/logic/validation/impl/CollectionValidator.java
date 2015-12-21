@@ -81,7 +81,7 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
     }
 
     String doi = collection.getDoi();
-    if (doi != null) {
+    if (doi != null && !doi.equals("")) {
       String pattern = "10\\.\\d+\\/\\S+";
       if (!doi.matches(pattern)) {
         valid = false;

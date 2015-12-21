@@ -31,7 +31,7 @@
                                   contextDownloadParam="&amp;col=#{UploadBean.id}"
                                   downloadEnabled="#{UploadBean.collectionSize > 0}"
                                   allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"
-                                  hasDoi="#{UploadBean.collection != null}"/>
+                                  hasDoi="#{UploadBean.collection.doi != null and UploadBean.collection.doi !=''}"/>
     </ui:define>
 
     <ui:define name="modalDialogs_from_site">

@@ -23,8 +23,8 @@
   "thumbnailUrl": "http://qa-imeji.mpdl.mpg.de/imeji/file/_FAfwLZ9Vy3LUSM/f7/a5/84/a3-ca3f-4116-9b05-34c49892c17d/0/thumbnail/cb6faf2b3b358438e2b670548168dd10.jpg",
   "fileUrl": "http://qa-imeji.mpdl.mpg.de/imeji/file/_FAfwLZ9Vy3LUSM/f7/a5/84/a3-ca3f-4116-9b05-34c49892c17d/0/original/cb6faf2b3b358438e2b670548168dd10.jpg",
   "metadata" : {
-		"text" : "value1",
-		"number" : 123.99,
+		"text" : ["value1","value2"],
+		"number" : [123.99,133.99],
 		"date" : "2013-12-26",
 		"conePerson": {
 	        "familyName": "Family name ",

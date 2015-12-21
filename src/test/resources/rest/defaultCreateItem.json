@@ -12,43 +12,22 @@
         "latitude": 47.421111
       },
       "number": 1.2345678E7,
-      "person": {
-        "id": "MaNxZZEaq2374xGy",
+      "conePerson": {
         "familyName": "Family name ",
         "givenName": "Given name",
         "completeName": "Family name , Given name",
         "alternativeName": "Alternative name ",
         "role": "author",
-        "identifiers": [
-          {
-            "type": "imeji",
-            "value": "MaNxZZEaq2374xGy"
-          }
-        ],
         "organizations": [
           {
-            "id": "f3gwuKQmneXV8AOh",
             "name": "Organization1",
             "description": "Description1",
-            "identifiers": [
-              {
-                "type": "imeji",
-                "value": "f3gwuKQmneXV8AOh"
-              }
-            ],
             "city": "City1",
             "country": "Country1"
           },
           {
-            "id": "SFHlThUiPda736zD",
             "name": "Organization2",
             "description": "Description1",
-            "identifiers": [
-              {
-                "type": "imeji",
-                "value": "SFHlThUiPda736zD"
-              }
-            ],
             "city": "City2",
             "country": "Country2"
           }

@@ -88,12 +88,15 @@ public class LoginBean {
 
   public void doLogin() throws Exception {
     Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
+    
+    try {
     User user = auth.doLogin();
-    if (user != null) {
-      sb.setUser(user);
+     sb.setUser(user);
       BeanHelper.cleanMessages();
       BeanHelper.info(sb.getMessage("success_log_in"));
-    } else {
+    } 
+    
+    catch (Exception e) {
       String name =
           ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
               .getInstanceName();
@@ -108,7 +111,6 @@ public class LoginBean {
         redirect = current.getCompleteUrl();
       }
     }
-
     FacesContext.getCurrentInstance().getExternalContext().redirect(redirect);
   }
 

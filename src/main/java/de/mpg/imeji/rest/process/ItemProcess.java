@@ -60,11 +60,11 @@ public class ItemProcess {
   public static final String METADATA_KEY = "metadata";
 
   public static JSONResponse deleteItem(HttpServletRequest req, String id) {
-    User u = BasicAuthentication.auth(req);
     JSONResponse resp;
 
     ItemService icrud = new ItemService();
     try {
+      User u = BasicAuthentication.auth(req);
       icrud.delete(id, u);
       resp = RestProcessUtils.buildResponse(Status.NO_CONTENT.getStatusCode(), null);
     } catch (Exception e) {
@@ -81,12 +81,13 @@ public class ItemProcess {
    * @return
    */
   public static JSONResponse readItem(HttpServletRequest req, String id) {
-    User u = BasicAuthentication.auth(req);
+    
     JSONResponse resp = null;
 
     ItemService icrud = new ItemService();
 
     try {
+      User u = BasicAuthentication.auth(req);
       switch (guessType(req.getParameter("syntax"))) {
         case RAW:
           resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.read(id, u));
@@ -113,10 +114,11 @@ public class ItemProcess {
   public static JSONResponse readItems(HttpServletRequest req, String q, int offset, int size) {
     JSONResponse resp = null;
 
-    User u = BasicAuthentication.auth(req);
+    
 
     ItemService is = new ItemService();
     try {
+      User u = BasicAuthentication.auth(req);
       switch (guessType(req.getParameter("syntax"))) {
         case DEFAULT:
           resp =
@@ -139,22 +141,19 @@ public class ItemProcess {
     // / write response
     JSONResponse resp;
 
-    // Load User (if provided)
-    User u = BasicAuthentication.auth(req);
-
     // Parse json into to
     String syntax = req.getParameter("syntax");
 
-    ItemWithFileTO itemTO = null;
+    ItemWithFileTO itemTO = new ItemWithFileTO();
     ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
     try {
-
+      User u = BasicAuthentication.auth(req);
       switch (SYNTAX_TYPE) {
         case RAW:
           itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class);
           break;
         case DEFAULT:
-          // extract metadata node
+         /* // extract metadata node
           Map<String, Object> itemMap = jsonToPOJO(json);
           HashMap<String, Object> metadata =
               (LinkedHashMap<String, Object>) itemMap.remove(METADATA_KEY);
@@ -167,7 +166,8 @@ public class ItemProcess {
               (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"
                   + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
           ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(
-              getMetadataProfileTO(itemTO, u), easyTO, itemTO, true);
+              getMetadataProfileTO(itemTO, u), easyTO, itemTO, true);*/
+          itemTO = (ItemWithFileTO)prepareDefaultItemTOAsItemTO(true, json, itemTO, itemTO.getId(), u);
           break;
         default:
           throw new BadRequestException("Bad syntax type: " + syntax);
@@ -177,13 +177,9 @@ public class ItemProcess {
         itemTO = uploadAndValidateFile(file, itemTO, origName);
       }
 
-    } catch (Exception e) {
-      return RestProcessUtils.localExceptionHandler(e, e.getMessage());
-    }
-
+   
     // create item with the file
     ItemService is = new ItemService();
-    try {
       ItemTO createdItem = is.create(itemTO, u);
       resp =
           RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(),
@@ -200,15 +196,19 @@ public class ItemProcess {
   private static MetadataProfileTO getMetadataProfileTO(ItemTO to, User u) throws ImejiException {
     Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     String query = null;
-    if (to.getId() != null) {
-      query =
-          JenaCustomQueries.selectProfileIdOfItem(ObjectHelper.getURI(Item.class, to.getId())
-              .toString());
-    } else if (to.getCollectionId() != null) {
+    //First collectionId has to be  queried, else tests with false item ID fail 
+    //for default Item
+    //Logic stays same, only order of queries to Jena has been switched
+    if (to.getCollectionId() != null) {
       query =
           JenaCustomQueries.selectProfileIdOfCollection(ObjectHelper.getURI(CollectionImeji.class,
               to.getCollectionId()).toString());
     }
+    else if (to.getId() != null) {
+      query =
+          JenaCustomQueries.selectProfileIdOfItem(ObjectHelper.getURI(Item.class, to.getId())
+              .toString());
+    } 
     if (query != null) {
       List<String> r = s.searchString(query, null, null, 0, -1).getResults();
       if (!r.isEmpty()) {
@@ -220,11 +220,9 @@ public class ItemProcess {
 
   public static JSONResponse easyUpdateItem(HttpServletRequest req, String id) throws IOException {
     JSONResponse resp = null;
-    User u = BasicAuthentication.auth(req);
-    if (u == null) {
-      resp = buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
-    } else {
+    
       try {
+        User u = BasicAuthentication.auth(req);
         ItemService icrud = new ItemService();
         DefaultItemTO defaultTO = (DefaultItemTO) buildTOFromJSON(req, DefaultItemTO.class);
         ItemTO itemTO = icrud.read(id, u);
@@ -237,14 +235,13 @@ public class ItemProcess {
       } catch (ImejiException e) {
         resp = localExceptionHandler(e, e.getLocalizedMessage());
       }
-    }
     return resp;
   }
 
 
   public static JSONResponse updateItem(HttpServletRequest req, String id,
       InputStream fileInputStream, String json, String filename) {
-    User u = BasicAuthentication.auth(req);
+    
 
     ItemService service = new ItemService();
     ItemTO to = new ItemTO();
@@ -262,6 +259,9 @@ public class ItemProcess {
       if (SYNTAX_TYPE == null) {
         throw new BadRequestException("Bad syntax type: " + syntax);
       }
+      
+      User u = BasicAuthentication.auth(req);
+      
       switch (SYNTAX_TYPE) {
         case RAW:
           to =
@@ -273,10 +273,27 @@ public class ItemProcess {
           to.setId(id);
           break;
         case DEFAULT:
-          // extract metadata node
+          to = prepareDefaultItemTOAsItemTO(fileUpdate, json, to, id, u);
+          /*
+           *    // extract metadata node
           Map<String, Object> itemMap = jsonToPOJO(json);
-          Map<String, Object> metadata =
+          HashMap<String, Object> metadata =
               (LinkedHashMap<String, Object>) itemMap.remove(METADATA_KEY);
+          // parse as normal ItemTO
+          itemTO =
+              (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap),
+                  ItemWithFileTO.class);
+          // update metadata part
+          DefaultItemTO easyTO =
+              (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"
+                  + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
+          ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(
+              getMetadataProfileTO(itemTO, u), easyTO, itemTO, true);
+          break;
+           */
+          // extract metadata node
+         /* LinkedHashMap<String, Object> itemMap = (LinkedHashMap<String, Object>)jsonToPOJO(json);
+          LinkedHashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove(METADATA_KEY);
           // parse as normal ItemTO
           to =
               fileUpdate ? (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
@@ -291,7 +308,7 @@ public class ItemProcess {
                   + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
 
           ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(to, u),
-              defaultTO, to, true);
+              defaultTO, to, true);*/
           break;
       }
 
@@ -307,6 +324,7 @@ public class ItemProcess {
 
       return response;
     } catch (Exception e) {
+      e.printStackTrace();
       return RestProcessUtils.localExceptionHandler(e, e.getMessage());
     }
   }
@@ -348,6 +366,32 @@ public class ItemProcess {
             "A file must be uploaded, referenced or fetched from external location.");
       }
     }
+    return to;
+
+  }
+  
+  public static ItemTO prepareDefaultItemTOAsItemTO(boolean fileUpdate, String json, ItemTO to, String id, User u) 
+      throws IOException, UnprocessableError, ImejiException{
+
+    // extract metadata node
+    LinkedHashMap<String, Object> itemMap = (LinkedHashMap<String, Object>)jsonToPOJO(json);
+    LinkedHashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove(METADATA_KEY);
+    // parse as normal ItemTO
+    to =
+        fileUpdate ? (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
+            buildJSONFromObject(itemMap), ItemWithFileTO.class) : (ItemTO) RestProcessUtils
+            .buildTOFromJSON(buildJSONFromObject(itemMap), ItemTO.class);
+
+    validateId(id, to);
+    to.setId(id);
+    // update metadata part
+    DefaultItemTO defaultTO =
+        (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"
+            + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
+
+    ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(to, u),
+        defaultTO, to, true);
+    
     return to;
 
   }

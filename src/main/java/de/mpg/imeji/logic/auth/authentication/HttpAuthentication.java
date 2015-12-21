@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.vo.User;
 
@@ -59,7 +60,7 @@ public class HttpAuthentication implements Authentication {
    * @see de.mpg.imeji.logic.auth.Authentification#doLogin()
    */
   @Override
-  public User doLogin() {
+  public User doLogin() throws AuthenticationError {
     if (apiKey != null) {
       APIKeyAuthentication keyAuthentication = new APIKeyAuthentication(apiKey);
       return keyAuthentication.doLogin();
@@ -71,6 +72,7 @@ public class HttpAuthentication implements Authentication {
         return simpleAuthentification.doLogin();
       }
     }
+
     return null;
   }
 

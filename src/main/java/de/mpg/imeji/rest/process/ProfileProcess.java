@@ -17,10 +17,9 @@ public class ProfileProcess {
   public static JSONResponse readProfile(HttpServletRequest req, String id) {
     JSONResponse resp;
 
-    User u = BasicAuthentication.auth(req);
-
     ProfileService pcrud = new ProfileService();
     try {
+      User u = BasicAuthentication.auth(req);
       resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), pcrud.read(id, u));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
@@ -32,20 +31,14 @@ public class ProfileProcess {
   public static JSONResponse deleteProfile(HttpServletRequest req, String id) {
     JSONResponse resp;
 
-    User u = BasicAuthentication.auth(req);
-
-    if (u == null) {
-      Exception e = new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
-      resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.USER_MUST_BE_LOGGED_IN);
-    } else {
       ProfileService pcrud = new ProfileService();
       try {
+        User u = BasicAuthentication.auth(req);
         resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), pcrud.delete(id, u));
       } catch (Exception e) {
 
         resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
       }
-    }
     return resp;
 
   }
@@ -53,10 +46,10 @@ public class ProfileProcess {
   public static JSONResponse readAll(HttpServletRequest req, String q) {
     JSONResponse resp;
 
-    User u = BasicAuthentication.auth(req);
 
     ProfileService ccrud = new ProfileService();
     try {
+      User u = BasicAuthentication.auth(req);
       resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u, q));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
@@ -66,10 +59,10 @@ public class ProfileProcess {
 
   public static JSONResponse releaseProfile(HttpServletRequest req, String id) {
     JSONResponse resp;
-    User u = BasicAuthentication.auth(req);
     ProfileService service = new ProfileService();
 
     try {
+      User u = BasicAuthentication.auth(req);
       resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.release(id, u));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
@@ -80,11 +73,9 @@ public class ProfileProcess {
   public static JSONResponse withdrawProfile(HttpServletRequest req, String id,
       String discardComment) {
     JSONResponse resp;
-
-    User u = BasicAuthentication.auth(req);
     ProfileService service = new ProfileService();
-
     try {
+      User u = BasicAuthentication.auth(req);
       resp =
           RestProcessUtils.buildResponse(OK.getStatusCode(),
               service.withdraw(id, u, discardComment));
@@ -104,10 +95,10 @@ public class ProfileProcess {
   public static JSONResponse readItemTemplate(HttpServletRequest req, String id) {
     JSONResponse resp = null;
 
-    User u = BasicAuthentication.auth(req);
-
     ProfileService pcrud = new ProfileService();
     try {
+          User u = BasicAuthentication.auth(req);
+
           resp =
               RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
                   pcrud.readItemTemplate(id, u));

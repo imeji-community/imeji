@@ -81,9 +81,14 @@ public class AlbumIntegration extends ImejiTestBase {
     String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
 
     Response response =
-        target(pathPrefix).register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
+        target(pathPrefix).register(authAsUserFalse).register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
     assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
+    
+    Response response2 =
+        target(pathPrefix).register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+    assertThat(response2.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
   }
 
 
@@ -100,6 +105,9 @@ public class AlbumIntegration extends ImejiTestBase {
   public void test_2_ReadAlbum_2_WithUnauth() throws ImejiException {
     Response response = target(pathPrefix).path(albumId).request(MediaType.APPLICATION_JSON).get();
     assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
+
+    Response response2 = target(pathPrefix).path(albumId).register(authAsUserFalse).request(MediaType.APPLICATION_JSON).get();
+    assertThat(response2.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
 
   }
 
@@ -206,11 +214,14 @@ public class AlbumIntegration extends ImejiTestBase {
   public void test_3_DeleteAlbum_4_WithOutUser() {
 
     initAlbum();
-
     Response response =
         target(pathPrefix).path("/" + albumId).request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
-  }
+
+    Response response2 =
+        target(pathPrefix).path("/" + albumId).register(authAsUserFalse).request(MediaType.APPLICATION_JSON_TYPE).delete();
+    assertEquals(UNAUTHORIZED.getStatusCode(), response2.getStatus());
+}
 
 
   @Test
@@ -253,6 +264,14 @@ public class AlbumIntegration extends ImejiTestBase {
             .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
 
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+    
+    
+    Response response2 =
+    target(pathPrefix).path("/" + albumId + "/release").register(authAsUserFalse)
+        .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
+
+    assertEquals(UNAUTHORIZED.getStatusCode(), response2.getStatus());
+
   }
 
   @Test
@@ -322,8 +341,12 @@ public class AlbumIntegration extends ImejiTestBase {
 
     Response response = target(pathPrefix).path("/" + albumId + "/members/link")
         .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
-
     assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
+
+    Response response2 = target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUserFalse)
+        .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
+    assertThat(response2.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
+
   }
 
   @Test
@@ -444,11 +467,19 @@ public class AlbumIntegration extends ImejiTestBase {
     form.param("id", albumId);
     form.param("discardComment",
         "test_6_WithdrawAlbum_3_WithNonAuth_" + System.currentTimeMillis());
+    
     response = target(pathPrefix).path("/" + albumId + "/discard")
         .request((MediaType.APPLICATION_JSON_TYPE))
         .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+
+    response = target(pathPrefix).path("/" + albumId + "/discard").register(authAsUserFalse)
+        .request((MediaType.APPLICATION_JSON_TYPE))
+        .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+
   }
 
 
@@ -575,7 +606,13 @@ public class AlbumIntegration extends ImejiTestBase {
         .put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-  }
+
+    response = target(pathPrefix).path("/" + albumId).register(authAsUserFalse).register(MultiPartFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+}
 
   @Test
   public void test_7_UpdateAlbum_4_NonExistingAlbum() throws IOException {
@@ -644,7 +681,12 @@ public class AlbumIntegration extends ImejiTestBase {
         .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
 
     assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
-  }
+
+    response = target(pathPrefix).path("/" + albumId + "/members/unlink").register(authAsUserFalse)
+        .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
+
+    assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
+}
 
   @Test
   public void test_8_UnlinkItemsToAlbum_3_WithNonAuth() throws ImejiException {

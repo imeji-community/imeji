@@ -40,6 +40,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -72,6 +73,9 @@ public class AlbumController extends ImejiController {
    * @param user
    */
   public URI create(Album album, User user) throws ImejiException {
+    if (user == null) {
+      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
+    }
     new WriterFacade(Imeji.albumModel);
     writeCreateProperties(album, user);
     ShareController shareController = new ShareController();

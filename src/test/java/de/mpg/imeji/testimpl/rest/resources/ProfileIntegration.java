@@ -43,6 +43,21 @@ public class ProfileIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
+  // Everybody can read any profiles until the bug is fixed
+  @Ignore 
+  @Test
+  public void test_1_ReadProfiles_Unauthorized() {
+    String profileId = collectionTO.getProfile().getId();
+
+    Response response =
+        target(pathPrefix).path(profileId).request(MediaType.APPLICATION_JSON).get();
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    
+    Response response2 =
+        target(pathPrefix).path(profileId).register(authAsUserFalse).request(MediaType.APPLICATION_JSON).get();
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response2.getStatus());
+  }
+
   @Test
   public void test_1_ReadProfiles_ReleaseCollection() throws Exception {
     CollectionService cs = new CollectionService();
@@ -53,15 +68,6 @@ public class ProfileIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
-  @Ignore
-  // Everybody ca read any profiles
-  @Test
-  public void test_1_ReadProfiles_Unauthorized() {
-    String profileId = collectionTO.getProfile().getId();
-    Response response =
-        target(pathPrefix).path(profileId).request(MediaType.APPLICATION_JSON).get();
-    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-  }
 
   @Test
   public void test_1_ReadProfiles_InvalidProfileId() {
@@ -79,8 +85,9 @@ public class ProfileIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
-  @Ignore
-  // Everybody ca read any profiles
+
+  // Everybody can read any profiles until the bug is fixed
+  @Ignore 
   @Test
   public void test_1_ReadProfiles_NotAllowedUser() {
     String profileId = collectionTO.getProfile().getId();
@@ -107,7 +114,19 @@ public class ProfileIntegration extends ImejiTestBase {
     Response response = target(pathPrefix).path(profileId).register(authAsUser2)
         .request(MediaType.APPLICATION_JSON).delete();
     assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-  }
+}
+
+ @Test
+  public void test_3_DeleteProfile_Unauthorized() {
+   
+   Response response = target(pathPrefix).path(profileId)
+        .request(MediaType.APPLICATION_JSON).delete();
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+
+    response = target(pathPrefix).path(profileId).register(authAsUserFalse)
+        .request(MediaType.APPLICATION_JSON).delete();
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+}
 
   @Test
   public void test_3_DeleteProfile_Referenced() {

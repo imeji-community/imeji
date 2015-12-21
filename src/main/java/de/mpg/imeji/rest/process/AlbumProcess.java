@@ -26,11 +26,9 @@ public class AlbumProcess {
 
   public static JSONResponse readAlbum(HttpServletRequest req, String id) {
     JSONResponse resp;
-
-    User u = BasicAuthentication.auth(req);
-
     AlbumService ccrud = new AlbumService();
     try {
+      User u = BasicAuthentication.auth(req);
       resp = buildResponse(Status.OK.getStatusCode(), ccrud.read(id, u));
     } catch (Exception e) {
       resp = localExceptionHandler(e, e.getLocalizedMessage());
@@ -41,9 +39,9 @@ public class AlbumProcess {
 
   public static JSONResponse readAllAlbums(HttpServletRequest req, String q, int offset, int size) {
     JSONResponse resp;
-    User u = BasicAuthentication.auth(req);
     AlbumService as = new AlbumService();
     try {
+      User u = BasicAuthentication.auth(req);
       resp = RestProcessUtils.buildResponse(OK.getStatusCode(), as.readAll(u, q, offset, size));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
@@ -55,10 +53,9 @@ public class AlbumProcess {
       int offset, int size) {
     JSONResponse resp;
 
-    User u = BasicAuthentication.auth(req);
-
     AlbumService ccrud = new AlbumService();
     try {
+      User u = BasicAuthentication.auth(req);
       resp =
           RestProcessUtils.buildResponse(OK.getStatusCode(),
               ccrud.readItems(id, u, q, offset, size));
@@ -72,35 +69,26 @@ public class AlbumProcess {
   public static JSONResponse createAlbum(HttpServletRequest req) {
     JSONResponse resp;
 
-    User u = BasicAuthentication.auth(req);
-
-    if (u == null) {
-      resp =
-          buildJSONAndExceptionResponse(Status.UNAUTHORIZED.getStatusCode(),
-              CommonUtils.USER_MUST_BE_LOGGED_IN);
-    } else {
-      AlbumService service = new AlbumService();
+    AlbumService service = new AlbumService();
       try {
+        System.out.println("Album 1");
+        User u = BasicAuthentication.auth(req);
+        System.out.println("Album 2");
         AlbumTO to = (AlbumTO) buildTOFromJSON(req, AlbumTO.class);
+        System.out.println("Album 3");
         resp = buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
       } catch (ImejiException e) {
         resp = localExceptionHandler(e, e.getLocalizedMessage());
       }
-
-    }
     return resp;
   }
 
   public static JSONResponse updateAlbum(HttpServletRequest req, String id) {
     JSONResponse resp;
 
-    User u = BasicAuthentication.auth(req);
-
-    if (u == null) {
-      resp = buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
-    } else {
-      AlbumService service = new AlbumService();
+    AlbumService service = new AlbumService();
       try {
+        User u = BasicAuthentication.auth(req);
         AlbumTO to = (AlbumTO) buildTOFromJSON(req, AlbumTO.class);
         if (!id.equals(to.getId())) {
           throw new BadRequestException("Album id is not equal in request URL and in json");
@@ -109,16 +97,15 @@ public class AlbumProcess {
       } catch (ImejiException e) {
         resp = localExceptionHandler(e, e.getLocalizedMessage());
       }
-    }
     return resp;
   }
 
   public static JSONResponse deleteAlbum(HttpServletRequest req, String id) {
     JSONResponse resp;
-    User u = BasicAuthentication.auth(req);
-    AlbumService service = new AlbumService();
 
+    AlbumService service = new AlbumService();
     try {
+      User u = BasicAuthentication.auth(req);
       resp = buildResponse(Status.NO_CONTENT.getStatusCode(), service.delete(id, u));
     } catch (Exception e) {
       resp = localExceptionHandler(e, e.getLocalizedMessage());
@@ -132,10 +119,10 @@ public class AlbumProcess {
       return localExceptionHandler(new BadRequestException("Please give a comment"), null);
     }
 
-    User u = BasicAuthentication.auth(req);
     AlbumService service = new AlbumService();
 
     try {
+      User u = BasicAuthentication.auth(req);
       resp = buildResponse(Status.OK.getStatusCode(), service.withdraw(id, u, discardComment));
     } catch (Exception e) {
       resp = localExceptionHandler(e, e.getLocalizedMessage());
@@ -145,10 +132,11 @@ public class AlbumProcess {
 
   public static JSONResponse releaseAlbum(HttpServletRequest req, String id) {
     JSONResponse resp;
-    User u = BasicAuthentication.auth(req);
+
     AlbumService service = new AlbumService();
 
     try {
+      User u = BasicAuthentication.auth(req);
       resp = buildResponse(Status.OK.getStatusCode(), service.release(id, u));
     } catch (Exception e) {
       resp = localExceptionHandler(e, e.getLocalizedMessage());
@@ -158,10 +146,10 @@ public class AlbumProcess {
 
   public static JSONResponse addItems(HttpServletRequest req, String id) {
     JSONResponse resp;
-    User u = BasicAuthentication.auth(req);
     AlbumService service = new AlbumService();
 
     try {
+      User u = BasicAuthentication.auth(req);
       List<String> itemIds = (List) buildTOFromJSON(req, List.class);
       resp = buildResponse(Status.OK.getStatusCode(), service.addItems(id, u, itemIds));
     } catch (Exception e) {
@@ -172,10 +160,10 @@ public class AlbumProcess {
 
   public static JSONResponse removeItems(HttpServletRequest req, String id, boolean removeAllItems) {
     JSONResponse resp;
-    User u = BasicAuthentication.auth(req);
     AlbumService service = new AlbumService();
     List<String> itemIds = null;
     try {
+      User u = BasicAuthentication.auth(req);
 
       if (!removeAllItems)
         itemIds = (List) buildTOFromJSON(req, List.class);

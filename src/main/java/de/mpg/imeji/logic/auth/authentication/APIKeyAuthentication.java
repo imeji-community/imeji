@@ -12,6 +12,7 @@ import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.lang.JoseException;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.ImejiRsaKeys;
@@ -33,7 +34,7 @@ public class APIKeyAuthentication implements Authentication {
   }
 
   @Override
-  public User doLogin() {
+  public User doLogin() throws AuthenticationError {
     try {
       UserController controller = new UserController(Imeji.adminUser);
       User user = controller.retrieve(URI.create(consumeJsonWebToken(key)));
@@ -43,7 +44,9 @@ public class APIKeyAuthentication implements Authentication {
     } catch (Exception e) {
       logger.error("Invalid Key authorization");
     }
-    return null;
+    logger.error("Error APIKeyAuthentication user could not be authenticated with provided credentials");
+    throw new AuthenticationError("User could not be authenticated with provided credentials!");
+    //return null;
   }
 
   /**

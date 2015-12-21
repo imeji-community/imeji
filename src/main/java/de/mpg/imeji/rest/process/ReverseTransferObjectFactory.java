@@ -381,7 +381,7 @@ public class ReverseTransferObjectFactory {
       metadata.getPersons().add(person);
     }
 
-    if (metadata.getPersons().size() == 0 && TRANSFER_MODE.CREATE.equals(mode)) {
+    if (metadata.getPersons().size() == 0 && TRANSFER_MODE.CREATE.equals(mode) && u!= null) {
       Person personU = new Person();
       PersonTO pTo = new PersonTO();
       personU.setFamilyName(u.getPerson().getFamilyName());

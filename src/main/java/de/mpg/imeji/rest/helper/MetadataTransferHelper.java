@@ -347,7 +347,6 @@ public class MetadataTransferHelper {
     String type = statement.getType().toString();
     String label = statement.getLabels().get(0).getValue();
     MetadataSetTO metadata = new MetadataSetTO(statement);
-
     switch (Metadata.Types.valueOfUri(type)) {
       case TEXT:
         String textValue = json.textValue();
@@ -362,6 +361,11 @@ public class MetadataTransferHelper {
         break;
       case NUMBER:
         NumberTO newNT = new NumberTO();
+        //Fix bug #362
+        if (!json.isNumber()) {
+          throw new UnprocessableError("Wrong value <" + json.toString()
+              + "> in metadata of type " + type + " with label " + label);
+        }
         newNT.setNumber(json.asDouble());
         metadata.setValue(newNT);
         break;
@@ -431,7 +435,7 @@ public class MetadataTransferHelper {
         try {
           easyPTO = mapper.readValue(json.toString(), new TypeReference<DefaultPublicationTO>() {});
         } catch (Exception e) {
-          throw new UnprocessableError(label + e.getMessage());
+          throw new UnprocessableError(label + ":  " + e.getMessage());
         }
         PublicationTO newPub = new PublicationTO();
         newPub.setCitation(easyPTO.getCitation());

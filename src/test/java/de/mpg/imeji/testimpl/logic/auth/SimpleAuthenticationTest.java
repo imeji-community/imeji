@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
 import de.mpg.imeji.logic.vo.User;
@@ -32,7 +33,13 @@ public class SimpleAuthenticationTest {
   public void testLoginWrongPassword() {
     Authentication simpAuth =
         new SimpleAuthentication(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD + "a");
-    User user = simpAuth.doLogin();
+    User user = null;
+    try {
+      user = simpAuth.doLogin();
+    } catch (AuthenticationError e) {
+      user = null;
+      
+    }
     Assert.assertNull(user);
   }
 
@@ -40,7 +47,13 @@ public class SimpleAuthenticationTest {
   public void testUserNotExist() {
     Authentication simpAuth =
         new SimpleAuthentication("abdc" + JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
-    User user = simpAuth.doLogin();
+    User user = null;
+    try {
+      user = simpAuth.doLogin();
+    } catch (AuthenticationError e) {
+      
+      user = null;
+    }
     Assert.assertNull(user);
   }
 
@@ -49,7 +62,12 @@ public class SimpleAuthenticationTest {
     // test if login if working for test user
     Authentication simpAuth =
         new SimpleAuthentication(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
-    User user = simpAuth.doLogin();
+    User user = null;
+    try {
+      user = simpAuth.doLogin();
+    } catch (AuthenticationError e) {
+      user = null;
+    }
     Assert.assertNotNull(user);
   }
 }

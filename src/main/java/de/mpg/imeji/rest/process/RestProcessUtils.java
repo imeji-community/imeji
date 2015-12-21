@@ -254,8 +254,12 @@ public class RestProcessUtils {
         Map.class);
   }
 
-  public static Map<String, Object> jsonToPOJO(String str) throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.readValue(str, Map.class);
+  public static Map<String, Object> jsonToPOJO(String str) throws IOException, BadRequestException {
+    try {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(str, Map.class);
+        } catch (Exception e) {
+          throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+        }
   }
 }

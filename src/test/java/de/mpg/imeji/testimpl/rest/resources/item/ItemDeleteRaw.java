@@ -11,45 +11,49 @@ import javax.ws.rs.core.Response.Status;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import util.JenaUtil;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.test.rest.resources.test.integration.ImejiTestBase;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.test.rest.resources.test.integration.ItemTestBase;
 
-public class ItemDelete extends ImejiTestBase {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class ItemDeleteRaw extends ItemTestBase {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ItemDelete.class);
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(ItemDeleteRaw.class);
   private static String itemJSON;
   private static final String pathPrefix = "/rest/items";
 
   @BeforeClass
   public static void specificSetup() throws Exception {
     initCollection();
-    initItem();
+    createItem();
     itemJSON = getStringFromPath("src/test/resources/rest/createItem.json");
   }
 
   @Test
   public void test_1_deleteItem_WithNonAuth() throws Exception {
-
-    initCollection();
-    initItem();
     ItemService s = new ItemService();
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
     Form form = new Form();
     form.param("id", itemId);
     Response response =
-        target(pathPrefix).path("/" + itemId).request(MediaType.APPLICATION_JSON_TYPE).delete();
+        target(pathPrefix).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
+        .request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
 
     Response response2 =
-        target(pathPrefix).register(authAsUserFalse).path("/" + itemId).request(MediaType.APPLICATION_JSON_TYPE).delete();
+        target(pathPrefix).register(authAsUserFalse).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
+        .request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response2.getStatus());
 
   }
@@ -57,7 +61,7 @@ public class ItemDelete extends ImejiTestBase {
   @Test
   public void test_2_deleteItem_NotAllowed() throws Exception {
     initCollection();
-    initItem();
+    createItem();
     ItemService s = new ItemService();
     System.out.println("ITEM STATUS = " + s.read(itemId, JenaUtil.testUser).getStatus());
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
@@ -65,6 +69,7 @@ public class ItemDelete extends ImejiTestBase {
     Form form = new Form();
     form.param("id", itemId);
     Response response = target(pathPrefix).register(authAsUser2).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
     assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
@@ -73,14 +78,14 @@ public class ItemDelete extends ImejiTestBase {
   @Test
   public void test_3_deleteItem_NotExist() throws Exception {
 
-    initItem();
+    createItem();
     ItemService s = new ItemService();
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
     Form form = new Form();
     form.param("id", itemId + "i_do_not_exist");
     Response response = target(pathPrefix).register(authAsUser)
-        .path("/" + itemId + "i_do_not_exist").request(MediaType.APPLICATION_JSON_TYPE).delete();
+        .path("/" + itemId + "i_do_not_exist").queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).request(MediaType.APPLICATION_JSON_TYPE).delete();
 
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
   }
@@ -88,7 +93,7 @@ public class ItemDelete extends ImejiTestBase {
   @Test
   public void test_2_deleteItem_Released() throws Exception {
     initCollection();
-    initItem();
+    createItem();
     ItemService s = new ItemService();
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
     CollectionService cs = new CollectionService();
@@ -98,6 +103,7 @@ public class ItemDelete extends ImejiTestBase {
     Form form = new Form();
     form.param("id", itemId);
     Response response = target(pathPrefix).register(authAsUser).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
@@ -106,7 +112,7 @@ public class ItemDelete extends ImejiTestBase {
   @Test
   public void test_2_deleteItem_Withdrawn() throws Exception {
     initCollection();
-    initItem();
+    createItem();
     ItemService s = new ItemService();
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
     CollectionService cs = new CollectionService();
@@ -119,6 +125,7 @@ public class ItemDelete extends ImejiTestBase {
     Form form = new Form();
     form.param("id", itemId);
     Response response = target(pathPrefix).register(authAsUser).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
@@ -127,13 +134,14 @@ public class ItemDelete extends ImejiTestBase {
   @Test
   public void test_3_deleteItem() throws Exception {
     initCollection();
-    initItem();
+    createItem();
     ItemService s = new ItemService();
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
     Form form = new Form();
     form.param("id", itemId);
     Response response = target(pathPrefix).register(authAsUser).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
     assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -143,18 +151,20 @@ public class ItemDelete extends ImejiTestBase {
   @Test
   public void test_3_deleteItemTwice() throws Exception {
     initCollection();
-    initItem();
+    createItem();
     ItemService s = new ItemService();
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
     Form form = new Form();
     form.param("id", itemId);
     Response response = target(pathPrefix).register(authAsUser).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
     assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
     Response response2 = target(pathPrefix).register(authAsUser).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
   }

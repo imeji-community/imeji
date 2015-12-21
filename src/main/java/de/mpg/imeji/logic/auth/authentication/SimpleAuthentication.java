@@ -24,6 +24,7 @@
  */
 package de.mpg.imeji.logic.auth.authentication;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.controller.UserController;
@@ -55,17 +56,24 @@ public class SimpleAuthentication implements Authentication {
    * @see de.mpg.imeji.logic.auth.Authentification#doLogin()
    */
   @Override
-  public User doLogin() {
+  public User doLogin() throws AuthenticationError {
+    
+    if (StringHelper.isNullOrEmptyTrim(login) && StringHelper.isNullOrEmptyTrim(pwd) ) {
+      return null;
+    }
+
     UserController uc = new UserController(Imeji.adminUser);
+    
     try {
       User user = uc.retrieve(login);
       if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(pwd))) {
         return user;
       }
     } catch (Exception e) {
-      logger.error("Error SimpleAuthentification", e);
+      logger.error("Error SimpleAuthentification user could not be authenticated with provided credentials");
+      throw new AuthenticationError("User could not be authenticated with provided credentials!");
     }
-    return null;
+    throw new AuthenticationError("User could not be authenticated with provided credentials!");
   }
 
   /*

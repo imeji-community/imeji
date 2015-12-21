@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -48,6 +49,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
@@ -84,6 +86,9 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public MetadataProfile create(MetadataProfile p, User user) throws ImejiException {
+    if (user == null) {
+      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
+    }
     writeCreateProperties(p, user);
     p.setStatus(Status.PENDING);
     writer.create(WriterFacade.toList(p), null, user);
@@ -150,6 +155,9 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public void update(MetadataProfile mdp, User user) throws ImejiException {
+    if (user == null) {
+      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
+    }
     writeUpdateProperties(mdp, user);
     writer.update(WriterFacade.toList(mdp), null, user, true);
     Imeji.executor.submit(new CleanMetadataJob(mdp));
@@ -187,6 +195,9 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public void delete(MetadataProfile mdp, User user, String collectionId) throws ImejiException {
+    if (user == null) {
+      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
+    }
     // First check if there are empty metadata records
     if ((isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp.getId().toString()))
         || !isNullOrEmpty(collectionId)
@@ -336,10 +347,14 @@ public class ProfileController extends ImejiController {
       mdpVO = new MetadataProfile();
       transferMetadataProfile(mdpTO, mdpVO, TRANSFER_MODE.CREATE);
       mdpVO.setDefault(true);
+      
       mdpVO = create(mdpVO, Imeji.adminUser);
-      release(mdpVO, Imeji.adminUser);
-
     }
+
+    if (mdpVO != null && !mdpVO.getStatus().equals(Status.RELEASED)){
+      release(mdpVO, Imeji.adminUser);
+    }
+    
     return mdpVO;
 
   }

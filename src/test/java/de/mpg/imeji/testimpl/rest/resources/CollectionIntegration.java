@@ -189,8 +189,13 @@ public class CollectionIntegration extends ImejiTestBase {
     Response response =
         target(pathPrefix).register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
-    assertEquals(response.getStatus(), UNAUTHORIZED.getStatusCode());
-  }
+    assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+
+    response =
+        target(pathPrefix).register(authAsUserFalse).register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+    assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+}
 
   // TODO: TEST for user who does not have right to create collection
 
@@ -207,9 +212,10 @@ public class CollectionIntegration extends ImejiTestBase {
   public void test_2_ReadCollection_3_Unauthorized() throws ImejiException {
     Response response =
         target(pathPrefix).path(collectionId).request(MediaType.APPLICATION_JSON).get();
-    // String jsonString = response.readEntity(String.class);
-    // assertThat("Authentication should fail!", jsonString,
-    // containsString("<div class=\"header\">Unauthorized</div>"));
+    assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
+
+    response =
+        target(pathPrefix).path(collectionId).register(authAsUserFalse).request(MediaType.APPLICATION_JSON).get();
     assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
 
   }
@@ -300,7 +306,11 @@ public class CollectionIntegration extends ImejiTestBase {
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
-  }
+
+    response = target(pathPrefix).path("/" + collectionId + "/release").register(authAsUserFalse)
+        .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
+    assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+}
 
   @Test
   public void test_3_ReleaseCollection_5_ReleaseCollectionTwice() throws ImejiException {
@@ -383,7 +393,13 @@ public class CollectionIntegration extends ImejiTestBase {
         .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
-  }
+
+    response = target(pathPrefix).path("/" + collectionId + "/discard").register(authAsUserFalse)
+        .request((MediaType.APPLICATION_JSON_TYPE))
+        .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+    assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+}
 
 
   @Test
@@ -501,6 +517,10 @@ public class CollectionIntegration extends ImejiTestBase {
     initCollection();
 
     Response response = target(pathPrefix).path("/" + collectionId)
+        .request(MediaType.APPLICATION_JSON_TYPE).delete();
+    assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+
+    response = target(pathPrefix).path("/" + collectionId).register(authAsUserFalse)
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
   }

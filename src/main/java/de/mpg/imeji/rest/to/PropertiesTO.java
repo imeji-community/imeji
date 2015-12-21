@@ -3,9 +3,11 @@ package de.mpg.imeji.rest.to;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
+//@XmlTransient
 @XmlType(propOrder = {"id", "createdBy", "modifiedBy", "createdDate", "modifiedDate",
     "versionDate", "status", "version", "discardComment"})
 public class PropertiesTO implements Serializable {

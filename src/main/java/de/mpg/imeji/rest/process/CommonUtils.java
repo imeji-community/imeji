@@ -15,6 +15,9 @@ public class CommonUtils {
   public static final String JAVAX_SERVLET_CONTEXT_TEMPDIR = "javax.servlet.context.tempdir";
   public static final String USER_MUST_BE_LOGGED_IN =
       "Need to be logged-in to proceed with the operation.";
+  public static final String USER_PROVIDED_WRONG_CREDENTIALS =
+      "User could not be authenticated with provided credentials!";
+
 
 
   public static String formatDate(Date d) {

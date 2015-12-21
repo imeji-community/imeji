@@ -47,7 +47,7 @@
 		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{logicBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{Auth.update(logicBean.collection) and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>		
 		<dialog:dialogOptionDialog submitId1="doiInput" submitId2="getDOIDialog" confirmationText="#{logicBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" submitLabel1="#{lbl.createDOI_manually}" submitLabel2="#{lbl.createDOI_from_service}" dialogId="createDOIDialog" rendered="#{Auth.update(logicBean.collection) and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
 		<dialog:confirmationDialog submitAction="createDOI" bean="#{logicBean}" confirmationText="#{msg.confirmation_create_DOI}" submitLabel="#{lbl.createDOI}" dialogId="getDOIDialog" rendered="#{Auth.update(logicBean.collection) and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>	
-		<dialog:doiInputDialog col="#{logicBean.collection}" bean="#{logicBean}" submitLabel="#{lbl.save}" dialogId="doiInput" rendered="#{Auth.update(logicBean.collection) and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:doiInputDialog col="#{logicBean.collection}" bean="#{logicBean}" confirmationText="#{logicBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" submitLabel="#{lbl.save}" dialogId="doiInput" rendered="#{Auth.update(logicBean.collection) and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
 	</ui:define>
 	
 </ui:composition>

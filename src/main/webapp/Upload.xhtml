@@ -40,7 +40,7 @@
         <dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{UploadBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" />
 		<dialog:dialogOptionDialog submitId1="doiInput" submitId2="getDOIDialog" confirmationText="#{UploadBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" submitLabel1="#{lbl.createDOI_manually}" submitLabel2="#{lbl.createDOI_from_service}" dialogId="createDOIDialog" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
 		<dialog:confirmationDialog submitAction="createDOI" bean="#{UploadBean}" confirmationText="#{msg.confirmation_create_DOI}" submitLabel="#{lbl.createDOI}" dialogId="getDOIDialog" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>	
-		<dialog:doiInputDialog col="#{UploadBean.collection}" bean="#{UploadBean}" submitLabel="#{lbl.save}" dialogId="doiInput" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:doiInputDialog col="#{UploadBean.collection}" bean="#{UploadBean}" submitLabel="#{lbl.save}" confirmationText="#{UplaodBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" dialogId="doiInput" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
     	
     </ui:define>
 

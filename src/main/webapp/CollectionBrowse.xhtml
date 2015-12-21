@@ -39,7 +39,7 @@
 									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}"
 									contextDownloadParam="&amp;col=#{paginatorListSessionBean.id}" 
 									allowedToShare="#{paginatorListSessionBean.collection.status !='WITHDRAWN' and Auth.admin(paginatorListSessionBean.collection)}"
-									hasDoi="#{paginatorListSessionBean.collection != null}"/>
+									hasDoi="#{paginatorListSessionBean.collection.doi != null and paginatorListSessionBean.collection.doi !=''}"/>
 		</ui:fragment>
 	</ui:define>
 	

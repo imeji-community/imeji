@@ -36,7 +36,7 @@
 										downloadEnabled="#{logicBean.size > 0}"
 										contextDownloadParam="&amp;col=#{logicBean.id}"
 										allowedToShare="#{logicBean.collection.status != 'WITHDRAWN' and Auth.admin(logicBean.collection)}"
-										hasDoi="#{logicBean.collection != null}"/>
+										hasDoi="#{logicBean.collection.doi != null and logicBean.collection.doi !=''}"/>
 		</ui:fragment>
 	</ui:define>
 	

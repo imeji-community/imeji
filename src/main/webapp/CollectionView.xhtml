@@ -41,7 +41,7 @@
 										allowedToShare="false"
 										profileEditable="#{Auth.update(metadataBean.profile) and metadataContextBean.status != 'WITHDRAWN'}"
 										activeMenu="metadata"
-										hasDoi="#{metadataBean.collection.doi != null}"/>
+										hasDoi="#{metadataBean.collection.doi != null and metadataBean.collection.doi !=''}"/>
 		</ui:fragment>
 	</ui:define>
 			

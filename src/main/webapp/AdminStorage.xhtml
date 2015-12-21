@@ -2,21 +2,27 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+
 	<ui:param name="headline" value="Administration" />
 	<ui:param name="currentMainMenu" value="admin"/>
 	
-	<ui:define name="mainContent">
+	<ui:define name="actionsMenu">
+	<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
+							 curMainMenu="#{currentMainMenu}" 
+							 downloadEnabled="false"
+							 actionEnabled="false"
+							 navBean="#{Navigation}"/>
+	</ui:define>
 	
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>	
-		
+	<ui:define name="mainContent">
 		<!-- AdminDataList - Back Button -->
-			<h:panelGroup layout="block" styleClass="imj_backPanel">
-				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
-				</h:outputLink>
-			</h:panelGroup>		
+		<h:panelGroup layout="block" styleClass="imj_backPanel">
+			<h:outputLink value="#{Navigation.adminUrl}">
+				<h:outputText value="#{lbl.back_to_admin}"/>
+			</h:outputLink>
+		</h:panelGroup>		
 		
 		<!-- Are You Admin? -->	
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
@@ -117,6 +123,21 @@
 								</h:form>
 							</div>
 							
+								<!-- Admin - reindex -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.search}"/>
+								</h2>
+							</div>
+							
+							<div class="imj_content">							
+								<h:form>
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.reindex}" value="#{lbl.admin_reindex}"/>
+									</h:panelGroup>	
+								</h:form>
+							</div>
+							
 							<!-- Admin - Clean database -->
 							<div class="imj_headline">
 								<h2>
@@ -144,7 +165,10 @@
 								</h:form>
 							</div>
 							
-								<!-- Admin - Import -->
+							
+							
+							
+								<!-- Admin - calculate file size -->
 							<div class="imj_headline">
 								<h2>
 									<h:outputText value="#{lbl.admin_refresh_file_size}"/>

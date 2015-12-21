@@ -5,11 +5,39 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<h:panelGroup layout="block" styleClass="imj_siteFooter">
 		<!-- begin: footer section-->
-		<h:outputText value="Powered by "/>
-		<h:outputLink target="_blank" value="http://imeji.org">
-			<h:outputText value="imeji"/>
-		</h:outputLink>
-		<h:outputText value=" - #{SessionBean.version} "/>
+		<div class="imj_startpageFooterLogos">
+			<div class="imj_poweredby_software">
+				<div class="imj_poweredby_software_text">
+					<h:outputText value="Powered by " />
+				</div>
+				<div class="imj_poweredby_software_image">
+					<h:outputLink target="_blank" value="http://imeji.org">
+						<img alt="imeji community logo" src="#{Navigation.applicationUrl}resources/icon/imeji_community_bright.png" class="imj_community_logo"/>
+					</h:outputLink>
+				</div>
+			</div>
+			<div class="imj_poweredby_imprint">
+	 		    <h:outputLink title="#{lbl.imprint}" target="_blank" value="#{Configuration.impressumUrl}" rendered="#{Configuration.impressumText==''}">
+	 		    	<h:outputText value="#{lbl.imprint}" />
+	 		    </h:outputLink>
+	 		    <h:outputLink title="#{lbl.imprint}" target="_blank" value="#{Navigation.applicationSpaceUrl}imprint" rendered="#{Configuration.impressumText!=''}">
+	 		    	<h:outputText value="#{lbl.imprint}" />
+	 		    </h:outputLink>
+				<h:outputText value=" - #{SessionBean.version} "/>
+			</div>
+
+			<div class="imj_poweredby_institution">
+				<ui:fragment rendered="#{Configuration.startPageFooterLogos != ''}">
+							<h:outputText value="#{Configuration.startPageFooterLogos}" escape="false"/>
+				</ui:fragment>
+				<ui:fragment rendered="#{Configuration.startPageFooterLogos == ''}">
+				  <h:outputLink title="Max Planck Digital Library" target="_blank" value="http://mpdl.mpg.de">
+				  		<img class="imj_community_logo" src="https://spot.mpdl.mpg.de/static/style/mpdl.png" alt="MPDL logo"/>
+				  </h:outputLink>
+				</ui:fragment>
+
+			</div>
+		</div>
 		<!-- end: footer section -->
 	</h:panelGroup>
 	<h:inputHidden id="instituteNameForIP" value="#{SessionBean.instituteNameByIP}"/>
@@ -17,7 +45,5 @@
 	<h:inputHidden id="instituteNameForUser" value="#{SessionBean.instituteByUser}"/>
 	<h:outputText value="#{Configuration.snippet}" escape="false"/>
 	
-	<h:panelGroup id="additonalFooterScripts" styleClass="imj_noDisplay">
-		<ui:insert name="additonalFooterScripts"/>
-	</h:panelGroup>
+    
 </ui:composition>

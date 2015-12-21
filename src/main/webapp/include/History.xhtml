@@ -2,7 +2,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	
+	<ui:remove>
 	<h:panelGroup layout="block" styleClass="imj_breadcrumpHistory">
 		<h:outputText value="#{lbl.history}:" styleClass="imj_breadcrumpTitle"/>
 		<ui:repeat var="page" value="#{HistorySession.pages}" rows="0" varStatus="pos">
@@ -20,4 +20,5 @@
 		</ui:repeat>
 		
 	</h:panelGroup>
+	</ui:remove>
 </ui:composition>

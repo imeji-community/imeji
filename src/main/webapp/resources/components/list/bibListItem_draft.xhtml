@@ -1,10 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components"
-	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:composite="http://java.sun.com/jsf/composite"
+		>
 	
 	<composite:interface>
 		<composite:attribute name="itemClass" required="true"/>
@@ -19,41 +18,32 @@
 	
 	<composite:implementation>
 		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
-
 		<li class="#{cc.attrs.itemClass}#{cc.attrs.isActivatable == 'yes' and cc.attrs.item.active ? ' imj_active' : ''}">
-					 
-			 <div class="imj_previewArea">
+		 <div class="imj_previewArea">
 				<div class="imj_previewImage imj_imageStack">			
-					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">						
+					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">
 						<h:graphicImage value="#{cc.attrs.item.thumbnail.link}" alt="preview picture" 
-										rendered="#{cc.attrs.item.thumbnail.link != null and cc.attrs.item.size > 0}"/>
-					  	<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
-					    				rendered="#{cc.attrs.item.size == 0 and cc.attrs.item.status != 'WITHDRAWN'}" title="#{lbl.ContainerEmpty}"/>
-					    <h:graphicImage value="#{Navigation.applicationUrl}resources/icon/discarded.png" alt="preview picture" 
-					    				rendered="#{cc.attrs.item.status == 'WITHDRAWN'}" title="#{lbl.ContainerEmpty}"/>				    
-					</h:outputLink>					 
+										rendered="#{cc.attrs.item.thumbnail.link != null and cc.attrs.item.status!='WITHDRAWN'}"/>
+						<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/discarded.png" alt="preview picture" 
+										rendered="#{cc.attrs.item.status =='WITHDRAWN'}"/>
+						<ui:fragment rendered="#{cc.attrs.item.type == 'ALBUM' and  cc.attrs.item.status!='WITHDRAWN'}">
+							<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
+										rendered="#{cc.attrs.item.thumbnail.link == null and cc.attrs.item.privateCount == 0}" title="#{lbl.ContainerEmpty}"/>
+							<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/private_grey.png" alt="#{lbl.ContainerPrivate}" 
+										rendered="#{cc.attrs.item.thumbnail.link == null and cc.attrs.item.privateCount &gt; 0}"  title="#{lbl.ContainerPrivate}"/>
+						</ui:fragment>
+						<ui:fragment rendered="#{cc.attrs.item.type == 'COLLECTION' and  cc.attrs.item.status!='WITHDRAWN'}">
+							<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
+										rendered="#{cc.attrs.item.thumbnail.link == null}" title="#{lbl.ContainerEmpty}"/>
+						</ui:fragment>
+					</h:outputLink>
 					<h:outputText value="#{cc.attrs.item.size} #{lbl.images}" class="imj_itemCount"/>
+
 				</div>
 			</div>
-			
-			
 			<div class="imj_statusArea">
-				<ui:fragment rendered="#{cc.attrs.item.status == 'PENDING'}">
-					<span class="imj_iconStatusPrivate_24" title="#{lbl.privateContent}">
-						<h:outputText value="&#160;"/>
-					</span>
-				</ui:fragment>
-				
-				<ui:fragment rendered="#{!cc.attrs.item.owner and cc.attrs.item.status=='RELEASED'}">
-					<span class="imj_iconStatusShareable_24" title="#{lbl.sharedContent}">
-						<h:outputText value="&#160;"/>
-					</span>
-				</ui:fragment>
-				<ui:fragment rendered="#{cc.attrs.item.status=='WITHDRAWN'}">
-					<span class="imj_iconStatusWithdrawn_24" title="#{lbl.discardedContent}">
-						<h:outputText value="&#160;"/>
-					</span>
-				</ui:fragment>
+                <h:outputText value="&#160;" styleClass="fa fa-lock fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'PENDING'}"/>
+                <h:outputText value="&#160;" styleClass="fa fa-trash-o fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}"/>
 			</div>
 
 			<div class="imj_itemContent">
@@ -76,7 +66,7 @@
 							<h:outputText value="#{cc.attrs.item.description.trim()}"/>
 							
 							<ui:fragment rendered="#{cc.attrs.item.descriptionFull.trim().length() &gt; cc.attrs.item.description.trim().length()}">
-								<button class="imj_expand imj_iconExpand_16 imj_containerDescExpand" onclick="$(this).parent().hide(); $(this).parent().next().show();">
+								<button class="imj_expand fa fa-plus imj_containerDescExpand" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().next().show();">
 									<h:outputText value="&#160;"/>
 								</button>
 							</ui:fragment>
@@ -86,7 +76,7 @@
 							<p class="imj_descriptionArea imj_additionalInfoArea">
 								<h:outputText value="#{cc.attrs.item.descriptionFull.trim()}"/>
 								
-								<button class="imj_collapse imj_iconCollapse_16" onclick="$(this).parent().hide(); $(this).parent().prev().show();" >
+								<button class="imj_collapse fa fa-minus" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().prev().show();" >
 									<h:outputText value="&#160;"/>
 								</button>
 							</p>
@@ -97,7 +87,7 @@
 						<ul>
 							<li>
 								<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">
-									<h:outputText value="#{lbl.startpage}"/>
+									<h:outputText value="#{lbl.about}"/>
 								</h:outputLink>
 							</li>	
 							<ui:fragment rendered="#{cc.attrs.item.size > 0}">
@@ -107,12 +97,13 @@
 									</h:outputLink>
 								</li>
 							</ui:fragment>
+							<ui:fragment rendered="#{cc.attrs.item.type != 'ALBUM'}">
 							<li>
 								<h:outputLink id="lnkViewMetadataDetail" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.infosPath}?init=1">
-									<h:outputText value="#{lbl.view_md}"/>
+									<h:outputText value="#{lbl.metadata_profile}"/>
 								</h:outputLink>
 							</li>
-							
+							</ui:fragment>
 							<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.create(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
 								<li>
 									<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
@@ -120,17 +111,17 @@
 									</h:outputLink>
 								</li>
 							</ui:fragment>
+
 							<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes'}">
-								<li>
-									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">
-										<h:form>
-											<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
-												<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
-											</h:commandButton>
-											<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
-												<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
-											</h:commandButton>
-										</h:form>
+								<li style="float:right">
+									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">					
+										<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive(AlbumsBean.addSelected)}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
+											<f:ajax execute="@this" render=":actionsMenuArea :ajaxWrapper"/>
+										</h:commandButton>
+										<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
+											<f:ajax execute="@this" render=":actionsMenuArea :ajaxWrapper"/>
+										</h:commandButton>
+										
 									</ui:fragment>
 									<ui:fragment rendered="#{!Auth.create(cc.attrs.item) and !cc.attrs.item.active}">
 										<h:outputText value="#{lbl.only_view_allowed}"/>

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -23,46 +22,52 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/collection")
 @j2jModel("collection")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class CollectionImeji extends Container implements Serializable
-{
-    private static final long serialVersionUID = -4689209760815149573L;
-    @j2jResource("http://imeji.org/terms/mdprofile")
-    private URI profile = null;
-    @j2jResource("http://imeji.org/terms/metadataSet")
-    private MetadataSet metadataSet = new MetadataSet();
-    /**
-     * Item list is not defined as a {@link j2jList}, i.e. there is no triple like "collection has item", but only
-     * "item is in collection". This avoid performance issue when the collection is growing.
-     */
-    private Collection<URI> images = new ArrayList<URI>();
+public class CollectionImeji extends Container implements Serializable {
+  private static final long serialVersionUID = -4689209760815149573L;
+  @j2jResource("http://imeji.org/terms/mdprofile")
+  private URI profile = null;
+  @j2jResource("http://imeji.org/terms/metadataSet")
+  private MetadataSet metadataSet = new MetadataSet();
 
-    public URI getProfile()
-    {
-        return profile;
-    }
+  @j2jResource("http://imeji.org/terms/space")
+  private URI space;
 
-    public void setProfile(URI profile)
-    {
-        this.profile = profile;
-    }
 
-    public MetadataSet getMetadataSet()
-    {
-        return metadataSet;
-    }
 
-    public void setMetadataSet(MetadataSet metadataSet)
-    {
-        this.metadataSet = metadataSet;
-    }
+  private Collection<URI> images = new ArrayList<URI>();
 
-    public void setImages(Collection<URI> images)
-    {
-        this.images = images;
-    }
+  public URI getProfile() {
+    return profile;
+  }
 
-    public Collection<URI> getImages()
-    {
-        return images;
-    }
+  public void setProfile(URI profile) {
+    this.profile = profile;
+  }
+
+  public MetadataSet getMetadataSet() {
+    return metadataSet;
+  }
+
+  public void setMetadataSet(MetadataSet metadataSet) {
+    this.metadataSet = metadataSet;
+  }
+
+  @Override
+  public void setImages(Collection<URI> images) {
+    this.images = images;
+  }
+
+  @Override
+  public Collection<URI> getImages() {
+    return images;
+  }
+
+  public URI getSpace() {
+    return space;
+  }
+
+  public void setSpace(URI space) {
+    this.space = space;
+  }
+
 }

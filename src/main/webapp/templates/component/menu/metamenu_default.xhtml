@@ -2,7 +2,8 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <ui:remove>
 <!--
 /* 
@@ -43,7 +44,7 @@ All rights reserved. Use is subject to license terms.
 			<!-- Username if logged in -->
 			<ui:fragment rendered="#{Auth.loggedIn}">
 				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationSpaceUrl}user?id=#{Auth.sessionUser.email}">
-					<h:outputText value="#{Auth.sessionUser.name}"/>
+					<h:outputText value="#{Auth.sessionUser.person.completeName}"/>
 				</h:outputLink>
 				
 				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
@@ -52,15 +53,15 @@ All rights reserved. Use is subject to license terms.
 			<!-- LogIn, LogOut -->
 			<h:form id="loginForm">
 				<h:panelGroup rendered="#{!Auth.loggedIn}" styleClass="imj_metaMenuItem">
-					<h:panelGroup rendered="#{!SessionBean.showLogin}">
-						<h:commandLink  id="lnkLogin1"  title="#{lbl.login}" action ="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
+					<h:panelGroup rendered="#{!SessionBean.showLogin and SessionBean.spaceId==''}">
+						<h:commandLink id="lnkLogin1" title="#{lbl.login}" action="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
 			    			<h:outputText value="#{lbl.login}"></h:outputText>
 			    			<f:ajax render="@form" execute="@this"/>
 			   			</h:commandLink>
 					</h:panelGroup>
 					<h:panelGroup rendered="#{SessionBean.showLogin}">
-						<h:inputText value="#{LoginBean.login}" placeholder=""/>
-						<h:inputSecret value="#{LoginBean.passwd}" placeholder=""/>
+						<h:inputText value="#{LoginBean.login}" p:placeholder="#{lbl.admin_user}"/>
+						<h:inputSecret value="#{LoginBean.passwd}" p:placeholder="#{lbl.password}"/>
 						<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}" styleClass="imj_metaMenuItem"/>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -72,40 +73,51 @@ All rights reserved. Use is subject to license terms.
 			</h:form>
 			
 			
+			<!-- Register -->
+			<h:form rendered="#{!Auth.loggedIn and Configuration.registrationEnabled}">
+				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+				<h:outputLink value="#{Navigation.applicationSpaceUrl}register" title="#{lbl.register}" styleClass="imj_metaMenuItem">
+					<h:outputText value="#{lbl.register}"/>
+				</h:outputLink>
+			</h:form>
+			
+			
 			<!-- CSS Switcher -->
 			<ui:fragment rendered="#{Configuration.alternativeCss != null and Configuration.alternativeCss != ''}">
-				
-				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
-				
+				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>	
 				<h:form>
-					<h:commandButton value="&#160;" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem imj_buttonStyleSwitcher"/>
+                    <h:commandLink value="&#160;" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem fa fa-desktop" title="Style"/>
+				</h:form>
+			</ui:fragment>
+					
+			
+			<!-- Language -->
+			<ui:fragment rendered="#{Internationalization.internationalizedLanguages.size() > 1}">
+				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+				<h:form id="langForm">
+					<div class="imj_customSelectbox">
+						<div class="imj_showSelection">
+							
+	                        <div class="imj_selectionText"></div>
+	                        <a href="javascript:void(0);" class="fa fa-angle-down"> </a>
+						</div>
+						<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItemSelect">
+							<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
+						</h:selectOneMenu>
+						<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay">
+							<f:ajax execute="@form" render="@form"></f:ajax>
+						</h:commandButton>
+					</div>
 				</h:form>
 			</ui:fragment>
 			
-			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
-			
-			<!-- Language -->
-			<h:form id="langForm" onsubmit="setTimeout(function () { window.location.reload(); }, 20);">
-				<div class="imj_customSelectbox">
-					<div class="imj_showSelection">
-						<div class="imj_selectionText"></div>
-						<div class="imj_buttonSortDescending_16"></div>
-					</div>
-					<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItemSelect">
-						<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
-					</h:selectOneMenu>
-					<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay">
-						<f:ajax execute="@form" render="@form"></f:ajax>
-					</h:commandButton>
-				</div>
-			</h:form>
-			
-			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
-		
 			<!-- Help -->
-			<h:outputLink id="lnkHelp" styleClass="imj_metaMenuItem" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
-				<h:outputText value="#{lbl.help}"/>
-			</h:outputLink>
+			<ui:fragment rendered="#{Navigation.helpUrl != ''}">
+				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+				<h:outputLink id="lnkHelp" styleClass="imj_metaMenuItem" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
+					<h:outputText value="#{lbl.help}"/>
+				</h:outputLink>
+			</ui:fragment>
 		</h:panelGroup>
 	</h:panelGroup>
 	

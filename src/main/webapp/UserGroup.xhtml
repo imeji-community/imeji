@@ -9,7 +9,7 @@
 	<ui:param name="currentMainMenu" value="admin"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"
@@ -17,9 +17,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		
-		<ui:include src="include/History.xhtml"></ui:include>			
-		
 		<ui:fragment rendered="#{!Auth.admin}">
 			<ui:include src="./include/LoginFormular.xhtml" />
 		</ui:fragment>
@@ -28,7 +25,7 @@
 		<ui:fragment rendered="#{Auth.admin}">
 			<h:panelGroup layout="block" styleClass="imj_backPanel">
 				<a href="#{Navigation.applicationSpaceUrl}usergroups" title="#{lbl.admin_groups_view}">
-					<h:outputText value="#{lbl.admin_userGroups_view}" styleClass="imj_backButton"/>
+					<h:outputText value="#{lbl.admin_userGroups_view}"/>
 				</a>
 			</h:panelGroup>
 		
@@ -107,7 +104,7 @@
 													<h:form>
 														<ui:repeat  var="user" value="#{UserGroup.users}" rows="0">
 															<div class="imj_userGrantList">
-																<h:outputText value="#{user.name} (#{user.email})" />
+																<h:outputText value="#{user.person.completeName} (#{user.email})" />
 																<h:commandButton value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
 															</div>
 															<br/>
@@ -123,19 +120,17 @@
 									</div>	
 									<div class="imj_admindataSetEdit"></div>
 								</h:form>
+								
+								<h3 class="imj_headline"><h:outputText value="#{lbl.grant_for_group}" styleClass="imj_admindataValueEntry"/></h3>
 								<div class="imj_admindataSetEdit">
-									<div>
-										<h:outputText value="#{UserGroup.userGroup.name} #{lbl.grants_has_following}:"/>
-									</div>
-									<div class="imj_admindataLabel"></div>
 									<div class="imj_admindataValue">
 										<div class="imj_admindataValueEntry">
 											<h:form>
 												<ui:repeat var="sh" value="#{UserGroup.roles}">
-													<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
-													<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
+													<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
+													<ui:param name="roles" value="#{sh.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
 													<div>
-														<h:outputText value="Grant for #{sh.title}" styleClass="imj_admindataValueEntry"/>
+														<h:outputText value=" #{SessionBean.getLabel(sh.type)}: #{sh.title}" styleClass="imj_admindataValueEntry"/>
 														<h:commandButton action="#{UserGroup.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton"/>
 														<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
 															<f:selectItems value="#{roles}" />

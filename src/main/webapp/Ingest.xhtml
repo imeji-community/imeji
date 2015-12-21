@@ -14,12 +14,12 @@
 									contextUrl="#{Navigation.collectionUrl}" 
 									curMainMenu="#{currentMainMenu}" 	
 									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.create(IngestBean.collection) and IngestBean.collection.status !='WITHDRAWN'}" 
+									userHasUploadRights="#{Auth.createContent(IngestBean.collection) and IngestBean.collection.status !='WITHDRAWN'}" 
 									navBean="#{Navigation}" 
 									activeMenu="ingest" 
 									hasContent="#{IngestBean.collectionSize > 0}"/>
 		
-		<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
 									curMainMenu="#{currentMainMenu}" 
 									navBean="#{Navigation}" 
 									collectionStatus="#{IngestBean.collection.status}" 
@@ -32,7 +32,7 @@
 									contextDownloadParam="&amp;col=#{IngestBean.collectionId}"/>
 	</ui:define>
 	
-	<ui:define name="additonalHeaderScripts">
+	<ui:define name="additonalFooterScripts">
 		<!-- Load Queue widget CSS and jQuery -->
 		<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -114,10 +114,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-	
-		<!-- Breadcrumb - History -->
-		<ui:include src="./include/History.xhtml"/>
-		
 		<h:panelGroup layout="block" rendered="#{!Auth.admin}">
 			<h2>
 				<h:outputText value="#{lbl.view_page_disallowed2}"/>

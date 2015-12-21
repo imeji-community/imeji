@@ -18,13 +18,33 @@
 			<div class="imj_shareForm">
 				<ui:fragment rendered="#{ShareBean.userGroup == null}">
 					<div id="shareButtons" class="imj_submitPanel">
-						<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$('#shareButtons').hide();"/>
+						<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$('#shareGroup').hide();"/>
 						<h:outputText value="#{lbl.or_big}" styleClass="imj_submitPanelSeparator"/>
-						<h:outputLink value="#{Navigation.applicationSpaceUrl}usergroups?back=#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_submitButton">
-							<h:outputText value="#{lbl.share_with_group}"/>
-						</h:outputLink>
+						<h:commandButton value="#{lbl.share_with_group}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#shareGroup').show();$('#share').hide();"/>
 					</div>
 				</ui:fragment>
+				
+				<div id="shareGroup" class="imj_noDisplay">
+					<h2 class="imj_sectionHeadline">
+						<h:outputText value="#{lbl.admin_userGroups}"/>
+					</h2>
+					<ui:repeat var="group" value="#{ShareBean.userGroupsBean.userGroups}" rows="0" varStatus="row" rendered="#{ShareBean.userGroupsBean != null}">
+						<!-- AdminDataList - Users List - Name -->								
+						<div class="imj_headline">
+							<span class="imj_invisible">: </span>
+							<h2>
+								<h:outputText value="#{group.name}"/>
+							</h2>
+							<h:outputLink value="share?group=#{group.id}" styleClass="imj_editButton" rendered="#{cc.attrs.type != 'item'}">
+								<h:outputText value="#{lbl.share_with}"/>
+							</h:outputLink>	
+							<h:outputLink value="?tab=share&amp;group=#{group.id}" styleClass="imj_editButton" rendered="#{cc.attrs.type == 'item'}">
+								<h:outputText value="#{lbl.share_with}"/>
+							</h:outputLink>					
+						</div>
+					</ui:repeat>
+				
+				</div>
 				<ui:fragment rendered="#{ShareBean.userGroup != null}">
 					<h2 class="imj_sectionHeadline">
 						<h:outputText value="#{lbl.share_with}"/>
@@ -84,9 +104,7 @@
 								<h:outputLabel for="selSendEmail" value="#{lbl.user_send_mail}"/>
 							</div>
 							<div class="imj_submitPanel">
-								<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}">
-									<h:outputText value="#{lbl.cancel}"/>
-								</h:outputLink>
+								<h:commandButton value="#{lbl.cancel}" action="#" styleClass="imj_cancelButton" type="button" onclick="$('#share').hide();"/>
 								<h:commandButton value="#{lbl.share}" action="#{ShareBean.share}" styleClass="imj_submitButton"/>
 							</div>
 						</div>
@@ -95,6 +113,7 @@
 				
 				
 				<!-- user table which shows all user with existing rights -->
+				<ui:fragment rendered="#{ShareBean.sharedWithNum > 0}">
 				<div class="imj_shareRightsOverview">
 					<h2 class="imj_sectionHeadline">
 						<h:outputText value="#{lbl.shared_with}"/>
@@ -121,7 +140,7 @@
 								<ui:repeat id="users" var="sh" value="#{ShareBean.sharedWith}" rows="0" varStatus="pos">
 									<tr>
 										<td>
-											<h:outputText value="#{sh.user.name}" rendered="#{sh.user != null}"/>
+											<h:outputText value="#{sh.user.person.completeName}" rendered="#{sh.user != null}"/>
 											<h:outputText value="#{sh.group.name}" rendered="#{sh.group != null}"/>
 										</td>
 										<td colspan="#{cc.attrs.roles.size()}">
@@ -144,10 +163,11 @@
 							<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}" rendered="#{cc.attrs.type != 'item'}">
 								<h:outputText value="#{lbl.reset}"/>
 							</h:outputLink>
-							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton"/>
+							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton" rendered="#{cc.attrs.type != 'item'}"/>
 						</div>
 					</h:form>
 				</div>
+				</ui:fragment>
 			</div>
 		</ui:fragment>
 	</composite:implementation>

@@ -18,26 +18,29 @@
 	
 	<!-- Main Content - bibliographic grid list - START -->
 	<ui:define name="mainContent">
-		
-		<!-- Breadcrumb - History -->
-		<ui:include src="../../include/History.xhtml"></ui:include>
 		<h:panelGroup layout="block" id ="ajaxWrapper">
 		
 			<h:outputText value="#{paginatorListSessionBean.initPaginator}"/>
-			<!-- Selection Info Panel -->
-			<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
-									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" filterBeanHasQuery="#{filterBeanHasQuery}"/>
 			
 			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
 			
+			<!-- Selection Info Panel -->
+			<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
+									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" 
+									 filterBeanHasQuery="#{filterBeanHasQuery}"
+									 objectLabel="#{objectLabel}"/>
+			
+			
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords == 0}">
-				<div class="imj_bibliographicList">
-					<h:outputText value="#{msg.no_collection_found}" styleClass="imj_bibliographicListItem"/>
+				<div class="imj_bibliographicList" style="font-size:130%">
+					<span class="fa fa-exclamation-triangle"/>
+					<h:outputText value=" #{msg.no_collection_found}"/>
 				</div>
 			</ui:fragment>
 			
 			<!-- List -->
+			<h:form>
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords > 0}">
 				<div id="imj_listBody">
 					<ui:fragment rendered="#{!Auth.loggedIn}">
@@ -53,9 +56,12 @@
 					</ui:fragment>
 				</div>
 			</ui:fragment>
+			</h:form>
 			
 			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords > 0}">
+				<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			</ui:fragment>
 			
 		</h:panelGroup>
 	</ui:define>

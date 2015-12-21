@@ -31,91 +31,86 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "license", namespace = ImejiNamespaces.METADATA)
-@XmlType(propOrder = { "externalUri", "license", "statement" })
-public class License extends Metadata
-{
-    private static final long serialVersionUID = -3194639210099160225L;
-    private SimpleDateFormat date;
-    private String dateFormat = "dd/mm/yyyy";
-    @j2jLiteral("http://imeji.org/terms/license")
-    private String license = null;
-    @j2jResource("http://purl.org/dc/elements/1.1/identifier")
-    private URI externalUri;
+@XmlType(propOrder = {"externalUri", "license", "statement"})
+public class License extends Metadata {
+  private static final long serialVersionUID = -3194639210099160225L;
+  private SimpleDateFormat date;
+  private String dateFormat = "dd/mm/yyyy";
+  @j2jLiteral("http://imeji.org/terms/license")
+  private String license = null;
+  @j2jResource("http://purl.org/dc/elements/1.1/identifier")
+  private URI externalUri;
 
-    @j2jResource("http://imeji.org/terms/statement")
-    private URI statement;
+  @j2jResource("http://imeji.org/terms/statement")
+  private URI statement;
 
-    public License()
-    {
+  public License() {}
+
+  public License(SimpleDateFormat date) {
+    this.date = date;
+    date.applyPattern(dateFormat);
+  }
+
+  public String getDateString() {
+    if (date == null || date.isLenient())
+      return "";
+    return date.format(date);
+  }
+
+  @XmlElement(name = "license", namespace = "http://imeji.org/terms/")
+  public String getLicense() {
+    return license;
+  }
+
+  public void setLicense(String str) {
+    license = str;
+  }
+
+
+  /**
+   * @return the externalUri
+   */
+  @XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1/")
+  public URI getExternalUri() {
+    return externalUri;
+  }
+
+  /**
+   * @param externalUri the externalUri to set
+   */
+  public void setExternalUri(URI externalUri) {
+    this.externalUri = externalUri;
+  }
+
+  @Override
+  @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
+  public URI getStatement() {
+    return statement;
+  }
+
+  @Override
+  public void setStatement(URI namespace) {
+    this.statement = namespace;
+  }
+
+  @Override
+  public void copy(Metadata metadata) {
+    if (metadata instanceof License) {
+      setPos(metadata.getPos());
+      this.license = ((License) metadata).getLicense();
+      setStatement(((License) metadata).getStatement());
+      this.externalUri = ((License) metadata).getExternalUri();
     }
+  }
 
-    public License(SimpleDateFormat date)
-    {
-        this.date = date;
-        date.applyPattern(dateFormat);
-    }
+  @Override
+  public String asFulltext() {
+    return license + " " + getDateString();
+  }
 
-    public String getDateString()
-    {
-        if (date == null || date.isLenient())
-            return "";
-        return date.format(date);
-    }
+  @Override
+  public void clean() {
+    // TODO Auto-generated method stub
 
-    @XmlElement(name = "license", namespace = "http://imeji.org/terms/")
-    public String getLicense()
-    {
-        return license;
-    }
-
-    public void setLicense(String str)
-    {
-        license = str;
-    }
-
-
-    /**
-     * @return the externalUri
-     */
-    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1/")
-    public URI getExternalUri()
-    {
-        return externalUri;
-    }
-
-    /**
-     * @param externalUri the externalUri to set
-     */
-    public void setExternalUri(URI externalUri)
-    {
-        this.externalUri = externalUri;
-    }
-
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
-    public URI getStatement()
-    {
-        return statement;
-    }
-
-    public void setStatement(URI namespace)
-    {
-        this.statement = namespace;
-    }
-
-    @Override
-    public void copy(Metadata metadata)
-    {
-        if (metadata instanceof License) {
-            setPos(metadata.getPos());
-            this.license = ((License)metadata).getLicense();
-            setStatement(((License) metadata).getStatement());
-            this.externalUri = ((License) metadata).getExternalUri();
-        }
-    }
-
-    @Override
-    public String asFulltext()
-    {
-        return license + " " + getDateString();
-    }
+  }
 }

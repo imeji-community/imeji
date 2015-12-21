@@ -181,3 +181,7 @@ target/
 hs_err*.log
 
 atlassian-ide-plugin.xml
+
+#elasticsearch
+global-*
+node.lock

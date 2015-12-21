@@ -3,23 +3,21 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-
-import java.util.List;
 
 /**
  * Bean for the Albums page
@@ -29,116 +27,101 @@ import java.util.List;
  * @version $Revision$ $LastChangedDate$
  */
 public class AlbumsBean extends SuperContainerBean<AlbumBean> {
-	private int totalNumberOfRecords;
-	private SessionBean sb;
 
-	/**
-	 * Bean for the Albums page
-	 */
-	public AlbumsBean() {
-		super();
-		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-	}
+  private boolean addSelected = false;
 
-	@Override
-	public String getNavigationString() {
-		return "pretty:albums";
-	}
+  /**
+   * Bean for the Albums page
+   */
+  public AlbumsBean() {
+    super();
+    this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  }
 
-	@Override
-	public int getTotalNumberOfRecords() {
-		return totalNumberOfRecords;
-	}
+  @Override
+  public String getNavigationString() {
+    return sb.getPrettySpacePage("pretty:albums");
+  }
 
-	@Override
-	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {  
-		UserController uc = new UserController(sb.getUser());
-		if (sb.getUser() != null) {
-			sb.setUser(uc.retrieve(sb.getUser().getEmail()));
-		}
-		AlbumController controller = new AlbumController();
-		SortCriterion sortCriterion = new SortCriterion();
-		sortCriterion.setIndex(SPARQLSearch
-				.getIndex(getSelectedSortCriterion()));
-		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-		SearchQuery searchQuery = new SearchQuery();
-		query = UrlHelper.getParameterValue("q");
-		if (query == null)
-			query = "";
-		if (!"".equals(query)) {
-			searchQuery = URLQueryTransformer.parseStringQuery(query);
-		}
-		if (getFilter() != null) {
-			searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
-			searchQuery.addPair(getFilter());
-		}
-		SearchResult searchResult = controller.search(searchQuery,
-				sb.getUser(), sortCriterion, limit, offset);
-		totalNumberOfRecords = searchResult.getNumberOfRecords();
-		return ImejiFactory.albumListToBeanList(controller.loadAlbumsLazy(
-				searchResult.getResults(), sb.getUser(), limit, offset));
-	}
+  @Override
+  public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
+    addSelected = UrlHelper.getParameterBoolean("add_selected");
+    AlbumController controller = new AlbumController();
+    Collection<Album> albums = new ArrayList<Album>();
+    search(offset, limit);
+    setTotalNumberOfRecords(searchResult.getNumberOfRecords());
+    albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), limit, offset);
+    return ImejiFactory.albumListToBeanList(albums);
+  }
 
-	public SessionBean getSb() {
-		return sb;
-	}
+  @Override
+  public String selectAll() {
+    for (AlbumBean bean : getCurrentPartList()) {
+      if (bean.getAlbum().getStatus() == Status.PENDING) {
+        bean.setSelected(true);
+        if (!(sb.getSelectedAlbums().contains(bean.getAlbum().getId()))) {
+          sb.getSelectedAlbums().add(bean.getAlbum().getId());
+        }
+      }
+    }
+    return "";
+  }
 
-	public void setSb(SessionBean sb) {
-		this.sb = sb;
-	}
+  @Override
+  public String selectNone() {
+    sb.getSelectedAlbums().clear();
+    return "";
+  }
 
-	@Override
-	public String selectAll() {
-		for (AlbumBean bean : getCurrentPartList()) {
-			if (bean.getAlbum().getStatus() == Status.PENDING) {
-				bean.setSelected(true);
-				if (!(sb.getSelectedAlbums().contains(bean.getAlbum().getId()))) {
-					sb.getSelectedAlbums().add(bean.getAlbum().getId());
-				}
-			}
-		}
-		return "";
-	}
+  public String deleteAll() {
+    if (sb.getSelectedAlbums().size() == 0) {
+      BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
+      return sb.getPrettySpacePage("pretty:albums");
+    }
+    for (AlbumBean b : getCurrentPartList()) {
+      if (b.getSelected()) {
+        b.delete();
+      }
+    }
+    sb.getSelectedAlbums().clear();
+    return sb.getPrettySpacePage("pretty:albums");
+  }
 
-	@Override
-	public String selectNone() {
-		sb.getSelectedAlbums().clear();
-		return "";
-	}
 
-	public String deleteAll() {
-		if (sb.getSelectedAlbums().size() == 0) {
-			BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
-			return "pretty:albums";
-		}
-		for (AlbumBean b : getCurrentPartList()) {
-			if (b.getSelected()) {
-				b.delete();
-			}
-		}
-		sb.getSelectedAlbums().clear();
-		return "pretty:albums";
-	}
+  @Override
+  public String getType() {
+    return PAGINATOR_TYPE.ALBUMS.name();
+  }
 
-	/**
-	 * Collection search is always a simple search (needed for
-	 * searchQueryDisplayArea.xhtml component)
-	 * 
-	 * @return
-	 */
-	public boolean isSimpleSearch() {
-		return true;
-	}
+  /*
+   * Perform the {@link SPARQLSearch}
+   * 
+   * @param searchQuery
+   * 
+   * @param sortCriterion
+   * 
+   * @return
+   * 
+   * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.
+   * SearchQuery , de.mpg.imeji.logic.search.vo.SortCriterion)
+   */
+  @Override
+  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion, int offset,
+      int limit) {
+    AlbumController controller = new AlbumController();
+    return controller.search(searchQuery, sb.getUser(), sortCriterion, limit, offset,
+        sb.getSelectedSpaceString());
+  }
 
-	/**
-	 * needed for searchQueryDisplayArea.xhtml component
-	 * 
-	 * @return
-	 */
-	public String getSimpleQuery() {
-		if (query != null) {
-			return query;
-		}
-		return "";
-	}
+  public String getTypeLabel() {
+    return sb.getLabel("type_" + getType().toLowerCase());
+  }
+
+  public boolean isAddSelected() {
+    return addSelected;
+  }
+
+  public void setAddSelected(boolean addSelected) {
+    this.addSelected = addSelected;
+  }
 }

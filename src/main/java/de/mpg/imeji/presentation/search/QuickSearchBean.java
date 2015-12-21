@@ -5,16 +5,12 @@ package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URLEncoder;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.util.UrlHelper;
 
 /**
  * Java bean for the simple search
@@ -23,99 +19,43 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class QuickSearchBean implements Serializable
-{
-    private static final long serialVersionUID = 1599497861175666068L;
-    private String searchString = "";
-    private String selectedSearchType = "images";
-    private static Logger logger = Logger.getLogger(QuickSearchBean.class);
+@ManagedBean(name = "QuickSearchBean")
+@RequestScoped
+public class QuickSearchBean implements Serializable {
+  private static final long serialVersionUID = 1599497861175666068L;
+  private String searchString;
 
-    /**
-     * Method when search is submitted
-     * 
-     * @return
-     * @throws IOException
-     */
-    public String search() throws IOException
-    {
-        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        if ("".equals(searchString))
-        {
-        	  BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getMessage("error_search_query_emtpy"));
-        	  return "pretty:";
-        }
-        if (getSelectedSearchType() == null)
-            setSelectedSearchType("images");
-        if (getSelectedSearchType().equals("collections"))
-        {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getCollectionsUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
-        }
-        else if (getSelectedSearchType().equals("images"))
-        {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getBrowseUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
-        }
-        else if (getSelectedSearchType().equals("albums"))
-        {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getAlbumsUrl() + "?q=" + URLEncoder.encode(searchString, "UTF-8"));
-        }
-        return "";
+  /**
+   * Method when search is submitted
+   * 
+   * @return
+   * @throws IOException
+   */
+  public QuickSearchBean() throws IOException {
+    String q = UrlHelper.getParameterValue("q");
+    if (SearchQueryParser.isSimpleSearch(SearchQueryParser.parseStringQuery(q))) {
+      this.searchString = q;
+    } else {
+      searchString = "";
     }
+  }
 
-    /**
-     * setter
-     * 
-     * @param searchString
-     */
-    public void setSearchString(String searchString)
-    {
-        this.searchString = searchString;
-    }
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getSearchString()
-    {
-        return searchString;
-    }
+  /**
+   * setter
+   * 
+   * @param searchString
+   */
+  public void setSearchString(String searchString) {
+    this.searchString = searchString;
+  }
 
-    /**
-     * setter
-     * 
-     * @param selectedSearchType
-     */
-    public void setSelectedSearchType(String selectedSearchType)
-    {
-        this.selectedSearchType = selectedSearchType;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getSelectedSearchType()
-    {
-        if (selectedSearchType == null)
-            selectedSearchType = "images";
-        return selectedSearchType;
-    }
-
-    /**
-     * Listener for the search type
-     * 
-     * @param event
-     */
-    public void selectedSearchTypeListener(ValueChangeEvent event)
-    {
-        if (event.getNewValue() != null && !event.getNewValue().equals(event.getOldValue()))
-        {
-            selectedSearchType = (String)event.getNewValue();
-        }
-    }
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getSearchString() {
+    return searchString;
+  }
 }

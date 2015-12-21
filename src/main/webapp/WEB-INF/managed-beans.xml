@@ -100,11 +100,6 @@
 
 	<!-- Album Beans -->
 	<managed-bean>
-		<managed-bean-name>AlbumBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumBean</managed-bean-class>
-		<managed-bean-scope>view</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>AlbumsBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -119,8 +114,9 @@
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<!-- Users bean -->
 
+
+	<!-- Users bean -->
 	<managed-bean>
 		<managed-bean-name>UserBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.user.UserBean</managed-bean-class>
@@ -132,7 +128,6 @@
 		<managed-bean-class>de.mpg.imeji.presentation.user.UserCreationBean</managed-bean-class>
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
-
 
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>
@@ -181,19 +176,9 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>BlogBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.BlogBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>SessionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.session.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>QuickSearchBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.search.QuickSearchBean</managed-bean-class>
-		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>AdminBean</managed-bean-name>

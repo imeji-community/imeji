@@ -22,12 +22,12 @@
 										contextUrl="#{Navigation.collectionUrl}" 
 										curMainMenu="#{currentMainMenu}" 
 										userHasAdminRights="#{Auth.admin}" 
-										userHasUploadRights="#{Auth.create(metadataBean.collection) and metadataContextBean.status != 'WITHDRAWN'}" 
+										userHasUploadRights="#{Auth.createContent(metadataBean.collection) and metadataContextBean.status != 'WITHDRAWN'}" 
 										hasContent="#{metadataBean.size > 0}" 
 										navBean="#{Navigation}" 
 										activeMenu="metadata" />
 			
-			<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+			<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 										curMainMenu="#{currentMainMenu}" 
 										navBean="#{Navigation}" 
 										collectionStatus="#{metadataContextBean.status}" 
@@ -36,24 +36,32 @@
 										isEditable="#{Auth.update(metadataBean.collection)}" 
 										isAdmin="#{Auth.admin(metadataBean.collection)}" 
 										hasContent="#{metadataBean.size > 0}" 
-										downloadEnabled="#{metadataBean.size > 0}"
+										downloadEnabled="true"
 										contextDownloadParam="&amp;col=#{metadataBean.id}" 
-										allowedToShare="#{metadataContextBean.status != 'WITHDRAWN' and Auth.admin(metadataBean.collection)}"/>
+										allowedToShare="false"
+										profileEditable="#{Auth.update(metadataBean.profile) and metadataContextBean.status != 'WITHDRAWN'}"
+										activeMenu="metadata"
+										hasDoi="#{metadataBean.collection.doi != null and metadataBean.collection.doi !=''}"/>
 		</ui:fragment>
 	</ui:define>
 			
-	<ui:define name="metadataProfile">
+	<ui:define name="mainContent">
 		<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{metadataBean}" metadataContextBean="#{metadataContextBean}" 
 		metadataProfile="#{metadataBean.profile}" 
 		profileUrl="#{Navigation.profileUrl}#{metadataBean.profile.idString}" 
 		exportUrl="#{Navigation.applicationSpaceUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{metadataContextBean.profile}&quot;" 
 		editable="#{Auth.update(metadataBean.profile) and metadataContextBean.status != 'WITHDRAWN'}" 
-		editUrl="#{Navigation.profileUrl}#{metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{metadataBean.id}"/>
+		editUrl="#{Navigation.profileUrl}#{metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{metadataBean.id}"
+		adminable="#{Auth.admin(metadataBean.collection)}" collectionStatus="#{metadataBean.collection.status}"/>
 	</ui:define>
 	
 	<ui:define name="modalDialogs_from_site">
 		<dialog:confirmationDialog submitAction="release" bean="#{metadataBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{Auth.update(metadataBean.collection)and metadataBean.collection.status.toString().toUpperCase() == 'PENDING' and metadataBean.size > 0}"/>
 		<dialog:confirmationDialog submitAction="delete" bean="#{metadataBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(metadataBean.collection)}"/>
 		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{metadataBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{Auth.update(metadataBean.collection) and metadataBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:dialogOptionDialog submitId1="doiInput" submitId2="getDOIDialog" confirmationText="#{metadataBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" submitLabel1="#{lbl.createDOI_manually}" submitLabel2="#{lbl.createDOI_from_service}" dialogId="createDOIDialog" rendered="#{Auth.update(metadataBean.collection) and metadataBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:confirmationDialog submitAction="createDOI" bean="#{metadataBean}" confirmationText="#{msg.confirmation_create_DOI}" submitLabel="#{lbl.createDOI}" dialogId="getDOIDialog" rendered="#{Auth.update(metadataBean.collection) and metadataBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>	
+		<dialog:doiInputDialog col="#{metadataBean.collection}" bean="#{metadataBean}" submitLabel="#{lbl.save}" confirmationText="#{metadataBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" dialogId="doiInput" rendered="#{Auth.update(metadataBean.collection) and metadataBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		
 	</ui:define>
 </ui:composition>

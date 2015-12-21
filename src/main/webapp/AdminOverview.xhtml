@@ -5,11 +5,11 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:param name="headline" value="#{PropertyBean.appName} Administration"/>
+	<ui:param name="headline" value=""/>
 	<ui:param name="currentMainMenu" value="admin"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"
@@ -17,10 +17,6 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>
-		
 		<!-- Are You Admin? -->
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
@@ -56,6 +52,11 @@
 										<h:outputText value="#{lbl.admin_userGroups_view}" />
 									</a>
 								</li>
+								<li>
+									<a href="#{Navigation.applicationSpaceUrl}createusergroup" title="#{lbl.admin_group_new}">
+										<h:outputText value="#{lbl.admin_group_new}" />
+									</a>
+								</li>
 							</ul>
 						</div>
 					</h:panelGroup>
@@ -72,6 +73,11 @@
 											<h:outputText value="#{lbl.edit}" />
 										</a>
 									</li>
+									<li>
+										<a href="#{Navigation.profileUrl}#{AdminBean.defaultProfileId}/#{Navigation.editPath}?init=1" title="#{lbl.edit_default_profile}">
+											<h:outputText value="#{lbl.edit_default_profile}" />
+										</a>
+									</li>
 								</ul>
 							</div>
 						</ui:fragment>
@@ -79,15 +85,29 @@
 					
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_spaceConfig">
 						<div class="imj_headline">
-							<h2><h:outputText value="#{lbl.admin_space_config}"/></h2>
+							<h2><h:outputText value="#{lbl.spaces} (Highly experimental)"/></h2>
 						</div>
 						<div class="imj_content">
 							<ul>
-								<li>
-									<a href="#{Navigation.applicationUrl}createspace" title="#{lbl.admin_space_create}">
-										<h:outputText value="#{lbl.admin_space_create}"/>
-									</a>
-								</li>
+							 	<ui:fragment rendered="#{Auth.admin and SessionBean.spaceId == ''}">
+									<li>
+										<a href="#{Navigation.applicationUrl}spaces" title="#{lbl.admin_space_create}">
+											<h:outputText value="#{lbl.admin_space_list}"/>
+										</a>
+									</li>
+									<li>
+										<a href="#{Navigation.applicationUrl}createspace" title="#{lbl.admin_space_create}">
+											<h:outputText value="#{lbl.create}"/>
+										</a>
+									</li>
+								</ui:fragment>
+								<ui:fragment rendered="#{Auth.admin and SessionBean.spaceId != ''}">
+									<li>
+										<a href="#{Navigation.applicationSpaceUrl}editspace" title="#{lbl.admin_space_edit}">
+											<h:outputText value="#{lbl.edit}"/>
+										</a>
+									</li>
+								</ui:fragment>
 							</ul>
 						</div>
 					</h:panelGroup>

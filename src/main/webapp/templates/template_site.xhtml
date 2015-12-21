@@ -29,86 +29,123 @@ All rights reserved. Use is subject to license terms.
 */
 -->
 <f:view encoding="UTF-8" locale="#{SessionBean.locale}" 
-	xmlns:f="http://java.sun.com/jsf/core" 
-	xmlns:h="http://java.sun.com/jsf/html" 
-	xmlns:ui="http://java.sun.com/jsf/facelets">
-	
-	<f:loadBundle var="lbl" basename="labels"/>
-	<f:loadBundle var="msg" basename="messages"/>
-	<ui:param name="siteWrapperClass" value="#{Auth.admin ? 'imj_siteWrapper imj_isAdmin' : 'imj_siteWrapper'}" />
-	
-	<html xmlns="http://www.w3.org/1999/xhtml">
-		
-		<h:head>
-			<ui:include src="component/header/html_head_default.xhtml"/>
-		</h:head>
-		
-		<h:body lang="#{SessionBean.locale}">
-			<div class="#{siteWrapperClass}">
-				<ui:insert name="init"/>
-				<ui:include src="component/header/header_default.xhtml"/>
-				<ui:insert name="actionsMenu"/>
-				<h:panelGroup layout="block" styleClass="imj_siteContentHeadline" rendered="#{headline.toString().trim().length() > 0}">
-					<h1>
-						<h:outputText value="#{headline.toString().trim()}"/>
-						<ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
-							<br/>
-							<h:outputText value="#{headlineSecondRow.toString().trim()}"/>
-						</ui:fragment>
-					</h1>
-				</h:panelGroup>
-				
-				<h:panelGroup id="imj_pageMessageArea">
-					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help')}">
-						
-						<ui:fragment rendered="#{MessagesBean.hasMessages}">
-							<ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
-									<h:messages styleClass="imj_messageList"
-												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
-												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
-							</ui:fragment>
-							
-							<ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
-								<ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
-									<div class="imj_messageTitleWarn"><h:outputText value="#{lbl.warning_lblMessageHeader}"/></div>
-									<h:messages styleClass="imj_messageList"
-												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
-												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
-								</ui:fragment>
-							
-								<ui:fragment rendered="#{!MessagesBean.hasErrorMessages}">
-									<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>
-									<h:messages styleClass="imj_messageList"
-												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
-												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
-								</ui:fragment>
-							</ui:fragment>
-						</ui:fragment>
-						
-						<ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help'}">
-							<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="imj_messageStatus">
-								<h:outputText value="#{lbl.active_album}: "/>
-								<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
-									<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
-								</h:outputLink>
-							</h:panelGroup>
-						</ui:fragment>
-					</h:panelGroup>
-				</h:panelGroup>
-				
-				
-				<div class="imj_mainContentWrapper">
-					<ui:insert name="searchQuery"/>
-					<ui:insert name="mainContent"/>
-				</div>
-				
-				<ui:include src="component/footer/footer_default.xhtml"/>
-			</div>
-			
-			<div class="imj_modalDialogBackground">&#160;</div>
-			
-			<ui:insert name="modalDialogs_from_template"/>
-			<ui:insert name="modalDialogs_from_site"/>
-		</h:body>
-	</html>
+        xmlns:f="http://java.sun.com/jsf/core" 
+        xmlns:h="http://java.sun.com/jsf/html" 
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <f:loadBundle var="lbl" basename="labels"/>
+    <f:loadBundle var="msg" basename="messages"/>
+    <ui:param name="siteWrapperClass" value="#{Auth.admin ? 'imj_siteWrapper imj_isAdmin' : 'imj_siteWrapper'}" />
+
+    <html xmlns="http://www.w3.org/1999/xhtml">
+
+        <h:head>
+            <ui:include src="component/header/html_head_default.xhtml"/>
+            <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        </h:head>
+
+        <h:body lang="#{SessionBean.locale}">
+            <!-- default necessary scripts, because of use in body-load context -->
+            <h:outputScript library="jquery" name="jquery-1.11.1.min.js"/>
+            <h:outputScript library="jquery/ui" name="1.10.4/jquery-ui.min.js"/>
+            <!-- optional header scripts, which must load before -->
+            <ui:insert name="additonalHeaderScripts"/>
+            
+            
+            <!-- global page wrapper -->
+            <div class="#{siteWrapperClass}">
+                <ui:insert name="init"/>
+                <ui:include src="component/header/header_default.xhtml"/>
+                
+                 <!-- headline -->
+                <h:panelGroup rendered="#{!displayQuery}" layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
+                    <h1>
+                        #{headline.toString().trim()}
+                        <h:outputText value="imeji" rendered="#{headline.toString().trim().length() == 0}"/>
+                        <ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
+                            <br/>
+                            #{headlineSecondRow.toString().trim()}"
+                        </ui:fragment>
+                    </h1>
+                </h:panelGroup>
+                <!-- Search Query -->
+                <ui:insert name="searchQuery"/>
+                <!-- Actions Menu -->
+                <div id="actionsMenuArea">
+               		<ui:insert name="actionsMenu"/>   
+                </div>
+                <!-- Message area -->
+                <div id="imj_pageMessageArea">
+                    <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages}">
+
+                        <ui:fragment rendered="#{MessagesBean.hasMessages}">
+                            <ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
+                                <h:messages styleClass="imj_messageList"
+                                            errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+                                            layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
+                                <ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
+                                    <div class="imj_messageTitleWarn"><h:outputText value="#{lbl.warning_lblMessageHeader}"/></div>
+                                    <h:messages styleClass="imj_messageList"
+                                                errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+                                                layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{!MessagesBean.hasErrorMessages}">
+                                    <div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>
+                                    <h:messages styleClass="imj_messageList"
+                                                errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+                                                layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+                                </ui:fragment>
+                            </ui:fragment>
+                        </ui:fragment>
+                    </h:panelGroup>
+                </div>
+
+                <!-- content wrapper -->
+                <div class="imj_mainContentWrapper">
+                    <ui:insert name="mainContent"/>
+                </div>
+                
+                <!-- footer -->
+                <ui:include src="component/footer/footer_default.xhtml"/>
+            </div>
+            
+            <!-- modal dialogs -->
+            <div class="imj_modalDialogBackground">&#160;</div>
+            <ui:insert name="modalDialogs_from_template"/>
+            <ui:insert name="modalDialogs_from_site"/>
+            
+            
+            <!-- scripts -->
+            <ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
+                <script type="text/javascript">var placeholder_simpleSearch = 'Search for ...';</script>
+            </ui:fragment>
+            <ui:fragment rendered="#{SessionBean.locale == 'de'}">
+                <script type="text/javascript">var placeholder_simpleSearch = 'Suche nach ...';</script>
+            </ui:fragment>
+            <ui:fragment rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
+                <script type="text/javascript">var placeholder_simpleSearch = '検索キーワード...';</script>
+            </ui:fragment>
+
+            <script type="text/javascript">var homeURL = '#{Navigation.applicationUrl}';</script>
+
+            <h:outputScript library="js/" name="default.js"></h:outputScript>
+
+            <script type="text/javascript">
+                $(function () {
+                    //add placeholders for meta menu (username and password) and simple search
+                    //$(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
+                    //$(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
+                    $(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
+                });
+            </script>
+
+            <div id="additonalFooterScripts" class="imj_noDisplay">
+                <ui:insert name="additonalFooterScripts"/>
+            </div>
+        </h:body>
+    </html>
 </f:view>

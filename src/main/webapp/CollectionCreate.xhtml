@@ -10,9 +10,10 @@
 	<ui:param name="headline" value="#{lbl.collection_create}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="containerHeadline" value="#{lbl.collection_info}"/>
+	<ui:param name="showProfileSelector" value="true"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"

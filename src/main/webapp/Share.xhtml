@@ -11,23 +11,14 @@
 	<ui:param name="currentMainMenu" value="#{ShareBean.type}"/>
 	<ui:param name="contUrl" value="#{ShareBean.type == 'COLLECTION' ? Navigation.collectionUrl : Navigation.albumUrl}"/>
 	
-	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{ShareBean.id}" 
-									contextUrl="#{contUrl}" 
-									curMainMenu="#{currentMainMenu}" 
-									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.create(ShareBean.shareTo)}" 
-									hasContent="#{ShareBean.hasContent}" 
-									navBean="#{Navigation}" 
-									activeMenu="share" 
-									allowedToShare="true"/>
-	</ui:define>
-	
-	<ui:define name="mainContent">
-	
-		<ui:include src="./include/History.xhtml"/>
-		<!-- ID must not be changed. The share page would not work anymore -->
-		<imjc:share id="share" roles="#{ShareBean.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
 		
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block" styleClass="imj_backPanel">
+			<h:outputLink value="#{HistorySession.previousPage.completeUrl}">
+				<h:outputText value="#{lbl.back_to}: #{ShareBean.title}"/>
+			</h:outputLink>
+		</h:panelGroup>		
+		<!-- ID must not be changed. The share page would not work anymore -->
+		<imjc:share id="share" roles="#{ShareBean.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
 	</ui:define>
 </ui:composition>

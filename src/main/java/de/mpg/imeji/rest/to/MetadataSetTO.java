@@ -13,71 +13,97 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.j2j.misc.LocalizedString;
+
 @XmlRootElement
-@XmlType (propOrder = {	 
-		"position",
-		"Labels",
-		"value", 
-		"statementUri",
-		"typeUri",
-		})
+@XmlType(propOrder = {"position", "Labels", "value", "statementUri", "typeUri",})
 @JsonInclude(Include.NON_NULL)
 @JsonDeserialize(using = MetadataSetTODeserializer.class)
-public class MetadataSetTO implements Serializable{
+public class MetadataSetTO implements Serializable {
 
-	private static final long serialVersionUID = 5826924314949469841L;
+  private static final long serialVersionUID = 5826924314949469841L;
 
-	@JsonIgnore
-	private int position;
-	
-	private List<LabelTO> Labels = new ArrayList<LabelTO>();
+  public MetadataSetTO() {
+    // TODO Auto-generated constructor stub
+  }
 
-	private MetadataTO value;
-	
-	private URI statementUri;
-	
-	private URI typeUri;
-	
-	public int getPosition() {
-		return position;
-	}
+  /**
+   * Construct a {@link MetadataSetTO} from a {@link StatementTO}
+   * 
+   * @param statement
+   */
+  public MetadataSetTO(StatementTO statement) {
+    // TODO refactor statementTO with LocalizedStringTO
+    for (LocalizedString label : statement.getLabels()) {
+      labels.add(new LabelTO(label.getLang(), label.getValue()));
+    }
+    this.statementUri = ObjectHelper.getURI(Statement.class, statement.getId());
+    this.typeUri = statement.getType();
+    this.parentStatementUri = statement.getParentStatementId();
+  }
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
+  @JsonIgnore
+  private int position;
 
-	public List<LabelTO> getLabels() {
-		return Labels;
-	}
+  private List<LabelTO> labels = new ArrayList<LabelTO>();
 
-	public void setLabels(List<LabelTO> labels) {
-		Labels = labels;
-	}
+  private MetadataTO value;
 
-	public MetadataTO getValue() {
-		return value;
-	}
+  private URI statementUri;
 
-	public void setValue(MetadataTO value) {
-		this.value = value;
+  private URI typeUri;
+  
+  private String parentStatementUri;
 
-	}
+  public int getPosition() {
+    return position;
+  }
 
-	public URI getStatementUri() {
-		return statementUri;
-	}
+  public void setPosition(int position) {
+    this.position = position;
+  }
 
-	public void setStatementUri(URI statementUri) {
-		this.statementUri = statementUri;
-	}
+  public List<LabelTO> getLabels() {
+    return labels;
+  }
 
-	public URI getTypeUri() {
-		return typeUri;
-	}
+  public void setLabels(List<LabelTO> labels) {
+    this.labels = labels;
+  }
 
-	public void setTypeUri(URI typeUri) {
-		this.typeUri = typeUri;
-	}
+  public MetadataTO getValue() {
+    return value;
+  }
 
+  public void setValue(MetadataTO value) {
+    this.value = value;
+
+  }
+
+  public URI getStatementUri() {
+    return statementUri;
+  }
+
+  public void setStatementUri(URI statementUri) {
+    this.statementUri = statementUri;
+  }
+
+  public URI getTypeUri() {
+    return typeUri;
+  }
+
+  public void setTypeUri(URI typeUri) {
+    this.typeUri = typeUri;
+  }
+
+  public String getParentStatementUri() {
+    return parentStatementUri;
+  }
+
+  public void setParentStatementUri(String statementUri) {
+    this.parentStatementUri = statementUri;
+  }
 
 }

@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="col" required="true" type="java.lang.Object"/>
+		<composite:attribute name="bean" required="true" type="java.lang.Object"/>
+		<composite:attribute name="submitLabel" required="true" type="java.lang.String"/>
+		<composite:attribute name="confirmationText" required="true" type="java.lang.String"/>
+		<composite:attribute name="dialogId" required="true" type="java.lang.String"/>
+		<composite:attribute name="confirmationLabel" type="java.lang.String"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<ui:fragment rendered="#{Auth.loggedIn}">
+			<div id="#{cc.attrs.dialogId}" class="imj_modalDialogBox" style="display:none;">
+				<h:form id="discardForm">
+					<div class="imj_confirmationText">
+						<p>
+							<h:outputText value="#{cc.attrs.confirmationText}"/>
+						</p>
+					</div>
+					<div class="imj_confirmationReasonTextarea">
+						<h:outputLabel value="#{lbl.doi} (#{lbl.example}: 10.1000/182)" for="discardComment"/>
+						<h:inputText id="discardComment" value="#{cc.attrs.col.doi}" styleClass="imj_dialogReasonText" autocomplete="off">
+							<f:ajax execute="@this"  render="buttonDiscard" event="keyup"/>
+						</h:inputText>
+					</div>
+					<h:panelGroup layout="block" styleClass="imj_submitPanel" id="buttonDiscard">
+						<button type="reset" onclick="closeDialog('#{cc.attrs.dialogId}');" class="imj_cancelButton">
+							<h:outputText value="#{lbl.cancel}"/>
+						</button>
+				 		<h:commandButton id="btnDiscardContainer" type="submit"
+				 						action="#{cc.attrs.bean.createDOI}"  
+				 						value="#{cc.attrs.submitLabel}" 
+				 						styleClass="#{'imj_submitButton'}"> 
+				 						<f:param name="doi" value="#{cc.attrs.col.doi}" />
+				 		</h:commandButton>
+					</h:panelGroup>
+				</h:form>
+			</div>
+		</ui:fragment>
+	</composite:implementation>
+</html>

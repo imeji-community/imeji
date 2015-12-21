@@ -25,7 +25,7 @@
   <script type="text/javascript">
     $(function () {
       window.swaggerUi = new SwaggerUi({
-      url: "/imeji/rest/api-docs",
+      url: "../../rest/api-docs",
       dom_id: "swagger-ui-container",
       supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
       onComplete: function(swaggerApi, swaggerUi){
@@ -51,25 +51,25 @@
       sorter : "alpha"
     });
 
-//     $('#input_apiKey').change(function() {
-//       var key = $('#input_apiKey')[0].value;
-//       log("key: " + key);
-//       if(key && key.trim() != "") {
-//         log("added key " + key);
-//         window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
-//       }
-//     })
-
+     //Key Auth
+	var keyAuth = function() {
+   	  var key = $('#input_apiKey')[0].value;
+   	  var auth = "Bearer " + btoa(key);
+      window.authorizations.add("key", new ApiKeyAuthorization("Authorization",auth, "header"));
+    };
 
 	//Basic Auth
-	var updateAuth = function() {
+	var basicAuth = function() {
       var auth = "Basic " + btoa($('#input_user')[0].value + ":" + $('#input_pass')[0].value);
       window.authorizations.add("key", new ApiKeyAuthorization("Authorization", auth, "header")); 
     };
+    
+    $('#input_apiKey').change(keyAuth);
+    $('#input_button_key').click(keyAuth);
 
-    $('#input_user').change(updateAuth);
-    $('#input_pass').change(updateAuth);
-    $('#input_button').click(updateAuth);
+    $('#input_user').change(basicAuth);
+    $('#input_pass').change(basicAuth);
+    $('#input_button').click(basicAuth);
         
     window.swaggerUi.load();
   });
@@ -81,9 +81,12 @@
   <div class="swagger-ui-wrap">
     <a id="logo" href="http://imeji.org" target="_blank">   REST api</a>
     <form id='api_selector'>
-      <div class='input'><input placeholder="user" id="input_user" name="user" type="text" size="10"/></div>	
-      <div class='input'><input placeholder="pass" id="input_pass" name="pass" type="password" size="10"/></div>
-      <div class='input'><input id="input_button" name="input_button" type="button" value="Authorize"/></div>
+     <div class='input'><input placeholder="API key" id="input_apiKey" name="key" type="text" size="10"/></div>	
+     <div class='input'><input id="input_button_key" name="input_button" type="button" value="Use Key"/></div>
+     <div class='input'> OR </div>
+      <div class='input'><input placeholder="Login" id="input_user" name="user" type="text" size="10"/></div>	
+      <div class='input'><input placeholder="Password" id="input_pass" name="pass" type="password" size="10"/></div>
+      <div class='input'><input id="input_button" name="input_button" type="button" value="Use Basic"/></div>
     </form>
   </div>
 </div>

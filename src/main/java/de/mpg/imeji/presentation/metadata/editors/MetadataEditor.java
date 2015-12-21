@@ -4,13 +4,10 @@
 package de.mpg.imeji.presentation.metadata.editors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.jobs.CleanMetadataJob;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -28,173 +25,169 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class MetadataEditor
-{
-    protected List<EditorItemBean> items;
-    protected Statement statement;
-    protected MetadataProfile profile;
+public abstract class MetadataEditor {
+  protected List<EditorItemBean> items;
+  protected Statement statement;
+  protected MetadataProfile profile;
 
-    // protected Validator validator;
-    /**
-     * Editor: Edit a list of images for one statement.
-     * 
-     * @param items
-     * @param statement
-     */
-    public MetadataEditor(List<Item> itemList, MetadataProfile profile, Statement statement, boolean addEmtpyValue)
-    {
-        this.statement = statement;
-        this.profile = profile;
-        items = new ArrayList<EditorItemBean>();
-        for (Item item : itemList)
-        {
-            items.add(new EditorItemBean(item, profile, addEmtpyValue));
+  // protected Validator validator;
+  /**
+   * Editor: Edit a list of images for one statement.
+   * 
+   * @param items
+   * @param statement
+   */
+  public MetadataEditor(List<Item> itemList, MetadataProfile profile, Statement statement,
+      boolean addEmtpyValue) {
+    this.statement = statement;
+    this.profile = profile;
+    items = new ArrayList<EditorItemBean>();
+    for (Item item : itemList) {
+      items.add(new EditorItemBean(item, profile, addEmtpyValue));
+    }
+    initialize();
+  }
+
+  /**
+   * Default editor
+   */
+  public MetadataEditor() {}
+
+  /**
+   * Reset all value to empty state
+   */
+  public void reset() {
+    items = new ArrayList<EditorItemBean>();
+    statement = null;
+    profile = null;
+  }
+
+  /**
+   * Clone as a {@link MetadataMultipleEditor}
+   */
+  @Override
+  public MetadataEditor clone() {
+    MetadataEditor editor = new MetadataMultipleEditor();
+    editor.setItems(items);
+    editor.setProfile(profile);
+    editor.setStatement(statement);
+    return editor;
+  }
+
+  /**
+   * Save the {@link Item} and {@link Metadata} defined in the editor
+   */
+  public boolean save() {
+    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    ItemController ic = new ItemController();
+    try {
+      List<Item> itemList = validateAndFormatItemsForSaving();
+      ic.updateBatch(itemList, sb.getUser());
+      String str = items.size() + " " + sb.getMessage("success_editor_images");
+      if (items.size() == 1) {
+        str = sb.getMessage("success_editor_image");
+      }
+      BeanHelper.info(str);
+      return true;
+
+    } catch (Exception e) {
+      for(EditorItemBean eib: this.items){
+        eib.getMds().setTree(eib.getMds().getUncutTree());
+      }
+      BeanHelper.cleanMessages();
+      BeanHelper.error(sb.getMessage("error_metadata_edit"));
+      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+      for (String errorM : listOfErrors) {
+        BeanHelper.error(errorM);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Validate and prepare the Items of the editor, so they can be saved
+   * 
+   * @return
+   */
+  public List<Item> validateAndFormatItemsForSaving() {
+    List<Item> itemList = new ArrayList<Item>();
+    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+
+    if (validateMetadataofImages()) {
+      if (prepareUpdate()) {
+        try {
+          addPositionToMetadata();
+          for (EditorItemBean eib : items) {
+            itemList.add(eib.asItem());
+          }
+        } catch (Exception e) {
+          BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getLocalizedMessage());
         }
-        initialize();
+      } else {
+        BeanHelper.error(sb.getMessage("error_metadata_edit_no_images"));
+      }
+    } else {
+      BeanHelper.error(sb.getMessage("error_metadata_validation"));
     }
+    return itemList;
+  }
 
-    /**
-     * Default editor
-     */
-    public MetadataEditor()
-    {
+  /**
+   * enable ordering for metadata values
+   */
+  protected void addPositionToMetadata() {
+    for (EditorItemBean eib : items) {
+      int pos = 0;
+      for (SuperMetadataBean smb : eib.getMds().getTree().getList()) {
+        smb.setPos(pos);
+        pos++;
+      }
     }
+  }
 
-    /**
-     * Reset all value to empty state
-     */
-    public void reset()
-    {
-        items = new ArrayList<EditorItemBean>();
-        statement = null;
-        profile = null;
+  public abstract void initialize();
+
+  public abstract boolean prepareUpdate();
+
+  public abstract boolean validateMetadataofImages();
+
+  /**
+   * Create a new Metadata according to current Editor configuration.
+   * 
+   * @return
+   */
+  protected Metadata newMetadata() {
+    if (statement != null) {
+      return MetadataFactory.createMetadata(statement);
     }
+    return null;
+  }
 
-    /**
-     * Clone as a {@link MetadataMultipleEditor}
-     */
-    public MetadataEditor clone()
-    {
-        MetadataEditor editor = new MetadataMultipleEditor();
-        editor.setItems(items);
-        editor.setProfile(profile);
-        editor.setStatement(statement);
-        return editor;
-    }
+  public List<EditorItemBean> getItems() {
+    return items;
+  }
 
-    /**
-     * Save the {@link Item} and {@link Metadata} defined in the editor
-     */
-    public void save()
-    {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ItemController ic = new ItemController();
-        try
-        {
+  public int getItemsSize() {
+    return items.size();
+  }
 
-        	if (validateMetadataofImages())
-            {
-                if (prepareUpdate())
-                {
-                    try
-                    {
-                    	addPositionToMetadata();
-                        List<Item> itemList = new ArrayList<Item>();
-                        for (EditorItemBean eib : items)
-                        {
-                            itemList.add(eib.asItem());
-                        }
-                        ic.update(itemList, sb.getUser());
-                        //BeanHelper.info(sb.getMessage("success_editor_edit"));
-                        String str = items.size() + " " + sb.getMessage("success_editor_images");
-                        if (items.size() == 1)
-                            str = sb.getMessage("success_editor_image");
-                        BeanHelper.info(str);
-                    }
-                    catch (Exception e)
-                    {
-                        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getMessage());
-                    }
-                }
-                else
-                {
-                    BeanHelper.error(sb.getMessage("error_metadata_validation"));
-                }
-            }
-            else
-            {
-                BeanHelper.error(sb.getMessage("error_metadata_edit_no_images"));
-            }
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(sb.getMessage("error_metadata_edit") + " ", e);
-        }
-    }
+  public void setItems(List<EditorItemBean> items) {
+    this.items = items;
+  }
 
-    /**
-     * enable ordering for metadata values
-     */
-    protected void addPositionToMetadata()
-    {
-        for (EditorItemBean eib : items)
-        {
-            int pos = 0;
-            for (SuperMetadataBean smb : eib.getMds().getTree().getList())
-            {
-                smb.setPos(pos);
-                pos++;
-            }
-        }
-    }
+  public Statement getStatement() {
+    return statement;
+  }
 
-    public abstract void initialize();
+  public void setStatement(Statement statement) {
+    this.statement = statement;
+  }
 
-    public abstract boolean prepareUpdate();
+  public MetadataProfile getProfile() {
+    return profile;
+  }
 
-    public abstract boolean validateMetadataofImages();
-
-    /**
-     * Create a new Metadata according to current Editor configuration.
-     * 
-     * @return
-     */
-    protected Metadata newMetadata()
-    {
-        if (statement != null)
-        {
-            return MetadataFactory.createMetadata(statement);
-        }
-        return null;
-    }
-
-    public List<EditorItemBean> getItems()
-    {
-        return items;
-    }
-
-    public void setItems(List<EditorItemBean> items)
-    {
-        this.items = items;
-    }
-
-    public Statement getStatement()
-    {
-        return statement;
-    }
-
-    public void setStatement(Statement statement)
-    {
-        this.statement = statement;
-    }
-
-    public MetadataProfile getProfile()
-    {
-        return profile;
-    }
-
-    public void setProfile(MetadataProfile profile)
-    {
-        this.profile = profile;
-    }
+  public void setProfile(MetadataProfile profile) {
+    this.profile = profile;
+  }
 }

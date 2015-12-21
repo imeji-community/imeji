@@ -2,22 +2,37 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:define name="init">
+	
+	<ui:param name="headline" value="#{itemBean.image != null ? itemBean.image.filename: ''}"/>
+ 	<ui:define name="init">
 		<h:outputText value="#{itemBean.init}"/>
 	</ui:define>
+
+	<ui:param name="backwardClass" value="#{itemBean.browse.previous == null ? 'previousItem imj_deactivated' : 'previousItem'}"/>
+	<ui:param name="forwardClass" value="#{itemBean.browse.next == null ? 'nextItem imj_deactivated' : 'nextItem'}"/>
 	
-	<ui:param name="backwardClass" value="#{itemBean.browse.previous == null ? 'imj_buttonBrowseBackward_16 imj_deactivated' : 'imj_buttonBrowseBackward_16'}"/>
-	<ui:param name="forwardClass" value="#{itemBean.browse.next == null ? 'imj_buttonBrowseForward_16 imj_deactivated' : 'imj_buttonBrowseForward_16'}"/>
+	<ui:define name="actionsMenu">
+
+		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
+									curMainMenu="#{currentMainMenu}" 
+									navBean="#{Navigation}" 
+									isDeletable="#{Auth.delete(itemBean.image)}" 
+									isEditable="#{Auth.update(itemBean.image)}" 
+									isAdmin="#{Auth.admin(itemBean.image)}"
+									downloadEnabled="true"
+									contextDownloadParam="&amp;col=#{logicBean.id}"
+									isContentDeletable="#{isContentDeletable}"
+									allowedToShare="#{logicBean.collection.status != 'WITHDRAWN' and Auth.admin(logicBean.collection)}"
+									activeMenu="item"/>
+	</ui:define>
 	
 	<!-- Main Content - Image Detail View -->
 	<ui:define name="mainContent">
 	  
 		<ui:fragment rendered="#{itemBean.image != null}">
-			<!-- Breadcrumb - History -->
-			<ui:include src="../../include/History.xhtml"></ui:include> 
-			
 			<!-- AJAX Wrapper - START -->
 			<h:panelGroup layout="block" id="imj_ajaxWrapper" styleClass="imj_mediaEntryDetailPage">
 				<h:panelGroup layout="block" id="selectionInfoPanel">
@@ -26,14 +41,35 @@
 				</h:panelGroup>
 				
 				<ui:fragment rendered="#{Auth.read(itemBean.image)}">
+				
 					<!-- pagination top -->
 					<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
+						<span class="imj_backPanel">
+							<ui:fragment rendered="#{currentMainMenu == 'mediaEntry' }">
+								<h:outputLink value="#{browseToAllItemsUrl}" title="#{lbl.images_all}">
+									<h:outputText value="#{lbl.images_all}"/>
+								</h:outputLink>
+							</ui:fragment>
+							
+							<ui:fragment rendered="#{currentMainMenu == 'album'}">
+								<h:outputLink value="#{browseToAllItemsUrl}" title="#{lbl.album_back_to_images}">
+									<h:outputText value="#{lbl.album_back_to_images}"/>
+								</h:outputLink>
+							</ui:fragment>
+							
+							<ui:fragment rendered="#{currentMainMenu == 'collection'}">
+								<h:outputLink value="#{browseToAllItemsUrl}" title="#{lbl.collection_back_to_images}">
+									<h:outputText value="#{lbl.collection_back_to_images}"/>
+								</h:outputLink>
+							</ui:fragment>
+						</span>
 						<h:panelGroup styleClass="imj_simplePageBrowser">
+						
 							<h:outputLink value="#{itemBean.browse.previous}&amp;tab=#{itemBean.tab}" styleClass="#{backwardClass}" disabled="#{itemBean.browse.previous == null}">
 								<h:outputText value="#{lbl.paginator_previous} #{itemBean.initLabels}"/>
 							</h:outputLink>
 							
-							<h:outputLink value="#{itemBean.browse.next}&amp;tab=#{itemBean.tab}" styleClass="#{forwardClass}" disabled="#{itemBean.browse.next == null}">
+							<h:outputLink style="text-align: left" value="#{itemBean.browse.next}&amp;tab=#{itemBean.tab}" styleClass="#{forwardClass}" disabled="#{itemBean.browse.next == null}">
 								<h:outputText value="#{lbl.paginator_next}"/>
 							</h:outputLink>
 						</h:panelGroup>

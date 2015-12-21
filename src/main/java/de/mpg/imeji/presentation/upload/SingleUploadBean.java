@@ -1,26 +1,23 @@
 package de.mpg.imeji.presentation.upload;
 
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.*;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.*;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.metadata.MetadataSetBean;
-import de.mpg.imeji.presentation.metadata.SingleEditBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
-import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.ObjectLoader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -29,367 +26,442 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.TempFileUtil;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.metadata.MetadataSetBean;
+import de.mpg.imeji.presentation.metadata.SingleEditBean;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
+import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
+import de.mpg.imeji.presentation.metadata.util.SuggestBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.user.UserBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 @ManagedBean(name = "SingleUploadBean")
 @ViewScoped
-public class SingleUploadBean implements Serializable{
-	private static final long serialVersionUID = -2731118794797476328L;
-	private static Logger logger = Logger.getLogger(SingleUploadBean.class);
-	
-	private Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-	
-	private List<SelectItem> collectionItems = new ArrayList<SelectItem>();	
-	private String selectedCollectionItem;
-	
-	@ManagedProperty("#{SingleUploadSession}")
-	private SingleUploadSession sus;
-	
-	@ManagedProperty("#{SessionBean}")
-	private SessionBean sb;
-	
-	@ManagedProperty(value = "#{SessionBean.user}")
-	private User user;
-	
-	private IngestImage ingestImage;
-	 
+public class SingleUploadBean implements Serializable {
+  private static final long serialVersionUID = -2731118794797476328L;
+  private static Logger logger = Logger.getLogger(SingleUploadBean.class);
 
-	public SingleUploadBean(){
-		
-	}
+  // private Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
 
-	@PostConstruct
-	public void init() {
-		if(user != null)
-		{
-			try {
-				loadCollections(); 
-				if (UrlHelper.getParameterBoolean("init")) {
-					sus.reset();
-					
-				}else if(UrlHelper.getParameterBoolean("start")){
-					upload();			
-				}
-				else if(UrlHelper.getParameterBoolean("done"))
-				{
-					sus.copyToTemp();
-				}
-			} catch (Exception e) {
-				logger.info("Some exception happened during initialization", e);
-			}
-		}
+  private List<SelectItem> collectionItems = new ArrayList<SelectItem>();
+  private String selectedCollectionItem;
 
-		}
-	    
-	public String save(){
-		try {        
-			Item item = uploadFileToItem(getIngestImage().getFile(), getIngestImage().getName());
-			SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
-			MetadataSetBean newSet = getMdSetBean();
-			edit.getEditor().getItems().get(0).setMds(newSet);
-			edit.save();
-			sus.uploaded();
-		} catch (Exception e) {
-			BeanHelper.error(e.getMessage());
-		}
-		return "";
-	} 
+  @ManagedProperty("#{SingleUploadSession}")
+  private SingleUploadSession sus;
 
-	/*
-	public void copyValueToItem(List <SuperMetadataBean> itemStatements, List <SuperMetadataBean> statements){
-		for(SuperMetadataBean smdb1 : itemStatements)
-		{
-			for(SuperMetadataBean smdb2 : statements)
-			{
-				if(smdb1.getStatement().getId().equals(smdb2.getStatement().getId()))
-				{
-					smdb1.setText(smdb2.getText());
-					smdb1.setDate(smdb2.getDate());
-					smdb1.setCitation(smdb2.getCitation());
-					smdb1.setConeId(smdb2.getConeId());
-					smdb1.setPerson(smdb2.getPerson());
-					smdb1.setName(smdb2.getName());
-					smdb1.setLatitude(smdb2.getLatitude());
-					smdb1.setLongitude(smdb2.getLongitude());
-					smdb1.setLicense(smdb2.getLicense());
-					smdb1.setExternalUri(smdb2.getExternalUri());
-					smdb1.setLabel(smdb2.getLabel());
-					smdb1.setNumber(smdb2.getNumber());
-					smdb1.setExportFormat(smdb2.getExportFormat());
-					smdb1.setCitation(smdb2.getCitation());
-				}
-			}
-		}
-		
-	}
-	*/
-	    
-	private Item uploadFileToItem(File file, String title) {
-		try {    
-			if (!StorageUtils.hasExtension(title))
-				title += StorageUtils.guessExtension(file);
-			validateName(file, title);
-			Item item = null;
-			ItemController controller = new ItemController();
-			item = controller.createWithFile(null, file, title, getCollection(), user);
-			sus.setUploadedItem(item);
-			return item;
-		} catch (Exception e) {	
-			sus.setfFile(" File " + title + " not uploaded: " + e.getMessage());
-			logger.error("Error uploading item: ", e);
-			return null;
-		}
-	}
-	
-	/**
-	 * Throws an {@link Exception} if the file ca be upload. Works only if the
-	 * file has an extension (therefore, for file without extension, the
-	 * validation will only occur when the file has been stored locally)
-	 */
-	private void validateName(File file, String title) {
-		if (StorageUtils.hasExtension(title)) {
-			StorageController sc = new StorageController();
-			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-			if (guessedNotAllowedFormat != null) {
-				SessionBean sessionBean = (SessionBean) BeanHelper
-						.getSessionBean(SessionBean.class);
-				throw new RuntimeException(
-						sessionBean.getMessage("upload_format_not_allowed") + " (" + guessedNotAllowedFormat + ")");
-			}
-		}
-	}
+  @ManagedProperty("#{SessionBean}")
+  private SessionBean sb;
 
-	
-	public void upload() {  
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		List<String> techMd = new ArrayList<String>();
-		try {
-			this.ingestImage = getUploadedIngestFile(request);
-			sus.setIngestImage(ingestImage);
-			techMd = TikaExtractor.extractFromFile(ingestImage.getFile());
-			sus.setTechMD(techMd);
-		} catch (FileUploadException|TypeNotAllowedException e) {
-			BeanHelper.error(e.getMessage());
-		}
+  @ManagedProperty(value = "#{SessionBean.user}")
+  private User user;
+
+  private IngestImage ingestImage;
+
+  public SingleUploadBean() {}
+
+  public void init() throws IOException {
+    if (user != null && user.isAllowedToCreateCollection()) {
+      try {
+        if (UrlHelper.getParameterBoolean("init")) {
+          sus.reset();
+          isAllowedToUpload();
+        } else if (UrlHelper.getParameterBoolean("start")) {
+          // loadCollections(false);
+          upload();
+          // loadCollections(true);
+        } else if (UrlHelper.getParameterBoolean("done") && !UrlHelper.hasParameter("h")) {
+          // loadCollections(false);
+          loadCollections();
+          prepareEditor();
+        }
+      } catch (Exception e) {
+        BeanHelper.error(e.getLocalizedMessage());
+      }
+    } else {
+      if (user != null) {
+        BeanHelper.cleanMessages();
+        BeanHelper.info("You have no right to create collections, thus you can not upload items!");
+        Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
+
+      }
+    }
+  }
+
+  public String save() {
+    try {
+      Item item = ImejiFactory.newItem(getCollection());
+      SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
+      MetadataSetBean newSet = getMdSetBean();
+      edit.getEditor().getItems().get(0).setMds(newSet);
+      edit.getEditor().validateAndFormatItemsForSaving();
+      uploadFileToItem(item, getIngestImage().getFile(), getIngestImage().getName());
+      sus.uploaded();
+      BeanHelper.cleanMessages();
+      reloadItemPage(item.getIdString(), ObjectHelper.getId(item.getCollection()));
+    } catch (Exception e) {
+      BeanHelper.error("There has been an error during saving of the item: " + e.getMessage());
+    }
+    sus.reset();
+    return "";
+  }
+
+  /**
+   * Reload the page with the current user
+   * 
+   * @throws IOException
+   */
+  private void reloadItemPage(String itemIdString, String collectionIdString) {
+    try {
+      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+
+      String redirectUrl = navigation.getCollectionUrl() + collectionIdString + "/"
+          + navigation.getItemPath() + "/" + itemIdString;
+
+      FacesContext.getCurrentInstance().getExternalContext().redirect(redirectUrl);
+    } catch (IOException e) {
+      Logger.getLogger(UserBean.class).info("Error reloading the page", e);
+    }
+  }
+
+
+  /**
+   * After the file has been uploaded
+   * 
+   * @throws Exception
+   */
+  private void prepareEditor() throws Exception {
+    StorageController sc = new StorageController();
+    if (sc.guessNotAllowedFormat(sus.getIngestImage().getFile()).equals(StorageUtils.BAD_FORMAT)) {
+      sus.reset();
+      throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
+    }
+    sus.copyToTemp();
+  }
+
+  private Item uploadFileToItem(Item item, File file, String title) throws ImejiException {
+
+    ItemController controller = new ItemController();
+    item = controller.create(item, file, title, user, null, null);
+    sus.setUploadedItem(item);
+    return item;
+  }
+
+  /**
+   * Upload the file and read the technical Metadata
+   * 
+   * @throws FileUploadException
+   * @throws TypeNotAllowedException
+   */
+  public void upload() throws FileUploadException, TypeNotAllowedException {
+    HttpServletRequest request =
+        (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+    List<String> techMd = new ArrayList<String>();
+    this.ingestImage = getUploadedIngestFile(request);
+    sus.setIngestImage(ingestImage);
+    techMd = TikaExtractor.extractFromFile(ingestImage.getFile());
+    sus.setTechMD(techMd);
+
+  }
+
+  /**
+   * Upload the file
+   * 
+   * @param request
+   * @return
+   * @throws FileUploadException
+   * @throws TypeNotAllowedException
+   */
+  private IngestImage getUploadedIngestFile(HttpServletRequest request)
+      throws FileUploadException, TypeNotAllowedException {
+    File tmp = null;
+    boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+    IngestImage ii = new IngestImage();
+    if (isMultipart) {
+      ServletFileUpload upload = new ServletFileUpload();
+      try {
+        FileItemIterator iter = upload.getItemIterator(request);
+        while (iter.hasNext()) {
+          FileItemStream fis = iter.next();
+          String filename = fis.getName();
+          InputStream in = fis.openStream();
+          tmp = TempFileUtil.createTempFile("singleupload",
+              "." + FilenameUtils.getExtension(filename));
+          FileOutputStream fos = new FileOutputStream(tmp);
+          if (!fis.isFormField()) {
+            try {
+              IOUtils.copy(in, fos);
+            } finally {
+              in.close();
+              fos.close();
+              ii.setName(filename);
+            }
+
+          }
+        }
+        ii.setFile(tmp);
+      } catch (IOException | FileUploadException e) {
+        logger.info("Could not get uploaded ingest file", e);
+      }
+    }
+    return ii;
+  }
+
+  public void colChangeListener(AjaxBehaviorEvent event) throws Exception {
+    methodColChangeListener();
+  }
+
+  private void methodColChangeListener() throws ImejiException {
+    if (!"".equals(selectedCollectionItem)) {
+      sus.setSelectedCollectionItem(selectedCollectionItem);
+      try {
+        CollectionImeji collection =
+            ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
+        MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
+        ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
+        MetadataSet mdSet = ImejiFactory.newMetadataSet(profile.getId());
+        MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
+
+        MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
+        labels.init(profile);
+        sus.setCollection(collection);
+        sus.setProfile(profile);
+        sus.setMdSetBean(mdSetBean);
+      } catch (URISyntaxException e) {
+        logger.info("Pure URI Syntax issue ", e);
+      }
+    } else {
 
     }
-	
-	
-	private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException, TypeNotAllowedException{
-		File tmp = null;
-		boolean isMultipart=ServletFileUpload.isMultipartContent(request);
-		IngestImage ii = new IngestImage();
-		if (isMultipart) {
-			ServletFileUpload upload=new ServletFileUpload();
-			try {    
-				FileItemIterator iter = upload.getItemIterator(request);
-				while (iter.hasNext()) {  
-					FileItemStream fis = iter.next();
-					if(fis.getName() != null && FilenameUtils.getExtension(fis.getName()).matches("ini|exe|sh|bin"))
-					{
-	                	throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
-					}
+  }
 
-					InputStream in = fis.openStream();
-					tmp = File.createTempFile("singleupload", "." + FilenameUtils.getExtension(fis.getName()));
-					FileOutputStream fos = new FileOutputStream(tmp);
-					if(fis.getName() != null)
-						ii.setName(fis.getName());
-					if(!fis.isFormField())
-					{
-						try {
-							IOUtils.copy(in, fos);
-						}finally{
-							in.close();
-							fos.close();
-						}
-					}
-				}
-				ii.setFile(tmp);
-			} catch (IOException | FileUploadException e) {
-				logger.info("Could not get uploaded ingest file",e);
-			}
-		}
-		return ii;
-	}   
+  /**
+   * Add a Metadata of the same type as the passed metadata
+   */
+  public void addMetadata(SuperMetadataBean smb) {
+    SuperMetadataBean newMd = smb.copyEmpty();
+    newMd.addEmtpyChilds(sus.getProfile());
+    sus.getMdSetBean().getTree().add(newMd);
+  }
 
-	
+  /**
+   * Remove the active metadata
+   */
+  public void removeMetadata(SuperMetadataBean smb) {
+    sus.getMdSetBean().getTree().remove(smb);
+    sus.getMdSetBean().addEmtpyValues();
+  }
 
+  /**
+   * Check if the user has at right to upload in at least one collection. If not, check if the user
+   * can create a collection
+   * 
+   * @throws ImejiException
+   */
+  private void isAllowedToUpload() throws ImejiException {
+    for (CollectionImeji c : retrieveAllUserCollections()) {
+      if (AuthUtil.staticAuth().createContent(user, c)) {
+        collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
+      }
+    }
+    if (collectionItems.isEmpty() && !user.isAllowedToCreateCollection()) {
+      sus.setCanUpload(false);
+      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
+    }
+    sus.setCanUpload(true);
+  }
 
-	public void colChangeListener(AjaxBehaviorEvent event) throws Exception{
-		if(!"".equals(selectedCollectionItem))
-		{  
-			sus.setSelectedCollectionItem(selectedCollectionItem);
-			try {     
-				CollectionImeji collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
-				MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
-				MetadataSet mdSet = ImejiFactory.newMetadataSet(profile.getId());
-				MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
-				
-				MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
-				labels.init(profile);
-				sus.setCollection(collection);
-				sus.setProfile(profile);
-				sus.setMdSetBean(mdSetBean);
-			} catch (URISyntaxException e) {
-				logger.info("Pure URI Syntax issue ", e);
-			} 
-		}
-		else
-		{
-			
-		}
-		
-	}  
-	    
-	/**
-	 * Add a Metadata of the same type as the passed metadata
-	 */
-	public void addMetadata(SuperMetadataBean smb) {    
-		SuperMetadataBean newMd = smb.copyEmpty();
-		newMd.addEmtpyChilds(sus.getProfile());
-		sus.getMdSetBean().getTree().add(newMd);
-	}
-	
-	/**
-	 * Remove the active metadata
-	 */
-	public void removeMetadata(SuperMetadataBean smb) {
-		sus.getMdSetBean().getTree().remove(smb);
-		sus.getMdSetBean().addEmtpyValues();
-	}
-
- 
-	/**
-	 * Load the collection
-	 */
-	public void loadCollections() throws Exception{
-
-		CollectionController cc = new CollectionController();
-		SearchQuery sq = new SearchQuery();
-		SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, user.getId().toString());
-		sq.addPair(sp);
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
-        sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
-        SearchResult results = cc.search(sq, sortCriterion, -1, 0, user);
-		collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
-		collectionItems.add(new SelectItem("", "-- select collection --"));
-		for(CollectionImeji c : collections)
-        {
-               if(AuthUtil.staticAuth().create(user, c))
-                     collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
-        }	
-	}
+  /**
+   * Load the collections where the user can upload the file
+   * 
+   * @throws ImejiException
+   */
+  private void loadCollections() throws ImejiException {
+    for (CollectionImeji c : retrieveAllUserCollections()) {
+      if (AuthUtil.staticAuth().createContent(user, c)) {
+        collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
+      }
+    }
+    // If the user hasn't any collection but is allowed to create one, create a default collection
+    if (collectionItems.isEmpty() && user.isAllowedToCreateCollection()) {
+      CollectionImeji defaultCollection = createDefaultCollection();
+      collectionItems.add(
+          new SelectItem(defaultCollection.getId(), defaultCollection.getMetadata().getTitle()));
+    }
+    // If there is no collection where the user can upload, send error
+    if (collectionItems.isEmpty()) {
+      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
+    } else if (collectionItems.size() >= 1) {
+      collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
+    }
+    setSelectedCollection(collectionItems.get(0).getValue().toString());
+  }
 
 
-	public List<SelectItem> getCollectionItems() {
-		return collectionItems;
-	}
+  /**
+   * Retrieve all the collections which the current user can read
+   * 
+   * @return
+   * @throws ImejiException
+   */
+  private List<CollectionImeji> retrieveAllUserCollections() throws ImejiException {
+    CollectionController cc = new CollectionController();
+    SearchQuery sq = new SearchQuery();
+    SortCriterion sortCriterion = new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.DESCENDING);
+    SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
+    return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
+  }
 
-	public void setCollectionItems(List<SelectItem> collectionItems) {
-		this.collectionItems = collectionItems;
-	}
+  /**
+   * Create a default collection where the user can upload his files
+   * 
+   * @throws ImejiException
+   */
+  private CollectionImeji createDefaultCollection() throws ImejiException {
+    CollectionController cc = new CollectionController();
+    CollectionImeji newC = ImejiFactory.newCollection();
+    newC.getMetadata()
+        .setTitle("Default first collection of " + user.getPerson().getCompleteName());
 
-	public String getSelectedCollectionItem() {
-		return sus.getSelectedCollectionItem();
-	}
+    Person creatorUser = getUser().getPerson();
 
-	public void setSelectedCollection(String selectedCollectionItem) {
-		this.selectedCollectionItem = selectedCollectionItem;
-	}
+    // If there are no organizations for Current User, add one
+    if ("".equals(creatorUser.getOrganizationString())) {
+      Organization creatorOrganization = new Organization();
+      creatorUser.getOrganizations().clear();
+      creatorOrganization.setName("Organization name not specified");
+      creatorUser.getOrganizations().add(creatorOrganization);
+    }
 
-	public User getUser() {
-		return user;
-	}
+    // ImejiFactory initiates new Empty Person, which is not needed
+    newC.getMetadata().getPersons().clear();
+    // Add current user as Author
+    newC.getMetadata().getPersons().add(creatorUser);
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    ProfileController pc = new ProfileController();
+    newC.setProfile(pc.retrieveDefaultProfile().getId());
+    URI id = cc.create(newC, pc.retrieveDefaultProfile(), user,
+        MetadataProfileCreationMethod.REFERENCE, sb.getSelectedSpaceString());
+    newC.setId(id);
+    return newC;
+  }
 
+  public List<SelectItem> getCollectionItems() {
+    return collectionItems;
+  }
 
-	public Collection<CollectionImeji> getCollections() {
-		return collections;
-	}
+  public void setCollectionItems(List<SelectItem> collectionItems) {
+    this.collectionItems = collectionItems;
+  }
 
-	public void setCollections(Collection<CollectionImeji> collections) {
-		this.collections = collections;
-	}
+  public String getSelectedCollectionItem() {
+    return sus.getSelectedCollectionItem();
+  }
 
-	public void setSelectedCollectionItem(String selectedCollectionItem) {
-		this.selectedCollectionItem = selectedCollectionItem;
-	}
+  public void setSelectedCollection(String selectedCollectionItem) {
+    this.selectedCollectionItem = selectedCollectionItem;
+  }
 
-	public CollectionImeji getCollection() {
-		return sus.getCollection();
-	}
+  public User getUser() {
+    return user;
+  }
 
-	public MetadataSetBean getMdSetBean(){
-		return sus.getMdSetBean();
-	}
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-	public List<String> getTechMd() {
-		return sus.getTechMD();
-	}
+  // public Collection<CollectionImeji> getCollections() {
+  // return collections;
+  // }
+  //
+  // public void setCollections(Collection<CollectionImeji> collections) {
+  // this.collections = collections;
+  // }
 
-	public SingleUploadSession getSus() {
-		return sus;
-	}
+  public void setSelectedCollectionItem(String selectedCollectionItem) {
+    this.selectedCollectionItem = selectedCollectionItem;
+  }
 
-	public void setSus(SingleUploadSession sus) {
-		this.sus = sus;
-	}
+  public CollectionImeji getCollection() {
+    return sus.getCollection();
+  }
 
-	public MetadataLabels getLabels() {
-		return sus.getLabels();
-	}
+  public MetadataSetBean getMdSetBean() {
+    return sus.getMdSetBean();
+  }
 
-	public IngestImage getIngestImage() {
-		return sus.getIngestImage();
-	}
+  public List<String> getTechMd() {
+    return sus.getTechMD();
+  }
 
-	public String getfFile()
-	{
-		return sus.getfFile();
-	}
-	
-	public Item getItem()
-	{
-		return sus.getUploadedItem();
-	}
-	
-	
-	
-	public SessionBean getSb() {
-		return sb;
-	}
+  public SingleUploadSession getSus() {
+    return sus;
+  }
 
-	public void setSb(SessionBean sb) {
-		this.sb = sb;
-	}
+  public void setSus(SingleUploadSession sus) {
+    this.sus = sus;
+  }
 
-	public static String extractIDFromURI(URI uri) {
-		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
-	}
-	
-	public boolean readyForUploading(){
-		return sus.isUploadFileToTemp() && sus.getCollection() != null;
-	}
-	
-	
+  public MetadataLabels getLabels() {
+    return sus.getLabels();
+  }
+
+  public IngestImage getIngestImage() {
+    return sus.getIngestImage();
+  }
+
+  public String getfFile() {
+    return sus.getfFile();
+  }
+
+  public Item getItem() {
+    return sus.getUploadedItem();
+  }
+
+  public SessionBean getSb() {
+    return sb;
+  }
+
+  public void setSb(SessionBean sb) {
+    this.sb = sb;
+  }
+
+  public static String extractIDFromURI(URI uri) {
+    return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
+  }
+
+  public boolean readyForUploading() {
+    return sus.isUploadFileToTemp() && sus.getCollection() != null;
+  }
 
 }
-

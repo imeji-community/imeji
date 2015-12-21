@@ -29,7 +29,7 @@
 									</ui:fragment>
 									<ui:fragment rendered="#{facets.label.startsWith('No ')}">
 										<h:outputText value="|" styleClass="imj_separator"/>
-										<h:outputLink value="#{facets.uri}" title="#{lbl.undefined_values_of}" styleClass="imj_facetCounter">
+										<h:outputLink value="#{facets.uri}" title="#{lbl.undefined_values_of} #{facets.internationalizedLabel}" styleClass="imj_facetCounter">
 											<h:outputText value="#{facets.count}"/>
 										</h:outputLink>
 										<h:outputText value=")"/>
@@ -77,8 +77,8 @@
 				*/
 				var facetsLoadingInterval;
 				jQuery(document).ready(function() {
-					// check in interval of 250ms for facets loading
-					facetsLoadingInterval = setInterval(displayFacetsWhenReady, 250);
+					// check in interval of 1000ms for facets loading
+					facetsLoadingInterval = setInterval(displayFacetsWhenReady, 1000);
 				});
 			</script>
 		</ui:fragment>

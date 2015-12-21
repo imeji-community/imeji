@@ -24,12 +24,12 @@
 									contextUrl="#{Navigation.albumUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.create(metadataBean.album) and metadataContextBean.status != 'WITHDRAWN'}" 
+									userHasUploadRights="#{Auth.createContent(metadataBean.album) and metadataContextBean.status != 'WITHDRAWN'}" 
 									hasContent="#{metadataBean.size > 0}" 
 									navBean="#{Navigation}" 
 									activeMenu="metadata" />
 		
-			<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+			<menu:context_actionMenu id="action"  	isUserLoggedIn="#{Auth.loggedIn}" 
 									curMainMenu="#{currentMainMenu}" 
 									navBean="#{Navigation}" 
 									collectionStatus="#{metadataContextBean.status}" 

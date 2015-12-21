@@ -93,6 +93,10 @@
 		<pattern value="/profile/#{EditMdProfileBean.id}/edit" />
 		<view-id>/jsf/ProfileEdit.xhtml</view-id>
 	</url-mapping>
+	<url-mapping id="createProfile">
+		<pattern value="/createprofile" />
+		<view-id>/jsf/ProfileCreate.xhtml</view-id>
+	</url-mapping>
 	<!-- Album Pages -->
 	<url-mapping id="createalbum">
 		<pattern value="/createalbum" />
@@ -149,10 +153,7 @@
 		<view-id>/jsf/User.xhtml</view-id>
 	</url-mapping>
 
-	<url-mapping id="privatePage">
-		<pattern value="/private"></pattern>
-		<view-id>/jsf/Private.xhtml</view-id>
-	</url-mapping>
+
 
 	<url-mapping id="administration">
 		<pattern value="/admin"></pattern>
@@ -204,6 +205,11 @@
 		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
 
+	<url-mapping id="imprint">
+		<pattern value="/imprint"></pattern>
+		<view-id>/jsf/Imprint.xhtml</view-id>
+	</url-mapping>
+	
 	<url-mapping id="digilibImage">
 		<pattern value="/digilibImage"></pattern>
 		<view-id>/jsf/DigilibImage.xhtml</view-id>
@@ -214,6 +220,11 @@
 		<view-id>/jsf/Login.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="registerFormular">
+		<pattern value="/register"/>
+		<view-id>/jsf/Register.xhtml</view-id>
+	</url-mapping>
+	
 	<url-mapping id="storageStatistics">
 		<pattern value="/admin/storage/statistics"></pattern>
 		<view-id>/jsf/StorageStatistics.xhtml</view-id>
@@ -222,6 +233,11 @@
 	<url-mapping id="spaceCreate">
 		<pattern value="/createspace"></pattern>
 		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="spaceList">
+		<pattern value="/spaces"></pattern>
+		<view-id>/jsf/Spaces.xhtml</view-id>
 	</url-mapping>
 	
 	<!-- Begin UrlMappings -->
@@ -364,11 +380,7 @@
 		<view-id>/jsf/User.xhtml</view-id>
 	</url-mapping>
 
-	<url-mapping id="space_privatePage">
-		<pattern value="/space/#{SessionBean.spaceId}/private"></pattern>
-		<view-id>/jsf/Private.xhtml</view-id>
-	</url-mapping>
-
+	
 	<url-mapping id="space_administration">
 		<pattern value="/space/#{SessionBean.spaceId}/admin"></pattern>
 		<view-id>/jsf/AdminOverview.xhtml</view-id>
@@ -418,6 +430,12 @@
 		<pattern value="/space/#{SessionBean.spaceId}/config"></pattern>
 		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="space_imprint">
+		<pattern value="/space/#{SessionBean.spaceId}/imprint"></pattern>
+		<view-id>/jsf/Imprint.xhtml</view-id>
+	</url-mapping>
+	
 
 	<url-mapping id="space_digilibImage">
 		<pattern value="/space/#{SessionBean.spaceId}/digilibImage"></pattern>
@@ -427,6 +445,11 @@
 	<url-mapping id="space_loginFormular">
 		<pattern value="/space/#{SessionBean.spaceId}/login" />
 		<view-id>/jsf/Login.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="registerFormular">
+		<pattern value="/space/#{SessionBean.spaceId}/register"/>
+		<view-id>/jsf/Register.xhtml</view-id>
 	</url-mapping>
 	
 	<url-mapping id="space_storageStatistics">
@@ -439,6 +462,11 @@
 		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="space_spaceEdit">
+		<pattern value="/space/#{SessionBean.spaceId}/editspace"></pattern>
+		<view-id>/jsf/AdminSpaceEdit.xhtml</view-id>
+	</url-mapping>
+
 <!-- 
 	NB 15.04. Not needed anylonger will redirect to space home page in any case
 	AdminSpaceWelcome content to be used for space/welcome page perhaps.

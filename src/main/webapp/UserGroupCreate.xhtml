@@ -2,9 +2,20 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+
+
 	<ui:param name="headline" value="#{lbl.admin_userGroup_new}" />
 	<ui:param name="currentMainMenu" value="admin"/>
+	
+	<ui:define name="actionsMenu">
+	<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
+							 curMainMenu="#{currentMainMenu}" 
+							 downloadEnabled="false"
+							 actionEnabled="false"
+							 navBean="#{Navigation}"/>
+	</ui:define>
 	
 	<ui:define name="mainContent">
 		<!-- Are You Admin? -->	
@@ -20,7 +31,7 @@
 						<div class="imj_adminPanel imj_userConfig">
 							<div class="imj_headline">
 								<h2>
-									<h:outputText value="Create new user group"/>
+									<h:outputText value="#{lbl.admin_group_new}"/>
 								</h2>
 							</div>
 							<h:form>
@@ -39,7 +50,7 @@
 									</h:panelGroup>
 								</div>
 								<div class="imj_submitPanel">
-									<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+									<h:outputLink value="#{HistorySession.previousPage.completeUrl}" styleClass="imj_cancelButton">
 										<h:outputText value="#{lbl.cancel}" />
 									</h:outputLink>
 									<h:commandButton action="#{UserGroup.create()}" value="#{lbl.save}" styleClass="imj_submitButton"/> 

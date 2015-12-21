@@ -31,73 +31,68 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "date", namespace = ImejiNamespaces.METADATA)
-@XmlType(propOrder = { "date", "time", "statement" })
-public class Date extends Metadata
-{
-    private static final long serialVersionUID = 8791083521970179964L;
-    @j2jLiteral("http://imeji.org/terms/date")
-    private String date;
-    @j2jLiteral("http://imeji.org/terms/time")
-    private long time;
+@XmlType(propOrder = {"date", "time", "statement"})
+public class Date extends Metadata {
+  private static final long serialVersionUID = 8791083521970179964L;
+  @j2jLiteral("http://imeji.org/terms/date")
+  private String date;
+  @j2jLiteral("http://imeji.org/terms/time")
+  private long time;
 
-    @j2jResource("http://imeji.org/terms/statement")
-    private URI statement;
+  @j2jResource("http://imeji.org/terms/statement")
+  private URI statement;
 
-    public Date()
-    {
+  public Date() {}
+
+  @XmlElement(name = "date", namespace = "http://imeji.org/terms/")
+  public String getDate() {
+    return date;
+  }
+
+  public void setDate(String date) {
+    if (date != null && !"".equals(date)) {
+      time = DateFormatter.getTime(date);
+      this.date = date;
     }
+  }
 
-    @XmlElement(name = "date", namespace = "http://imeji.org/terms/")
-    public String getDate()
-    {
-        return date;
-    }
+  @XmlElement(name = "time", namespace = "http://imeji.org/terms/")
+  public long getTime() {
+    return time;
+  }
 
-    public void setDate(String date)
-    {
-        if (date != null && !"".equals(date))
-        {
-            time = DateFormatter.getTime(date);
-            this.date = date;
-        }
-    }
+  public void setTime(long dateTime) {
+    this.time = dateTime;
+  }
 
-    @XmlElement(name = "time", namespace = "http://imeji.org/terms/")
-    public long getTime()
-    {
-        return time;
-    }
+  @Override
+  @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
+  public URI getStatement() {
+    return statement;
+  }
 
-    public void setTime(long dateTime)
-    {
-        this.time = dateTime;
-    }
+  @Override
+  public void setStatement(URI namespace) {
+    this.statement = namespace;
+  }
 
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
-    public URI getStatement()
-    {
-        return statement;
+  @Override
+  public void copy(Metadata metadata) {
+    if (metadata instanceof Date) {
+      setPos(metadata.getPos());
+      setDate(((Date) metadata).getDate());
+      setStatement(((Date) metadata).getStatement());
     }
+  }
 
-    public void setStatement(URI namespace)
-    {
-        this.statement = namespace;
-    }
+  @Override
+  public String asFulltext() {
+    return date;
+  }
 
-    @Override
-    public void copy(Metadata metadata)
-    {
-        if (metadata instanceof Date)
-        {
-            setPos(metadata.getPos());
-            setDate(((Date)metadata).getDate());
-            setStatement(((Date) metadata).getStatement());
-        }
-    }
+  @Override
+  public void clean() {
+    // TODO Auto-generated method stub
 
-    @Override
-    public String asFulltext()
-    {
-        return date;
-    }
+  }
 }

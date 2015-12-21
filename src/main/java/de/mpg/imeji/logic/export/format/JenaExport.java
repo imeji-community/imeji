@@ -23,87 +23,70 @@ import de.mpg.imeji.logic.search.SearchResult;
  * 
  * @author saquet
  */
-public class JenaExport extends Export
-{
-	
-	private static Logger logger = Logger.getLogger(JenaExport.class);
-	  
-	@Override
-    public void init()
-    {
-        // Not initialization so far
-    }
+public class JenaExport extends Export {
 
-    @Override
-    public void export(OutputStream out, SearchResult sr)
-    {
-        Model m = exportIntoModel(sr);
-        m.write(out, "RDF/XML");
-    }
+  private static Logger logger = Logger.getLogger(JenaExport.class);
 
-    @Override
-    public String getContentType()
-    {
-        return "application/xml";
-    }
+  @Override
+  public void init() {
+    // Not initialization so far
+  }
 
-    /**
-     * Create a model with all Search results
-     * 
-     * @param sr
-     * @return
-     */
-    private Model exportIntoModel(SearchResult sr)
-    {
-        Model exportModel = ModelFactory.createDefaultModel();
-        for (String s : sr.getResults())
-        {
-            try
-            {
-                Imeji.dataset.begin(ReadWrite.READ);
-                Model m = Imeji.dataset.getNamedModel(Imeji.imageModel);
-                Resource resource = m.getResource(s);
-                exportResource(resource, exportModel);
-                Imeji.dataset.commit();
-            }
-            catch (Exception e)
-            {
-                Imeji.dataset.abort();
-                logger.info("Some problems with Exporting of Imeji data", e);
-            }
-            finally
-            {
-                Imeji.dataset.end();
-            }
+  @Override
+  public void export(OutputStream out, SearchResult sr) {
+    Model m = exportIntoModel(sr);
+    m.write(out, "RDF/XML");
+  }
+
+  @Override
+  public String getContentType() {
+    return "application/xml";
+  }
+
+  /**
+   * Create a model with all Search results
+   * 
+   * @param sr
+   * @return
+   */
+  private Model exportIntoModel(SearchResult sr) {
+    Model exportModel = ModelFactory.createDefaultModel();
+    for (String s : sr.getResults()) {
+      try {
+        Imeji.dataset.begin(ReadWrite.READ);
+        Model m = Imeji.dataset.getNamedModel(Imeji.imageModel);
+        Resource resource = m.getResource(s);
+        exportResource(resource, exportModel);
+        Imeji.dataset.commit();
+      } catch (Exception e) {
+        Imeji.dataset.abort();
+        logger.info("Some problems with Exporting of Imeji data", e);
+      } finally {
+        Imeji.dataset.end();
+      }
+    }
+    return exportModel;
+  }
+
+  /**
+   * Write all properties of a resource in the model
+   * 
+   * @param r
+   * @param m
+   * @return
+   */
+  private void exportResource(Resource r, Model m) {
+    for (StmtIterator iterator = r.listProperties(); iterator.hasNext();) {
+      Statement st = iterator.next();
+      try {
+        exportResource(st.getResource(), m);
+        if (st.getResource().getURI() == null) {
+          exportResource(st.getResource(), m);
         }
-        return exportModel;
+      } catch (Exception e) {
+        // Not to be handle
+      }
+      m.add(st);
     }
-
-    /**
-     * Write all properties of a resource in the model
-     * 
-     * @param r
-     * @param m
-     * @return
-     */
-    private void exportResource(Resource r, Model m)
-    {
-        for (StmtIterator iterator = r.listProperties(); iterator.hasNext();)
-        {
-            Statement st = iterator.next();
-            try
-            {
-                exportResource(st.getResource(), m);
-                if (st.getResource().getURI() == null)
-                {
-                    exportResource(st.getResource(), m);
-                }
-            }
-            catch (Exception e)
-            {
-                // Not to be handle
-            }
-            m.add(st);
-        }
-    }
+  }
 }

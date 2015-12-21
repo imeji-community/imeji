@@ -1,4 +1,5 @@
-<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" >
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html">
     <f:loadBundle var="lbl" basename="labels"/>
     <f:loadBundle var="msg" basename="messages"/>
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,7 +13,6 @@
             <title><h:outputText value="Digilib Viewer"/></title>
             
             <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
-            <link rel="stylesheet" href="#{Navigation.applicationUrl}resources/css/old_style/themes/skin_darkGrey/styles/theme.css" type="text/css" media="all"/>
             <style type="text/css">
 	            body {
 	                 background: silver;
@@ -23,11 +23,9 @@
             
 			<h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault"></h:outputStylesheet>
 			
+			<script type="text/javascript" language="JavaScript" src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+			<script src="//code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>  
-			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
-			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-			<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-			
 			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.js"></script>
 	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.cookie.js"></script>
 	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.js"></script>
@@ -46,9 +44,14 @@
 	            $(document).ready(function(){
 	                var opts = {
 	                    interactionMode : 'fullscreen',
-	                    showRegionNumbers : true
+	                    showRegionNumbers : true,
+	                    digilibBaseUrl : '#{Navigation.applicationUrl}resources/digilib/',
+	                    // path to digilib frontend page (inside digilibBaseUrl)
+	                    digilibFrontendPath : '#{Navigation.applicationUrl}/digilibImage',
+	                    // base URL to Scaler servlet (usually digilibBaseUrl+'/servlet/Scaler')
+	                    scalerBaseUrl : '#{Navigation.applicationUrl}/digilib',
 	                    };
-	                var $div = $('div#digilib');                
+	                var $div = $('div#digilib');
 	                $div.digilib(opts);
 	            });
 	
@@ -58,8 +61,8 @@
         <h:body lang="#{SessionBean.locale}">
             	
 			<div id="digilib">
-				<p>digilib doesn't work! Please switch on Javascript or notify the server administrator!</p>
-				<img src="http://digilib.berlios.de/images/digilib-logo-big.png" />
+				<p>The Image Viewer Digilib doesn't work! Please switch on Javascript or notify the server administrator!</p>
+				<!-- <img src="http://digilib.berlios.de/images/digilib-logo-big.png" /> -->
 			</div>
                             
         </h:body>

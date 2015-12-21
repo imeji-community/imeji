@@ -1,0 +1,29 @@
+{
+	"metadata" : {
+		"text" : "value1",
+		"number" : 123,
+		"date" : "2013-12-26",
+		"person" : {
+			"familyName" : "Test",
+			"givenName" : "User"
+		},
+		"license" : {
+			"license" : "cc-by",
+			"url" : "http://test.org"
+		},
+		"geolocation" : {
+			"name" : "munich",
+			"longitude" : 50,
+			"latitude" : 15
+		},
+		"link" : {
+			"link" : "test",
+			"url" : "http://test.org"
+		},
+		"publication" : {
+			"format" : "APA",
+			"publication" : "http://test.org",
+			"citation" : "test citation"
+		}
+	}
+}

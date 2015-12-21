@@ -230,6 +230,7 @@
 											</h:outputLink>
 										</li>
 										
+										<ui:fragment rendered ="#{cc.attrs.curMainMenu == 'collection'}">
 										<li>
 											<h:outputLink id="lnkCreateDOI" value="#" onclick="openDialog('createDOIDialog');" title="#{lbl.createDOI}" rendered="#{ConfigurationBean.doiServiceUrl != null and ConfigurationBean.doiServiceUrl != ''}">
 												<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
@@ -240,6 +241,7 @@
 												<h:outputText value="#{lbl.change_doi}" rendered="#{cc.attrs.hasDoi}"/>
 											</h:outputLink>
 										</li>
+										</ui:fragment>
 									</ui:fragment>
 									
 									<ui:fragment rendered="#{cc.attrs.isDeletable}">

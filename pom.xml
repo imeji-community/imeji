@@ -292,6 +292,19 @@
 									<ignore />
 								</action>
 							</pluginExecution>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.zeroturnaround</groupId>
+									<artifactId>javarebel-maven-plugin</artifactId>
+									<versionRange>[1.1,)</versionRange>
+									<goals>
+										<goal>generate</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore />
+								</action>
+							</pluginExecution>
 						</pluginExecutions>
 					</lifecycleMappingMetadata>
 				</configuration>
@@ -598,83 +611,46 @@
 				<jdk.version>1.7</jdk.version>
 			</properties>
 			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.zeroturnaround</groupId>
-							<artifactId>javarebel-maven-plugin</artifactId>
-							<configuration>
-								<packaging>war</packaging>
-								<classpath>
-									<fallback>default</fallback>
-									<resources>
-										<resource>
-											<directory>target/classes</directory>
-											<excludes>
-												<exclude>log4j.xml</exclude>
-											</excludes>
-										</resource>
-									</resources>
-								</classpath>
-							</configuration>
-							<executions>
-								<execution>
-									<id>generate-rebel-xml</id>
-									<phase>process-resources</phase>
-									<goals>
-										<goal>generate</goal>
-									</goals>
-								</execution>
-							</executions>
-							<dependencies>
-								<dependency>
-									<groupId>org.codehaus.plexus</groupId>
-									<artifactId>plexus-utils</artifactId>
-									<version>1.4.1</version>
-									<scope>runtime</scope>
-								</dependency>
-							</dependencies>
-						</plugin>
-						<plugin>
-							<artifactId>maven-antrun-plugin</artifactId>
-							<executions>
-								<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
-								<execution>
-									<id>install</id>
-									<phase>install</phase>
-									<configuration>
-										<tasks>
-											<delete quiet="true"
-												file="${tomcat.webapps}/${project.warName}.war" />
-											<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
-											<copy overwrite="true"
-												file="${project.build.directory}/${project.warName}.war"
-												tofile="${tomcat.webapps}/${project.warName}.war" />
-										</tasks>
-									</configuration>
-									<goals>
-										<goal>run</goal>
-									</goals>
-								</execution>
-							</executions>
-						</plugin>
-						<plugin>
-							<groupId>org.zeroturnaround</groupId>
-							<artifactId>jrebel-maven-plugin</artifactId>
-							<version>1.1.5</version>
-							<executions>
-								<execution>
-									<id>generate-rebel-xml</id>
-									<phase>process-resources</phase>
-									<goals>
-										<goal>generate</goal>
-									</goals>
-								</execution>
-							</executions>
-						</plugin>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
+							<execution>
+								<id>install</id>
+								<phase>install</phase>
+								<configuration>
+									<tasks>
+										<delete quiet="true"
+											file="${tomcat.webapps}/${project.warName}.war" />
+										<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
+										<copy overwrite="true"
+											file="${project.build.directory}/${project.warName}.war"
+											tofile="${tomcat.webapps}/${project.warName}.war" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.zeroturnaround</groupId>
+						<artifactId>jrebel-maven-plugin</artifactId>
+						<version>1.1.5</version>
+						<executions>
+							<execution>
+								<id>generate-rebel-xml</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 
-					</plugins>
-				</pluginManagement>
+				</plugins>
 				<!-- <plugins> <plugin> <groupId>org.eclipse.m2e</groupId> <artifactId>lifecycle-mapping</artifactId> 
 					<version>1.0.0</version> <configuration> <lifecycleMappingMetadata> <pluginExecutions> 
 					<pluginExecution> <pluginExecutionFilter> <groupId>org.zeroturnaround</groupId> 

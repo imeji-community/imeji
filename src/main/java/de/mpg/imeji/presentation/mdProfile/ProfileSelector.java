@@ -11,10 +11,12 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
@@ -33,7 +35,8 @@ public class ProfileSelector implements Serializable {
   private User user;
   private String space;
   // Select profile menu
-  private List<SelectItem> profileItems = new ArrayList<SelectItem>();
+  private List<SelectItem> referenceProfiles = new ArrayList<SelectItem>();
+  private List<SelectItem> copyProfiles = new ArrayList<SelectItem>();
   private String selectedProfileItem;
   private List<StatementWrapper> statementWrappers = new ArrayList<StatementWrapper>();
   private boolean copyProfile;
@@ -72,11 +75,15 @@ public class ProfileSelector implements Serializable {
   private void initSelectProfileMenu() throws ImejiException {
     ProfileController profileController = new ProfileController();
     List<MetadataProfile> profiles = profileController.search(user, space);
-    profileItems = new ArrayList<>();
-    profileItems.add(new SelectItem(null, "Select a profile"));
+    referenceProfiles = new ArrayList<>();
+    referenceProfiles.add(new SelectItem(null, "Select a profile"));
     for (MetadataProfile mdp : profiles) {
-      if (!mdp.getStatements().isEmpty()) {
-        profileItems.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+      if (!mdp.getStatements().isEmpty() && (AuthUtil.staticAuth().administrate(user, mdp)
+          || mdp.getStatus() == Status.RELEASED)) {
+        referenceProfiles.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+      }
+      if (!mdp.getStatements().isEmpty() && AuthUtil.staticAuth().read(user, mdp)) {
+        copyProfiles.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
       }
     }
   }
@@ -124,11 +131,11 @@ public class ProfileSelector implements Serializable {
   }
 
   public List<SelectItem> getProfileItems() {
-    return profileItems;
+    return isCopyProfile() ? copyProfiles : referenceProfiles;
   }
 
   public void setProfileItems(List<SelectItem> profileItems) {
-    this.profileItems = profileItems;
+    this.referenceProfiles = profileItems;
   }
 
   public List<StatementWrapper> getStatementWrappers() {

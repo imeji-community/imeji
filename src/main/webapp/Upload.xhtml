@@ -30,16 +30,17 @@
                                   isAdmin="#{Auth.admin(UploadBean.collection)}" 
                                   contextDownloadParam="&amp;col=#{UploadBean.id}"
                                   downloadEnabled="#{UploadBean.collectionSize > 0}"
-                                  allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"/>
+                                  allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"
+                                  hasDoi="#{UploadBean.collection.doi != null and UploadBean.collection.doi !=''}"/>
     </ui:define>
 
     <ui:define name="modalDialogs_from_site">
         <dialog:confirmationDialog submitAction="release" bean="#{UploadBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" />
         <dialog:confirmationDialog submitAction="delete" bean="#{UploadBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog"/>
         <dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{UploadBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" />
-		<dialog:dialogOptionDialog submitId1="doiInput" submitId2="getDOIDialog" confirmationText="" submitLabel1="#{lbl.createDOI_manually}" submitLabel2="#{lbl.createDOI_from_service}" dialogId="createDOIDialog" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:dialogOptionDialog submitId1="doiInput" submitId2="getDOIDialog" confirmationText="#{UploadBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" submitLabel1="#{lbl.createDOI_manually}" submitLabel2="#{lbl.createDOI_from_service}" dialogId="createDOIDialog" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
 		<dialog:confirmationDialog submitAction="createDOI" bean="#{UploadBean}" confirmationText="#{msg.confirmation_create_DOI}" submitLabel="#{lbl.createDOI}" dialogId="getDOIDialog" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>	
-		<dialog:doiInputDialog col="#{UploadBean.collection}" bean="#{UploadBean}" submitLabel="#{lbl.save}" dialogId="doiInput" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:doiInputDialog col="#{UploadBean.collection}" bean="#{UploadBean}" submitLabel="#{lbl.save}" confirmationText="#{UplaodBean.collection.doi == '' ? '' : msg.collection_has_doi_warning}" dialogId="doiInput" rendered="#{Auth.update(UploadBean.collection) and UploadBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
     	
     </ui:define>
 
@@ -133,7 +134,6 @@
                                     <h:form>
                                         <h:outputLabel value="#{lbl.upload_from_link}" for="uploadInputText"/>
                                         <h:inputText value="#{UploadBean.externalUrl}" id="uploadInputText"/>
-
                                         <div class="imj_submitPanel">
                                             <h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
                                         </div>
@@ -233,7 +233,7 @@
                                 </ui:repeat>
                             </ol>
                             <!-- Edit selected -->
-                            <ui:fragment rendered="#{UploadBean.getsFiles().size() > 0}">
+                            <ui:fragment rendered="#{UploadBean.getsFiles().size() > 0 and Auth.updateContent(UploadBean.collection)}">
                                 <h:outputLink value="#{Navigation.collectionUrl}#{UploadBean.id}/upload?edituploaded=1" id="lnkSelectEdit">
                                     <h:outputText value="#{lbl.edit_uploaded_images}"/>
                                 </h:outputLink>

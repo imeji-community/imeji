@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.mdProfile.wrapper;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
@@ -26,11 +27,12 @@ import de.mpg.j2j.misc.LocalizedString;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class StatementWrapper implements Comparable<StatementWrapper> {
+public class StatementWrapper implements Comparable<StatementWrapper>, Serializable {
+  private static final long serialVersionUID = 7304068244275901609L;
   private Statement statement;
   private boolean multiple = false;
   private String vocabularyString;
-  private VocabularyHelper vocabularyHelper;
+  private transient VocabularyHelper vocabularyHelper;
   private boolean showRemoveWarning = false;
   private int level = 0;
   /**
@@ -111,10 +113,11 @@ public class StatementWrapper implements Comparable<StatementWrapper> {
    * @return
    */
   public Statement getAsStatement() {
-    if (vocabularyString != null)
+    if (vocabularyString != null) {
       statement.setVocabulary(URI.create(vocabularyString));
-    else
+    } else {
       statement.setVocabulary(null);
+    }
     return statement;
   }
 

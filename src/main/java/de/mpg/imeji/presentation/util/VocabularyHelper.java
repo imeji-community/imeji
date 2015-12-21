@@ -44,8 +44,8 @@ public class VocabularyHelper {
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     vocabularies = new ArrayList<SelectItem>();
     for (Object o : properties.keySet()) {
-      vocabularies.add(new SelectItem(properties.getProperty(o.toString()), session
-          .getLabel("vocabulary_" + o.toString())));
+      vocabularies.add(new SelectItem(properties.getProperty(o.toString()),
+          session.getLabel("vocabulary_" + o.toString())));
     }
   }
 

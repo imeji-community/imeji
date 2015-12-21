@@ -83,12 +83,10 @@ public class UserController {
    * @throws ImejiException
    */
   public User create(User u, USER_TYPE type) throws ImejiException {
-
     if (user == null && !USER_TYPE.INACTIVE.equals(type)) {
       throw new BadRequestException(
           "Not sufficient permissions to create user other than a user with status INACTIVE!");
     }
-
     // Now set up the creator to Admin User, as necessary for permissions
     user = Imeji.adminUser;
     u.setUserStatus(User.UserStatus.ACTIVE);

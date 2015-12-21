@@ -111,7 +111,6 @@ public class ItemBean {
     } catch (Exception e) {
       FacesContext.getCurrentInstance().getExternalContext().responseSendError(404,
           "404_NOT_FOUND");
-
     }
 
     if (item != null) {
@@ -145,11 +144,19 @@ public class ItemBean {
     relatedAlbums = (List<Album>) ac.retrieveBatchLazy(
         ac.search(q, sessionBean.getUser(), null, -1, 0, null).getResults(), sessionBean.getUser(),
         -1, 0);
-    Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
-    imageUploader =
-        search.searchString(JenaCustomQueries.selectUserCompleteName(item.getCreatedBy()), null,
-            Imeji.adminUser, 0, 1).getResults().get(0);
+    initImageUploader();
+  }
 
+  private void initImageUploader() {
+    Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
+    List<String> users =
+        search.searchString(JenaCustomQueries.selectUserCompleteName(item.getCreatedBy()), null,
+            Imeji.adminUser, 0, 1).getResults();
+    if (users != null && users.size() > 0) {
+      imageUploader = users.get(0);
+    } else {
+      imageUploader = sessionBean.getLabel("unknown_user");
+    }
   }
 
   /**

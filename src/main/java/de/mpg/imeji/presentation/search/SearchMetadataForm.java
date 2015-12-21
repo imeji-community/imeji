@@ -155,7 +155,7 @@ public class SearchMetadataForm {
           }
           try {
             if (!isEmtpyValue(latitude)) {
-              long la = Long.parseLong(latitude);
+              Double la = Double.parseDouble(latitude);
               if (!(la >= -90 && la <= 90)) {
                 messages.add("error_latitude_format");
               }
@@ -165,7 +165,7 @@ public class SearchMetadataForm {
           }
           try {
             if (!isEmtpyValue(longitude)) {
-              long lo = Long.parseLong(longitude);
+              Double lo = Double.parseDouble(longitude);
               if (!(lo >= -180 && lo <= 180)) {
                 messages.add("error_longitude_format");
               }

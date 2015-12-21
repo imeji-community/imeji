@@ -67,8 +67,11 @@ public class HistoryPage {
         return ObjectLoader.loadUserGroupLazy(URI.create(groupUri), user).getName();
       } else if (ImejiPages.USER == imejiPage) {
         String email = UrlHelper.decode(ObjectHelper.getId(uri));
-        return email.equals(user.getEmail()) ? user.getPerson().getCompleteName()
-            : ObjectLoader.loadUser(email, user).getPerson().getCompleteName();
+        if (user != null && email.equals(user.getEmail())) {
+          return user.getPerson().getCompleteName();
+        } else {
+          return ObjectLoader.loadUser(email, user).getPerson().getCompleteName();
+        }
       }
     }
     return "";

@@ -7,12 +7,14 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import com.hp.hpl.jena.util.iterator.Filter;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
 import de.mpg.imeji.logic.search.elasticsearch.util.ElasticSearchUtil;
 import de.mpg.imeji.logic.search.model.SearchElement;
@@ -39,6 +41,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
  * 
  */
 public class ElasticQueryFactory {
+  private static final Logger logger = Logger.getLogger(ElasticQueryFactory.class);
 
   /**
    * Build a {@link QueryBuilder} from a {@link SearchQuery}
@@ -168,10 +171,10 @@ public class ElasticQueryFactory {
         // normal user
         Collection<Grant> grants = new ArrayList<Grant>();
         grants.addAll(user.getGrants());
-        for(UserGroup g : user.getGroups()){
+        for (UserGroup g : user.getGroups()) {
           grants.addAll(g.getGrants());
         }
-        return buildGrantQuery(grants, GrantType.READ);
+        return buildGrantQuery(grants, null);
       }
     }
     return QueryBuilders.matchAllQuery();
@@ -205,10 +208,12 @@ public class ElasticQueryFactory {
   private static QueryBuilder buildGrantQuery(Collection<Grant> grants, GrantType grantType) {
     BoolQueryBuilder q = QueryBuilders.boolQuery();
     // Add query for all release objects
-    if (grantType == GrantType.READ) {
+    if (grantType == null) {
       q.should(
           fieldQuery(ElasticFields.STATUS, Status.RELEASED.name(), SearchOperators.EQUALS, false));
     }
+    // if granttype is null, set it to READ
+    grantType = grantType == null ? GrantType.READ : grantType;
     // Add query for each read grant
     for (Grant g : grants) {
       if (g.asGrantType() == grantType) {
@@ -412,6 +417,8 @@ public class ElasticQueryFactory {
         break;
       case coordinates:
         break;
+      case pid:
+        return fieldQuery(ElasticFields.PID, pair.getValue(), pair.getOperator(), pair.isNot());
       default:
         break;
     }
@@ -451,9 +458,14 @@ public class ElasticQueryFactory {
         return metadataQuery(ElasticFields.METADATA_LOCATION, md.getValue(), SearchOperators.GEO,
             md.getStatement(), md.isNot());
       case time:
-        return metadataQuery(ElasticFields.METADATA_NUMBER,
-            Long.toString(SearchUtils.parseDateAsTime(md.getValue())), md.getOperator(),
-            md.getStatement(), md.isNot());
+        try {
+          return metadataQuery(ElasticFields.METADATA_NUMBER,
+              Long.toString(SearchUtils.parseDateAsTime(md.getValue())), md.getOperator(),
+              md.getStatement(), md.isNot());
+        } catch (UnprocessableError e) {
+          logger.error("Wrong date format (can not be search): " + md.getValue());
+          return QueryBuilders.matchAllQuery();
+        }
       default:
         return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
             md.getStatement(), md.isNot());

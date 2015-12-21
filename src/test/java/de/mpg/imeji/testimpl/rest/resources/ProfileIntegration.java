@@ -43,8 +43,17 @@ public class ProfileIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
+  @Test
+  public void test_1_ReadProfiles_ReleaseCollection() throws Exception {
+    CollectionService cs = new CollectionService();
+    cs.release(collectionId, JenaUtil.testUser);
+    String profileId = collectionTO.getProfile().getId();
+    Response response = target(pathPrefix).path(profileId).register(authAsUser2)
+        .request(MediaType.APPLICATION_JSON).get();
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+  }
+
   // Everybody can read any profiles until the bug is fixed
-  @Ignore 
   @Test
   public void test_1_ReadProfiles_Unauthorized() {
     String profileId = collectionTO.getProfile().getId();
@@ -57,18 +66,7 @@ public class ProfileIntegration extends ImejiTestBase {
         target(pathPrefix).path(profileId).register(authAsUserFalse).request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response2.getStatus());
   }
-
-  @Test
-  public void test_1_ReadProfiles_ReleaseCollection() throws Exception {
-    CollectionService cs = new CollectionService();
-    cs.release(collectionId, JenaUtil.testUser);
-    String profileId = collectionTO.getProfile().getId();
-    Response response = target(pathPrefix).path(profileId).register(authAsUser2)
-        .request(MediaType.APPLICATION_JSON).get();
-    assertEquals(Status.OK.getStatusCode(), response.getStatus());
-  }
-
-
+  
   @Test
   public void test_1_ReadProfiles_InvalidProfileId() {
     String profileId = collectionTO.getProfile().getId();
@@ -87,7 +85,6 @@ public class ProfileIntegration extends ImejiTestBase {
 
 
   // Everybody can read any profiles until the bug is fixed
-  @Ignore 
   @Test
   public void test_1_ReadProfiles_NotAllowedUser() {
     String profileId = collectionTO.getProfile().getId();

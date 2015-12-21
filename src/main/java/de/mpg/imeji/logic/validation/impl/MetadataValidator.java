@@ -74,13 +74,13 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
       java.util.Date valueDate = null;
       try {
         valueDate = sdf.parse(value);
-        if (!value.equals(sdf.format(valueDate)))
+        if (!value.equals(sdf.format(valueDate))) {
           return false;
+        }
       } catch (ParseException e) {
         return false;
       }
-      return ((Date) md).getTime() != Long.MIN_VALUE && value != null
-          && isAllowedValueString(value, s);
+      return ((Date) md).getTime() != Long.MIN_VALUE && isAllowedValueString(value, s);
     } else if (md instanceof Link) {
       URI value = ((Link) md).getUri();
       return value != null && isAllowedValueURI(value, s);

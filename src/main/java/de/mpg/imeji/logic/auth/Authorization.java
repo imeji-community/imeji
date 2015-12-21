@@ -65,12 +65,14 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean create(User user, Object obj) {
-    if (obj instanceof Album)
+    if (obj instanceof Album) {
       return true; // everybody is allowed to create albums
+    }
     if (hasGrant(user,
         toGrant(getRelevantURIForSecurity(obj, false, true, false), GrantType.CREATE))
-        && !isDiscarded(obj))
+        && !isDiscarded(obj)) {
       return true;
+    }
     return false;
   }
 
@@ -83,14 +85,15 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean read(User user, Object obj) {
-    if (isPublic(obj) || obj instanceof MetadataProfile)
+    if (isPublic(obj) /* || obj instanceof MetadataProfile */) {
       return true;
-    else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
-        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+    } else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
+        getGrantTypeAccordingToObjectType(obj, GrantType.READ)))) {
       return true;
-    else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
-        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+    } else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
+        getGrantTypeAccordingToObjectType(obj, GrantType.READ)))) {
       return true;
+    }
     return false;
   }
 
@@ -104,8 +107,9 @@ public class Authorization {
    */
   public boolean update(User user, Object obj) {
     if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
-        getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
+        getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE)))) {
       return true;
+    }
     return false;
   }
 
@@ -123,14 +127,15 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean delete(User user, Object obj) {
-    if (AuthUtil.isSysAdmin(user))
+    if (AuthUtil.isSysAdmin(user)) {
       return true;
+    }
 
     if (!isPublic(obj)
         && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
-            getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
+            getGrantTypeAccordingToObjectType(obj, GrantType.DELETE)))) {
       return true;
-
+    }
     return false;
   }
 
@@ -145,8 +150,9 @@ public class Authorization {
   public boolean administrate(User user, Object obj) {
     if (!isDiscarded(obj)
         && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
-            getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
+            getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN)))) {
       return true;
+    }
     return false;
   }
 
@@ -161,8 +167,9 @@ public class Authorization {
   public boolean createContent(User user, Object obj) {
     if (hasGrant(user,
         toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.CREATE))
-        && !isDiscarded(obj))
+        && !isDiscarded(obj)) {
       return true;
+    }
     return false;
   }
 
@@ -175,8 +182,9 @@ public class Authorization {
    */
   public boolean updateContent(User user, Object obj) {
     if (hasGrant(user,
-        toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.UPDATE_CONTENT)))
+        toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.UPDATE_CONTENT))) {
       return true;
+    }
     return false;
   }
 
@@ -188,14 +196,13 @@ public class Authorization {
    * @return
    */
   public boolean deleteContent(User user, Object obj) {
-
-    if (AuthUtil.isSysAdmin(user))
+    if (AuthUtil.isSysAdmin(user)) {
       return true;
-
+    }
     if (!isPublic(obj) && hasGrant(user,
-        toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.DELETE_CONTENT)))
+        toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.DELETE_CONTENT))) {
       return true;
-
+    }
     return false;
   }
 
@@ -208,8 +215,9 @@ public class Authorization {
    */
   public boolean adminContent(User user, Object obj) {
     if (hasGrant(user,
-        toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.ADMIN_CONTENT)))
+        toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.ADMIN_CONTENT))) {
       return true;
+    }
     return false;
   }
 
@@ -223,10 +231,12 @@ public class Authorization {
    */
   private boolean hasGrant(User user, Grant g) {
     List<Grant> all = AuthUtil.getAllGrantsOfUser(user);
-    if (all.contains(g))
+    if (all.contains(g)) {
       return true;
-    if (all.contains(toGrant(PropertyBean.baseURI(), GrantType.ADMIN)))
+    }
+    if (all.contains(toGrant(PropertyBean.baseURI(), GrantType.ADMIN))) {
       return true;
+    }
     return false;
   }
 
@@ -238,8 +248,9 @@ public class Authorization {
    * @return
    */
   private Grant toGrant(String uri, GrantType type) {
-    if (uri == null)
+    if (uri == null) {
       return null;
+    }
     return new Grant(type, URI.create(uri));
   }
 
@@ -254,25 +265,26 @@ public class Authorization {
    */
   public String getRelevantURIForSecurity(Object obj, boolean hasItemGrant, boolean getContext,
       boolean isReadGrant) {
-    if (obj instanceof Item)
+    if (obj instanceof Item) {
       return hasItemGrant ? ((Item) obj).getId().toString()
           : ((Item) obj).getCollection().toString();
-    else if (obj instanceof Container)
+    } else if (obj instanceof Container) {
       return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
           : ((Container) obj).getId().toString();
-    else if (obj instanceof CollectionListItem)
+    } else if (obj instanceof CollectionListItem) {
       return ((CollectionListItem) obj).getUri().toString();
-    else if (obj instanceof AlbumBean)
+    } else if (obj instanceof AlbumBean) {
       return ((AlbumBean) obj).getAlbum().getId().toString();
-    else if (obj instanceof MetadataProfile)
+    } else if (obj instanceof MetadataProfile) {
       return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
           : ((MetadataProfile) obj).getId().toString();
-    else if (obj instanceof User)
+    } else if (obj instanceof User) {
       return ((User) obj).getId().toString();
-    else if (obj instanceof URI)
+    } else if (obj instanceof URI) {
       return getCollectionUri(obj.toString(), isReadGrant);
-    else if (obj instanceof String)
+    } else if (obj instanceof String) {
       return getCollectionUri((String) obj, isReadGrant);
+    }
     return PropertyBean.baseURI();
   }
 
@@ -336,18 +348,19 @@ public class Authorization {
    * @return
    */
   private boolean isPublic(Object obj) {
-    if (obj instanceof Item)
+    if (obj instanceof Item) {
       return isPublicStatus(((Item) obj).getStatus());
-    else if (obj instanceof Container)
+    } else if (obj instanceof Container) {
       return isPublicStatus(((Container) obj).getStatus());
-    else if (obj instanceof Space)
+    } else if (obj instanceof Space) {
       return isPublicStatus(((Space) obj).getStatus());
-    else if (obj instanceof MetadataProfile)
+    } else if (obj instanceof MetadataProfile) {
       return isPublicStatus(((MetadataProfile) obj).getStatus());
-    else if (obj instanceof Person)
+    } else if (obj instanceof Person) {
       return true;
-    else if (obj instanceof Organization)
+    } else if (obj instanceof Organization) {
       return true;
+    }
     return false;
   }
 
@@ -358,18 +371,19 @@ public class Authorization {
    * @return
    */
   private boolean isDiscarded(Object obj) {
-    if (obj instanceof Item)
+    if (obj instanceof Item) {
       return isDiscardedStatus(((Item) obj).getStatus());
-    else if (obj instanceof Container)
+    } else if (obj instanceof Container) {
       return isDiscardedStatus(((Container) obj).getStatus());
-    else if (obj instanceof Space)
+    } else if (obj instanceof Space) {
       return isDiscardedStatus(((Space) obj).getStatus());
-    else if (obj instanceof MetadataProfile)
+    } else if (obj instanceof MetadataProfile) {
       return isDiscardedStatus(((MetadataProfile) obj).getStatus());
-    else if (obj instanceof Person)
+    } else if (obj instanceof Person) {
       return false;
-    else if (obj instanceof Organization)
+    } else if (obj instanceof Organization) {
       return false;
+    }
     return false;
   }
 

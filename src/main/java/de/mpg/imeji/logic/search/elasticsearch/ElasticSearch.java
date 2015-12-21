@@ -9,6 +9,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchIndexer;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -34,6 +35,7 @@ public class ElasticSearch implements Search {
    * Construct an Elastic Search Query for on data type. If type is null, search for all types
    * 
    * @param type
+   * @throws ImejiException
    */
   public ElasticSearch(SearchObjectTypes type) {
     switch (type) {
@@ -50,7 +52,7 @@ public class ElasticSearch implements Search {
         this.type = ElasticTypes.spaces;
         break;
       default:
-        this.type = null;
+        this.type = ElasticTypes.items;
         break;
     }
     this.indexer =
@@ -69,8 +71,6 @@ public class ElasticSearch implements Search {
     if (size == -1) {
       size = Integer.MAX_VALUE;
     }
-    ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)
-        .setQuery(QueryBuilders.matchAllQuery()).execute().actionGet();
     SearchResponse resp = ElasticService.client.prepareSearch(ElasticService.DATA_ALIAS)
         .setNoFields().setQuery(QueryBuilders.matchAllQuery()).setPostFilter(f).setTypes(getTypes())
         .setSize(size).setFrom(from).addSort(ElasticSortFactory.build(sortCri)).execute()

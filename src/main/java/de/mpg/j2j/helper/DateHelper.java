@@ -14,10 +14,20 @@ import java.util.Locale;
  * @version $Revision$ $LastChangedDate$
  */
 public class DateHelper {
-  private static SimpleDateFormat format =
-      new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault());
-  private static SimpleDateFormat formatSmall =
-      new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+  private static final ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>() {
+    @Override
+    protected SimpleDateFormat initialValue() {
+      return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault());
+    }
+  };
+
+  private static final ThreadLocal<SimpleDateFormat> formatSmall =
+      new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+          return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        }
+      };
 
   /**
    * Return the current {@link Calendar} from the system
@@ -37,7 +47,7 @@ public class DateHelper {
    */
   public static Calendar parseDate(String dateString) {
     try {
-      Date d = format.parse(dateString);
+      Date d = format.get().parse(dateString);
       Calendar cal = Calendar.getInstance();
 
       cal.setTime(d);
@@ -56,6 +66,6 @@ public class DateHelper {
    * @return
    */
   public static String printDate(Calendar c) {
-    return formatSmall.format(c.getTime());
+    return formatSmall.get().format(c.getTime());
   }
 }

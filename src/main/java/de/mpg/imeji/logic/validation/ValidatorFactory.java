@@ -33,9 +33,9 @@ public class ValidatorFactory {
    */
   public static Validator<?> newValidator(Object obj, Validator.Method method) {
     // For now, do not do anything with Delete, just a possiblity
-    if (Validator.Method.DELETE.equals(method))
+    if (Validator.Method.DELETE.equals(method)) {
       return new PseudoValidator(method);
-
+    }
     if (obj instanceof Item) {
       return new ItemValidator(method);
     } else if (obj instanceof Metadata) {
@@ -52,5 +52,30 @@ public class ValidatorFactory {
       return new SpaceValidator(method);
     }
     return new PseudoValidator(method);
+  }
+
+  public static Validator<?> newValidator2(Class<?> clazz, Validator.Method method) {
+    // For now, do not do anything with Delete, just a possiblity
+    if (Validator.Method.DELETE.equals(method)) {
+      return new PseudoValidator(method);
+    }
+
+    if (clazz.equals(Item.class)) {
+      return new ItemValidator(method);
+    } else if (clazz.equals(Metadata.class)) {
+      return new MetadataValidator(method);
+    } else if (clazz.equals(CollectionImeji.class)) {
+      return new CollectionValidator(method);
+    } else if (clazz.equals(Album.class)) {
+      return new AlbumValidator(method);
+    } else if (clazz.equals(MetadataProfile.class)) {
+      return new ProfileValidator(method);
+    } else if (clazz.equals(User.class)) {
+      return new UserValidator(method);
+    } else if (clazz.equals(Space.class)) {
+      return new SpaceValidator(method);
+    }
+    return new PseudoValidator(method);
+
   }
 }

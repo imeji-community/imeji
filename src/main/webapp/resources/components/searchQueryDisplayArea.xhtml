@@ -8,7 +8,7 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<h:panelGroup layout="block" styleClass="imj_searchQueryDisplay">
+		<div class="imj_searchQueryDisplay" >
 			<h:outputText value=" #{lbl.search_query}:"/>
 			
 			<span class="imj_searchQueryText">
@@ -18,7 +18,7 @@
 			<h:outputLink value="#{cc.attrs.navBean.searchUrl}?q=#{cc.attrs.searchBean.query}" styleClass="imj_submitButton" rendered="#{!cc.attrs.searchBean.simpleSearch}">
 				<h:outputText value="#{lbl.search_revise}"/>
 			</h:outputLink>
-		</h:panelGroup>
+		</div>
 		
 	</composite:implementation>
 </html>

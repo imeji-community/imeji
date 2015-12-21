@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,6 +18,7 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -32,6 +34,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -390,11 +393,18 @@ public class AlbumBean extends ContainerBean {
    * Make the current {@link Album} active
    * 
    * @return
+   * @throws ImejiException
+   * @throws IOException
    */
-  public String makeActive() {
+  public String makeActive(boolean addSelected) throws ImejiException, IOException {
     findItems(sessionBean.getUser(), getSize());
     sessionBean.setActiveAlbum(this.album);
     this.setActive(true);
+    if (addSelected) {
+      FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(((HistorySession) BeanHelper.getSessionBean(HistorySession.class))
+              .getPreviousPage().getCompleteUrlWithHistory() + "&add_selected=1");
+    }
     return "";
   }
 

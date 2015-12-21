@@ -232,9 +232,15 @@ public class Jena2Java {
         listObject = createJavaObjectForListElements(f);
       }
       if (listObject != null) {
-        Object o = loadObject(st.getSubject(), f, listObject, count);
-        object.add(o);
-        count++;
+        if (J2JHelper.isResource(listObject)) {
+          J2JHelper.setId(listObject, URI.create(st.getResource().toString()));
+          Object o = loadResource(listObject);
+          object.add(o);
+        } else {
+          Object o = loadObject(st.getSubject(), f, listObject, count);
+          object.add(o);
+          count++;
+        }
       }
     }
     return object;

@@ -46,8 +46,8 @@ All rights reserved. Use is subject to license terms.
 
         <h:body lang="#{SessionBean.locale}">
             <!-- default necessary scripts, because of use in body-load context -->
-            <h:outputScript library="jquery" name="jquery-1.11.1.min.js"></h:outputScript>
-            <h:outputScript library="jquery/ui" name="1.10.4/jquery-ui.min.js"></h:outputScript>
+            <h:outputScript library="jquery" name="jquery-1.11.1.min.js"/>
+            <h:outputScript library="jquery/ui" name="1.10.4/jquery-ui.min.js"/>
             <!-- optional header scripts, which must load before -->
             <ui:insert name="additonalHeaderScripts"/>
             
@@ -56,25 +56,26 @@ All rights reserved. Use is subject to license terms.
             <div class="#{siteWrapperClass}">
                 <ui:insert name="init"/>
                 <ui:include src="component/header/header_default.xhtml"/>
-                <!-- Search Query -->
-                <ui:insert name="searchQuery"/>
+                
                  <!-- headline -->
                 <h:panelGroup rendered="#{!displayQuery}" layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
                     <h1>
-                        <h:outputText value="#{headline.toString().trim()}"/>
+                        #{headline.toString().trim()}
                         <h:outputText value="imeji" rendered="#{headline.toString().trim().length() == 0}"/>
                         <ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
                             <br/>
-                            <h:outputText value="#{headlineSecondRow.toString().trim()}"/>
+                            #{headlineSecondRow.toString().trim()}"
                         </ui:fragment>
                     </h1>
                 </h:panelGroup>
+                <!-- Search Query -->
+                <ui:insert name="searchQuery"/>
                 <!-- Actions Menu -->
-                <h:panelGroup id="actionsMenuArea">
-                <ui:insert name="actionsMenu"/>   
-                </h:panelGroup>
+                <div id="actionsMenuArea">
+               		<ui:insert name="actionsMenu"/>   
+                </div>
                 <!-- Message area -->
-                <h:panelGroup id="imj_pageMessageArea">
+                <div id="imj_pageMessageArea">
                     <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages}">
 
                         <ui:fragment rendered="#{MessagesBean.hasMessages}">
@@ -101,7 +102,7 @@ All rights reserved. Use is subject to license terms.
                             </ui:fragment>
                         </ui:fragment>
                     </h:panelGroup>
-                </h:panelGroup>
+                </div>
 
                 <!-- content wrapper -->
                 <div class="imj_mainContentWrapper">
@@ -142,9 +143,9 @@ All rights reserved. Use is subject to license terms.
                 });
             </script>
 
-            <h:panelGroup id="additonalFooterScripts" styleClass="imj_noDisplay">
+            <div id="additonalFooterScripts" class="imj_noDisplay">
                 <ui:insert name="additonalFooterScripts"/>
-            </h:panelGroup>
+            </div>
         </h:body>
     </html>
 </f:view>

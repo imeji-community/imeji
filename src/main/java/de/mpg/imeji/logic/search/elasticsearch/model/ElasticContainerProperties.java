@@ -1,6 +1,5 @@
 package de.mpg.imeji.logic.search.elasticsearch.model;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +19,7 @@ public class ElasticContainerProperties extends ElasticProperties {
   private String name;
   private String description;
   private String space;
+  private List<String> pid;
   private List<ElasticPerson> author = new ArrayList<>();
 
   /**
@@ -31,6 +31,10 @@ public class ElasticContainerProperties extends ElasticProperties {
     super(c);
     this.setName(c.getMetadata().getTitle());
     this.setDescription(c.getMetadata().getDescription());
+    if (c.getDoi() != null) {
+      this.pid = new ArrayList<>();
+      this.pid.add(c.getDoi());
+    }
     for (Person p : c.getMetadata().getPersons()) {
       author.add(new ElasticPerson(p));
     }
@@ -84,5 +88,13 @@ public class ElasticContainerProperties extends ElasticProperties {
    */
   public void setSpace(String space) {
     this.space = space;
+  }
+
+  public List<String> getPid() {
+    return pid;
+  }
+
+  public void setPid(List<String> pid) {
+    this.pid = pid;
   }
 }

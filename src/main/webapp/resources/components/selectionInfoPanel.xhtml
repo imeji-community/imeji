@@ -31,22 +31,32 @@
 						<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.items}"/>
 					</h:panelGroup>
 					
-					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_overlayMenu" rendered="#{Auth.loggedIn }">
+					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_overlayMenu" rendered="#{Auth.loggedIn}">
 						<h:panelGroup layout="block"  styleClass="imj_menuHeader" rendered="#{SessionBean.selectedSize > 0}">
 							<h:outputText id="lblSelectedSize" value=" #{SessionBean.selectedSize} #{lbl.selected}"/>
 							<span class="fa fa-chevron-circle-down"/>
 						</h:panelGroup>
 						
-						<h:panelGroup layout="block" styleClass="imj_menuBody">							
+						<div class="imj_menuBody">							
 							<ui:fragment rendered="#{SessionBean.selectedSize > 0}">
 								<ul class="imj_overlayMenuList">
 									<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
-										<li class="imj_overlayMenuListItem">
-											<!-- No active album selected -->
-											<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
-												<h:panelGroup styleClass="fa fa-search"/>
+										<li class="imj_overlayMenu">
+											<h:outputLink value="#{Navigation.albumsUrl}?q=grant=%22upload%22&amp;add_selected=1" title="#{lbl.activate}">
 												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
 											</h:outputLink>
+											<!-- No active album selected -->
+											<ui:remove>TODO: select the album from here
+												<ul class="imj_menuBody" style="position: absolute; left: 100%; top:0; width:100%">
+													<ui:repeat var="album" value="">
+														<li >
+															<h:commandLink action="#{cc.attrs.facetBean.albumMenu}">
+																<h:outputText value="#{album.name}"/>
+															</h:commandLink>
+														</li>
+													</ui:repeat>	
+												</ul>
+											</ui:remove>
 										</li>
 									</ui:fragment>
 									
@@ -71,7 +81,7 @@
 									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null}">
 										<li class="imj_overlayMenuListItem">
 											<!-- Delete/Discard selected images -->
-											<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="imj_criticalItem" value="#" 
+											<h:outputLink onclick="openDialog('dialogDeleteSelected')" value="#" 
 														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and Auth.deleteContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'PENDING'}">
 												<h:outputText value="#{lbl.delete_selectedImages}"/>
 											</h:outputLink>
@@ -90,7 +100,7 @@
 									</ui:fragment>
 								</ul>
 							</ui:fragment>
-						</h:panelGroup>
+						</div>
 					</h:panelGroup>
 				</h:form>		
 			</ui:fragment>

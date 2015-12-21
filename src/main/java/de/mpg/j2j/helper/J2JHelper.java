@@ -245,8 +245,8 @@ public class J2JHelper {
    * @return
    */
   public static boolean isURIResource(Object o, Field f) {
-    return f != null
-        && (f.getType().equals(URI.class) && f.getAnnotation(j2jResource.class) != null || ((isList(f) || isLazyList(f)) && o instanceof URI));
+    return f != null && (f.getType().equals(URI.class) && f.getAnnotation(j2jResource.class) != null
+        || ((isList(f) || isLazyList(f)) && o instanceof URI));
   }
 
   /**

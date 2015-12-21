@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
@@ -23,13 +24,14 @@ public class SearchUtils {
    * 
    * @param date
    * @return
+   * @throws UnprocessableError
    */
-  public static long parseDateAsTime(String date) {
+  public static long parseDateAsTime(String date) throws UnprocessableError {
     Date d = DateFormatter.parseDate(date, "yyyy-MM-dd");
     if (d != null) {
       return d.getTime();
     }
-    throw null;
+    throw new UnprocessableError("wrong date format: " + date);
   }
 
 

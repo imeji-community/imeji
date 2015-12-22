@@ -34,8 +34,6 @@ public class JSONDeserializationTest {
     ObjectMapper mapper = new ObjectMapper();
     // mapper.enable(SerializationFeature.INDENT_OUTPUT);
     String jsonStringOut = mapper.writeValueAsString(item);
-    System.out.println(jsonStringIn);
-    System.out.println(jsonStringOut); 
     assertThat("Bad deserialization of ItemTO JSON", jsonToPOJO(jsonStringIn),
         equalTo(jsonToPOJO(jsonStringOut)));
 

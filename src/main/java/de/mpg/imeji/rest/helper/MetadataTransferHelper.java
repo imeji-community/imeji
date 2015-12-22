@@ -84,11 +84,11 @@ public class MetadataTransferHelper {
       ) {
       String localParentsLabelStack = ProfileTransferHelper.getParentStatementLabels(statement.getParentStatementId(), profileTO, "");
       throw new UnprocessableError("Metadata with label \""+label+"\", must be enclosed within metadata parents: "+ localParentsLabelStack+
-          ". Check your structure, and provide necessary values for all parents "+ localParentsLabelStack +" in the metadata to enable proper assignment of values!);");
+          ". Check your structure, and provide necessary values for all parents "+ localParentsLabelStack +" in the metadata to enable proper assignment of values! Please check the template item!");
     }
     
     if (statement.getParentStatementId()==null && !parentLabel.equals("") && !label.equals(parentLabel)) {
-      throw new UnprocessableError("Metadata with label \""+label+"\", must not be within any metadata parents! Change your input!");
+      throw new UnprocessableError("Metadata with label \""+label+"\", must not be within any metadata parents! Change your input or check the template item!");
     }
   }
   
@@ -98,7 +98,7 @@ public class MetadataTransferHelper {
                         if (!(label.equals(parentStatementRealLabel) && hasInnerParent)){
                             String parentsLabelStack = ProfileTransferHelper.getParentStatementLabels(innerStatement.getParentStatementId(), profileTO, "");
                             throw new UnprocessableError("Metadata with label \""+currentLabel+"\", must be enclosed within metadata parents: "+ parentsLabelStack+
-                              ". Check your structure, and provide necessary values for all parents "+ parentsLabelStack +" in the metadata to enable proper assignment of values!);");
+                              ". Check your structure, and provide necessary values for all parents "+ parentsLabelStack +" in the metadata to enable proper assignment of values! Please check the template item! ");
                         }
                       }
   }
@@ -111,10 +111,18 @@ public class MetadataTransferHelper {
     boolean emptySingleValueCheck = !nodeChild.isArray() && ( nodeChild.isObject() && nodeChild.size()==0 ||
         nodeChild.isValueNode() && StringUtils.trim(nodeChild.asText()).length() == 0 );
     
+    boolean tooMuchArrayValueCheck =  nodeChild.isArray() && nodeChild.size()>1;
+    
     if (isInnerParent &&  (emptyArrayValueCheck || emptySingleValueCheck) ) {
           //validate if node is empty parent is null
           throw new UnprocessableError("Metadata with label \""+currentLabel+"\" is a parent for other metadata! "
-              +" Please provide a non-empty, non-null value for \""+ currentLabel +"\" to enable proper assignment of values!);");
+              +" Please provide a non-empty, non-null value for \""+ currentLabel +"\" to enable proper assignment of values! Please check the template item! ");
+    }
+    
+    if (isInnerParent && tooMuchArrayValueCheck) {
+      throw new UnprocessableError("Metadata with label \""+currentLabel+"\" is a parent for other metadata! "
+          +" You provided multiple values in the inner parent node: "+nodeChild +". To support multiple values, you must explicitly add new \""+currentLabel+"\" which encloses appropriate children metadata! Please check the template item!");
+      
     }
   }
   
@@ -132,7 +140,7 @@ public class MetadataTransferHelper {
     //
     if (json.getNodeType() == JsonNodeType.ARRAY) {
       if (!statement.getMaxOccurs().equals("unbounded") && json.size()>1) {
-        throw new UnprocessableError("Metadata \"" + label + "\" can only have one value");
+        throw new UnprocessableError("Metadata \"" + label + "\" can only have one value.");
       }
       tempNode = (ArrayNode)json;
     }
@@ -154,7 +162,7 @@ public class MetadataTransferHelper {
                   boolean hasInnerParent = false;
                   if (!node.has(label)){
                       throw new UnprocessableError("Metadata with label \""+label+"\" is a parent for other metadata! "
-                          +" Please provide a value for \""+ label +"\" to enable proper assignment of values!);");
+                          +" Please provide a value for \""+ label +"\" to enable proper assignment of values! Please check the template item!");
                   }
                   
                   for (Iterator<String> iteratorChild = node.fieldNames(); iteratorChild.hasNext();) {
@@ -183,7 +191,7 @@ public class MetadataTransferHelper {
                       //if only child is provided, without its parent node, throw Exception
                       if (!isInnerParent && !hasDirectParentNode)  {
                             throw new UnprocessableError("Metadata with label \""+currentLabel+"\" is a child of a metadata with label \""
-                                                           +label+"\" ! Please provide a value for \""+ label +"\" to enable proper assignment of values!);");
+                                                           +label+"\" ! Please provide a value for \""+ label +"\" to enable proper assignment of values! Please check the template item!");
                       }
                       
                      List<MetadataSetTO> arrList = parseMetadata(nodeChild, innerStatement, isInnerParent, isInnerParent? innerStatement.getLabels().get(0).getValue():label, profileTO);

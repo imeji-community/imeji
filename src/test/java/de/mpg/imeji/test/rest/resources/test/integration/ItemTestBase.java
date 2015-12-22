@@ -101,6 +101,45 @@ public class ItemTestBase extends ImejiTestBase {
     }
     return statements;
   }
+  
+ 
+  protected static Collection<Statement> getDefaultHierarchicalStatements() {
+    Collection<Statement> statements = new ArrayList<Statement>();
+    Statement st;
+
+    for (String type : new String[] {"text", "number", "conePerson", "geolocation", "date", "license",
+        "link", "publication"}) {
+      st = new Statement();
+      st.setType(URI.create("http://imeji.org/terms/metadata#" + type));
+      st.getLabels().add(new LocalizedString(type, "en"));
+      if (type.equals("text") || type.equals("number")){
+        st.setMaxOccurs("unbounded");
+      }
+      
+      statements.add(st);
+      
+      if (type.equals("text") || type.equals("number")) {
+        //text and number are multiple, text is parent of date and License, number is parent of conePerson and geo and text
+        for (String typeChild : new String[] { "date", "license", "conePerson", "text", "geolocation"}) {
+          Statement stChild = new Statement();
+          stChild.setType(URI.create("http://imeji.org/terms/metadata#" + typeChild));
+          stChild.getLabels().add(new LocalizedString(typeChild+"Child", "en"));
+          if(  ( type.equals("text") && (typeChild.equals("date") || typeChild.equals("license"))) ||
+               ( type.equals("number") && (typeChild.equals("text") || typeChild.equals("conePerson") || typeChild.equals("geolocation"))) )
+          {
+            stChild.setParent(st.getId());
+            statements.add(stChild);
+          }
+        }
+      }
+      
+    }
+    
+    for (Statement mySt:statements) {
+      System.out.println("Statement = "+mySt.getLabel()+", ID= "+mySt.getId()+", PARENT= "+mySt.getParent());
+    }
+    return statements;
+  }
 
 
   protected static Collection<Statement> getBasicStatements() {

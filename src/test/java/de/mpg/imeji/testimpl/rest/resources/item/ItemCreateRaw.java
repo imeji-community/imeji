@@ -273,11 +273,11 @@ public class ItemCreateRaw extends ItemTestBase {
     multiPart.field("json", wrongJSON.replace("___COLLECTION_ID___", collectionId)
         .replace("___FILENAME___", "test.png"));
 
-    LOGGER.info(multiPart.getField("json").getValue());
+    //LOGGER.info(multiPart.getField("json").getValue());
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-    LOGGER.info(response.readEntity(String.class));
+    //LOGGER.info(response.readEntity(String.class));
     assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
 
   }

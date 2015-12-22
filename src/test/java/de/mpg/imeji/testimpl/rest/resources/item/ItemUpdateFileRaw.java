@@ -110,9 +110,9 @@ public class ItemUpdateFileRaw extends ImejiTestBase {
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
-    // assertThat("Checksum of stored file does not match the source file",
-    // itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(ATTACHED_FILE)));
-    LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
+    assertThat("Checksum of stored file does not match the source file",
+     itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(ATTACHED_FILE)));
+    //LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
   }
 
   @Test

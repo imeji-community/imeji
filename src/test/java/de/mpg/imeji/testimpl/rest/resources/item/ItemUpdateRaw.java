@@ -58,7 +58,7 @@ public class ItemUpdateRaw extends ItemTestBase {
 
     String json = response.readEntity(String.class);
     
-    LOGGER.info(json);
+    //LOGGER.info(json);
     
     multiPart.field("json", json.
         replace("collectionId.*$", collectionId+"\" }") );

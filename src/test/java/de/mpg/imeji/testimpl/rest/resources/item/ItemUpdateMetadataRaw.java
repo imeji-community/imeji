@@ -138,7 +138,7 @@ public class ItemUpdateMetadataRaw extends ItemTestBase {
             .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
             .replaceAll("(\"citation\"\\s*:\\s*)\"(.+)\"", REP_CHANGED));
 
-    LOGGER.info(multiPart.getField("json").getValue());
+    //LOGGER.info(multiPart.getField("json").getValue());
 
     Response response =
         target(PATH_PREFIX).path("/" + itemId)
@@ -150,7 +150,7 @@ public class ItemUpdateMetadataRaw extends ItemTestBase {
     ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
 
 
-    LOGGER.info(buildJSONFromObject(updatedItem));
+    //LOGGER.info(buildJSONFromObject(updatedItem));
 
     assertThat(updatedItem.getFilename(), equalTo(CHANGED));
 
@@ -334,7 +334,7 @@ public class ItemUpdateMetadataRaw extends ItemTestBase {
     multiPart.field("json",
         buildJSONFromObject(itemTO).replaceAll("(\"statementUri\"\\s*:\\s*)\"(.+)\"", REP_CHANGED));
 
-    LOGGER.info(multiPart.getField("json").getValue());
+    //LOGGER.info(multiPart.getField("json").getValue());
 
     Response response =
         target(PATH_PREFIX).path("/" + itemId)
@@ -358,7 +358,7 @@ public class ItemUpdateMetadataRaw extends ItemTestBase {
     multiPart.field("json",
         buildJSONFromObject(itemTO).replaceAll("(\"statementUri\"\\s*:\\s*)\"(.+)\"", REP_CHANGED));
 
-    LOGGER.info(multiPart.getField("json").getValue());
+    //LOGGER.info(multiPart.getField("json").getValue());
 
     Response response =
         target(PATH_PREFIX).path("/" + itemId)
@@ -399,7 +399,7 @@ public class ItemUpdateMetadataRaw extends ItemTestBase {
     assertEquals(response.getStatus(), OK.getStatusCode());
 
     final String json = response.readEntity(String.class);
-    LOGGER.info(json);
+    //LOGGER.info(json);
 
     assertThat(json, not(containsString("\"text\"")));
     assertThat(json, not(containsString("\"date\"")));
@@ -422,7 +422,7 @@ public class ItemUpdateMetadataRaw extends ItemTestBase {
 
     multiPart.field("json", buildJSONFromObject(itemTO));
 
-    LOGGER.info(multiPart.getField("json").getValue());
+    //LOGGER.info(multiPart.getField("json").getValue());
 
     Response response =
         target(PATH_PREFIX).path("/" + itemId)

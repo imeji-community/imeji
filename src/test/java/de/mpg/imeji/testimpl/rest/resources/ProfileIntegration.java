@@ -105,6 +105,15 @@ public class ProfileIntegration extends ImejiTestBase {
 
 
   }
+  
+  @Test
+  public void test_1_ReadProfiles_ItemTemplate() {
+    String profileId = ProfileService.DEFAULT_METADATA_PROFILE_ID;
+    Response response = target(pathPrefix).path(profileId+"/template").register(authAsUser2)
+        .request(MediaType.APPLICATION_JSON).get();
+
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+  }
 
   @Test
   public void test_3_DeleteProfile_NotAuthorized() {

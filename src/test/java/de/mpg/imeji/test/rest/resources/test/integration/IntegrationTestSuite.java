@@ -11,6 +11,8 @@ import de.mpg.imeji.testimpl.rest.resources.VersionManagerTest;
 import de.mpg.imeji.testimpl.rest.resources.item.ItemCreate;
 import de.mpg.imeji.testimpl.rest.resources.item.ItemCreateRaw;
 import de.mpg.imeji.testimpl.rest.resources.item.ItemDefaultMdCreate;
+import de.mpg.imeji.testimpl.rest.resources.item.ItemDefaultMdCreateHierarchical;
+import de.mpg.imeji.testimpl.rest.resources.item.ItemDefaultMdUpdateHierarchical;
 import de.mpg.imeji.testimpl.rest.resources.item.ItemDeleteRaw;
 import de.mpg.imeji.testimpl.rest.resources.item.ItemReadRaw;
 import de.mpg.imeji.testimpl.rest.resources.item.ItemUpdate;
@@ -31,7 +33,8 @@ import util.SuperTestSuite;
 @Suite.SuiteClasses({ 
    //Default format Tests
     ItemCreate.class, ItemRead.class, ItemUpdateBasic.class, ItemUpdateFile.class, 
-    ItemUpdateMetadata.class , ItemDelete.class,  ItemDefaultMdCreate.class, ItemUpdate.class,
+    ItemUpdateMetadata.class , ItemDelete.class,  ItemDefaultMdCreate.class,ItemDefaultMdCreateHierarchical.class, ItemUpdate.class,
+    ItemDefaultMdUpdateHierarchical.class,
     ItemEasyPatchMetadata.class, 
     //Raw Format Tests
     ItemCreateRaw.class, ItemReadRaw.class, ItemUpdateBasicRaw.class, ItemUpdateFileRaw.class, 

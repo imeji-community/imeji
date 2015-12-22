@@ -108,8 +108,8 @@ public class ProfileIntegration extends ImejiTestBase {
   
   @Test
   public void test_1_ReadProfiles_ItemTemplate() {
-    String profileId = ProfileService.DEFAULT_METADATA_PROFILE_ID;
-    Response response = target(pathPrefix).path(profileId+"/template").register(authAsUser2)
+    String profileId =collectionTO.getProfile().getId();
+    Response response = target(pathPrefix).path(profileId+"/template").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());

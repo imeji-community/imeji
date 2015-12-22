@@ -2,6 +2,9 @@ package de.mpg.imeji.rest.defaultTO;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import de.mpg.imeji.logic.vo.Organization;
 
 /**
@@ -10,6 +13,7 @@ import de.mpg.imeji.logic.vo.Organization;
  * @author bastiens
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class DefaultOrganizationTO implements Serializable {
   private static final long serialVersionUID = 6845497959988466861L;
   private String name;

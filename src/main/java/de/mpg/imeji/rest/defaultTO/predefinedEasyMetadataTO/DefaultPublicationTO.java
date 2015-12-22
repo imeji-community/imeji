@@ -2,6 +2,9 @@ package de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+@JsonInclude(Include.NON_NULL)
 public class DefaultPublicationTO implements Serializable {
 
   private static final long serialVersionUID = 1207174642221784716L;

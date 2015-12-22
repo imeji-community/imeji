@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
 
@@ -13,6 +16,7 @@ import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
  * @author bastiens
  * 
  */
+@JsonInclude(Include.NON_NULL)
 public class DefaultConePersonTO implements Serializable {
   private static final long serialVersionUID = 1645461293418318845L;
 

@@ -139,8 +139,6 @@ public abstract class ImejiController {
   protected List<ImejiTriple> getContainerSpaceTriples(String uri, Object o, URI spaceId) {
     List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
     URI myUri = URI.create(uri);
-    System.out.println("uri=" + uri);
-    System.out.println("Myuri=" + myUri.toString());
     triples.add(new ImejiTriple(uri, ImejiNamespaces.SPACE, URI.create(spaceId.toString()), o));
     return triples;
   }

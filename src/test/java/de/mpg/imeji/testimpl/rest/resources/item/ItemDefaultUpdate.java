@@ -150,7 +150,6 @@ public class ItemDefaultUpdate extends ItemTestBase {
         true);
     ItemService s = new ItemService();
     itemTO = s.create(itemTO, JenaUtil.testUser);
-    System.out.println(itemTO.getMetadata().size());
     itemId = itemTO.getId();
   }
 

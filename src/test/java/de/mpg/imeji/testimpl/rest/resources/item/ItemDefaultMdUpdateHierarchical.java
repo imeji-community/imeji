@@ -221,7 +221,7 @@ public class ItemDefaultMdUpdateHierarchical extends ItemTestBase {
             .replaceAll("\"number\": 1.2345678E7", "\"number\": [234,235]"));
     Response response = getTargetAuth(itemId).put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-    LOGGER.info(response.readEntity(String.class));
+    //LOGGER.info(response.readEntity(String.class));
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
   }
 

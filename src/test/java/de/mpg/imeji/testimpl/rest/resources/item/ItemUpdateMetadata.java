@@ -494,7 +494,6 @@ public class ItemUpdateMetadata extends ItemTestBase {
         if (mdsTo.getLabels().get(0).getValue().equals("text")) {
             i++;
             updatedTextString+= ((TextTO)mdsTo.getValue()).getText();
-            System.out.println("Text "+i + updatedTextString);
         }
     }
     

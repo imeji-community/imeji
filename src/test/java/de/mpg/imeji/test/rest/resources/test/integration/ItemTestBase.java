@@ -80,9 +80,6 @@ public class ItemTestBase extends ImejiTestBase {
 
       collectionId = ObjectHelper.getId(cc.create(ci, mp, JenaUtil.testUser,
           CollectionController.MetadataProfileCreationMethod.REFERENCE, null));
-
-      System.out.println("PROFILEW= "+profileId+" collection = "+collectionId);
-
     } catch (Exception e) {
       logger.error("Cannot init Collection", e);
     }
@@ -135,9 +132,6 @@ public class ItemTestBase extends ImejiTestBase {
       
     }
     
-    for (Statement mySt:statements) {
-      System.out.println("Statement = "+mySt.getLabel()+", ID= "+mySt.getId()+", PARENT= "+mySt.getParent());
-    }
     return statements;
   }
 

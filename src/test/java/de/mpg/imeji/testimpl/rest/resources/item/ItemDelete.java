@@ -59,7 +59,6 @@ public class ItemDelete extends ImejiTestBase {
     initCollection();
     initItem();
     ItemService s = new ItemService();
-    System.out.println("ITEM STATUS = " + s.read(itemId, JenaUtil.testUser).getStatus());
     assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 
     Form form = new Form();

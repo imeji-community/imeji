@@ -110,7 +110,7 @@ public class ItemDefaultMdCreateHierarchical extends ItemTestBase {
             .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
             .replaceAll("\"referenceUrl\"\\s*:\\s*\"___REFERENCE_URL___\",", ""));
    
-    LOGGER.info("ITEM = "+multiPart.getField("json").getValue());
+    //LOGGER.info("ITEM = "+multiPart.getField("json").getValue());
     Response response = target(pathPrefix).register(authAsUser)
         .register(MultiPartFeature.class).register(JacksonFeature.class)
         .request(MediaType.APPLICATION_JSON_TYPE)
@@ -312,7 +312,7 @@ public class ItemDefaultMdCreateHierarchical extends ItemTestBase {
             .replaceAll("\"number\": 1.2345678E7", "\"number\": [234,235]"));
     Response response = getTargetAuth().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-    LOGGER.info(response.readEntity(String.class));
+    //LOGGER.info(response.readEntity(String.class));
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
   }
   

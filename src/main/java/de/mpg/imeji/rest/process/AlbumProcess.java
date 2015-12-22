@@ -71,11 +71,8 @@ public class AlbumProcess {
 
     AlbumService service = new AlbumService();
       try {
-        System.out.println("Album 1");
         User u = BasicAuthentication.auth(req);
-        System.out.println("Album 2");
         AlbumTO to = (AlbumTO) buildTOFromJSON(req, AlbumTO.class);
-        System.out.println("Album 3");
         resp = buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
       } catch (ImejiException e) {
         resp = localExceptionHandler(e, e.getLocalizedMessage());

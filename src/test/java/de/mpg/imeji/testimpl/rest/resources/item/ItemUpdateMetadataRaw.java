@@ -388,7 +388,7 @@ public class ItemUpdateMetadataRaw extends ItemTestBase {
             // /only publication should be filled, not citation or format
             .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED));
 
-    LOGGER.info(multiPart.getField("json").getValue());
+    //LOGGER.info(multiPart.getField("json").getValue());
 
     Response response =
         target(PATH_PREFIX).path("/" + itemId)

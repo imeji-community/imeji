@@ -44,7 +44,6 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.lf5.util.StreamUtils;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
 import org.apache.sanselan.common.byteSources.ByteSource;
@@ -80,7 +79,7 @@ public class JpegUtils {
   public static BufferedImage readJpeg(byte[] bytes) throws IOException, ImageReadException {
     File f = TempFileUtil.createTempFile("uploadReadJpeg", ".jpg");
     try {
-      StreamUtils.copyThenClose(new ByteArrayInputStream(bytes), new FileOutputStream(f));
+      StorageUtils.writeInOut(new ByteArrayInputStream(bytes), new FileOutputStream(f), true);
       BufferedImage bi = readJpeg(f);
       return bi;
     } finally {
@@ -115,10 +114,12 @@ public class JpegUtils {
           checkAdobeMarker(file);
           profile = Sanselan.getICCProfile(file);
           WritableRaster raster = (WritableRaster) reader.readRaster(0, null);
-          if (colorType == COLOR_TYPE_YCCK)
+          if (colorType == COLOR_TYPE_YCCK) {
             convertYcckToCmyk(raster);
-          if (hasAdobeMarker)
+          }
+          if (hasAdobeMarker) {
             convertInvertedColors(raster);
+          }
           image = convertCmykToRgb(raster, profile);
         }
         return image;
@@ -226,8 +227,8 @@ public class JpegUtils {
       }
     }
     ICC_ColorSpace cmykCS = new ICC_ColorSpace(cmykProfile);
-    BufferedImage rgbImage =
-        new BufferedImage(cmykRaster.getWidth(), cmykRaster.getHeight(), BufferedImage.TYPE_INT_RGB);
+    BufferedImage rgbImage = new BufferedImage(cmykRaster.getWidth(), cmykRaster.getHeight(),
+        BufferedImage.TYPE_INT_RGB);
     WritableRaster rgbRaster = rgbImage.getRaster();
     ColorSpace rgbCS = rgbImage.getColorModel().getColorSpace();
     ColorConvertOp cmykToRgb = new ColorConvertOp(cmykCS, rgbCS, null);

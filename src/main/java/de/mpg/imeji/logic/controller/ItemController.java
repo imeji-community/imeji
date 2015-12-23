@@ -110,10 +110,10 @@ public class ItemController extends ImejiController {
    */
   public Item createWithFile(Item item, File f, String filename, CollectionImeji c, User user)
       throws ImejiException {
-    if (!AuthUtil.staticAuth().createContent(user, c))
+    if (!AuthUtil.staticAuth().createContent(user, c)) {
       throw new NotAllowedError(
           "User not Allowed to upload files in collection " + c.getIdString());
-
+    }
     // To check the user Quota, it always has to be provided with the Admin User
     UserController uc = new UserController(user);
     uc.checkQuota(f, c);
@@ -121,8 +121,9 @@ public class ItemController extends ImejiController {
     StorageController sc = new StorageController();
     UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 
-    if (item == null)
+    if (item == null) {
       item = ImejiFactory.newItem(c);
+    }
 
     if (filename == null || filename.equals("")) {
       throw new UnprocessableError("Filename must not be empty!");

@@ -316,14 +316,13 @@ public class Imeji {
   public static boolean isValidateChecksumInCollection() {
     String validateChecksum;
     try {
-      validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
+      validateChecksum = PropertyReader.getProperty("imeji.validate.checksum");
     } catch (Exception e) {
       return true;
     }
-
-    if (isNullOrEmpty(validateChecksum))
+    if (isNullOrEmpty(validateChecksum)) {
       return true;
-
+    }
     return Boolean.valueOf(validateChecksum);
 
   }

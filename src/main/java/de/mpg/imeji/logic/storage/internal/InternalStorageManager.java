@@ -41,6 +41,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
@@ -84,9 +85,8 @@ public class InternalStorageManager implements Serializable {
     try {
       File storageDir = new File(PropertyReader.getProperty("imeji.storage.path"));
       storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
-      storageUrl =
-          StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url")) + "file"
-              + StringHelper.urlSeparator;
+      storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"))
+          + "file" + StringHelper.urlSeparator;
       // storageUrl = StringHelper.normalizeURI(PropertyBean.baseURI()) +
       // "file" + StringHelper.urlSeparator;
       administrator = new InternalStorageAdministrator(storagePath);
@@ -132,7 +132,8 @@ public class InternalStorageManager implements Serializable {
       url = replaceExtension(url, origExtension);
       copy(file, transformUrlToPath(url));
     } else if (url.contains(FileResolution.WEB.name().toLowerCase()))
-      write(generatorManager.generateWebResolution(file, guessedExtension), transformUrlToPath(url));
+      write(generatorManager.generateWebResolution(file, guessedExtension),
+          transformUrlToPath(url));
     else if (url.contains(FileResolution.THUMBNAIL.name().toLowerCase()))
       write(generatorManager.generateThumbnail(file, guessedExtension), transformUrlToPath(url));
   }
@@ -311,14 +312,16 @@ public class InternalStorageManager implements Serializable {
       throws IOException {
     ImageGeneratorManager generatorManager = new ImageGeneratorManager();
     // write web resolution file in storage
-
     String calculatedExtension = guessExtension(file);
-    write(generatorManager.generateWebResolution(file, calculatedExtension),
-        transformUrlToPath(item.getWebUrl()));
+    String webResolutionPath =
+        write(generatorManager.generateWebResolution(file, calculatedExtension),
+            transformUrlToPath(item.getWebUrl()));
     // Use Web resolution to generate Thumbnail (avoid to read the original
     // file again)
-
-    write(generatorManager.generateThumbnail(file, calculatedExtension),
+    File webResolutionFile = new File(webResolutionPath);
+    write(
+        generatorManager.generateThumbnail(webResolutionFile,
+            FilenameUtils.getExtension(webResolutionPath)),
         transformUrlToPath(item.getThumbnailUrl()));
     // write original file in storage: simple copy the tmp file to the
     // correct path

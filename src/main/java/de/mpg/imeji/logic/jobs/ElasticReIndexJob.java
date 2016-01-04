@@ -32,6 +32,8 @@ public class ElasticReIndexJob implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
     logger.info("Reindex started!");
+    // Check if the alias is used by only 1 index. If not, reset completely the indexes
+    ElasticService.getIndexNameFromAliasName(ElasticService.DATA_ALIAS);
     String index = ElasticService.createIndex();
     reindexAlbums(index);
     reindexItems(index);

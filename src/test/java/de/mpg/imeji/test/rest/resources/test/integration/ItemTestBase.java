@@ -135,6 +135,60 @@ public class ItemTestBase extends ImejiTestBase {
     return statements;
   }
 
+  protected static Collection<Statement> getDefaultHierarchicalStatementsMultipleH() {
+    Collection<Statement> statements = new ArrayList<Statement>();
+    Statement st;
+
+    for (String type : new String[] {"text", "number", "conePerson", "geolocation", "date", "license",
+        "link", "publication"}) {
+      st = new Statement();
+      st.setType(URI.create("http://imeji.org/terms/metadata#" + type));
+      st.getLabels().add(new LocalizedString(type, "en"));
+      if (type.equals("text") || type.equals("number")){
+        st.setMaxOccurs("unbounded");
+      }
+      
+      statements.add(st);
+      
+      if (type.equals("text") || type.equals("number")) {
+        //text and number are multiple, text is parent of date and License, number is parent of conePerson and geo and text
+        for (String typeChild : new String[] { "date", "license", "conePerson", "text", "geolocation"}) {
+          Statement stChild = new Statement();
+          stChild.setType(URI.create("http://imeji.org/terms/metadata#" + typeChild));
+          stChild.getLabels().add(new LocalizedString(typeChild+"Child", "en"));
+          if(  ( type.equals("text") && (typeChild.equals("date") || typeChild.equals("license"))) ||
+               ( type.equals("number") && (typeChild.equals("text") || typeChild.equals("conePerson") || typeChild.equals("geolocation"))) )
+          {
+            stChild.setParent(st.getId());
+            if (typeChild.equals("text")) {
+                stChild.setMaxOccurs("unbounded");
+            }
+            statements.add(stChild);
+          }
+          
+          if (typeChild.equals("text") && type.equals("number")) {
+            //text and number are multiple, text is in addition parent of date and text
+            for (String typeChildChild : new String[] { "date", "text"}) {
+              Statement stChildChild = new Statement();
+              stChildChild.setType(URI.create("http://imeji.org/terms/metadata#" + typeChildChild));
+              stChildChild.getLabels().add(new LocalizedString(typeChildChild+"ChildChild", "en"));
+              stChildChild.setParent(stChild.getId());
+              if (typeChildChild.equals("date")) {
+                stChildChild.setMaxOccurs("unbounded");
+               }
+              statements.add(stChildChild);
+              }
+            }
+          }
+        }
+      }
+    
+    for (Statement st1:statements){
+        System.out.println("LABEL= "+st1.getLabel());
+    }
+      
+    return statements;
+  }
 
   protected static Collection<Statement> getBasicStatements() {
     Collection<Statement> statements = new ArrayList<Statement>();

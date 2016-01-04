@@ -14,7 +14,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
@@ -24,6 +27,7 @@ import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.SearchResultTO;
 
 public class ItemService implements API<ItemTO> {
 
@@ -88,18 +92,32 @@ public class ItemService implements API<ItemTO> {
     return tos;
   }
 
-  public List<DefaultItemTO> readDefaultItems(User u, String q, int offset, int size)
+  /**
+   * Search and load items according ton the query.
+   * 
+   * @param u
+   * @param q
+   * @param offset
+   * @param size
+   * @return
+   * @throws ImejiException
+   * @throws IOException
+   */
+  public SearchResultTO readDefaultItems(User u, String q, int offset, int size)
       throws ImejiException, IOException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
-    for (Item vo : new ItemController().searchAndRetrieve(null,
-        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
+    ItemController controller = new ItemController();
+    SearchResult result = SearchFactory.create(SEARCH_IMPLEMENTATIONS.ELASTIC)
+        .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
+    for (Item vo : controller.retrieveBatch(result.getResults(), -1, 0, u)) {
       DefaultItemTO to = new DefaultItemTO();
       TransferObjectFactory.transferDefaultItem(vo, to,
           profileCache.read(vo.getMetadataSet().getProfile()));
       tos.add(to);
     }
-    return tos;
+    return new SearchResultTO.Builder().numberOfRecords(result.getResults().size()).offset(offset)
+        .results(tos).query(q).size(size).totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
 
 

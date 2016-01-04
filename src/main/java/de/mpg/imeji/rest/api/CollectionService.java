@@ -22,12 +22,14 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
@@ -38,6 +40,7 @@ import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.SearchResultTO;
 
 public class CollectionService implements API<CollectionTO> {
 
@@ -102,25 +105,27 @@ public class CollectionService implements API<CollectionTO> {
    */
   public Object readDefaultItems(String id, User u, String q, int offset, int size)
       throws ImejiException, IOException {
-    ItemController itemController = new ItemController();
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
-    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(CollectionImeji.class, id),
-        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
+
+    ItemController controller = new ItemController();
+    SearchResult result = SearchFactory.create(SEARCH_IMPLEMENTATIONS.ELASTIC).search(
+        SearchQueryParser.parseStringQuery(q), null, u,
+        ObjectHelper.getURI(CollectionImeji.class, id).toString(), null, offset, size);
+    for (Item vo : controller.retrieveBatch(result.getResults(), -1, 0, u)) {
       DefaultItemTO to = new DefaultItemTO();
       TransferObjectFactory.transferDefaultItem(vo, to,
           profileCache.read(vo.getMetadataSet().getProfile()));
       tos.add(to);
     }
-    
-   return tos;
+    return new SearchResultTO.Builder().numberOfRecords(result.getResults().size()).offset(offset)
+        .results(tos).query(q).size(size).totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
-  
-  public Object readItemTemplate(String id, User u)
-      throws ImejiException, IOException {
+
+  public Object readItemTemplate(String id, User u) throws ImejiException, IOException {
     return MetadataTransferHelper.readItemTemplateForProfile(id, null, u);
   }
- 
+
   public List<CollectionTO> readAll(User u, String q, int offset, int size)
       throws ImejiException, IOException {
     CollectionController cc = new CollectionController();

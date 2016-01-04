@@ -103,7 +103,7 @@ public class MetadataTransferHelper {
                       }
   }
   
-  public static void validateInnerNodeParent(boolean isInnerParent, JsonNode nodeChild, String currentLabel) throws UnprocessableError{
+  public static void validateInnerNodeParent(boolean isInnerParent, JsonNode nodeChild, String currentLabel, String maxOccurs) throws UnprocessableError{
 
     boolean emptyArrayValueCheck =  nodeChild.isArray() && ( nodeChild.get(0).isObject() && nodeChild.get(0).size()==0 ||
         nodeChild.get(0).isValueNode() && StringUtils.trim(nodeChild.get(0).asText()).length() == 0 );
@@ -111,17 +111,18 @@ public class MetadataTransferHelper {
     boolean emptySingleValueCheck = !nodeChild.isArray() && ( nodeChild.isObject() && nodeChild.size()==0 ||
         nodeChild.isValueNode() && StringUtils.trim(nodeChild.asText()).length() == 0 );
     
+    //boolean tooMuchArrayValueCheck =  nodeChild.isArray() && nodeChild.size()>1 && !nodeChild.get(0).isObject() ;
     boolean tooMuchArrayValueCheck =  nodeChild.isArray() && nodeChild.size()>1;
     
     if (isInnerParent &&  (emptyArrayValueCheck || emptySingleValueCheck) ) {
           //validate if node is empty parent is null
           throw new UnprocessableError("Metadata with label \""+currentLabel+"\" is a parent for other metadata! "
-              +" Please provide a non-empty, non-null value for \""+ currentLabel +"\" to enable proper assignment of values! Please check the template item! ");
+              +" Please provide a non-empty, non-null value for \""+ currentLabel +"\" to enable proper assignment of values at "+ nodeChild+ " or check the template item! ");
     }
     
-    if (isInnerParent && tooMuchArrayValueCheck) {
+    if (isInnerParent && tooMuchArrayValueCheck &&  ( !nodeChild.get(0).isObject() && maxOccurs.equals("unbounded") )) {
       throw new UnprocessableError("Metadata with label \""+currentLabel+"\" is a parent for other metadata! "
-          +" You provided multiple values in the inner parent node: "+nodeChild +". To support multiple values, you must explicitly add new \""+currentLabel+"\" which encloses appropriate children metadata! Please check the template item!");
+          +" You provided multiple values in the inner parent node: "+nodeChild +". To support multiple values, you must explicitly add new \""+currentLabel+"\" object which encloses appropriate children metadata! Please check the template item!");
       
     }
   }
@@ -162,7 +163,7 @@ public class MetadataTransferHelper {
                   boolean hasInnerParent = false;
                   if (!node.has(label)){
                       throw new UnprocessableError("Metadata with label \""+label+"\" is a parent for other metadata! "
-                          +" Please provide a value for \""+ label +"\" to enable proper assignment of values! Please check the template item!");
+                          +" Please provide a value for \""+ label +"\" to enable proper assignment of values at "+ node+ " or check the template item!");
                   }
                   
                   for (Iterator<String> iteratorChild = node.fieldNames(); iteratorChild.hasNext();) {
@@ -179,7 +180,7 @@ public class MetadataTransferHelper {
                       }
                       
                       
-                      validateInnerNodeParent(isInnerParent, nodeChild, currentLabel);
+                      validateInnerNodeParent(isInnerParent, nodeChild, currentLabel, innerStatement.getMaxOccurs());
                       //Force creation of parent node which has same label as the other one
                       if (currentLabel.equals(label)) {
                           isInnerParent = false;

@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources;
 
 import static de.mpg.imeji.rest.process.AlbumProcess.readAllAlbums;
+import static de.mpg.imeji.rest.process.CollectionProcess.readCollectionItems;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 import java.io.InputStream;
@@ -82,7 +83,7 @@ public class AlbumResource implements ImejiResource {
 
   @GET
   @Path("/{id}/members")
-  @ApiOperation(value = "Get album members")
+  @ApiOperation(value = "Get album members by album id and a query")
   @Produces(MediaType.APPLICATION_JSON)
   public Response readAllMembers(@Context HttpServletRequest req, @PathParam("id") String id,
       @QueryParam("q") String q, @DefaultValue("0") @QueryParam("offset") int offset,
@@ -90,7 +91,7 @@ public class AlbumResource implements ImejiResource {
     JSONResponse resp = AlbumProcess.readAlbumItems(req, id, q, offset, size);
     return RestProcessUtils.buildJSONResponse(resp);
   }
-
+  
   @Override
   public Response create(HttpServletRequest req) {
     // TODO Auto-generated method stub

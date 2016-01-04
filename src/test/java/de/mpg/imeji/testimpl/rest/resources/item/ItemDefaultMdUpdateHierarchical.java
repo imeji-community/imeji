@@ -25,6 +25,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -60,7 +61,6 @@ public class ItemDefaultMdUpdateHierarchical extends ItemTestBase {
     createItem();
   }
   
-
   @Test
   public void test_1_updateItem_emptySyntaxParameter() throws IOException {
     //Do not provide Syntax Parameter (should be default)
@@ -207,7 +207,7 @@ public class ItemDefaultMdUpdateHierarchical extends ItemTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
-  
+ 
   @Test
   public void test_6_updateItem_defaultSyntax_multipleValueInParentNodeValueOfParentObject() throws IOException
   {
@@ -219,6 +219,64 @@ public class ItemDefaultMdUpdateHierarchical extends ItemTestBase {
         .replaceAll("\"referenceUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
             // 
             .replaceAll("\"number\": 1.2345678E7", "\"number\": [234,235]"));
+    
+    Response response = getTargetAuth(itemId).put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+    //LOGGER.info(response.readEntity(String.class));
+    assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+  }
+  
+  @Test
+  public void test_7_updateItem_defaultSyntax_multipleValueInParentNodeValueOfParentObject() throws Exception
+  {
+    initCollectionWithProfile(getDefaultHierarchicalStatementsMultipleH());
+    itemJSON = getStringFromPath("src/test/resources/rest/defaultCreateItemHierarchicalMultipleParentChild.json");
+    createItem();
+
+    FormDataMultiPart multiPart = new FormDataMultiPart();
+    
+    //itemJSON = getStringFromPath("src/test/resources/rest/defaultCreateItemHierarchicalMultipleParentChild.json");
+
+    multiPart.field("json",
+        itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___", "test.png")
+        .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "\"id\": \""+itemId+"\", ")
+        .replaceAll("\"referenceUrl\"\\s*:\\s*\"___FETCH_URL___\",", ""));
+    
+    
+    Response response = getTargetAuth(itemId).put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+    //LOGGER.info(response.readEntity(String.class));
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    
+    Response response2 = getTargetAuth(itemId).get();
+    String jSonGet = response2.readEntity(String.class);
+    multiPart.field("json", jSonGet);
+    response2 = getTargetAuth(itemId).put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+    //LOGGER.info(response.readEntity(String.class));
+    assertEquals(Status.OK.getStatusCode(), response2.getStatus());
+    
+  }
+  
+  @Test
+  public void test_7_updateItem_defaultSyntax_multipleValueInParentNodeValueOfParentObjectMissingInnerParentNode() throws Exception
+  {
+    initCollectionWithProfile(getDefaultHierarchicalStatementsMultipleH());
+    itemJSON = getStringFromPath("src/test/resources/rest/defaultCreateItemHierarchicalMultipleParentChild.json");
+    createItem();
+
+    FormDataMultiPart multiPart = new FormDataMultiPart();
+    
+    //itemJSON = getStringFromPath("src/test/resources/rest/defaultCreateItemHierarchicalMultipleParentChild.json");
+
+    multiPart.field("json",
+        itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___", "test.png")
+        .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "\"id\": \""+itemId+"\", ")
+        .replaceAll("\"referenceUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
+        .replace("\"textChild\": \"this is second correct\",", "")
+        );
+    
+    
     Response response = getTargetAuth(itemId).put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     //LOGGER.info(response.readEntity(String.class));

@@ -38,6 +38,7 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -154,8 +155,8 @@ public class AlbumIntegration extends ImejiTestBase {
             .register(authAsUser).request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    List<ItemTO> itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+    List<DefaultItemTO> itemList =
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertThat(itemList, not(empty()));
     Assert.assertThat(itemList.get(0).getFilename(), equalTo(itemTO.getFilename()));
 
@@ -174,6 +175,51 @@ public class AlbumIntegration extends ImejiTestBase {
 
     response = target(pathPrefix).path("/" + albumId + "/members")
         .queryParam("q", itemTO.getFilename() + "_new").register(authAsUser)
+        .request(MediaType.APPLICATION_JSON).get();
+
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    List<DefaultItemTO> itemList =
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
+    Assert.assertThat(itemList, empty());
+
+  }
+  
+  @Test
+  public void test_2_ReadAlbum_6_ReadAlbumItemsWithQuery_RawSyntax() throws IOException, BadRequestException {
+    initCollection();
+    initItem();
+    initAlbum();
+
+    Response response =
+        target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUser)
+            .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+    response =
+        target(pathPrefix).path("/" + albumId + "/members").queryParam("syntax", "raw").queryParam("q", itemTO.getFilename())
+            .register(authAsUser).request(MediaType.APPLICATION_JSON).get();
+
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    List<ItemTO> itemList =
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+    Assert.assertThat(itemList, not(empty()));
+    Assert.assertThat(itemList.get(0).getFilename(), equalTo(itemTO.getFilename()));
+
+  }
+
+  @Test
+  public void test_2_ReadAlbum_6_ReadAlbumItemsWithQueryForNoResultsAndOneItemInAlbum_RawSyntax()
+      throws IOException, BadRequestException {
+    initCollection();
+    initItem();
+
+    Response response =
+        target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUser)
+            .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+    response = target(pathPrefix).path("/" + albumId + "/members")
+        .queryParam("syntax", "raw").queryParam("q", itemTO.getFilename() + "_new").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -746,8 +792,8 @@ public class AlbumIntegration extends ImejiTestBase {
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    List<ItemTO> itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+    List<DefaultItemTO> itemList =
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertThat(itemList, not(empty()));
     Assert.assertEquals(2, itemList.size());
 
@@ -762,7 +808,7 @@ public class AlbumIntegration extends ImejiTestBase {
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
     itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertThat(itemList, empty());
   }
 
@@ -795,8 +841,8 @@ public class AlbumIntegration extends ImejiTestBase {
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    List<ItemTO> itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+    List<DefaultItemTO> itemList =
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertThat(itemList, not(empty()));
     Assert.assertEquals(1, itemList.size());
   }
@@ -825,8 +871,8 @@ public class AlbumIntegration extends ImejiTestBase {
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    List<ItemTO> itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+    List<DefaultItemTO> itemList =
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertThat(itemList, not(empty()));
     Assert.assertEquals(2, itemList.size());
 
@@ -846,7 +892,7 @@ public class AlbumIntegration extends ImejiTestBase {
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
     itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertEquals(itemList.size(), 2);
   }
 
@@ -874,8 +920,8 @@ public class AlbumIntegration extends ImejiTestBase {
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    List<ItemTO> itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+    List<DefaultItemTO> itemList =
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertThat(itemList, not(empty()));
     Assert.assertEquals(2, itemList.size());
 
@@ -885,7 +931,7 @@ public class AlbumIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
     String itemsToUnlinkFromAlbum = "[";
-    for (ItemTO it : itemList) {
+    for (DefaultItemTO it : itemList) {
       itemsToUnlinkFromAlbum += "\"" + it.getId() + "\",";
     }
     itemsToUnlinkFromAlbum =
@@ -909,7 +955,7 @@ public class AlbumIntegration extends ImejiTestBase {
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
     itemList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
     Assert.assertEquals(itemList.size(), 2);
   }
 

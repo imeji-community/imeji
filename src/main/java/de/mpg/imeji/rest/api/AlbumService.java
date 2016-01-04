@@ -22,8 +22,10 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
@@ -72,6 +74,33 @@ public class AlbumService implements API<AlbumTO> {
       tos.add(to);
     }
     return tos;
+  }
+  
+  /**
+   * Read all the items of an album according to search query. Response is done with the default
+   * format
+   * 
+   * @param id
+   * @param u
+   * @param q
+   * @return
+   * @throws ImejiException
+   * @throws IOException
+   */
+  public Object readDefaultItems(String id, User u, String q, int offset, int size)
+      throws ImejiException, IOException {
+    ItemController itemController = new ItemController();
+    ProfileCache profileCache = new ProfileCache();
+    List<DefaultItemTO> tos = new ArrayList<>();
+    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(Album.class, id),
+        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
+      DefaultItemTO to = new DefaultItemTO();
+      TransferObjectFactory.transferDefaultItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    
+   return tos;
   }
 
   @Override

@@ -6,6 +6,7 @@ import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONAndExceptionRe
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildResponse;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
 import static de.mpg.imeji.rest.process.RestProcessUtils.localExceptionHandler;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
@@ -51,19 +52,58 @@ public class AlbumProcess {
 
   public static JSONResponse readAlbumItems(HttpServletRequest req, String id, String q,
       int offset, int size) {
-    JSONResponse resp;
+    JSONResponse resp = null;
 
     AlbumService ccrud = new AlbumService();
     try {
       User u = BasicAuthentication.auth(req);
-      resp =
+      
+      switch (guessType(req.getParameter("syntax"))) {
+        case DEFAULT:
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
+                  ccrud.readDefaultItems(id, u, q, offset, size));
+          break;
+        case RAW:
+          resp =
+              RestProcessUtils.buildResponse(OK.getStatusCode(),
+                  ccrud.readItems(id, u, q, offset, size));
+          break;
+      }
+
+      
+     /* resp =
           RestProcessUtils.buildResponse(OK.getStatusCode(),
-              ccrud.readItems(id, u, q, offset, size));
+              ccrud.readItems(id, u, q, offset, size));*/
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
+    
     return resp;
+ 
   }
+  
+  /*
+   * 
+   *   try {
+      u = BasicAuthentication.auth(req);
+      switch (guessType(req.getParameter("syntax"))) {
+        case DEFAULT:
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
+                  ccrud.readDefaultItems(id, u, q, offset, size));
+          break;
+        case RAW:
+          resp =
+              RestProcessUtils.buildResponse(OK.getStatusCode(),
+                  ccrud.readItems(id, u, q, offset, size));
+          break;
+      }
+    } catch (Exception e) {
+      resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+    }
+   * 
+   */
 
 
   public static JSONResponse createAlbum(HttpServletRequest req) {

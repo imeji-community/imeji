@@ -19,10 +19,12 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
@@ -31,6 +33,7 @@ import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.SearchResultTO;
 
 public class AlbumService implements API<AlbumTO> {
 
@@ -75,7 +78,7 @@ public class AlbumService implements API<AlbumTO> {
     }
     return tos;
   }
-  
+
   /**
    * Read all the items of an album according to search query. Response is done with the default
    * format
@@ -89,18 +92,20 @@ public class AlbumService implements API<AlbumTO> {
    */
   public Object readDefaultItems(String id, User u, String q, int offset, int size)
       throws ImejiException, IOException {
-    ItemController itemController = new ItemController();
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
-    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(Album.class, id),
-        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
+    ItemController controller = new ItemController();
+    SearchResult result = SearchFactory.create(SEARCH_IMPLEMENTATIONS.ELASTIC).search(
+        SearchQueryParser.parseStringQuery(q), null, u,
+        ObjectHelper.getURI(Album.class, id).toString(), null, offset, size);
+    for (Item vo : controller.retrieveBatch(result.getResults(), -1, 0, u)) {
       DefaultItemTO to = new DefaultItemTO();
       TransferObjectFactory.transferDefaultItem(vo, to,
           profileCache.read(vo.getMetadataSet().getProfile()));
       tos.add(to);
     }
-    
-   return tos;
+    return new SearchResultTO.Builder().numberOfRecords(result.getResults().size()).offset(offset)
+        .results(tos).query(q).size(size).totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
 
   @Override

@@ -107,7 +107,6 @@ public class CollectionService implements API<CollectionTO> {
       throws ImejiException, IOException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
-
     ItemController controller = new ItemController();
     SearchResult result = SearchFactory.create(SEARCH_IMPLEMENTATIONS.ELASTIC).search(
         SearchQueryParser.parseStringQuery(q), null, u,

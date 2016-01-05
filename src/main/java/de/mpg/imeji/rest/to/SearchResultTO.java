@@ -7,7 +7,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-
 @JsonPropertyOrder({"query", "totalNumberOfResults", "numberOfResults", "offset", "size",
     "results"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -17,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author bastiens
  *
  */
-public class SearchResultTO implements Serializable {
+public class SearchResultTO<T> implements Serializable {
 
   private static final long serialVersionUID = -9046921435794271874L;
   private int totalNumberOfResults;
@@ -25,7 +24,9 @@ public class SearchResultTO implements Serializable {
   private int size;
   private int offset;
   private String query;
-  private List<?> results = new ArrayList<>();
+  private List<T> results = new ArrayList<>();
+
+  public SearchResultTO() {}
 
   /**
    * Builder for {@link SearchResultTO}
@@ -33,51 +34,51 @@ public class SearchResultTO implements Serializable {
    * @author bastiens
    *
    */
-  public static class Builder {
+  public static class Builder<T> {
     private int totalNumberOfResults;
     private int numberOfResults;
     private int size;
     private int offset;
     private String query;
-    private List<?> results = new ArrayList<>();
+    private List<T> results = new ArrayList<>();
 
-    public SearchResultTO build() {
-      return new SearchResultTO(this);
+    public SearchResultTO<T> build() {
+      return new SearchResultTO<T>(this);
     }
 
-    public Builder totalNumberOfRecords(int i) {
+    public Builder<T> totalNumberOfRecords(int i) {
       this.totalNumberOfResults = i;
       return this;
     }
 
-    public Builder numberOfRecords(int i) {
+    public Builder<T> numberOfRecords(int i) {
       this.numberOfResults = i;
       return this;
     }
 
-    public Builder size(int i) {
+    public Builder<T> size(int i) {
       this.size = i;
       return this;
     }
 
-    public Builder offset(int i) {
+    public Builder<T> offset(int i) {
       this.offset = i;
       return this;
     }
 
-    public Builder query(String s) {
+    public Builder<T> query(String s) {
       this.query = s;
       return this;
     }
 
-    public Builder results(List<?> l) {
+    public Builder<T> results(List<T> l) {
       this.results = l;
       return this;
     }
 
   }
 
-  public SearchResultTO(Builder builder) {
+  public SearchResultTO(Builder<T> builder) {
     this.query = builder.query;
     this.numberOfResults = builder.numberOfResults;
     this.offset = builder.offset;
@@ -138,14 +139,14 @@ public class SearchResultTO implements Serializable {
   /**
    * @return the results
    */
-  public List<?> getResults() {
+  public List<T> getResults() {
     return results;
   }
 
   /**
    * @param results the results to set
    */
-  public void setResults(List<?> results) {
+  public void setResults(List<T> results) {
     this.results = results;
   }
 

@@ -19,11 +19,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.JenaUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.test.rest.resources.test.integration.ItemTestBase;
+import util.JenaUtil;
 
 public class ItemRead extends ItemTestBase {
 
@@ -39,36 +42,31 @@ public class ItemRead extends ItemTestBase {
 
   @Test
   public void test_1_ReadItem_Default() throws Exception {
-    //DEFAULT Format
-    Response response =
-        (target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    // DEFAULT Format
+    Response response = (target(PATH_PREFIX).path("/" + itemId).register(authAsUser)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    
+
     DefaultItemTO itemWithFileTO = response.readEntity(DefaultItemTO.class);
     assertEquals(itemId, itemWithFileTO.getId());
   }
 
   @Test
   public void test_2_ReadItem_Unauthorized() throws IOException {
-    //Default format
-  //Read no user 
-    Response response =
-        (target(PATH_PREFIX).path("/" + itemId)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    // Default format
+    // Read no user
+    Response response = (target(PATH_PREFIX).path("/" + itemId).register(MultiPartFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
 
-    //Read user , but not allowed
-    Response response2 =
-        (target(PATH_PREFIX).path("/" + itemId).register(authAsUser2)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    // Read user , but not allowed
+    Response response2 = (target(PATH_PREFIX).path("/" + itemId).register(authAsUser2)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.FORBIDDEN.getStatusCode(), response2.getStatus());
 
-    //Read user false credentials
-    Response response3 =
-        (target(PATH_PREFIX).path("/" + itemId).register(authAsUserFalse)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    // Read user false credentials
+    Response response3 = (target(PATH_PREFIX).path("/" + itemId).register(authAsUserFalse)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response3.getStatus());
   }
 
@@ -76,10 +74,8 @@ public class ItemRead extends ItemTestBase {
   @Test
   public void test_3_ReadItem_Forbidden() throws IOException {
 
-    Response response2 =
-        (target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser2)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    Response response2 = (target(PATH_PREFIX).path("/" + itemId).register(authAsUser2)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.FORBIDDEN.getStatusCode(), response2.getStatus());
 
   }
@@ -91,25 +87,22 @@ public class ItemRead extends ItemTestBase {
     s.release(collectionId, JenaUtil.testUser);
     assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
 
-    //RAW FORMAT
-    Response response =
-        (target(PATH_PREFIX).path("/" + itemId)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    // RAW FORMAT
+    Response response = (target(PATH_PREFIX).path("/" + itemId).register(MultiPartFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    
-    Response response1 =
-        (target(PATH_PREFIX).path("/" + itemId).register(authAsUserFalse)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+
+    Response response1 = (target(PATH_PREFIX).path("/" + itemId).register(authAsUserFalse)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response1.getStatus());
 
-    Response response2 =
-        (target(PATH_PREFIX).path("/" + itemId).register(authAsUser2)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    Response response2 = (target(PATH_PREFIX).path("/" + itemId).register(authAsUser2)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.OK.getStatusCode(), response2.getStatus());
 
   }
-  
-  
+
+
   @Test
   public void test_5_ReadItem_InWithDrawnCollection() throws Exception {
     CollectionService s = new CollectionService();
@@ -120,21 +113,17 @@ public class ItemRead extends ItemTestBase {
 
     assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser).getStatus());
 
-    //Default Format
-    Response response =
-        (target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    // Default Format
+    Response response = (target(PATH_PREFIX).path("/" + itemId).register(authAsUser)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    
-    Response response1 =
-        (target(PATH_PREFIX).path("/" + itemId).register(authAsUserFalse)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+
+    Response response1 = (target(PATH_PREFIX).path("/" + itemId).register(authAsUserFalse)
+        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response1.getStatus());
-    
-     Response response2 =
-        (target(PATH_PREFIX).path("/" + itemId)
-            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+
+    Response response2 = (target(PATH_PREFIX).path("/" + itemId).register(MultiPartFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.OK.getStatusCode(), response2.getStatus());
 
 
@@ -143,19 +132,15 @@ public class ItemRead extends ItemTestBase {
   @Test
   public void test_6_ReadItem_NotFound() throws Exception {
     Response response =
-        (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item")
-        .register(authAsUser)
+        (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item").register(authAsUser)
+            .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+
+    response = (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item")
         .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
-    response =
-        (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item")
-        .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
-    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-
-    response =
-        (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item")
-        .register(authAsUser2)
+    response = (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item").register(authAsUser2)
         .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
@@ -163,18 +148,18 @@ public class ItemRead extends ItemTestBase {
 
   @Test
   public void test_7_ReadItemsWithQuery() throws Exception {
-    //DEFAULT FORMAT
-    
-     Response response =
-        (target(PATH_PREFIX).queryParam("q", itemTO.getFilename())
-            .register(authAsUser)
+    // DEFAULT FORMAT
+
+    Response response =
+        (target(PATH_PREFIX).queryParam("q", itemTO.getFilename()).register(authAsUser)
             .register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    List<DefaultItemTO> itemListD =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), DefaultItemTO.class);
-    assertThat(itemListD, not(empty()));
-    assertThat(itemListD.get(0).getFilename(), equalTo(itemTO.getFilename()));
+    SearchResultTO<DefaultItemTO> resultTO = RestProcessUtils.buildTOFromJSON(
+        response.readEntity(String.class), new TypeReference<SearchResultTO<DefaultItemTO>>() {});
+    List<DefaultItemTO> itemList = resultTO.getResults();
+    assertThat(itemList, not(empty()));
+    assertThat(itemList.get(0).getFilename(), equalTo(itemTO.getFilename()));
   }
 
 

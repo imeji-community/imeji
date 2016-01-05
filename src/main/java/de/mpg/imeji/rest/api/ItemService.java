@@ -103,7 +103,7 @@ public class ItemService implements API<ItemTO> {
    * @throws ImejiException
    * @throws IOException
    */
-  public SearchResultTO readDefaultItems(User u, String q, int offset, int size)
+  public SearchResultTO<DefaultItemTO> readDefaultItems(User u, String q, int offset, int size)
       throws ImejiException, IOException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
@@ -116,10 +116,10 @@ public class ItemService implements API<ItemTO> {
           profileCache.read(vo.getMetadataSet().getProfile()));
       tos.add(to);
     }
-    return new SearchResultTO.Builder().numberOfRecords(result.getResults().size()).offset(offset)
-        .results(tos).query(q).size(size).totalNumberOfRecords(result.getNumberOfRecords()).build();
+    return new SearchResultTO.Builder<DefaultItemTO>().numberOfRecords(result.getResults().size())
+        .offset(offset).results(tos).query(q).size(size)
+        .totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
-
 
   public ItemTO update(ItemTO to, User u) throws ImejiException {
     Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);

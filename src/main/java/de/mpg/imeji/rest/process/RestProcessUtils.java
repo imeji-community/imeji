@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -57,6 +58,17 @@ public class RestProcessUtils {
     } catch (Exception e) {
       throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
     }
+  }
+
+  public static <T> T buildTOFromJSON(final String json, final TypeReference<T> type)
+      throws BadRequestException {
+    T data = null;
+    try {
+      data = new ObjectMapper().readValue(json, type);
+    } catch (Exception e) {
+      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+    }
+    return data;
   }
 
   public static JsonNode buildJsonNode(Object obj) {
@@ -122,6 +134,19 @@ public class RestProcessUtils {
       throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
     }
   }
+
+  public static String buildJSONFromObject(Object obj, TypeReference<?> typeReference)
+      throws BadRequestException {
+    ObjectWriter ow =
+        new ObjectMapper().writerWithType(typeReference).with(SerializationFeature.INDENT_OUTPUT);
+    try {
+      return ow.writeValueAsString(obj);
+    } catch (Exception e) {
+      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+    }
+  }
+
+
 
   public static Response buildJSONResponse(JSONResponse resp) {
     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -256,10 +281,10 @@ public class RestProcessUtils {
 
   public static Map<String, Object> jsonToPOJO(String str) throws IOException, BadRequestException {
     try {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(str, Map.class);
-        } catch (Exception e) {
-          throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
-        }
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(str, Map.class);
+    } catch (Exception e) {
+      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+    }
   }
 }

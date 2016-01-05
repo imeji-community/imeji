@@ -38,6 +38,7 @@ import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.SearchResultTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 public class RestProcessUtils {
@@ -60,6 +61,25 @@ public class RestProcessUtils {
     }
   }
 
+  /**
+   * Parse a JSON to a parameterized type object. Usage:
+   * 
+   * <pre>
+   * buildTOFromJSON(json,new TypeReference{@literal<T>}(){})
+   * </pre>
+   * 
+   * For instance, to parse a {@link SearchResultTO} of {@link DefaultItemTO}, do:
+   * 
+   * <pre>
+   * buildTOFromJSON(json,new TypeReference{@literal<SearchResultTO<DefaultItemTO>>}(){})
+   * </pre>
+   *
+   * 
+   * @param json
+   * @param type
+   * @return
+   * @throws BadRequestException
+   */
   public static <T> T buildTOFromJSON(final String json, final TypeReference<T> type)
       throws BadRequestException {
     T data = null;
@@ -70,6 +90,7 @@ public class RestProcessUtils {
     }
     return data;
   }
+
 
   public static JsonNode buildJsonNode(Object obj) {
     ObjectMapper mapper = new ObjectMapper();

@@ -12,13 +12,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -52,16 +50,22 @@ public class AlbumService implements API<AlbumTO> {
     return getAlbumTO(controller, id, u);
   }
 
-  public List<AlbumTO> readAll(User u, String q, int offset, int size) throws ImejiException {
-    return Lists.transform(new AlbumController().searchAndretrieveLazy(u, q, null, offset, size),
-        new Function<Album, AlbumTO>() {
-          @Override
-          public AlbumTO apply(Album vo) {
-            AlbumTO to = new AlbumTO();
-            TransferObjectFactory.transferAlbum(vo, to);
-            return to;
-          }
-        });
+  public SearchResultTO<AlbumTO> readAll(User u, String q, int offset, int size)
+      throws ImejiException, IOException {
+    AlbumController controller = new AlbumController();
+    List<AlbumTO> tos = new ArrayList<>();
+    SearchResult result =
+        SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
+            .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
+    for (Album vo : controller.retrieveBatchLazy(result.getResults(), u, -1, 0)) {
+      AlbumTO to = new AlbumTO();
+      TransferObjectFactory.transferAlbum(vo, to);
+      tos.add(to);
+    }
+    return new SearchResultTO.Builder<AlbumTO>().numberOfRecords(result.getResults().size())
+        .offset(offset).results(tos).query(q).size(size)
+        .totalNumberOfRecords(result.getNumberOfRecords()).build();
+
   }
 
   public List<ItemTO> readItems(String id, User u, String q, int offset, int size)
@@ -104,8 +108,9 @@ public class AlbumService implements API<AlbumTO> {
           profileCache.read(vo.getMetadataSet().getProfile()));
       tos.add(to);
     }
-    return new SearchResultTO.Builder().numberOfRecords(result.getResults().size()).offset(offset)
-        .results(tos).query(q).size(size).totalNumberOfRecords(result.getNumberOfRecords()).build();
+    return new SearchResultTO.Builder<DefaultItemTO>().numberOfRecords(result.getResults().size())
+        .offset(offset).results(tos).query(q).size(size)
+        .totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
 
   @Override

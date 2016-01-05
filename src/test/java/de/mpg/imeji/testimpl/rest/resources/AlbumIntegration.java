@@ -136,8 +136,9 @@ public class AlbumIntegration extends ImejiTestBase {
     Response response = target(pathPrefix).queryParam("q", albumTO.getTitle()).register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    List<AlbumTO> albumList =
-        RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), AlbumTO.class);
+    SearchResultTO<AlbumTO> result = RestProcessUtils.buildTOFromJSON(
+        response.readEntity(String.class), new TypeReference<SearchResultTO<AlbumTO>>() {});
+    List<AlbumTO> albumList = result.getResults();
     Assert.assertThat(albumList, not(empty()));
     Assert.assertThat(albumList.get(0).getTitle(), equalTo(albumTO.getTitle()));
 
@@ -191,7 +192,7 @@ public class AlbumIntegration extends ImejiTestBase {
   }
 
   @Test
-  public void test_2_ReadAlbum_6_ReadAlbumItemsWithQuery_RawSyntax()
+  public void test_2_ReadAlbum_6_ReadAlbumItemsRawWithQuery_RawSyntax()
       throws IOException, BadRequestException {
     initCollection();
     initItem();
@@ -215,7 +216,7 @@ public class AlbumIntegration extends ImejiTestBase {
   }
 
   @Test
-  public void test_2_ReadAlbum_6_ReadAlbumItemsWithQueryForNoResultsAndOneItemInAlbum_RawSyntax()
+  public void test_2_ReadAlbum_6_ReadAlbumItemsRawWithQueryForNoResultsAndOneItemInAlbum_RawSyntax()
       throws IOException, BadRequestException {
     initCollection();
     initItem();

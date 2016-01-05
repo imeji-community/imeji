@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+@JsonPropertyOrder({"query", "totalNumberOfResults", "numberOfResults", "offset", "size",
+    "results"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 /**
  * A TO to wrap Search results
@@ -16,11 +20,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class SearchResultTO implements Serializable {
 
   private static final long serialVersionUID = -9046921435794271874L;
-  private int totalNumberOfRecords;
-  private int numberOfRecords;
+  private int totalNumberOfResults;
+  private int numberOfResults;
   private int size;
   private int offset;
-  private String q;
+  private String query;
   private List<?> results = new ArrayList<>();
 
   /**
@@ -30,11 +34,11 @@ public class SearchResultTO implements Serializable {
    *
    */
   public static class Builder {
-    private int totalNumberOfRecords;
-    private int numberOfRecords;
+    private int totalNumberOfResults;
+    private int numberOfResults;
     private int size;
     private int offset;
-    private String q;
+    private String query;
     private List<?> results = new ArrayList<>();
 
     public SearchResultTO build() {
@@ -42,12 +46,12 @@ public class SearchResultTO implements Serializable {
     }
 
     public Builder totalNumberOfRecords(int i) {
-      this.totalNumberOfRecords = i;
+      this.totalNumberOfResults = i;
       return this;
     }
 
     public Builder numberOfRecords(int i) {
-      this.numberOfRecords = i;
+      this.numberOfResults = i;
       return this;
     }
 
@@ -62,7 +66,7 @@ public class SearchResultTO implements Serializable {
     }
 
     public Builder query(String s) {
-      this.q = s;
+      this.query = s;
       return this;
     }
 
@@ -74,21 +78,62 @@ public class SearchResultTO implements Serializable {
   }
 
   public SearchResultTO(Builder builder) {
-    this.q = builder.q;
-    this.numberOfRecords = builder.numberOfRecords;
+    this.query = builder.query;
+    this.numberOfResults = builder.numberOfResults;
     this.offset = builder.offset;
     this.results = builder.results;
     this.size = builder.size;
-    this.totalNumberOfRecords = builder.totalNumberOfRecords;
+    this.totalNumberOfResults = builder.totalNumberOfResults;
   }
 
-  public int getTotalNumberOfRecords() {
-    return totalNumberOfRecords;
+
+  /**
+   * @return the totalNumberOfResults
+   */
+  public int getTotalNumberOfResults() {
+    return totalNumberOfResults;
   }
 
-  public void setTotalNumberOfRecords(int totalNumberOfRecords) {
-    this.totalNumberOfRecords = totalNumberOfRecords;
+
+  /**
+   * @param totalNumberOfResults the totalNumberOfResults to set
+   */
+  public void setTotalNumberOfResults(int totalNumberOfResults) {
+    this.totalNumberOfResults = totalNumberOfResults;
   }
+
+
+  /**
+   * @return the numberOfResults
+   */
+  public int getNumberOfResults() {
+    return numberOfResults;
+  }
+
+
+  /**
+   * @param numberOfResults the numberOfResults to set
+   */
+  public void setNumberOfResults(int numberOfResults) {
+    this.numberOfResults = numberOfResults;
+  }
+
+
+  /**
+   * @return the query
+   */
+  public String getQuery() {
+    return query;
+  }
+
+
+  /**
+   * @param query the query to set
+   */
+  public void setQuery(String query) {
+    this.query = query;
+  }
+
 
   /**
    * @return the results
@@ -132,33 +177,6 @@ public class SearchResultTO implements Serializable {
     this.offset = offset;
   }
 
-  /**
-   * @return the q
-   */
-  public String getQ() {
-    return q;
-  }
-
-  /**
-   * @param q the q to set
-   */
-  public void setQ(String q) {
-    this.q = q;
-  }
-
-  /**
-   * @return the numberOfRecords
-   */
-  public int getNumberOfRecords() {
-    return numberOfRecords;
-  }
-
-  /**
-   * @param numberOfRecords the numberOfRecords to set
-   */
-  public void setNumberOfRecords(int numberOfRecords) {
-    this.numberOfRecords = numberOfRecords;
-  }
 
 
 }

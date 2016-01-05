@@ -424,6 +424,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_mediaEditPanel .imj_mediaEditPanelItem { letter-spacing: 0.045em; margin: 1em 0.273em 0 2.000em; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 .imj_mediaEditPanel .imj_metadataEditButtonArea { display: inline-block; }
 
+.imj_metadataValue .imj_metadataEditButtonArea { display: block; margin-left: 1em; margin-top: -1em; margin-bottom: 1em; }
+
 .imj_mediaContainerEditMD { margin-bottom: 0.5em; padding: 0; width: 100%; border-top: 0.1em solid #6CAE2F; }
 .imj_mediaContainerEditMD .imj_headline, .imj_mediaContainerEditMD .imj_administrationTiledList .imj_adminPanel .imj_config_headline, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_config_headline { width: 100%; }
 .imj_mediaContainerEditMD .imj_headline .imj_headline h3, .imj_mediaContainerEditMD .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_headline h3, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_config_headline .imj_headline h3, .imj_mediaContainerEditMD .imj_headline .imj_administrationTiledList .imj_adminPanel .imj_config_headline h3, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_headline .imj_config_headline h3, .imj_mediaContainerEditMD .imj_administrationTiledList .imj_adminPanel .imj_config_headline .imj_config_headline h3, .imj_administrationTiledList .imj_adminPanel .imj_mediaContainerEditMD .imj_config_headline .imj_config_headline h3 { margin: 1% 0; }

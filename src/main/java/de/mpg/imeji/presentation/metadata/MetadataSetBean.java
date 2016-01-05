@@ -187,7 +187,7 @@ public class MetadataSetBean implements Serializable {
         String childId = st.getId().toString();
         String parentId = st.getParent().toString();
         if(multiValueStatements.containsKey(parentId)){
-          for(int i=0; i<multiValueStatements.get(parentId) - countStatementOccurance(l, childId); i++){
+          while(multiValueStatements.get(parentId) - countStatementOccurance(l, childId) > 0){
             if(multiValueStatements.containsKey(childId)){
               multiValueStatements.put(childId, multiValueStatements.get(childId) + 1);
             }

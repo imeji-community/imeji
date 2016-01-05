@@ -210,15 +210,16 @@
 												<div style="margin-left: #{metadata.hierarchyLevel}em;">
 													<!-- MetaDataInput -->
 													<list:batchEditList_singleStatement id="editMd" itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
-												</div>
-												<!-- imj_multipleButtons (-) (+) command buttons -->
-												<div class="imj_metadataEditButtonArea">
-													<h:commandLink type="submit" styleClass="fa fa-plus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="" title="#{lbl.add} #{MetadataLabels.internationalizedLabels[metadata.statement.id]}">
-														<f:ajax execute="@form" render="@form"/>
-                                                    </h:commandLink>
-													<h:commandLink type="submit" styleClass="fa fa-minus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="" title="#{lbl.remove_this_metadata} #{MetadataLabels.internationalizedLabels[metadata.statement.id]}">
-														<f:ajax execute="@form" render="@form"/>
-                                                    </h:commandLink>
+													<!-- imj_multipleButtons (-) (+) command buttons -->
+													<h:panelGroup class="imj_metadataEditButtonArea" rendered="#{metadata.statement.maxOccurs != '1'}">
+														<h:commandLink type="submit" styleClass="fa fa-plus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="" title="#{lbl.add} #{MetadataLabels.internationalizedLabels[metadata.statement.id]}">
+															<f:ajax execute="@form" render="@form"/>
+	                                                    </h:commandLink>
+														<h:commandLink type="submit" styleClass="fa fa-minus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="" title="#{lbl.remove_this_metadata} #{MetadataLabels.internationalizedLabels[metadata.statement.id]}">
+															<f:ajax execute="@form" render="@form"/>
+	                                                    </h:commandLink>                                                
+													</h:panelGroup>
+													<h:panelGroup style="visibility:hidden" styleClass="fa fa-minus-square-o" rendered="#{metadata.statement.maxOccurs == '1'}"></h:panelGroup>												
 												</div>
 											</div>
 										</div>

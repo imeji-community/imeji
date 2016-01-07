@@ -47,11 +47,19 @@ public class HttpAuthentication implements Authentication {
   private String apiKey = null;
 
   /**
-   * Constructor
+   * Constructor with {@link HttpServletRequest}
    */
   public HttpAuthentication(HttpServletRequest request) {
-    usernamePassword = getUsernamePassword(request);
-    apiKey = getApiKey(request);
+    this(request.getHeader("Authorization"));
+  }
+
+  /**
+   * Constructor with the authorization header
+   * 
+   * @param authorizationHeader
+   */
+  public HttpAuthentication(String authorizationHeader) {
+    parseAuthorizationHeader(authorizationHeader);
   }
 
   /*
@@ -72,37 +80,23 @@ public class HttpAuthentication implements Authentication {
         return simpleAuthentification.doLogin();
       }
     }
-
-    return null;
+    throw new AuthenticationError("No Basic Authentication or API key found");
   }
 
+
   /**
-   * Utility method to read the username and password in the {@link HttpServletRequest} (separated
-   * by a colon).
+   * Parse the authprization header and set the variables
    * 
-   * @param request
-   * @return The username and password combination
+   * @param authHeader
    */
-  private String getUsernamePassword(HttpServletRequest request) {
-    String authHeader = request.getHeader("Authorization");
+  private void parseAuthorizationHeader(String authHeader) {
     if (authHeader != null && authHeader.contains("Basic")) {
-      return new String(Base64.decodeBase64(authHeader.replace("Basic ", "").trim().getBytes()));
+      usernamePassword =
+          new String(Base64.decodeBase64(authHeader.replace("Basic ", "").trim().getBytes()));
     }
-    return null;
-  }
-
-  /**
-   * Return the api Key
-   * 
-   * @param request
-   * @return
-   */
-  private String getApiKey(HttpServletRequest request) {
-    String authHeader = request.getHeader("Authorization");
     if (authHeader != null && authHeader.contains("Bearer ")) {
-      return new String(Base64.decodeBase64(authHeader.replace("Bearer ", "").trim().getBytes()));
+      apiKey = authHeader.replace("Bearer ", "").trim();
     }
-    return null;
   }
 
   /*

@@ -44,9 +44,9 @@ public class APIKeyAuthentication implements Authentication {
     } catch (Exception e) {
       logger.error("Invalid Key authorization");
     }
-    logger.error("Error APIKeyAuthentication user could not be authenticated with provided credentials");
-    throw new AuthenticationError("User could not be authenticated with provided credentials!");
-    //return null;
+    logger.error(
+        "Error APIKeyAuthentication user could not be authenticated with provided credentials");
+    throw new AuthenticationError("Invalid Key authorization");
   }
 
   /**

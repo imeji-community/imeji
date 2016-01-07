@@ -27,6 +27,7 @@ package de.mpg.imeji.presentation.metadata;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -139,7 +140,7 @@ public class MetadataSetBean implements Serializable {
    * already defined one. this method does the contrary as the trim() method
    */
   public void addEmtpyValues() {
-    // Find the Metadata which have not be defined with a value into the
+    // Find the Metadata which have not been defined with a value into the
     // Metadataset
     List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>(metadataTree.getList());
     
@@ -173,12 +174,29 @@ public class MetadataSetBean implements Serializable {
       }
     }
     
-    //count occurance of different multipleValue statements
-    for(SuperMetadataBean smb : l){
-      String statementId = smb.getStatement().getId().toString();
+    //count occurance of different multipleValue statements    
+    for(int i = 0; i<l.size(); i++){
+      String statementId = l.get(i).getStatement().getId().toString();
       if(multiValueStatements.containsKey(statementId)){
-        multiValueStatements.put(statementId, multiValueStatements.get(statementId) + 1);
-      }      
+          multiValueStatements.put(statementId, multiValueStatements.get(statementId) + 1);
+      }        
+    }
+    
+    //save number of statements with different parents in HashMap
+    HashSet<SuperMetadataBean> parents = new HashSet<SuperMetadataBean>();
+    HashMap<String, Integer> statementOccurrences = new HashMap<String, Integer>();
+    for(SuperMetadataBean smb : l){
+      if(smb.getParent() == null || !(parents.contains(smb.getParent()))){
+        String statementId = smb.getStatement().getId().toString();
+        if(statementOccurrences.containsKey(statementId)){
+          statementOccurrences.put(statementId, statementOccurrences.get(statementId)+1);
+        }else{
+          statementOccurrences.put(statementId, 1);
+        }
+        if(smb.getParent() != null){
+          parents.add(smb.getParent());
+        }
+      }
     }
     
     //add statements for children of multipleValue statements
@@ -187,9 +205,10 @@ public class MetadataSetBean implements Serializable {
         String childId = st.getId().toString();
         String parentId = st.getParent().toString();
         if(multiValueStatements.containsKey(parentId)){
-          while(multiValueStatements.get(parentId) - countStatementOccurance(l, childId) > 0){
+          while(multiValueStatements.get(parentId) - statementOccurrences.get(childId) > 0){
             if(multiValueStatements.containsKey(childId)){
               multiValueStatements.put(childId, multiValueStatements.get(childId) + 1);
+              statementOccurrences.put(st.getId().toString(), statementOccurrences.get(childId) + 1);
             }
             SuperMetadataBean newSmb = new SuperMetadataBean(MetadataFactory.createMetadata(profile.getStatement(childId)), profile.getStatement(childId));
             l.add(newSmb); 
@@ -241,7 +260,7 @@ public class MetadataSetBean implements Serializable {
     initTreeFromList(l);
   }
   
-  public int countStatementOccurance(List<SuperMetadataBean> l, String statementID){
+  public int countStatementOccurrence(List<SuperMetadataBean> l, String statementID){
     int count = 0;
     for (SuperMetadataBean md : l) {
       if (md.getStatement().getId().toString().equals(statementID))

@@ -421,7 +421,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
       sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
       sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 
-      searchResult = search(searchQuery, sortCriterion, offset, limit);
+      searchResult = search(searchQuery, sortCriterion, offset, -1);
       setSearchQuery(searchQuery);
       setSelectedFilterSearch(sp);
       searchResult.setQuery(getQuery());

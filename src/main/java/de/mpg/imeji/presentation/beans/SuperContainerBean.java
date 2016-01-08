@@ -416,7 +416,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
       searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
       searchQuery.addPair(sp);
     }
-    if (getSearchQuery() == null || changedFilters(sp, getSelectedFilterSearch())) {
+    if (getSearchQuery() == null || changedFilters(sp, getSelectedFilterSearch()) || (limit > searchResult.getResults().size() && totalNumberOfRecords > searchResult.getResults().size())) {
       SortCriterion sortCriterion = new SortCriterion();
       sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
       sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));

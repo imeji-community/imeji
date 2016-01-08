@@ -57,20 +57,20 @@ public class SimpleAuthentication implements Authentication {
    */
   @Override
   public User doLogin() throws AuthenticationError {
-    
-    if (StringHelper.isNullOrEmptyTrim(login) && StringHelper.isNullOrEmptyTrim(pwd) ) {
+    if (StringHelper.isNullOrEmptyTrim(login) && StringHelper.isNullOrEmptyTrim(pwd)) {
       return null;
     }
 
     UserController uc = new UserController(Imeji.adminUser);
-    
+
     try {
       User user = uc.retrieve(login);
       if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(pwd))) {
         return user;
       }
     } catch (Exception e) {
-      logger.error("Error SimpleAuthentification user could not be authenticated with provided credentials");
+      logger.error(
+          "Error SimpleAuthentification user could not be authenticated with provided credentials");
       throw new AuthenticationError("User could not be authenticated with provided credentials!");
     }
     throw new AuthenticationError("User could not be authenticated with provided credentials!");

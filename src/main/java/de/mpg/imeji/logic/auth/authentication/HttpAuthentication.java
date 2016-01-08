@@ -80,7 +80,8 @@ public class HttpAuthentication implements Authentication {
         return simpleAuthentification.doLogin();
       }
     }
-    throw new AuthenticationError("No Basic Authentication or API key found");
+    // not logged in
+    return null;
   }
 
 

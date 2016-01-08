@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.vo.User;
  */
 @JsonInclude(Include.NON_NULL)
 public class UserTO {
+  private String id;
   private String email;
   private long quota;
   private String apiKey;
@@ -74,6 +75,20 @@ public class UserTO {
    */
   public void setPerson(PersonTO person) {
     this.person = person;
+  }
+
+  /**
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * @param id the id to set
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 
 }

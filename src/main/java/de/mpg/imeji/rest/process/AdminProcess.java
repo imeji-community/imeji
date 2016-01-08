@@ -22,7 +22,7 @@ public class AdminProcess {
   public static JSONResponse login(String authorizationHeader) {
     try {
       User userVO = BasicAuthentication.auth(authorizationHeader);
-      if (userVO.getApiKey() == null) {
+      if (userVO.getApiKey() == null || "".equals(userVO.getApiKey())) {
         updateUserKey(userVO, generateNewKey(userVO));
       }
       UserTO userTO = new UserTO();

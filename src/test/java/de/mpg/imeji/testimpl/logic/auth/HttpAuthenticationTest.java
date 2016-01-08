@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.auth.ImejiRsaKeys;
 import de.mpg.imeji.logic.auth.authentication.APIKeyAuthentication;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.process.AdminProcess;
 import util.JenaUtil;
 
 /**
@@ -72,6 +73,12 @@ public class HttpAuthenticationTest {
     }
   }
 
+  /**
+   * Login a user with its API Key
+   * 
+   * @throws ImejiException
+   * @throws JoseException
+   */
   @Test
   public void loginWithAPIKey() throws ImejiException, JoseException {
     User usertest = new UserController(JenaUtil.testUser).retrieve(JenaUtil.TEST_USER_EMAIL);
@@ -84,6 +91,12 @@ public class HttpAuthenticationTest {
     }
   }
 
+  /**
+   * Login A user with a wrong API Key
+   * 
+   * @throws ImejiException
+   * @throws JoseException
+   */
   @Test
   public void loginWithWrongAPIKey() throws ImejiException, JoseException {
     User usertest = new UserController(JenaUtil.testUser).retrieve(JenaUtil.TEST_USER_EMAIL);
@@ -93,6 +106,67 @@ public class HttpAuthenticationTest {
       Assert.fail();
     } catch (AuthenticationError e) {
       // ok
+    }
+  }
+
+  /**
+   * Login a user which doesn't have an API Key (login is done with email/password)
+   * 
+   * @throws ImejiException
+   */
+  @Test
+  public void loginUserWithoutKey() throws ImejiException {
+    // Force key == null
+    UserController controller = new UserController(JenaUtil.testUser);
+    User usertest = controller.retrieve(JenaUtil.TEST_USER_EMAIL);
+    usertest.setApiKey(null);
+    controller.update(usertest, usertest);
+    AdminProcess
+        .login(generateBasicAuthenticationHeader(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD));
+    String key = controller.retrieve(JenaUtil.TEST_USER_EMAIL).getApiKey();
+    Assert.assertTrue(key != null && !"".equals(key));
+  }
+
+  /**
+   * Login a user which doesn't have an API Key (login is done with email/password)
+   * 
+   * @throws ImejiException
+   */
+  @Test
+  public void loginUserWithEmtpytKey() throws ImejiException {
+    // Force key == ""
+    UserController controller = new UserController(JenaUtil.testUser);
+    User usertest = controller.retrieve(JenaUtil.TEST_USER_EMAIL);
+    usertest.setApiKey("");
+    controller.update(usertest, usertest);
+    AdminProcess
+        .login(generateBasicAuthenticationHeader(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD));
+    String key = controller.retrieve(JenaUtil.TEST_USER_EMAIL).getApiKey();
+    Assert.assertTrue(key != null && !"".equals(key));
+  }
+
+  /**
+   * Logout a user
+   * 
+   * @throws ImejiException
+   */
+  @Test
+  public void logout() throws ImejiException {
+    // Login to be sure to have a valid key
+    AdminProcess
+        .login(generateBasicAuthenticationHeader(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD));
+    // read the key
+    UserController controller = new UserController(JenaUtil.testUser);
+    User usertest = controller.retrieve(JenaUtil.TEST_USER_EMAIL);
+    String key = usertest.getApiKey();
+    AdminProcess.logout(generateAPIKEYAuthenticationHeader(key));
+    Assert.assertFalse(key.equals(controller.retrieve(JenaUtil.TEST_USER_EMAIL).getApiKey()));
+    try {
+      // Try to login again with the old key
+      AuthenticationFactory.factory(generateAPIKEYAuthenticationHeader(key)).doLogin();
+      Assert.fail("Key shouldn't be valid after logout");
+    } catch (AuthenticationError e) {
+      // OK: Login not possible with old key
     }
   }
 

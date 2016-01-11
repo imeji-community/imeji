@@ -180,9 +180,9 @@ digilib buttons plugin
         // buttons (reference added later)
         'buttons' : null,
         // disabled buttons (should be an array of button names)
-        'buttonsDisabled' : [],
+        'buttonsDisabled' : ["back", "fwd","page"],
         // show buttons needed for consecutive (book-like) consultation of image files
-        'showPageButtons' : true,
+        'showPageButtons' : false,
         // defaults for digilib buttons
         'buttonSettings' : {
             'fullscreen' : {

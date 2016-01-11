@@ -177,20 +177,39 @@ public class CollectionController extends ImejiController {
    */
   public Collection<CollectionImeji> retrieveBatchLazy(List<String> uris, int limit, int offset,
       User user) throws ImejiException {
-    List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-    List<String> retrieveUris;
-    if (limit < 0) {
-      retrieveUris = uris;
-    } else {
-      retrieveUris = uris.size() > 0 && limit > 0
-          ? uris.subList(offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
-    }
-    for (String s : retrieveUris) {
-      cols.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
-    }
+//    List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
+//    List<String> retrieveUris;
+//    if (limit < 0) {
+//      retrieveUris = uris;
+//    } else {
+//      retrieveUris = uris.size() > 0 && limit > 0
+//          ? uris.subList(offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
+//    }
+//    for (String s : retrieveUris) {
+//      cols.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
+//    }
+    List<CollectionImeji> cols = prepareBatchRetrieve(uris, limit, offset);
     reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
     return cols;
 
+  }
+  
+  /**
+   * Prepare the list of {@link Collection} which is going to be retrieved
+   * 
+   * @param uris
+   * @param limit
+   * @param offset
+   * @return
+   */
+  private List<CollectionImeji> prepareBatchRetrieve(List<String> uris, int limit, int offset) {
+    List<CollectionImeji> collections = new ArrayList<CollectionImeji>();
+    uris = uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
+        : uris;
+    for (String s : uris) {
+      collections.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
+    }
+    return collections;
   }
 
   /**
@@ -503,7 +522,7 @@ public class CollectionController extends ImejiController {
       User user, String spaceId) {
     // Search search = SearchFactory.create(SearchObjectTypes.COLLECTION,
     // SEARCH_IMPLEMENTATIONS.JENA);
-    return search.search(searchQuery, sortCri, user, null, spaceId, 0, -1);
+    return search.search(searchQuery, sortCri, user, null, spaceId, offset, limit);
   }
 
   /**

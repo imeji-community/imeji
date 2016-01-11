@@ -57,7 +57,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
     search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
     collections =
-        controller.retrieveBatchLazy(searchResult.getResults(), limit, offset, sb.getUser());
+        controller.retrieveBatchLazy(searchResult.getResults(), -1, offset, sb.getUser());
     return ImejiFactory.collectionListToListItem(collections, sb.getUser());
   }
 

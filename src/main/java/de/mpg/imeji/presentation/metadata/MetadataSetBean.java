@@ -182,19 +182,19 @@ public class MetadataSetBean implements Serializable {
       }        
     }
     
-    //save number of statements with different parents in HashMap
-    HashSet<SuperMetadataBean> parents = new HashSet<SuperMetadataBean>();
+    //save number of different statements with different parents in HashMap to calculate how many empty statements are needed
+    HashSet<String> parents = new HashSet<String>();
     HashMap<String, Integer> statementOccurrences = new HashMap<String, Integer>();
     for(SuperMetadataBean smb : l){
-      if(smb.getParent() == null || !(parents.contains(smb.getParent()))){
-        String statementId = smb.getStatement().getId().toString();
+      String statementId = smb.getStatement().getId().toString();
+      if(smb.getParent() == null || !(parents.contains(smb.getParent() + statementId))){        
         if(statementOccurrences.containsKey(statementId)){
           statementOccurrences.put(statementId, statementOccurrences.get(statementId)+1);
         }else{
           statementOccurrences.put(statementId, 1);
         }
         if(smb.getParent() != null){
-          parents.add(smb.getParent());
+          parents.add(smb.getParent()+statementId);
         }
       }
     }

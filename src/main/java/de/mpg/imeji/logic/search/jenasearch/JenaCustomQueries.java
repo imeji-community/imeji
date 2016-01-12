@@ -135,7 +135,7 @@ public class JenaCustomQueries {
    * @return
    */
   public static String selectUserAll(String name) {
-    return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?l . ?s <http://xmlns.com/foaf/0.1/email> ?email. filter(regex(?name, '"
+    return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?name . ?s <http://xmlns.com/foaf/0.1/email> ?email. filter(regex(?name, '"
         + name + "','i') || regex(?email, '" + name + "','i'))}";
   }
 

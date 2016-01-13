@@ -43,6 +43,7 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -135,11 +136,28 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public MetadataProfile retrieveByCollectionId(URI collectionId, User user) throws ImejiException {
-
     CollectionController cc = new CollectionController();
     CollectionImeji c;
     try {
       c = cc.retrieve(collectionId, user);
+      return retrieve(c.getProfile(), user);
+    } catch (NotFoundException e) {
+      throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
+    }
+  }
+
+  /**
+   * Retrieve the {@link MetadataProfile} of an {@link Item} TODO: Use Search for better performance
+   * 
+   * @param itemId
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public MetadataProfile retrieveByItemId(URI itemId, User user) throws ImejiException {
+    try {
+      Item item = new ItemController().retrieve(itemId, user);
+      CollectionImeji c = new CollectionController().retrieve(item.getCollection(), user);
       return retrieve(c.getProfile(), user);
     } catch (NotFoundException e) {
       throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
@@ -344,14 +362,14 @@ public class ProfileController extends ImejiController {
       mdpVO = new MetadataProfile();
       transferMetadataProfile(mdpTO, mdpVO, TRANSFER_MODE.CREATE);
       mdpVO.setDefault(true);
-      
+
       mdpVO = create(mdpVO, Imeji.adminUser);
     }
 
-    if (mdpVO != null && !mdpVO.getStatus().equals(Status.RELEASED)){
+    if (mdpVO != null && !mdpVO.getStatus().equals(Status.RELEASED)) {
       release(mdpVO, Imeji.adminUser);
     }
-    
+
     return mdpVO;
 
   }

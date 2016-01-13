@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.defaultTO;
+package de.mpg.imeji.rest.to.defaultItemTO;
 
 import java.io.Serializable;
 
@@ -12,9 +12,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class DefaultMetadataTO implements Serializable {
   private static final long serialVersionUID = 3695589988406699703L;
-
-
-
   private String name;
   private double longitude;
   private double latitude;

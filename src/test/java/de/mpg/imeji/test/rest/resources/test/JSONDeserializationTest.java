@@ -3,9 +3,9 @@ package de.mpg.imeji.test.rest.resources.test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 
 import org.junit.Test;
 import org.slf4j.Logger;

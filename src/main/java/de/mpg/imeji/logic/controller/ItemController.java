@@ -424,9 +424,7 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public Item updateFile(Item item, File f, String filename, User user) throws ImejiException {
-
     validateChecksum(item.getCollection(), f, true);
-
     // First remove the old File from the Internal Storage if its there
     if (!isNullOrEmpty(item.getStorageId())) {
       removeFileFromStorage(item.getStorageId());

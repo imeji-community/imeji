@@ -29,15 +29,14 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
 
 public class CollectionService implements API<CollectionTO> {
@@ -63,32 +62,6 @@ public class CollectionService implements API<CollectionTO> {
     return getCollectionTO(controller, id, u);
   }
 
-  /**
-   * Read all the items of a collection according to search query. Response is done with the raw
-   * format
-   * 
-   * @param id
-   * @param u
-   * @param q
-   * @return
-   * @throws ImejiException
-   * @throws IOException
-   */
-  public List<ItemTO> readItems(String id, User u, String q, int offset, int size)
-      throws ImejiException, IOException {
-
-    ItemController itemController = new ItemController();
-    ProfileCache profileCache = new ProfileCache();
-    List<ItemTO> tos = new ArrayList<>();
-    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(CollectionImeji.class, id),
-        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
-      ItemTO to = new ItemTO();
-      TransferObjectFactory.transferItem(vo, to,
-          profileCache.read(vo.getMetadataSet().getProfile()));
-      tos.add(to);
-    }
-    return tos;
-  }
 
   /**
    * Read all the items of a collection according to search query. Response is done with the default
@@ -101,7 +74,7 @@ public class CollectionService implements API<CollectionTO> {
    * @throws ImejiException
    * @throws IOException
    */
-  public Object readDefaultItems(String id, User u, String q, int offset, int size)
+  public SearchResultTO<DefaultItemTO> readItems(String id, User u, String q, int offset, int size)
       throws ImejiException, IOException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();

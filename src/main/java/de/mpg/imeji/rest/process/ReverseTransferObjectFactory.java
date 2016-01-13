@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
@@ -40,8 +39,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
-import de.mpg.imeji.rest.helper.ItemTransferHelper;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.ProfileTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
@@ -54,6 +51,7 @@ import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.rest.to.StatementTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
@@ -96,6 +94,32 @@ public class ReverseTransferObjectFactory {
   }
 
   /**
+   * Transfer a {@link DefaultItemTO} to an {@link Item}
+   * 
+   * @param to
+   * @param vo
+   * @param u
+   * @param mode
+   * @throws ImejiException
+   * @throws JsonMappingException
+   * @throws JsonParseException
+   */
+  public static void transferDefaultItem(DefaultItemTO to, Item vo, MetadataProfile profile, User u,
+      TRANSFER_MODE mode) throws ImejiException {
+    if (mode == TRANSFER_MODE.CREATE) {
+      if (!isNullOrEmpty(to.getId()))
+        vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
+      if (!isNullOrEmpty(to.getCollectionId()))
+        vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
+    }
+    if (!isNullOrEmpty(to.getFilename())) {
+      vo.setFilename(to.getFilename());
+    }
+    transferDefaultMetadata(to, vo, profile, u, mode);
+  }
+
+
+  /**
    * Transfert an {@link ItemTO} into an Item
    * 
    * @param to
@@ -104,54 +128,29 @@ public class ReverseTransferObjectFactory {
    * @param mode
    * @throws ImejiException
    */
-  public static void transferItem(ItemTO to, Item vo, User u, TRANSFER_MODE mode)
-      throws ImejiException {
-
+  public static void transferItem(ItemTO to, Item vo, MetadataProfile profile, User u,
+      TRANSFER_MODE mode) throws ImejiException {
     // only fields which can be transferred for TO to VO!!!
     if (mode == TRANSFER_MODE.CREATE) {
-      if (!isNullOrEmpty(to.getId()))
+      if (!isNullOrEmpty(to.getId())) {
         vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
-
-      if (!isNullOrEmpty(to.getCollectionId()))
+      }
+      if (!isNullOrEmpty(to.getCollectionId())) {
         vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
+      }
     }
-
-    if (!isNullOrEmpty(to.getFilename()))
+    if (!isNullOrEmpty(to.getFilename())) {
       vo.setFilename(to.getFilename());
-
-    transferItemMetadata(to, vo, u, mode);
+    }
+    transferItemMetadata(to, vo, profile, u, mode);
   }
 
-  public static void transferItemMetadata(ItemTO to, Item vo, User u, TRANSFER_MODE mode)
-      throws ImejiException {
-
-
+  public static void transferItemMetadata(ItemTO to, Item vo, MetadataProfile mp, User u,
+      TRANSFER_MODE mode) throws ImejiException {
     List<Metadata> voMDs = (List<Metadata>) vo.getMetadataSet().getMetadata();
     // Collection<Metadata> copyOfvoMDs = ImmutableList.copyOf(voMDs);
     voMDs.clear();
-
-    MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
-
     validateMetadata(to, mp);
-
-    // for (Statement st : mp.getStatements()) {
-    // final URI stURI = st.getId();
-    //
-    // Collection<MetadataSetTO> mdsList = lookUpMetadata(to, st);
-    // // Metadata mdVOPrev = lookUpMetadata(copyOfvoMDs, stURI,
-    // // st.getType());
-    // if (mdsList.isEmpty()) {
-    // {
-    // final String message =
-    // "Statement { type: \"" + st.getType() + "\", id: \"" + stURI
-    // + "\" } has not been found for item id: \"" + vo.getId() + "\"";
-    // // throw new RuntimeException(message);
-    // LOGGER.debug(message);
-    // }
-    // } /*else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
-    // throw new BadRequestException("Statement { type: \"" + st.getType() + "\", id: \"" + stURI
-    // + "\" } for item id: \"" + vo.getId() + "\" occurs more then once");
-    // } */else
     int i = 0;
     for (MetadataSetTO mds : to.getMetadata()) {
       switch (mds.getTypeUri().toString()) {
@@ -432,26 +431,6 @@ public class ReverseTransferObjectFactory {
     }
   }
 
-  public static void sort(List<ItemTransferHelper> list, ItemTransferHelper newItem) {
-    if (list.size() == 0)
-      list.add(0, newItem);
-    else {
-      int i = 0;
-      for (ItemTransferHelper item : list) {
-        i++;
-        if (newItem.getStatementID().equals(item.getStatementID())) {
-          if (newItem.getPos() < item.getPos()) {
-            i--;
-            break;
-          }
-        }
-      }
-      list.add(i, newItem);
-    }
-  }
-
-
-
   /**
    * Transfer a {@link DefaultItemTO} into an {@link ItemTO}
    * 
@@ -463,20 +442,16 @@ public class ReverseTransferObjectFactory {
    * @throws JsonParseException
    * @throws JsonMappingException
    */
-  // NEW EASY METADATA
-  public static void transferDefaultItemTOtoItemTO(MetadataProfileTO profileTO,
-      DefaultItemTO defaultTO, ItemTO itemTO, boolean updatedAll)
+  public static void transferDefaultMetadata2(MetadataProfileTO profileTO, DefaultItemTO defaultTO,
+      ItemTO itemTO, boolean updatedAll)
           throws UnprocessableError, JsonParseException, JsonMappingException {
     if (defaultTO.getMetadata() == null) {
       itemTO.getMetadata().clear();
     } else {
-
       for (String label : defaultTO.getMetadata().keySet()) {
         // Get statement according to the label - Note: this is always the toplevel
         StatementTO statement = ProfileTransferHelper.findStatementByLabel(label, profileTO);
-
         List<MetadataSetTO> newMetadata = new ArrayList<MetadataSetTO>();
-
         // Get the new metadata according to the json and the statement
         boolean isParent = ProfileTransferHelper.hasChildStatement(statement.getId(), profileTO);
         newMetadata.addAll(MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label),
@@ -492,35 +467,41 @@ public class ReverseTransferObjectFactory {
     }
   }
 
-
-  /*
-   * ORIGINAL simple EasyMD
+  /**
+   * Transfer a {@link DefaultItemTO} to an Item TODO Check Performance and refactor
    * 
-   * public static void transferDefaultItemTOtoItemTO(MetadataProfileTO profileTO, DefaultItemTO
-   * defaultTO, ItemTO itemTO, boolean updatedAll) throws BadRequestException, JsonParseException,
-   * JsonMappingException { if (defaultTO.getMetadata() == null) { itemTO.getMetadata().clear(); }
-   * else { // NEW for (String label : defaultTO.getMetadata().keySet()) { // Get statement
-   * according to the label StatementTO statement =
-   * ProfileTransferHelper.findStatementByLabel(label, profileTO); // Get the new metadata according
-   * to the json and the statement List<MetadataSetTO> newMetadata =
-   * MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label), statement); //
-   * add/replace the metadata to the itemto if (!newMetadata.isEmpty()) { // remove all the metadata
-   * with the same statement itemTO.clearMetadata(newMetadata.get(0).getStatementUri()); // add the
-   * new metadata itemTO.getMetadata().addAll(newMetadata); } }
-   * 
-   * } }
-   * 
+   * @param defaultTO
+   * @param item
+   * @param profileTO
+   * @param updatedAll
+   * @param u
+   * @param mode
+   * @throws JsonParseException
+   * @throws JsonMappingException
+   * @throws ImejiException
    */
-
-  // NEW EASY METADATA
-  private List<MetadataSetTO> getChildsAsList(String parentLabel, Object parentValue,
-      StatementTO parentStatement, MetadataProfileTO profile) {
-    List<MetadataSetTO> newMetadata = new ArrayList<MetadataSetTO>();
-    ArrayNode parValueNode = (ArrayNode) parentValue;
-
-    // newMetadata.addAll(MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label),
-    // statement));
-    return newMetadata;
+  public static void transferDefaultMetadata(DefaultItemTO defaultTO, Item item,
+      MetadataProfile profile, User u, TRANSFER_MODE mode) throws ImejiException {
+    ItemTO itemTO = new ItemTO();
+    MetadataProfileTO profileTO = new MetadataProfileTO();
+    TransferObjectFactory.transferMetadataProfile(profile, profileTO);
+    for (String label : defaultTO.getMetadata().keySet()) {
+      // Get statement according to the label - Note: this is always the toplevel
+      StatementTO statement = ProfileTransferHelper.findStatementByLabel(label, profileTO);
+      List<MetadataSetTO> newMetadata = new ArrayList<MetadataSetTO>();
+      // Get the new metadata according to the json and the statement
+      boolean isParent = ProfileTransferHelper.hasChildStatement(statement.getId(), profileTO);
+      newMetadata.addAll(MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label),
+          statement, isParent, "", profileTO));
+      // add/replace the metadata to the itemto
+      if (!newMetadata.isEmpty()) {
+        // remove all the metadata with the same statement
+        itemTO.clearMetadata(newMetadata.get(0).getStatementUri());
+        // add the new metadata
+        itemTO.getMetadata().addAll(newMetadata);
+      }
+    }
+    transferItem(itemTO, item, profile, u, mode);
   }
 }
 

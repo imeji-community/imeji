@@ -41,7 +41,7 @@ public class UserService implements API<UserTO> {
   }
 
   @Override
-  public Object read(String id, User u) throws ImejiException {
+  public UserTO read(String id, User u) throws ImejiException {
     // TODO Auto-generated method stub
     return null;
   }

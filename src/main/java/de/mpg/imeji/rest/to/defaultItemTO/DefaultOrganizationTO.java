@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.defaultTO;
+package de.mpg.imeji.rest.to.defaultItemTO;
 
 import java.io.Serializable;
 

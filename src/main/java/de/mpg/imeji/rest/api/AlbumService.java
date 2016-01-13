@@ -25,13 +25,12 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 
 public class AlbumService implements API<AlbumTO> {
 
@@ -68,21 +67,6 @@ public class AlbumService implements API<AlbumTO> {
 
   }
 
-  public List<ItemTO> readItems(String id, User u, String q, int offset, int size)
-      throws ImejiException, IOException {
-    ItemController itemController = new ItemController();
-    ProfileCache profileCache = new ProfileCache();
-    List<ItemTO> tos = new ArrayList<>();
-    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(Album.class, id),
-        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
-      ItemTO to = new ItemTO();
-      TransferObjectFactory.transferItem(vo, to,
-          profileCache.read(vo.getMetadataSet().getProfile()));
-      tos.add(to);
-    }
-    return tos;
-  }
-
   /**
    * Read all the items of an album according to search query. Response is done with the default
    * format
@@ -94,7 +78,7 @@ public class AlbumService implements API<AlbumTO> {
    * @throws ImejiException
    * @throws IOException
    */
-  public Object readDefaultItems(String id, User u, String q, int offset, int size)
+  public SearchResultTO<DefaultItemTO> readItems(String id, User u, String q, int offset, int size)
       throws ImejiException, IOException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();

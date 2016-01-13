@@ -46,7 +46,7 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.api.DefaultItemService;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -155,8 +155,6 @@ public class CollectionIntegration extends ImejiTestBase {
   @Test
   public void test_1_CreateCollection_5_ReleasedReferenceProfileByOtherUser()
       throws ImejiException, UnsupportedEncodingException, IOException {
-
-    ItemService itemStatus = new ItemService();
     initItem();
     // assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 
@@ -191,11 +189,11 @@ public class CollectionIntegration extends ImejiTestBase {
             .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
 
-    response =
-        target(pathPrefix).register(authAsUserFalse).register(MultiPartFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
-            .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+    response = target(pathPrefix).register(authAsUserFalse).register(MultiPartFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
-}
+  }
 
   // TODO: TEST for user who does not have right to create collection
 
@@ -214,8 +212,8 @@ public class CollectionIntegration extends ImejiTestBase {
         target(pathPrefix).path(collectionId).request(MediaType.APPLICATION_JSON).get();
     assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
 
-    response =
-        target(pathPrefix).path(collectionId).register(authAsUserFalse).request(MediaType.APPLICATION_JSON).get();
+    response = target(pathPrefix).path(collectionId).register(authAsUserFalse)
+        .request(MediaType.APPLICATION_JSON).get();
     assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
 
   }
@@ -265,7 +263,7 @@ public class CollectionIntegration extends ImejiTestBase {
 
   @Test
   public void test_3_ReleaseCollection_1_WithAuth() throws ImejiException {
-    ItemService itemStatus = new ItemService();
+    DefaultItemService service = new DefaultItemService();
     initItem();
     // assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 
@@ -277,20 +275,20 @@ public class CollectionIntegration extends ImejiTestBase {
     CollectionService s = new CollectionService();
     assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
 
-    assertEquals("RELEASED", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("RELEASED", service.read(itemId, JenaUtil.testUser).getStatus());
 
   }
 
   @Test
   public void test_3_ReleaseCollection_2_WithUnauth() throws ImejiException {
-    ItemService itemStatus = new ItemService();
+    DefaultItemService itemService = new DefaultItemService();
     initItem();
-    assertEquals("PENDING", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("PENDING", itemService.read(itemId, JenaUtil.testUser).getStatus());
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .register(authAsUser2).request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
     assertEquals(FORBIDDEN.getStatusCode(), response.getStatus());
 
-    assertEquals("PENDING", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("PENDING", itemService.read(itemId, JenaUtil.testUser).getStatus());
   }
 
   @Test
@@ -310,7 +308,7 @@ public class CollectionIntegration extends ImejiTestBase {
     response = target(pathPrefix).path("/" + collectionId + "/release").register(authAsUserFalse)
         .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
-}
+  }
 
   @Test
   public void test_3_ReleaseCollection_5_ReleaseCollectionTwice() throws ImejiException {
@@ -332,14 +330,13 @@ public class CollectionIntegration extends ImejiTestBase {
 
   @Test
   public void test_4_WithdrawCollection_1_WithAuth() throws ImejiException {
-
-    ItemService itemStatus = new ItemService();
+    DefaultItemService itemService = new DefaultItemService();
     initItem();
     CollectionService s = new CollectionService();
     s.release(collectionId, JenaUtil.testUser);
 
     assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
-    assertEquals("RELEASED", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("RELEASED", itemService.read(itemId, JenaUtil.testUser).getStatus());
 
     Form form = new Form();
     form.param("discardComment",
@@ -350,10 +347,9 @@ public class CollectionIntegration extends ImejiTestBase {
 
     assertEquals(OK.getStatusCode(), response.getStatus());
 
-
     assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser).getStatus());
 
-    assertEquals("WITHDRAWN", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("WITHDRAWN", itemService.read(itemId, JenaUtil.testUser).getStatus());
 
   }
 
@@ -399,7 +395,7 @@ public class CollectionIntegration extends ImejiTestBase {
         .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
     assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
-}
+  }
 
 
   @Test

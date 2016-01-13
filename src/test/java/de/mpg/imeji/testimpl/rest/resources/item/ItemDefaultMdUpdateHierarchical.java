@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.research.ws.wadl.Request;
 
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import de.mpg.imeji.test.rest.resources.test.integration.ItemTestBase;
 
 /**

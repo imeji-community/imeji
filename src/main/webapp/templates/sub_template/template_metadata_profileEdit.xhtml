@@ -44,7 +44,7 @@
 								
 								<!-- START ajaxArea -->
 								<h:panelGroup layout="block" id="ajaxArea">
-									<script type="text/javascript">dragAndDrop(); highlighter();</script>
+									
 									<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
 									
 									
@@ -327,5 +327,8 @@
 				}			
 			</script>
 		</ui:fragment>
+	</ui:define>
+	<ui:define name="additonalFooterScripts">
+		<script type="text/javascript">dragAndDrop(); highlighter();</script>
 	</ui:define>
 </ui:composition>

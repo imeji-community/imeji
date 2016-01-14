@@ -208,7 +208,6 @@ public class MetadataSetBean implements Serializable {
           while(multiValueStatements.get(parentId) - statementOccurrences.get(childId) > 0){
             if(multiValueStatements.containsKey(childId)){
               multiValueStatements.put(childId, multiValueStatements.get(childId) + 1);
-              statementOccurrences.put(childId, statementOccurrences.get(childId) + 1);
             }
             SuperMetadataBean newSmb = new SuperMetadataBean(MetadataFactory.createMetadata(profile.getStatement(childId)), profile.getStatement(childId));
             statementOccurrences.put(childId, statementOccurrences.get(childId) + 1);

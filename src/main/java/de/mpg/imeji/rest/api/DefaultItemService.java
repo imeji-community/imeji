@@ -4,7 +4,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +31,12 @@ import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemWithFileTO;
 
+/**
+ * API Service for {@link DefaultItemTO}
+ * 
+ * @author bastiens
+ *
+ */
 public class DefaultItemService implements API<DefaultItemTO> {
   private final ItemController controller = new ItemController();
 
@@ -70,7 +75,7 @@ public class DefaultItemService implements API<DefaultItemTO> {
 
   @Override
   public DefaultItemTO update(DefaultItemTO to, User u) throws ImejiException {
-    Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
+    Item item = controller.retrieveLazy(ObjectHelper.getURI(Item.class, to.getId()), u);
     // Get Item profile
     MetadataProfile profile = getProfile(to, u);
     // Transfer the item
@@ -121,24 +126,8 @@ public class DefaultItemService implements API<DefaultItemTO> {
   }
 
   @Override
-  public List<String> search(String q, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /**
-   * Search and retrieve items according ton the query.
-   * 
-   * @param u
-   * @param q
-   * @param offset
-   * @param size
-   * @return
-   * @throws ImejiException
-   * @throws IOException
-   */
-  public SearchResultTO<DefaultItemTO> searchAndRetrieveItems(User u, String q, int offset,
-      int size) throws ImejiException, IOException {
+  public SearchResultTO<DefaultItemTO> search(String q, int offset, int size, User u)
+      throws Exception {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
     ItemController controller = new ItemController();
@@ -203,4 +192,6 @@ public class DefaultItemService implements API<DefaultItemTO> {
         return str;
     return null;
   }
+
+
 }

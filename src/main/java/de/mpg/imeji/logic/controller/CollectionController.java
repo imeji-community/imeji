@@ -89,8 +89,8 @@ public class CollectionController extends ImejiController {
   public URI create(CollectionImeji c, MetadataProfile p, User user,
       MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
     // First validate the collection, to avoid to create a zombie profile...
-    
-    //Code provided here in order not to try to create a profile etc.. 
+
+    // Code provided here in order not to try to create a profile etc..
     if (user == null) {
       throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
     }
@@ -117,9 +117,9 @@ public class CollectionController extends ImejiController {
     // Check in controller if Profile is released and is created by user
     if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
       if (!(p.getCreatedBy().equals(user.getId()) || Status.RELEASED.equals(p.getStatus()))) {
-        throw new UnprocessableError("You can not reference the metadata profile with Id="
-            + p.getIdString()
-            + "The profile you reference must be released or must be created by you!");
+        throw new UnprocessableError(
+            "You can not reference the metadata profile with Id=" + p.getIdString()
+                + "The profile you reference must be released or must be created by you!");
       }
     }
 
@@ -177,23 +177,12 @@ public class CollectionController extends ImejiController {
    */
   public Collection<CollectionImeji> retrieveBatchLazy(List<String> uris, int limit, int offset,
       User user) throws ImejiException {
-//    List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-//    List<String> retrieveUris;
-//    if (limit < 0) {
-//      retrieveUris = uris;
-//    } else {
-//      retrieveUris = uris.size() > 0 && limit > 0
-//          ? uris.subList(offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
-//    }
-//    for (String s : retrieveUris) {
-//      cols.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
-//    }
     List<CollectionImeji> cols = prepareBatchRetrieve(uris, limit, offset);
     reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
     return cols;
 
   }
-  
+
   /**
    * Prepare the list of {@link Collection} which is going to be retrieved
    * 

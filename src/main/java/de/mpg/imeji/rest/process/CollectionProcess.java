@@ -137,7 +137,7 @@ public class CollectionProcess {
     CollectionService ccrud = new CollectionService();
     try {
       User u = BasicAuthentication.auth(req);
-      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u, q, offset, size));
+      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.search(q, offset, size, u));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }

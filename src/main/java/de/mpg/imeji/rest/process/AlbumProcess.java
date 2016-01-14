@@ -39,7 +39,7 @@ public class AlbumProcess {
     AlbumService as = new AlbumService();
     try {
       User u = BasicAuthentication.auth(req);
-      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), as.readAll(u, q, offset, size));
+      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), as.search(q, offset, size, u));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }

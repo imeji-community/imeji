@@ -49,24 +49,6 @@ public class AlbumService implements API<AlbumTO> {
     return getAlbumTO(controller, id, u);
   }
 
-  public SearchResultTO<AlbumTO> readAll(User u, String q, int offset, int size)
-      throws ImejiException, IOException {
-    AlbumController controller = new AlbumController();
-    List<AlbumTO> tos = new ArrayList<>();
-    SearchResult result =
-        SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
-            .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
-    for (Album vo : controller.retrieveBatchLazy(result.getResults(), u, -1, 0)) {
-      AlbumTO to = new AlbumTO();
-      TransferObjectFactory.transferAlbum(vo, to);
-      tos.add(to);
-    }
-    return new SearchResultTO.Builder<AlbumTO>().numberOfRecords(result.getResults().size())
-        .offset(offset).results(tos).query(q).size(size)
-        .totalNumberOfRecords(result.getNumberOfRecords()).build();
-
-  }
-
   /**
    * Read all the items of an album according to search query. Response is done with the default
    * format
@@ -156,12 +138,6 @@ public class AlbumService implements API<AlbumTO> {
 
   }
 
-  @Override
-  public List<String> search(String q, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   public List<String> addItems(String id, User u, List<String> itemIds) throws ImejiException {
     AlbumController controller = new AlbumController();
     Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
@@ -196,6 +172,23 @@ public class AlbumService implements API<AlbumTO> {
   @Override
   public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {
     // TODO Auto-generated method stub
+  }
+
+  @Override
+  public SearchResultTO<AlbumTO> search(String q, int offset, int size, User u) throws Exception {
+    AlbumController controller = new AlbumController();
+    List<AlbumTO> tos = new ArrayList<>();
+    SearchResult result =
+        SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
+            .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
+    for (Album vo : controller.retrieveBatchLazy(result.getResults(), u, -1, 0)) {
+      AlbumTO to = new AlbumTO();
+      TransferObjectFactory.transferAlbum(vo, to);
+      tos.add(to);
+    }
+    return new SearchResultTO.Builder<AlbumTO>().numberOfRecords(result.getResults().size())
+        .offset(offset).results(tos).query(q).size(size)
+        .totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
 
 }

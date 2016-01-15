@@ -155,7 +155,7 @@ public class AlbumIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
     response =
-        target(pathPrefix).path("/" + albumId + "/members").queryParam("q", itemTO.getFilename())
+        target(pathPrefix).path("/" + albumId + "/items").queryParam("q", itemTO.getFilename())
             .register(authAsUser).request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -178,7 +178,7 @@ public class AlbumIntegration extends ImejiTestBase {
             .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-    response = target(pathPrefix).path("/" + albumId + "/members")
+    response = target(pathPrefix).path("/" + albumId + "/items")
         .queryParam("q", itemTO.getFilename() + "_new").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
@@ -750,7 +750,7 @@ public class AlbumIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
     // read two items from the Album
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -761,12 +761,12 @@ public class AlbumIntegration extends ImejiTestBase {
     Assert.assertEquals(2, itemList.size());
 
     // remove all album mebres
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
     // read no items from the Album
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -801,7 +801,7 @@ public class AlbumIntegration extends ImejiTestBase {
         .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
     assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -832,7 +832,7 @@ public class AlbumIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
     // read two items from the Album
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -848,12 +848,12 @@ public class AlbumIntegration extends ImejiTestBase {
 
 
     // remove all album mebres TODO: Seems not to work as planned
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
     // read all items from the Album
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -883,7 +883,7 @@ public class AlbumIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
     // read two items from the Album
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -913,12 +913,12 @@ public class AlbumIntegration extends ImejiTestBase {
 
 
     // remove all album mebres
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
     // read all items from the Album
-    response = target(pathPrefix).path("/" + albumId + "/members").register(authAsUser)
+    response = target(pathPrefix).path("/" + albumId + "/items").register(authAsUser)
         .request(MediaType.APPLICATION_JSON).get();
 
     assertEquals(Status.OK.getStatusCode(), response.getStatus());

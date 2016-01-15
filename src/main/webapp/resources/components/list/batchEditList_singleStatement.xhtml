@@ -22,7 +22,7 @@
 		<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace !='http://imeji.org/terms/metadata#conePerson'}">
 			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>
 		</ui:fragment>
-		<div class="imj_singleStatementEdit">
+		<div class="imj_singleStatementEdit" style="margin-left: #{cc.attrs.itemBean.hierarchyLevel}em;">
 			
 			<!-- METADATA TYPE TEXT -->
 			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#text'}">

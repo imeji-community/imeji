@@ -5,10 +5,10 @@ import static de.mpg.imeji.rest.process.CollectionProcess.deleteCollection;
 import static de.mpg.imeji.rest.process.CollectionProcess.readAllCollections;
 import static de.mpg.imeji.rest.process.CollectionProcess.readCollection;
 import static de.mpg.imeji.rest.process.CollectionProcess.readCollectionItems;
+import static de.mpg.imeji.rest.process.CollectionProcess.readItemTemplate;
 import static de.mpg.imeji.rest.process.CollectionProcess.releaseCollection;
 import static de.mpg.imeji.rest.process.CollectionProcess.updateCollection;
 import static de.mpg.imeji.rest.process.CollectionProcess.withdrawCollection;
-import static de.mpg.imeji.rest.process.CollectionProcess.readItemTemplate;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 import java.io.InputStream;
@@ -29,9 +29,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
@@ -42,12 +39,9 @@ import de.mpg.imeji.rest.to.JSONResponse;
 @Api(value = "rest/collections", description = "Operations on collections")
 public class CollectionResource implements ImejiResource {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CollectionResource.class);
-
   @GET
   @Path("/{id}/items")
-  @ApiOperation(value = "Get all items of collection by id.",
-      notes = "The result set can be filtered by query (optional)")
+  @ApiOperation(value = "Search and retrieve items of the collection")
   @Produces(MediaType.APPLICATION_JSON)
   public Response readItemsWithQuery(@Context HttpServletRequest req, @PathParam("id") String id,
       @QueryParam("q") String q, @DefaultValue("0") @QueryParam("offset") int offset,
@@ -113,8 +107,7 @@ public class CollectionResource implements ImejiResource {
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  @ApiOperation(
-      value = "Create collection or new version of collection",
+  @ApiOperation(value = "Create collection or new version of collection",
       notes = "The body parameter is the json of a collection. You can get an example by using the get collection method.")
   @Produces(MediaType.APPLICATION_JSON)
   public Response create(@Context HttpServletRequest req, InputStream json) {
@@ -139,14 +132,15 @@ public class CollectionResource implements ImejiResource {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
 
   @GET
   @Path("/{id}/items/template")
   @ApiOperation(value = "Get template item for a collection")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readCollectionItemTemplate(@Context HttpServletRequest req, @PathParam("id") String id) {
-    JSONResponse resp = readItemTemplate(req, id); 
+  public Response readCollectionItemTemplate(@Context HttpServletRequest req,
+      @PathParam("id") String id) {
+    JSONResponse resp = readItemTemplate(req, id);
     return buildJSONResponse(resp);
   }
 

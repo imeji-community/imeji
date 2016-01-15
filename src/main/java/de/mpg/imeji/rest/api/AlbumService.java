@@ -9,9 +9,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
@@ -33,8 +30,6 @@ import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 
 public class AlbumService implements API<AlbumTO> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(AlbumService.class);
 
   private AlbumTO getAlbumTO(AlbumController controller, String id, User u) throws ImejiException {
     AlbumTO to = new AlbumTO();

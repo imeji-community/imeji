@@ -1,7 +1,6 @@
 package de.mpg.imeji.rest.resources;
 
 import static de.mpg.imeji.rest.process.AlbumProcess.readAllAlbums;
-import static de.mpg.imeji.rest.process.CollectionProcess.readCollectionItems;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 import java.io.InputStream;
@@ -22,9 +21,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
@@ -37,12 +33,9 @@ import de.mpg.imeji.rest.to.JSONResponse;
 @Api(value = "rest/albums", description = "Operations on albums")
 public class AlbumResource implements ImejiResource {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CollectionResource.class);
-
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  @ApiOperation(
-      value = "Create album or new version of album",
+  @ApiOperation(value = "Create album or new version of album",
       notes = "The body parameter is the json of an album. You can get an example by using the get album method.")
   @Produces(MediaType.APPLICATION_JSON)
   public Response create(@Context HttpServletRequest req, InputStream json) {
@@ -82,16 +75,16 @@ public class AlbumResource implements ImejiResource {
   }
 
   @GET
-  @Path("/{id}/members")
-  @ApiOperation(value = "Get album members by album id and a query")
+  @Path("/{id}/items")
+  @ApiOperation(value = "Search and retrieve items of the album.")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readAllMembers(@Context HttpServletRequest req, @PathParam("id") String id,
+  public Response searchItems(@Context HttpServletRequest req, @PathParam("id") String id,
       @QueryParam("q") String q, @DefaultValue("0") @QueryParam("offset") int offset,
       @DefaultValue(DEFAULT_LIST_SIZE) @QueryParam("size") int size) {
     JSONResponse resp = AlbumProcess.readAlbumItems(req, id, q, offset, size);
     return RestProcessUtils.buildJSONResponse(resp);
   }
-  
+
   @Override
   public Response create(HttpServletRequest req) {
     // TODO Auto-generated method stub

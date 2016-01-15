@@ -153,7 +153,6 @@ public class AlbumProcess {
   public static JSONResponse addItems(HttpServletRequest req, String id) {
     JSONResponse resp;
     AlbumService service = new AlbumService();
-
     try {
       User u = BasicAuthentication.auth(req);
       List<String> itemIds = (List) buildTOFromJSON(req, List.class);
@@ -171,9 +170,9 @@ public class AlbumProcess {
     List<String> itemIds = null;
     try {
       User u = BasicAuthentication.auth(req);
-
-      if (!removeAllItems)
+      if (!removeAllItems) {
         itemIds = (List) buildTOFromJSON(req, List.class);
+      }
       resp = buildResponse(Status.NO_CONTENT.getStatusCode(),
           service.removeItems(id, u, itemIds, removeAllItems));
     } catch (Exception e) {

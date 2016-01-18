@@ -621,24 +621,26 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    */
   @Override
   public int compareTo(SuperMetadataBean o) {
-    if (statement.getPos() > o.getStatement().getPos())
+    if (statement.getPos() > o.getStatement().getPos()) {
       return 1;
-    else if (statement.getPos() < o.getStatement().getPos())
+    } else if (statement.getPos() < o.getStatement().getPos()) {
       return -1;
-    if (getPos() > o.getPos())
+    }
+    if (getPos() > o.getPos()) {
       return 1;
-    else if (getPos() < o.getPos())
+    } else if (getPos() < o.getPos()) {
       return -1;
+    }
     return 0;
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof SuperMetadataBean) {
-      return compareTo((SuperMetadataBean) obj) == 0;
-    }
-    return false;
-  }
+  // @Override
+  // public boolean equals(Object obj) {
+  // if (obj instanceof SuperMetadataBean) {
+  // return compareTo((SuperMetadataBean) obj) == 0;
+  // }
+  // return false;
+  // }
 
   /**
    * Return the higher parent

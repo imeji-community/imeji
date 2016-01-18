@@ -229,7 +229,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
     for (SuperMetadataBeanTO smbchild : parent.getChilds()) {
 
-      if (smbchild.getParent().getTreeIndex() == parent.getTreeIndex()) {
+      if (smbchild.getParent().getTreeIndex().equals(parent.getTreeIndex())) {
 
         setJsonFieldParent(smbchild);
 

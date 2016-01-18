@@ -484,7 +484,6 @@ public class MetadataTransferHelper {
       profileURI = col.getProfile();
     }
 
-
     Item vo = new Item();
     vo.setId(URI.create("newid"));
     if (collectionId != null) {
@@ -496,7 +495,8 @@ public class MetadataTransferHelper {
         "<change-the-file-name-here-or-provide-separate-field-for-fetch-or-reference-url-see-API-Documentation>");
     MetadataSet mds = new MetadataSet();
     ProfileController pc = new ProfileController();
-    MetadataProfile profile = pc.retrieve(profileURI, u);
+    MetadataProfile profile =
+        profileURI != null ? pc.retrieve(profileURI, u) : new MetadataProfile();
 
     mds.getMetadata().addAll(MetadataTransferHelper.getTemplateMetadataSet(profile));
     List<MetadataSet> metadataSets = new ArrayList<MetadataSet>();

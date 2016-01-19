@@ -42,6 +42,7 @@ import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -140,6 +141,7 @@ public class ImejiTestBase extends JerseyTest {
     try {
       collectionTO = (CollectionTO) RestProcessUtils.buildTOFromJSON(
           getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json"), CollectionTO.class);
+
       collectionTO = s.create(collectionTO, JenaUtil.testUser);
       collectionId = collectionTO.getId();
     } catch (Exception e) {

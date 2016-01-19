@@ -189,14 +189,16 @@ public class CollectionService implements API<CollectionTO> {
 
     CollectionImeji vo = getCollectionVO(cc, to.getId(), u);
     MetadataProfile originalMp = pc.retrieve(vo.getProfile(), u);
-    String hasStatements = originalMp.getStatements().size() > 0
+    
+    String hasStatements = (originalMp == null)?"":
+     (( originalMp.getStatements().size() > 0)
         ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
-        : "";
-
+        : "");
+    
     // profile is defined
     CollectionProfileTO profTO = to.getProfile();
     String profileId = (profTO != null) ? profTO.getId() : "";
-    String method = (profTO != null) ? profTO.getMethod() : "";
+    String method = (profTO != null) ? profTO.getMethod() : METHOD.REFERENCE.name();
 
     MetadataProfile mp = null;
 
@@ -211,7 +213,7 @@ public class CollectionService implements API<CollectionTO> {
                 + hasStatements);
       }
 
-      if (!profileId.equals(originalMp.getIdString())) {
+      if (originalMp == null && profileId != null || !profileId.equals(originalMp.getIdString())) {
 
         if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
           throw new BadRequestException("Wrong metadata profile update method: " + method

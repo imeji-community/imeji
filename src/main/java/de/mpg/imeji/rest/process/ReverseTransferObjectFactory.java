@@ -132,7 +132,8 @@ public class ReverseTransferObjectFactory {
 
     MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
 
-    validateMetadata(to, mp);
+    if (mp != null )
+      validateMetadata(to, mp);
 
     // for (Statement st : mp.getStatements()) {
     // final URI stURI = st.getId();

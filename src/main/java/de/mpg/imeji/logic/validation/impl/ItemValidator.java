@@ -39,7 +39,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
   @Override
   public void validate(Item item, MetadataProfile p) throws UnprocessableError {
 
-    if (isDelete())
+    if (isDelete() || p == null)
       return;
 
     MetadataValidator mdValidator = new MetadataValidator(getValidateForMethod());

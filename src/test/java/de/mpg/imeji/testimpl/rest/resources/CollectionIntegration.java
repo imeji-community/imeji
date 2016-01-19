@@ -47,6 +47,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -66,6 +67,7 @@ public class CollectionIntegration extends ImejiTestBase {
   @Before
   public void specificSetup() {
     initCollection();
+    initProfile();
   }
 
   @Test
@@ -81,12 +83,12 @@ public class CollectionIntegration extends ImejiTestBase {
     assertThat("Empty collection id", collectionId, not(isEmptyOrNullString()));
   }
 
-  @Test
+ @Test
   public void test_1_CreateCollection_2_CopyProfile()
       throws ImejiException, UnsupportedEncodingException, IOException {
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
-    jsonString = jsonString.replace("___PROFILE_ID___", collectionTO.getProfile().getId())
+    jsonString = jsonString.replace("___PROFILE_ID___", profileId)
         .replace("___METHOD___", "copy");
 
     Response response = target(pathPrefix).register(authAsUser).register(MultiPartFeature.class)
@@ -105,7 +107,7 @@ public class CollectionIntegration extends ImejiTestBase {
       throws ImejiException, UnsupportedEncodingException, IOException {
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
-    jsonString = jsonString.replace("___PROFILE_ID___", collectionTO.getProfile().getId())
+    jsonString = jsonString.replace("___PROFILE_ID___", profileId)
         .replace("___METHOD___", "reference");
 
     Response response =
@@ -125,7 +127,7 @@ public class CollectionIntegration extends ImejiTestBase {
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
     jsonString =
-        jsonString.replace("___PROFILE_ID___", collectionTO.getProfile().getId() + "shmarrn")
+        jsonString.replace("___PROFILE_ID___", profileId + "shmarrn")
             .replace("___METHOD___", "reference");
     Response response =
         target(pathPrefix).register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE)
@@ -141,7 +143,7 @@ public class CollectionIntegration extends ImejiTestBase {
 
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
-    jsonString = jsonString.replace("___PROFILE_ID___", collectionTO.getProfile().getId())
+    jsonString = jsonString.replace("___PROFILE_ID___", profileId)
         .replace("___METHOD___", "reference");
     Response response =
         target(pathPrefix).register(authAsUser2).request(MediaType.APPLICATION_JSON_TYPE)
@@ -156,7 +158,18 @@ public class CollectionIntegration extends ImejiTestBase {
   public void test_1_CreateCollection_5_ReleasedReferenceProfileByOtherUser()
       throws ImejiException, UnsupportedEncodingException, IOException {
 
-    ItemService itemStatus = new ItemService();
+    //First set the collection profile, as it is created without a profile
+   CollectionProfileTO colProfile = new CollectionProfileTO();
+   initProfile();
+   
+   colProfile.setId(profileId);
+   colProfile.setMethod("copy");
+   collectionTO.setProfile(colProfile);
+   
+   CollectionService s = new CollectionService();
+   collectionTO = s.update(collectionTO, JenaUtil.testUser);
+   collectionId = collectionTO.getId();
+   
     initItem();
     // assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 
@@ -165,7 +178,6 @@ public class CollectionIntegration extends ImejiTestBase {
 
     assertEquals(OK.getStatusCode(), response.getStatus());
 
-    CollectionService s = new CollectionService();
     assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
@@ -265,9 +277,22 @@ public class CollectionIntegration extends ImejiTestBase {
 
   @Test
   public void test_3_ReleaseCollection_1_WithAuth() throws ImejiException {
+
+    initCollection();
+//     CollectionProfileTO colProfile = new CollectionProfileTO();
+//      initProfile();
+//    
+////    colProfile.setId(profileId);
+////    colProfile.setMethod("copy");
+////    collectionTO.setProfile(colProfile);
+////    
+////    CollectionService s = new CollectionService();
+////    collectionTO = s.update(collectionTO, JenaUtil.testUser);
+////    collectionId = collectionTO.getId();
+//
     ItemService itemStatus = new ItemService();
     initItem();
-    // assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
@@ -283,8 +308,9 @@ public class CollectionIntegration extends ImejiTestBase {
 
   @Test
   public void test_3_ReleaseCollection_2_WithUnauth() throws ImejiException {
+    initCollection();
     ItemService itemStatus = new ItemService();
-    initItem();
+    initItem(); 
     assertEquals("PENDING", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .register(authAsUser2).request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
@@ -295,6 +321,7 @@ public class CollectionIntegration extends ImejiTestBase {
 
   @Test
   public void test_3_ReleaseCollection_3_EmptyCollection() {
+    initCollection();
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
     assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
@@ -361,6 +388,7 @@ public class CollectionIntegration extends ImejiTestBase {
   @Test
   public void test_4_WithdrawCollection_2_WithUnauth() throws ImejiException {
 
+    initCollection();
     initItem();
     CollectionService s = new CollectionService();
     s.release(collectionId, JenaUtil.testUser);
@@ -545,6 +573,9 @@ public class CollectionIntegration extends ImejiTestBase {
 
     collectionTO.setTitle(collectionTO.getTitle() + CHANGED);
     collectionTO.setDescription(collectionTO.getDescription() + CHANGED);
+    CollectionProfileTO colProfile = new CollectionProfileTO();
+    colProfile.setId(profileId);
+    collectionTO.setProfile(colProfile);
 
     String storedProfileId = collectionTO.getProfile().getId();
     collectionTO.getProfile().setMethod(METHOD.COPY.toString());
@@ -689,6 +720,7 @@ public class CollectionIntegration extends ImejiTestBase {
 
 
   }
+
 
   private static Response getResponse(Builder request, CollectionTO collTO)
       throws BadRequestException {

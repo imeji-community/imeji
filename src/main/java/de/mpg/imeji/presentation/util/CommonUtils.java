@@ -7,8 +7,19 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 
+/**
+ * Common utility class
+ * 
+ * @author bastiens
+ *
+ */
 public class CommonUtils {
   private static final Pattern REMOVE_TAGS = Pattern.compile("<.+?>");
+
+  /**
+   * Private Constructor
+   */
+  private CommonUtils() {}
 
   /**
    * Remove html tags from a {@link String}

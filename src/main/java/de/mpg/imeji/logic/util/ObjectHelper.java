@@ -31,7 +31,12 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 public class ObjectHelper {
 
-  private static Logger logger = Logger.getLogger(ObjectHelper.class);
+  private static final Logger logger = Logger.getLogger(ObjectHelper.class);
+
+  /**
+   * Private constructor
+   */
+  private ObjectHelper() {}
 
   /**
    * Ensure that the {@link URI} uses the correct base uri (see property

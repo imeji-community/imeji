@@ -37,21 +37,34 @@ public class HistoryUtil {
    **/
   public static URI extractURI(String url) {
     Matcher m = findItemId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(Item.class, m.group(1));
+    }
     m = findCollectionId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(CollectionImeji.class, m.group(1));
+    }
     m = findAlbumId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(Album.class, m.group(1));
+    }
     m = findUserId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(User.class, UrlHelper.decode(m.group(1)));
+    }
     m = findUserGroupId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(UserGroup.class, UrlHelper.decode(m.group(1)));
+    }
     return null;
+  }
+
+  public static void main(String[] args) {
+
+    Matcher m = Pattern.compile(".*/collection/([a-zA-Z_0-9-]+).*")
+        .matcher("http://localhost:8080/imeji/collection/2F1kdy1E2zP2xAk-test");
+
+    System.out.println(m.find() + m.group(1));
   }
 
   /**

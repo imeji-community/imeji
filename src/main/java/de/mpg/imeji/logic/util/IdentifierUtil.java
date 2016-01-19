@@ -27,9 +27,6 @@ package de.mpg.imeji.logic.util;
 import java.net.URI;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Provides A utility Method to create identifers in imeji
@@ -39,25 +36,14 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class IdentifierUtil {
-  private static String method;
-  private static AtomicInteger counter = new AtomicInteger();
   private static Random rand = new Random();
-  /**
-   * When this value is reached, initialize the counter to 0. Since id use timestamp, the id will
-   * still be unique as the timestamp will have changed in the meantime
-   */
-  private static final int COUNTER_MAXIMUM_VALUE = 100000;
-  /**
-   * The counter identifier is composed with a first random part, to avoid easy identifier guess
-   */
-  private static final int COUNTER_PREFIX_RANGE = 1000;
   /**
    * Array of all possible {@link String} characters which are used to generate a random Id
    */
   private static final String[] RANDOM_ID_CHARSET = {"a", "b", "c", "d", "e", "f", "g", "h", "i",
-      "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A",
-      "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
-      "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "_", ""};
+      "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B",
+      "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+      "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "_", ""};
   /**
    * The size of the random id. Since the RANDOM_ID_CHARSET has 64 elements, to calculate the number
    * of possible id, do 64^RANDOM_ID_SIZE with: - 1: 6 bits - 10: 60 bits - 12: 72 bits - 15: 90bits
@@ -65,48 +51,26 @@ public class IdentifierUtil {
   private static final int RANDOM_ID_SIZE = 16;
 
   /**
-   * Initialize the static value for the identifier method
+   * Private Constructor
    */
-  public IdentifierUtil() {
-    try {
-      method = PropertyReader.getProperty("imeji.identifier.method");
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
+  private IdentifierUtil() {}
 
   /**
-   * Return an identifier according to the method set in the properties
+   * Return a randon id
    * 
    * @return
    */
   public static String newId() {
-    if ("universal".equals(method)) {
-      return newUniversalUniqueId();
-    } else if ("random".equals(method)) {
-      return newRandomId();
-    } else if ("counter".equals(method)) {
-      return newLocalUniqueId();
-    } else {
-      return newRandomId();
-    }
+    return newRandomId();
   }
 
   /**
-   * Return an identifier according to the method passed (universal, random or counter)
+   * Return an identifier according to the method passed (universal or random)
    * 
    * @return
    */
   public static String newId(String method) {
-    if ("universal".equals(method)) {
-      return newUniversalUniqueId();
-    } else if ("random".equals(method)) {
-      return newRandomId();
-    } else if ("counter".equals(method)) {
-      return newLocalUniqueId();
-    } else {
-      return newRandomId();
-    }
+    return "universal".equals(method) ? newUniversalUniqueId() : newRandomId();
   }
 
   /**
@@ -121,29 +85,13 @@ public class IdentifierUtil {
 
   /**
    * Return an {@link URI} according to the identifier creation method. Method can be universal,
-   * random or counter
+   * random
    * 
    * @param c
    * @return
    */
   public static URI newURI(Class<?> c, String method) {
     return ObjectHelper.getURI(c, newId(method));
-  }
-
-  /**
-   * Create a new identifier unique for the local instance of imeji
-   * 
-   * @return
-   */
-  public static String newLocalUniqueId() {
-    int value = counter.getAndIncrement();
-    if (value > COUNTER_MAXIMUM_VALUE) {
-      // Set to the minimum value
-      counter.set(0);
-    }
-    return Integer.toString(rand.nextInt(COUNTER_PREFIX_RANGE), Character.MAX_RADIX) + "-"
-        + Long.toString(System.currentTimeMillis(), Character.MAX_RADIX) + "-"
-        + Long.toString(value, Character.MAX_RADIX);
   }
 
   /**

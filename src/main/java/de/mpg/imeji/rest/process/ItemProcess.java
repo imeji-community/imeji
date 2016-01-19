@@ -144,7 +144,7 @@ public class ItemProcess {
       }
       return RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.update(to, u));
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.error("Error updating item ", e);
       return RestProcessUtils.localExceptionHandler(e, e.getMessage());
     }
   }

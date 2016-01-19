@@ -34,6 +34,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -64,6 +66,7 @@ public class SuperMetadataTreeTO implements Serializable {
   private Map<String, JsonNode> oMap = new LinkedHashMap<String, JsonNode>();
   private MetadataProfile profile;
   private ObjectMapper mapper = new ObjectMapper();
+  private static final Logger logger = Logger.getLogger(SuperMetadataTreeTO.class);
 
   /**
    * Default Constructor
@@ -115,9 +118,7 @@ public class SuperMetadataTreeTO implements Serializable {
    * @param profile
    * @return
    */
-  public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile)
-
-  {
+  public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile) {
     LinkedList<Metadata> mdC = new LinkedList<Metadata>();
     int i = 0;
     for (Statement st : profile.getStatements()) {
@@ -129,7 +130,7 @@ public class SuperMetadataTreeTO implements Serializable {
         mdC.add(md);
         i++;
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.error("Error generating default value for metadata", e);
       }
     }
     return mdC;
@@ -184,7 +185,6 @@ public class SuperMetadataTreeTO implements Serializable {
   private void addOMap(String label, JsonNode value, boolean isMultiple) {
     ArrayNode multipleVal = mapper.createArrayNode();
     if (oMap.get(label) == null) {
-
       oMap.put(label, isMultiple ? multipleVal.add(value.get(0)) : value);
     } else {
       JsonNode mapNode = oMap.get(label);
@@ -197,8 +197,9 @@ public class SuperMetadataTreeTO implements Serializable {
 
   private void setJsonFieldParent(SuperMetadataBeanTO parent) {
 
-    if (!MetadataAndProfileHelper.isMetadataParent(parent.getStatement().getId(), profile))
+    if (!MetadataAndProfileHelper.isMetadataParent(parent.getStatement().getId(), profile)) {
       return;
+    }
 
     // if metadata is not parent, then return, otherwise,
     // produce proper Json even if there are no children values

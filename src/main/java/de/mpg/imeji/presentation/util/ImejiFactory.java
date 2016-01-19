@@ -39,6 +39,11 @@ import de.mpg.j2j.misc.LocalizedString;
 public class ImejiFactory {
   private static Logger logger = Logger.getLogger(ImejiFactory.class);
 
+  /**
+   * Private Constructor
+   */
+  private ImejiFactory() {};
+
   public static Album newAlbum() {
     Album album = new Album();
     album.setMetadata(newContainerMetadata());

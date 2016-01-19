@@ -36,6 +36,11 @@ public class ObjectLoader {
   private static Logger logger = Logger.getLogger(ObjectLoader.class);
 
   /**
+   * Private Constructor
+   */
+  private ObjectLoader() {}
+
+  /**
    * Load a {@link CollectionImeji} with all its item
    * 
    * @param id

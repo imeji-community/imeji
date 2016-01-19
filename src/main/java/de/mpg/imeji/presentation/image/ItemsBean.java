@@ -63,7 +63,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   private String discardComment;
   private String selectedImagesContext;
   private SearchResult searchResult;
-  private SortCriterion sortCriterion;
+  protected SortCriterion sortCriterion;
 
   /**
    * The context of the browse page (browse, collection browse, album browse)
@@ -269,7 +269,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initFacets() {
     try {
-      this.setFacets(new FacetsBean(SearchQueryParser.parseStringQuery(query)));
+      SearchResult searchRes = search(getSearchQuery(), sortCriterion, 0, this.getTotalNumberOfElements());
+      this.setFacets(new FacetsBean(null, SearchQueryParser.parseStringQuery(query), searchRes));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(facets);
       executor.shutdown();

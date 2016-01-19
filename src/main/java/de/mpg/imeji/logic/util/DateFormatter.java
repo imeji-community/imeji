@@ -17,6 +17,9 @@ import java.util.regex.Pattern;
  * @version $Revision$ $LastChangedDate$
  */
 public class DateFormatter {
+
+  private DateFormatter() {}
+
   /**
    * Return the time of the {@link Date}, if the format is recognized
    * 

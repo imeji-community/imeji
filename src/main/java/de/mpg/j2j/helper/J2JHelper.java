@@ -22,6 +22,12 @@ import de.mpg.j2j.annotations.j2jResource;
  * @version $Revision$ $LastChangedDate$
  */
 public class J2JHelper {
+
+  /**
+   * private constructor
+   */
+  private J2JHelper() {}
+
   /**
    * Get the Id of an {@link Object} (a {@link j2jId} must be defined)
    * 
@@ -29,8 +35,9 @@ public class J2JHelper {
    * @return
    */
   public static URI getId(Object o) {
-    if (o == null)
+    if (o == null) {
       return null;
+    }
     j2jId ano = o.getClass().getAnnotation(j2jId.class);
     if (ano != null) {
       try {
@@ -110,16 +117,17 @@ public class J2JHelper {
    * @return
    */
   public static String getNamespace(Object o, Field f) {
-    if (isResource(o))
+    if (isResource(o)) {
       return getResourceNamespace(o);
-    else if (isLiteral(f))
+    } else if (isLiteral(f)) {
       return getLiteralNamespace(f);
-    else if (isURIResource(o, f))
+    } else if (isURIResource(o, f)) {
       return getURIResourceNamespace(o, f);
-    else if (isList(f))
+    } else if (isList(f)) {
       return getListNamespace(f);
-    else if (isLazyList(f))
+    } else if (isLazyList(f)) {
       return getLazyListNamespace(f);
+    }
     return null;
   }
 
@@ -132,14 +140,15 @@ public class J2JHelper {
   public static String getNamespace(Field f) {
     if (isResource(f)) {
       String resourceNamespace = getResourceNamespace(f);
-      if (resourceNamespace != null)
+      if (resourceNamespace != null) {
         return resourceNamespace;
-
+      }
       return f.getAnnotation(j2jResource.class).value();
-    } else if (isLiteral(f))
+    } else if (isLiteral(f)) {
       return getLiteralNamespace(f);
-    else if (isList(f))
+    } else if (isList(f)) {
       return getListNamespace(f);
+    }
     return null;
   }
 
@@ -150,10 +159,11 @@ public class J2JHelper {
    * @return
    */
   public static String getResourceNamespace(Object o) {
-    if (isResource(o))
+    if (isResource(o)) {
       return o.getClass().getAnnotation(j2jResource.class).value();
-    else
+    } else {
       return null;
+    }
   }
 
   /**
@@ -183,12 +193,13 @@ public class J2JHelper {
    * @return
    */
   public static String getLiteralNamespace(Field f) {
-    if (isLiteral(f))
+    if (isLiteral(f)) {
       return f.getAnnotation(j2jLiteral.class).value();
-    else if (isList(f))
+    } else if (isList(f)) {
       return getListNamespace(f);
-    else
+    } else {
       return null;
+    }
   }
 
   /**
@@ -198,10 +209,11 @@ public class J2JHelper {
    * @return
    */
   public static String getListNamespace(Field f) {
-    if (isList(f))
+    if (isList(f)) {
       return f.getAnnotation(j2jList.class).value();
-    else
+    } else {
       return null;
+    }
   }
 
   /**
@@ -211,10 +223,11 @@ public class J2JHelper {
    * @return
    */
   public static String getLazyListNamespace(Field f) {
-    if (isLazyList(f))
+    if (isLazyList(f)) {
       return f.getAnnotation(j2jLazyList.class).value();
-    else
+    } else {
       return null;
+    }
   }
 
   /**
@@ -339,9 +352,11 @@ public class J2JHelper {
    */
   public static List<Field> getOnlyAnnotatedFields(List<Field> l) {
     List<Field> afl = new ArrayList<Field>();
-    for (Field f : l)
-      if (isAnnotated(f))
+    for (Field f : l) {
+      if (isAnnotated(f)) {
         afl.add(f);
+      }
+    }
     return afl;
   }
 

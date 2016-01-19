@@ -4,11 +4,15 @@
 package de.mpg.imeji.presentation.facet;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
@@ -39,8 +43,7 @@ public class CollectionFacets extends Facets {
   private List<List<Facet>> facets = new ArrayList<List<Facet>>();
   private URI colURI = null;
   private SearchQuery searchQuery;
-  private SearchResult allImages = ((CollectionItemsBean) BeanHelper
-      .getSessionBean(CollectionItemsBean.class)).getSearchResult();
+  private SearchResult allImages;
   private MetadataProfile profile;
 
   /**
@@ -49,10 +52,10 @@ public class CollectionFacets extends Facets {
    * @param col
    * @param searchQuery
    */
-  public CollectionFacets(CollectionImeji col, SearchQuery searchQuery) {
+  public CollectionFacets(CollectionImeji col, SearchQuery searchQuery, SearchResult r) {
     if (col == null)
       return;
-
+    allImages = r;
     this.colURI = col.getId();
     this.searchQuery = searchQuery;
     sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
@@ -75,6 +78,7 @@ public class CollectionFacets extends Facets {
 
     int count = 0;
     int sizeAllImages = allImages.getNumberOfRecords();
+    HashSet<String> set = new HashSet<String>(allImages.getResults());
     try {
       for (Statement st : profile.getStatements()) {
         List<Facet> group = new ArrayList<Facet>();
@@ -82,7 +86,7 @@ public class CollectionFacets extends Facets {
           SearchPair pair =
               new SearchPair(SearchFields.statement, SearchOperators.EQUALS, st.getId().toString(),
                   false);
-          count = getCount(searchQuery, pair, allImages.getResults());
+          count = getCount(searchQuery, pair, set);
 
           group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
               FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
@@ -120,14 +124,21 @@ public class CollectionFacets extends Facets {
    * @param collectionImages
    * @return
    */
-  public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> collectionImages) {
+  public int getCount(SearchQuery searchQuery, SearchPair pair, HashSet<String> collectionImages) {
+    int counter = 0;
     ItemController ic = new ItemController();
-    SearchQuery sq = new SearchQuery();
+    SearchQuery sq = new SearchQuery(); 
     if (pair != null) {
       sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
       sq.addPair(pair);
     }
-    return ic.search(colURI, sq, null, sb.getUser(), null, -1, 0).getNumberOfRecords();
+    SearchResult res = ic.search(colURI, sq, null, sb.getUser(), null, -1, 0);
+    for(String record : res.getResults()){
+      if(collectionImages.contains(record)){
+        counter++;
+      }
+    }
+    return counter;
   }
 
   /*

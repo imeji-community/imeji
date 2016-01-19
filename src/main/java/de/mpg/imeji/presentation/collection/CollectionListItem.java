@@ -189,24 +189,24 @@ public class CollectionListItem {
     return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
         .getPrettySpacePage("pretty:collections");
   }
-  
-  public String createDOI(){
+
+  public String createDOI() {
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    String doi = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
+    String doi =
+        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
     CollectionController cc = new CollectionController();
-    
-    try{
+
+    try {
       CollectionImeji collection = cc.retrieve(uri, sessionBean.getUser());
-      if(doi != null){
+      if (doi != null) {
         cc.createDOIManually(doi, collection, sessionBean.getUser());
-      }else{
+      } else {
         cc.createDOI(collection, sessionBean.getUser());
-      } 
+      }
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
       logger.error("Error during doi creation", e);
-      e.printStackTrace();
     }
     return "pretty:";
   }

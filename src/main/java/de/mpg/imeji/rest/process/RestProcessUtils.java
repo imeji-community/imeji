@@ -167,18 +167,13 @@ public class RestProcessUtils {
     }
   }
 
-
-
   public static Response buildJSONResponse(JSONResponse resp) {
     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     String json = "";
     try {
       json = ow.writeValueAsString(resp.getObject());
     } catch (JsonProcessingException e) {
-
       logger.error("Have a JSON Processing Exception during building JSON Response", e);
-      e.printStackTrace();
-
     }
     return Response.status(resp.getStatus()).entity(json).type(MediaType.APPLICATION_JSON).build();
   }

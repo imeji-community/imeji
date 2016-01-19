@@ -19,6 +19,11 @@ import de.mpg.imeji.presentation.session.SessionBean;
  */
 public class ObjectCachedLoader {
   /**
+   * private Constructor
+   */
+  private ObjectCachedLoader() {}
+
+  /**
    * Load a {@link MetadataProfile} from the session if possible, otherwise from jena
    * 
    * @param uri

@@ -116,6 +116,7 @@ public class ReverseTransferObjectFactory {
   public static void transferDefaultItem(DefaultItemTO to, Item vo, MetadataProfile profile, User u,
       TRANSFER_MODE mode) throws ImejiException {
     if (mode == TRANSFER_MODE.CREATE) {
+      
       if (!isNullOrEmpty(to.getCollectionId())) {
         vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
       }
@@ -125,6 +126,7 @@ public class ReverseTransferObjectFactory {
     }
     transferDefaultMetadata(to, vo, profile, u, mode);
   }
+
 
   /**
    * Transfer Metadata of an {@link ItemTO} to an {@link Item}
@@ -141,7 +143,31 @@ public class ReverseTransferObjectFactory {
     List<Metadata> voMDs = (List<Metadata>) vo.getMetadataSet().getMetadata();
     // Collection<Metadata> copyOfvoMDs = ImmutableList.copyOf(voMDs);
     voMDs.clear();
-    validateMetadata(to, mp);
+
+
+    //MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
+
+    if (mp != null )
+      validateMetadata(to, mp);
+
+    // for (Statement st : mp.getStatements()) {
+    // final URI stURI = st.getId();
+    //
+    // Collection<MetadataSetTO> mdsList = lookUpMetadata(to, st);
+    // // Metadata mdVOPrev = lookUpMetadata(copyOfvoMDs, stURI,
+    // // st.getType());
+    // if (mdsList.isEmpty()) {
+    // {
+    // final String message =
+    // "Statement { type: \"" + st.getType() + "\", id: \"" + stURI
+    // + "\" } has not been found for item id: \"" + vo.getId() + "\"";
+    // // throw new RuntimeException(message);
+    // LOGGER.debug(message);
+    // }
+    // } /*else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
+    // throw new BadRequestException("Statement { type: \"" + st.getType() + "\", id: \"" + stURI
+    // + "\" } for item id: \"" + vo.getId() + "\" occurs more then once");
+    // } */else
     int i = 0;
     for (MetadataSetTO mds : to.getMetadata()) {
       switch (mds.getTypeUri().toString()) {
@@ -431,6 +457,9 @@ public class ReverseTransferObjectFactory {
    */
   public static void transferDefaultMetadata(DefaultItemTO defaultTO, Item item,
       MetadataProfile profile, User u, TRANSFER_MODE mode) throws ImejiException {
+    
+    if (profile == null )
+      return;
     ItemTO itemTO = new ItemTO();
     MetadataProfileTO profileTO = new MetadataProfileTO();
     TransferObjectFactory.transferMetadataProfile(profile, profileTO);

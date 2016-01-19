@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -58,9 +59,9 @@ public class FacetsBean implements Callable<Boolean> {
    * @param col
    * @param searchQuery
    */
-  public FacetsBean(CollectionImeji col, SearchQuery searchQuery) {
+  public FacetsBean(CollectionImeji col, SearchQuery searchQuery, SearchResult searchRes) {
     try {
-      facetsClass = new CollectionFacets(col, searchQuery);
+      facetsClass = new CollectionFacets(col, searchQuery, searchRes);
     } catch (Exception e) {
       BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
           .getLabel("error") + ", Collection Facets intialization : " + e.getMessage());

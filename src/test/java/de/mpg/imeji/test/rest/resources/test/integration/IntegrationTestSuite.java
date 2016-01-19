@@ -32,7 +32,7 @@ import util.SuperTestSuite;
     ItemEasyPatchMetadata.class, ItemDefaultUpdate.class,
 
     // Other Tests
-    AlbumIntegration.class, CollectionIntegration.class, ProfileIntegration.class,
+    AlbumIntegration.class, CollectionIntegration.class,ProfileIntegration.class,
     StorageIntegration.class, VersionManagerTest.class})
 
 public class IntegrationTestSuite extends SuperTestSuite {

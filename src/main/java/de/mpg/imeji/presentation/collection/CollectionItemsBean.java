@@ -93,7 +93,8 @@ public class CollectionItemsBean extends ItemsBean {
   public void initFacets() {
     try {
       searchQuery = SearchQueryParser.parseStringQuery(getQuery());
-      setFacets(new FacetsBean(collection, searchQuery));
+      SearchResult searchRes = search(getSearchQuery(), sortCriterion, 0, -1);
+      setFacets(new FacetsBean(collection, searchQuery, searchRes));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(getFacets());
       executor.shutdown();

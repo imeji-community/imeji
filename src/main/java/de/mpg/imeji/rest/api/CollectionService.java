@@ -130,14 +130,16 @@ public class CollectionService implements API<CollectionTO> {
 
     CollectionImeji vo = getCollectionVO(to.getId(), u);
     MetadataProfile originalMp = pc.retrieve(vo.getProfile(), u);
-    String hasStatements = originalMp.getStatements().size() > 0
+    
+    String hasStatements = (originalMp == null)?"":
+     (( originalMp.getStatements().size() > 0)
         ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
-        : "";
-
+        : "");
+    
     // profile is defined
     CollectionProfileTO profTO = to.getProfile();
     String profileId = (profTO != null) ? profTO.getId() : "";
-    String method = (profTO != null) ? profTO.getMethod() : "";
+    String method = (profTO != null) ? profTO.getMethod() : METHOD.REFERENCE.name();
 
     MetadataProfile mp = null;
 
@@ -151,21 +153,24 @@ public class CollectionService implements API<CollectionTO> {
             "Can not retrieve the metadata profile provided in the JSON body with id: " + profileId
                 + hasStatements);
       }
-      if (!profileId.equals(originalMp.getIdString())) {
-        if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
-          throw new BadRequestException("Wrong metadata profile update method: " + method
-              + " ! Allowed values are {copy, reference}. ");
+
+
+    if (originalMp == null && profileId != null || !profileId.equals(originalMp.getIdString())) {
+
+      if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
+        throw new BadRequestException("Wrong metadata profile update method: " + method
+            + " ! Allowed values are {copy, reference}. ");
         }
 
-      }
+     }
 
     }
-
-    CollectionImeji updatedCollection =
-        cc.updateWithProfile(vo, mp, u, cc.getProfileCreationMethod(method));
-    CollectionTO newTO = new CollectionTO();
-    TransferObjectFactory.transferCollection(updatedCollection, newTO);
-    return newTO;
+  
+      CollectionImeji updatedCollection =
+          cc.updateWithProfile(vo, mp, u, cc.getProfileCreationMethod(method));
+      CollectionTO newTO = new CollectionTO();
+      TransferObjectFactory.transferCollection(updatedCollection, newTO);
+      return newTO;
   }
 
   @Override

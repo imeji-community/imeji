@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -29,10 +31,11 @@ public class ProfileIntegration extends ImejiTestBase {
   private static final Logger LOGGER = LoggerFactory.getLogger(ProfileIntegration.class);
 
   @Before
-  public void specificSetup() {
-    initCollection();
-    initItem();
+  public void specificSetup()  {
     initProfile();
+    initCollectionWithProfile(profileId);
+    initItem();
+    
   }
 
   @Test

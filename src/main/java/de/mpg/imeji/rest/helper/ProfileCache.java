@@ -28,6 +28,8 @@ public class ProfileCache {
    * @return
    */
   public MetadataProfile read(URI uri) {
+    if (uri == null )
+        return null;
     if (profiles.containsKey(uri.toString())) {
       return profiles.get(uri.toString());
     }

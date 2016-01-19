@@ -7,9 +7,6 @@ import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Entities.EscapeMode;
-import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
 /**
@@ -30,9 +27,14 @@ public class StringHelper {
   public static final String fileSeparator = System.getProperty("file.separator");
   /**
    * Tha maximum size of a file: Theorically, the max length could be 255. For security, imeji uses
-   * qa lower count.
+   * a lower count.
    */
   public static final int FILENAME_MAX_LENGTH = 200;
+
+  /**
+   * Private Constructor
+   */
+  private StringHelper() {}
 
   /**
    * Encode a {@link String} to MD5
@@ -119,16 +121,19 @@ public class StringHelper {
     return isNullOrEmpty(str) || "".equals(str.trim());
   }
 
+  /**
+   * 
+   * @param s
+   * @return
+   */
   public static boolean hasInvalidTags(String s) {
     if (isNullOrEmpty(s)) {
       return false;
-    } 
-    
+    }
     if (!Jsoup.isValid(s, Whitelist.relaxed())) {
       return true;
     }
-
-  return false;
+    return false;
   }
 
 }

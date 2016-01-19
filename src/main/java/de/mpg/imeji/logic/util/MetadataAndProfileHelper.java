@@ -21,22 +21,24 @@ import de.mpg.j2j.misc.LocalizedString;
 
 public class MetadataAndProfileHelper {
 
-  
+  private MetadataAndProfileHelper() {}
+
   public static Metadata getDefaultValueMetadata(Statement statement)
       throws UnprocessableError, IllegalAccessException, InstantiationException {
     String type = statement.getType().toString();
     Metadata md = Metadata.createNewInstance(statement.getType());
 
-    switch (Metadata.Types.valueOfUri(type) ) {
+    switch (Metadata.Types.valueOfUri(type)) {
       case TEXT:
         String textValue = "Textual value";
-          Text newT = new Text();
-          newT.setText(textValue);
-          md = newT;
-          break;
+        Text newT = new Text();
+        newT.setText(textValue);
+        md = newT;
+        break;
       case NUMBER:
-        de.mpg.imeji.logic.vo.predefinedMetadata.Number newNT = new de.mpg.imeji.logic.vo.predefinedMetadata.Number(999.9);
-        md =  newNT;
+        de.mpg.imeji.logic.vo.predefinedMetadata.Number newNT =
+            new de.mpg.imeji.logic.vo.predefinedMetadata.Number(999.9);
+        md = newNT;
         break;
       case CONE_PERSON:
         ConePerson newCone = new ConePerson();
@@ -51,10 +53,11 @@ public class MetadataAndProfileHelper {
         org.setCity("Organization city");
         newP.getOrganizations().add(org);
         newCone.setPerson(newP);
-        md= newCone;
+        md = newCone;
         break;
       case DATE:
-        de.mpg.imeji.logic.vo.predefinedMetadata.Date newDT = new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
+        de.mpg.imeji.logic.vo.predefinedMetadata.Date newDT =
+            new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
         newDT.setDate("2015-01-01");
         md = newDT;
         break;
@@ -69,7 +72,7 @@ public class MetadataAndProfileHelper {
         License newLicense = new License();
         newLicense.setLicense("License name");
         newLicense.setExternalUri(URI.create("http://example.license.com"));
-        md= newLicense;
+        md = newLicense;
         break;
       case LINK:
         Link newLink = new Link();
@@ -85,7 +88,7 @@ public class MetadataAndProfileHelper {
     }
     return md;
   }
-  
+
   public static Statement getStatement(URI uri, MetadataProfile profile) {
     for (Statement st : profile.getStatements()) {
       if (st.getId().toString().equals(uri.toString()))
@@ -93,8 +96,8 @@ public class MetadataAndProfileHelper {
     }
     return null;
   }
-  
-  
+
+
   /**
    * Return true if the {@link Metadata} has an empty value (which shouldn't be store in the
    * database)
@@ -111,10 +114,10 @@ public class MetadataAndProfileHelper {
           || Double.isNaN(((Date) md).getTime()))
         return true;
     } else if (md instanceof Geolocation) {
-      return (((Geolocation) md).getName() == null || ((Geolocation) md).getName().trim()
-          .equals(""))
-          && (Double.isNaN(((Geolocation) md).getLatitude()) || Double.isNaN(((Geolocation) md)
-              .getLongitude()));
+      return (((Geolocation) md).getName() == null
+          || ((Geolocation) md).getName().trim().equals(""))
+          && (Double.isNaN(((Geolocation) md).getLatitude())
+              || Double.isNaN(((Geolocation) md).getLongitude()));
     } else if (md instanceof License) {
       if ((((License) md).getLicense() == null || "".equals(((License) md).getLicense().trim()))
           && ((License) md).getExternalUri() == null)
@@ -135,24 +138,24 @@ public class MetadataAndProfileHelper {
     }
     return false;
   }
-  
+
   /**
-   * Checks if the Metadata statement with prvided URI is a parent at all 
+   * Checks if the Metadata statement with prvided URI is a parent at all
    * 
-   * @param profile  - {@link MetadataProfile} object} 
+   * @param profile - {@link MetadataProfile} object}
    * @param statement - the statement URI
    * @return true if the statement provided is parent in defined metadata profile
    */
-  public static boolean isMetadataParent (URI statement, MetadataProfile profile) {
-    for (Statement pS:profile.getStatements()) {
+  public static boolean isMetadataParent(URI statement, MetadataProfile profile) {
+    for (Statement pS : profile.getStatements()) {
       if (statement.equals(pS.getParent())) {
         return true;
       }
     }
     return false;
   }
-  
-  
+
+
   public static Statement findStatementByLabel(String label, MetadataProfile profile)
       throws BadRequestException {
     for (Statement st : profile.getStatements()) {

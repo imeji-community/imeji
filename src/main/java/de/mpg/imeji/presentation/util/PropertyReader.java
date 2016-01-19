@@ -1,6 +1,5 @@
 package de.mpg.imeji.presentation.util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,9 +22,13 @@ public class PropertyReader {
   private static Properties properties;
   private static final String DEFAULT_PROPERTY_FILE = "imeji.properties";
   private static URL solution;
-  private static String fileLocation = null;
   private static String version = null;
-  private static Logger logger = Logger.getLogger(PropertyReader.class);
+  private static final Logger logger = Logger.getLogger(PropertyReader.class);
+
+  /**
+   * private constructor
+   */
+  private PropertyReader() {}
 
   /**
    * Gets the value of a property for the given key from the system properties or the escidoc
@@ -110,7 +113,6 @@ public class PropertyReader {
    * @throws IOException If the file could not be found neither in the file system nor in the
    *         classpath.
    */
-  @SuppressWarnings("resource")
   public static InputStream getInputStream(String filepath) throws IOException {
     InputStream instream = null;
     // First try to search in file system
@@ -127,13 +129,11 @@ public class PropertyReader {
       }
       logger.info("loading properties from " + serverConfDirectory + "/" + filepath);
       instream = new FileInputStream(serverConfDirectory + "/" + filepath);
-      fileLocation = (new File(serverConfDirectory + "/" + filepath)).getAbsolutePath();
     } catch (Exception e) {
       // try to get resource from classpath
       URL url = PropertyReader.class.getClassLoader().getResource(filepath);
       if (url != null) {
         instream = url.openStream();
-        fileLocation = url.getFile();
       }
     }
     if (instream == null) {
@@ -154,7 +154,6 @@ public class PropertyReader {
    */
 
   private static Properties cleanUp(Properties props) {
-
     // Trim values
     for (Entry<Object, Object> e : props.entrySet()) {
       e.setValue(((String) e.getValue()).trim());

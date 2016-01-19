@@ -12,8 +12,19 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Helper to work with jsf beans
+ * 
+ * @author bastiens
+ *
+ */
 public class BeanHelper {
-  private static Logger logger = Logger.getLogger(BeanHelper.class);
+  private static final Logger logger = Logger.getLogger(BeanHelper.class);
+
+  /**
+   * Private Constructor
+   */
+  private BeanHelper() {}
 
   /**
    * Return any bean stored in request scope under the specified name.
@@ -267,7 +278,8 @@ public class BeanHelper {
   /**
    * @param summary summary text
    */
-  public static void message(String summary, String detail, UIComponent component, Severity severity) {
+  public static void message(String summary, String detail, UIComponent component,
+      Severity severity) {
     FacesMessage fm = new FacesMessage(severity, summary, detail);
     if (component == null) {
       FacesContext.getCurrentInstance().addMessage(null, fm);

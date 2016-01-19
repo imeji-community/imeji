@@ -15,6 +15,11 @@ public class IPUtils {
   private static final Logger logger = Logger.getLogger(IPUtils.class);
 
   /**
+   * Private Constructor
+   */
+  private IPUtils() {}
+
+  /**
    * True if the ip is include into the IP Range. IP range can be: <br/>
    * 130.183.100-129.* <br/>
    * 130.183.248.12-13 <br/>

@@ -25,6 +25,11 @@ import de.mpg.imeji.presentation.session.SessionBean;
  */
 public class ProfileHelper {
   /**
+   * Private Constructor
+   */
+  private ProfileHelper() {}
+
+  /**
    * Load the all th {@link MetadataProfile} found in a {@link List} of {@link Item}
    * 
    * @param imgs

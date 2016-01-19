@@ -5,6 +5,12 @@ package de.mpg.imeji.presentation.util;
 
 import de.mpg.j2j.misc.LocalizedString;
 
+/**
+ * Helper to work with {@link LocalizedString}
+ * 
+ * @author bastiens
+ *
+ */
 public class LocalizedStringHelper {
   private String string = null;
   private String lang = "eng";

@@ -39,6 +39,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CookieUtils {
   /**
+   * private Constructor
+   */
+  private CookieUtils() {}
+
+  /**
    * Read a cookie. If not found, the default value is returned. After the cookie has been read, the
    * cookie is updated (new max age, default value set if needed)
    * 

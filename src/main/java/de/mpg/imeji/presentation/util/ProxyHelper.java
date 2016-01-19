@@ -15,18 +15,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.log4j.Logger;
 
 public class ProxyHelper {
-  /**
-   * Logger for this class.
-   */
-  private static final Logger LOGGER = Logger.getLogger(ProxyHelper.class);
-  static String proxyHost = null;
-  static String proxyPort = null;
-  static String nonProxyHosts = null;
-  static Pattern nonProxyPattern = null;
-  static boolean flag = false;
+  private static String proxyHost = null;
+  private static String proxyPort = null;
+  private static String nonProxyHosts = null;
+  private static Pattern nonProxyPattern = null;
+  private static boolean flag = false;
+
+  private ProxyHelper() {}
 
   /**
    * check if proxy has to get used for given url. If yes, set ProxyHost in httpClient
@@ -71,8 +68,8 @@ public class ProxyHelper {
    * @throws IOException
    * @throws HttpException
    */
-  public static int executeMethod(HttpClient client, HttpMethod method) throws HttpException,
-      IOException {
+  public static int executeMethod(HttpClient client, HttpMethod method)
+      throws HttpException, IOException {
     setProxy(client, method.getURI().toString());
     return client.executeMethod(method);
   }

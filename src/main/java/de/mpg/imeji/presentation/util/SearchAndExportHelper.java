@@ -28,6 +28,11 @@ public class SearchAndExportHelper {
   private static Pattern ESCIDOC_ID_PATTERN = Pattern.compile("escidoc:[0-9]+");
 
   /**
+   * Private Constructor
+   */
+  private SearchAndExportHelper() {}
+
+  /**
    * Used the Search and export interface to return the styled citation of the current
    * {@link Publication}
    * 

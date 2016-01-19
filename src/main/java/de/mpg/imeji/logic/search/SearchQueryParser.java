@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
@@ -23,6 +24,8 @@ import de.mpg.imeji.logic.search.model.SearchMetadata;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchSimpleMetadata;
+import de.mpg.imeji.logic.search.util.StringParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -38,15 +41,37 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class SearchQueryParser {
   /**
-   * The Pattern to match a metadata search
+   * Regex to match: statementid:field="value"
    */
-  private static final String SEARCH_METADATA_PATTERN = "[a-zA-Z0-9-_]+:[a-z_]+[=<>]{1,2}\".+\"";
+  private static final String SEARCH_METADATA_REGEX =
+      "([a-zA-Z0-9-_]+):([a-z_]+)([=<>]{1,2})\"(.+)\"";
   /**
-   * The Pattern to match a search pair
+   * Regex to match: field="value"
    */
-  private static final String SEARCH_PAIR_PATTERN = "[a-zA-Z_]+[=<>]{1,2}\".+\"";
+  private static final String SEARCH_PAIR_REGEX = "([a-zA-Z_]+)([=<>]{1,2})\"(.+)\"";
+  /**
+   * Regex to match md:label="value"
+   */
+  private static final String SEARCH_METADATA_SIMPLE_REGEX =
+      "md:([a-zA-Z0-9-_]+)([=<>]{1,2})\"(.+)\"";
+  /**
+   * PAttern for SEARCH_METADATA_REGEX
+   */
+  private static final Pattern SEARCH_METADATA_PATTERN = Pattern.compile(SEARCH_METADATA_REGEX);
+  /**
+   * Pattern for SEARCH_PAIR_REGEX
+   */
+  private static final Pattern SEARCH_PAIR_PATTERN = Pattern.compile(SEARCH_PAIR_REGEX);
+  /**
+   * Pattern for SEARCH_METADATA_SIMPLE_REGEX
+   */
+  private static final Pattern SEARCH_METADATA_SIMPLE_PATTERN =
+      Pattern.compile(SEARCH_METADATA_SIMPLE_REGEX);
 
-  private static final String SEARCH_METADATA_SIMPLE_PATTERN = "md:[a-zA-Z0-9-_]+:[=<>]{1,2}\".+\"";
+  /**
+   * Private Constructor
+   */
+  private SearchQueryParser() {}
 
   /**
    * Parse a url search query into a {@link SearchQuery}. Decode the query with UTF-8
@@ -84,6 +109,9 @@ public class SearchQueryParser {
     }
     StringReader reader = new StringReader(query);
     int c = 0;
+    StringParser simpleMdParser = new StringParser(SEARCH_METADATA_SIMPLE_PATTERN);
+    StringParser mdParser = new StringParser(SEARCH_METADATA_PATTERN);
+    StringParser pairParser = new StringParser(SEARCH_PAIR_PATTERN);
     while ((c = reader.read()) != -1) {
       if (bracketsOpened - bracketsClosed != 0) {
         subQuery += (char) c;
@@ -116,32 +144,26 @@ public class SearchQueryParser {
           subQuery = "";
         }
       }
-      if (matchSearchMetadataPattern(scString)) {
-        String op = parseOperatorInSearchPattern(scString, SEARCH_METADATA_PATTERN);
-        int indexOp = scString.indexOf(op);
-        int indexValue = scString.indexOf("\"");
-        int indexIndex = scString.indexOf(":");
-        String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
-        if (value.startsWith("\"")) {
-          value += "\"";
-        }
-        SearchFields field =
-            SearchFields.valueOf(scString.substring(indexIndex + 1, indexOp).trim());
-        SearchOperators operator = stringOperator2SearchOperator(op);
-        searchQuery.addPair(new SearchMetadata(field, operator, value,
-            ObjectHelper.getURI(Statement.class, scString.substring(0, indexIndex).trim()), not));
+      if (simpleMdParser.find(scString)) {
+        searchQuery.addPair(new SearchSimpleMetadata(simpleMdParser.getGroup(1),
+            stringOperator2SearchOperator(simpleMdParser.getGroup(2)), simpleMdParser.getGroup(3),
+            not));
         not = false;
         scString = "";
-      } else if (matchSearchPairPattern(scString)) {
-        String op = parseOperatorInSearchPattern(scString, SEARCH_PAIR_PATTERN);
-        int indexOp = scString.indexOf(op);
-        int indexValue = scString.indexOf("\"");
-        String value = scString.substring(indexValue + 1, scString.length() - 1).trim();
-        if (value.startsWith("\"")) {
-          value += "\"";
-        }
-        SearchFields field = SearchFields.valueOf(scString.substring(0, indexOp).trim());
-        SearchOperators operator = stringOperator2SearchOperator(op);
+      } else if (mdParser.find(scString)) {
+        SearchOperators operator = stringOperator2SearchOperator(mdParser.getGroup(3));
+        String value = mdParser.getGroup(4);
+        value = value.startsWith("\"") ? value + "\"" : value;
+        SearchFields field = SearchFields.valueOf(mdParser.getGroup(2));
+        URI statementId = ObjectHelper.getURI(Statement.class, mdParser.getGroup(1));
+        searchQuery.addPair(new SearchMetadata(field, operator, value, statementId, not));
+        not = false;
+        scString = "";
+      } else if (pairParser.find(scString)) {
+        SearchOperators operator = stringOperator2SearchOperator(pairParser.getGroup(2));
+        SearchFields field = SearchFields.valueOf(pairParser.getGroup(1));
+        String value = pairParser.getGroup(3);
+        value = value.startsWith("\"") ? value + "\"" : value;
         searchQuery.addPair(new SearchPair(field, operator, value, not));
         scString = "";
         not = false;
@@ -152,42 +174,6 @@ public class SearchQueryParser {
           .addPair(new SearchPair(SearchFields.all, SearchOperators.REGEX, query.trim(), false));
     }
     return searchQuery;
-  }
-
-  /**
-   * Parse the operator (=, ==, =<, >=) in the search pattern
-   * 
-   * @param pattern
-   * @return
-   */
-  private static String parseOperatorInSearchPattern(String str, String pattern) {
-    for (SearchOperators op : SearchOperators.values()) {
-      String opString = operator2URL(op);
-      String opPattern = pattern.replace("[=<>]{1,2}", opString);
-      if (str.trim().matches(opPattern))
-        return opString;
-    }
-    throw new RuntimeException("Operator not found in " + pattern);
-  }
-
-  /**
-   * Pattern to parse a {@link SearchPair} from an url query
-   * 
-   * @param str
-   * @return
-   */
-  private static boolean matchSearchPairPattern(String str) {
-    return str.trim().matches(SEARCH_PAIR_PATTERN);
-  }
-
-  /**
-   * Pattern to parse a {@link SearchMetadata} from a url query
-   * 
-   * @param str
-   * @return
-   */
-  private static boolean matchSearchMetadataPattern(String str) {
-    return str.trim().matches(SEARCH_METADATA_PATTERN);
   }
 
   /**

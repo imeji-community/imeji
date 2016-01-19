@@ -15,8 +15,16 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
  * 
  */
 public class ElasticSortFactory {
+  /**
+   * Prefix used to index the value used by the sorting. See
+   * https://www.elastic.co/guide/en/elasticsearch/guide/current/multi-fields.html
+   */
+  private static final String SORT_INDEX = ".sort";
 
-  private static SortBuilder defaultSort =
+  /**
+   * Default Sorting value
+   */
+  private static final SortBuilder defaultSort =
       SortBuilders.fieldSort(ElasticFields.CREATED.field()).order(SortOrder.ASC);
 
   /**
@@ -32,35 +40,41 @@ public class ElasticSortFactory {
     SearchFields index = SearchFields.valueOf(sort.getIndex().getName());
     switch (index) {
       case text:
-        return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field() + ".sort")
-            .order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.METADATA_TEXT.field() + SORT_INDEX, sort);
       case title:
-        return SortBuilders.fieldSort(ElasticFields.NAME.field() + ".sort")
-            .order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.NAME.field() + SORT_INDEX, sort);
       case date:
-        return SortBuilders.fieldSort(ElasticFields.METADATA_TEXT.field() + ".sort")
-            .order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.METADATA_TEXT.field() + SORT_INDEX, sort);
       case modified:
-        return SortBuilders.fieldSort(ElasticFields.MODIFIED.field()).order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.MODIFIED.field(), sort);
       case filename:
-        return SortBuilders.fieldSort(ElasticFields.FILENAME.field() + ".sort")
-            .order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.FILENAME.field() + SORT_INDEX, sort);
       case filetype:
-        return SortBuilders.fieldSort(ElasticFields.FILETYPE.field()).order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.FILETYPE.field(), sort);
       case filesize:
-        return SortBuilders.fieldSort(ElasticFields.SIZE.field()).order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.SIZE.field(), sort);
       case creator:
-        return SortBuilders.fieldSort(ElasticFields.AUTHOR_COMPLETENAME.field() + ".sort")
-            .order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.AUTHOR_COMPLETENAME.field() + SORT_INDEX, sort);
       case status:
-        return SortBuilders.fieldSort(ElasticFields.STATUS.field()).order(getSortOrder(sort));
+        return makeBuilder(ElasticFields.STATUS.field(), sort);
       default:
         return defaultSort;
     }
   }
 
   /**
-   * REturn the {@link SortOrder} of the current sort criterion
+   * Construct a Sortbuilder
+   * 
+   * @param field
+   * @param sortCriterion
+   * @return
+   */
+  private static SortBuilder makeBuilder(String field, SortCriterion sortCriterion) {
+    return SortBuilders.fieldSort(field).order(getSortOrder(sortCriterion));
+  }
+
+  /**
+   * Return the {@link SortOrder} of the current sort criterion
    * 
    * @param sort
    * @return

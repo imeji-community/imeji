@@ -12,21 +12,46 @@ public enum ImejiPages {
    * Order is important: The History will follow the regex rules following this order to find a
    * match
    */
-  ITEM_DETAIL("", ".*/item/(\\w+).*"), COLLECTIONS("history_collections", "/collections"), COLLECTION_ITEMS(
-      "history_images_collection", ".*/collection/(\\w+)/browse.*"), COLLECTION_UPLOAD(
-      "history_upload", ".*/collection/(\\w+)/upload.*"), COLLECTION_INFOS(
-      "history_collection_info", ".*/collection/(\\w+)/infos.*"), COLLECTION_HOME("collection",
-      ".*/collection/(\\w*).*"), ALBUMS("albums", "/albums"), ALBUM_ITEMS("history_images_album",
-      ".*/album/(\\w+)/browse.*"), ALBUM_INFOS("history_album_info", ".*/album/(\\w+)/infos.*"), ALBUM_HOME(
-      "history_album", ".*/album/(\\w*).*"), ADMINISTRATION("admin", "/admin"), USER("user",
-      ".*/user\\?id=(.*)&?"), USERS("admin_info_users", "/users"),  USER_GROUP_CREATE("admin_userGroup_new", "/createusergroup"),USER_CREATE("admin_user_new",
-      "/createuser"), USER_GROUP("admin_userGroup", ".*/usergroup\\?id=(.*)&?"), USER_GROUPS("admin_userGroups_view",
-      "/usergroups"), HELP("help", "/help"), SEARCH("history_advanced_search", "/search"), BATCH_EDIT_ITEMS(
-      "edit_images", ".*/edit\\?.*type=.*"), UPLOAD("upload", "/singleupload"), BROWSE(
-      "history_images", "/browse"), CREATE_COLLECTION("collection_create", ".*/createcollection.*"), CREATE_ALBUM(
-      "album_create", ".*/createalbum"), SPACES("spaces", ".*/spaces"), CREATE_SPACE(
-      "admin_space_create", ".*/createspace"), EDIT_SPACE("admin_space_edit",
-      ".*/space/.*/editspace"), HOME("history_home", "/");
+  ITEM_DETAIL("", ".*/item/([A-Za-z0-9-_]+).*"), COLLECTIONS("history_collections",
+      "/collections"), COLLECTION_ITEMS("history_images_collection",
+          ".*/collection/([A-Za-z0-9-_]+)/browse.*"), COLLECTION_UPLOAD("history_upload",
+              ".*/collection/([A-Za-z0-9-_]+)/upload.*"), COLLECTION_INFOS(
+                  "history_collection_info",
+                  ".*/collection/([A-Za-z0-9-_]+)/infos.*"), COLLECTION_HOME("collection",
+                      ".*/collection/([A-Za-z0-9-_]+).*"), ALBUMS("albums", "/albums"), ALBUM_ITEMS(
+                          "history_images_album",
+                          ".*/album/([A-Za-z0-9-_]+)/browse.*"), ALBUM_INFOS("history_album_info",
+                              ".*/album/([A-Za-z0-9-_]+)/infos.*"), ALBUM_HOME("history_album",
+                                  ".*/album/([A-Za-z0-9-_]+).*"), ADMINISTRATION("admin",
+                                      "/admin"), USER("user", ".*/user\\?id=(.*)&?"), USERS(
+                                          "admin_info_users",
+                                          "/users"), USER_GROUP_CREATE("admin_userGroup_new",
+                                              "/createusergroup"), USER_CREATE("admin_user_new",
+                                                  "/createuser"), USER_GROUP("admin_userGroup",
+                                                      ".*/usergroup\\?id=(.*)&?"), USER_GROUPS(
+                                                          "admin_userGroups_view",
+                                                          "/usergroups"), HELP("help",
+                                                              "/help"), SEARCH(
+                                                                  "history_advanced_search",
+                                                                  "/search"), BATCH_EDIT_ITEMS(
+                                                                      "edit_images",
+                                                                      ".*/edit\\?.*type=.*"), UPLOAD(
+                                                                          "upload",
+                                                                          "/singleupload"), BROWSE(
+                                                                              "history_images",
+                                                                              "/browse"), CREATE_COLLECTION(
+                                                                                  "collection_create",
+                                                                                  ".*/createcollection.*"), CREATE_ALBUM(
+                                                                                      "album_create",
+                                                                                      ".*/createalbum"), SPACES(
+                                                                                          "spaces",
+                                                                                          ".*/spaces"), CREATE_SPACE(
+                                                                                              "admin_space_create",
+                                                                                              ".*/createspace"), EDIT_SPACE(
+                                                                                                  "admin_space_edit",
+                                                                                                  ".*/space/.*/editspace"), HOME(
+                                                                                                      "history_home",
+                                                                                                      "/");
 
   /**
    * The key to the label

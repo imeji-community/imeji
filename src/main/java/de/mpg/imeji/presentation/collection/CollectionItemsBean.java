@@ -172,7 +172,6 @@ public class CollectionItemsBean extends ItemsBean {
     } catch (ImejiException e) {
       BeanHelper.error(sb.getMessage("error_doi_creation_" + e.getMessage()));
       logger.error("Error during doi creation", e);
-      e.printStackTrace();
     }
     return "pretty:";
   }

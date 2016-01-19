@@ -40,11 +40,13 @@ public class SearchQueryParser {
   /**
    * The Pattern to match a metadata search
    */
-  private static String SEARCH_METADATA_PATTERN = "[a-zA-Z0-9-_]+:[a-z_]+[=<>]{1,2}\".+\"";
+  private static final String SEARCH_METADATA_PATTERN = "[a-zA-Z0-9-_]+:[a-z_]+[=<>]{1,2}\".+\"";
   /**
    * The Pattern to match a search pair
    */
-  private static String SEARCH_PAIR_PATTERN = "[a-zA-Z_]+[=<>]{1,2}\".+\"";
+  private static final String SEARCH_PAIR_PATTERN = "[a-zA-Z_]+[=<>]{1,2}\".+\"";
+
+  private static final String SEARCH_METADATA_SIMPLE_PATTERN = "md:[a-zA-Z0-9-_]+:[=<>]{1,2}\".+\"";
 
   /**
    * Parse a url search query into a {@link SearchQuery}. Decode the query with UTF-8

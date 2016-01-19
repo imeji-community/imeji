@@ -56,8 +56,9 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 
   @XmlEnum(Types.class)
   public enum Types {
-    TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(Date.class), GEOLOCATION(
-        Geolocation.class), LICENSE(License.class), LINK(Link.class), PUBLICATION(Publication.class);
+    TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(
+        Date.class), GEOLOCATION(Geolocation.class), LICENSE(License.class), LINK(
+            Link.class), PUBLICATION(Publication.class);
     private Class<? extends Metadata> clazz = null;
 
     private Types(Class<? extends Metadata> clazz) {
@@ -84,8 +85,8 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 
   public Metadata() {}
 
-  public static Metadata createNewInstance(URI typeUri) throws IllegalAccessException,
-      InstantiationException {
+  public static Metadata createNewInstance(URI typeUri)
+      throws IllegalAccessException, InstantiationException {
     for (Types type : Types.values()) {
       if (type.getClazzNamespace().equals(typeUri.toString())) {
         return type.getClazz().newInstance();
@@ -106,20 +107,13 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
    */
   @Override
   public int compareTo(Metadata imd) {
-    if (imd.getPos() > this.pos)
+    if (imd.getPos() > this.pos) {
       return -1;
-    else if (imd.getPos() == this.pos)
+    } else if (imd.getPos() == this.pos) {
       return 0;
-    else
+    } else {
       return 1;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof Metadata) {
-      return compareTo((Metadata) obj) == 0;
     }
-    return false;
   }
 
   public abstract void copy(Metadata metadata);

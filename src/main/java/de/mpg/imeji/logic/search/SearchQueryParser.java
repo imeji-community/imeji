@@ -85,10 +85,11 @@ public class SearchQueryParser {
     StringReader reader = new StringReader(query);
     int c = 0;
     while ((c = reader.read()) != -1) {
-      if (bracketsOpened - bracketsClosed != 0)
+      if (bracketsOpened - bracketsClosed != 0) {
         subQuery += (char) c;
-      else
+      } else {
         scString += (char) c;
+      }
       if (c == '(') {
         hasBracket = true;
         bracketsOpened++;
@@ -254,8 +255,9 @@ public class SearchQueryParser {
             query += " NOT";
           }
           String g = transform2URL(new SearchQuery(((SearchGroup) se).getGroup()));
-          if (!"".equals(g))
+          if (!"".equals(g)) {
             query += logical + "(" + g + ")";
+          }
           break;
         case LOGICAL_RELATIONS:
           logical = " " + ((SearchLogicalRelation) se).getLogicalRelation().name() + " ";
@@ -372,10 +374,11 @@ public class SearchQueryParser {
     int groupSize = group.getElements().size();
     if (isSearchGroupForComplexMetadata(group)) {
       for (SearchElement md : group.getElements()) {
-        if (md instanceof SearchMetadata)
+        if (md instanceof SearchMetadata) {
           str += searchMetadata2PrettyQuery((SearchMetadata) md);
-        else if (md instanceof SearchLogicalRelation)
+        } else if (md instanceof SearchLogicalRelation) {
           str += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) md);
+        }
       }
       // str =
       // searchMetadata2PrettyQuery((SearchMetadata)group.getElements().get(0));
@@ -383,12 +386,14 @@ public class SearchQueryParser {
     } else {
       str = searchElements2PrettyQuery(group.getElements());
     }
-    if ("".equals(str))
+    if ("".equals(str)) {
       return "";
-    if (groupSize > 1)
+    }
+    if (groupSize > 1) {
       return " (" + removeUseLessLogicalOperation(str) + ") ";
-    else
+    } else {
       return removeUseLessLogicalOperation(str);
+    }
   }
 
   /**
@@ -468,19 +473,25 @@ public class SearchQueryParser {
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     String orString = session.getLabel("or_big");
     String andString = session.getLabel("and_big");
-    if (q.endsWith(" "))
+    if (q.endsWith(" ")) {
       q = q.substring(0, q.length() - 1);
-    if (q.endsWith(" " + andString))
+    }
+    if (q.endsWith(" " + andString)) {
       q = q.substring(0, q.length() - andString.length());
-    if (q.endsWith(" " + orString))
+    }
+    if (q.endsWith(" " + orString)) {
       q = q.substring(0, q.length() - orString.length());
-    if (q.startsWith(orString))
+    }
+    if (q.startsWith(orString)) {
       q = q.substring(orString.length(), q.length());
-    if (q.startsWith(andString))
+    }
+    if (q.startsWith(andString)) {
       q = q.substring(andString.length(), q.length());
+    }
     if (q.endsWith(" ") || q.endsWith(" " + session.getLabel("and_big"))
-        || q.endsWith(" " + session.getLabel("or_big")))
+        || q.endsWith(" " + session.getLabel("or_big"))) {
       q = removeUseLessLogicalOperation(q);
+    }
     return q.trim();
   }
 
@@ -524,8 +535,9 @@ public class SearchQueryParser {
    * @return
    */
   private static String negation2PrettyQuery(boolean isNot) {
-    if (isNot)
+    if (isNot) {
       return "!";
+    }
     return "";
   }
 

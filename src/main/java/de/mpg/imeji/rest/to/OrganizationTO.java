@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultOrganizationTO;
 
 @XmlRootElement
 @XmlType(propOrder = {

@@ -60,29 +60,28 @@ import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 public class SuperMetadataTreeTO implements Serializable {
   private static final long serialVersionUID = 8726381279225329881L;
   private Map<String, SuperMetadataBeanTO> map = new LinkedHashMap<String, SuperMetadataBeanTO>();
-  //private Map<String, List<JsonNode>> oMap = new LinkedHashMap<String, List<JsonNode>>();
+  // private Map<String, List<JsonNode>> oMap = new LinkedHashMap<String, List<JsonNode>>();
   private Map<String, JsonNode> oMap = new LinkedHashMap<String, JsonNode>();
   private MetadataProfile profile;
   private ObjectMapper mapper = new ObjectMapper();
+
   /**
    * Default Constructor
    */
-  
-  public SuperMetadataTreeTO(Collection<Metadata> metadataSet, MetadataProfile profile) 
-  
-  {
+
+  public SuperMetadataTreeTO(Collection<Metadata> metadataSet, MetadataProfile profile) {
 
     List<SuperMetadataBeanTO> list = new ArrayList<SuperMetadataBeanTO>();
     for (Metadata md : metadataSet) {
-      
+
       Statement st = MetadataAndProfileHelper.getStatement(md.getStatement(), profile);
-      
+
       if (st != null) {
         SuperMetadataBeanTO smd = new SuperMetadataBeanTO(md, st);
         list.add(smd);
       }
     }
-    
+
     Collections.sort(list);
     // Set parents according to the current order
     list = setParents(list);
@@ -91,47 +90,49 @@ public class SuperMetadataTreeTO implements Serializable {
     map = createMap(list, null, "0");
 
     // Set the children
-    for (String mapLabel :map.keySet() ) {
+    for (String mapLabel : map.keySet()) {
       SuperMetadataBeanTO smb = map.get(mapLabel);
       smb.setChilds(getChilds(smb.getTreeIndex()));
     }
-    
-    for (SuperMetadataBeanTO smb:list) {
+
+    for (SuperMetadataBeanTO smb : list) {
       setJsonFieldParent(smb);
       if (!smb.getTreeIndex().contains(","))
-        addOMap(smb.getLabel(), mapper.valueToTree(smb.isMultiple()? smb.getJsonField():smb.getJsonFieldSingle()), smb.isMultiple());
-      }
+        addOMap(smb.getLabel(),
+            mapper.valueToTree(smb.isMultiple() ? smb.getJsonField() : smb.getJsonFieldSingle()),
+            smb.isMultiple());
+    }
   }
-  
-  
 
-  
-/**
- * Create the {@link LinkedList} of {@link Metadata} with template (default values) from the {@link MetadataProfile}
- * For each profile statement, it will generate a default value, depending on the metadata type
- * It returns a generated "metadata record", which can be serialized as JSON as any other metadata 
- * @param profile
- * @return 
- */
-public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile) 
-  
+
+
+  /**
+   * Create the {@link LinkedList} of {@link Metadata} with template (default values) from the
+   * {@link MetadataProfile} For each profile statement, it will generate a default value, depending
+   * on the metadata type It returns a generated "metadata record", which can be serialized as JSON
+   * as any other metadata
+   * 
+   * @param profile
+   * @return
+   */
+  public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile)
+
   {
     LinkedList<Metadata> mdC = new LinkedList<Metadata>();
     int i = 0;
-    for (Statement st : profile.getStatements())
-    {
-        Metadata md;
-        try {
-          md = MetadataAndProfileHelper.getDefaultValueMetadata(st);
-          md.setPos(i);
-          md.setStatement(st.getId());
-          mdC.add(md);
-          i++;
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+    for (Statement st : profile.getStatements()) {
+      Metadata md;
+      try {
+        md = MetadataAndProfileHelper.getDefaultValueMetadata(st);
+        md.setPos(i);
+        md.setStatement(st.getId());
+        mdC.add(md);
+        i++;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
-    return  mdC;
+    return mdC;
   }
 
   /**
@@ -146,19 +147,19 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
       SuperMetadataBeanTO parent, String index) {
     Map<String, SuperMetadataBeanTO> map = new LinkedHashMap<String, SuperMetadataBeanTO>();
     for (SuperMetadataBeanTO smd : list) {
-      if ((parent == null && isRootMetadata(smd)) || isChild(smd, parent) ) {
+      if ((parent == null && isRootMetadata(smd)) || isChild(smd, parent)) {
         smd.setTreeIndex(index);
         map.put(smd.getTreeIndex(), smd);
         map.putAll(createMap(removeFromList(list, smd), smd, addIndex(index, "0")));
         index = incrementIndex(index);
-        //set here the JsonField & Value of Root data
+        // set here the JsonField & Value of Root data
         setJsonFieldRootAndLeave(smd);
       }
     }
     return map;
   }
 
-   /**
+  /**
    * Create the {@link Map} from the {@link List}
    * 
    * @param list
@@ -166,106 +167,102 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
    * @param index
    * @return
    */
-  private void setJsonFieldRootAndLeave (SuperMetadataBeanTO smd) {
-    
-      if (!MetadataAndProfileHelper.isMetadataParent(smd.getStatement().getId(), getProfile())) {
-        
-          JsonNode jsonVal = MetadataTransferHelper.serializeMetadata(smd.getMetadata(), smd.getStatement());
+  private void setJsonFieldRootAndLeave(SuperMetadataBeanTO smd) {
 
-            List<JsonNode> allVals = (new ArrayList<JsonNode>());
-            allVals.add(jsonVal);
-            smd.setJsonFieldList(allVals);
-      }
-      
-   }
- 
-  private void addOMap(String label, JsonNode value, boolean isMultiple){
-        ArrayNode multipleVal = mapper.createArrayNode();
-        if (oMap.get(label) == null )
-        {
-          
-          oMap.put(label, isMultiple?multipleVal.add(value.get(0)):value);
-        }
-        else
-        {
-          JsonNode mapNode = oMap.get(label);
-          if (mapNode.isArray()) {
-              ((ArrayNode)mapNode).add(value.get(0));
-          }
-          oMap.put(label, mapNode);
-        }
+    if (!MetadataAndProfileHelper.isMetadataParent(smd.getStatement().getId(), getProfile())) {
+
+      JsonNode jsonVal =
+          MetadataTransferHelper.serializeMetadata(smd.getMetadata(), smd.getStatement());
+
+      List<JsonNode> allVals = (new ArrayList<JsonNode>());
+      allVals.add(jsonVal);
+      smd.setJsonFieldList(allVals);
+    }
+
   }
-  
-  private void setJsonFieldParent (SuperMetadataBeanTO parent)  {
 
-           if ( !MetadataAndProfileHelper.isMetadataParent (parent.getStatement().getId(), profile))
-                  return;
-          
-          //if metadata is not parent, then return, otherwise, 
-          //produce proper Json even if there are no children values
-          
-          List<JsonNode> parentValues = new ArrayList<JsonNode> ();
-          if (parent.isMultiple() && parent.getJsonField()!= null ) {
-              parentValues = parent.getJsonField();
+  private void addOMap(String label, JsonNode value, boolean isMultiple) {
+    ArrayNode multipleVal = mapper.createArrayNode();
+    if (oMap.get(label) == null) {
+
+      oMap.put(label, isMultiple ? multipleVal.add(value.get(0)) : value);
+    } else {
+      JsonNode mapNode = oMap.get(label);
+      if (mapNode.isArray()) {
+        ((ArrayNode) mapNode).add(value.get(0));
+      }
+      oMap.put(label, mapNode);
+    }
+  }
+
+  private void setJsonFieldParent(SuperMetadataBeanTO parent) {
+
+    if (!MetadataAndProfileHelper.isMetadataParent(parent.getStatement().getId(), profile))
+      return;
+
+    // if metadata is not parent, then return, otherwise,
+    // produce proper Json even if there are no children values
+
+    List<JsonNode> parentValues = new ArrayList<JsonNode>();
+    if (parent.isMultiple() && parent.getJsonField() != null) {
+      parentValues = parent.getJsonField();
+    }
+
+    if (!parent.isMultiple() && parent.getJsonFieldSingle() != null) {
+      parentValues.add(parent.getJsonFieldSingle());
+    }
+
+
+    ObjectNode parentNode = mapper.createObjectNode();
+    if (parentValues.size() == 0) {
+      JsonNode jsonParentValue =
+          MetadataTransferHelper.serializeMetadata(parent.getMetadata(), parent.getStatement());
+      List<JsonNode> jsonParentList = new ArrayList<JsonNode>();
+      jsonParentList.add(jsonParentValue);
+      // CHANGE LIST/MULTIPLE
+      parentNode.set(parent.getLabel(), mapper.valueToTree(jsonParentList.get(0)));
+    }
+
+    // Map<String, List<JsonNode>> childrenMap = new LinkedHashMap<String, List<JsonNode>>();
+    // CHANGE LIST/MULTIPLE
+    Map<String, JsonNode> childrenMap = new LinkedHashMap<String, JsonNode>();
+
+    for (SuperMetadataBeanTO smbchild : parent.getChilds()) {
+
+      if (smbchild.getParent().getTreeIndex().equals(parent.getTreeIndex())) {
+
+        setJsonFieldParent(smbchild);
+
+        if (childrenMap.get(smbchild.getLabel()) == null
+        // change LIST/MULTIPLE || childrenMap.get(smbchild.getLabel()).isEmpty()
+        ) {
+          childrenMap.put(smbchild.getLabel(), mapper.valueToTree(
+              smbchild.isMultiple() ? smbchild.getJsonField() : smbchild.getJsonFieldSingle()));
+        } else {
+
+          if (smbchild.isMultiple()) {
+            ArrayNode childVals = (ArrayNode) childrenMap.get(smbchild.getLabel());
+            childVals.addAll(smbchild.getJsonField());
+            childrenMap.put(smbchild.getLabel(), childVals);
+          } else {
+            childrenMap.put(smbchild.getLabel(), smbchild.getJsonFieldSingle());
           }
-          
-          if (!parent.isMultiple() && parent.getJsonFieldSingle()!= null ) {
-              parentValues.add(parent.getJsonFieldSingle());
-          }
-              
-          
-          ObjectNode parentNode = mapper.createObjectNode();
-          if (parentValues.size() == 0) {
-              JsonNode jsonParentValue = MetadataTransferHelper.serializeMetadata(parent.getMetadata(), parent.getStatement());
-              List<JsonNode> jsonParentList = new ArrayList<JsonNode>();
-              jsonParentList.add(jsonParentValue);
-              //CHANGE LIST/MULTIPLE
-              parentNode.set(parent.getLabel(), mapper.valueToTree(jsonParentList.get(0)));
-          }
+        }
 
-          //Map<String, List<JsonNode>> childrenMap = new LinkedHashMap<String, List<JsonNode>>();
-          //CHANGE LIST/MULTIPLE
-          Map<String, JsonNode> childrenMap = new LinkedHashMap<String, JsonNode>();
-           
-           for (SuperMetadataBeanTO smbchild: parent.getChilds() ) {
-             
-                if (smbchild.getParent().getTreeIndex() == parent.getTreeIndex()) {
-               
-                    setJsonFieldParent(smbchild);
+      }
 
-               if (childrenMap.get(smbchild.getLabel()) == null 
-                     // change LIST/MULTIPLE || childrenMap.get(smbchild.getLabel()).isEmpty() 
-                    ) {
-                    childrenMap.put(smbchild.getLabel(), mapper.valueToTree(smbchild.isMultiple()?smbchild.getJsonField():smbchild.getJsonFieldSingle()));
-                }
-                else
-                {
-                   
-                  if (smbchild.isMultiple()) {
-                    ArrayNode childVals = (ArrayNode)childrenMap.get(smbchild.getLabel());
-                    childVals.addAll(smbchild.getJsonField());
-                    childrenMap.put(smbchild.getLabel(), childVals);
-                  }
-                  else
-                  {
-                    childrenMap.put(smbchild.getLabel(), smbchild.getJsonFieldSingle());
-                  }
-                }
-               
-                }
+    }
 
-           }
-           
-           for (String label:childrenMap.keySet()) {
-               parentNode.set(label, mapper.valueToTree(childrenMap.get(label)));
-           }
-           
-           
-           parentValues.add(parentNode);
-           parent.setJsonFieldList(parentValues);
- }
+    for (String label : childrenMap.keySet()) {
+      parentNode.set(label, mapper.valueToTree(childrenMap.get(label)));
+    }
 
-    
+
+    parentValues.add(parentNode);
+    parent.setJsonFieldList(parentValues);
+  }
+
+
   /**
    * True if the {@link SuperMetadataBeanTO} is a root metadata
    * 
@@ -275,7 +272,7 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
   private boolean isRootMetadata(SuperMetadataBeanTO smb) {
     return smb.getParent() == null;
   }
-  
+
 
   /**
    * True if the {@link SuperMetadataBeanTO} smb is child of parent
@@ -299,7 +296,8 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
    * @param smb
    * @return
    */
-  private List<SuperMetadataBeanTO> removeFromList(List<SuperMetadataBeanTO> list, SuperMetadataBeanTO smb) {
+  private List<SuperMetadataBeanTO> removeFromList(List<SuperMetadataBeanTO> list,
+      SuperMetadataBeanTO smb) {
     List<SuperMetadataBeanTO> subList = new ArrayList<SuperMetadataBeanTO>(list);
     subList.remove(smb);
     return subList;
@@ -333,7 +331,7 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
   private boolean isParent(String index1, String index2) {
     return index2.startsWith(index1 + ",") && index1.length() < index2.length();
   }
-  
+
 
   /**
    * Increment the index to one position (1,1 -> 1,2 or 2,3,0,3 -> 2,3,0,4)
@@ -363,8 +361,8 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
 
 
   /**
-   * Set the Parent {@link SuperMetadataBeanTO} to all element of the list. This is made according to
-   * the current order of the list (see findBestParent() method)
+   * Set the Parent {@link SuperMetadataBeanTO} to all element of the list. This is made according
+   * to the current order of the list (see findBestParent() method)
    * 
    * @param flat
    * @return
@@ -377,15 +375,16 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
   }
 
   /**
-   * Find the parent of a {@link Metadata} from the list, and return it as {@link SuperMetadataBeanTO}
-   * . This is Dependent to the statement (if it has a parent statement), and the position of the
-   * child in the list
+   * Find the parent of a {@link Metadata} from the list, and return it as
+   * {@link SuperMetadataBeanTO} . This is Dependent to the statement (if it has a parent
+   * statement), and the position of the child in the list
    * 
    * @param md
    * @param list
    * @return
-   */  
-  private SuperMetadataBeanTO findBestParent(SuperMetadataBeanTO child, List<SuperMetadataBeanTO> list) {
+   */
+  private SuperMetadataBeanTO findBestParent(SuperMetadataBeanTO child,
+      List<SuperMetadataBeanTO> list) {
     // If the statement has no parent, the metadata doens't as well
     if (child.getStatement().getParent() == null)
       return null;
@@ -397,34 +396,34 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
         candidates.add(md);
     }
     // Return the best candidate
-    for(int i = candidates.size()-1; i>=0; i--){
-      if(candidates.get(i).getPos() < child.getPos()){
+    for (int i = candidates.size() - 1; i >= 0; i--) {
+      if (candidates.get(i).getPos() < child.getPos()) {
         return candidates.get(i);
       }
     }
     return null;
   }
-  
-  
-  public Map<String, SuperMetadataBeanTO> getMap(){
-      return map;
+
+
+  public Map<String, SuperMetadataBeanTO> getMap() {
+    return map;
   }
-  
-  public Map<String, JsonNode> getOMap(){
+
+  public Map<String, JsonNode> getOMap() {
 
     return oMap;
   }
-  
-  public Map<String, JsonNode> getOMapWithJsonNodes(){
+
+  public Map<String, JsonNode> getOMapWithJsonNodes() {
     Map<String, JsonNode> json = new LinkedHashMap<String, JsonNode>();
-    for (String label:getOMap().keySet()){
-        json.put(label, mapper.valueToTree(getOMap().get(label)));
+    for (String label : getOMap().keySet()) {
+      json.put(label, mapper.valueToTree(getOMap().get(label)));
     }
-  
+
     return json;
   }
-  
-  
+
+
   /**
    * @return the profile
    */
@@ -438,7 +437,7 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
   public void setProfile(MetadataProfile profile) {
     this.profile = profile;
   }
-  
+
   /**
    * {@link Comparator} to sort the {@link SuperMetadataBean} in the {@link SuperMetadataTree}
    * 
@@ -473,5 +472,5 @@ public static LinkedList<Metadata> generateDefaultValues(MetadataProfile profile
     }
   }
 
-  
+
 }

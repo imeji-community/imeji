@@ -23,8 +23,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.apache.commons.httpclient.HttpStatus;
 import org.codehaus.jettison.json.JSONException;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -36,12 +34,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.JenaUtil;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.api.DefaultItemService;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import de.mpg.imeji.test.rest.resources.test.integration.ItemTestBase;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+import util.JenaUtil;
 
 /**
  * Created by vlad on 09.12.14.
@@ -62,47 +61,46 @@ public class ItemCreate extends ItemTestBase {
     itemJSON = getStringFromPath("src/test/resources/rest/createItemBasic.json");
   }
 
-  
-  @Test
-  public void createItemWithEmptyFilename() throws IOException {
 
+  @Test
+  public void createItemWithEmptyFilename() throws Exception {
+    initCollectionWithProfile(getDefaultBasicStatements());
     FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
     multiPart.field("json",
-        itemJSON.replace("___COLLECTION_ID___", collectionId).
-        replace("___FILENAME___", "").
-        replace("___REFERENCE_URL___", "").
-        replace("___FETCH_URL___", ""));
-    
-    //LOGGER.info(multiPart.getField("json").getValue());
-    
+        itemJSON.replace("___COLLECTION_ID___", collectionId).replace("___FILENAME___", "")
+            .replace("___REFERENCE_URL___", "").replace("___FETCH_URL___", ""));
+    // LOGGER.info(multiPart.getField("json").getValue());
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
-
-    assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+    DefaultItemTO item = (DefaultItemTO) response.readEntity(DefaultItemTO.class);
+    assertThat("File name is wrong", item.getFilename(),
+        equalTo(filePart.getFileEntity().getName()));
   }
 
- // see bug https://github.com/imeji-community/imeji/issues/1023
-  
+  // see bug https://github.com/imeji-community/imeji/issues/1023
+
   @Test
   public void createItemWithFile_NullAsExtensionInFileUrl_Bug1023() throws IOException {
     FileDataBodyPart filePart =
         new FileDataBodyPart("file", new File("src/test/resources/storage/test"));
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
-        .replaceAll("\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,", "")
-         .replace("___FILENAME___", "").
-            replace("___REFERENCE_URL___", "").
-            replace("___FETCH_URL___", ""));
+    multiPart.field("json",
+        itemJSON.replace("___COLLECTION_ID___", collectionId)
+            .replaceAll("\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,", "")
+            .replace("___FILENAME___", "").replace("___REFERENCE_URL___", "")
+            .replace("___FETCH_URL___", ""));
 
 
-    //LOGGER.info(multiPart.getField("json").getValue());
+    // LOGGER.info(multiPart.getField("json").getValue());
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
     assertEquals(CREATED.getStatusCode(), response.getStatus());
     DefaultItemTO createdItem = (DefaultItemTO) response.readEntity(DefaultItemTO.class);
 
-    //LOGGER.info("Created Item file URL = "+createdItem.getFilename()+" - "+createdItem.getFileUrl());
+    // LOGGER.info("Created Item file URL = "+createdItem.getFilename()+" -
+    // "+createdItem.getFileUrl());
     assertThat(createdItem.getFileUrl().toString(),
         allOf(not(endsWith(".null")), endsWith(".png")));
 
@@ -112,7 +110,8 @@ public class ItemCreate extends ItemTestBase {
   @Test
   public void createItemWithoutFilename() throws IOException {
 
-    FileDataBodyPart filePart = new FileDataBodyPart("file", new File("src/test/resources/storage/test.jpg"));
+    FileDataBodyPart filePart =
+        new FileDataBodyPart("file", new File("src/test/resources/storage/test.jpg"));
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
     multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
@@ -129,8 +128,9 @@ public class ItemCreate extends ItemTestBase {
 
   @Test
   public void createItemWithFilename() throws IOException {
-    
-    FileDataBodyPart filePart = new FileDataBodyPart("file", new File("src/test/resources/storage/test4.jpg"));
+
+    FileDataBodyPart filePart =
+        new FileDataBodyPart("file", new File("src/test/resources/storage/test4.jpg"));
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
     multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
@@ -198,9 +198,10 @@ public class ItemCreate extends ItemTestBase {
 
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
 
-    Response response2 = target(pathPrefix).register(authAsUserFalse).register(MultiPartFeature.class)
-        .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
-        .post(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response2 =
+        target(pathPrefix).register(authAsUserFalse).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response2.getStatus());
 
@@ -213,7 +214,8 @@ public class ItemCreate extends ItemTestBase {
     sc.release(collectionId, JenaUtil.testUser);
     assertEquals("RELEASED", sc.read(collectionId, JenaUtil.testUser).getStatus());
 
-    FileDataBodyPart filePart = new FileDataBodyPart("file", new File("src/test/resources/storage/test2.jpg"));
+    FileDataBodyPart filePart =
+        new FileDataBodyPart("file", new File("src/test/resources/storage/test2.jpg"));
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
     multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
@@ -223,7 +225,7 @@ public class ItemCreate extends ItemTestBase {
 
     assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
 
-    ItemService is = new ItemService();
+    DefaultItemService is = new DefaultItemService();
     assertEquals("RELEASED", is.read(itemId, JenaUtil.testUser).getStatus());
 
   }
@@ -256,9 +258,8 @@ public class ItemCreate extends ItemTestBase {
     multiPart.field("json", itemJSON.replace("___COLLECTION_ID___", collectionId)
         .replace("___FILENAME___", "test.png"));
 
-    Response response = target(pathPrefix).register(authAsUser2)
-        .register(MultiPartFeature.class).register(JacksonFeature.class)
-        .request(MediaType.APPLICATION_JSON_TYPE)
+    Response response = target(pathPrefix).register(authAsUser2).register(MultiPartFeature.class)
+        .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
         .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
@@ -275,11 +276,11 @@ public class ItemCreate extends ItemTestBase {
     multiPart.field("json", wrongJSON.replace("___COLLECTION_ID___", collectionId)
         .replace("___FILENAME___", "test.png"));
 
-    //LOGGER.info(multiPart.getField("json").getValue());
+    // LOGGER.info(multiPart.getField("json").getValue());
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-    //LOGGER.info(response.readEntity(String.class));
+    // LOGGER.info(response.readEntity(String.class));
     assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
 
   }
@@ -406,9 +407,8 @@ public class ItemCreate extends ItemTestBase {
 
   // Default Authorized Target with imeji syntax
   private Invocation.Builder getAuthTarget() {
-    return target(pathPrefix).register(authAsUser)
-        .register(MultiPartFeature.class).register(JacksonFeature.class)
-        .request(MediaType.APPLICATION_JSON_TYPE);
+    return target(pathPrefix).register(authAsUser).register(MultiPartFeature.class)
+        .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE);
   }
 
   /**

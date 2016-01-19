@@ -19,5 +19,4 @@ public class SuperTestSuite {
   public static void endSuite() {
     ElasticService.shutdown();
   }
-
 }

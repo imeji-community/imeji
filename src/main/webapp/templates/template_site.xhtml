@@ -48,7 +48,7 @@ All rights reserved. Use is subject to license terms.
             <!-- default necessary scripts, because of use in body-load context -->
             <h:outputScript library="jquery" name="jquery-1.11.1.min.js"/>
             <h:outputScript library="jquery/ui" name="1.10.4/jquery-ui.min.js"/>
-            <h:outputScript library="js/" name="default.js"></h:outputScript>
+            
             <!-- optional header scripts, which must load before -->
             <ui:insert name="additonalHeaderScripts"/>
             
@@ -73,7 +73,7 @@ All rights reserved. Use is subject to license terms.
                 <ui:insert name="searchQuery"/>
                 <!-- Actions Menu -->
                 <div id="actionsMenuArea">
-               		<ui:insert name="actionsMenu"/>   
+               		<ui:insert name="actionsMenu"/>  
                 </div>
                 <!-- Message area -->
                 <div id="imj_pageMessageArea">
@@ -133,7 +133,7 @@ All rights reserved. Use is subject to license terms.
 
             <script type="text/javascript">var homeURL = '#{Navigation.applicationUrl}';</script>
 
-
+			<h:outputScript library="js/" name="default.js"></h:outputScript>
             <script type="text/javascript">
                 $(function () {
                     //add placeholders for meta menu (username and password) and simple search

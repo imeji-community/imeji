@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO;
+package de.mpg.imeji.rest.to.defaultItemTO.predefinedEasyMetadataTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultOrganizationTO;
 
 /**
  * TO for {@link ConePerson}

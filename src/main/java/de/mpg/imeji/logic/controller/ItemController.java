@@ -424,9 +424,7 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public Item updateFile(Item item, File f, String filename, User user) throws ImejiException {
-
     validateChecksum(item.getCollection(), f, true);
-
     // First remove the old File from the Internal Storage if its there
     if (!isNullOrEmpty(item.getStorageId())) {
       removeFileFromStorage(item.getStorageId());
@@ -543,20 +541,16 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public int delete(String itemId, User u) throws ImejiException {
-
     if (u == null) {
       throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
     }
-
     Item item = retrieve(ObjectHelper.getURI(Item.class, itemId), u);
-
     if (!Status.PENDING.equals(item.getStatus())) {
       throw new UnprocessableError("Item status must be PENDING.");
     }
-
     List<Item> items = new ArrayList<Item>();
     items.add(item);
-    return (delete(items, u));
+    return delete(items, u);
   }
 
   /**

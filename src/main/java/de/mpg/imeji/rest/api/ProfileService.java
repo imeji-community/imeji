@@ -2,7 +2,6 @@ package de.mpg.imeji.rest.api;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -10,21 +9,22 @@ import com.google.common.collect.Lists;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
+import de.mpg.imeji.rest.to.SearchResultTO;
 
 
-
+/**
+ * API Service for {@link MetadataProfileTO}
+ * 
+ * @author bastiens
+ *
+ */
 public class ProfileService implements API<MetadataProfileTO> {
 
   public static final String DEFAULT_METADATA_PROFILE_ID = "default";
@@ -33,7 +33,6 @@ public class ProfileService implements API<MetadataProfileTO> {
     ProfileController pcon = new ProfileController();
     return pcon.retrieve(uri, Imeji.adminUser);
   }
-
 
   @Override
   public MetadataProfileTO create(MetadataProfileTO o, User u) {
@@ -45,9 +44,8 @@ public class ProfileService implements API<MetadataProfileTO> {
   public MetadataProfileTO read(String id, User u) throws ImejiException {
     ProfileController pcontroller = new ProfileController();
     MetadataProfileTO to = new MetadataProfileTO();
-    MetadataProfile vo =
-        DEFAULT_METADATA_PROFILE_ID.equals(id) ? Imeji.defaultMetadataProfile : pcontroller
-            .retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+    MetadataProfile vo = DEFAULT_METADATA_PROFILE_ID.equals(id) ? Imeji.defaultMetadataProfile
+        : pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
     TransferObjectFactory.transferMetadataProfile(vo, to);
     return to;
   }
@@ -74,7 +72,8 @@ public class ProfileService implements API<MetadataProfileTO> {
   }
 
   @Override
-  public MetadataProfileTO withdraw(String id, User u, String discardComment) throws ImejiException {
+  public MetadataProfileTO withdraw(String id, User u, String discardComment)
+      throws ImejiException {
 
     ProfileController controller = new ProfileController();
     MetadataProfile vo = controller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
@@ -96,12 +95,6 @@ public class ProfileService implements API<MetadataProfileTO> {
   public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {
     // TODO Auto-generated method stub
 
-  }
-
-  @Override
-  public List<String> search(String q, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-    return null;
   }
 
   public List<MetadataProfileTO> readAll(User u, String q) throws ImejiException {
@@ -128,11 +121,18 @@ public class ProfileService implements API<MetadataProfileTO> {
       throws ImejiException {
     return cc.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
   }
-  
-  public Object readItemTemplate(String id, User u)
-      throws ImejiException, IOException {
-    
+
+  public Object readItemTemplate(String id, User u) throws ImejiException, IOException {
+
     return MetadataTransferHelper.readItemTemplateForProfile(null, id, u);
+  }
+
+
+  @Override
+  public SearchResultTO<MetadataProfileTO> search(String q, int offset, int size, User u)
+      throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

@@ -9,9 +9,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
@@ -25,17 +22,14 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 
 public class AlbumService implements API<AlbumTO> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(AlbumService.class);
 
   private AlbumTO getAlbumTO(AlbumController controller, String id, User u) throws ImejiException {
     AlbumTO to = new AlbumTO();
@@ -50,39 +44,6 @@ public class AlbumService implements API<AlbumTO> {
     return getAlbumTO(controller, id, u);
   }
 
-  public SearchResultTO<AlbumTO> readAll(User u, String q, int offset, int size)
-      throws ImejiException, IOException {
-    AlbumController controller = new AlbumController();
-    List<AlbumTO> tos = new ArrayList<>();
-    SearchResult result =
-        SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
-            .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
-    for (Album vo : controller.retrieveBatchLazy(result.getResults(), u, -1, 0)) {
-      AlbumTO to = new AlbumTO();
-      TransferObjectFactory.transferAlbum(vo, to);
-      tos.add(to);
-    }
-    return new SearchResultTO.Builder<AlbumTO>().numberOfRecords(result.getResults().size())
-        .offset(offset).results(tos).query(q).size(size)
-        .totalNumberOfRecords(result.getNumberOfRecords()).build();
-
-  }
-
-  public List<ItemTO> readItems(String id, User u, String q, int offset, int size)
-      throws ImejiException, IOException {
-    ItemController itemController = new ItemController();
-    ProfileCache profileCache = new ProfileCache();
-    List<ItemTO> tos = new ArrayList<>();
-    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(Album.class, id),
-        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
-      ItemTO to = new ItemTO();
-      TransferObjectFactory.transferItem(vo, to,
-          profileCache.read(vo.getMetadataSet().getProfile()));
-      tos.add(to);
-    }
-    return tos;
-  }
-
   /**
    * Read all the items of an album according to search query. Response is done with the default
    * format
@@ -94,7 +55,7 @@ public class AlbumService implements API<AlbumTO> {
    * @throws ImejiException
    * @throws IOException
    */
-  public Object readDefaultItems(String id, User u, String q, int offset, int size)
+  public SearchResultTO<DefaultItemTO> readItems(String id, User u, String q, int offset, int size)
       throws ImejiException, IOException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
@@ -172,12 +133,6 @@ public class AlbumService implements API<AlbumTO> {
 
   }
 
-  @Override
-  public List<String> search(String q, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   public List<String> addItems(String id, User u, List<String> itemIds) throws ImejiException {
     AlbumController controller = new AlbumController();
     Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
@@ -212,6 +167,23 @@ public class AlbumService implements API<AlbumTO> {
   @Override
   public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {
     // TODO Auto-generated method stub
+  }
+
+  @Override
+  public SearchResultTO<AlbumTO> search(String q, int offset, int size, User u) throws Exception {
+    AlbumController controller = new AlbumController();
+    List<AlbumTO> tos = new ArrayList<>();
+    SearchResult result =
+        SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
+            .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
+    for (Album vo : controller.retrieveBatchLazy(result.getResults(), u, -1, 0)) {
+      AlbumTO to = new AlbumTO();
+      TransferObjectFactory.transferAlbum(vo, to);
+      tos.add(to);
+    }
+    return new SearchResultTO.Builder<AlbumTO>().numberOfRecords(result.getResults().size())
+        .offset(offset).results(tos).query(q).size(size)
+        .totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
 
 }

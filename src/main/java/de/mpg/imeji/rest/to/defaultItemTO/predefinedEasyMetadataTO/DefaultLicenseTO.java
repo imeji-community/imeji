@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO;
+package de.mpg.imeji.rest.to.defaultItemTO.predefinedEasyMetadataTO;
 
 import java.io.Serializable;
 

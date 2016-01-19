@@ -158,21 +158,22 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
 
   @Override
   public int compareTo(Statement o) {
-    if (o.getPos() > this.pos)
+    if (o.getPos() > this.pos) {
       return -1;
-    else if (o.getPos() == this.pos)
+    } else if (o.getPos() == this.pos) {
       return 0;
-    else
+    } else {
       return 1;
+    }
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof Statement) {
-      return compareTo((Statement) obj) == 0;
-    }
-    return false;
-  }
+  // @Override
+  // public boolean equals(Object obj) {
+  // if (obj instanceof Statement) {
+  // return compareTo((Statement) obj) == 0;
+  // }
+  // return false;
+  // }
 
   @XmlElement(name = "isDescription", namespace = "http://imeji.org/terms/")
   public boolean isDescription() {

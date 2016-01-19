@@ -34,11 +34,11 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.imeji.rest.to.SearchResultTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 public class RestProcessUtils {

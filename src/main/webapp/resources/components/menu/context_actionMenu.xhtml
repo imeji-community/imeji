@@ -272,12 +272,12 @@
 											</h:form>
 										</li>
 									</ui:fragment>
-									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection'  and cc.attrs.profileEditable}">
+									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection'  and cc.attrs.isAdmin and metadataBean.profile != null}">
 										<li>
-											<h:outputLink rendered="#{metadataBean.profile == null or metadataBean.profile.statements.size() == 0}" value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}">
+											<h:outputLink rendered="#{metadataBean.profile.statements.size() == 0}" value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}">
 												<h:outputText value="#{lbl.add_profile}"/>
 											</h:outputLink>
-											<h:outputLink rendered="#{metadataBean.profile == null or metadataBean.profile.statements.size() > 0}" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.profile_change}" >
+											<h:outputLink rendered="#{metadataBean.profile.statements.size() > 0}" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.profile_change}" >
 												<h:outputText value="#{lbl.profile_change}"/>
 											</h:outputLink>
 										</li>

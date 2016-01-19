@@ -1,11 +1,12 @@
 package de.mpg.imeji.rest.api;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.User;
-
 import java.util.List;
 
 import javax.ws.rs.NotSupportedException;
+
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.to.SearchResultTO;
 
 
 /**
@@ -40,7 +41,7 @@ public interface API<V> {
    * @param u
    * @return
    */
-  public Object read(String id, User u) throws ImejiException;
+  public V read(String id, User u) throws ImejiException;
 
 
   /**
@@ -106,6 +107,6 @@ public interface API<V> {
    * @param u
    * @return
    */
-  public List<String> search(String q, User u) throws ImejiException;
+  public SearchResultTO<V> search(String q, int offset, int size, User u) throws Exception;
 
 }

@@ -20,7 +20,7 @@
 										userHasUploadRights="#{Auth.createContent(metadataContextBean) and metadataContextBean.status != 'WITHDRAWN'}" 
 										hasContent="#{metadataContextBean.images.size() > 0}" 
 										navBean="#{Navigation}" 
-										activeMenu="metadata"/>
+										activeMenu="start"/>
 										
 			<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
 									 curMainMenu="#{currentMainMenu}" 

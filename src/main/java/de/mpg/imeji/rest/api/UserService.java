@@ -11,9 +11,15 @@ import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.UserTO;
 
-
+/**
+ * API Service for {@link UserTO}
+ * 
+ * @author bastiens
+ *
+ */
 public class UserService implements API<UserTO> {
 
 
@@ -41,7 +47,7 @@ public class UserService implements API<UserTO> {
   }
 
   @Override
-  public Object read(String id, User u) throws ImejiException {
+  public UserTO read(String id, User u) throws ImejiException {
     // TODO Auto-generated method stub
     return null;
   }
@@ -82,7 +88,7 @@ public class UserService implements API<UserTO> {
   }
 
   @Override
-  public List<String> search(String q, User u) throws ImejiException {
+  public SearchResultTO<UserTO> search(String q, int offset, int size, User u) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }

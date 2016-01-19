@@ -22,8 +22,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -34,29 +32,33 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.JenaUtil;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.process.ItemProcess;
-import de.mpg.imeji.rest.to.IdentifierTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.imeji.rest.to.LabelTO;
-import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.MetadataTO;
-import de.mpg.imeji.rest.to.OrganizationTO;
-import de.mpg.imeji.rest.to.PersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
+import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.rest.api.DefaultItemService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemWithFileTO;
 import de.mpg.imeji.test.rest.resources.test.integration.ItemTestBase;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+import util.JenaUtil;
 
 /**
  * Created by vlad on 09.12.14.
@@ -80,8 +82,8 @@ public class ItemUpdateMetadata extends ItemTestBase {
   }
 
   @Test
-  public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common() throws IOException,
-      UnprocessableError, ImejiException {
+  public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common()
+      throws IOException, UnprocessableError, ImejiException {
 
     final String CHANGED = "allowed_change";
     double NUM = 90;
@@ -92,13 +94,10 @@ public class ItemUpdateMetadata extends ItemTestBase {
     final String DATE_CHANGED = "$1\"" + dateFormat.format(date) + "\"";
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
-    
-    multiPart.field(
-        "json",
-        updateJSON
-            .replace("___FILE_NAME___", CHANGED)
-             .replace("___COLLECTION_ID___", collectionId)
-             .replace("___ITEM_ID___", itemId)
+
+    multiPart.field("json",
+        updateJSON.replace("___FILE_NAME___", CHANGED).replace("___COLLECTION_ID___", collectionId)
+            .replace("___ITEM_ID___", itemId)
             // text
             .replaceAll("(\"text\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
             // person
@@ -113,7 +112,7 @@ public class ItemUpdateMetadata extends ItemTestBase {
             .replaceAll("(\"country\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
             .replaceAll("(\"city\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
             // number
-            .replaceAll("(\"number\"\\s*:\\s*).+", NUM_CHANGED+", ")
+            .replaceAll("(\"number\"\\s*:\\s*).+", NUM_CHANGED + ", ")
             // geo
             .replaceAll("(\"longitude\"\\s*:\\s*).+", NUM_CHANGED + ",")
             .replaceAll("(\"latitude\"\\s*:\\s*).+", NUM_CHANGED)
@@ -129,219 +128,232 @@ public class ItemUpdateMetadata extends ItemTestBase {
             .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
             .replaceAll("(\"citation\"\\s*:\\s*)\"(.+)\"", REP_CHANGED));
 
-    //LOGGER.info(multiPart.getField("json").getValue());
+    // LOGGER.info(multiPart.getField("json").getValue());
 
     Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
+        target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .put(Entity.entity(multiPart, multiPart.getMediaType()));
-    assertEquals( OK.getStatusCode(), response.getStatus());
-    
-    //DefaultItemTO updatedDItem = (DefaultItemTO) response.readEntity(DefaultItemTO.class);
-    ItemTO updatedItem = new ItemTO();
+    assertEquals(OK.getStatusCode(), response.getStatus());
 
-    updatedItem = ItemProcess.prepareDefaultItemTOAsItemTO(true, response.readEntity(String.class), updatedItem, itemId, JenaUtil.testUser);
-    itemTO = updatedItem;
+    itemTO = (DefaultItemTO) response.readEntity(DefaultItemTO.class);
 
-    //LOGGER.info(buildJSONFromObject(updatedItem));
+    // Read collection profile
+    MetadataProfile profile = new ProfileController().retrieveByCollectionId(
+        ObjectHelper.getURI(CollectionImeji.class, itemTO.getCollectionId()), JenaUtil.testUser);
 
-    assertThat(updatedItem.getFilename(), equalTo(CHANGED));
+    // Transfer the response (ItemTO) into a VO (Item)
+    Item item = new Item();
+    ReverseTransferObjectFactory.transferDefaultItem(itemTO, item, profile, JenaUtil.testUser,
+        null);
 
-    List<MetadataSetTO> mds = updatedItem.getMetadata();
+    // Tests
+    assertThat(itemTO.getFilename(), equalTo(CHANGED));
+    List<Metadata> mds = (List<Metadata>) item.getMetadataSet().getMetadata();
 
     // text
-    assertThat(((TextTO) mds.get(0).getValue()).getText(), equalTo(CHANGED));
+    assertThat(((Text) mds.get(0)).getText(), equalTo(CHANGED));
+
 
     // geolocation
-    final GeolocationTO geolocationTO = (GeolocationTO) mds.get(3).getValue();
-    assertThat(geolocationTO.getName(), equalTo(CHANGED));
-    assertThat(geolocationTO.getLatitude(), equalTo(NUM));
-    assertThat(geolocationTO.getLongitude(), equalTo(NUM));
+    final Geolocation geolocation = (Geolocation) mds.get(3);
+    assertThat(geolocation.getName(), equalTo(CHANGED));
+    assertThat(geolocation.getLatitude(), equalTo(NUM));
+    assertThat(geolocation.getLongitude(), equalTo(NUM));
 
     // number
-    assertThat(((NumberTO) mds.get(1).getValue()).getNumber(), equalTo(NUM));
+    assertThat(((de.mpg.imeji.logic.vo.predefinedMetadata.Number) mds.get(1)).getNumber(),
+        equalTo(NUM));
 
     // person
-    PersonTO person = ((ConePersonTO) mds.get(2).getValue()).getPerson();
+    Person person = ((ConePerson) mds.get(2)).getPerson();
     assertThat(person.getFamilyName(), equalTo(CHANGED));
     assertThat(person.getGivenName(), equalTo(CHANGED));
-    final OrganizationTO organizationTO = person.getOrganizations().get(0);
-    assertThat(organizationTO.getName(), equalTo(CHANGED));
-    assertThat(organizationTO.getCountry(), equalTo(CHANGED));
-    assertThat(organizationTO.getCity(), equalTo(CHANGED));
-    assertThat(organizationTO.getDescription(), equalTo(CHANGED));
+    final Organization organization = person.getOrganizations().iterator().next();
+    assertThat(organization.getName(), equalTo(CHANGED));
+    assertThat(organization.getCountry(), equalTo(CHANGED));
+    assertThat(organization.getCity(), equalTo(CHANGED));
+    assertThat(organization.getDescription(), equalTo(CHANGED));
 
     // date
-    assertThat(((DateTO) mds.get(4).getValue()).getDate(), equalTo(dateFormat.format(date)));
+    assertThat(((de.mpg.imeji.logic.vo.predefinedMetadata.Date) mds.get(4)).getDate(),
+        equalTo(dateFormat.format(date)));
 
     // license
-    final LicenseTO licenseTO = (LicenseTO) mds.get(5).getValue();
-    assertThat(licenseTO.getLicense(), equalTo(CHANGED));
-    assertThat(licenseTO.getUrl(), equalTo(CHANGED));
+    final License license = (License) mds.get(5);
+    assertThat(license.getLicense(), equalTo(CHANGED));
+    assertThat(license.getExternalUri().toString(), equalTo(CHANGED));
 
     // link
-    assertThat(((LinkTO) mds.get(6).getValue()).getLink(), equalTo(CHANGED));
-    assertThat(((LinkTO) mds.get(6).getValue()).getUrl(), equalTo(CHANGED));
+    assertThat(((Link) mds.get(6)).getUri().toString(), equalTo(CHANGED));
+    assertThat(((Link) mds.get(6)).getLabel(), equalTo(CHANGED));
 
     // publication
-    assertThat(((PublicationTO) mds.get(7).getValue()).getFormat(), equalTo(CHANGED));
-    assertThat(((PublicationTO) mds.get(7).getValue()).getPublication(), equalTo(CHANGED));
+    assertThat(((Publication) mds.get(7)).getExportFormat(), equalTo(CHANGED));
+    assertThat(((Publication) mds.get(7)).getUri().toString(), equalTo(CHANGED));
   }
 
 
-  
-@Test
-  public void test_2_UpdateItem_2_Change_Metadata_Statements_Not_Allowed() throws IOException,
-      UnprocessableError, ImejiException {
 
-    final String CHANGED = "not_allowed_change";
-    final String REP_CHANGED = "$1\"" + CHANGED + "\"";
+  @Test
+  public void test_2_UpdateItem_2_Change_Metadata_Statements_Not_Allowed()
+      throws IOException, UnprocessableError, ImejiException {
 
-    FormDataMultiPart multiPart = new FormDataMultiPart();
-    
-    // identifiers
-    MetadataSetTO md =
-        itemTO.filterMetadataByTypeURI(MetadataTO.getTypeURI(ConePersonTO.class)).get(0);
-    PersonTO p = ((ConePersonTO) md.getValue()).getPerson();
-
-    for (IdentifierTO ident : p.getIdentifiers()) {
-      ident.setType(CHANGED);
-      ident.setValue(CHANGED);
-    }
-    for (OrganizationTO org : p.getOrganizations()) {
-      for (IdentifierTO ident : org.getIdentifiers()) {
-        ident.setType(CHANGED);
-        ident.setValue(CHANGED);
-      }
-    }
-
-    int i = 0;
-    for (IdentifierTO identifier:p.getIdentifiers()) {
-        if (i == 0) {
-          identifier.setValue(CHANGED);
-          identifier.setType(CHANGED);
-          identifier = p.getOrganizations().get(i).getIdentifiers().get(i);
-          identifier.setValue(CHANGED);
-          identifier.setType(CHANGED);
-        }
-   }
-
-    // labels
-    for (MetadataSetTO mds : itemTO.getMetadata()) {
-      for (LabelTO lb : mds.getLabels()) {
-        lb.setValue(CHANGED);
-        lb.setLanguage(CHANGED);
-      }
-    }
-
-    multiPart.field(
-        "json",
-        updateJSON
-            .replace("___COLLECTION_ID___", collectionId)
-            .replace("___ITEM_ID___", itemId)
-            // item properties
-            .replaceAll("(\"fullname\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"userId\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"createdDate\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"modifiedDate\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"versionDate\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"status\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"version\"\\s*:\\s*)(.*)", "$1-1,")
-            .replaceAll("(\"discardComment\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"visibility\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"mimetype\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"checksumMd5\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"webResolutionUrlUrl\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"thumbnailUrl\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
-            .replaceAll("(\"fileUrl\"\\s*:\\s*)\"(.*)\"", REP_CHANGED));
-
-    //LOGGER.info(multiPart.getField("json").getValue());
-
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
-    assertEquals(OK.getStatusCode(), response.getStatus() );
-    
-      ItemTO updItem = new ItemTO();
-      updItem.setCollectionId(collectionId);
-      updItem = ItemProcess.prepareDefaultItemTOAsItemTO(false, response.readEntity(String.class), updItem, itemId, JenaUtil.testUser);
-      itemTO = updItem;
-
-    // LOGGER.info(buildJSONFromObject(updItem));
-
-    // assertThat(updItem.getCreatedBy().getFullname(), not(equalTo(CHANGED)));
-    assertThat(updItem.getCreatedBy().getUserId(), not(equalTo(CHANGED)));
-    assertThat(updItem.getModifiedBy().getFullname(), not(equalTo(CHANGED)));
-    assertThat(updItem.getModifiedBy().getUserId(), not(equalTo(CHANGED)));
-
-    assertThat(updItem.getCreatedDate(), not(equalTo(CHANGED)));
-    assertThat(updItem.getModifiedDate(), not(equalTo(CHANGED)));
-    assertThat(updItem.getVersionDate(), not(equalTo(CHANGED)));
-
-    assertThat(updItem.getStatus(), not(equalTo(CHANGED)));
-
-    assertThat(updItem.getVersion(), not(equalTo(-1)));
-
-    assertThat(updItem.getDiscardComment(), not(equalTo(CHANGED)));
-    assertThat(updItem.getVisibility(), not(equalTo(CHANGED)));
-    assertThat(updItem.getCollectionId(), not(equalTo(CHANGED)));
-    assertThat(updItem.getMimetype(), not(equalTo(CHANGED)));
-    assertThat(updItem.getChecksumMd5(), not(equalTo(CHANGED)));
-    assertThat(updItem.getWebResolutionUrlUrl().toString(), not(equalTo(CHANGED)));
-    assertThat(updItem.getThumbnailUrl().toString(), not(equalTo(CHANGED)));
-    assertThat(updItem.getFileUrl().toString(), not(equalTo(CHANGED)));
-
-
-    List<MetadataSetTO> mdsList = updItem.getMetadata();
-
-    for (MetadataSetTO mds : mdsList) {
-      // statements
-      assertThat(mds.getStatementUri().toString(), not(equalTo(CHANGED)));
-      assertThat(mds.getTypeUri().toString(), not(equalTo(CHANGED)));
-      // labels
-      for (LabelTO l : mds.getLabels()) {
-        assertThat(l.getValue(), not(equalTo(CHANGED)));
-        assertThat(l.getLanguage(), not(equalTo(CHANGED)));
-      }
-    }
-
-    // person
-    p = ((ConePersonTO) mdsList.get(2).getValue()).getPerson();
-    assertThat(p.getId(), not(equalTo(CHANGED)));
-    // person identifiers
-    for (IdentifierTO ident : p.getIdentifiers()) {
-      assertThat(ident.getType(), not(equalTo(CHANGED)));
-      assertThat(ident.getValue(), not(equalTo(CHANGED)));
-    }
-    for (OrganizationTO org : p.getOrganizations()) {
-      assertThat(org.getId(), not(equalTo(CHANGED)));
-      for (IdentifierTO ident : org.getIdentifiers()) {
-        assertThat(ident.getType(), not(equalTo(CHANGED)));
-        assertThat(ident.getValue(), not(equalTo(CHANGED)));
-      }
-    }
+    // final String CHANGED = "not_allowed_change";
+    // final String REP_CHANGED = "$1\"" + CHANGED + "\"";
+    //
+    // FormDataMultiPart multiPart = new FormDataMultiPart();
+    //
+    // MetadataProfileTO profileTO = new MetadataProfileTO();
+    // TransferObjectFactory.transferMetadataProfile(profile, profileTO);
+    //
+    // Item item = new Item();
+    // ReverseTransferObjectFactory.transferDefaultItem(itemTO, item, profileTO, JenaUtil.testUser,
+    // null);
+    //
+    // for (Metadata md : item.getMetadataSet().getMetadata()) {
+    // if (md instanceof ConePerson) {
+    // ((ConePerson) md).getPerson().setIdentifier(CHANGED);
+    // for (Organization org : ((ConePerson) md).getPerson().getOrganizations()) {
+    // org.setIdentifier(CHANGED);
+    // }
+    // }
+    // }
+    //
+    //
+    //
+    // // identifiers
+    // MetadataSetTO md =
+    // itemTO.filterMetadataByTypeURI(MetadataTO.getTypeURI(ConePersonTO.class)).get(0);
+    // PersonTO p = ((ConePersonTO) md.getValue()).getPerson();
+    //
+    // for (IdentifierTO ident : p.getIdentifiers()) {
+    // ident.setType(CHANGED);
+    // ident.setValue(CHANGED);
+    // }
+    // for (OrganizationTO org : p.getOrganizations()) {
+    // for (IdentifierTO ident : org.getIdentifiers()) {
+    // ident.setType(CHANGED);
+    // ident.setValue(CHANGED);
+    // }
+    // }
+    //
+    // int i = 0;
+    // for (IdentifierTO identifier : p.getIdentifiers()) {
+    // if (i == 0) {
+    // identifier.setValue(CHANGED);
+    // identifier.setType(CHANGED);
+    // identifier = p.getOrganizations().get(i).getIdentifiers().get(i);
+    // identifier.setValue(CHANGED);
+    // identifier.setType(CHANGED);
+    // }
+    // }
+    //
+    // // labels
+    // for (MetadataSetTO mds : itemTO.getMetadata()) {
+    // for (LabelTO lb : mds.getLabels()) {
+    // lb.setValue(CHANGED);
+    // lb.setLanguage(CHANGED);
+    // }
+    // }
+    //
+    // multiPart.field("json",
+    // updateJSON.replace("___COLLECTION_ID___", collectionId).replace("___ITEM_ID___", itemId)
+    // // item properties
+    // .replaceAll("(\"fullname\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"userId\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"createdDate\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"modifiedDate\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"versionDate\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"status\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"version\"\\s*:\\s*)(.*)", "$1-1,")
+    // .replaceAll("(\"discardComment\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"visibility\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"mimetype\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"checksumMd5\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"webResolutionUrlUrl\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"thumbnailUrl\"\\s*:\\s*)\"(.*)\"", REP_CHANGED)
+    // .replaceAll("(\"fileUrl\"\\s*:\\s*)\"(.*)\"", REP_CHANGED));
+    //
+    // // LOGGER.info(multiPart.getField("json").getValue());
+    //
+    // Response response =
+    // target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+    // .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
+    // .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    // assertEquals(OK.getStatusCode(), response.getStatus());
+    //
+    // ItemTO updItem = new ItemTO();
+    // updItem.setCollectionId(collectionId);
+    // updItem = ItemProcess.prepareDefaultItemTOAsItemTO(false, response.readEntity(String.class),
+    // updItem, itemId, JenaUtil.testUser);
+    // itemTO = updItem;
+    //
+    // // LOGGER.info(buildJSONFromObject(updItem));
+    //
+    // // assertThat(updItem.getCreatedBy().getFullname(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getCreatedBy().getUserId(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getModifiedBy().getFullname(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getModifiedBy().getUserId(), not(equalTo(CHANGED)));
+    //
+    // assertThat(updItem.getCreatedDate(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getModifiedDate(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getVersionDate(), not(equalTo(CHANGED)));
+    //
+    // assertThat(updItem.getStatus(), not(equalTo(CHANGED)));
+    //
+    // assertThat(updItem.getVersion(), not(equalTo(-1)));
+    //
+    // assertThat(updItem.getDiscardComment(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getVisibility(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getCollectionId(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getMimetype(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getChecksumMd5(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getWebResolutionUrlUrl().toString(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getThumbnailUrl().toString(), not(equalTo(CHANGED)));
+    // assertThat(updItem.getFileUrl().toString(), not(equalTo(CHANGED)));
+    //
+    //
+    // List<MetadataSetTO> mdsList = updItem.getMetadata();
+    //
+    // for (MetadataSetTO mds : mdsList) {
+    // // statements
+    // assertThat(mds.getStatementUri().toString(), not(equalTo(CHANGED)));
+    // assertThat(mds.getTypeUri().toString(), not(equalTo(CHANGED)));
+    // // labels
+    // for (LabelTO l : mds.getLabels()) {
+    // assertThat(l.getValue(), not(equalTo(CHANGED)));
+    // assertThat(l.getLanguage(), not(equalTo(CHANGED)));
+    // }
+    // }
+    //
+    // // person
+    // p = ((ConePersonTO) mdsList.get(2).getValue()).getPerson();
+    // assertThat(p.getId(), not(equalTo(CHANGED)));
+    // // person identifiers
+    // for (IdentifierTO ident : p.getIdentifiers()) {
+    // assertThat(ident.getType(), not(equalTo(CHANGED)));
+    // assertThat(ident.getValue(), not(equalTo(CHANGED)));
+    // }
+    // for (OrganizationTO org : p.getOrganizations()) {
+    // assertThat(org.getId(), not(equalTo(CHANGED)));
+    // for (IdentifierTO ident : org.getIdentifiers()) {
+    // assertThat(ident.getType(), not(equalTo(CHANGED)));
+    // assertThat(ident.getValue(), not(equalTo(CHANGED)));
+    // }
+    // }
   }
 
 
-  
- 
-  
-@Test
-  public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues() throws IOException,
-      BadRequestException {
+
+  @Test
+  public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues()
+      throws IOException, BadRequestException {
 
     final String REP_CHANGED = "$1\"\"";
     FormDataMultiPart multiPart = new FormDataMultiPart();
-    multiPart.field(
-        "json",
-        updateJSON
-            .replace("___COLLECTION_ID___", collectionId)
-            .replace("___ITEM_ID___", itemId)
+    multiPart.field("json",
+        updateJSON.replace("___COLLECTION_ID___", collectionId).replace("___ITEM_ID___", itemId)
             .replaceAll("(\"text\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
             .replaceAll("(\"date\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
             .replaceAll("(\"license\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
@@ -350,156 +362,152 @@ public class ItemUpdateMetadata extends ItemTestBase {
             // /only publication should be filled, not citation or format
             .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED));
 
-    //LOGGER.info(multiPart.getField("json").getValue());
+    // LOGGER.info(multiPart.getField("json").getValue());
 
     Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
+        target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .put(Entity.entity(multiPart, multiPart.getMediaType()));
     assertEquals(response.getStatus(), OK.getStatusCode());
 
     final String json = response.readEntity(String.class);
-    //LOGGER.info(json);
+    // LOGGER.info(json);
 
     assertThat(json, not(containsString("\"text\"")));
     assertThat(json, not(containsString("\"date\"")));
     assertThat(json, allOf(not(containsString("\"license\"")), not(containsString("\"url\""))));
     assertThat(json, allOf(not(containsString("\"link\"")), not(containsString("\"url\""))));
-    assertThat(
-        json,
-        allOf(not(containsString("\"format\"")), not(containsString("\"publication\"")),
-            not(containsString("\"citation\""))));
+    assertThat(json, allOf(not(containsString("\"format\"")),
+        not(containsString("\"publication\"")), not(containsString("\"citation\""))));
   }
 
- 
-@Test
+
+  @Test
   public void test_3_UpdateItem_2_Change_Metadata_Statements_EmptyStatements_SomeSections()
       throws IOException, UnprocessableError, ImejiException {
-    
+
     FormDataMultiPart multiPart = new FormDataMultiPart();
-    
-    multiPart.field(
-        "json",
-        updateJSON
-        .replace("___COLLECTION_ID___", collectionId)
-        .replace("___ITEM_ID___", itemId));
-    
+
+    multiPart.field("json",
+        updateJSON.replace("___COLLECTION_ID___", collectionId).replace("___ITEM_ID___", itemId));
+
     Response responseUpd =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
+        target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-    assertEquals(OK.getStatusCode(), responseUpd.getStatus() );
+    assertEquals(OK.getStatusCode(), responseUpd.getStatus());
     String originalJ = responseUpd.readEntity(String.class);
-    //LOGGER.info("ORIGINAL= "+originalJ);
-    
-    ItemTO updItem = new ItemTO();
-    updItem = ItemProcess.prepareDefaultItemTOAsItemTO(false, originalJ, updItem, itemId, JenaUtil.testUser);
+    // LOGGER.info("ORIGINAL= "+originalJ);
 
-   multiPart = new FormDataMultiPart();
+    DefaultItemTO updItem =
+        (DefaultItemTO) RestProcessUtils.buildTOFromJSON(originalJ, DefaultItemTO.class);
 
-    multiPart.field(
-        "json",
-        originalJ
-            .replaceAll("\"text.*\",", "")
-            .replaceAll("\"date.*\",", ""));
-    
-    //LOGGER.info("UPDATE"+multiPart.getField("json").getValue());
+    multiPart = new FormDataMultiPart();
+
+    multiPart.field("json", originalJ.replaceAll("\"text.*\",", "").replaceAll("\"date.*\",", ""));
+
+    // LOGGER.info("UPDATE"+multiPart.getField("json").getValue());
 
     Response responseUpd2 =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
+        target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), responseUpd2.getStatus());
-    
-    ItemTO newUpdItem = new ItemTO();
-    newUpdItem = ItemProcess.prepareDefaultItemTOAsItemTO(false, responseUpd2.readEntity(String.class), newUpdItem, itemId, JenaUtil.testUser);
-    assertThat(newUpdItem.getMetadata().size(), equalTo(updItem.getMetadata().size()-2));
+
+    DefaultItemTO newUpdItem = (DefaultItemTO) RestProcessUtils
+        .buildTOFromJSON(responseUpd2.readEntity(String.class), DefaultItemTO.class);
+
+    assertThat(newUpdItem.getMetadata().size(), equalTo(updItem.getMetadata().size() - 2));
 
   }
 
-  
- @Test
+
+  @Test
   public void test_3_UpdateItem_3_Change_Metadata_Statements_EmptyStatements_CompleteSection()
       throws IOException, UnprocessableError, ImejiException {
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
 
-    multiPart.field("json", 
-       updateJSON
-       .replace("___COLLECTION_ID___", collectionId)
-       .replace("___ITEM_ID___", itemId)
-       .replaceAll("\"metadata\".*", "\"metadata\" : {} }")
-     );
+    multiPart.field("json", updateJSON.replace("___COLLECTION_ID___", collectionId)
+        .replace("___ITEM_ID___", itemId).replaceAll("\"metadata\".*", "\"metadata\" : {} }"));
 
     Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
+        target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-    assertEquals( OK.getStatusCode(), response.getStatus());
+    assertEquals(OK.getStatusCode(), response.getStatus());
     String newJson = response.readEntity(String.class);
-    
-    ItemTO newUpdItem = new ItemTO();
-    newUpdItem = ItemProcess.prepareDefaultItemTOAsItemTO(false, newJson, newUpdItem, itemId, JenaUtil.testUser);
+
+    DefaultItemTO newUpdItem =
+        (DefaultItemTO) RestProcessUtils.buildTOFromJSON(newJson, DefaultItemTO.class);
+
     assertThat(newUpdItem.getMetadata().size(), equalTo(0));
 
   }
 
- 
+
   @Test
   public void test_4_UpdateItem_3_Change_Metadata_Statements_Add_MultipleStatement()
       throws Exception {
 
     initCollectionWithProfile(getMultipleStatements());
     initItemWithMultipleStatements();
-    
+
     String ADDED_TITLE = "addedMultipleText";
     FormDataMultiPart multiPart = new FormDataMultiPart();
-   
-    String jsonAddNewTitle = 
+
+    itemTO = (DefaultItemTO) RestProcessUtils.buildTOFromJSON(
+        getStringFromPath(STATIC_CONTEXT_REST + "/easyUpdateItemBasicMultipleStatements.json"),
+        DefaultItemTO.class);
+
+    String jsonAddNewTitle =
         getStringFromPath(STATIC_CONTEXT_REST + "/easyUpdateItemBasicMultipleStatements.json")
-        .replace("___COLLECTION_ID___", collectionId)
-        .replace("___ITEM_ID___", itemId)
-        .replaceAll("\"text\".*],", "\"text\": [\"value1\", \"value2\",\""+ADDED_TITLE+"\"],");
-    
-    multiPart.field("json", jsonAddNewTitle );
-    //LOGGER.info("MODIEIF "+jsonAddNewTitle );
+            .replace("___COLLECTION_ID___", collectionId).replace("___ITEM_ID___", itemId)
+            .replaceAll("\"text\".*],",
+                "\"text\": [\"value1\", \"value2\",\"" + ADDED_TITLE + "\"],");
+
+    multiPart.field("json", jsonAddNewTitle);
+    // LOGGER.info("MODIEIF "+jsonAddNewTitle );
 
     Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
+        target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
-    
-    ItemTO updItem = new ItemTO();
-    updItem = ItemProcess.prepareDefaultItemTOAsItemTO(false, response.readEntity(String.class), updItem, itemId, JenaUtil.testUser);
 
-    assertThat(updItem.getMetadata(), hasSize(itemTO.getMetadata().size()+1));
+    DefaultItemTO updItem = (DefaultItemTO) RestProcessUtils
+        .buildTOFromJSON(response.readEntity(String.class), DefaultItemTO.class);
+
+    Item item = new Item();
+    ReverseTransferObjectFactory.transferDefaultItem(updItem, item, profile, JenaUtil.testUser,
+        TRANSFER_MODE.UPDATE);
+    Item originalItem = new Item();
+    ReverseTransferObjectFactory.transferDefaultItem(itemTO, originalItem, profile,
+        JenaUtil.testUser, TRANSFER_MODE.UPDATE);
+    assertThat(item.getMetadataSet().getMetadata(),
+        hasSize(originalItem.getMetadataSet().getMetadata().size() + 1));
     int i = 0;
     String updatedTextString = "";
-    for (MetadataSetTO mdsTo:updItem.getMetadata()){
-        if (mdsTo.getLabels().get(0).getValue().equals("text")) {
-            i++;
-            updatedTextString+= ((TextTO)mdsTo.getValue()).getText();
-        }
+    // Find the statementId for the text Metadata
+    String textStatementId = null;
+    for (Statement st : profile.getStatements()) {
+      if ("text".equals(st.getLabel())) {
+        textStatementId = st.getId().toString();
+      }
     }
-    
+    for (Metadata md : item.getMetadataSet().getMetadata()) {
+      if (md.getStatement().toString().equals(textStatementId) && md instanceof Text) {
+        i++;
+        updatedTextString += ((Text) md).getText();
+      }
+    }
     assertThat(i, equalTo(3));
     assertThat(updatedTextString, containsString(ADDED_TITLE));
-    
+
 
   }
 
@@ -512,57 +520,52 @@ public class ItemUpdateMetadata extends ItemTestBase {
     initItemWithMultipleStatements();
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
-    String jsonAddNewTitle = 
+    String jsonAddNewTitle =
         getStringFromPath(STATIC_CONTEXT_REST + "/easyUpdateItemBasicMultipleStatements.json")
-        .replace("___COLLECTION_ID___", collectionId)
-        .replace("___ITEM_ID___", itemId)
-        .replaceAll("\"date\".*\",", "\"date\": [\"2015-12-01\", \"2015-12-02\"],");
-    
-    multiPart.field("json", jsonAddNewTitle );
+            .replace("___COLLECTION_ID___", collectionId).replace("___ITEM_ID___", itemId)
+            .replaceAll("\"date\".*\",", "\"date\": [\"2015-12-01\", \"2015-12-02\"],");
+
+    multiPart.field("json", jsonAddNewTitle);
 
     Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
+        target(PATH_PREFIX).path("/" + itemId).register(authAsUser).register(MultiPartFeature.class)
+            .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE)
             .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
   }
 
-
-
+  /**
+   * Initialize an Item with a Metadata of each type
+   * 
+   * @throws Exception
+   */
   protected static void initItemWithFullMetadata() throws Exception {
-    
-    
-    ItemService s = new ItemService();
-    itemTO = new ItemTO();
-    itemTO.setCollectionId(collectionId);
-    itemTO = ItemProcess.prepareDefaultItemTOAsItemTO(true, 
-           updateJSON
-             .replace("___COLLECTION_ID___", collectionId),
-             itemTO, itemTO.getId(), JenaUtil.testUser);
-    ((ItemWithFileTO) itemTO).setFile(new File("src/test/resources/storage/test.png"));
-    
-    itemTO = s.create(itemTO, JenaUtil.testUser);
+    DefaultItemService service = new DefaultItemService();
+    String json = updateJSON.replace("___COLLECTION_ID___", collectionId);
+    DefaultItemWithFileTO defaultItemWithFileTO =
+        (DefaultItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, DefaultItemWithFileTO.class);
+    defaultItemWithFileTO.setFile(new File("src/test/resources/storage/test.png"));
+    itemTO = service.create(defaultItemWithFileTO, JenaUtil.testUser);
     itemId = itemTO.getId();
   }
 
+  /**
+   * Initialize an Item with multiple metadata
+   * 
+   * @throws Exception
+   */
   private static void initItemWithMultipleStatements() throws Exception {
-    ItemService s = new ItemService();
-
-    itemTO = new ItemTO();
-    itemTO.setCollectionId(collectionId);
-    itemTO = ItemProcess.prepareDefaultItemTOAsItemTO(true, 
-              getStringFromPath(STATIC_CONTEXT_REST + "/easyUpdateItemBasicMultipleStatements.json")
-             .replace("___COLLECTION_ID___", collectionId),
-             itemTO, itemTO.getId(), JenaUtil.testUser);
-    ((ItemWithFileTO) itemTO).setFile(new File("src/test/resources/storage/test.png"));
-    
-    itemTO = s.create(itemTO, JenaUtil.testUser);
+    DefaultItemService service = new DefaultItemService();
+    String json =
+        getStringFromPath(STATIC_CONTEXT_REST + "/easyUpdateItemBasicMultipleStatements.json")
+            .replace("___COLLECTION_ID___", collectionId);
+    DefaultItemWithFileTO defaultItemWithFileTO =
+        (DefaultItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, DefaultItemWithFileTO.class);
+    defaultItemWithFileTO.setFile(new File("src/test/resources/storage/test.png"));
+    itemTO = service.create(defaultItemWithFileTO, JenaUtil.testUser);
     itemId = itemTO.getId();
-
   }
 
 

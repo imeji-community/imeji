@@ -10,7 +10,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.rest.api.ProfileService;
 
 /**
- * This class is a cache to read profiles, to avoid to read too much the profiles
+ * This class is a cache to read profiles, to avoid to read too often the profiles
  * 
  * @author bastiens
  *

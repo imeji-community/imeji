@@ -31,10 +31,6 @@ import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
-import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
-import de.mpg.imeji.logic.search.model.SearchIndex;
-import de.mpg.imeji.logic.search.model.SortCriterion;
-import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -357,7 +353,6 @@ public class UserController {
    */
   public Collection<User> searchUserByName(String name) {
     Search search = SearchFactory.create();
-    System.out.println("Searching by Name");
     return loadUsers(
         search.searchString(JenaCustomQueries.selectUserAll(name), null, null, 0, -1).getResults());
   }
@@ -527,11 +522,12 @@ public class UserController {
         logger.info("Could not find user with URI " + uri, e);
       }
     }
-    
-    //Always sort Users by complete name
+
+    // Always sort Users by complete name
     Comparator<User> comparator = new Comparator<User>() {
       public int compare(User c1, User c2) {
-          return c1.getPerson().getCompleteName().toLowerCase().compareTo(c2.getPerson().getCompleteName().toLowerCase()); // use your logic
+        return c1.getPerson().getCompleteName().toLowerCase()
+            .compareTo(c2.getPerson().getCompleteName().toLowerCase()); // use your logic
       }
     };
     Collections.sort(users, comparator);

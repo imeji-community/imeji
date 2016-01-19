@@ -116,6 +116,7 @@ public class ReverseTransferObjectFactory {
   public static void transferDefaultItem(DefaultItemTO to, Item vo, MetadataProfile profile, User u,
       TRANSFER_MODE mode) throws ImejiException {
     if (mode == TRANSFER_MODE.CREATE) {
+      
       if (!isNullOrEmpty(to.getCollectionId())) {
         vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
       }
@@ -125,6 +126,7 @@ public class ReverseTransferObjectFactory {
     }
     transferDefaultMetadata(to, vo, profile, u, mode);
   }
+
 
   /**
    * Transfer Metadata of an {@link ItemTO} to an {@link Item}
@@ -455,6 +457,9 @@ public class ReverseTransferObjectFactory {
    */
   public static void transferDefaultMetadata(DefaultItemTO defaultTO, Item item,
       MetadataProfile profile, User u, TRANSFER_MODE mode) throws ImejiException {
+    
+    if (profile == null )
+      return;
     ItemTO itemTO = new ItemTO();
     MetadataProfileTO profileTO = new MetadataProfileTO();
     TransferObjectFactory.transferMetadataProfile(profile, profileTO);

@@ -155,19 +155,17 @@ public class CollectionService implements API<CollectionTO> {
       }
 
 
-      if (originalMp == null && profileId != null || !profileId.equals(originalMp.getIdString())) {
+    if (originalMp == null && profileId != null || !profileId.equals(originalMp.getIdString())) {
 
-      if (!profileId.equals(originalMp.getIdString())) {
-        if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
-          throw new BadRequestException("Wrong metadata profile update method: " + method
-              + " ! Allowed values are {copy, reference}. ");
+      if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
+        throw new BadRequestException("Wrong metadata profile update method: " + method
+            + " ! Allowed values are {copy, reference}. ");
         }
 
-        }
-
-      }
      }
 
+    }
+  
       CollectionImeji updatedCollection =
           cc.updateWithProfile(vo, mp, u, cc.getProfileCreationMethod(method));
       CollectionTO newTO = new CollectionTO();

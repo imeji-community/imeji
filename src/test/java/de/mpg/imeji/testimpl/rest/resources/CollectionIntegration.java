@@ -19,6 +19,8 @@ import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -34,6 +36,8 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsSame;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
@@ -46,6 +50,9 @@ import util.JenaUtil;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.DefaultItemService;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
@@ -71,16 +78,23 @@ public class CollectionIntegration extends ImejiTestBase {
   }
 
   @Test
-  public void test_1_CreateCollection_1_DefaultProfile() throws IOException {
+  public void test_1_CreateCollection_1_WithoutProfile() throws IOException, ImejiException {
     String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json");
     Response response = target(pathPrefix).register(authAsUser).register(MultiPartFeature.class)
         .request(MediaType.APPLICATION_JSON_TYPE)
         .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
     assertEquals(response.getStatus(), CREATED.getStatusCode());
+    
+    
     Map<String, Object> collData = jsonToPOJO(response);
     assertNotNull("Created collection is null", collData);
-    collectionId = (String) collData.get("id");
+    collectionId = (String)collData.get("id");
+    
     assertThat("Empty collection id", collectionId, not(isEmptyOrNullString()));
+    
+    CollectionService s = new CollectionService();
+    collectionTO = s.read(collectionId, Imeji.adminUser);
+    assertNull(collectionTO.getProfile().getId());
   }
 
  @Test
@@ -100,6 +114,11 @@ public class CollectionIntegration extends ImejiTestBase {
     assertNotNull("Created collection is null", collData);
     collectionId = (String) collData.get("id");
     assertThat("Empty collection id", collectionId, not(isEmptyOrNullString()));
+
+    CollectionService s = new CollectionService();
+    collectionTO = s.read(collectionId, Imeji.adminUser);
+    assertNotEquals(profileId,  collectionTO.getProfile().getId());
+    
   }
 
   @Test
@@ -119,6 +138,12 @@ public class CollectionIntegration extends ImejiTestBase {
     assertNotNull("Created collection is null", collData);
     collectionId = (String) collData.get("id");
     assertThat("Empty collection id", collectionId, not(isEmptyOrNullString()));
+
+    CollectionService s = new CollectionService();
+   
+    
+    collectionTO = s.read(collectionId, Imeji.adminUser);
+    assertEquals(profileId,  collectionTO.getProfile().getId() );
   }
 
   @Test

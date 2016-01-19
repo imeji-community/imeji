@@ -149,6 +149,22 @@ public class ImejiTestBase extends JerseyTest {
     }
     return collectionId;
   }
+  
+  public static String initCollectionWithProfile(String profileId)  {
+    CollectionService s = new CollectionService();
+    try {
+      collectionTO = (CollectionTO) RestProcessUtils.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json")
+                                                                     .replace("___PROFILE_ID___", profileId)
+                                                                     .replace("___METHOD___", "copy"), 
+                                                                     CollectionTO.class);
+
+      collectionTO = s.create(collectionTO, JenaUtil.testUser);
+      collectionId = collectionTO.getId();
+    } catch (Exception e) {
+      logger.error("Cannot init Collection", e);
+    }
+    return collectionId;
+  }
 
   /**
    * Create a new album and set the albumid
@@ -201,6 +217,7 @@ public class ImejiTestBase extends JerseyTest {
           TRANSFER_MODE.UPDATE);
       defaultItemTO.setCollectionId(collectionId);
       TransferObjectFactory.transferDefaultItem(itemVo, defaultItemTO, profile);
+      
 
     } catch (Exception e) {
       logger.error("Cannot init Item", e);

@@ -51,7 +51,9 @@ public enum ImejiPages {
                                                                                                   "admin_space_edit",
                                                                                                   ".*/space/.*/editspace"), HOME(
                                                                                                       "history_home",
-                                                                                                      "/");
+                                                                                                      "/"),
+                                                                                                      PROFILE("metadata_profile",
+                                                                                                          ".*/metadataProfile/([A-Za-z0-9-_]+).*");
 
   /**
    * The key to the label

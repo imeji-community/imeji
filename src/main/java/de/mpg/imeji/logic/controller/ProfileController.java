@@ -455,4 +455,8 @@ public class ProfileController extends ImejiController {
     }
   }
 
+  public MetadataProfile retrieveLazy(URI imgUri, User user) throws ImejiException {
+    return (MetadataProfile) reader.readLazy(imgUri.toString(), user, new MetadataProfile());
+
+  }
 }

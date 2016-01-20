@@ -54,9 +54,9 @@ public class DefaultItemService implements API<DefaultItemTO> {
           ((DefaultItemWithFileTO) to).getFetchUrl(),
           ((DefaultItemWithFileTO) to).getReferenceUrl());
       // transfer item into ItemTO
-      to = new DefaultItemTO();
-      TransferObjectFactory.transferDefaultItem(item, to, profile);
-      return to;
+      DefaultItemTO createdTO = new DefaultItemTO();
+      TransferObjectFactory.transferDefaultItem(item, createdTO, profile);
+      return createdTO;
     } else {
       throw new BadRequestException(
           "A file must be uploaded, referenced or fetched from external location.");
@@ -90,9 +90,9 @@ public class DefaultItemService implements API<DefaultItemTO> {
     } else {
       item = controller.update(item, u);
     }
-    to = new DefaultItemTO();
-    TransferObjectFactory.transferDefaultItem(item, to, profile);
-    return to;
+    DefaultItemTO createdTO = new DefaultItemTO();
+    TransferObjectFactory.transferDefaultItem(item, createdTO, profile);
+    return createdTO;
   }
 
   @Override
@@ -103,34 +103,25 @@ public class DefaultItemService implements API<DefaultItemTO> {
 
   @Override
   public DefaultItemTO release(String i, User u) throws ImejiException {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public DefaultItemTO withdraw(String i, User u, String discardComment) throws ImejiException {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-
-  }
+  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   @Override
-  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-
-  }
+  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   @Override
   public SearchResultTO<DefaultItemTO> search(String q, int offset, int size, User u)
-      throws Exception {
+      throws ImejiException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
-    ItemController controller = new ItemController();
     SearchResult result = SearchFactory.create(SEARCH_IMPLEMENTATIONS.ELASTIC)
         .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
     for (Item vo : controller.retrieveBatch(result.getResults(), -1, 0, u)) {
@@ -185,13 +176,14 @@ public class DefaultItemService implements API<DefaultItemTO> {
   }
 
   private String firstNonNullOrEmtpy(String... strs) {
-    if (strs == null)
+    if (strs == null) {
       return null;
-    for (String str : strs)
-      if (str != null && !"".equals(str.trim()))
+    }
+    for (String str : strs) {
+      if (str != null && !"".equals(str.trim())) {
         return str;
+      }
+    }
     return null;
   }
-
-
 }

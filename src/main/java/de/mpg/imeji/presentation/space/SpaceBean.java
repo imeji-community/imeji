@@ -133,9 +133,8 @@ public abstract class SpaceBean implements Serializable {
 
 
       if (!StringHelper.isNullOrEmptyTrim(space.getIdString())) {
-        collections =
-            cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, user, space.getId()
-                .toString(), 0, -1);
+        collections = cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, user,
+            space.getId().toString(), 0, -1);
         for (CollectionImeji selC : collections) {
           selectedCollections.add(selC.getId().toString());
         }
@@ -149,7 +148,7 @@ public abstract class SpaceBean implements Serializable {
           return coll1.getMetadata().getTitle().compareToIgnoreCase(coll2.getMetadata().getTitle());
         }
       });
-    } catch (ImejiException | IOException e) {
+    } catch (ImejiException e) {
       BeanHelper.info(sessionBean.getMessage("could_not_load_collections_for_space"));
     }
     if (UrlHelper.getParameterBoolean("start")) {
@@ -225,8 +224,8 @@ public abstract class SpaceBean implements Serializable {
     setIngestImage(getUploadedIngestFile(request, response));
   }
 
-  private IngestImage getUploadedIngestFile(HttpServletRequest request, HttpServletResponse response)
-      throws FileUploadException, TypeNotAllowedException {
+  private IngestImage getUploadedIngestFile(HttpServletRequest request,
+      HttpServletResponse response) throws FileUploadException, TypeNotAllowedException {
     File tmp = null;
     boolean isMultipart = ServletFileUpload.isMultipartContent(request);
     IngestImage ii = new IngestImage();
@@ -239,15 +238,12 @@ public abstract class SpaceBean implements Serializable {
           FileItemStream fis = iter.next();
           InputStream in = fis.openStream();
 
-          tmp =
-              TempFileUtil.createTempFile("spacelogo",
-                  "." + FilenameUtils.getExtension(fis.getName()));
+          tmp = TempFileUtil.createTempFile("spacelogo",
+              "." + FilenameUtils.getExtension(fis.getName()));
           if (fis.getName() != null && extensionNotAllowed(tmp)) {
             response.resetBuffer();
-            response
-                .getWriter()
-                .print(
-                    "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}STOP");
+            response.getWriter().print(
+                "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}STOP");
             response.flushBuffer();
             throw new TypeNotAllowedException(
                 ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))

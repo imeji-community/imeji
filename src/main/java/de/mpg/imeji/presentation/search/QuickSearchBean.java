@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.util.UrlHelper;
 
@@ -31,7 +32,7 @@ public class QuickSearchBean implements Serializable {
    * @return
    * @throws IOException
    */
-  public QuickSearchBean() throws IOException {
+  public QuickSearchBean() throws ImejiException {
     String q = UrlHelper.getParameterValue("q");
     if (SearchQueryParser.isSimpleSearch(SearchQueryParser.parseStringQuery(q))) {
       this.searchString = q;
@@ -39,7 +40,6 @@ public class QuickSearchBean implements Serializable {
       searchString = "";
     }
   }
-
 
   /**
    * setter

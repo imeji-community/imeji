@@ -26,6 +26,7 @@ import de.mpg.imeji.logic.search.model.SearchMetadata;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchSimpleMetadata;
 import de.mpg.imeji.logic.search.util.SearchUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Grant;
@@ -424,6 +425,17 @@ public class ElasticQueryFactory {
     }
     return matchNothing();
   }
+
+  /**
+   * TODO Index Labels of metadata to search for metadata by label
+   * 
+   * @param md
+   * @return
+   */
+  private static QueryBuilder metadataFilter(SearchSimpleMetadata md) {
+    return null;
+  }
+
 
   /**
    * Create a {@link QueryBuilder} for a {@link SearchMetadata}

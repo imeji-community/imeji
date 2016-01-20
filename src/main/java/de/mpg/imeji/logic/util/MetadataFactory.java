@@ -26,6 +26,12 @@ import de.mpg.j2j.annotations.j2jDataType;
  * @version $Revision$ $LastChangedDate$
  */
 public class MetadataFactory {
+
+  /**
+   * private Constructor
+   */
+  private MetadataFactory() {}
+
   /**
    * Create a new {@link Metadata} according to its namespace
    * 
@@ -52,8 +58,8 @@ public class MetadataFactory {
     } else if ("http://imeji.org/terms/metadata#license".equals(typeNamespace)) {
       md = new License();
     } else {
-      throw new RuntimeException("MetadataFactory: Error creating new Metadata. Unknown type: "
-          + typeNamespace);
+      throw new RuntimeException(
+          "MetadataFactory: Error creating new Metadata. Unknown type: " + typeNamespace);
     }
     return md;
   }

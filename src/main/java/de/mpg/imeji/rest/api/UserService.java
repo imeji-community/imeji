@@ -42,13 +42,11 @@ public class UserService implements API<UserTO> {
 
   @Override
   public UserTO create(UserTO o, User u) throws ImejiException {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public UserTO read(String id, User u) throws ImejiException {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -59,37 +57,28 @@ public class UserService implements API<UserTO> {
 
   @Override
   public boolean delete(String i, User u) throws ImejiException {
-    // TODO Auto-generated method stub
     return false;
   }
 
   @Override
   public UserTO release(String i, User u) throws ImejiException {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public UserTO withdraw(String i, User u, String discardComment) throws ImejiException {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-
-  }
+  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   @Override
-  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-
-  }
+  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   @Override
-  public SearchResultTO<UserTO> search(String q, int offset, int size, User u) throws Exception {
-    // TODO Auto-generated method stub
+  public SearchResultTO<UserTO> search(String q, int offset, int size, User u)
+      throws ImejiException {
     return null;
   }
 

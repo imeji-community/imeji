@@ -111,8 +111,8 @@ public class EditItemMetadataBean {
             .getMessage("no_items_to_edit"));
       }
     } catch (Exception e) {
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getLabel("error") + " " + e);
+      BeanHelper.error(
+          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
       logger.error("Error init Edit page", e);
     }
   }
@@ -159,7 +159,7 @@ public class EditItemMetadataBean {
    * @return
    * @throws IOException
    */
-  private List<String> findItems() throws IOException {
+  private List<String> findItems() throws ImejiException {
     if ("selected".equals(type)) {
       return getSelectedItems();
     } else if ("all".equals(type) && query != null && collectionId != null) {
@@ -196,12 +196,12 @@ public class EditItemMetadataBean {
       } else {
         logger.error("No statement found");
         isProfileWithStatements = false;
-        BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getLabel("profile_empty"));
+        BeanHelper.error(
+            ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty"));
       }
     } catch (Exception e) {
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getLabel("error") + " " + e);
+      BeanHelper.error(
+          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
       logger.error("Error init Edit page", e);
     }
   }
@@ -223,14 +223,16 @@ public class EditItemMetadataBean {
   private void initModeMenu() {
     selectedMode = "basic";
     modeRadio = new ArrayList<SelectItem>();
-    modeRadio.add(new SelectItem("basic", ((SessionBean) BeanHelper
-        .getSessionBean(SessionBean.class)).getMessage("editor_basic")));
+    modeRadio.add(new SelectItem("basic",
+        ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getMessage("editor_basic")));
     if (this.statement.getMaxOccurs().equals("unbounded")) {
-      modeRadio.add(new SelectItem("append", ((SessionBean) BeanHelper
-          .getSessionBean(SessionBean.class)).getMessage("editor_append")));
+      modeRadio
+          .add(new SelectItem("append", ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+              .getMessage("editor_append")));
     }
-    modeRadio.add(new SelectItem("overwrite", ((SessionBean) BeanHelper
-        .getSessionBean(SessionBean.class)).getMessage("editor_overwrite")));
+    modeRadio.add(
+        new SelectItem("overwrite", ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+            .getMessage("editor_overwrite")));
   }
 
   /**
@@ -244,8 +246,9 @@ public class EditItemMetadataBean {
         // Add a statement to the menu only if it doen'st have a parent
         // statement. If it has a parent, then it
         // will be editable by choosing the parent in the menu
-        statementMenu.add(new SelectItem(s.getId().toString(), ((MetadataLabels) BeanHelper
-            .getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getId())));
+        statementMenu.add(new SelectItem(s.getId().toString(),
+            ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
+                .getInternationalizedLabels().get(s.getId())));
       }
     }
   }
@@ -306,7 +309,7 @@ public class EditItemMetadataBean {
    * @return
    * @throws IOException
    */
-  public List<String> searchItems() throws IOException {
+  public List<String> searchItems() throws ImejiException {
     SearchQuery sq = SearchQueryParser.parseStringQuery(query);
     ItemController itemController = new ItemController();
     SearchResult sr =
@@ -431,15 +434,15 @@ public class EditItemMetadataBean {
     this.reset();
     unlockImages();
     HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
-    
-    //redirect to view when previous page was upload
-    if(hs.getPreviousPage().getUrl().contains("upload")){
+
+    // redirect to view when previous page was upload
+    if (hs.getPreviousPage().getUrl().contains("upload")) {
       FacesContext.getCurrentInstance().getExternalContext()
-      .redirect(hs.getPreviousPage().getCompleteUrl().replaceFirst("upload.*", "browse"));
-   
-    }else{
+          .redirect(hs.getPreviousPage().getCompleteUrl().replaceFirst("upload.*", "browse"));
+
+    } else {
       FacesContext.getCurrentInstance().getExternalContext()
-      .redirect(hs.getPreviousPage().getCompleteUrl());
+          .redirect(hs.getPreviousPage().getCompleteUrl());
     }
   }
 
@@ -517,21 +520,6 @@ public class EditItemMetadataBean {
     for (Statement st : profile.getStatements())
       l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
     eib.getMds().initTreeFromList(SuperMetadataTree.resetPosition(l));
-  }
-
-  /**
-   * True if the {@link EditorItemBean} has a value for the {@link Statement}
-   * 
-   * @param eib
-   * @param st
-   * @return
-   */
-  private boolean hasValue(EditorItemBean eib, Statement st) {
-    for (SuperMetadataBean md : eib.getMds().getTree().getList())
-      if (md.getStatement().getId().compareTo(st.getId()) == 0
-          && !MetadataHelper.isEmpty(md.asMetadata()))
-        return true;
-    return false;
   }
 
   /**
@@ -699,11 +687,8 @@ public class EditItemMetadataBean {
   public void redirectToCollectionItemsPage(String collectionId) throws IOException {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 
-    FacesContext
-        .getCurrentInstance()
-        .getExternalContext()
-        .redirect(
-            navigation.getApplicationSpaceUrl() + navigation.getCollectionPath() + "/"
-                + ObjectHelper.getId(URI.create(collectionId)) + "/" + navigation.getBrowsePath());
+    FacesContext.getCurrentInstance().getExternalContext()
+        .redirect(navigation.getApplicationSpaceUrl() + navigation.getCollectionPath() + "/"
+            + ObjectHelper.getId(URI.create(collectionId)) + "/" + navigation.getBrowsePath());
   }
 }

@@ -23,7 +23,6 @@ import de.mpg.imeji.rest.to.SearchResultTO;
  * @param <V>
  */
 public interface API<V> {
-  public final static int CURRENT_VERSION = 1;
 
   /**
    * Create an Object in imeji

@@ -20,7 +20,7 @@
 	<composite:implementation>
 		
 		<div class="imj_metadataProfileList">
-			<ui:fragment rendered="#{cc.attrs.metadataProfile.statements.size() == 0}">
+			<ui:fragment rendered="#{cc.attrs.metadataProfile == null or cc.attrs.metadataProfile.statements.size() == 0}">
 				<div class="imj_listHeader">
 					<h3 class="imj_headline">
 						<h:outputText value="#{msg.error_collection_profile_not_exist}"/>
@@ -33,7 +33,7 @@
 					</div>
 				</div>
 			</ui:fragment>
-			<ui:fragment rendered="#{cc.attrs.metadataProfile.statements.size() != 0}">
+			<ui:fragment rendered="#{cc.attrs.metadataProfile != null and cc.attrs.metadataProfile.statements.size() != 0}">
 				<div class="imj_listHeader">
 					<h3 class="imj_headline">
 						<h:outputText value="#{cc.attrs.headline}: #{cc.attrs.metadataProfile.title}"/>

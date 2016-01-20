@@ -220,5 +220,4 @@ public class CollectionService implements API<CollectionTO> {
         .offset(offset).results(tos).query(q).size(size)
         .totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
-
 }

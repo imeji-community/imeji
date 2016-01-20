@@ -25,11 +25,13 @@
 package de.mpg.imeji.test.logic.search;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 
@@ -56,9 +58,10 @@ public class URLQueryTransformerTest {
    * Test the methods for an advanced search query
    * 
    * @throws IOException
+   * @throws UnprocessableError
    */
   @Test
-  public void testAdvancedSearch() throws IOException {
+  public void testAdvancedSearch() throws IOException, UnprocessableError {
     test(advancedQuery, false);
   }
 
@@ -66,9 +69,10 @@ public class URLQueryTransformerTest {
    * Test the methods for an simple search query
    * 
    * @throws IOException
+   * @throws UnprocessableError
    */
   @Test
-  public void testSimpleSeach() throws IOException {
+  public void testSimpleSeach() throws IOException, UnprocessableError {
     test(simpleQuery, true);
   }
 
@@ -76,9 +80,10 @@ public class URLQueryTransformerTest {
    * Test the methods for an advanced search query with special characters
    * 
    * @throws IOException
+   * @throws UnprocessableError
    */
   @Test
-  public void testAdvancedSearchWithSpecialCharacter() throws IOException {
+  public void testAdvancedSearchWithSpecialCharacter() throws IOException, UnprocessableError {
     test(advancedQuery.replace("TEST", specialsChar), false);
   }
 
@@ -86,9 +91,10 @@ public class URLQueryTransformerTest {
    * Test the methods for an simple search query with special characters
    * 
    * @throws IOException
+   * @throws UnprocessableError
    */
   @Test
-  public void testSimpleSearchWithSpecialCharacter() throws IOException {
+  public void testSimpleSearchWithSpecialCharacter() throws IOException, UnprocessableError {
     test(simpleQuery.replace("TEST", specialsChar), true);
   }
 
@@ -97,8 +103,11 @@ public class URLQueryTransformerTest {
    * 
    * @param query
    * @throws IOException
+   * @throws UnprocessableError
+   * @throws UnsupportedEncodingException
    */
-  private void test(String query, boolean simple) throws IOException {
+  private void test(String query, boolean simple)
+      throws UnprocessableError, UnsupportedEncodingException {
     String encodedQuery = URLEncoder.encode(query, "UTF-8");
     SearchQuery sq = SearchQueryParser.parseStringQuery(query);
     String resultEncoded = SearchQueryParser.transform2UTF8URL(sq);

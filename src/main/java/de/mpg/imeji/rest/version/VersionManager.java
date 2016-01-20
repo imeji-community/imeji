@@ -1,14 +1,14 @@
 package de.mpg.imeji.rest.version;
 
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.rest.api.API;
-import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
-import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.rest.MyApplication;
+import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
+import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
 
 /**
  * Implements the version management of the api
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  *
  */
 public class VersionManager {
-  private int requestedVersion = API.CURRENT_VERSION;
+  private int requestedVersion = MyApplication.CURRENT_VERSION;
   private Pattern p = Pattern.compile(".*/rest/v([0-9]+)/.*");
   private String path;
   private boolean hasVersion = false;
@@ -35,18 +35,18 @@ public class VersionManager {
    * @throws UnknowAPIVersionException
    * @throws DeprecatedAPIVersionException
    */
-  public void checkVersion(String path) throws UnknowAPIVersionException,
-      DeprecatedAPIVersionException {
+  public void checkVersion(String path)
+      throws UnknowAPIVersionException, DeprecatedAPIVersionException {
     this.path = path;
     requestedVersion = parseVersionNumber(path);
     if (!isAnExistingVersion()) {
       throw new UnknowAPIVersionException("API version v" + requestedVersion
-          + " is not a valid version. Please use the latest version v" + API.CURRENT_VERSION
-          + ". For more information see " + linkToAPIDoc());
+          + " is not a valid version. Please use the latest version v"
+          + MyApplication.CURRENT_VERSION + ". For more information see " + linkToAPIDoc());
     } else if (isOldVersion()) {
       throw new DeprecatedAPIVersionException("API version v" + requestedVersion
-          + " is no longer supported. Please use the latest version v" + API.CURRENT_VERSION
-          + ". For more information see " + linkToAPIDoc());
+          + " is no longer supported. Please use the latest version v"
+          + MyApplication.CURRENT_VERSION + ". For more information see " + linkToAPIDoc());
     }
     // everything fine!
   }
@@ -85,7 +85,7 @@ public class VersionManager {
       return Integer.parseInt(m.group(1));
     }
     hasVersion = false;
-    return API.CURRENT_VERSION;
+    return MyApplication.CURRENT_VERSION;
   }
 
   /**
@@ -94,7 +94,7 @@ public class VersionManager {
    * @return
    */
   private boolean isOldVersion() {
-    return API.CURRENT_VERSION > requestedVersion;
+    return MyApplication.CURRENT_VERSION > requestedVersion;
   }
 
   /**
@@ -103,7 +103,7 @@ public class VersionManager {
    * @return
    */
   private boolean isAnExistingVersion() {
-    return API.CURRENT_VERSION >= requestedVersion;
+    return MyApplication.CURRENT_VERSION >= requestedVersion;
   }
 
   /**
@@ -112,7 +112,7 @@ public class VersionManager {
    * @return
    */
   public boolean isCurrentVersion() {
-    return API.CURRENT_VERSION == requestedVersion;
+    return MyApplication.CURRENT_VERSION == requestedVersion;
   }
 
   public boolean hasVersion() {

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -78,14 +79,20 @@ public class SearchQueryParser {
    * 
    * @param query
    * @return
+   * @throws UnprocessableError
    * @throws IOException
    */
-  public static SearchQuery parseStringQuery(String query) throws IOException {
+  public static SearchQuery parseStringQuery(String query) throws UnprocessableError {
     if (query == null) {
       query = "";
     }
-    String decodedQuery = URLDecoder.decode(query, "UTF-8");
-    return parseStringQueryDecoded(decodedQuery);
+    String decodedQuery;
+    try {
+      decodedQuery = URLDecoder.decode(query, "UTF-8");
+      return parseStringQueryDecoded(decodedQuery);
+    } catch (IOException e) {
+      throw new UnprocessableError("Query could not be parsed: " + query);
+    }
   }
 
   /**

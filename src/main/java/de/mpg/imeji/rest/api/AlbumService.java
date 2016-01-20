@@ -29,6 +29,12 @@ import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 
+/**
+ * Service for {@link AlbumTO}
+ * 
+ * @author bastiens
+ *
+ */
 public class AlbumService implements API<AlbumTO> {
 
   private AlbumTO getAlbumTO(AlbumController controller, String id, User u) throws ImejiException {
@@ -56,7 +62,7 @@ public class AlbumService implements API<AlbumTO> {
    * @throws IOException
    */
   public SearchResultTO<DefaultItemTO> readItems(String id, User u, String q, int offset, int size)
-      throws ImejiException, IOException {
+      throws ImejiException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
     ItemController controller = new ItemController();
@@ -87,11 +93,10 @@ public class AlbumService implements API<AlbumTO> {
   @Override
   public AlbumTO update(AlbumTO to, User u) throws ImejiException {
     AlbumController ac = new AlbumController();
-
     Album vo = ac.retrieve(ObjectHelper.getURI(Album.class, to.getId()), u);
-    if (vo == null)
+    if (vo == null) {
       throw new UnprocessableError("Album not found");
-
+    }
     transferAlbum(to, vo, UPDATE, u);
     AlbumTO newTO = new AlbumTO();
     TransferObjectFactory.transferAlbum(ac.update(vo, u), newTO);
@@ -111,8 +116,6 @@ public class AlbumService implements API<AlbumTO> {
     AlbumController controller = new AlbumController();
     Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
     controller.release(vo, u);
-
-    // Now Read the album and return it back
     return getAlbumTO(controller, id, u);
   }
 
@@ -122,22 +125,16 @@ public class AlbumService implements API<AlbumTO> {
     Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
     vo.setDiscardComment(discardComment);
     controller.withdraw(vo, u);
-
-    // Now Read the withdrawn album and return it back
     return getAlbumTO(controller, id, u);
   }
 
   @Override
-  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-
-  }
+  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   public List<String> addItems(String id, User u, List<String> itemIds) throws ImejiException {
     AlbumController controller = new AlbumController();
     Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
     List<String> itemUris = new ArrayList<>();
-
     // Convert Ids to Uris
     for (String itemId : itemIds) {
       itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
@@ -165,12 +162,11 @@ public class AlbumService implements API<AlbumTO> {
   }
 
   @Override
-  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-  }
+  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   @Override
-  public SearchResultTO<AlbumTO> search(String q, int offset, int size, User u) throws Exception {
+  public SearchResultTO<AlbumTO> search(String q, int offset, int size, User u)
+      throws ImejiException {
     AlbumController controller = new AlbumController();
     List<AlbumTO> tos = new ArrayList<>();
     SearchResult result =

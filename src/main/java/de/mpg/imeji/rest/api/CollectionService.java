@@ -71,7 +71,7 @@ public class CollectionService implements API<CollectionTO> {
    * @throws IOException
    */
   public SearchResultTO<DefaultItemTO> readItems(String id, User u, String q, int offset, int size)
-      throws ImejiException, IOException {
+      throws ImejiException {
     ProfileCache profileCache = new ProfileCache();
     List<DefaultItemTO> tos = new ArrayList<>();
     ItemController controller = new ItemController();
@@ -130,12 +130,12 @@ public class CollectionService implements API<CollectionTO> {
 
     CollectionImeji vo = getCollectionVO(to.getId(), u);
     MetadataProfile originalMp = pc.retrieve(vo.getProfile(), u);
-    
-    String hasStatements = (originalMp == null)?"":
-     (( originalMp.getStatements().size() > 0)
-        ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
-        : "");
-    
+
+    String hasStatements = (originalMp == null) ? ""
+        : ((originalMp.getStatements().size() > 0)
+            ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
+            : "");
+
     // profile is defined
     CollectionProfileTO profTO = to.getProfile();
     String profileId = (profTO != null) ? profTO.getId() : "";
@@ -154,23 +154,19 @@ public class CollectionService implements API<CollectionTO> {
                 + hasStatements);
       }
 
-
-    if (originalMp == null && profileId != null || !profileId.equals(originalMp.getIdString())) {
-
-      if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
-        throw new BadRequestException("Wrong metadata profile update method: " + method
-            + " ! Allowed values are {copy, reference}. ");
+      if (originalMp == null && profileId != null || !profileId.equals(originalMp.getIdString())) {
+        if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
+          throw new BadRequestException("Wrong metadata profile update method: " + method
+              + " ! Allowed values are {copy, reference}. ");
         }
-
-     }
-
+      }
     }
-  
-      CollectionImeji updatedCollection =
-          cc.updateWithProfile(vo, mp, u, cc.getProfileCreationMethod(method));
-      CollectionTO newTO = new CollectionTO();
-      TransferObjectFactory.transferCollection(updatedCollection, newTO);
-      return newTO;
+
+    CollectionImeji updatedCollection =
+        cc.updateWithProfile(vo, mp, u, cc.getProfileCreationMethod(method));
+    CollectionTO newTO = new CollectionTO();
+    TransferObjectFactory.transferCollection(updatedCollection, newTO);
+    return newTO;
   }
 
   @Override
@@ -189,7 +185,6 @@ public class CollectionService implements API<CollectionTO> {
     CollectionImeji vo = controller.retrieve(ObjectHelper.getURI(CollectionImeji.class, id), u);
     controller.delete(vo, u);
     return true;
-
   }
 
   @Override
@@ -203,20 +198,14 @@ public class CollectionService implements API<CollectionTO> {
   }
 
   @Override
-  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-
-  }
+  public void share(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   @Override
-  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {
-    // TODO Auto-generated method stub
-
-  }
+  public void unshare(String id, String userId, List<String> roles, User u) throws ImejiException {}
 
   @Override
   public SearchResultTO<CollectionTO> search(String q, int offset, int size, User u)
-      throws ImejiException, IOException {
+      throws ImejiException {
     CollectionController cc = new CollectionController();
     List<CollectionTO> tos = new ArrayList<>();
     SearchResult result =

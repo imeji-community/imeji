@@ -16,14 +16,9 @@ import de.mpg.imeji.logic.vo.User;
  */
 public class UserValidator extends ObjectValidator implements Validator<User> {
 
-
-  public UserValidator(Validator.Method method) {
-    super(method);
-  }
-
-
   @Override
-  public void validate(User user) throws UnprocessableError {
+  public void validate(User user, Method m) throws UnprocessableError {
+    setValidateForMethod(m);
     if (isDelete()) {
       return;
     }
@@ -84,8 +79,8 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
   }
 
   @Override
-  public void validate(User t, MetadataProfile p) throws UnprocessableError {
-    validate(t);
+  public void validate(User t, MetadataProfile p, Method m) throws UnprocessableError {
+    validate(t, m);
   }
 
 }

@@ -21,30 +21,28 @@ import de.mpg.imeji.logic.vo.Person;
  */
 public class AlbumValidator extends ObjectValidator implements Validator<Album> {
 
-  public AlbumValidator(Validator.Method method) {
-    super(method);
-  }
 
   @Override
-  public void validate(Album album) throws UnprocessableError {
+  public void validate(Album album, Method method) throws UnprocessableError {
+    setValidateForMethod(method);
     if (isDelete()) {
       return;
     }
 
     boolean valid = true;
     String errorMessage = "";
-    
+
     if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())) {
       valid = false;
       errorMessage += "error_bad_format_description;";
-      //throw new UnprocessableError("error_bad_format_description");
+      // throw new UnprocessableError("error_bad_format_description");
     }
 
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
       valid = false;
-      errorMessage+="error_album_need_title;";
+      errorMessage += "error_album_need_title;";
     }
-    
+
     List<Person> pers = new ArrayList<Person>();
 
     for (Person c : album.getMetadata().getPersons()) {
@@ -53,8 +51,8 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
         if (!isNullOrEmpty(o.getName().trim())) {
           orgs.add(o);
         } else {
-          valid= false;
-          errorMessage+="error_organization_need_name;";
+          valid = false;
+          errorMessage += "error_organization_need_name;";
         }
       }
 
@@ -62,20 +60,20 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
         if (orgs.size() > 0) {
           pers.add(c);
         } else {
-          valid=false;
-          errorMessage+="error_author_need_one_organization;";
+          valid = false;
+          errorMessage += "error_author_need_one_organization;";
         }
       } else {
-        valid=false;
-        errorMessage+="error_author_need_one_family_name;";
+        valid = false;
+        errorMessage += "error_author_need_one_family_name;";
       }
     }
 
     if (pers.size() == 0 || pers == null || pers.isEmpty()) {
-      valid=false;
-      errorMessage+="error_album_need_one_author;";
+      valid = false;
+      errorMessage += "error_album_need_one_author;";
     }
-    
+
     if (!valid) {
       throw new UnprocessableError(errorMessage);
     }
@@ -83,8 +81,8 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
   }
 
   @Override
-  public void validate(Album t, MetadataProfile p) throws UnprocessableError {
-    validate(t);
+  public void validate(Album t, MetadataProfile p, Method method) throws UnprocessableError {
+    validate(t, method);
   }
 
 }

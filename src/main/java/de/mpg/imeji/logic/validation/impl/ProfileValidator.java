@@ -23,12 +23,8 @@ import de.mpg.j2j.misc.LocalizedString;
  */
 public class ProfileValidator extends ObjectValidator implements Validator<MetadataProfile> {
 
-  public ProfileValidator(Validator.Method method) {
-    super(method);
-  }
-
   @Override
-  public void validate(MetadataProfile profile) throws UnprocessableError {
+  public void validate(MetadataProfile profile, Method m) throws UnprocessableError {
     if (isDelete())
       return;
 
@@ -104,8 +100,8 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
   }
 
   @Override
-  public void validate(MetadataProfile t, MetadataProfile p) throws UnprocessableError {
-    validate(t);
+  public void validate(MetadataProfile t, MetadataProfile p, Method m) throws UnprocessableError {
+    validate(t, m);
   }
 
 }

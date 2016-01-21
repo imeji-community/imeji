@@ -24,6 +24,7 @@ public class UnprocessableError extends ImejiException {
 
   public UnprocessableError(String message, Throwable e) {
     super(message, e);
+    this.messages.add(message);
   }
 
   public Set<String> getMessages() {

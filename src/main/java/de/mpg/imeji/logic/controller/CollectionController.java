@@ -94,9 +94,8 @@ public class CollectionController extends ImejiController {
     if (user == null) {
       throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
     }
-
-    CollectionValidator validator = new CollectionValidator(Method.CREATE);
-    validator.validate(c);
+    // Validate before creating a profile, in can the collection isn't valid
+    new CollectionValidator().validate(c, Method.CREATE);
     ProfileController pc = new ProfileController();
     String metadataProfileName = " (Metadata profile)";
     if (p == null && method == MetadataProfileCreationMethod.NEW) {
@@ -115,7 +114,7 @@ public class CollectionController extends ImejiController {
     }
 
     // Check in controller if Profile is released and is created by user
-    if (method.equals(MetadataProfileCreationMethod.REFERENCE) && p != null ) {
+    if (method.equals(MetadataProfileCreationMethod.REFERENCE) && p != null) {
       if (!(p.getCreatedBy().equals(user.getId()) || Status.RELEASED.equals(p.getStatus()))) {
         throw new UnprocessableError(
             "You can not reference the metadata profile with Id=" + p.getIdString()
@@ -125,10 +124,10 @@ public class CollectionController extends ImejiController {
 
     writeCreateProperties(c, user);
 
-    if (p != null ) {
+    if (p != null) {
       c.setProfile(p.getId());
     }
-    
+
     writer.create(WriterFacade.toList(c), p, user);
     // Prepare grants
     ShareController shareController = new ShareController();
@@ -353,26 +352,26 @@ public class CollectionController extends ImejiController {
       itemController.delete(items, user);
 
       // Delete profile if it is set for the collection
-      if (collection.getProfile()!=null) {
-          ProfileController pc = new ProfileController();
-          try {
-    
-            MetadataProfile collectionMdp = pc.retrieve(collection.getProfile(), user);
-            if ((pc.isReferencedByOtherResources(collectionMdp.getId().toString(),
-                collection.getId().toString()))
-                || (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString()))
-                || collectionMdp.getDefault()) {
-              logger.info(
-                  "Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
-                      + "Profile <" + collectionMdp.getId().toString() + "> will not be deleted!");
-            } else {
-              logger.info("Metadata profile <" + collectionMdp.getId().toString()
-                  + "> is not referenced elsewhere, will be deleted!");
-              pc.delete(collectionMdp, user, collection.getId().toString());
-            }
-          } catch (NotFoundException e) {
-            logger.info("Collection profile does not exist, could not be deleted.");
+      if (collection.getProfile() != null) {
+        ProfileController pc = new ProfileController();
+        try {
+
+          MetadataProfile collectionMdp = pc.retrieve(collection.getProfile(), user);
+          if ((pc.isReferencedByOtherResources(collectionMdp.getId().toString(),
+              collection.getId().toString()))
+              || (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString()))
+              || collectionMdp.getDefault()) {
+            logger.info(
+                "Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
+                    + "Profile <" + collectionMdp.getId().toString() + "> will not be deleted!");
+          } else {
+            logger.info("Metadata profile <" + collectionMdp.getId().toString()
+                + "> is not referenced elsewhere, will be deleted!");
+            pc.delete(collectionMdp, user, collection.getId().toString());
           }
+        } catch (NotFoundException e) {
+          logger.info("Collection profile does not exist, could not be deleted.");
+        }
       }
 
       writer.delete(WriterFacade.toList(collection), user);
@@ -414,8 +413,9 @@ public class CollectionController extends ImejiController {
       List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.release(items, user);
       update(collection, user);
-      
-      if (collection.getProfile() != null && AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
+
+      if (collection.getProfile() != null
+          && AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
         ProfileController pc = new ProfileController();
         pc.release(pc.retrieve(collection.getProfile(), user), user);
       }
@@ -494,7 +494,8 @@ public class CollectionController extends ImejiController {
       itemController.withdraw(items, coll.getDiscardComment(), user);
       writeWithdrawProperties(coll, null);
       update(coll, user);
-      if (coll.getProfile() != null && !coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())
+      if (coll.getProfile() != null
+          && !coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())
           && AuthUtil.staticAuth().administrate(user, coll.getProfile().toString())) {
         // Withdraw profile
         ProfileController pc = new ProfileController();
@@ -545,9 +546,8 @@ public class CollectionController extends ImejiController {
       return MetadataProfileCreationMethod.COPY;
     } else if ("new".equalsIgnoreCase(method)) {
       return MetadataProfileCreationMethod.NEW;
-    }
-   else {
-     return MetadataProfileCreationMethod.REFERENCE;
+    } else {
+      return MetadataProfileCreationMethod.REFERENCE;
     }
   }
 

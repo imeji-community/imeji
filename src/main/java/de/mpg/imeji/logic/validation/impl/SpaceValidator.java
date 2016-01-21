@@ -22,21 +22,17 @@ import de.mpg.imeji.logic.vo.Space;
  */
 public class SpaceValidator extends ObjectValidator implements Validator<Space> {
 
-  public SpaceValidator(Validator.Method method) {
-    super(method);
-  }
-
   @Override
-  public void validate(Space space) throws UnprocessableError {
+  public void validate(Space space, Method m) throws UnprocessableError {
     if (isDelete())
       return;
 
-    boolean valid=true;
+    boolean valid = true;
     String errorMessage = "";
-    
+
     if (isNullOrEmptyTrim(space.getTitle())) {
-      valid=false;
-      errorMessage+="error_space_need_title;";
+      valid = false;
+      errorMessage += "error_space_need_title;";
     }
 
     try {
@@ -44,20 +40,20 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
       // above creation of URI in order to check if it is a syntactically
       // valid slug
     } catch (URISyntaxException e) {
-      valid=false;
-      errorMessage+="error_space_invalid_slug;";
+      valid = false;
+      errorMessage += "error_space_invalid_slug;";
     }
 
     if (isSpaceByLabel(space.getSlug(), space.getId())) {
-      valid=false;
-      errorMessage+="error_there_is_another_space_with_same_slug;";
+      valid = false;
+      errorMessage += "error_there_is_another_space_with_same_slug;";
     }
 
     if (isNullOrEmptyTrim(space.getSlug())) {
-      valid=false;
-      errorMessage+="error_space_needs_slug";
+      valid = false;
+      errorMessage += "error_space_needs_slug";
     }
-    
+
     if (!valid) {
       throw new UnprocessableError(errorMessage);
     }
@@ -83,8 +79,8 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
   }
 
   @Override
-  public void validate(Space t, MetadataProfile p) throws UnprocessableError {
-    validate(t);
+  public void validate(Space t, MetadataProfile p, Method m) throws UnprocessableError {
+    validate(t, m);
   }
 
 }

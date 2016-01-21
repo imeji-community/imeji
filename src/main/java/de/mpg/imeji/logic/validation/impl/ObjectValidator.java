@@ -4,7 +4,6 @@
 package de.mpg.imeji.logic.validation.impl;
 
 import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.validation.Validator.Method;
 
 /**
  * @author natasab
@@ -23,11 +22,6 @@ public abstract class ObjectValidator {
 
   public Validator.Method getValidateForMethod() {
     return validateForMethod;
-  }
-
-
-  public ObjectValidator(Method method) {
-    setValidateForMethod(method);
   }
 
   public boolean isDelete() {

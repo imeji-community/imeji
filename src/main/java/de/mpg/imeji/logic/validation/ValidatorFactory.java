@@ -23,6 +23,12 @@ import de.mpg.imeji.logic.vo.User;
  *
  */
 public class ValidatorFactory {
+  private static final PseudoValidator PSEUDO_VALIDATOR = new PseudoValidator(null);
+
+  private ValidatorFactory() {
+
+  }
+
   /**
    * Return a new {@link Validator} according to the object class
    * 
@@ -34,7 +40,7 @@ public class ValidatorFactory {
   public static Validator<?> newValidator(Object obj, Validator.Method method) {
     // For now, do not do anything with Delete, just a possiblity
     if (Validator.Method.DELETE.equals(method)) {
-      return new PseudoValidator(method);
+      return PSEUDO_VALIDATOR;
     }
     if (obj instanceof Item) {
       return new ItemValidator(method);
@@ -51,31 +57,6 @@ public class ValidatorFactory {
     } else if (obj instanceof Space) {
       return new SpaceValidator(method);
     }
-    return new PseudoValidator(method);
-  }
-
-  public static Validator<?> newValidator2(Class<?> clazz, Validator.Method method) {
-    // For now, do not do anything with Delete, just a possiblity
-    if (Validator.Method.DELETE.equals(method)) {
-      return new PseudoValidator(method);
-    }
-
-    if (clazz.equals(Item.class)) {
-      return new ItemValidator(method);
-    } else if (clazz.equals(Metadata.class)) {
-      return new MetadataValidator(method);
-    } else if (clazz.equals(CollectionImeji.class)) {
-      return new CollectionValidator(method);
-    } else if (clazz.equals(Album.class)) {
-      return new AlbumValidator(method);
-    } else if (clazz.equals(MetadataProfile.class)) {
-      return new ProfileValidator(method);
-    } else if (clazz.equals(User.class)) {
-      return new UserValidator(method);
-    } else if (clazz.equals(Space.class)) {
-      return new SpaceValidator(method);
-    }
-    return new PseudoValidator(method);
-
+    return PSEUDO_VALIDATOR;
   }
 }

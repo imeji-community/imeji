@@ -3,10 +3,7 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -125,13 +122,10 @@ public class CreateCollectionBean extends CollectionBean {
       uc.update(sessionBean.getUser(), sessionBean.getUser());
       BeanHelper.info(sessionBean.getMessage("success_collection_create"));
       return true;
-    }
-    catch (Exception e) {
+    } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(sessionBean.getMessage("error_collection_create"));
-      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
-      for (String errorM : listOfErrors) {
-        BeanHelper.error(sessionBean.getMessage(errorM));
+      for (String m : e.getMessages()) {
+        BeanHelper.error(sessionBean.getMessage(m));
       }
       return false;
     }

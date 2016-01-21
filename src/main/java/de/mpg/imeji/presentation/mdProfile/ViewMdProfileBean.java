@@ -25,7 +25,7 @@ public class ViewMdProfileBean extends MdProfileBean {
    * Bean constructor
    */
   public ViewMdProfileBean() {
-    super();
+    //super();
     session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
   }
 
@@ -36,19 +36,22 @@ public class ViewMdProfileBean extends MdProfileBean {
    * @throws Exception
    */
   @Override
-  public String getInit() {
-    if (this.getId() != null) {
-      try {
+  public String getInit()  {
+    try {
+      if (this.getId() != null) {
+
         ProfileController profileController = new ProfileController();
         this.setProfile(profileController.retrieve(this.getId(), session.getUser()));
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
+        super.getInit();
+      
     } else {
       BeanHelper.error(session.getLabel("error") + "  No profile Id found in URL");
     }
-    super.getInit();
     return "";
+
+    } catch (Exception e) {
+      return "";
+   }
   }
 
   /**
@@ -72,6 +75,6 @@ public class ViewMdProfileBean extends MdProfileBean {
 
   @Override
   protected String getNavigationString() {
-    return session.getPrettySpacePage("pretty:editProfile");
+    return session.getPrettySpacePage("pretty:viewProfile");
   }
 }

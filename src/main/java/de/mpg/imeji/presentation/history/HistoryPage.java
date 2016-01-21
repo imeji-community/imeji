@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.Map;
 
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -65,6 +66,8 @@ public class HistoryPage {
       } else if (ImejiPages.USER_GROUP == imejiPage) {
         String groupUri = UrlHelper.decode(ObjectHelper.getId(uri));
         return ObjectLoader.loadUserGroupLazy(URI.create(groupUri), user).getName();
+      } else if (ImejiPages.PROFILE.matches(uriStr)) {
+        return new ProfileController().retrieveLazy(uri, user).getTitle();
       } else if (ImejiPages.USER == imejiPage) {
         String email = UrlHelper.decode(ObjectHelper.getId(uri));
         if (user != null && email.equals(user.getEmail())) {

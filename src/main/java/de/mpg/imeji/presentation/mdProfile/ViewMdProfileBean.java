@@ -25,7 +25,7 @@ public class ViewMdProfileBean extends MdProfileBean {
    * Bean constructor
    */
   public ViewMdProfileBean() {
-    //super();
+    super();
     session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
   }
 

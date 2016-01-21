@@ -46,12 +46,16 @@ public class StringHelper {
   public static String convertToMD5(String pass) throws Exception {
     MessageDigest dig = MessageDigest.getInstance("MD5");
     dig.update(pass.getBytes("UTF-8"));
-    byte messageDigest[] = dig.digest();
-    StringBuffer hexString = new StringBuffer();
+    byte[] messageDigest = dig.digest();
+    StringBuilder sBuilder = new StringBuilder();
     for (int i = 0; i < messageDigest.length; i++) {
-      hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+      sBuilder.append(Integer.toHexString(0xFF & messageDigest[i]));
     }
-    return hexString.toString();
+    return sBuilder.toString();
+  }
+
+  public static void main(String[] args) throws Exception {
+    System.out.println(convertToMD5("123456789"));
   }
 
   /**

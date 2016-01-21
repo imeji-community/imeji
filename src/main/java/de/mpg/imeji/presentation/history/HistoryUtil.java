@@ -32,7 +32,7 @@ public class HistoryUtil {
   private static Pattern findAlbumId = Pattern.compile(ImejiPages.ALBUM_HOME.getRegex());
   private static Pattern findUserGroupId = Pattern.compile(ImejiPages.USER_GROUP.getRegex());
   private static Pattern findUserId = Pattern.compile(ImejiPages.USER.getRegex());
-  private static Pattern findProfileId = Pattern.compile(ImejiPages.PROFILE.getRegex());
+  //private static Pattern findProfileId = Pattern.compile(ImejiPages.PROFILE.getRegex());
 
   /**
    * Extract the URI of an imeji object from the url
@@ -58,10 +58,10 @@ public class HistoryUtil {
     if (m.find()) {
       return ObjectHelper.getURI(UserGroup.class, UrlHelper.decode(m.group(1)));
     }
-    m = findProfileId.matcher(url);
-    if (m.find()) {
-      return ObjectHelper.getURI(MetadataProfile.class, UrlHelper.decode(m.group(1)));
-    }
+//    m = findProfileId.matcher(url);
+//    if (m.find()) {
+//      return ObjectHelper.getURI(MetadataProfile.class, UrlHelper.decode(m.group(1)));
+//    }
     return null;
   }
 
@@ -81,9 +81,9 @@ public class HistoryUtil {
    */
   public static ImejiPages getImejiPage(String url) {
     for (ImejiPages page : ImejiPages.values()) {
-      if (page.matches(url))
-        System.out.println("PAGE= "+page.getLabel());
+      if (page.matches(url)) {
         return page;
+      }
     }
     return ImejiPages.HOME;
   }
@@ -96,9 +96,9 @@ public class HistoryUtil {
       return "history_home";
 
     for (ImejiPages page : ImejiPages.values()) {
-      if (url.matches(page.getRegex()))
-        System.out.println("PAGE! === "+page.getLabel());
+      if (url.matches(page.getRegex())) {
         return page.getLabel();
+      }
     }
     return "history_home";
   }

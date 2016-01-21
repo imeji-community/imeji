@@ -21,21 +21,19 @@ import de.mpg.imeji.logic.vo.Statement;
  */
 public class ItemValidator extends ObjectValidator implements Validator<Item> {
 
-  public ItemValidator(Validator.Method method) {
-    super(method);
-  }
+  private static final MetadataValidator METADATA_VALIDATOR = new MetadataValidator();
 
   @Override
-  public void validate(Item t) throws UnprocessableError {
+  public void validate(Item t, Method m) throws UnprocessableError {
     throw new UnprocessableError("Item needs a profile to be validated");
   }
 
   @Override
-  public void validate(Item item, MetadataProfile p) throws UnprocessableError {
+  public void validate(Item item, MetadataProfile p, Method m) throws UnprocessableError {
+    setValidateForMethod(m);
     if (isDelete() || p == null) {
       return;
     }
-    MetadataValidator mdValidator = new MetadataValidator(getValidateForMethod());
     // List of the statement which are not defined as Multiple
     List<String> nonMultipleStatement = new ArrayList<String>();
     Map<Metadata, String> validationMap = new HashMap<Metadata, String>();
@@ -74,7 +72,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
     for (Metadata md : item.getMetadataSet().getMetadata()) {
       Statement s = MetadataAndProfileHelper.getStatement(md.getStatement(), p);
       try {
-        mdValidator.validate(md, p);
+        METADATA_VALIDATOR.validate(md, p, getValidateForMethod());
       } catch (UnprocessableError e) {
         validationMap.put(md, e.getMessage());
       }

@@ -26,17 +26,10 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
   private final UnprocessableError exception = new UnprocessableError("");
   private static final Pattern DOI_VALIDATION_PATTERN = Pattern.compile("10\\.\\d+\\/\\S+");
 
-  /**
-   * Create a validator for a {@link Collection}
-   * 
-   * @param method
-   */
-  public CollectionValidator(Validator.Method method) {
-    super(method);
-  }
 
   @Override
-  public void validate(CollectionImeji collection) throws UnprocessableError {
+  public void validate(CollectionImeji collection, Method m) throws UnprocessableError {
+    setValidateForMethod(m);
     exception.getMessages().clear();
     if (isDelete()) {
       return;
@@ -78,7 +71,7 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
    * @return
    */
   private boolean validatePerson(Person p) {
-    p.setOrganizations(validateOrgsNameAndReturnValidOrgs(p.getOrganizations()));
+    validateOrgsName(p.getOrganizations());
     if (!isNullOrEmpty(p.getFamilyName().trim())) {
       if (!p.getOrganizations().isEmpty()) {
         return true;
@@ -97,17 +90,12 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
    * @param organizations
    * @return the valid organizations
    */
-  private Collection<Organization> validateOrgsNameAndReturnValidOrgs(
-      Collection<Organization> organizations) {
-    List<Organization> orgs = new ArrayList<Organization>();
+  private void validateOrgsName(Collection<Organization> organizations) {
     for (Organization o : organizations) {
-      if (!isNullOrEmpty(o.getName().trim())) {
-        orgs.add(o);
-      } else {
+      if (isNullOrEmpty(o.getName().trim())) {
         exception.getMessages().add("error_organization_need_name");
       }
     }
-    return orgs;
   }
 
   /**
@@ -123,8 +111,8 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
   }
 
   @Override
-  public void validate(CollectionImeji t, MetadataProfile p) throws UnprocessableError {
-    validate(t);
+  public void validate(CollectionImeji t, MetadataProfile p, Method m) throws UnprocessableError {
+    validate(t, m);
   }
 
 }

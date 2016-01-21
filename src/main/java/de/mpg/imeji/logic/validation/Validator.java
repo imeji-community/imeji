@@ -18,7 +18,7 @@ public interface Validator<T> {
    * @param t
    * @throws UnprocessableError
    */
-  public void validate(T t) throws UnprocessableError;
+  public void validate(T t, Method method) throws UnprocessableError;
 
 
   /**
@@ -28,7 +28,7 @@ public interface Validator<T> {
    * @param p
    * @throws UnprocessableError
    */
-  public void validate(T t, MetadataProfile p) throws UnprocessableError;
+  public void validate(T t, MetadataProfile p, Method method) throws UnprocessableError;
 
   public enum Method {
     CREATE, UPDATE, DELETE, ALL;

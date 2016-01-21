@@ -31,18 +31,14 @@ import de.mpg.imeji.presentation.util.ProfileHelper;
  */
 public class MetadataValidator extends ObjectValidator implements Validator<Metadata> {
 
-  public MetadataValidator(Validator.Method method) {
-    super(method);
+  @Override
+  public void validate(Metadata t, Method m) throws UnprocessableError {
+    throw new UnprocessableError("Metadata can not be validated without a profile");
   }
 
   @Override
-  @Deprecated
-  public void validate(Metadata t) throws UnprocessableError {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public void validate(Metadata md, MetadataProfile p) throws UnprocessableError {
+  public void validate(Metadata md, MetadataProfile p, Method m) throws UnprocessableError {
+    setValidateForMethod(m);
     if (isDelete()) {
       return;
     }

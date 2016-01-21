@@ -13,8 +13,8 @@ import org.junit.Test;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.validation.Validator.Method;
+import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.validation.impl.ItemValidator;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -43,60 +43,46 @@ public class ItemValidatorTest {
 
   private static MetadataProfile profile;
   private static Validator<Item> validator;
-  private static Statement TEXT_PREDEFINED = newStatement(
-      Types.TEXT,
-      "text",
-      Arrays.asList(ValidatorPredefinedValues.TEXT1.value(),
+  private static Statement TEXT_PREDEFINED =
+      newStatement(Types.TEXT, "text", Arrays.asList(ValidatorPredefinedValues.TEXT1.value(),
           ValidatorPredefinedValues.TEXT2.value()), false);
-  private static Statement TEXT_PREDEFINED_MULTIPLE = newStatement(
-      Types.TEXT,
-      "text multiple",
-      Arrays.asList(ValidatorPredefinedValues.TEXT1.value(),
-          ValidatorPredefinedValues.TEXT2.value()), true);
-  private static Statement NUMBER_PREDEFINED = newStatement(
-      Types.NUMBER,
-      "number predefined",
+  private static Statement TEXT_PREDEFINED_MULTIPLE =
+      newStatement(Types.TEXT, "text multiple", Arrays.asList(
+          ValidatorPredefinedValues.TEXT1.value(), ValidatorPredefinedValues.TEXT2.value()), true);
+  private static Statement NUMBER_PREDEFINED = newStatement(Types.NUMBER, "number predefined",
       Arrays.asList(ValidatorPredefinedValues.NUMBER1.value(),
-          ValidatorPredefinedValues.NUMBER2.value()), false);
-  private static Statement NUMBER_PREDEFINED_MULTIPLE = newStatement(
-      Types.NUMBER,
-      "number predefined",
-      Arrays.asList(ValidatorPredefinedValues.NUMBER1.value(),
-          ValidatorPredefinedValues.NUMBER2.value()), true);
-  private static Statement DATE_PREDEFINED = newStatement(
-      Types.DATE,
-      "date predefined",
-      Arrays.asList(ValidatorPredefinedValues.DATE1.value(),
-          ValidatorPredefinedValues.DATE2.value()), false);
-  private static Statement DATE_PREDEFINED_MULTIPLE = newStatement(
-      Types.DATE,
-      "date predefined",
-      Arrays.asList(ValidatorPredefinedValues.DATE1.value(),
-          ValidatorPredefinedValues.DATE2.value()), true);
-  private static Statement LINK_PREDEFINED = newStatement(
-      Types.LINK,
-      "link predefined",
-      Arrays.asList(ValidatorPredefinedValues.LINK1.value(),
-          ValidatorPredefinedValues.LINK2.value()), false);
-  private static Statement LINK_PREDEFINED_MULTIPLE = newStatement(
-      Types.LINK,
-      "link predefined",
-      Arrays.asList(ValidatorPredefinedValues.LINK1.value(),
-          ValidatorPredefinedValues.LINK2.value()), true);
+          ValidatorPredefinedValues.NUMBER2.value()),
+      false);
+  private static Statement NUMBER_PREDEFINED_MULTIPLE = newStatement(Types.NUMBER,
+      "number predefined", Arrays.asList(ValidatorPredefinedValues.NUMBER1.value(),
+          ValidatorPredefinedValues.NUMBER2.value()),
+      true);
+  private static Statement DATE_PREDEFINED =
+      newStatement(Types.DATE, "date predefined", Arrays.asList(
+          ValidatorPredefinedValues.DATE1.value(), ValidatorPredefinedValues.DATE2.value()), false);
+  private static Statement DATE_PREDEFINED_MULTIPLE =
+      newStatement(Types.DATE, "date predefined", Arrays.asList(
+          ValidatorPredefinedValues.DATE1.value(), ValidatorPredefinedValues.DATE2.value()), true);
+  private static Statement LINK_PREDEFINED =
+      newStatement(Types.LINK, "link predefined", Arrays.asList(
+          ValidatorPredefinedValues.LINK1.value(), ValidatorPredefinedValues.LINK2.value()), false);
+  private static Statement LINK_PREDEFINED_MULTIPLE =
+      newStatement(Types.LINK, "link predefined", Arrays.asList(
+          ValidatorPredefinedValues.LINK1.value(), ValidatorPredefinedValues.LINK2.value()), true);
   private static Statement PERSON = newStatement(Types.CONE_PERSON, "person", null, false);
-  private static Statement PERSON_MULTIPLE = newStatement(Types.CONE_PERSON, "person multiple",
-      null, true);
+  private static Statement PERSON_MULTIPLE =
+      newStatement(Types.CONE_PERSON, "person multiple", null, true);
   private static Statement GEOLOCATION =
       newStatement(Types.GEOLOCATION, "geolocation", null, false);
-  private static Statement GEOLOCATION_MULTIPLE = newStatement(Types.GEOLOCATION,
-      "geolocation multiple", null, true);
+  private static Statement GEOLOCATION_MULTIPLE =
+      newStatement(Types.GEOLOCATION, "geolocation multiple", null, true);
   private static Statement LICENSE = newStatement(Types.LICENSE, "license", null, false);
-  private static Statement LICENSE_MULTIPLE = newStatement(Types.LICENSE, "license multiple", null,
-      true);
+  private static Statement LICENSE_MULTIPLE =
+      newStatement(Types.LICENSE, "license multiple", null, true);
   private static Statement PUBLICATION =
       newStatement(Types.PUBLICATION, "publication", null, false);
-  private static Statement PUBLICATION_MULTIPLE = newStatement(Types.PUBLICATION,
-      "publication multiple", null, true);
+  private static Statement PUBLICATION_MULTIPLE =
+      newStatement(Types.PUBLICATION, "publication multiple", null, true);
 
   /**
    * Predefined values for the Unit Tests
@@ -128,7 +114,7 @@ public class ItemValidatorTest {
   @Test
   public void validateEmtpy() {
     try {
-      validator.validate(getItem(), profile);
+      validator.validate(getItem(), profile, Method.ALL);
     } catch (Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -152,7 +138,7 @@ public class ItemValidatorTest {
     item.getMetadataSet().getMetadata().add(md3);
     item.getMetadataSet().getMetadata().add(md4);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
     } catch (Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -167,7 +153,7 @@ public class ItemValidatorTest {
     md1.setText(ValidatorPredefinedValues.TEXT1.value() + "QWERTY");
     item.getMetadataSet().getMetadata().add(md1);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
       Assert.fail("Validation for Text with wrong predefined value not working");
     } catch (UnprocessableError e) {
       // good...
@@ -179,7 +165,7 @@ public class ItemValidatorTest {
     md2.setNumber(0);
     item.getMetadataSet().getMetadata().add(md2);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
       Assert.fail("Validation for Number with wrong predefined value not working");
     } catch (UnprocessableError e) {
       // good
@@ -189,7 +175,7 @@ public class ItemValidatorTest {
     md3.setDate("2000");
     item.getMetadataSet().getMetadata().add(md3);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
       Assert.fail("Validation for Date with wrong predefined value not working");
     } catch (UnprocessableError e) {
       // good
@@ -199,7 +185,7 @@ public class ItemValidatorTest {
     md4.setUri(URI.create(ValidatorPredefinedValues.LINK1.value() + "/wrong"));
     item.getMetadataSet().getMetadata().add(md3);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
       Assert.fail("Validation for Link with wrong predefined value not working");
     } catch (UnprocessableError e) {
       // good
@@ -259,7 +245,7 @@ public class ItemValidatorTest {
     item.getMetadataSet().getMetadata().add(md);
     item.getMetadataSet().getMetadata().add(md);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
       Assert.fail("Error validating multiple values for " + md.getTypeNamespace()
           + ": multiple value should not be allowed");
     } catch (UnprocessableError e) {
@@ -318,7 +304,7 @@ public class ItemValidatorTest {
     item.getMetadataSet().getMetadata().add(md);
     item.getMetadataSet().getMetadata().add(md);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
     } catch (UnprocessableError e) {
       Assert.fail("Error validating multiple values for " + md.getTypeNamespace()
           + ": multiple value should be allowed: " + e.getMessage());
@@ -332,7 +318,7 @@ public class ItemValidatorTest {
     Item item = getItem();
     item.getMetadataSet().getMetadata().add(md);
     try {
-      validator.validate(item, profile);
+      validator.validate(item, profile, Method.ALL);
       Assert.fail("Wrong date format, should not be validated");
     } catch (UnprocessableError e) {
       // good

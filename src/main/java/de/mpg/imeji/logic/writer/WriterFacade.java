@@ -180,7 +180,7 @@ public class WriterFacade {
     Validator<Object> validator =
         (Validator<Object>) ValidatorFactory.newValidator(list.get(0), method);
     for (Object o : list) {
-      validator.validate(o, profile);
+      validator.validate(o, profile, method);
     }
   }
 

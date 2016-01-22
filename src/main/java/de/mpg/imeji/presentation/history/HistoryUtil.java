@@ -61,7 +61,7 @@ public class HistoryUtil {
 
     m = findProfileId.matcher(url);
     if (m.find() ) {
-      return ObjectHelper.getURI(MetadataProfile.class, UrlHelper.decode(m.group(1)));
+      return ObjectHelper.getURI(MetadataProfile.class, UrlHelper.decode(m.group(2)));
     }
 
     return null;

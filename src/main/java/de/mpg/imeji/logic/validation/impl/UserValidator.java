@@ -17,10 +17,11 @@ import de.mpg.imeji.logic.vo.User;
  *
  */
 public class UserValidator extends ObjectValidator implements Validator<User> {
-  private final UnprocessableError exception = new UnprocessableError(new HashSet<String>());
+  private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
 
   @Override
   public void validate(User user, Method m) throws UnprocessableError {
+    exception = new UnprocessableError(new HashSet<String>());
     setValidateForMethod(m);
     if (isDelete()) {
       return;
@@ -32,7 +33,7 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
       exception.getMessages().add("error_user_email_not_valid");
     }
 
-    if (userAlreadyExists(user)) {
+    if (emailAlreadyUsed(user)) {
       exception.getMessages().add("error_user_already_exists");
     }
 
@@ -57,7 +58,7 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
    * @return
    * @throws Exception
    */
-  private boolean userAlreadyExists(User user) {
+  private boolean emailAlreadyUsed(User user) {
     UserController uc = new UserController(Imeji.adminUser);
     return uc.existsUserWitheMail(user.getEmail(), user.getId().toString(),
         (Method.CREATE.equals(getValidateForMethod()) ? true : false));

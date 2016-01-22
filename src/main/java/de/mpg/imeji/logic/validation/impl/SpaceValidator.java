@@ -22,10 +22,11 @@ import de.mpg.imeji.logic.vo.Space;
  *
  */
 public class SpaceValidator extends ObjectValidator implements Validator<Space> {
-  private final UnprocessableError exception = new UnprocessableError(new HashSet<String>());
+  private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
 
   @Override
   public void validate(Space space, Method m) throws UnprocessableError {
+    exception = new UnprocessableError(new HashSet<String>());
     setValidateForMethod(m);
     if (isDelete()) {
       return;

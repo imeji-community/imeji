@@ -21,11 +21,12 @@ import de.mpg.imeji.logic.vo.Person;
  *
  */
 public class AlbumValidator extends ObjectValidator implements Validator<Album> {
-  private final UnprocessableError exception = new UnprocessableError(new HashSet<String>());
+  private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
 
 
   @Override
   public void validate(Album album, Method method) throws UnprocessableError {
+    exception = new UnprocessableError(new HashSet<String>());
     setValidateForMethod(method);
     if (isDelete()) {
       return;

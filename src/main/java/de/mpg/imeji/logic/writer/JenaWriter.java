@@ -119,14 +119,6 @@ public class JenaWriter implements Writer {
   private void runTransaction(List<Object> objects, GrantType type, boolean lazy)
       throws ImejiException {
     index(objects);
-    // int n = 5000;
-    // for (int i = 0; i < objects.size(); i = i + n) {
-    // int max = i + n < objects.size() ? i + n : objects.size() ;
-    // Transaction t = new CRUDTransaction(objects.subList(i, max), type,
-    // modelURI, lazy);
-    // // Write Transaction needs to be added in a new Thread
-    // ThreadedTransaction.run(new ThreadedTransaction(t));
-    // }
     Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
     // Write Transaction needs to be added in a new Thread
     ThreadedTransaction.run(new ThreadedTransaction(t));

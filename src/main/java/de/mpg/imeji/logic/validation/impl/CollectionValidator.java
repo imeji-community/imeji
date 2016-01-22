@@ -24,12 +24,13 @@ import de.mpg.imeji.logic.vo.Person;
  */
 public class CollectionValidator extends ObjectValidator implements Validator<CollectionImeji> {
 
-  private final UnprocessableError exception = new UnprocessableError(new HashSet<String>());
+  private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
   private static final Pattern DOI_VALIDATION_PATTERN = Pattern.compile("10\\.\\d+\\/\\S+");
 
 
   @Override
   public void validate(CollectionImeji collection, Method m) throws UnprocessableError {
+    exception = new UnprocessableError(new HashSet<String>());
     setValidateForMethod(m);
     exception.getMessages().clear();
     if (isDelete()) {

@@ -2,11 +2,14 @@ package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Date;
 import java.util.HashMap;
 
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
@@ -36,23 +39,50 @@ public class IngestProfileController {
    * @param profileXmlFile
    * @throws Exception
    */
-  public void ingest(File profileXmlFile, URI profile) throws Exception {
+  public void ingest(File profileXmlFile, CollectionImeji collection) throws Exception {
+    URI profile = collection.getProfile();
     ProfileParser pp = new ProfileParser();
     MetadataProfile mdp = pp.parse(profileXmlFile);
-    if (isCopyOfOther(mdp, profile)) {
-      changeStatementURI(mdp);
-    }
+    MetadataProfile original;
     ProfileController pc = new ProfileController();
-    MetadataProfile original = pc.retrieve(profile, user);
+    if (profile != null ){
+        if (isCopyOfOther(mdp, profile)) {
+          changeStatementURI(mdp);
+        }
+        original = pc.retrieve(profile, user);
+    }
+    else 
+    {
+      original = new MetadataProfile();
+    }
+    
     original.setStatements(mdp.getStatements());
     // ingested profile can never be default profile
     original.setDefault(false);
     try {
-      pc.update(original, user);
+      if (profile != null ) {
+          pc.update(original, user);
+          pc.removeMetadataWithoutStatement(original);
+      }
+      else
+      {
+        if (mdp.getTitle()!= null && mdp.getTitle() != ""  ) {
+          original.setTitle(mdp.getTitle());
+        }
+        else
+        {
+          original.setTitle("Metadata profile for "+collection.getMetadata().getTitle()+" (ingested at:  "+new Date(System.currentTimeMillis())+" )");
+        }
+        original.setDescription(mdp.getDescription());
+        mdp = pc.create(original, user);
+        CollectionController cc = new CollectionController();
+        collection.setProfile(mdp.getId());
+        cc.update(collection, user);
+      }
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-    pc.removeMetadataWithoutStatement(original);
+    
   }
 
   /**
@@ -99,6 +129,13 @@ public class IngestProfileController {
    * @return
    */
   private boolean isCopyOfOther(MetadataProfile mdp, URI uri) {
-    return uri.compareTo(mdp.getId()) != 0;
+    if ( mdp == null || uri ==null) {
+      return false;
+    }
+    else
+    {
+      return uri.compareTo(mdp.getId()) != 0;
+    }
+    
   }
 }

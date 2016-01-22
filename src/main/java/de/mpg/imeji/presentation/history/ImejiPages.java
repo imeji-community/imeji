@@ -11,6 +11,7 @@ public enum ImejiPages {
   /*
    * Order is important: The History will follow the regex rules following this order to find a
    * match
+   * MAKE SURE "HOME" (history_home) is the last in this Enum (experienced not-matching where it should otherwise)
    */
   ITEM_DETAIL("", ".*/item/([A-Za-z0-9-_]+).*"), COLLECTIONS("history_collections",
       "/collections"), COLLECTION_ITEMS("history_images_collection",
@@ -49,11 +50,12 @@ public enum ImejiPages {
                                                                                               "admin_space_create",
                                                                                               ".*/createspace"), EDIT_SPACE(
                                                                                                   "admin_space_edit",
-                                                                                                  ".*/space/.*/editspace"), HOME(
+                                                                                                  ".*/space/.*/editspace"), 
+                                                                                                  PROFILE("metadata_profile",
+                                                                                                      ".*/(profile|metadataProfile)/([a-zA-Z_0-9-]+).*"),
+                                                                                                  HOME(
                                                                                                       "history_home",
-                                                                                                      "/"),
-                                                                                                      PROFILE("metadata_profile",
-                                                                                                          ".*/metadataProfile/([A-Za-z0-9-_]+).*");
+                                                                                                      "/");
 
   /**
    * The key to the label

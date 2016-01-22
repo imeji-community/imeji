@@ -4,6 +4,7 @@ import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -21,48 +22,43 @@ import de.mpg.imeji.logic.vo.Space;
  *
  */
 public class SpaceValidator extends ObjectValidator implements Validator<Space> {
+  private final UnprocessableError exception = new UnprocessableError(new HashSet<String>());
 
   @Override
   public void validate(Space space, Method m) throws UnprocessableError {
-    if (isDelete())
+    setValidateForMethod(m);
+    if (isDelete()) {
       return;
-
-    boolean valid = true;
-    String errorMessage = "";
+    }
 
     if (isNullOrEmptyTrim(space.getTitle())) {
-      valid = false;
-      errorMessage += "error_space_need_title;";
+      exception.getMessages().add("error_space_need_title");
     }
 
     try {
+      // creation of URI in order to check if it is a syntactically valid slug
       new URI(space.getSlug());
-      // above creation of URI in order to check if it is a syntactically
-      // valid slug
     } catch (URISyntaxException e) {
-      valid = false;
-      errorMessage += "error_space_invalid_slug;";
+      exception.getMessages().add("error_space_invalid_slug");
     }
 
     if (isSpaceByLabel(space.getSlug(), space.getId())) {
-      valid = false;
-      errorMessage += "error_there_is_another_space_with_same_slug;";
+      exception.getMessages().add("error_there_is_another_space_with_same_slug");
     }
 
     if (isNullOrEmptyTrim(space.getSlug())) {
-      valid = false;
-      errorMessage += "error_space_needs_slug";
+      exception.getMessages().add("error_space_needs_slug");
     }
 
-    if (!valid) {
-      throw new UnprocessableError(errorMessage);
+    if (!exception.getMessages().isEmpty()) {
+      throw exception;
     }
-
   }
 
   private boolean isSpaceByLabel(String spaceId, URI spaceUriId) {
-    if (isNullOrEmptyTrim(spaceId))
+    if (isNullOrEmptyTrim(spaceId)) {
       return false;
+    }
 
     List<String> spaceUrisFound =
         ImejiSPARQL.exec(JenaCustomQueries.getSpaceByLabel(spaceId), Imeji.spaceModel);

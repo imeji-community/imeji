@@ -25,8 +25,10 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
 
   @Override
   public void validate(MetadataProfile profile, Method m) throws UnprocessableError {
-    if (isDelete())
+    setValidateForMethod(m);
+    if (isDelete()) {
       return;
+    }
 
     if (isNullOrEmpty(profile.getTitle())) {
       throw new UnprocessableError("error_profile_need_title");

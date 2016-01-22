@@ -3,6 +3,7 @@ package de.mpg.imeji.logic.validation.impl;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -20,6 +21,7 @@ import de.mpg.imeji.logic.vo.Person;
  *
  */
 public class AlbumValidator extends ObjectValidator implements Validator<Album> {
+  private final UnprocessableError exception = new UnprocessableError(new HashSet<String>());
 
 
   @Override
@@ -29,18 +31,12 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
       return;
     }
 
-    boolean valid = true;
-    String errorMessage = "";
-
     if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())) {
-      valid = false;
-      errorMessage += "error_bad_format_description;";
-      // throw new UnprocessableError("error_bad_format_description");
+      exception.getMessages().add("error_bad_format_description");
     }
 
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
-      valid = false;
-      errorMessage += "error_album_need_title;";
+      exception.getMessages().add("error_album_need_title");
     }
 
     List<Person> pers = new ArrayList<Person>();
@@ -51,8 +47,7 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
         if (!isNullOrEmpty(o.getName().trim())) {
           orgs.add(o);
         } else {
-          valid = false;
-          errorMessage += "error_organization_need_name;";
+          exception.getMessages().add("error_organization_need_name");
         }
       }
 
@@ -60,22 +55,19 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
         if (orgs.size() > 0) {
           pers.add(c);
         } else {
-          valid = false;
-          errorMessage += "error_author_need_one_organization;";
+          exception.getMessages().add("error_author_need_one_organization");
         }
       } else {
-        valid = false;
-        errorMessage += "error_author_need_one_family_name;";
+        exception.getMessages().add("error_author_need_one_family_name");
       }
     }
 
-    if (pers.size() == 0 || pers == null || pers.isEmpty()) {
-      valid = false;
-      errorMessage += "error_album_need_one_author;";
+    if (pers.isEmpty()) {
+      exception.getMessages().add("error_album_need_one_author");
     }
 
-    if (!valid) {
-      throw new UnprocessableError(errorMessage);
+    if (!exception.getMessages().isEmpty()) {
+      throw exception;
     }
 
   }

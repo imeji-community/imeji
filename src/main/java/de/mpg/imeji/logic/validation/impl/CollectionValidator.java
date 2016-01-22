@@ -4,6 +4,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -23,7 +24,7 @@ import de.mpg.imeji.logic.vo.Person;
  */
 public class CollectionValidator extends ObjectValidator implements Validator<CollectionImeji> {
 
-  private final UnprocessableError exception = new UnprocessableError("");
+  private final UnprocessableError exception = new UnprocessableError(new HashSet<String>());
   private static final Pattern DOI_VALIDATION_PATTERN = Pattern.compile("10\\.\\d+\\/\\S+");
 
 

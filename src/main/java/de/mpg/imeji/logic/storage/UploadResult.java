@@ -46,7 +46,9 @@ public class UploadResult {
   /**
    * Default constructor
    */
-  public UploadResult() {}
+  public UploadResult() {
+
+  }
 
   /**
    * Constructor with the 3 results

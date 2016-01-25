@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -47,7 +46,6 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -59,8 +57,8 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class CollectionController extends ImejiController {
-  private static ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
-  private static WriterFacade writer = new WriterFacade(Imeji.collectionModel);
+  private static final ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
+  private static final WriterFacade writer = new WriterFacade(Imeji.collectionModel);
   private static Logger logger = Logger.getLogger(CollectionController.class);
   private Search search =
       SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC);
@@ -88,12 +86,7 @@ public class CollectionController extends ImejiController {
    */
   public URI create(CollectionImeji c, MetadataProfile p, User user,
       MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
-    // First validate the collection, to avoid to create a zombie profile...
-
-    // Code provided here in order not to try to create a profile etc..
-    if (user == null) {
-      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
-    }
+    isLoggedInUser(user);
     // Validate before creating a profile, in can the collection isn't valid
     new CollectionValidator().validate(c, Method.CREATE);
     ProfileController pc = new ProfileController();
@@ -388,9 +381,7 @@ public class CollectionController extends ImejiController {
   public void release(CollectionImeji collection, User user) throws ImejiException {
     ItemController itemController = new ItemController();
 
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
+    isLoggedInUser(user);
 
     if (collection == null) {
       throw new NotFoundException("collection object does not exists");
@@ -423,10 +414,7 @@ public class CollectionController extends ImejiController {
   }
 
   public void createDOI(CollectionImeji coll, User user) throws ImejiException {
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
-
+    isLoggedInUser(user);
     if (coll == null) {
       throw new NotFoundException("Collection does not exists");
     }
@@ -448,9 +436,7 @@ public class CollectionController extends ImejiController {
 
   public void createDOIManually(String doi, CollectionImeji collection, User user)
       throws ImejiException {
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
+    isLoggedInUser(user);
 
     if (collection == null) {
       throw new NotFoundException("Collection does not exists");
@@ -473,10 +459,7 @@ public class CollectionController extends ImejiController {
    */
   public void withdraw(CollectionImeji coll, User user) throws ImejiException {
     ItemController itemController = new ItemController();
-
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
+    isLoggedInUser(user);
 
     if (coll == null) {
       throw new NotFoundException("Collection does not exists");
@@ -516,8 +499,6 @@ public class CollectionController extends ImejiController {
    */
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset,
       User user, String spaceId) {
-    // Search search = SearchFactory.create(SearchObjectTypes.COLLECTION,
-    // SEARCH_IMPLEMENTATIONS.JENA);
     return search.search(searchQuery, sortCri, user, null, spaceId, offset, limit);
   }
 

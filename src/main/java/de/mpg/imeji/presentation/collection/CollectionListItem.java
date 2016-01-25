@@ -99,6 +99,7 @@ public class CollectionListItem {
         isOwner = collection.getCreatedBy().equals(user.getId());
       }
     } catch (Exception e) {
+      System.out.println(uri);
       logger.error("Error creating collectionListItem", e);
     }
   }

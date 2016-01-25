@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.ImejiNamespaces;
@@ -47,6 +48,18 @@ public abstract class ImejiController {
   public static final String LOGO_STORAGE_SUBDIRECTORY = "/thumbnail";
 
   /**
+   * If a user is not logged in, throw a Exception
+   * 
+   * @param user
+   * @throws AuthenticationError
+   */
+  protected void isLoggedInUser(User user) throws AuthenticationError {
+    if (user == null) {
+      throw new AuthenticationError(AuthenticationError.USER_MUST_BE_LOGGED_IN);
+    }
+  }
+
+  /**
    * Add the {@link Properties} to an imeji object when it is created
    * 
    * @param properties
@@ -59,8 +72,9 @@ public abstract class ImejiController {
     properties.setModifiedBy(user.getId());
     properties.setCreated(now);
     properties.setModified(now);
-    if (properties.getStatus() == null)
+    if (properties.getStatus() == null) {
       properties.setStatus(Status.PENDING);
+    }
   }
 
   /**
@@ -96,8 +110,8 @@ public abstract class ImejiController {
   protected List<ImejiTriple> getUpdateTriples(String uri, User user, Object o) {
     List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
     triples.add(new ImejiTriple(uri, ImejiNamespaces.MODIFIED_BY, user.getId(), o));
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.LAST_MODIFICATION_DATE, DateHelper
-        .getCurrentDate(), o));
+    triples.add(new ImejiTriple(uri, ImejiNamespaces.LAST_MODIFICATION_DATE,
+        DateHelper.getCurrentDate(), o));
     return triples;
   }
 
@@ -154,10 +168,11 @@ public abstract class ImejiController {
   protected List<ImejiTriple> getWithdrawTriples(String uri, Object o, String comment)
       throws UnprocessableError {
     List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-    if (comment != null && !"".equals(comment))
+    if (comment != null && !"".equals(comment)) {
       triples.add(new ImejiTriple(uri, ImejiNamespaces.DISCARD_COMMENT, comment, o));
-    else
+    } else {
       throw new UnprocessableError("Discard error: A Discard comment is needed");
+    }
     triples.add(new ImejiTriple(uri, ImejiNamespaces.STATUS, Status.WITHDRAWN.getURI(), o));
     return triples;
   }
@@ -218,8 +233,8 @@ public abstract class ImejiController {
    * @throws ImejiException
    * @throws URISyntaxException
    */
-  protected Container updateFile(Container container, File f, User user) throws ImejiException,
-      IOException, URISyntaxException {
+  protected Container updateFile(Container container, File f, User user)
+      throws ImejiException, IOException, URISyntaxException {
     InternalStorageManager ism = new InternalStorageManager();
     if (f != null) {
       String url = ism.generateUrl(container.getIdString(), f.getName(), FileResolution.THUMBNAIL);
@@ -233,8 +248,9 @@ public abstract class ImejiController {
   }
 
   public static int getMin(int a, int b) {
-    if (a < b)
+    if (a < b) {
       return a;
+    }
     return b;
   }
 

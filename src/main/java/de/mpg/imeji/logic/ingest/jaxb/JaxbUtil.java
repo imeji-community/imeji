@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 public class JaxbUtil {
   public static <T> T unmarshal(String xsdFilename, String xmlFilename, Class<T> clss)
       throws JAXBException, SAXException {
-    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null
         : schemaFactory.newSchema(getFileURLInClasspath(xsdFilename));
     JAXBContext jaxbContext = JAXBContext.newInstance(clss.getPackage().getName());
@@ -41,7 +41,7 @@ public class JaxbUtil {
 
   public static <T> T unmarshal(String xsdFilename, File xmlFile, Class<T> clss)
       throws JAXBException, SAXException {
-    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null
         : schemaFactory.newSchema(getFileURLInClasspath(xsdFilename));
     JAXBContext jaxbContext = JAXBContext.newInstance(clss.getPackage().getName());
@@ -54,10 +54,12 @@ public class JaxbUtil {
     unmarshaller.setSchema(schema);
     return clss.cast(unmarshaller.unmarshal(xmlFile));
   }
+  
+  //be "http://www.w3.org/2000/xmlns/".
 
   public static void marshal(String xsdFilename, String xmlFilename, Object jaxbElement)
       throws JAXBException, SAXException, FileNotFoundException {
-    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null
         : schemaFactory.newSchema(getFileURLInClasspath(xsdFilename));
     JAXBContext jaxbContext =
@@ -76,7 +78,7 @@ public class JaxbUtil {
 
   public static void marshal(String xsdFilename, File xmlFile, Object jaxbElement)
       throws JAXBException, SAXException, FileNotFoundException {
-    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     Schema schema = (xsdFilename == null || xsdFilename.trim().length() == 0) ? null
         : schemaFactory.newSchema(getFileURLInClasspath(xsdFilename));
     JAXBContext jaxbContext =

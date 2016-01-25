@@ -259,7 +259,7 @@ public class AuthUtil {
         CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
         if (c != null) {
           roles.add(new SharedHistory(user, SharedObjectType.COLLECTION, sharedWith,
-              c.getProfile().toString(), c.getMetadata().getTitle()));
+              c.getProfile() != null ? c.getProfile().toString() : null, c.getMetadata().getTitle()));
         }
       } else if (sharedWith.contains("/album/")) {
         Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);

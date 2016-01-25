@@ -79,31 +79,34 @@ public class CollectionFacets extends Facets {
     int count = 0;
     int sizeAllImages = allImages.getNumberOfRecords();
     HashSet<String> set = new HashSet<String>(allImages.getResults());
-    try {
-      for (Statement st : profile.getStatements()) {
-        List<Facet> group = new ArrayList<Facet>();
-        if (st.isPreview() && !fs.isFilter(getName(st.getId()))) {
-          SearchPair pair =
-              new SearchPair(SearchFields.statement, SearchOperators.EQUALS, st.getId().toString(),
-                  false);
-          count = getCount(searchQuery, pair, set);
+    if(profile != null){
+      try {
+        for (Statement st : profile.getStatements()) {
+          List<Facet> group = new ArrayList<Facet>();
+          if (st.isPreview() && !fs.isFilter(getName(st.getId()))) {
+            SearchPair pair =
+                new SearchPair(SearchFields.statement, SearchOperators.EQUALS, st.getId().toString(),
+                    false);
+            count = getCount(searchQuery, pair, set);
 
-          group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
-              FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
+            group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
+                FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
 
-          // create this facet only if there are no
-          if (count <= sizeAllImages) {
-            pair.setNot(true);
-            group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No "
-                + getName(st.getId()), FacetType.COLLECTION), "No " + getName(st.getId()),
-                sizeAllImages - count, FacetType.COLLECTION, st.getId()));
+            // create this facet only if there are no
+            if (count <= sizeAllImages) {
+              pair.setNot(true);
+              group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No "
+                  + getName(st.getId()), FacetType.COLLECTION), "No " + getName(st.getId()),
+                  sizeAllImages - count, FacetType.COLLECTION, st.getId()));
+            }
           }
+          facets.add(group);
         }
-        facets.add(group);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
       }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
     }
+
   }
 
   /**

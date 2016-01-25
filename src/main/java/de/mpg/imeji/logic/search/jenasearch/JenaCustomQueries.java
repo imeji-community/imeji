@@ -54,6 +54,11 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
  * @version $Revision$ $LastChangedDate$
  */
 public class JenaCustomQueries {
+
+  private JenaCustomQueries() {
+
+  }
+
   /**
    * Select all {@link Metadata} which are restricted, according to their {@link Statement}
    * 

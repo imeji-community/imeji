@@ -230,7 +230,6 @@ public class Imeji {
   }
 
   private static void initDefaultMetadataProfile() {
-
     ProfileController pc = new ProfileController();
     logger.info("Initializing default metadata profile...");
     try {

@@ -26,7 +26,9 @@ public class J2JHelper {
   /**
    * private constructor
    */
-  private J2JHelper() {}
+  private J2JHelper() {
+
+  }
 
   /**
    * Get the Id of an {@link Object} (a {@link j2jId} must be defined)
@@ -319,8 +321,6 @@ public class J2JHelper {
       }
       return object;
     } catch (Exception e) {
-      // throw new RuntimeException("Error reading field " + f.getName() + " from " + o.toString() +
-      // " :", e);
       return null;
     }
   }

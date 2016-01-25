@@ -9,7 +9,6 @@ import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import de.mpg.imeji.logic.search.model.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
@@ -23,12 +22,10 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/container")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public abstract class Container extends Properties implements FulltextIndex, Serializable {
+public abstract class Container extends Properties implements Serializable {
   private static final long serialVersionUID = -5314334939747696614L;
   @j2jResource("http://imeji.org/terms/container/metadata")
   private ContainerMetadata metadata = new ContainerMetadata();
-  @j2jLiteral("http://imeji.org/terms/fulltext")
-  private String fulltext;
   @j2jLiteral("http://imeji.org/terms/doi")
   private String doi;
 
@@ -49,28 +46,6 @@ public abstract class Container extends Properties implements FulltextIndex, Ser
   public abstract void setImages(Collection<URI> images);
 
   public abstract Collection<URI> getImages();
-
-  @Override
-  public void setFulltextIndex(String fulltext) {
-    this.fulltext = fulltext;
-  }
-
-  @Override
-  public String getFulltextIndex() {
-    return fulltext;
-  }
-
-  @Override
-  public void indexFulltext() {
-    fulltext = metadata.getTitle();
-    if (!"".equals(metadata.getDescription())) {
-      fulltext += " " + metadata.getDescription();
-    }
-    for (Person p : metadata.getPersons()) {
-      fulltext += " " + p.AsFullText();
-    }
-    fulltext = fulltext.trim();
-  }
 
   @XmlElement(name = "logoUrl", namespace = "http://imeji.org/terms/")
   public URI getLogoUrl() {

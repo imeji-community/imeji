@@ -121,8 +121,9 @@ public class ProfileController extends ImejiController {
    */
   public MetadataProfile retrieve(URI uri, User user) throws ImejiException {
     MetadataProfile p = null;
-    if (uri == null )
-        return null;
+    if (uri == null) {
+      return null;
+    }
     p = ((MetadataProfile) reader.read(uri.toString(), user, new MetadataProfile()));
     Collections.sort((List<Statement>) p.getStatements());
     return p;
@@ -143,7 +144,7 @@ public class ProfileController extends ImejiController {
     try {
       c = cc.retrieve(collectionId, user);
 
-      if (c.getProfile() == null )
+      if (c.getProfile() == null)
         return null;
 
       return retrieve(c.getProfile(), user);

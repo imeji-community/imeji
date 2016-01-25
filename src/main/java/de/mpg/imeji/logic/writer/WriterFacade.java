@@ -142,8 +142,9 @@ public class WriterFacade {
    */
   public void updateLazy(List<Object> objects, MetadataProfile profile, User user)
       throws ImejiException {
-    if (objects.isEmpty())
+    if (objects.isEmpty()) {
       return;
+    }
     checkSecurity(objects, user, GrantType.UPDATE);
     validate(objects, profile, Validator.Method.UPDATE);
     writer.updateLazy(objects, user);

@@ -96,7 +96,7 @@ public class ShareBean implements Serializable {
     CollectionImeji collection = ObjectLoader.loadCollectionLazy(uri, user);
     if (collection != null) {
       this.shareTo = collection;
-      this.profileUri = collection.getProfile().toString();
+      this.profileUri = collection.getProfile() != null ? collection.getProfile().toString() : null;
       this.title = collection.getMetadata().getTitle();
       this.owner = collection.getCreatedBy();
       this.hasContent = hasContent(collection);

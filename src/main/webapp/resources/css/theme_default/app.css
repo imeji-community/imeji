@@ -66,7 +66,7 @@ p { display: block; margin: 1em 0; }
 .imj_siteWrapper .imj_spaceLogo { max-height: 5em; margin-left: 3%; }
 .imj_siteWrapper .imj_siteContentHeadline { clear: both; float: left; max-width: 40%; margin: 0.4em 3%; padding: 0.5% 0.4em; color: #F0F0F0; background-color: #313131; text-align: left; }
 .imj_siteWrapper .imj_siteContentHeadline:after { content: ""; content: none; clear: right; }
-.imj_siteWrapper .imj_siteContentHeadline h1 { font-size: 160%; font-weight: bold; letter-spacing: 0.045em; line-height: normal; }
+.imj_siteWrapper .imj_siteContentHeadline h1 { font-size: 160%; font-weight: bold; letter-spacing: 0.045em; line-height: normal; text-overflow: ellipsis; overflow: hidden; }
 .imj_siteWrapper .imj_siteFooter { clear: both; width: 100%; padding: 2em 0; text-align: center; }
 .imj_siteWrapper .imj_siteFooter img { max-height: 40px; }
 
@@ -324,7 +324,7 @@ select.imj_metadataEditText { min-height: 0; }
 
 .imj_selectionInfoPanelItemSelect { float: right; }
 
-.imj_filterInfoPanel { width: 100%; padding: 0 0%; margin-bottom: 0.5em; }
+.imj_filterInfoPanel { width: 100%; padding: 0 0%; margin-bottom: 0.5em; margin-top: 0.5em; }
 .imj_filterInfoPanel .imj_removeFilterButton { margin: 0 0.272727em; }
 
 .imj_paginator { width: 99%; background-color: #292929; margin: 0; padding: 0.636363em 1%; text-align: center; }

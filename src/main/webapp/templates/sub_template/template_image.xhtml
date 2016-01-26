@@ -21,7 +21,7 @@
 									navBean="#{Navigation}" 
 									isDeletable="#{Auth.delete(itemBean.image)}" 
 									isEditable="#{Auth.update(itemBean.image)}" 
-									isAdmin="#{Auth.admin(itemBean.image)}"
+									isAdmin="#{Auth.admin(itemBean.image) }"
 									downloadEnabled="true"
 									contextDownloadParam="&amp;col=#{logicBean.id}"
 									isContentDeletable="#{isContentDeletable}"
@@ -82,18 +82,6 @@
 		</ui:fragment>
 		
 		 <ui:fragment rendered="#{itemBean.image == null}">
-		<!--	<h:panelGroup layout="block" styleClass="imj_errorPage" rendered="#{Auth.loggedIn}">
-	        	<h3 class="imj_headline">
-					<h:outputText value="#{lbl.errorNote}"/>
-				</h3>				
-				<p class="imj_errorText">
-					<h:outputText value="#{msg.error_file_not_found_logged_in}"/>
-				</p>
-			</h:panelGroup>			
-			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
-	        	<ui:include src="../../include/LoginFormular.xhtml"/>
-			</h:panelGroup>
-			 -->
 			<h:outputLink value="#{HistorySession.previousPage.url}" rendered="#{HistorySession.previousPage != null}">
 				<h:outputText value="#{lbl.back_to_previous}" />
 			</h:outputLink>		

@@ -86,18 +86,23 @@ public class EditItemMetadataBean {
 
   /**
    * Initialize all elements of the bean
+   * 
+   * @throws IOException
    */
-  public void init() {
+  public void init() throws IOException {
     reset();
     try {
       List<String> uris = findItems();
       if (uris != null && !uris.isEmpty()) {
         lockImages(uris);
-        if ("selected".equals(type))
-          allItems = loaditems(uris);
-        else
-          allItems = loaditems(uris.subList(0, 1));
+        // If editing all items, load only the first one
+        allItems = "selected".equals(type) ? loaditems(uris) : loaditems(uris.subList(0, 1));
         initProfileAndStatement(allItems);
+        if (profile == null) {
+          redirectToCollectionItemsPage(collectionId);
+          BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+              .getLabel("profile_empty"));
+        }
         initStatementsMenu();
         initEmtpyEditorItem();
         initEditor(new ArrayList<Item>(allItems));
@@ -111,6 +116,7 @@ public class EditItemMetadataBean {
             .getMessage("no_items_to_edit"));
       }
     } catch (Exception e) {
+      redirectToView();
       BeanHelper.error(
           ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
       logger.error("Error init Edit page", e);
@@ -272,8 +278,9 @@ public class EditItemMetadataBean {
    * Set to the original state
    * 
    * @return
+   * @throws IOException
    */
-  public String resetChanges() {
+  public String resetChanges() throws IOException {
     init();
     return "";
   }

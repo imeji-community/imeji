@@ -37,8 +37,10 @@ public class SuggestBean {
    */
   public void init(MetadataProfile profile) {
     suggests = new HashMap<URI, Suggest>();
-    for (Statement s : profile.getStatements()) {
-      suggests.put(s.getId(), new Suggest(s));
+    if (profile != null) {
+      for (Statement s : profile.getStatements()) {
+        suggests.put(s.getId(), new Suggest(s));
+      }
     }
   }
 
@@ -88,7 +90,8 @@ public class SuggestBean {
      * @return
      */
     public List<SelectItem> getRestrictedValues() {
-      if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0) {
+      if (statement.getLiteralConstraints() != null
+          && statement.getLiteralConstraints().size() > 0) {
         List<SelectItem> list = new ArrayList<SelectItem>();
         list.add(new SelectItem(null, "-"));
         for (String str : statement.getLiteralConstraints()) {

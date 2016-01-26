@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -81,15 +80,6 @@ public class UploadBean implements Serializable {
   private boolean recursive;
   private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 
-  /**
-   * Construct the Bean and initalize the pages
-   * 
-   * @throws Exception
-   * 
-   * @throws URISyntaxException
-   * @throws IOException
-   */
-  public UploadBean() {}
 
   /**
    * Method checking the url parameters and triggering then the {@link UploadBean} methods
@@ -103,7 +93,6 @@ public class UploadBean implements Serializable {
     readId();
     try {
       loadCollection();
-
       if (UrlHelper.getParameterBoolean("init")) {
         ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).reset();
         session.getSelected().clear();
@@ -118,7 +107,6 @@ public class UploadBean implements Serializable {
       } else {
         BeanHelper.error("I can not get to the collection id ");
       }
-
     } catch (Exception e) {
       BeanHelper.error(e.getLocalizedMessage());
     }
@@ -130,8 +118,9 @@ public class UploadBean implements Serializable {
    */
   private void readId() {
     URI uri = HistoryUtil.extractURI(PrettyContext.getCurrentInstance().getRequestURL().toString());
-    if (uri != null)
+    if (uri != null) {
       this.id = ObjectHelper.getId(uri);
+    }
   }
 
   /**
@@ -232,11 +221,13 @@ public class UploadBean implements Serializable {
    */
   private String findFileName(URL url) {
     String name = FilenameUtils.getName(url.getPath());
-    if (isWellFormedFileName(name))
+    if (isWellFormedFileName(name)) {
       return name;
+    }
     name = FilenameUtils.getName(url.toString());
-    if (isWellFormedFileName(name))
+    if (isWellFormedFileName(name)) {
       return name;
+    }
     return FilenameUtils.getName(url.getPath());
   }
 
@@ -324,15 +315,8 @@ public class UploadBean implements Serializable {
    */
   private Item uploadFile(File fileUploaded, String title) {
     try {
-
       String calculatedExtension = StorageUtils.guessExtension(fileUploaded);
       File file = fileUploaded;
-
-      // TODO: not certain we should change the extensions even if these
-      // are not provided! Thus commented at the moment
-      // if (!StorageUtils.hasExtension(title)) {
-      // title += "."+calculatedExtension;
-      // }
 
       if (!fileUploaded.getName().endsWith(calculatedExtension)) {
         file = new File(file.getName() + calculatedExtension);
@@ -464,14 +448,10 @@ public class UploadBean implements Serializable {
     try {
       cc.release(collection, user);
       BeanHelper.info(sessionBean.getMessage("success_collection_release"));
-
-
-
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_release"));
       BeanHelper.error(e.getMessage());
     }
-
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getCollectionUrl()
         + ObjectHelper.getId(collection.getId()) + "/" + navigation.getUploadPath() + "?init=1");

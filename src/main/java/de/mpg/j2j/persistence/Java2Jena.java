@@ -113,9 +113,8 @@ public class Java2Jena {
         model.add(r, p, o);
       }
     } else if (obj instanceof LocalizedString) {
-      Literal o =
-          model
-              .createLiteral(((LocalizedString) obj).getValue(), ((LocalizedString) obj).getLang());
+      Literal o = model.createLiteral(((LocalizedString) obj).getValue(),
+          ((LocalizedString) obj).getLang());
       p = RDFS.label;
       if (o != null) {
         model.add(r, p, o);
@@ -213,8 +212,8 @@ public class Java2Jena {
           addProperty(s, r, f);
         }
       } catch (Exception e) {
-        throw new RuntimeException("Error adding property for field " + f + " to object "
-            + o.getClass(), e);
+        throw new RuntimeException(
+            "Error adding property for field " + f + " to object " + o.getClass(), e);
       }
     }
   }
@@ -291,10 +290,12 @@ public class Java2Jena {
    * @param f
    */
   private void addLiteral(Resource s, Object literalObject, Field f) {
-    Property p = model.createProperty(J2JHelper.getLiteralNamespace(f));
-    Literal o = literalHelper.java2Literal(literalObject);
-    if (o != null) {
-      model.add(s, p, o);
+    if (literalObject != null) {
+      Property p = model.createProperty(J2JHelper.getLiteralNamespace(f));
+      Literal o = literalHelper.java2Literal(literalObject);
+      if (o != null) {
+        model.add(s, p, o);
+      }
     }
   }
 
@@ -353,8 +354,8 @@ public class Java2Jena {
             Resource resource = model.getResource(J2JHelper.getId(r).toString());
             l.add(resource);
             // delete all properties for this predicate
-            for (StmtIterator iterator = resource.listProperties(model.createProperty(predicate)); iterator
-                .hasNext();) {
+            for (StmtIterator iterator =
+                resource.listProperties(model.createProperty(predicate)); iterator.hasNext();) {
               Statement st = iterator.next();
               if (st.getObject().isResource()) {
                 l.add(st.getResource());

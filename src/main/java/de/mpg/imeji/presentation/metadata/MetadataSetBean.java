@@ -66,8 +66,9 @@ public class MetadataSetBean implements Serializable {
     this.profile = profile;
     // Init the list of metadata
     initTreeFromList(toSuperList((List<Metadata>) mds.getMetadata()));
-    if (addEmtpyValue)
+    if (profile != null && addEmtpyValue) {
       addEmtpyValues();
+    }
   }
 
   /**
@@ -86,20 +87,20 @@ public class MetadataSetBean implements Serializable {
   public void trim() {
     setUncutTree(new SuperMetadataTree(metadataTree.getList()));
     for (SuperMetadataBean smb : metadataTree.getList()) {
-      if (isHierarchyEmpty(smb)){
+      if (isHierarchyEmpty(smb)) {
         metadataTree.removeButKeepChilds(smb);
-      }        
+      }
     }
   }
-  
-  private boolean isHierarchyEmpty(SuperMetadataBean smb){
-    if(smb.isEmpty() && smb.getChilds().size()==0){
+
+  private boolean isHierarchyEmpty(SuperMetadataBean smb) {
+    if (smb.isEmpty() && smb.getChilds().size() == 0) {
       return true;
-    }else if(!smb.isEmpty()){
+    } else if (!smb.isEmpty()) {
       return false;
-    }else{
+    } else {
       boolean empty = true;
-      for(SuperMetadataBean child : smb.getChilds()){
+      for (SuperMetadataBean child : smb.getChilds()) {
         empty = isHierarchyEmpty(child);
       }
       return empty;
@@ -143,102 +144,106 @@ public class MetadataSetBean implements Serializable {
     // Find the Metadata which have not been defined with a value into the
     // Metadataset
     List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>(metadataTree.getList());
-    
-    //check if profile statements exist at least once and add missing statements
+
+    // check if profile statements exist at least once and add missing statements
     int lastRootIndex = 0;
     int rootPos = 0;
-    for (Statement st : profile.getStatements()) {      
-      if (!exists(st)){
+    for (Statement st : profile.getStatements()) {
+      if (!exists(st)) {
         SuperMetadataBean smb = new SuperMetadataBean(MetadataFactory.createMetadata(st), st);
-        if(smb.getStatement().getParent() == null){
+        if (smb.getStatement().getParent() == null) {
           smb.setTreeIndex(String.valueOf(lastRootIndex));
           smb.setPos(rootPos);
           rootPos++;
           lastRootIndex++;
         }
         l.add(smb);
-      }else{
+      } else {
         rootPos++;
-        if(st.getParent() == null){
+        if (st.getParent() == null) {
           String test = getlastStatementofType(l, st.getId().toString()).getTreeIndex();
           lastRootIndex = Integer.valueOf(test) + 1;
         }
-      }        
-    }
-    
-    //Create Map with multipleValue statements
-    HashMap<String, Integer> multiValueStatements = new HashMap<String, Integer>();
-    for(Statement st : profile.getStatements()){
-      if(st.getMaxOccurs().equals("unbounded")){
-          multiValueStatements.put(st.getId().toString(), 0);
       }
     }
-    
-    //count occurance of different multipleValue statements    
-    for(int i = 0; i<l.size(); i++){
-      String statementId = l.get(i).getStatement().getId().toString();
-      if(multiValueStatements.containsKey(statementId)){
-          multiValueStatements.put(statementId, multiValueStatements.get(statementId) + 1);
-      }        
+
+    // Create Map with multipleValue statements
+    HashMap<String, Integer> multiValueStatements = new HashMap<String, Integer>();
+    for (Statement st : profile.getStatements()) {
+      if (st.getMaxOccurs().equals("unbounded")) {
+        multiValueStatements.put(st.getId().toString(), 0);
+      }
     }
-    
-    //save number of different statements with different parents in HashMap to calculate how many empty statements are needed
+
+    // count occurance of different multipleValue statements
+    for (int i = 0; i < l.size(); i++) {
+      String statementId = l.get(i).getStatement().getId().toString();
+      if (multiValueStatements.containsKey(statementId)) {
+        multiValueStatements.put(statementId, multiValueStatements.get(statementId) + 1);
+      }
+    }
+
+    // save number of different statements with different parents in HashMap to calculate how many
+    // empty statements are needed
     HashSet<String> parents = new HashSet<String>();
     HashMap<String, Integer> statementOccurrences = new HashMap<String, Integer>();
-    for(SuperMetadataBean smb : l){
+    for (SuperMetadataBean smb : l) {
       String statementId = smb.getStatement().getId().toString();
-      if(smb.getParent() == null || !(parents.contains(smb.getParent() + statementId))){        
-        if(statementOccurrences.containsKey(statementId)){
-          statementOccurrences.put(statementId, statementOccurrences.get(statementId)+1);
-        }else{
+      if (smb.getParent() == null || !(parents.contains(smb.getParent() + statementId))) {
+        if (statementOccurrences.containsKey(statementId)) {
+          statementOccurrences.put(statementId, statementOccurrences.get(statementId) + 1);
+        } else {
           statementOccurrences.put(statementId, 1);
         }
-        if(smb.getParent() != null){
-          parents.add(smb.getParent()+statementId);
+        if (smb.getParent() != null) {
+          parents.add(smb.getParent() + statementId);
         }
       }
     }
-    
-    //add statements for children of multipleValue statements
-    for(Statement st : profile.getStatements()){
-      if(st.getParent() != null){
+
+    // add statements for children of multipleValue statements
+    for (Statement st : profile.getStatements()) {
+      if (st.getParent() != null) {
         String childId = st.getId().toString();
         String parentId = st.getParent().toString();
-        if(multiValueStatements.containsKey(parentId)){
-          while(multiValueStatements.get(parentId) - statementOccurrences.get(childId) > 0){
-            if(multiValueStatements.containsKey(childId)){
+        if (multiValueStatements.containsKey(parentId)) {
+          while (multiValueStatements.get(parentId) - statementOccurrences.get(childId) > 0) {
+            if (multiValueStatements.containsKey(childId)) {
               multiValueStatements.put(childId, multiValueStatements.get(childId) + 1);
             }
-            SuperMetadataBean newSmb = new SuperMetadataBean(MetadataFactory.createMetadata(profile.getStatement(childId)), profile.getStatement(childId));
+            SuperMetadataBean newSmb =
+                new SuperMetadataBean(MetadataFactory.createMetadata(profile.getStatement(childId)),
+                    profile.getStatement(childId));
             statementOccurrences.put(childId, statementOccurrences.get(childId) + 1);
-            l.add(newSmb); 
+            l.add(newSmb);
           }
-          
+
         }
       }
     }
-    
-    
-    //find parent for new elements from top to bottom
-    for(SuperMetadataBean b: l){
-      if(b.getTreeIndex().equals("")){
-        for(SuperMetadataBean parent: l){
+
+
+    // find parent for new elements from top to bottom
+    for (SuperMetadataBean b : l) {
+      if (b.getTreeIndex().equals("")) {
+        for (SuperMetadataBean parent : l) {
           boolean parentFound = false;
-          if(parent.getStatement().getId().toString().equals(b.getStatement().getParent().toString())){
-            boolean hasChild = false; 
+          if (parent.getStatement().getId().toString()
+              .equals(b.getStatement().getParent().toString())) {
+            boolean hasChild = false;
             int pos = 0;
-            for(SuperMetadataBean smb : parent.getChilds()){
+            for (SuperMetadataBean smb : parent.getChilds()) {
               pos++;
-               if(smb.getStatementId().equals(b.getStatementId())){
-                 hasChild = true;
-               }
-             }
-            if(!hasChild){
+              if (smb.getStatementId().equals(b.getStatementId())) {
+                hasChild = true;
+              }
+            }
+            if (!hasChild) {
               b.setParent(parent);
               parent.getChilds().add(b);
               b.setTreeIndex(parent.getTreeIndex() + "," + pos);
-              for(SuperMetadataBean smb2:l){
-                if(smb2.getPos()>parent.getPos()){
+              for (SuperMetadataBean smb2 : l) {
+                if (smb2.getPos() > parent.getPos()) {
                   smb2.setPos(smb2.getPos() + 1);
                 }
               }
@@ -247,20 +252,20 @@ public class MetadataSetBean implements Serializable {
               break;
             }
           }
-          if(parentFound){
+          if (parentFound) {
             break;
           }
         }
       }
     }
-    
-    
-    
+
+
+
     // Reinit the tree
     initTreeFromList(l);
   }
-  
-  public int countStatementOccurrence(List<SuperMetadataBean> l, String statementID){
+
+  public int countStatementOccurrence(List<SuperMetadataBean> l, String statementID) {
     int count = 0;
     for (SuperMetadataBean md : l) {
       if (md.getStatement().getId().toString().equals(statementID))
@@ -268,10 +273,10 @@ public class MetadataSetBean implements Serializable {
     }
     return count;
   }
-  
+
   private SuperMetadataBean getlastStatementofType(List<SuperMetadataBean> l, String string) {
-    for(int i = l.size()-1; i>=0; i--){
-      if(l.get(i).getStatement().getId().toString().equals(string)){
+    for (int i = l.size() - 1; i >= 0; i--) {
+      if (l.get(i).getStatement().getId().toString().equals(string)) {
         return l.get(i);
       }
     }
@@ -340,7 +345,7 @@ public class MetadataSetBean implements Serializable {
   public void setTree(SuperMetadataTree metadataTree) {
     this.metadataTree = metadataTree;
   }
-  
+
   public SuperMetadataTree getUncutTree() {
     return uncutTree;
   }

@@ -359,7 +359,7 @@ select.imj_metadataEditText { min-height: 0; }
 
 .imj_imageInfoLayer { width: 95.95%; padding: 0 2%; }
 .imj_imageInfoLayer .imj_metadataValue { width: 72.33%; margin-left: 0.727272em; }
-.imj_imageInfoLayer .highlight_area.imj_highlightDependencies { background-color: #4d4d4d; }
+.imj_imageInfoLayer .highlight_area.imj_highlightDependencies { background-color: #686868; }
 .imj_imageInfoLayer .imj_infoNavigation { width: 90%; padding: 0 2%; text-align: right; margin-bottom: 1.454545em; float: right; }
 .imj_imageInfoLayer .imj_infoNavigation .imj_buttonEdit_16 { margin-right: 0.181818em; }
 .imj_imageInfoLayer .imj_infoNavigation a { margin-left: 1em; }
@@ -393,7 +393,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_welcomeInfo .id_tabs ul li { margin-left: 1%; padding: 1%; display: inline; font-size: 110%; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 .imj_welcomeInfo .id_tabs .imj_tabMenu { text-align: right; }
 .imj_welcomeInfo .id_tabs .imj_tabMenu li { background-color: #313131; }
-.imj_welcomeInfo .id_tabs .imj_tabMenu li.ui-state-active { background-color: #3f3f3f; }
+.imj_welcomeInfo .id_tabs .imj_tabMenu li.ui-state-active { background-color: #313131; }
 .imj_welcomeInfo .id_tabs .imj_tabContent { min-height: 30em; }
 .imj_welcomeInfo .id_tabs .imj_tabContent ul { margin-bottom: 3em; }
 .imj_welcomeInfo .id_tabs .imj_tabContent li { display: block; padding-left: 2%; background-color: #313131; }
@@ -510,11 +510,11 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator { height: 1.545454em; width: 0.090909em; margin: 0 0.727272em; border-right: 0.1em solid #6CAE2F; display: inline-block; visibility: hidden; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] { display: inline; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem { vertical-align: baseline; }
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input { height: 1.454545em; color: #F2F2F2; background-color: #292929; border: 0.1em solid #6CAE2F; vertical-align: top; }
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input { height: 1.454545em; color: #F0F0F0; background-color: #292929; border: 0.1em solid #6CAE2F; vertical-align: top; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"], .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] { width: 12em; margin-right: 0.181818em; border: 0.2em solid #6CAE2F; }
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] { color: #6CAE2F; padding: 0; margin-left: 0.272727em; border: none 0; vertical-align: text-top; cursor: pointer; }
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] { color: #6CAE2F; padding: 0; margin-left: 0.272727em; border: none 0; vertical-align: text-top; cursor: pointer; background-color: #292929; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover { color: #F0F0F0; }
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input:-webkit-autofill { -webkit-box-shadow: 0 0 0 5em #292929 inset; -webkit-text-fill-color: #F2F2F2; }
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input:-webkit-autofill { -webkit-box-shadow: 0 0 0 5em #292929 inset; -webkit-text-fill-color: #F0F0F0; }
 .imj_metaMenuStandardSingleLine .imj_customSelectbox { vertical-align: middle; padding-top: 0.181818em; }
 .imj_metaMenuStandardSingleLine .imj_customSelectbox select { margin-top: -0.181818em; }
 
@@ -582,7 +582,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem { width: 91.95%; padding: 0 4% 1em 4%; display: inline-block; border-top: 0.1em solid #292929; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem:hover { background-color: #292929; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem.imj_active { background-color: #444444; }
-.imj_bibliographicList .imj_listBody .imj_bibliographicListItem.imj_active:hover { background-color: #4d4d4d; }
+.imj_bibliographicList .imj_listBody .imj_bibliographicListItem.imj_active:hover { background-color: #4c4c4c; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_previewArea { width: 21.5%; min-width: 12em; display: inline-block; vertical-align: top; text-align: center; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemHeadline { padding: 0.5em 0; font-size: 120%; line-height: 145%; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemHeadline a { display: inline-block; max-width: 100%; text-overflow: ellipsis; overflow: hidden; }

@@ -24,8 +24,6 @@
  */
 package de.mpg.imeji.logic.auth;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.vo.User;
 
@@ -37,7 +35,6 @@ import de.mpg.imeji.logic.vo.User;
  * @version $Revision$ $LastChangedDate$
  */
 public interface Authentication {
-  static Logger logger = Logger.getLogger(Authentication.class);
 
   /**
    * Log in a user with a login (email or user name) and password
@@ -45,7 +42,7 @@ public interface Authentication {
    * @param login
    * @param pwd
    * @return
-   * @throws AuthenticationError 
+   * @throws AuthenticationError
    */
   public User doLogin() throws AuthenticationError;
 

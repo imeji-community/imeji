@@ -24,6 +24,8 @@
  */
 package de.mpg.imeji.logic.auth.authentication;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authentication;
@@ -39,6 +41,7 @@ import de.mpg.imeji.logic.vo.User;
  * @version $Revision$ $LastChangedDate$
  */
 public class SimpleAuthentication implements Authentication {
+  private static final Logger LOGGER = Logger.getLogger(SimpleAuthentication.class);
   private String login = null;
   private String pwd = null;
 
@@ -69,7 +72,7 @@ public class SimpleAuthentication implements Authentication {
         return user;
       }
     } catch (Exception e) {
-      logger.error(
+      LOGGER.error(
           "Error SimpleAuthentification user could not be authenticated with provided credentials");
       throw new AuthenticationError("User could not be authenticated with provided credentials!");
     }

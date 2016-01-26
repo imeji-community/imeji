@@ -28,8 +28,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.storage.util.VideoUtils;
@@ -42,7 +40,6 @@ import de.mpg.imeji.logic.storage.util.VideoUtils;
  * @version $Revision$ $LastChangedDate$
  */
 public class XuggleImageGenerator implements ImageGenerator {
-  private static Logger logger = Logger.getLogger(XuggleImageGenerator.class);
 
   /*
    * (non-Javadoc)

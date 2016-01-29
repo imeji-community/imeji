@@ -90,6 +90,7 @@ public class Imeji {
    * 
    * @throws URISyntaxException
    * @throws IOException
+   * 
    */
   public static void init() throws IOException, URISyntaxException {
     tdbPath = PropertyReader.getProperty("imeji.tdb.path");

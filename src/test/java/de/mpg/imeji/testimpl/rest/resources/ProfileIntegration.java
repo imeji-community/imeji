@@ -4,11 +4,14 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +31,11 @@ public class ProfileIntegration extends ImejiTestBase {
   private static final Logger LOGGER = LoggerFactory.getLogger(ProfileIntegration.class);
 
   @Before
-  public void specificSetup() {
-    initCollection();
-    initItem();
+  public void specificSetup()  {
     initProfile();
+    initCollectionWithProfile(profileId);
+    initItem();
+    
   }
 
   @Test
@@ -52,16 +56,20 @@ public class ProfileIntegration extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
   }
 
-
-  // Everybody ca read any profiles
+  // Everybody can read any profiles until the bug is fixed
   @Test
   public void test_1_ReadProfiles_Unauthorized() {
     String profileId = collectionTO.getProfile().getId();
+
     Response response =
         target(pathPrefix).path(profileId).request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    
+    Response response2 =
+        target(pathPrefix).path(profileId).register(authAsUserFalse).request(MediaType.APPLICATION_JSON).get();
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response2.getStatus());
   }
-
+  
   @Test
   public void test_1_ReadProfiles_InvalidProfileId() {
     String profileId = collectionTO.getProfile().getId();
@@ -79,7 +87,7 @@ public class ProfileIntegration extends ImejiTestBase {
   }
 
 
-  // Everybody ca read any profiles
+  // Everybody can read any profiles until the bug is fixed
   @Test
   public void test_1_ReadProfiles_NotAllowedUser() {
     String profileId = collectionTO.getProfile().getId();
@@ -100,13 +108,34 @@ public class ProfileIntegration extends ImejiTestBase {
 
 
   }
+  
+  @Test
+  public void test_1_ReadProfiles_ItemTemplate() {
+    String profileId =collectionTO.getProfile().getId();
+    Response response = target(pathPrefix).path(profileId+"/template").register(authAsUser)
+        .request(MediaType.APPLICATION_JSON).get();
+
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+  }
 
   @Test
   public void test_3_DeleteProfile_NotAuthorized() {
     Response response = target(pathPrefix).path(profileId).register(authAsUser2)
         .request(MediaType.APPLICATION_JSON).delete();
     assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-  }
+}
+
+ @Test
+  public void test_3_DeleteProfile_Unauthorized() {
+   
+   Response response = target(pathPrefix).path(profileId)
+        .request(MediaType.APPLICATION_JSON).delete();
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+
+    response = target(pathPrefix).path(profileId).register(authAsUserFalse)
+        .request(MediaType.APPLICATION_JSON).delete();
+    assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+}
 
   @Test
   public void test_3_DeleteProfile_Referenced() {

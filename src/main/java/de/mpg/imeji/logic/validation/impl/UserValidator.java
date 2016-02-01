@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.validation.impl;
 
+import java.util.HashSet;
+
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
@@ -15,49 +17,38 @@ import de.mpg.imeji.logic.vo.User;
  *
  */
 public class UserValidator extends ObjectValidator implements Validator<User> {
-
-
-  public UserValidator(Validator.Method method) {
-    super(method);
-  }
-
+  private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
 
   @Override
-  public void validate(User user) throws UnprocessableError {
+  public void validate(User user, Method m) throws UnprocessableError {
+    exception = new UnprocessableError(new HashSet<String>());
+    setValidateForMethod(m);
     if (isDelete()) {
       return;
     }
-    StringBuilder builder = new StringBuilder();
-    boolean hasError = false;
 
     if (user.getEmail() == null || "".equals(user.getEmail().trim())) {
-      hasError = true;
-      builder.append("error_user_email_unfilled" + ";");
+      exception.getMessages().add("error_user_email_unfilled");
     } else if (!isValidEmail(user.getEmail())) {
-      hasError = true;
-      builder.append("error_user_email_not_valid" + ";");
+      exception.getMessages().add("error_user_email_not_valid");
     }
 
-    if (userAlreadyExists(user)) {
-      hasError = true;
-      builder.append("error_user_already_exists" + ";");
+    if (emailAlreadyUsed(user)) {
+      exception.getMessages().add("error_user_already_exists");
     }
 
     if (user.getPerson() == null || "".equals(user.getPerson().getFamilyName())
         || user.getPerson().getFamilyName() == null) {
-      hasError = true;
-      builder.append("error_user_name_unfilled" + ";");
+      exception.getMessages().add("error_user_name_unfilled");
     }
 
     if (user.getPerson() != null && "".equals(user.getPerson().getOrganizationString())) {
-      hasError = true;
-      builder.append("error_user_organization_unfilled" + ";");
+      exception.getMessages().add("error_user_organization_unfilled");
     }
 
-    if (hasError) {
-      throw new UnprocessableError(builder.toString());
+    if (!exception.getMessages().isEmpty()) {
+      throw exception;
     }
-
   }
 
 
@@ -67,7 +58,7 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
    * @return
    * @throws Exception
    */
-  private boolean userAlreadyExists(User user) {
+  private boolean emailAlreadyUsed(User user) {
     UserController uc = new UserController(Imeji.adminUser);
     return uc.existsUserWitheMail(user.getEmail(), user.getId().toString(),
         (Method.CREATE.equals(getValidateForMethod()) ? true : false));
@@ -84,8 +75,8 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
   }
 
   @Override
-  public void validate(User t, MetadataProfile p) throws UnprocessableError {
-    validate(t);
+  public void validate(User t, MetadataProfile p, Method m) throws UnprocessableError {
+    validate(t, m);
   }
 
 }

@@ -14,14 +14,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
@@ -56,7 +53,6 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -68,11 +64,11 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class ItemController extends ImejiController {
-  private static Logger logger = Logger.getLogger(ItemController.class);
-  private static ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
-  private static WriterFacade writer = new WriterFacade(Imeji.imageModel);
-  public static String NO_THUMBNAIL_URL = "NO_THUMBNAIL_URL";
-  private Search search =
+  private static final Logger logger = Logger.getLogger(ItemController.class);
+  private static final ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
+  private static final WriterFacade writer = new WriterFacade(Imeji.imageModel);
+  public static final String NO_THUMBNAIL_URL = "NO_THUMBNAIL_URL";
+  private final Search search =
       SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.ELASTIC);
 
   /**
@@ -110,10 +106,10 @@ public class ItemController extends ImejiController {
    */
   public Item createWithFile(Item item, File f, String filename, CollectionImeji c, User user)
       throws ImejiException {
-    if (!AuthUtil.staticAuth().createContent(user, c))
+    if (!AuthUtil.staticAuth().createContent(user, c)) {
       throw new NotAllowedError(
           "User not Allowed to upload files in collection " + c.getIdString());
-
+    }
     // To check the user Quota, it always has to be provided with the Admin User
     UserController uc = new UserController(user);
     uc.checkQuota(f, c);
@@ -121,8 +117,9 @@ public class ItemController extends ImejiController {
     StorageController sc = new StorageController();
     UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 
-    if (item == null)
+    if (item == null) {
       item = ImejiFactory.newItem(c);
+    }
 
     if (filename == null || filename.equals("")) {
       throw new UnprocessableError("Filename must not be empty!");
@@ -242,11 +239,7 @@ public class ItemController extends ImejiController {
    */
   public Item create(Item item, File uploadedFile, String filename, User u, String fetchUrl,
       String referenceUrl) throws ImejiException {
-
-    if (u == null) {
-      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
-    }
-
+    isLoggedInUser(u);
     if (uploadedFile != null && isNullOrEmpty(filename)) {
       throw new BadRequestException("Filename for the uploaded file must not be empty!");
     }
@@ -254,7 +247,6 @@ public class ItemController extends ImejiController {
     if (uploadedFile == null && isNullOrEmpty(fetchUrl) && isNullOrEmpty(referenceUrl)) {
       throw new BadRequestException(
           "Please upload a file or provide one of the fetchUrl or referenceUrl as input.");
-
     }
 
     Item newItem = new Item(item);
@@ -423,9 +415,7 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public Item updateFile(Item item, File f, String filename, User user) throws ImejiException {
-
     validateChecksum(item.getCollection(), f, true);
-
     // First remove the old File from the Internal Storage if its there
     if (!isNullOrEmpty(item.getStorageId())) {
       removeFileFromStorage(item.getStorageId());
@@ -519,14 +509,15 @@ public class ItemController extends ImejiController {
    */
   public int delete(List<Item> items, User user) throws ImejiException {
     int count = 0;
-    Map<String, URI> cMap = new HashMap<String, URI>();
     List<Object> toDelete = new ArrayList<Object>();
     for (Item item : items) {
       if (item != null) {
+        if (!Status.PENDING.equals(item.getStatus())) {
+          throw new UnprocessableError("Item status must be PENDING.");
+        }
         removeFileFromStorage(item.getStorageId());
         toDelete.add(item);
         count++;
-        cMap.put(item.getCollection().toString(), item.getCollection());
       }
     }
     writer.delete(toDelete, user);
@@ -542,20 +533,10 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public int delete(String itemId, User u) throws ImejiException {
-
-    if (u == null) {
-      throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
-    }
-
     Item item = retrieve(ObjectHelper.getURI(Item.class, itemId), u);
-
-    if (!Status.PENDING.equals(item.getStatus())) {
-      throw new UnprocessableError("Item status must be PENDING.");
-    }
-
     List<Item> items = new ArrayList<Item>();
     items.add(item);
-    return (delete(items, u));
+    return delete(items, u);
   }
 
   /**
@@ -744,7 +725,8 @@ public class ItemController extends ImejiController {
   public void updateItemsProfile(List<Item> l, User user, String profileUri) throws ImejiException {
     List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
     for (Item item : l) {
-      if (!profileUri.equals(item.getMetadataSet().getProfile().toString())) {
+      if (item.getMetadataSet().getProfile() == null
+          || !profileUri.equals(item.getMetadataSet().getProfile().toString())) {
         triples.add(getProfileTriple(item.getMetadataSet().getId().toString(), item, profileUri));
         triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
       }

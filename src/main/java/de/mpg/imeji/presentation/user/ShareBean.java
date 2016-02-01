@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -49,14 +50,13 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 @ViewScoped
 public class ShareBean implements Serializable {
   private static final long serialVersionUID = 8106762709528360926L;
-  private static Logger logger = Logger.getLogger(ShareBean.class);
+  private static final Logger LOGGER = Logger.getLogger(ShareBean.class);
   @ManagedProperty(value = "#{SessionBean.user}")
   private User user;
   private String id;
   private URI uri;
   // The object (collection, album or item) which is going to be shared
   private Object shareTo;
-  // private String shareToUri;
   // the user whom the shareto object belongs
   private URI owner;
   private String title;
@@ -66,7 +66,6 @@ public class ShareBean implements Serializable {
   private List<String> errorList = new ArrayList<String>();
   private List<SharedHistory> sharedWith = new ArrayList<SharedHistory>();
   private boolean isAdmin;
-  // private List<SelectItem> grantItems = new ArrayList<SelectItem>();
   private List<String> selectedRoles = new ArrayList<String>();
   private boolean sendEmail = false;
   private UserGroup userGroup;
@@ -86,9 +85,11 @@ public class ShareBean implements Serializable {
   /**
    * Init {@link ShareBean} for {@link CollectionImeji}
    * 
+   * @throws ImejiException
+   * 
    * @throws Exception
    */
-  public void initShareCollection() throws Exception {
+  public void initShareCollection() throws ImejiException {
     this.shareTo = null;
     this.profileUri = null;
     this.type = SharedObjectType.COLLECTION;
@@ -96,7 +97,7 @@ public class ShareBean implements Serializable {
     CollectionImeji collection = ObjectLoader.loadCollectionLazy(uri, user);
     if (collection != null) {
       this.shareTo = collection;
-      this.profileUri = collection.getProfile().toString();
+      this.profileUri = collection.getProfile() != null ? collection.getProfile().toString() : null;
       this.title = collection.getMetadata().getTitle();
       this.owner = collection.getCreatedBy();
       this.hasContent = hasContent(collection);
@@ -109,7 +110,7 @@ public class ShareBean implements Serializable {
    * 
    * @throws Exception
    */
-  public void initShareAlbum() throws Exception {
+  public void initShareAlbum() throws ImejiException {
     this.type = SharedObjectType.ALBUM;
     this.shareTo = null;
     this.profileUri = null;
@@ -130,7 +131,7 @@ public class ShareBean implements Serializable {
    * @return
    * @throws Exception
    */
-  public String getInitShareItem() throws Exception {
+  public String getInitShareItem() throws ImejiException {
     this.type = SharedObjectType.ITEM;
     this.profileUri = null;
     this.shareTo = null;
@@ -161,8 +162,6 @@ public class ShareBean implements Serializable {
         + PrettyContext.getCurrentInstance().getRequestQueryString();
     this.pageUrl = this.pageUrl.split("[&\\?]group=")[0];
     this.initShareWithGroup();
-    // this.ugroupsBean = new UserGroupsBean();
-    // ugroupsBean.init();
   }
 
   /**
@@ -196,7 +195,6 @@ public class ShareBean implements Serializable {
    */
   public void share() {
     shareTo(checkInput());
-    // init();
     reloadPage();
   }
 
@@ -268,7 +266,7 @@ public class ShareBean implements Serializable {
    * @return
    */
   private List<String> checkInput() {
-    List<String> emailList = new ArrayList<>();
+    List<String> emails = new ArrayList<>();
     if (getEmailInput() != null) {
       List<String> inputValues = Arrays.asList(getEmailInput().split("\\s*[|,;\\n]\\s*"));
       for (String value : inputValues) {
@@ -276,25 +274,25 @@ public class ShareBean implements Serializable {
           try {
             UserController uc = new UserController(Imeji.adminUser);
             uc.retrieve(value);
-            emailList.add(value);
+            emails.add(value);
 
           } catch (Exception e) {
             this.errorList
                 .add(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
             BeanHelper
                 .error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
-            logger.error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
+            LOGGER.error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
           }
         } else {
           this.errorList
               .add(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
           BeanHelper
               .error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
-          logger.error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
+          LOGGER.error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
         }
       }
     }
-    return emailList;
+    return emails;
   }
 
   /**
@@ -340,7 +338,7 @@ public class ShareBean implements Serializable {
         emailClient.sendMail(dest.getEmail(), null,
             subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
       } catch (Exception e) {
-        logger.error("Error sending email", e);
+        LOGGER.error("Error sending email", e);
         BeanHelper.error(sb.getMessage("error") + ": Email not sent");
       }
     }
@@ -427,7 +425,7 @@ public class ShareBean implements Serializable {
         // gc.addGrants(u, grants, u);
         sendEmail(c.retrieve(uri), subject, grants);
       } catch (Exception e) {
-        logger.error("Error sending email", e);
+        LOGGER.error("Error sending email", e);
         BeanHelper.error(sb.getMessage("error") + ": Email not sent");
       }
     }
@@ -462,7 +460,7 @@ public class ShareBean implements Serializable {
         }
 
       } catch (Exception e) {
-        logger.error("Error by sharing ", e);
+        LOGGER.error("Error by sharing ", e);
       }
     }
     clearError();

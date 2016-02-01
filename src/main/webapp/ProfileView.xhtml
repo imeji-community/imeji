@@ -9,18 +9,18 @@
 		<h:outputText value="#{ViewMdProfileBean.init}"/>
 	</ui:define>
 	
-	<ui:param name="headline" value="#{(Auth.read(ViewMdProfileBean.profile)) ? ViewMdProfileBean.profile.title : ''}"/>
+	<ui:param name="headline" value="#{ViewMdProfileBean.profile.title}"/>
 	<ui:param name="itemBean" value="#{ViewMdProfileBean}"/>
 	<ui:param name="profileBean" value="#{ViewMdProfileBean.profile}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	
 	<ui:define name="mainContent">
-		<h:panelGroup layout="block" rendered="#{!Auth.read(ViewMdProfileBean.profile)}">
+		<!-- <h:panelGroup layout="block" rendered="#{!Auth.read(ViewMdProfileBean.profile)}">
 			<h2 class="imj_headline"><h:outputText value="You are not allow to see this profile"/></h2>
-		</h:panelGroup>
+		</h:panelGroup> -->
 		
 		<!-- AJAX Wrapper - START -->
-		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.read(ViewMdProfileBean.profile)}">
+		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			<imjc:metadataProfile_view headline="#{lbl.profile_basics}" metadataBean="#{itemBean}" metadataContextBean="#{profileBean}" metadataProfile="#{profileBean}"
 				exportUrl="#{Navigation.applicationSpaceUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{ViewMdProfileBean.profile.id}&quot;"
 				relatedCollectionsUrl="#{Navigation.applicationSpaceUrl}collections?q=prof==&quot;#{ViewMdProfileBean.encodedId}&quot;" editable="#{Auth.update(profileBean)}"

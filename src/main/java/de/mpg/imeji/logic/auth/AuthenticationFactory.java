@@ -57,4 +57,8 @@ public class AuthenticationFactory {
   public static Authentication factory(HttpServletRequest request) {
     return new HttpAuthentication(request);
   }
+
+  public static Authentication factory(String authorizationHeader) {
+    return new HttpAuthentication(authorizationHeader);
+  }
 }

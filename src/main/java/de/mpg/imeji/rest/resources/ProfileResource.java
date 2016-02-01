@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources;
 
+import static de.mpg.imeji.rest.process.CollectionProcess.readItemTemplate;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,5 +87,16 @@ public class ProfileResource implements ImejiResource {
     JSONResponse resp = ProfileProcess.withdrawProfile(req, id, discardComment);
     return buildJSONResponse(resp);
   }
+  
+  
+  @GET
+  @Path("/{id}/template")
+  @ApiOperation(value = "Get template item for a metadata profile")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response readProfileItemTemplate(@Context HttpServletRequest req, @PathParam("id") String id) {
+    JSONResponse resp = ProfileProcess.readItemTemplate(req, id); 
+    return buildJSONResponse(resp);
+  }
+
 
 }

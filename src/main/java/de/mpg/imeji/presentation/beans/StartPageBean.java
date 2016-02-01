@@ -75,7 +75,7 @@ public class StartPageBean implements Serializable {
    * @throws URISyntaxException
    * @throws IOException
    */
-  private SearchQuery readSearchQueryInProperty() throws IOException, URISyntaxException {
+  private SearchQuery readSearchQueryInProperty() throws ImejiException, URISyntaxException {
     String prop = ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
         .getStartPageCarouselQuery();
     if (prop != null) {

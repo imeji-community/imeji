@@ -4,15 +4,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.apache.log4j.Logger;
-
 /**
  * Created by vlad on 11.02.15.
  */
 public class ResourceHelper {
 
-  private static Logger LOGGER = Logger.getLogger(ResourceHelper.class);
+  /**
+   * Private Constructor
+   */
+  private ResourceHelper() {}
 
+  /**
+   * Read a file defined by its path, and return the content as String
+   * 
+   * @param path
+   * @return
+   * @throws IOException
+   */
   public static String getStringFromPath(String path) throws IOException {
     return new String(Files.readAllBytes(Paths.get(path)), "UTF-8");
   }

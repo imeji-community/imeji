@@ -21,6 +21,11 @@ import de.mpg.j2j.transaction.ThreadedTransaction;
  * @version $Revision$ $LastChangedDate$
  */
 public class ImejiSPARQL {
+
+  private ImejiSPARQL() {
+    // private constructor
+  }
+
   /**
    * Execute a sparql query and return {@link List} of uri
    * 

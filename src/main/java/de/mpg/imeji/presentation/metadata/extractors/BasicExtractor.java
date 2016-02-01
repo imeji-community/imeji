@@ -73,7 +73,7 @@ public class BasicExtractor {
     displayMetadata(techMd, root, 0);
   }
 
-  private static void indent(List<String> techMd, StringBuffer sb, int level) {
+  private static void indent(List<String> techMd, StringBuilder sb, int level) {
     for (int i = 0; i < level; i++) {
       sb.append("    ");
     }
@@ -87,7 +87,7 @@ public class BasicExtractor {
    * @param level
    */
   static void displayMetadata(List<String> techMd, Node node, int level) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     // print open tag of element
     indent(techMd, sb, level);
     sb.append("<" + node.getNodeName());

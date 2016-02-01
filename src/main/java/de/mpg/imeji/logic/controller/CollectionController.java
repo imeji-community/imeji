@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -58,8 +57,8 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class CollectionController extends ImejiController {
-  private static ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
-  private static WriterFacade writer = new WriterFacade(Imeji.collectionModel);
+  private static final ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
+  private static final WriterFacade writer = new WriterFacade(Imeji.collectionModel);
   private static Logger logger = Logger.getLogger(CollectionController.class);
   private Search search =
       SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC);
@@ -87,12 +86,12 @@ public class CollectionController extends ImejiController {
    */
   public URI create(CollectionImeji c, MetadataProfile p, User user,
       MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
-    // First validate the collection, to avoid to create a zombie profile...
-    CollectionValidator validator = new CollectionValidator(Method.CREATE);
-    validator.validate(c);
+    isLoggedInUser(user);
+    // Validate before creating a profile, in can the collection isn't valid
+    new CollectionValidator().validate(c, Method.CREATE);
     ProfileController pc = new ProfileController();
     String metadataProfileName = " (Metadata profile)";
-    if (p == null || method == MetadataProfileCreationMethod.NEW) {
+    if (p == null && method == MetadataProfileCreationMethod.NEW) {
       p = new MetadataProfile();
       p.setDescription(c.getMetadata().getDescription());
       p.setTitle(c.getMetadata().getTitle() + metadataProfileName);
@@ -106,9 +105,22 @@ public class CollectionController extends ImejiController {
       // his collection (if profile is already released, no problems)
       throw new NotAllowedError("Not allowed to reference this profile");
     }
-    c.setProfile(p.getId());
+
+    // Check in controller if Profile is released and is created by user
+    if (method.equals(MetadataProfileCreationMethod.REFERENCE) && p != null) {
+      if (!(p.getCreatedBy().equals(user.getId()) || Status.RELEASED.equals(p.getStatus()))) {
+        throw new UnprocessableError(
+            "You can not reference the metadata profile with Id=" + p.getIdString()
+                + "The profile you reference must be released or must be created by you!");
+      }
+    }
+
     writeCreateProperties(c, user);
-    c.setProfile(p.getId());
+
+    if (p != null) {
+      c.setProfile(p.getId());
+    }
+
     writer.create(WriterFacade.toList(c), p, user);
     // Prepare grants
     ShareController shareController = new ShareController();
@@ -160,20 +172,28 @@ public class CollectionController extends ImejiController {
    */
   public Collection<CollectionImeji> retrieveBatchLazy(List<String> uris, int limit, int offset,
       User user) throws ImejiException {
-    List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-    List<String> retrieveUris;
-    if (limit < 0) {
-      retrieveUris = uris;
-    } else {
-      retrieveUris = uris.size() > 0 && limit > 0
-          ? uris.subList(offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
-    }
-    for (String s : retrieveUris) {
-      cols.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
-    }
+    List<CollectionImeji> cols = prepareBatchRetrieve(uris, limit, offset);
     reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
     return cols;
 
+  }
+
+  /**
+   * Prepare the list of {@link Collection} which is going to be retrieved
+   * 
+   * @param uris
+   * @param limit
+   * @param offset
+   * @return
+   */
+  private List<CollectionImeji> prepareBatchRetrieve(List<String> uris, int limit, int offset) {
+    List<CollectionImeji> collections = new ArrayList<CollectionImeji>();
+    uris = uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
+        : uris;
+    for (String s : uris) {
+      collections.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
+    }
+    return collections;
   }
 
   /**
@@ -324,25 +344,27 @@ public class CollectionController extends ImejiController {
 
       itemController.delete(items, user);
 
-      // Delete profile
-      ProfileController pc = new ProfileController();
-      try {
+      // Delete profile if it is set for the collection
+      if (collection.getProfile() != null) {
+        ProfileController pc = new ProfileController();
+        try {
 
-        MetadataProfile collectionMdp = pc.retrieve(collection.getProfile(), user);
-        if ((pc.isReferencedByOtherResources(collectionMdp.getId().toString(),
-            collection.getId().toString()))
-            || (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString()))
-            || collectionMdp.getDefault()) {
-          logger.info(
-              "Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
-                  + "Profile <" + collectionMdp.getId().toString() + "> will not be deleted!");
-        } else {
-          logger.info("Metadata profile <" + collectionMdp.getId().toString()
-              + "> is not referenced elsewhere, will be deleted!");
-          pc.delete(collectionMdp, user, collection.getId().toString());
+          MetadataProfile collectionMdp = pc.retrieve(collection.getProfile(), user);
+          if ((pc.isReferencedByOtherResources(collectionMdp.getId().toString(),
+              collection.getId().toString()))
+              || (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString()))
+              || collectionMdp.getDefault()) {
+            logger.info(
+                "Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
+                    + "Profile <" + collectionMdp.getId().toString() + "> will not be deleted!");
+          } else {
+            logger.info("Metadata profile <" + collectionMdp.getId().toString()
+                + "> is not referenced elsewhere, will be deleted!");
+            pc.delete(collectionMdp, user, collection.getId().toString());
+          }
+        } catch (NotFoundException e) {
+          logger.info("Collection profile does not exist, could not be deleted.");
         }
-      } catch (NotFoundException e) {
-        logger.info("Collection profile does not exist, could not be deleted.");
       }
 
       writer.delete(WriterFacade.toList(collection), user);
@@ -359,9 +381,7 @@ public class CollectionController extends ImejiController {
   public void release(CollectionImeji collection, User user) throws ImejiException {
     ItemController itemController = new ItemController();
 
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
+    isLoggedInUser(user);
 
     if (collection == null) {
       throw new NotFoundException("collection object does not exists");
@@ -384,7 +404,9 @@ public class CollectionController extends ImejiController {
       List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.release(items, user);
       update(collection, user);
-      if (AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
+
+      if (collection.getProfile() != null
+          && AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
         ProfileController pc = new ProfileController();
         pc.release(pc.retrieve(collection.getProfile(), user), user);
       }
@@ -392,10 +414,7 @@ public class CollectionController extends ImejiController {
   }
 
   public void createDOI(CollectionImeji coll, User user) throws ImejiException {
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
-
+    isLoggedInUser(user);
     if (coll == null) {
       throw new NotFoundException("Collection does not exists");
     }
@@ -417,9 +436,7 @@ public class CollectionController extends ImejiController {
 
   public void createDOIManually(String doi, CollectionImeji collection, User user)
       throws ImejiException {
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
+    isLoggedInUser(user);
 
     if (collection == null) {
       throw new NotFoundException("Collection does not exists");
@@ -442,10 +459,7 @@ public class CollectionController extends ImejiController {
    */
   public void withdraw(CollectionImeji coll, User user) throws ImejiException {
     ItemController itemController = new ItemController();
-
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
+    isLoggedInUser(user);
 
     if (coll == null) {
       throw new NotFoundException("Collection does not exists");
@@ -463,7 +477,8 @@ public class CollectionController extends ImejiController {
       itemController.withdraw(items, coll.getDiscardComment(), user);
       writeWithdrawProperties(coll, null);
       update(coll, user);
-      if (!coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())
+      if (coll.getProfile() != null
+          && !coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())
           && AuthUtil.staticAuth().administrate(user, coll.getProfile().toString())) {
         // Withdraw profile
         ProfileController pc = new ProfileController();
@@ -484,9 +499,7 @@ public class CollectionController extends ImejiController {
    */
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset,
       User user, String spaceId) {
-    // Search search = SearchFactory.create(SearchObjectTypes.COLLECTION,
-    // SEARCH_IMPLEMENTATIONS.JENA);
-    return search.search(searchQuery, sortCri, user, null, spaceId, 0, -1);
+    return search.search(searchQuery, sortCri, user, null, spaceId, offset, limit);
   }
 
   /**
@@ -512,8 +525,10 @@ public class CollectionController extends ImejiController {
       return MetadataProfileCreationMethod.REFERENCE;
     } else if ("copy".equalsIgnoreCase(method)) {
       return MetadataProfileCreationMethod.COPY;
-    } else {
+    } else if ("new".equalsIgnoreCase(method)) {
       return MetadataProfileCreationMethod.NEW;
+    } else {
+      return MetadataProfileCreationMethod.REFERENCE;
     }
   }
 

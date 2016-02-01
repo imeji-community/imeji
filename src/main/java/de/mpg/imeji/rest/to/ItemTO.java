@@ -1,7 +1,5 @@
 package de.mpg.imeji.rest.to;
 
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,10 +15,11 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 @XmlRootElement
-@XmlType(propOrder = {"id", "createdBy", "modifiedBy", "createdDate", "modifiedDate",
-    "versionDate", "status", "visibility", "version", "discardComment", "collectionId", "filename",
-    "mimetype", "checksumMd5", "webResolutionUrlUrl", "thumbnailUrl", "fileUrl", "metadata"})
+@XmlType(propOrder = {"id", "createdBy", "modifiedBy", "createdDate", "modifiedDate", "versionDate",
+    "status", "visibility", "version", "discardComment", "collectionId", "filename", "mimetype",
+    "checksumMd5", "webResolutionUrlUrl", "thumbnailUrl", "fileUrl", "metadata"})
 @JsonInclude(Include.NON_NULL)
+// TODO REMOVE and replace definitely by defaultItemTO
 public class ItemTO extends PropertiesTO implements Serializable {
 
   private static final long serialVersionUID = 8408059450327059926L;
@@ -46,17 +45,17 @@ public class ItemTO extends PropertiesTO implements Serializable {
 
   private long fileSize;
 
-  public static enum SYNTAX {
-    DEFAULT, RAW;
-    public static SYNTAX guessType(String type) {
-      if (type != null && type.trim().equalsIgnoreCase(RAW.toString()))
-        return RAW;
-      else if (isNullOrEmptyTrim(type) || type.trim().equalsIgnoreCase(DEFAULT.toString()))
-        return DEFAULT;
-      else
-        return null;
-    }
-  };
+  // public static enum SYNTAX {
+  // DEFAULT, RAW;
+  // public static SYNTAX guessType(String type) {
+  // if (type != null && type.trim().equalsIgnoreCase(RAW.toString()))
+  // return RAW;
+  // else if (isNullOrEmptyTrim(type) || type.trim().equalsIgnoreCase(DEFAULT.toString()))
+  // return DEFAULT;
+  // else
+  // return null;
+  // }
+  // };
 
 
   public long getFileSize() {
@@ -155,8 +154,8 @@ public class ItemTO extends PropertiesTO implements Serializable {
   }
 
   public List<MetadataSetTO> filterMetadataByTypeURI(final URI type) {
-    return Lists.newArrayList(Collections2.filter(Lists.newArrayList(this.metadata),
-        new Predicate<MetadataSetTO>() {
+    return Lists.newArrayList(
+        Collections2.filter(Lists.newArrayList(this.metadata), new Predicate<MetadataSetTO>() {
           @Override
           public boolean apply(MetadataSetTO md) {
             return type.equals(md.getTypeUri());
@@ -171,8 +170,8 @@ public class ItemTO extends PropertiesTO implements Serializable {
    * @return
    */
   public List<MetadataSetTO> clearMetadata(final URI statement) {
-    return Lists.newArrayList(Collections2.filter(Lists.newArrayList(this.metadata),
-        new Predicate<MetadataSetTO>() {
+    return Lists.newArrayList(
+        Collections2.filter(Lists.newArrayList(this.metadata), new Predicate<MetadataSetTO>() {
           @Override
           public boolean apply(MetadataSetTO md) {
             return !md.getStatementUri().equals(statement);

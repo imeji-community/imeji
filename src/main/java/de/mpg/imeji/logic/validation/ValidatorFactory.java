@@ -23,6 +23,19 @@ import de.mpg.imeji.logic.vo.User;
  *
  */
 public class ValidatorFactory {
+  private static final PseudoValidator PSEUDO_VALIDATOR = new PseudoValidator();
+  private static final ItemValidator ITEM_VALIDATOR = new ItemValidator();
+  private static final MetadataValidator METADATA_VALIDATOR = new MetadataValidator();
+  private static final CollectionValidator COLLECTION_VALIDATOR = new CollectionValidator();
+  private static final AlbumValidator ALBUM_VALIDATOR = new AlbumValidator();
+  private static final ProfileValidator PROFILE_VALIDATOR = new ProfileValidator();
+  private static final UserValidator USER_VALIDATOR = new UserValidator();
+  private static final SpaceValidator SPACE_VALIDATOR = new SpaceValidator();
+
+  private ValidatorFactory() {
+
+  }
+
   /**
    * Return a new {@link Validator} according to the object class
    * 
@@ -32,50 +45,26 @@ public class ValidatorFactory {
    * @return
    */
   public static Validator<?> newValidator(Object obj, Validator.Method method) {
+    Validator<?> validator = PSEUDO_VALIDATOR;
     // For now, do not do anything with Delete, just a possiblity
     if (Validator.Method.DELETE.equals(method)) {
-      return new PseudoValidator(method);
+      return validator;
     }
     if (obj instanceof Item) {
-      return new ItemValidator(method);
+      validator = ITEM_VALIDATOR;
     } else if (obj instanceof Metadata) {
-      return new MetadataValidator(method);
+      validator = METADATA_VALIDATOR;
     } else if (obj instanceof CollectionImeji) {
-      return new CollectionValidator(method);
+      validator = COLLECTION_VALIDATOR;
     } else if (obj instanceof Album) {
-      return new AlbumValidator(method);
+      validator = ALBUM_VALIDATOR;
     } else if (obj instanceof MetadataProfile) {
-      return new ProfileValidator(method);
+      validator = PROFILE_VALIDATOR;
     } else if (obj instanceof User) {
-      return new UserValidator(method);
+      validator = USER_VALIDATOR;
     } else if (obj instanceof Space) {
-      return new SpaceValidator(method);
+      validator = SPACE_VALIDATOR;
     }
-    return new PseudoValidator(method);
-  }
-
-  public static Validator<?> newValidator2(Class<?> clazz, Validator.Method method) {
-    // For now, do not do anything with Delete, just a possiblity
-    if (Validator.Method.DELETE.equals(method)) {
-      return new PseudoValidator(method);
-    }
-
-    if (clazz.equals(Item.class)) {
-      return new ItemValidator(method);
-    } else if (clazz.equals(Metadata.class)) {
-      return new MetadataValidator(method);
-    } else if (clazz.equals(CollectionImeji.class)) {
-      return new CollectionValidator(method);
-    } else if (clazz.equals(Album.class)) {
-      return new AlbumValidator(method);
-    } else if (clazz.equals(MetadataProfile.class)) {
-      return new ProfileValidator(method);
-    } else if (clazz.equals(User.class)) {
-      return new UserValidator(method);
-    } else if (clazz.equals(Space.class)) {
-      return new SpaceValidator(method);
-    }
-    return new PseudoValidator(method);
-
+    return validator;
   }
 }

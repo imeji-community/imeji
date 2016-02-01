@@ -15,7 +15,6 @@ import org.apache.commons.io.FileUtils;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
-import com.sun.pdfview.PDFParseException;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -49,8 +48,9 @@ public class PdfUtils {
   private static int getThumbnailPage() {
     try {
       int page = Integer.parseInt(PropertyReader.getProperty("imeji.internal.pdf.thumbnail.page"));
-      if (page >= 0)
+      if (page >= 0) {
         return page;
+      }
     } catch (Exception e) {
       return PdfUtils.PAGENUMBERTOIMAGE;
     }
@@ -65,8 +65,7 @@ public class PdfUtils {
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] pdfsToImageBytes(File file) throws FileNotFoundException, IOException,
-      PDFParseException {
+  public static byte[] pdfsToImageBytes(File file) throws FileNotFoundException, IOException {
     return PdfUtils.pdfFileToByteAray(
         new PDFFile(ByteBuffer.wrap(FileUtils.readFileToByteArray(file))),
         PdfUtils.getThumbnailPage(), BufferedImage.TYPE_INT_RGB, PdfUtils.getResolutionDPI());
@@ -175,14 +174,14 @@ public class PdfUtils {
           null, // null for the ImageObserver
           true, // fill background with white
           true // block until drawing is done
-          );
+      );
     } else {
       retval = (BufferedImage) page.getImage(widthPx, heightPx, // width & height
           rect, // clip rect
           null, // null for the ImageObserver
           true, // fill background with white
           true // block until drawing is done
-          );
+      );
     }
     Graphics2D graphics = (Graphics2D) retval.getGraphics();
     if (rotationAngle != 0) {

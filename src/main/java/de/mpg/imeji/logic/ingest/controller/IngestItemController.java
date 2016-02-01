@@ -15,13 +15,14 @@ import de.mpg.imeji.logic.ingest.mapper.ItemMapperTask;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
 import de.mpg.imeji.logic.ingest.validator.ItemContentValidator;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+
 
 /**
  * Controller to ingest {@link Item}
@@ -115,7 +116,7 @@ public class IngestItemController {
   private MetadataSet copyMetadataIfValid(MetadataSet mds1, MetadataSet mds2) {
     List<Metadata> l = new ArrayList<Metadata>();
     for (Metadata md : mds1.getMetadata()) {
-      if (!MetadataHelper.isEmpty(md)) {
+      if (!MetadataAndProfileHelper.isEmpty(md)) {
         Metadata copyTo = findMetadata(md.getId(), mds2);
         if (copyTo == null) {
           // If the metadata doesn't exist, give it a new id

@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 
@@ -31,27 +32,51 @@ public class HistoryUtil {
   private static Pattern findAlbumId = Pattern.compile(ImejiPages.ALBUM_HOME.getRegex());
   private static Pattern findUserGroupId = Pattern.compile(ImejiPages.USER_GROUP.getRegex());
   private static Pattern findUserId = Pattern.compile(ImejiPages.USER.getRegex());
+  private static Pattern findProfileId = Pattern.compile(ImejiPages.PROFILE.getRegex());
 
   /**
    * Extract the URI of an imeji object from the url
    **/
   public static URI extractURI(String url) {
     Matcher m = findItemId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(Item.class, m.group(1));
+    }
     m = findCollectionId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(CollectionImeji.class, m.group(1));
+    }
     m = findAlbumId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(Album.class, m.group(1));
+    }
     m = findUserId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(User.class, UrlHelper.decode(m.group(1)));
+    }
     m = findUserGroupId.matcher(url);
-    if (m.find())
+    if (m.find()) {
       return ObjectHelper.getURI(UserGroup.class, UrlHelper.decode(m.group(1)));
+    }
+
+    m = findProfileId.matcher(url);
+    if (m.find() ) {
+      return ObjectHelper.getURI(MetadataProfile.class, UrlHelper.decode(m.group(2)));
+    }
+
     return null;
+  }
+
+  public static void main(String[] args) {
+
+//    Matcher m = Pattern.compile(".*/collection/([a-zA-Z_0-9-]+).*")
+//        .matcher("http://localhost:8080/imeji/collection/2F1kdy1E2zP2xAk-test");
+//    
+    Matcher m = Pattern.compile(".*/(profile|metadataProfile)/([a-zA-Z_0-9-]+).*")
+        .matcher("http://localhost:8080/imeji/metadataProfile/AymO1Dd7gfykbrU ");
+    
+    
+    System.out.println(m.find() + m.group(1));
   }
 
   /**
@@ -62,8 +87,9 @@ public class HistoryUtil {
    */
   public static ImejiPages getImejiPage(String url) {
     for (ImejiPages page : ImejiPages.values()) {
-      if (page.matches(url))
+      if (page.matches(url)) {
         return page;
+      }
     }
     return ImejiPages.HOME;
   }
@@ -76,8 +102,9 @@ public class HistoryUtil {
       return "history_home";
 
     for (ImejiPages page : ImejiPages.values()) {
-      if (url.matches(page.getRegex()))
+      if (url.matches(page.getRegex())) {
         return page.getLabel();
+      }
     }
     return "history_home";
   }

@@ -104,8 +104,9 @@ public class FileServlet extends HttpServlet {
     }
     resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
     SessionBean session = getSession(req);
-    User user = getUser(req, session);
+    User user; 
     try {
+      user =  getUser(req, session);
       if ("NO_THUMBNAIL_URL".equals(url)) {
         ExternalStorage eStorage = new ExternalStorage();
         eStorage.read("http://localhost:8080/imeji/resources/icon/empty.png",
@@ -240,8 +241,10 @@ public class FileServlet extends HttpServlet {
    * 
    * @param req
    * @return
+   * @throws AuthenticationError 
    */
-  private User getUser(HttpServletRequest req, SessionBean session) {
+  private User getUser(HttpServletRequest req, SessionBean session) throws AuthenticationError {
+
     User user = AuthenticationFactory.factory(req).doLogin();
     if (user != null) {
       return user;

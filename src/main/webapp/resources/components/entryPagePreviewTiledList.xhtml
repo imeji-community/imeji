@@ -40,7 +40,7 @@
 					</div>
 				</h:outputLink>
 					<ui:fragment rendered="#{cc.attrs.mediaLogicBean.items.size() == 0  and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
-					<h2 class="imj_headline imj_messageInfo">
+					<h2 class="imj_headline">
   					   <h:outputText value="#{lbl.no_item_collection}"/>
 					    <br/>
 						<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.createContent(cc.attrs.mediaLogicBean.container) and cc.attrs.mediaLogicBean.items.size() == 0 and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">

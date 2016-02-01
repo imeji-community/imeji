@@ -13,7 +13,7 @@ import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
  */
 public abstract class SearchElement {
   public enum SEARCH_ELEMENTS {
-    LOGICAL_RELATIONS, PAIR, GROUP, QUERY, METADATA;
+    LOGICAL_RELATIONS, PAIR, GROUP, QUERY, METADATA, SIMPLE_METADATA;
   }
 
   public abstract SEARCH_ELEMENTS getType();

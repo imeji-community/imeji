@@ -49,7 +49,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  */
 public class InternalStorage implements Storage {
   private static final long serialVersionUID = 7865121663793602621L;
-  private final String name = "internal";
+  private static final String name = "internal";
   protected InternalStorageManager manager;
 
   /**
@@ -128,8 +128,8 @@ public class InternalStorage implements Storage {
     try {
       manager.replaceFile(file, url);
     } catch (IOException e) {
-      throw new RuntimeException("Error updating file " + manager.transformUrlToPath(url)
-          + " in internal storage: ", e);
+      throw new RuntimeException(
+          "Error updating file " + manager.transformUrlToPath(url) + " in internal storage: ", e);
     }
   }
 

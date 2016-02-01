@@ -249,9 +249,9 @@ public class SingleUploadBean implements Serializable {
             ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
         MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
         ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
-        MetadataSet mdSet = ImejiFactory.newMetadataSet(profile.getId());
-        MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
 
+        MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId()) : ImejiFactory.newMetadataSet(null);
+        MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);        
         MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
         labels.init(profile);
         sus.setCollection(collection);

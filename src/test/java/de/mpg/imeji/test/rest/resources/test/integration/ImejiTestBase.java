@@ -20,21 +20,32 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.api.DefaultItemService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
+import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemWithFileTO;
 import de.mpg.j2j.misc.LocalizedString;
 import util.JenaUtil;
 
@@ -48,13 +59,17 @@ public class ImejiTestBase extends JerseyTest {
   protected static HttpAuthenticationFeature authAsUser2 =
       HttpAuthenticationFeature.basic(JenaUtil.TEST_USER_EMAIL_2, JenaUtil.TEST_USER_PWD);
 
+  protected static HttpAuthenticationFeature authAsUserFalse =
+      HttpAuthenticationFeature.basic("falseuser", "falsepassword");
+
   protected static String collectionId;
   protected static String albumId;
   protected static String profileId;
   protected static String itemId;
   protected static CollectionTO collectionTO;
   protected static AlbumTO albumTO;
-  protected static ItemTO itemTO;
+  protected static DefaultItemTO itemTO;
+  protected static DefaultItemTO defaultItemTO;
   private static Logger logger = Logger.getLogger(ImejiTestBase.class);
 
   private static MyApplication app = null;
@@ -88,6 +103,13 @@ public class ImejiTestBase extends JerseyTest {
     app = null;
   }
 
+  @Rule
+  public TestRule watcher = new TestWatcher() {
+    protected void starting(Description description) {
+      System.out.println("Starting test: " + description.getMethodName());
+    }
+  };
+
   /**
    * Create a profile
    */
@@ -119,6 +141,23 @@ public class ImejiTestBase extends JerseyTest {
     try {
       collectionTO = (CollectionTO) RestProcessUtils.buildTOFromJSON(
           getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json"), CollectionTO.class);
+
+      collectionTO = s.create(collectionTO, JenaUtil.testUser);
+      collectionId = collectionTO.getId();
+    } catch (Exception e) {
+      logger.error("Cannot init Collection", e);
+    }
+    return collectionId;
+  }
+  
+  public static String initCollectionWithProfile(String profileId)  {
+    CollectionService s = new CollectionService();
+    try {
+      collectionTO = (CollectionTO) RestProcessUtils.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json")
+                                                                     .replace("___PROFILE_ID___", profileId)
+                                                                     .replace("___METHOD___", "copy"), 
+                                                                     CollectionTO.class);
+
       collectionTO = s.create(collectionTO, JenaUtil.testUser);
       collectionId = collectionTO.getId();
     } catch (Exception e) {
@@ -154,31 +193,34 @@ public class ImejiTestBase extends JerseyTest {
    * @throws Exception
    */
   public static void initItem() {
-    ItemService s = new ItemService();
-    ItemWithFileTO to = new ItemWithFileTO();
-    to.setCollectionId(collectionId);
-    to.setFile(new File(STATIC_CONTEXT_STORAGE + "/test.png"));
-    to.setStatus("PENDING");
-    try {
-      itemTO = s.create(to, JenaUtil.testUser);
-      itemId = itemTO.getId();
-    } catch (Exception e) {
-      logger.error("Cannot init Item", e);
-    }
+    initItem(null);
   }
 
   public static void initItem(String fileName) {
-    ItemService s = new ItemService();
-    ItemWithFileTO to = new ItemWithFileTO();
+    DefaultItemService s = new DefaultItemService();
+    DefaultItemWithFileTO to = new DefaultItemWithFileTO();
     to.setCollectionId(collectionId);
-    to.setFile(new File(STATIC_CONTEXT_STORAGE + "/" + fileName + ".jpg"));
+    if (fileName == null) {
+      to.setFile(new File(STATIC_CONTEXT_STORAGE + "/test.png"));
+    } else {
+      to.setFile(new File(STATIC_CONTEXT_STORAGE + "/" + fileName + ".jpg"));
+    }
     to.setStatus("PENDING");
     try {
       itemTO = s.create(to, JenaUtil.testUser);
       itemId = itemTO.getId();
+      defaultItemTO = new DefaultItemTO();
+      MetadataProfile profile = new ProfileController().retrieveByCollectionId(
+          ObjectHelper.getURI(CollectionImeji.class, collectionId), JenaUtil.testUser);
+      Item itemVo = new Item();
+      ReverseTransferObjectFactory.transferDefaultItem(itemTO, itemVo, profile, JenaUtil.testUser,
+          TRANSFER_MODE.UPDATE);
+      defaultItemTO.setCollectionId(collectionId);
+      TransferObjectFactory.transferDefaultItem(itemVo, defaultItemTO, profile);
+      
+
     } catch (Exception e) {
       logger.error("Cannot init Item", e);
-
     }
   }
 

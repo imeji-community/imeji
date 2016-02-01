@@ -37,7 +37,7 @@ public class ProfileValidatorTest {
 
   @Before
   public void init() {
-    validator = new ProfileValidator(Method.ALL);
+    validator = new ProfileValidator();
     profile = new MetadataProfile();
     profile.setTitle("Profile");
   }
@@ -47,7 +47,7 @@ public class ProfileValidatorTest {
     profile.setStatements(asList(newStatement(Types.TEXT, "text1", "text2"),
         newStatement(Types.TEXT, "text1", "text2")));
     try {
-      validator.validate(profile);
+      validator.validate(profile, Method.ALL);
       fail("Validation of uniqueness... false positive");
     } catch (UnprocessableError e) {
       assertThat(e.getMessage(), equalTo("labels_have_to_be_unique"));
@@ -59,7 +59,7 @@ public class ProfileValidatorTest {
   public void validateLabelSyntax_numberHash() {
     profile.setStatements(asList(newStatement(Types.TEXT, "12345#text", "text")));
     try {
-      validator.validate(profile);
+      validator.validate(profile, Method.ALL);
     } catch (UnprocessableError e) {
       fail("Unexpected error:" + e.getLocalizedMessage());
     }
@@ -72,7 +72,7 @@ public class ProfileValidatorTest {
     s.setLabels(asList(new LocalizedString("text1", "en"), new LocalizedString("text2", "en")));
     profile.setStatements(asList(s));
     try {
-      validator.validate(profile);
+      validator.validate(profile, Method.ALL);
       Assert.fail("Validation of label syntax... false positive");
     } catch (UnprocessableError e) {
       assertThat(e.getMessage(), equalTo("labels_duplicate_lang"));
@@ -83,7 +83,7 @@ public class ProfileValidatorTest {
   public void validateLabelSyntax_notNumberNumberHash() {
     profile.setStatements(asList(newStatement(Types.TEXT, "abcd12345#text", "text")));
     try {
-      validator.validate(profile);
+      validator.validate(profile, Method.ALL);
     } catch (UnprocessableError e) {
       fail("Unexpected error:" + e.getLocalizedMessage());
     }

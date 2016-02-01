@@ -31,18 +31,14 @@ import de.mpg.imeji.presentation.util.ProfileHelper;
  */
 public class MetadataValidator extends ObjectValidator implements Validator<Metadata> {
 
-  public MetadataValidator(Validator.Method method) {
-    super(method);
+  @Override
+  public void validate(Metadata t, Method m) throws UnprocessableError {
+    throw new UnprocessableError("Metadata can not be validated without a profile");
   }
 
   @Override
-  @Deprecated
-  public void validate(Metadata t) throws UnprocessableError {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public void validate(Metadata md, MetadataProfile p) throws UnprocessableError {
+  public void validate(Metadata md, MetadataProfile p, Method m) throws UnprocessableError {
+    setValidateForMethod(m);
     if (isDelete()) {
       return;
     }
@@ -191,9 +187,11 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
    * @return
    */
   private boolean containsString(Collection<String> l, String value) {
-    for (String s : l)
-      if (s.equals(value))
+    for (String s : l) {
+      if (s.equals(value)) {
         return true;
+      }
+    }
     return false;
   }
 
@@ -205,9 +203,11 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
    * @return
    */
   private boolean containsDouble(Collection<String> l, double value) {
-    for (String s : l)
-      if (Double.parseDouble(s) == value)
+    for (String s : l) {
+      if (Double.parseDouble(s) == value) {
         return true;
+      }
+    }
     return false;
   }
 
@@ -219,10 +219,11 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
    * @return
    */
   private boolean containsURI(Collection<String> l, URI value) {
-    for (String s : l)
-      if (URI.create(s).equals(value))
+    for (String s : l) {
+      if (URI.create(s).equals(value)) {
         return true;
+      }
+    }
     return false;
   }
-
 }

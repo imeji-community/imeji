@@ -28,10 +28,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
-import com.sun.pdfview.PDFParseException;
-
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -44,16 +40,13 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  * @version $Revision$ $LastChangedDate$
  */
 public class PdfImageGenerator implements ImageGenerator {
-  private static Logger logger = Logger.getLogger(PdfImageGenerator.class);
-
   /*
    * (non-Javadoc)
    * 
    * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
   @Override
-  public byte[] generateJPG(File file, String extension) throws FileNotFoundException,
-      PDFParseException, IOException {
+  public byte[] generateJPG(File file, String extension) throws FileNotFoundException, IOException {
     if (StorageUtils.getMimeType(extension).equals("application/pdf"))
       return PdfUtils.pdfsToImageBytes(file);
     return null;

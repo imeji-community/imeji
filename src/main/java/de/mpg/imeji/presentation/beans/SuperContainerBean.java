@@ -417,23 +417,25 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
       searchQuery.addPair(sp);
     }
     if (getSearchQuery() == null || changedFilters(sp, getSelectedFilterSearch())) {
-      SortCriterion sortCriterion = new SortCriterion();
-      sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
-      sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-
-      searchResult = search(searchQuery, sortCriterion, offset, limit);
-      setSearchQuery(searchQuery);
-      setSelectedFilterSearch(sp);
-      searchResult.setQuery(getQuery());
-      // setQuery(getQuery());
-
-      searchResult.setSort(sortCriterion);
-
-      setTotalNumberOfRecords(searchResult.getNumberOfRecords());
       setCurrentPageNumber(1);
       setGoToPage("1");
       myOffset = 0;
     }
+
+    SortCriterion sortCriterion = new SortCriterion();
+    sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
+    sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+
+    searchResult = search(searchQuery, sortCriterion, myOffset, limit);
+    setSearchQuery(searchQuery);
+    setSelectedFilterSearch(sp);
+    searchResult.setQuery(getQuery());
+    // setQuery(getQuery());
+
+    searchResult.setSort(sortCriterion);
+
+    setTotalNumberOfRecords(searchResult.getNumberOfRecords());
+
 
     return myOffset;
   }

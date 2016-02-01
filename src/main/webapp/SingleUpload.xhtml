@@ -151,7 +151,7 @@
 											<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 											<span class="imj_invisible">: </span>
 										</div>
-										<div class="imj_metadataValue" style="margin-left: #{smdb.hierarchyLevel}em;">
+										<div class="imj_metadataValue" style="margin-left: #{metadata.hierarchyLevel}em;">
 											<!-- MetaDataInput -->
 											<list:batchEditList_singleStatement id="editMd" itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>											
 											<div class="imj_metadataEditButtonArea">

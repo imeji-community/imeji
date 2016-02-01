@@ -8,6 +8,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -456,6 +458,7 @@ public class UserController {
    * @return
    */
   private Collection<Person> searchPersonByNameInUsers(String name) {
+    System.out.println("searching by person name in users");
     Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
     return loadPersons(search
         .searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1).getResults(),
@@ -511,7 +514,7 @@ public class UserController {
    * @throws ImejiException
    */
   public Collection<User> loadUsers(List<String> uris) {
-    Collection<User> users = new ArrayList<User>();
+    List<User> users = new ArrayList<User>();
     for (String uri : uris) {
       try {
         users.add((User) reader.read(uri, user, new User()));
@@ -519,6 +522,15 @@ public class UserController {
         logger.info("Could not find user with URI " + uri, e);
       }
     }
+
+    // Always sort Users by complete name
+    Comparator<User> comparator = new Comparator<User>() {
+      public int compare(User c1, User c2) {
+        return c1.getPerson().getCompleteName().toLowerCase()
+            .compareTo(c2.getPerson().getCompleteName().toLowerCase()); // use your logic
+      }
+    };
+    Collections.sort(users, comparator);
     return users;
   }
 

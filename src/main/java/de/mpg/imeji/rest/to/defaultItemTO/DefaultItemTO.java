@@ -1,8 +1,8 @@
-package de.mpg.imeji.rest.defaultTO;
+package de.mpg.imeji.rest.to.defaultItemTO;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,9 +14,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import de.mpg.imeji.rest.to.PropertiesTO;
 
 @XmlRootElement
-@XmlType(propOrder = {"id", "createdBy", "modifiedBy", "createdDate", "modifiedDate",
-    "versionDate", "status", "visibility", "version", "discardComment", "collectionId", "filename",
-    "mimetype", "checksumMd5", "webResolutionUrlUrl", "thumbnailUrl", "fileUrl", "metadata"})
+@XmlType(propOrder = { "visibility", "collectionId", "filename",
+    "mimetype", "fileSize", "checksumMd5", "webResolutionUrlUrl", "thumbnailUrl", "fileUrl", "metadata"})
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DefaultItemTO extends PropertiesTO implements Serializable {
 
@@ -48,7 +48,11 @@ public class DefaultItemTO extends PropertiesTO implements Serializable {
 
   private long fileSize;
 
-  private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
+  /* ORIGINAL EASY METADATA
+   * 
+   * private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
+   */
+  private Map<String, JsonNode> metadata = new LinkedHashMap<String, JsonNode>();
 
   public String getCollectionId() {
     return collectionId;

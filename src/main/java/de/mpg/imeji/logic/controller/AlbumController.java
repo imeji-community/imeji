@@ -14,9 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -51,12 +48,10 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class AlbumController extends ImejiController {
-  private static ReaderFacade reader = new ReaderFacade(Imeji.albumModel);
-  private static WriterFacade writer = new WriterFacade(Imeji.albumModel);
+  private static final ReaderFacade reader = new ReaderFacade(Imeji.albumModel);
+  private static final WriterFacade writer = new WriterFacade(Imeji.albumModel);
   private Search search =
       SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC);
-
-  private static Logger logger = Logger.getLogger(AlbumController.class);
 
   /**
    * Construct a new controller for {@link Album}
@@ -72,7 +67,7 @@ public class AlbumController extends ImejiController {
    * @param user
    */
   public URI create(Album album, User user) throws ImejiException {
-    new WriterFacade(Imeji.albumModel);
+    isLoggedInUser(user);
     writeCreateProperties(album, user);
     ShareController shareController = new ShareController();
     shareController.shareToCreator(user, album.getId().toString());
@@ -199,9 +194,7 @@ public class AlbumController extends ImejiController {
    * @throws ImejiException
    */
   public void withdraw(Album album, User user) throws ImejiException {
-    if (user == null) {
-      throw new AuthenticationError("User must be signed-in");
-    }
+    isLoggedInUser(user);
     if (album == null) {
       throw new NotFoundException("Album does not exists");
     }

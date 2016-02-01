@@ -104,8 +104,9 @@ public class ItemBean {
    */
   public String getInit() throws Exception {
     tab = UrlHelper.getParameterValue("tab");
-    if ("".equals(tab))
+    if ("".equals(tab)) {
       tab = null;
+    }
     try {
       loadImage();
     } catch (Exception e) {
@@ -147,6 +148,9 @@ public class ItemBean {
     initImageUploader();
   }
 
+  /**
+   * Find the user name of the user who upload the file
+   */
   private void initImageUploader() {
     Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
     List<String> users =
@@ -175,7 +179,8 @@ public class ItemBean {
       loadCollection(user);
       loadProfile(user);
       labels.init(profile);
-      if (profile.getId() != null) {
+      edit = new SingleEditBean(item, profile, getPageUrl());
+      if (profile != null) {
         edit = new SingleEditBean(item, profile, getPageUrl());
         mds = edit.getEditor().getItems().get(0).getMds();
       }
@@ -244,9 +249,6 @@ public class ItemBean {
    */
   public void loadProfile(User user) {
     profile = ObjectLoader.loadProfile(item.getMetadataSet().getProfile(), user);
-    if (profile == null) {
-      profile = new MetadataProfile();
-    }
   }
 
   public String getInitLabels() throws Exception {

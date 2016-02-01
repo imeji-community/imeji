@@ -39,7 +39,7 @@ public class IngestController {
   public void ingest(File itemListXmlFile, File profileXmlFile) throws Exception {
     if (profileXmlFile != null) {
       IngestProfileController ipc = new IngestProfileController(user);
-      ipc.ingest(profileXmlFile, collection.getProfile());
+      ipc.ingest(profileXmlFile, collection);
     }
     if (itemListXmlFile != null) {
       ProfileController pc = new ProfileController();

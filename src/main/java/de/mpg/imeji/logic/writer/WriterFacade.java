@@ -29,6 +29,7 @@ import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -108,8 +109,9 @@ public class WriterFacade {
    * @see de.mpg.imeji.logic.writer.Writer#delete(java.util.List, de.mpg.imeji.logic.vo.User)
    */
   public void delete(List<Object> objects, User user) throws ImejiException {
-    if (objects.isEmpty())
+    if (objects.isEmpty()) {
       return;
+    }
     checkSecurity(objects, user, GrantType.DELETE);
     validate(objects, null, Validator.Method.DELETE);
     writer.delete(objects, user);
@@ -142,8 +144,9 @@ public class WriterFacade {
    */
   public void updateLazy(List<Object> objects, MetadataProfile profile, User user)
       throws ImejiException {
-    if (objects.isEmpty())
+    if (objects.isEmpty()) {
       return;
+    }
     checkSecurity(objects, user, GrantType.UPDATE);
     validate(objects, profile, Validator.Method.UPDATE);
     writer.updateLazy(objects, user);
@@ -180,7 +183,7 @@ public class WriterFacade {
     Validator<Object> validator =
         (Validator<Object>) ValidatorFactory.newValidator(list.get(0), method);
     for (Object o : list) {
-      validator.validate(o, profile);
+      validator.validate(o, profile, method);
     }
   }
 
@@ -191,30 +194,25 @@ public class WriterFacade {
    * @param user
    * @param opType
    * @throws NotAllowedError
+   * @throws AuthenticationError
    */
-  private void checkSecurity(List<Object> list, User user, GrantType gt) throws NotAllowedError {
-    String messageHelper = null;
+  private void checkSecurity(List<Object> list, User user, GrantType gt)
+      throws NotAllowedError, AuthenticationError {
+    String message = user != null ? user.getEmail() : "";
     for (Object o : list) {
-      messageHelper = " not allowed to " + Grant.getGrantTypeName(gt) + " " + extractID(o);
+      message += " not allowed to " + Grant.getGrantTypeName(gt) + " " + extractID(o);
       if (gt == GrantType.CREATE) {
-        throwAuthorizationException(AuthUtil.staticAuth().create(user, o),
-            user.getEmail() + messageHelper);
+        throwAuthorizationException(user != null, AuthUtil.staticAuth().create(user, o), message);
       } else if (gt == GrantType.UPDATE) {
-        throwAuthorizationException(AuthUtil.staticAuth().update(user, o),
-            user.getEmail() + messageHelper);
-
+        throwAuthorizationException(user != null, AuthUtil.staticAuth().update(user, o), message);
       } else if (gt == GrantType.DELETE) {
-        throwAuthorizationException(AuthUtil.staticAuth().delete(user, o),
-            user.getEmail() + messageHelper);
-
+        throwAuthorizationException(user != null, AuthUtil.staticAuth().delete(user, o), message);
       } else if (gt == GrantType.UPDATE_CONTENT) {
-        throwAuthorizationException(AuthUtil.staticAuth().updateContent(user, o),
-            user.getEmail() + messageHelper);
-
+        throwAuthorizationException(user != null, AuthUtil.staticAuth().updateContent(user, o),
+            message);
       } else if (gt == GrantType.ADMIN_CONTENT) {
-        throwAuthorizationException(AuthUtil.staticAuth().adminContent(user, o),
-            user.getEmail() + messageHelper);
-
+        throwAuthorizationException(user != null, AuthUtil.staticAuth().adminContent(user, o),
+            message);
       }
     }
   }
@@ -226,11 +224,13 @@ public class WriterFacade {
    * @param user
    * @param opType
    * @throws NotAllowedError
+   * @throws AuthenticationError
    */
   public void checkSecurityParentObject(List<Object> list, User user, GrantType gt)
-      throws NotAllowedError {
-    if (list.isEmpty())
+      throws NotAllowedError, AuthenticationError {
+    if (list.isEmpty()) {
       return;
+    }
     checkSecurity(list, user, gt);
   }
 
@@ -263,10 +263,17 @@ public class WriterFacade {
    * @param b
    * @param message
    * @throws NotAllowedError
+   * @throws AuthenticationError
    */
-  private void throwAuthorizationException(boolean allowed, String message) throws NotAllowedError {
+  private void throwAuthorizationException(boolean loggedIn, boolean allowed, String message)
+      throws NotAllowedError, AuthenticationError {
     if (!allowed) {
-      throw new NotAllowedError(message);
+      if (!loggedIn) {
+        throw new AuthenticationError(AuthenticationError.USER_MUST_BE_LOGGED_IN);
+      } else {
+        throw new NotAllowedError(message);
+      }
+
     }
   }
 

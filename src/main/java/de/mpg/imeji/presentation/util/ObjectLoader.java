@@ -36,6 +36,11 @@ public class ObjectLoader {
   private static Logger logger = Logger.getLogger(ObjectLoader.class);
 
   /**
+   * Private Constructor
+   */
+  private ObjectLoader() {}
+
+  /**
    * Load a {@link CollectionImeji} with all its item
    * 
    * @param id
@@ -107,7 +112,7 @@ public class ObjectLoader {
    * @return
    * @throws Exception
    */
-  public static Album loadAlbumLazy(URI id, User user) throws Exception {
+  public static Album loadAlbumLazy(URI id, User user) throws ImejiException {
     try {
       AlbumController ac = new AlbumController();
       return ac.retrieveLazy(id, user);
@@ -127,7 +132,7 @@ public class ObjectLoader {
    * @return
    * @throws Exception
    */
-  public static Item loadItem(URI id, User user) throws Exception {
+  public static Item loadItem(URI id, User user) throws ImejiException {
     try {
       ItemController ic = new ItemController();
       return ic.retrieve(id, user);
@@ -148,7 +153,7 @@ public class ObjectLoader {
    * @return
    * @throws Exception
    */
-  public static UserGroup loadUserGroupLazy(URI id, User user) throws Exception {
+  public static UserGroup loadUserGroupLazy(URI id, User user) throws ImejiException {
     try {
       UserGroupController c = new UserGroupController();
       return c.read(id, user);
@@ -168,7 +173,7 @@ public class ObjectLoader {
    * @return
    * @throws Exception
    */
-  public static User loadUser(URI uri, User user) throws Exception {
+  public static User loadUser(URI uri, User user) throws ImejiException {
     try {
       UserController uc = new UserController(user);
       return uc.retrieve(uri);
@@ -188,7 +193,7 @@ public class ObjectLoader {
    * @return
    * @throws Exception
    */
-  public static User loadUser(String email, User user) throws Exception {
+  public static User loadUser(String email, User user) throws ImejiException {
     try {
       UserController uc = new UserController(user);
       return uc.retrieve(email);

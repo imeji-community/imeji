@@ -9,7 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -20,6 +19,7 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
@@ -27,9 +27,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
-import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.UserNameCache;
 import de.mpg.imeji.rest.to.AlbumTO;
@@ -45,6 +42,10 @@ import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.rest.to.PersonTOBasic;
 import de.mpg.imeji.rest.to.PropertiesTO;
 import de.mpg.imeji.rest.to.StatementTO;
+import de.mpg.imeji.rest.to.UserTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultOrganizationTO;
+import de.mpg.imeji.rest.to.defaultItemTO.predefinedEasyMetadataTO.DefaultConePersonTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
@@ -117,8 +118,10 @@ public class TransferObjectFactory {
     // TODO: versionOf
 
     // in output jsen reference to mdprofile
-    to.getProfile().setId(CommonUtils.extractIDFromURI(vo.getProfile()));
-    to.getProfile().setMethod("");
+    if (vo.getProfile() != null ) {
+      to.getProfile().setId(CommonUtils.extractIDFromURI(vo.getProfile()));
+      to.getProfile().setMethod("");
+    }
 
     for (Person p : vo.getMetadata().getPersons()) {
       PersonTO pto = new PersonTO();
@@ -140,6 +143,19 @@ public class TransferObjectFactory {
       to.getContributors().add(pto);
     }
 
+  }
+
+  /**
+   * Transfer a {@link User} to a {@link UserTO}
+   * 
+   * @param vo
+   * @param to
+   */
+  public static void transferUser(User vo, UserTO to) {
+    transferPerson(vo.getPerson(), to.getPerson());
+    to.setApiKey(vo.getApiKey());
+    to.setEmail(vo.getEmail());
+    to.setQuota(vo.getQuota());
   }
 
   /**
@@ -272,6 +288,7 @@ public class TransferObjectFactory {
     transferItemMetadataDefault(profile, vo.getMetadataSet().getMetadata(), to);
   }
 
+
   public static int getPosition(Map<Integer, String> positions, String statement) {
     if (!positions.containsValue(statement)) {
       positions.put(0, statement);
@@ -310,7 +327,7 @@ public class TransferObjectFactory {
       return;
     }
 
-    //get all statements of the Profile!
+    // get all statements of the Profile!
     int mdPosition = 0;
     for (Metadata md : voMds) {
       md.getId();
@@ -318,11 +335,11 @@ public class TransferObjectFactory {
       // mdTO.setPosition(md.getPos());
       mdTO.setStatementUri(md.getStatement());
       mdTO.setTypeUri(URI.create(md.getTypeNamespace()));
-      //NB
+      // NB
       mdTO.setPosition(mdPosition);
 
       if (profile.getStatements().size() > 0) {
-        
+
         List<LabelTO> ltos = new ArrayList<LabelTO>();
         for (Statement s : profile.getStatements()) {
           if (s.getId().toString().equals(md.getStatement().toString())) {
@@ -330,11 +347,11 @@ public class TransferObjectFactory {
               LabelTO lto = new LabelTO(ls.getLang(), ls.getValue());
               ltos.add(lto);
             }
-            
-            if (s.getParent() != null ){
+
+            if (s.getParent() != null) {
               mdTO.setParentStatementUri(s.getParent().toString());
             }
-            
+
             break;
           }
         }

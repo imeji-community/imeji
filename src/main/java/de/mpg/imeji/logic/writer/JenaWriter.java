@@ -14,7 +14,6 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.reader.JenaReader;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
-import de.mpg.imeji.logic.search.model.FulltextIndex;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.transaction.CRUDTransaction;
@@ -118,32 +117,10 @@ public class JenaWriter implements Writer {
    */
   private void runTransaction(List<Object> objects, GrantType type, boolean lazy)
       throws ImejiException {
-    index(objects);
-    // int n = 5000;
-    // for (int i = 0; i < objects.size(); i = i + n) {
-    // int max = i + n < objects.size() ? i + n : objects.size() ;
-    // Transaction t = new CRUDTransaction(objects.subList(i, max), type,
-    // modelURI, lazy);
-    // // Write Transaction needs to be added in a new Thread
-    // ThreadedTransaction.run(new ThreadedTransaction(t));
-    // }
     Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
     // Write Transaction needs to be added in a new Thread
     ThreadedTransaction.run(new ThreadedTransaction(t));
-
   }
 
-  /**
-   * Set the fulltext value of each imeji object (based on the metadata values, the author, etc.)
-   * 
-   * @param l
-   */
-  private void index(List<Object> l) {
-    for (Object o : l) {
-      if (o instanceof FulltextIndex) {
-        ((FulltextIndex) o).indexFulltext();
-      }
-    }
-  }
 
 }

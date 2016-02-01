@@ -42,6 +42,7 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -115,6 +116,9 @@ public class ProfileController extends ImejiController {
    */
   public MetadataProfile retrieve(URI uri, User user) throws ImejiException {
     MetadataProfile p = null;
+    if (uri == null) {
+      return null;
+    }
     p = ((MetadataProfile) reader.read(uri.toString(), user, new MetadataProfile()));
     Collections.sort((List<Statement>) p.getStatements());
     return p;
@@ -130,11 +134,33 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public MetadataProfile retrieveByCollectionId(URI collectionId, User user) throws ImejiException {
-
     CollectionController cc = new CollectionController();
     CollectionImeji c;
     try {
       c = cc.retrieve(collectionId, user);
+
+      if (c.getProfile() == null)
+        return null;
+
+      return retrieve(c.getProfile(), user);
+    } catch (NotFoundException e) {
+      throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
+    }
+  }
+
+
+  /**
+   * Retrieve the {@link MetadataProfile} of an {@link Item} TODO: Use Search for better performance
+   * 
+   * @param itemId
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public MetadataProfile retrieveByItemId(URI itemId, User user) throws ImejiException {
+    try {
+      Item item = new ItemController().retrieve(itemId, user);
+      CollectionImeji c = new CollectionController().retrieve(item.getCollection(), user);
       return retrieve(c.getProfile(), user);
     } catch (NotFoundException e) {
       throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
@@ -150,6 +176,7 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public void update(MetadataProfile mdp, User user) throws ImejiException {
+    isLoggedInUser(user);
     writeUpdateProperties(mdp, user);
     writer.update(WriterFacade.toList(mdp), null, user, true);
     Imeji.executor.submit(new CleanMetadataJob(mdp));
@@ -163,8 +190,7 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public void release(MetadataProfile mdp, User user) throws ImejiException {
-    mdp.setStatus(Status.RELEASED);
-    mdp.setVersionDate(DateHelper.getCurrentDate());
+    writeReleaseProperty(mdp, user);
     update(mdp, user);
   }
 
@@ -333,10 +359,14 @@ public class ProfileController extends ImejiController {
       mdpVO = new MetadataProfile();
       transferMetadataProfile(mdpTO, mdpVO, TRANSFER_MODE.CREATE);
       mdpVO.setDefault(true);
-      mdpVO = create(mdpVO, Imeji.adminUser);
-      release(mdpVO, Imeji.adminUser);
 
+      mdpVO = create(mdpVO, Imeji.adminUser);
     }
+
+    if (mdpVO != null && !mdpVO.getStatus().equals(Status.RELEASED)) {
+      release(mdpVO, Imeji.adminUser);
+    }
+
     return mdpVO;
 
   }
@@ -415,4 +445,8 @@ public class ProfileController extends ImejiController {
     }
   }
 
+  public MetadataProfile retrieveLazy(URI imgUri, User user) throws ImejiException {
+    return (MetadataProfile) reader.readLazy(imgUri.toString(), user, new MetadataProfile());
+
+  }
 }

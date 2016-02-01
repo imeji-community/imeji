@@ -34,6 +34,11 @@ public class MaxPlanckInstitutUtils {
   private static Map<String, String> IdMap;
 
   /**
+   * Private Constructor
+   */
+  private MaxPlanckInstitutUtils() {}
+
+  /**
    * Return the name of the Max Planck Institute according to the IP. If not found, return null
    * 
    * @param ip

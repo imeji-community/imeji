@@ -50,7 +50,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
     Collection<Album> albums = new ArrayList<Album>();
     search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-    albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), limit, offset);
+    albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), -1, offset);
     return ImejiFactory.albumListToBeanList(albums);
   }
 

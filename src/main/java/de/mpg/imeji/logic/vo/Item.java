@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.chrono.AssembledChronology.Fields;
 
-import de.mpg.imeji.logic.search.model.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -36,7 +35,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "item", namespace = "http://imeji.org/terms/")
-public class Item extends Properties implements FulltextIndex, Serializable {
+public class Item extends Properties implements Serializable {
   private static final long serialVersionUID = 3989965275269803885L;
 
   public enum Visibility {
@@ -64,8 +63,6 @@ public class Item extends Properties implements FulltextIndex, Serializable {
   private String escidocId;
   @j2jLiteral("http://imeji.org/terms/storageId")
   private String storageId;
-  @j2jLiteral("http://imeji.org/terms/fulltext")
-  private String fulltext;
   @j2jLiteral("http://imeji.org/terms/checksum")
   private String checksum;
   @j2jLiteral("http://imeji.org/terms/fileSize")
@@ -76,8 +73,9 @@ public class Item extends Properties implements FulltextIndex, Serializable {
   private long height;
   private List<String> albums = new ArrayList<>();
 
+  public Item() {
 
-  public Item() {}
+  }
 
   public Item(Item im) {
     copyInFields(im);
@@ -228,32 +226,6 @@ public class Item extends Properties implements FulltextIndex, Serializable {
    */
   public void setStorageId(String storageId) {
     this.storageId = storageId;
-  }
-
-  @Override
-  public void setFulltextIndex(String fulltext) {
-    this.fulltext = fulltext;
-  }
-
-  @Override
-  @XmlElement(name = "fulltext", namespace = "http://imeji.org/terms/")
-  public String getFulltextIndex() {
-    return fulltext;
-  }
-
-  /**
-   * Set the value for the fulltext search (according to all {@link Metadata} values)
-   */
-  @Override
-  public void indexFulltext() {
-    fulltext = filename;
-    for (Metadata md : getMetadataSet().getMetadata()) {
-      if (!"".equals(md.asFulltext())) {
-        fulltext += " " + md.asFulltext();
-      }
-    }
-    if (fulltext != null)
-      fulltext = fulltext.trim();
   }
 
   /**

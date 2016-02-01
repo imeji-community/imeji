@@ -43,7 +43,6 @@ import javax.imageio.stream.ImageOutputStream;
 import org.w3c.dom.NamedNodeMap;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
-import de.mpg.imeji.presentation.upload.helper.AnimatedGifEncoder;
 
 /**
  * Utility class for Gif images

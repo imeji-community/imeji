@@ -21,8 +21,8 @@
 
 					<ui:repeat id="filterList" var="filter" value="#{cc.attrs.fSession.filters}" offset="0" varStatus="index">
 						<h:outputText value="/" styleClass="imj_facetSeparator" rendered="#{index.index > 0}"/>
-						<h:outputText value="#{filter.internationalizedLabel}"/>
-						<h:outputText value="(#{filter.notDefineType})" rendered="#{filter.notDefine}"/>
+						<h:outputText value="#{filter.internationalizedLabel}" rendered="#{!(filter.notDefine)}"/>
+						<h:outputText value="NO #{filter.notDefineType}" rendered="#{filter.notDefine}"/>
 						<h:outputLink styleClass="imj_removeFacetButton fa fa-times" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == SessionBean.getPrettySpacePage('pretty:browse')}"/>
 						<h:outputLink styleClass="imj_removeFacetButton fa fa-times" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}"/>	
 					</ui:repeat>

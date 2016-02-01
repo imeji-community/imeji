@@ -118,7 +118,6 @@ public class ElasticIndexer implements SearchIndexer {
     try {
       return mapper.writeValueAsString(toESEntity(obj, dataType));
     } catch (JsonProcessingException e) {
-      e.printStackTrace();
       throw new UnprocessableError("Error serializing object to json", e);
     }
   }
@@ -219,7 +218,6 @@ public class ElasticIndexer implements SearchIndexer {
           .setSource(jsonMapping).execute().actionGet();
     } catch (Exception e) {
       logger.error("Error initializing the Elastic Search Mapping", e);
-      e.printStackTrace();
     }
   }
 

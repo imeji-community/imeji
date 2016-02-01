@@ -14,7 +14,15 @@ public class ElasticFolder extends ElasticContainerProperties {
 
   public ElasticFolder(CollectionImeji c) {
     super(c);
-    this.setProfile(c.getProfile().toString());
+
+    if (c.getProfile() != null ) {
+      this.setProfile(c.getProfile().toString());
+    }
+    else
+    {
+      this.setProfile("");
+    }
+
     this.setSpace(String.valueOf(c.getSpace()));
   }
 

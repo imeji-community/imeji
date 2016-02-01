@@ -76,23 +76,9 @@ public class StorageUtils {
    * @return
    */
   public static byte[] toBytes(InputStream stream) {
-    int b;
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    try {
-      while ((b = stream.read()) != -1) {
-        bos.write(b);
-      }
-      return bos.toByteArray();
-    } catch (IOException e) {
-      throw new RuntimeException("Error transforming inputstream to bytearryoutputstream", e);
-    } finally {
-      try {
-        bos.flush();
-        bos.close();
-      } catch (IOException e) {
-        logger.error(e);
-      }
-    }
+    writeInOut(stream, bos, true);
+    return bos.toByteArray();
   }
 
   /**
@@ -104,7 +90,7 @@ public class StorageUtils {
    */
   public static void writeInOut(InputStream in, OutputStream out, boolean close) {
     try {
-      IOUtils.copy(in, out);
+      IOUtils.copyLarge(in, out);
     } catch (IOException e) {
       throw new RuntimeException("Error writing inputstream in outputstream: ", e);
     } finally {
@@ -318,21 +304,13 @@ public class StorageUtils {
    * @throws IOException
    */
   public static String calculateChecksum(File file) throws ImejiException {
-    FileInputStream fis = null;
     try {
-      fis = new FileInputStream(file);
-      return DigestUtils.md5Hex(toBytes(fis));
+      return DigestUtils.md5Hex(toBytes(new FileInputStream(file)));
     } catch (IOException e) {
       throw new UnprocessableError("Error calculating the cheksum of the file: ", e);
     }
-
-    // finally {
-    // if (fis != null)
-    // fis.close();
-    // }
-    //
-
   }
+
 
   /**
    * Return the bytes from an url

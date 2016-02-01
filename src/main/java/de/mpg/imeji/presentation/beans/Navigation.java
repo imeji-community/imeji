@@ -23,37 +23,37 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class Navigation implements Serializable {
   private static final long serialVersionUID = -4318697194892200726L;
   // Url of the FW
-  public String frameworkUrl;
+  public static String frameworkUrl;
   // Url of the application
-  public final String applicationUrl;
+  public static String applicationUrl;
   // Url of digilib
-  public String externalDigilibUrl;
+  public static String externalDigilibUrl;
   // Pages of imeji
-  public final Page HOME = new Page("HomePage", "");
-  public final Page SEARCH = new Page("Search", "search");
-  public final Page HELP = new Page("Help", "help");
-  public final Page BROWSE = new Page("Browse", "browse");
-  public final Page ITEM = new Page("Item", "item");
-  public final Page COLLECTION = new Page("collection", "collection");
-  public final Page ALBUM = new Page("album", "album");
-  public final Page PROFILE = new Page("Profile", "profile");
-  public final Page ALBUMS = new Page("albums", "albums");
-  public final Page COLLECTIONS = new Page("Collections", "collections");
-  public final Page EXPORT = new Page("export", "export");
-  public final Page EDIT = new Page("Edit", "edit");
-  public final Page INFOS = new Page("Info", "infos");
-  public final Page CREATE = new Page("Create", "create");
-  public final Page UPLOAD = new Page("Upload collection", "upload");
-  public final Page SHARE = new Page("Share", "share");
-  public final Page USER = new Page("User", "user");
-  public final Page ADMIN = new Page("Admin", "admin");
-  public final Page DIGILIB = new Page("Digilib", "digilib");
-  public final Page SINGLEUPLOAD = new Page("Single upload", "singleupload");
-  public final Page REGISTRATION = new Page("Registration", "register");
+  public static final Page HOME = new Page("HomePage", "");
+  public static final Page SEARCH = new Page("Search", "search");
+  public static final Page HELP = new Page("Help", "help");
+  public static final Page BROWSE = new Page("Browse", "browse");
+  public static final Page ITEM = new Page("Item", "item");
+  public static final Page COLLECTION = new Page("collection", "collection");
+  public static final Page ALBUM = new Page("album", "album");
+  public static final Page PROFILE = new Page("Profile", "profile");
+  public static final Page ALBUMS = new Page("albums", "albums");
+  public static final Page COLLECTIONS = new Page("Collections", "collections");
+  public static final Page EXPORT = new Page("export", "export");
+  public static final Page EDIT = new Page("Edit", "edit");
+  public static final Page INFOS = new Page("Info", "infos");
+  public static final Page CREATE = new Page("Create", "create");
+  public static final Page UPLOAD = new Page("Upload collection", "upload");
+  public static final Page SHARE = new Page("Share", "share");
+  public static final Page USER = new Page("User", "user");
+  public static final Page ADMIN = new Page("Admin", "admin");
+  public static final Page DIGILIB = new Page("Digilib", "digilib");
+  public static final Page SINGLEUPLOAD = new Page("Single upload", "singleupload");
+  public static final Page REGISTRATION = new Page("Registration", "register");
   // session
-  private SessionBean sessionBean = null;
-  public final String spaceCommonSlug = "space/";
-  public final String spacesAllSlug = "spaces";
+
+  public static final String spaceCommonSlug = "space/";
+  public static final String spacesAllSlug = "spaces";
 
 
   /**
@@ -88,7 +88,7 @@ public class Navigation implements Serializable {
   }
 
   public String getExternalDigilibUrl() {
-    return this.externalDigilibUrl;
+    return externalDigilibUrl;
   }
 
   public String getDomain() {
@@ -160,11 +160,6 @@ public class Navigation implements Serializable {
     return applicationUrl + getSpacePath() + EXPORT.getPath();
   }
 
-  // public String getBlogUrl() throws IOException, URISyntaxException
-  // {
-  // return PropertyReader.getProperty("imeji.blog.url");
-  // }
-
   public String getShareUrl() {
     return applicationUrl + getSpacePath() + SHARE.getPath();
   }
@@ -217,10 +212,10 @@ public class Navigation implements Serializable {
   }
 
   public String getSpacePath() {
-    if (!(isNullOrEmpty(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getSpaceId()))) {
-      return spaceCommonSlug
-          + StringHelper.normalizeURI(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getSpaceId());
+    if (!(isNullOrEmpty(
+        ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getSpaceId()))) {
+      return spaceCommonSlug + StringHelper
+          .normalizeURI(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getSpaceId());
     }
     return "";
   }
@@ -231,7 +226,7 @@ public class Navigation implements Serializable {
    * @return
    */
   public String getContext() {
-    sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     if (sessionBean.getCurrentPage() == null) {
       return "";
     }
@@ -279,7 +274,7 @@ public class Navigation implements Serializable {
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
    */
-  public class Page implements Serializable {
+  public static class Page implements Serializable {
     private static final long serialVersionUID = -5718218208615761900L;
     private String name;
     private String path;

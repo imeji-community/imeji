@@ -25,7 +25,12 @@ import org.apache.log4j.Logger;
  */
 public class UrlHelper {
 
-  private static Logger LOGGER = Logger.getLogger(UrlHelper.class);
+  private static final Logger LOGGER = Logger.getLogger(UrlHelper.class);
+
+  /**
+   * Private Constructor
+   */
+  private UrlHelper() {}
 
   /**
    * Return the value of a parameter in an url

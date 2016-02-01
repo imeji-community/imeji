@@ -17,6 +17,7 @@
 			
 			<!-- AJAX Wrapper - START -->
 			<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_editMetadataProfilePage">
+			
 		  		<h:form id="profileForm" >
 					<div class="imj_metadataProfileList imj_edit">
 						<div class="imj_listHeader">
@@ -327,5 +328,8 @@
 				}			
 			</script>
 		</ui:fragment>
+	</ui:define>
+	<ui:define name="additonalFooterScripts">
+		<script type="text/javascript">dragAndDrop(); highlighter();</script>
 	</ui:define>
 </ui:composition>

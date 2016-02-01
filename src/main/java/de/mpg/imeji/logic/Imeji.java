@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -58,9 +57,7 @@ import de.mpg.j2j.annotations.j2jModel;
  * @version $Revision$ $LastChangedDate$
  */
 public class Imeji {
-
-  private static Logger logger = Logger.getLogger(Imeji.class);
-
+  private static final Logger logger = Logger.getLogger(Imeji.class);
   public static String tdbPath = null;
   public static String collectionModel;
   public static String albumModel;
@@ -68,23 +65,24 @@ public class Imeji {
   public static String userModel;
   public static String profileModel;
   public static String statementModel;
-  public static String counterModel = "http://imeji.org/counter";
   public static String spaceModel;
   public static Dataset dataset;
-  public static URI counterID = URI.create("http://imeji.org/counter/0");
   public static User adminUser;
   public static MetadataProfile defaultMetadataProfile;
   private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
   private static final String ADMIN_PASSWORD_INIT = "admin";
-  public static LocksSurveyor locksSurveyor = new LocksSurveyor();
+  /**
+   * Thread to check if locked objects can be unlocked
+   */
+  public static final LocksSurveyor locksSurveyor = new LocksSurveyor();
   /**
    * The {@link ExecutorService} which runs the thread in imeji
    */
-  public static ExecutorService executor = Executors.newCachedThreadPool();
+  public static final ExecutorService executor = Executors.newCachedThreadPool();
   /**
    * Executes jobs over night
    */
-  public static NightlyExecutor nightlyExecutor = new NightlyExecutor();
+  public static final NightlyExecutor nightlyExecutor = new NightlyExecutor();
 
   /**
    * Initialize the {@link Jena} database according to imeji.properties<br/>
@@ -92,6 +90,7 @@ public class Imeji {
    * 
    * @throws URISyntaxException
    * @throws IOException
+   * 
    */
   public static void init() throws IOException, URISyntaxException {
     tdbPath = PropertyReader.getProperty("imeji.tdb.path");
@@ -153,12 +152,14 @@ public class Imeji {
     initModel(statementModel);
     initModel(profileModel);
     initModel(spaceModel);
-    initModel(counterModel);
     logger.info("... models done!");
     initadminUser();
     initDefaultMetadataProfile();
   }
 
+  /**
+   * Reset imeji, i.e. remove all data
+   */
   public static void reset() {
     TDBFactory.reset();
     ElasticService.reset();
@@ -230,7 +231,6 @@ public class Imeji {
   }
 
   private static void initDefaultMetadataProfile() {
-
     ProfileController pc = new ProfileController();
     logger.info("Initializing default metadata profile...");
     try {
@@ -290,23 +290,6 @@ public class Imeji {
   }
 
   /**
-   * Print all data in one {@link Model} as RDF
-   * 
-   * @param modelName
-   */
-  public static void printModel(String modelName) {
-    try {
-      dataset.begin(ReadWrite.READ);
-      dataset.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
-      dataset.commit();
-    } catch (Exception e) {
-      dataset.abort();
-    } finally {
-      dataset.end();
-    }
-  }
-
-  /**
    * Returns true if checksum of uploaded files will be checked for duplicates within a single
    * collection according to settings in properties. If properties do not exist, checksum duplicate
    * checking will be set as default
@@ -316,15 +299,13 @@ public class Imeji {
   public static boolean isValidateChecksumInCollection() {
     String validateChecksum;
     try {
-      validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
+      validateChecksum = PropertyReader.getProperty("imeji.validate.checksum");
     } catch (Exception e) {
       return true;
     }
-
-    if (isNullOrEmpty(validateChecksum))
+    if (isNullOrEmpty(validateChecksum)) {
       return true;
-
+    }
     return Boolean.valueOf(validateChecksum);
-
   }
 }

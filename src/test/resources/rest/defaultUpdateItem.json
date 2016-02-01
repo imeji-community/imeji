@@ -9,7 +9,7 @@
         "latitude": 47.421111
       },
       "number": 1.2345678E7,
-      "person": {
+      "conePerson": {
         "familyName": "test",
         "givenName": "tester"
       },

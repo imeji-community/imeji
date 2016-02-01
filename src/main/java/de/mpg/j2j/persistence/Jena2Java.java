@@ -70,7 +70,7 @@ public class Jena2Java {
     }
     for (Field f : J2JHelper.getAllObjectFields(javaObject.getClass())) {
       Object object = J2JHelper.getFieldAsJavaObject(f, javaObject);
-      object = loadObject(subject, f, object, 0);
+      object = loadObject(subject, f, object, 0, null);
       setField(javaObject, f, object);
     }
     return javaObject;
@@ -86,20 +86,20 @@ public class Jena2Java {
    * @param position
    * @return
    */
-  private Object loadObject(Resource subject, Field f, Object object, int position) {
+  private Object loadObject(Resource subject, Field f, Object object, int position, Statement st) {
     if (J2JHelper.isResource(object)) {
       object = loadResourceObject(subject, object, position);
     } else if (J2JHelper.isLiteral(f)) {
-      object = loadObjectLiteral(f, subject, object, position);
+      object = loadObjectLiteral(f, subject, object, position, st);
     } else if (J2JHelper.isURIResource(object, f)) {
       object = readURIResource(f, subject, object, position);
     } else if (object instanceof List<?>) {
       object = readList(f, subject);
     } else if (object instanceof LocalizedString) {
-      object = readLocalizedString(f, subject, object, position);
+      object = readLocalizedString(f, subject, object, position, st);
     } else if (J2JHelper.isList(f) && J2JHelper.getLiteralNamespace(f) != null) {
       // field of a list which has not been handle so for (i.e not an URI or not a localized String)
-      object = loadObjectLiteral(f, subject, object, position);
+      object = loadObjectLiteral(f, subject, object, position, st);
     }
     return object;
   }
@@ -114,6 +114,7 @@ public class Jena2Java {
    */
   private Object setField(Object subject, Field f, Object object) {
     try {
+      f.setAccessible(true);
       object = LiteralHelper.jenaTypeToJ2jType(object);
       if (object != null) {
         f.set(subject, object);
@@ -156,9 +157,10 @@ public class Jena2Java {
    * @param position
    * @return
    */
-  private Object loadObjectLiteral(Field f, Resource subject, Object object, int position) {
+  private Object loadObjectLiteral(Field f, Resource subject, Object object, int position,
+      Statement statement) {
     String predicate = J2JHelper.getLiteralNamespace(f);
-    Statement st = getStatement(subject, predicate, position);
+    Statement st = statement == null ? getStatement(subject, predicate, position) : statement;
     if (st != null) {
       object = LiteralHelper.jenaTypeToJ2jType(st.getLiteral().getValue());
     }
@@ -196,8 +198,10 @@ public class Jena2Java {
    * @param position
    * @return
    */
-  private Object readLocalizedString(Field f, Resource subject, Object object, int position) {
-    Statement st = getStatement(subject, RDFS.label.getURI(), position);
+  private Object readLocalizedString(Field f, Resource subject, Object object, int position,
+      Statement statement) {
+    Statement st =
+        statement == null ? getStatement(subject, RDFS.label.getURI(), position) : statement;
     LocalizedString ls =
         new LocalizedString(st.getObject().asLiteral().getValue().toString(), st.getLanguage());
     return ls;
@@ -237,7 +241,7 @@ public class Jena2Java {
           Object o = loadResource(listObject);
           object.add(o);
         } else {
-          Object o = loadObject(st.getSubject(), f, listObject, count);
+          Object o = loadObject(st.getSubject(), f, listObject, count, st);
           object.add(o);
           count++;
         }

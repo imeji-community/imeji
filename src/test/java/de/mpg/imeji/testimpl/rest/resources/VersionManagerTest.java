@@ -1,15 +1,15 @@
 package de.mpg.imeji.testimpl.rest.resources;
 
-import de.mpg.imeji.rest.api.API;
-import de.mpg.imeji.rest.version.VersionManager;
-import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
-import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
-import de.mpg.imeji.test.rest.resources.test.integration.ImejiTestBase;
+import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
+import de.mpg.imeji.rest.MyApplication;
+import de.mpg.imeji.rest.version.VersionManager;
+import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
+import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
+import de.mpg.imeji.test.rest.resources.test.integration.ImejiTestBase;
 
 /**
  * Test the {@link VersionManager}
@@ -25,7 +25,7 @@ public class VersionManagerTest extends ImejiTestBase {
 
   @Test
   public void testDeprecatedVersion() throws IOException {
-    String version = Integer.toString(API.CURRENT_VERSION - 1);
+    String version = Integer.toString(MyApplication.CURRENT_VERSION - 1);
     VersionManager versionManager = new VersionManager();
     try {
       versionManager.checkVersion(pathPrefixWithVersion.replace("XXX_VERSION_XXX", version));
@@ -39,7 +39,7 @@ public class VersionManagerTest extends ImejiTestBase {
 
   @Test
   public void testUnknownVersion() {
-    String version = Integer.toString(API.CURRENT_VERSION + 1);
+    String version = Integer.toString(MyApplication.CURRENT_VERSION + 1);
     VersionManager versionManager = new VersionManager();
     try {
       versionManager.checkVersion(pathPrefixWithVersion.replace("XXX_VERSION_XXX", version));
@@ -53,7 +53,7 @@ public class VersionManagerTest extends ImejiTestBase {
 
   @Test
   public void testcurrentVersion() {
-    String version = Integer.toString(API.CURRENT_VERSION);
+    String version = Integer.toString(MyApplication.CURRENT_VERSION);
     VersionManager versionManager = new VersionManager();
     try {
       versionManager.checkVersion(pathPrefixWithVersion.replace("XXX_VERSION_XXX", version));

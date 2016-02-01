@@ -67,21 +67,6 @@ public class RDFImageExport extends RDFExport {
    */
   @Override
   protected void filterResources(SearchResult sr, User user) {
-    // List<String> restrictedMetadataWithCollection = ImejiSPARQL
-    // .exec(SPARQLQueries.selectMetadataRestricted(), null);
-    // filteredResources = new ArrayList<String>();
-    // Security security = new Security();
-    // for (String str : restrictedMetadataWithCollection)
-    // {
-    // String[] splited = SortHelper.SORT_VALUE_PATTERN.split(str);
-    // // create an emty item with the URI of the collection
-    // Item it = new Item();
-    // it.setCollection(URI.create(splited[1]));
-    // // Check if user is privileged viewer for this item
-    // if (!security.isPrivilegedViewer(user, it))
-    // {
-    // filteredResources.add(splited[0]);
-    // }
-    // }
+
   }
 }

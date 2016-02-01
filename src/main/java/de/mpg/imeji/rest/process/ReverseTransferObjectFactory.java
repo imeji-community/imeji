@@ -3,6 +3,7 @@ package de.mpg.imeji.rest.process;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,12 +14,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -37,8 +36,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
-import de.mpg.imeji.rest.helper.ItemTransferHelper;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.ProfileTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
@@ -51,6 +48,7 @@ import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.rest.to.StatementTO;
+import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
@@ -68,185 +66,214 @@ public class ReverseTransferObjectFactory {
     CREATE, UPDATE
   }
 
+  /**
+   * Transfer an {@link CollectionTO} to a {@link CollectionImeji}
+   * 
+   * @param to
+   * @param vo
+   * @param mode
+   * @param u
+   */
   public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode,
       User u) {
-
     ContainerMetadata metadata = new ContainerMetadata();
-
     metadata.setTitle(to.getTitle());
     metadata.setDescription(to.getDescription());
-
     // set contributors
     transferCollectionContributors(to.getContributors(), metadata, u, mode);
     vo.setMetadata(metadata);
 
   }
 
+  /**
+   * Transfer an {@link AlbumTO} to an {@link Album}
+   * 
+   * @param to
+   * @param vo
+   * @param mode
+   * @param u
+   */
   public static void transferAlbum(AlbumTO to, Album vo, TRANSFER_MODE mode, User u) {
     ContainerMetadata metadata = new ContainerMetadata();
     metadata.setTitle(to.getTitle());
     metadata.setDescription(to.getDescription());
-
     // set contributors
     transferCollectionContributors(to.getContributors(), metadata, u, mode);
     vo.setMetadata(metadata);
   }
 
   /**
-   * Transfert an {@link ItemTO} into an Item
+   * Transfer a {@link DefaultItemTO} to an {@link Item}
    * 
    * @param to
    * @param vo
    * @param u
    * @param mode
    * @throws ImejiException
+   * @throws JsonMappingException
+   * @throws JsonParseException
    */
-  public static void transferItem(ItemTO to, Item vo, User u, TRANSFER_MODE mode)
-      throws ImejiException {
-
-    // only fields which can be transferred for TO to VO!!!
+  public static void transferDefaultItem(DefaultItemTO to, Item vo, MetadataProfile profile, User u,
+      TRANSFER_MODE mode) throws ImejiException {
     if (mode == TRANSFER_MODE.CREATE) {
-      if (!isNullOrEmpty(to.getId()))
-        vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
-
-      if (!isNullOrEmpty(to.getCollectionId()))
+      
+      if (!isNullOrEmpty(to.getCollectionId())) {
         vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
+      }
     }
-
-    if (!isNullOrEmpty(to.getFilename()))
+    if (!isNullOrEmpty(to.getFilename())) {
       vo.setFilename(to.getFilename());
-
-    transferItemMetadata(to, vo, u, mode);
+    }
+    transferDefaultMetadata(to, vo, profile, u, mode);
   }
 
-  public static void transferItemMetadata(ItemTO to, Item vo, User u, TRANSFER_MODE mode)
-      throws ImejiException {
-    
-    
-    List <Metadata> voMDs = (List<Metadata>) vo.getMetadataSet().getMetadata();
+
+  /**
+   * Transfer Metadata of an {@link ItemTO} to an {@link Item}
+   * 
+   * @param to
+   * @param vo
+   * @param mp
+   * @param u
+   * @param mode
+   * @throws ImejiException
+   */
+  public static void transferItemMetadata(ItemTO to, Item vo, MetadataProfile mp, User u,
+      TRANSFER_MODE mode) throws ImejiException {
+    List<Metadata> voMDs = (List<Metadata>) vo.getMetadataSet().getMetadata();
     // Collection<Metadata> copyOfvoMDs = ImmutableList.copyOf(voMDs);
     voMDs.clear();
 
-    MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
 
-    validateMetadata(to, mp);
+    //MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
 
-//    for (Statement st : mp.getStatements()) {
-//      final URI stURI = st.getId();
-//
-//      Collection<MetadataSetTO> mdsList = lookUpMetadata(to, st);
-//      // Metadata mdVOPrev = lookUpMetadata(copyOfvoMDs, stURI,
-//      // st.getType());
-//      if (mdsList.isEmpty()) {
-//        {
-//          final String message =
-//              "Statement { type: \"" + st.getType() + "\", id: \"" + stURI
-//                  + "\" } has not been found for item id: \"" + vo.getId() + "\"";
-//          // throw new RuntimeException(message);
-//          LOGGER.debug(message);
-//        }
-//      } /*else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
-//        throw new BadRequestException("Statement { type: \"" + st.getType() + "\", id: \"" + stURI
-//            + "\" } for item id: \"" + vo.getId() + "\" occurs more then once");
-//      } */else
-        int i = 0;
-        for (MetadataSetTO mds : to.getMetadata()) {
-          switch (mds.getTypeUri().toString()) {
-            case "http://imeji.org/terms/metadata#text":
-              TextTO textTO = (TextTO)mds.getValue();
-              if (!isNullOrEmpty(textTO.getText())) {
-                Text mdVO = new Text();
-                mdVO.setStatement(mds.getStatementUri());
-                mdVO.setText(textTO.getText());
-                mdVO.setPos(i); i++;
-                voMDs.add(mdVO);
-              }
-              break;
-            case "http://imeji.org/terms/metadata#geolocation":
-              GeolocationTO geoTO = (GeolocationTO) mds.getValue();
-              if (geoTO != null) {
-                Geolocation mdVO = new Geolocation();
-                mdVO.setStatement(mds.getStatementUri());
-                mdVO.setName(geoTO.getName());
-                mdVO.setLatitude(geoTO.getLatitude());
-                mdVO.setLongitude(geoTO.getLongitude());
-                mdVO.setPos(i); i++;
-                voMDs.add(mdVO);
-              }
-              break;
-            case "http://imeji.org/terms/metadata#number":
-              NumberTO numberTO = (NumberTO) mds.getValue();
-              if (numberTO != null) {
-                Number mdVO = new Number();
-                mdVO.setStatement(mds.getStatementUri());
-                mdVO.setNumber(numberTO.getNumber());
-                mdVO.setPos(i);i++;
-                voMDs.add(mdVO);
-              }
-              break;
-            case "http://imeji.org/terms/metadata#conePerson":
-              ConePersonTO personTO = (ConePersonTO) mds.getValue();
-              if (personTO != null) {
-                ConePerson mdVO = new ConePerson();
-                mdVO.setStatement(mds.getStatementUri());
-                mdVO.setPerson(new Person());
-                transferPerson(personTO.getPerson(), mdVO.getPerson(), mode);
-                mdVO.setPos(i);i++;
-                voMDs.add(mdVO);
-              }
-              break;
-            case "http://imeji.org/terms/metadata#date":
-              DateTO dateTO = (DateTO) mds.getValue();
-              if (!isNullOrEmpty(dateTO.getDate())) {
-                de.mpg.imeji.logic.vo.predefinedMetadata.Date mdVO =
-                    new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
-                mdVO.setStatement(mds.getStatementUri());
-                mdVO.setDate(dateTO.getDate());
-                mdVO.setPos(i);i++;
-                voMDs.add(mdVO);
-              }
-              break;
-            case "http://imeji.org/terms/metadata#license":
-              LicenseTO licenseTO = (LicenseTO) mds.getValue();
-              final String lic = licenseTO.getLicense();
-              final String url = licenseTO.getUrl();
-              if (!isNullOrEmpty(lic) || !isNullOrEmpty(url)) {
-                License mdVO = new License();
-                mdVO.setStatement(mds.getStatementUri());
-                // set license to uri if empty
-                mdVO.setLicense(isNullOrEmpty(lic) ? url : lic);
-                if (!isNullOrEmpty(url))
-                  mdVO.setExternalUri(URI.create(url));
-                mdVO.setPos(i);i++;
-                voMDs.add(mdVO);
-              }
-              break;
-            case "http://imeji.org/terms/metadata#publication":
-              PublicationTO pubTO = (PublicationTO) mds.getValue();
-              if (!isNullOrEmpty(pubTO.getPublication())) {
-                Publication mdVO = new Publication();
-                mdVO.setStatement(mds.getStatementUri());
-                mdVO.setUri(URI.create(pubTO.getPublication()));
-                mdVO.setExportFormat(pubTO.getFormat());
-                mdVO.setCitation(pubTO.getCitation());
-                mdVO.setPos(i);i++;
-                voMDs.add(mdVO);
-              }
-              break;
-            case "http://imeji.org/terms/metadata#link":
-              LinkTO linkTO = (LinkTO) mds.getValue();
-              if (!isNullOrEmpty(linkTO.getUrl())) {
-                Link mdVO = new Link();
-                mdVO.setStatement(mds.getStatementUri());
-                mdVO.setLabel(linkTO.getLink());
-                mdVO.setUri(URI.create(linkTO.getUrl()));
-                mdVO.setPos(i);i++;
-                voMDs.add(mdVO);
-              }
-              break;
+    if (mp != null )
+      validateMetadata(to, mp);
+
+    // for (Statement st : mp.getStatements()) {
+    // final URI stURI = st.getId();
+    //
+    // Collection<MetadataSetTO> mdsList = lookUpMetadata(to, st);
+    // // Metadata mdVOPrev = lookUpMetadata(copyOfvoMDs, stURI,
+    // // st.getType());
+    // if (mdsList.isEmpty()) {
+    // {
+    // final String message =
+    // "Statement { type: \"" + st.getType() + "\", id: \"" + stURI
+    // + "\" } has not been found for item id: \"" + vo.getId() + "\"";
+    // // throw new RuntimeException(message);
+    // LOGGER.debug(message);
+    // }
+    // } /*else if (mdsList.size() > 1 && "1".equals(st.getMaxOccurs())) {
+    // throw new BadRequestException("Statement { type: \"" + st.getType() + "\", id: \"" + stURI
+    // + "\" } for item id: \"" + vo.getId() + "\" occurs more then once");
+    // } */else
+    int i = 0;
+    for (MetadataSetTO mds : to.getMetadata()) {
+      switch (mds.getTypeUri().toString()) {
+        case "http://imeji.org/terms/metadata#text":
+          TextTO textTO = (TextTO) mds.getValue();
+          if (!isNullOrEmpty(textTO.getText())) {
+            Text mdVO = new Text();
+            mdVO.setStatement(mds.getStatementUri());
+            mdVO.setText(textTO.getText());
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
           }
+          break;
+        case "http://imeji.org/terms/metadata#geolocation":
+          GeolocationTO geoTO = (GeolocationTO) mds.getValue();
+          if (geoTO != null) {
+            Geolocation mdVO = new Geolocation();
+            mdVO.setStatement(mds.getStatementUri());
+            mdVO.setName(geoTO.getName());
+            mdVO.setLatitude(geoTO.getLatitude());
+            mdVO.setLongitude(geoTO.getLongitude());
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
+          }
+          break;
+        case "http://imeji.org/terms/metadata#number":
+          NumberTO numberTO = (NumberTO) mds.getValue();
+          if (numberTO != null) {
+            Number mdVO = new Number();
+            mdVO.setStatement(mds.getStatementUri());
+            mdVO.setNumber(numberTO.getNumber());
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
+          }
+          break;
+        case "http://imeji.org/terms/metadata#conePerson":
+          ConePersonTO personTO = (ConePersonTO) mds.getValue();
+          if (personTO != null) {
+            ConePerson mdVO = new ConePerson();
+            mdVO.setStatement(mds.getStatementUri());
+            mdVO.setPerson(new Person());
+            transferPerson(personTO.getPerson(), mdVO.getPerson(), mode);
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
+          }
+          break;
+        case "http://imeji.org/terms/metadata#date":
+          DateTO dateTO = (DateTO) mds.getValue();
+          if (!isNullOrEmpty(dateTO.getDate())) {
+            de.mpg.imeji.logic.vo.predefinedMetadata.Date mdVO =
+                new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
+            mdVO.setStatement(mds.getStatementUri());
+            mdVO.setDate(dateTO.getDate());
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
+          }
+          break;
+        case "http://imeji.org/terms/metadata#license":
+          LicenseTO licenseTO = (LicenseTO) mds.getValue();
+          final String lic = licenseTO.getLicense();
+          final String url = licenseTO.getUrl();
+          if (!isNullOrEmpty(lic) || !isNullOrEmpty(url)) {
+            License mdVO = new License();
+            mdVO.setStatement(mds.getStatementUri());
+            // set license to uri if empty
+            mdVO.setLicense(isNullOrEmpty(lic) ? url : lic);
+            if (!isNullOrEmpty(url))
+              mdVO.setExternalUri(URI.create(url));
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
+          }
+          break;
+        case "http://imeji.org/terms/metadata#publication":
+          PublicationTO pubTO = (PublicationTO) mds.getValue();
+          if (!isNullOrEmpty(pubTO.getPublication())) {
+            Publication mdVO = new Publication();
+            mdVO.setStatement(mds.getStatementUri());
+            mdVO.setUri(URI.create(pubTO.getPublication()));
+            mdVO.setExportFormat(pubTO.getFormat());
+            mdVO.setCitation(pubTO.getCitation());
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
+          }
+          break;
+        case "http://imeji.org/terms/metadata#link":
+          LinkTO linkTO = (LinkTO) mds.getValue();
+          if (!isNullOrEmpty(linkTO.getUrl())) {
+            Link mdVO = new Link();
+            mdVO.setStatement(mds.getStatementUri());
+            mdVO.setLabel(linkTO.getLink());
+            mdVO.setUri(URI.create(linkTO.getUrl()));
+            mdVO.setPos(i);
+            i++;
+            voMDs.add(mdVO);
+          }
+          break;
+      }
     }
-//    }
+    // }
   }
 
   /**
@@ -301,12 +328,14 @@ public class ReverseTransferObjectFactory {
     }
   }
 
-  private static MetadataProfile getMetadataProfile(URI collectionURI, User u)
-      throws ImejiException {
-    ProfileController pc = new ProfileController();
-    return pc.retrieveByCollectionId(collectionURI, u);
-  }
-
+  /**
+   * Check that a statement exists
+   * 
+   * @param statements
+   * @param type
+   * @param statementUri
+   * @return
+   */
   private static Statement lookUpStatement(Collection<Statement> statements, final URI type,
       final URI statementUri) {
     return Iterables.find(statements, new Predicate<Statement>() {
@@ -317,14 +346,7 @@ public class ReverseTransferObjectFactory {
     });
   }
 
-  private static Collection<MetadataSetTO> lookUpMetadata(ItemTO to, final Statement st) {
-    return Collections2.filter(to.getMetadata(), new Predicate<MetadataSetTO>() {
-      @Override
-      public boolean apply(MetadataSetTO md) {
-        return md.getTypeUri().equals(st.getType()) && md.getStatementUri().equals(st.getId());
-      }
-    });
-  }
+
 
   /**
    * Transfer a {@link PersonTO} into a {@link Person}
@@ -334,9 +356,7 @@ public class ReverseTransferObjectFactory {
    * @param mode
    */
   public static void transferPerson(PersonTO pto, Person p, TRANSFER_MODE mode) {
-
     if (mode == TRANSFER_MODE.CREATE) {
-      // p.setPos(pto.getPosition());
       IdentifierTO ito = new IdentifierTO();
       ito.setValue(pto.getIdentifiers().isEmpty() ? null : pto.getIdentifiers().get(0).getValue());
       p.setIdentifier(ito.getValue());
@@ -346,10 +366,8 @@ public class ReverseTransferObjectFactory {
     p.setGivenName(pto.getGivenName());
     p.setCompleteName(pto.getCompleteName());
     p.setAlternativeName(pto.getAlternativeName());
-
-    // set oganizations
+    // set organizations
     transferContributorOrganizations(pto.getOrganizations(), p, mode);
-
   }
 
 
@@ -378,7 +396,7 @@ public class ReverseTransferObjectFactory {
       metadata.getPersons().add(person);
     }
 
-    if (metadata.getPersons().size() == 0 && TRANSFER_MODE.CREATE.equals(mode)) {
+    if (metadata.getPersons().size() == 0 && TRANSFER_MODE.CREATE.equals(mode) && u != null) {
       Person personU = new Person();
       PersonTO pTo = new PersonTO();
       personU.setFamilyName(u.getPerson().getFamilyName());
@@ -424,60 +442,44 @@ public class ReverseTransferObjectFactory {
     }
   }
 
-  public static void sort(List<ItemTransferHelper> list, ItemTransferHelper newItem) {
-    if (list.size() == 0)
-      list.add(0, newItem);
-    else {
-      int i = 0;
-      for (ItemTransferHelper item : list) {
-        i++;
-        if (newItem.getStatementID().equals(item.getStatementID())) {
-          if (newItem.getPos() < item.getPos()) {
-            i--;
-            break;
-          }
-        }
-      }
-      list.add(i, newItem);
-    }
-  }
-
-
-
   /**
-   * Transfer a {@link DefaultItemTO} into an {@link ItemTO}
+   * Transfer a {@link DefaultItemTO} to an Item TODO Check Performance and refactor
    * 
-   * @param profileTO
    * @param defaultTO
-   * @param itemTO
+   * @param item
+   * @param profileTO
    * @param updatedAll
-   * @throws BadRequestException
+   * @param u
+   * @param mode
    * @throws JsonParseException
    * @throws JsonMappingException
+   * @throws ImejiException
    */
-
-  public static void transferDefaultItemTOtoItemTO(MetadataProfileTO profileTO,
-      DefaultItemTO defaultTO, ItemTO itemTO, boolean updatedAll) throws BadRequestException,
-      JsonParseException, JsonMappingException {
-    if (defaultTO.getMetadata() == null) {
-      itemTO.getMetadata().clear();
-    } else {
-      // NEW
-      for (String label : defaultTO.getMetadata().keySet()) {
-        // Get statement according to the label
-        StatementTO statement = ProfileTransferHelper.findStatementByLabel(label, profileTO);
-        // Get the new metadata according to the json and the statement
-        List<MetadataSetTO> newMetadata =
-            MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label), statement);
-        // add/replace the metadata to the itemto
-        if (!newMetadata.isEmpty()) {
-          // remove all the metadata with the same statement
-          itemTO.clearMetadata(newMetadata.get(0).getStatementUri());
-          // add the new metadata
-          itemTO.getMetadata().addAll(newMetadata);
-        }
+  public static void transferDefaultMetadata(DefaultItemTO defaultTO, Item item,
+      MetadataProfile profile, User u, TRANSFER_MODE mode) throws ImejiException {
+    
+    if (profile == null )
+      return;
+    ItemTO itemTO = new ItemTO();
+    MetadataProfileTO profileTO = new MetadataProfileTO();
+    TransferObjectFactory.transferMetadataProfile(profile, profileTO);
+    for (String label : defaultTO.getMetadata().keySet()) {
+      // Get statement according to the label - Note: this is always the toplevel
+      StatementTO statement = ProfileTransferHelper.findStatementByLabel(label, profileTO);
+      List<MetadataSetTO> newMetadata = new ArrayList<MetadataSetTO>();
+      // Get the new metadata according to the json and the statement
+      boolean isParent = ProfileTransferHelper.hasChildStatement(statement.getId(), profileTO);
+      newMetadata.addAll(MetadataTransferHelper.parseMetadata(defaultTO.getMetadata().get(label),
+          statement, isParent, "", profileTO));
+      // add/replace the metadata to the itemto
+      if (!newMetadata.isEmpty()) {
+        // remove all the metadata with the same statement
+        itemTO.clearMetadata(newMetadata.get(0).getStatementUri());
+        // add the new metadata
+        itemTO.getMetadata().addAll(newMetadata);
       }
-
     }
+    transferItemMetadata(itemTO, item, profile, u, mode);
   }
 }
+

@@ -16,6 +16,11 @@ public class TempFileUtil {
   public static final String IMEJI_TEMP_FILE_PREFIX = "imeji";
 
   /**
+   * Private Constructor
+   */
+  private TempFileUtil() {}
+
+  /**
    * Create a temp {@link File}. This method should be used to ensure that all temp files are
    * correctly removed by the {@link CleanTempFilesJob}
    * 

@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO;
+package de.mpg.imeji.rest.to.defaultItemTO.predefinedEasyMetadataTO;
 
 import java.io.Serializable;
 
@@ -40,16 +40,5 @@ public class DefaultGeolocationTO implements Serializable {
   public void setLatitude(double latitude) {
     this.latitude = latitude;
   }
-
-  // @JsonCreator
-  // public EasyGeolocationTO(Map<String,Object> props)
-  // {
-  // name = (String) props.get("name");
-  // longitude = (double) props.get("longitude");
-  // latitude = (double) props.get("latitude");
-  // }
-  //
-
-
 
 }

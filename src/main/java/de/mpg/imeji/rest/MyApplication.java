@@ -8,6 +8,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class MyApplication extends ResourceConfig {
   Logger logger = Logger.getLogger(MyApplication.class);
 
+  public static final int CURRENT_VERSION = 1;
+
   public MyApplication() {
     packages("de.mpg.imeji.rest.resources");
     // Uncomment loggingFilter registration below to start logging your

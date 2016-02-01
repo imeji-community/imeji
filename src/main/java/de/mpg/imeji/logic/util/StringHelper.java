@@ -7,9 +7,6 @@ import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Entities.EscapeMode;
-import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
 /**
@@ -30,9 +27,14 @@ public class StringHelper {
   public static final String fileSeparator = System.getProperty("file.separator");
   /**
    * Tha maximum size of a file: Theorically, the max length could be 255. For security, imeji uses
-   * qa lower count.
+   * a lower count.
    */
   public static final int FILENAME_MAX_LENGTH = 200;
+
+  /**
+   * Private Constructor
+   */
+  private StringHelper() {}
 
   /**
    * Encode a {@link String} to MD5
@@ -44,12 +46,16 @@ public class StringHelper {
   public static String convertToMD5(String pass) throws Exception {
     MessageDigest dig = MessageDigest.getInstance("MD5");
     dig.update(pass.getBytes("UTF-8"));
-    byte messageDigest[] = dig.digest();
-    StringBuffer hexString = new StringBuffer();
+    byte[] messageDigest = dig.digest();
+    StringBuilder sBuilder = new StringBuilder();
     for (int i = 0; i < messageDigest.length; i++) {
-      hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+      sBuilder.append(Integer.toHexString(0xFF & messageDigest[i]));
     }
-    return hexString.toString();
+    return sBuilder.toString();
+  }
+
+  public static void main(String[] args) throws Exception {
+    System.out.println(convertToMD5("123456789"));
   }
 
   /**
@@ -119,16 +125,19 @@ public class StringHelper {
     return isNullOrEmpty(str) || "".equals(str.trim());
   }
 
+  /**
+   * 
+   * @param s
+   * @return
+   */
   public static boolean hasInvalidTags(String s) {
     if (isNullOrEmpty(s)) {
       return false;
-    } 
-    
+    }
     if (!Jsoup.isValid(s, Whitelist.relaxed())) {
       return true;
     }
-
-  return false;
+    return false;
   }
 
 }

@@ -66,8 +66,10 @@ public class ViewCollectionBean extends CollectionBean {
         setSendEmailNotification(sessionBean.getUser().getObservedCollections().contains(id));
       }
       if (getCollection() != null) {
-        setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
-        setProfileId(ObjectHelper.getId(getProfile().getId()));
+        if (getCollection().getProfile() != null ){
+          setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
+          setProfileId(ObjectHelper.getId(getProfile().getId()));
+        }
         // super.setTab(TabType.COLLECTION);
         persons = new ArrayList<Person>();
         for (Person p : super.getCollection().getMetadata().getPersons()) {

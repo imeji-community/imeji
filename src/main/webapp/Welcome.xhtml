@@ -83,7 +83,7 @@
 			<!-- Main Content -->							
 			<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo" style="#{Configuration.startPageCarouselEnabled? '' : 'width: 98%'}">			
 				<!-- HTML Snippet defined in the configuration -->
-				<ui:fragment rendered="#{Configuration.getStartPageHTML(SessionBean.locale) != ''}">sdssd
+				<ui:fragment rendered="#{Configuration.getStartPageHTML(SessionBean.locale) != ''}">
 					<h:outputText value="#{Configuration.getStartPageHTML(SessionBean.locale)}" escape="false"/>
 				</ui:fragment>
 				<!-- Default Startpage content (if configuration is emtpy) -->

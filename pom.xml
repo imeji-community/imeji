@@ -93,8 +93,8 @@
 	</mailingLists>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<!-- Setting this property so that generated project uses correct version 
 			of richfaces. -->
 		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
@@ -598,7 +598,7 @@
 					encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
-				<jdk.version>1.7</jdk.version>
+				<jdk.version>1.8</jdk.version>
 			</properties>
 			<build>
 				<plugins>
@@ -657,7 +657,7 @@
 					encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
-				<jdk.version>1.7</jdk.version>
+				<jdk.version>1.8</jdk.version>
 				<project.build.finalName>imeji</project.build.finalName>
 			</properties>
 			<build>

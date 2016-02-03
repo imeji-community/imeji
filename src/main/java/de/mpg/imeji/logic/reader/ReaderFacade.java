@@ -123,7 +123,7 @@ public class ReaderFacade implements Reader {
           email = user.getEmail();
           throw new NotAllowedError(email + " not allowed to read " + id);
         } else if (user == null) {
-          throw new AuthenticationError("Authentication is required.");
+          throw new AuthenticationError("Authentication is required for " + id);
         }
       }
     }

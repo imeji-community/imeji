@@ -44,6 +44,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 
@@ -55,7 +56,6 @@ import de.mpg.imeji.presentation.collection.CollectionListItem;
  * @version $Revision$ $LastChangedDate$
  */
 public class Authorization {
-
   /**
    * Return true if the {@link User} can create the object
    * 
@@ -85,7 +85,7 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean read(User user, Object obj) {
-    if (isPublic(obj) /* || obj instanceof MetadataProfile */) {
+    if (isPublic(obj, user)) {
       return true;
     } else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
         getGrantTypeAccordingToObjectType(obj, GrantType.READ)))) {
@@ -131,7 +131,7 @@ public class Authorization {
       return true;
     }
 
-    if (!isPublic(obj)
+    if (!isPublic(obj, user)
         && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
             getGrantTypeAccordingToObjectType(obj, GrantType.DELETE)))) {
       return true;
@@ -199,7 +199,7 @@ public class Authorization {
     if (AuthUtil.isSysAdmin(user)) {
       return true;
     }
-    if (!isPublic(obj) && hasGrant(user,
+    if (!isPublic(obj, user) && hasGrant(user,
         toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.DELETE_CONTENT))) {
       return true;
     }
@@ -347,8 +347,10 @@ public class Authorization {
    * @param obj
    * @return
    */
-  private boolean isPublic(Object obj) {
-    if (obj instanceof Item) {
+  private boolean isPublic(Object obj, User user) {
+    if (ConfigurationBean.getPrivateModusStatic() && user == null) {
+      return false;
+    } else if (obj instanceof Item) {
       return isPublicStatus(((Item) obj).getStatus());
     } else if (obj instanceof Container) {
       return isPublicStatus(((Container) obj).getStatus());

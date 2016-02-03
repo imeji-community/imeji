@@ -76,13 +76,13 @@ public class ConfigurationBean {
    * @version $Revision$ $LastChangedDate$
    */
   private enum CONFIGURATION {
-    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_DISK_SPACE_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS;
+    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_DISK_SPACE_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS, PRIVATE_MODUS;
   }
 
   private static Properties config;
-  private File configFile;
+  private static File configFile;
   private static FileTypes fileTypes;
-  private String lang = "en";
+  private static String lang = "en";
   private final static Logger logger = Logger.getLogger(ConfigurationBean.class);
   // A list of predefined file types, which is set when imeji is initialized
   private final static String predefinedFileTypes =
@@ -111,11 +111,23 @@ public class ConfigurationBean {
    * @throws IOException
    */
   public ConfigurationBean() throws IOException, URISyntaxException {
-    configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
-    if (!configFile.exists()) {
-      configFile.createNewFile();
-    }
+    initializeConfigFile();
     readConfig();
+  }
+
+  /**
+   * Initialize the Configuration File
+   * 
+   * @throws IOException
+   * @throws URISyntaxException
+   */
+  private synchronized void initializeConfigFile() throws IOException, URISyntaxException {
+    if (configFile == null) {
+      configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
+      if (!configFile.exists()) {
+        configFile.createNewFile();
+      }
+    }
   }
 
   /**
@@ -124,13 +136,14 @@ public class ConfigurationBean {
    * @param f
    * @throws IOException
    */
-  private String readConfig() {
+  private synchronized void readConfig() throws IOException {
     try {
       config = new Properties();
       FileInputStream in = new FileInputStream(configFile);
       config.loadFromXML(in);
     } catch (Exception e) {
       logger.info("conf.xml can not be read, probably emtpy");
+      return;
     }
     this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
     Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
@@ -139,20 +152,19 @@ public class ConfigurationBean {
     } else {
       fileTypes = new FileTypes((String) ft);
     }
-
     Object o = config.get(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name());
-    if (o == null)
+    if (o == null) {
       initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA,
           predefinedDefaultDiskSpaceQuota);
-
+    }
     initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, predefinedUploadBlackList);
     initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, predefinedLanguages);
     initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
     initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED,
         predefinedCarouselConfig);
     saveConfig();
-    return "";
   }
+
 
   /**
    * Init a property with its default value if null or empty
@@ -435,8 +447,8 @@ public class ConfigurationBean {
   /**
    * @param lang the lang to set
    */
-  public void setLang(String lang) {
-    this.lang = lang;
+  public void setLang(String s) {
+    lang = s;
   }
 
   /**
@@ -529,16 +541,6 @@ public class ConfigurationBean {
     setDataViewerFormatListString(str);
     return "";
   }
-
-  // public boolean isEnableAutosuggestForUsers() {
-  // return Boolean.parseBoolean(config
-  // .getProperty(CONFIGURATION.AUTOSUGGEST_USERS.name()));
-  // }
-  //
-  // public void setEnableAutosuggestForUsers(boolean b) {
-  // config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(),
-  // Boolean.toString(b));
-  // }
 
   public String getAutosuggestForOrganizations() {
     return config.getProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name());
@@ -669,6 +671,18 @@ public class ConfigurationBean {
         .parseBoolean((String) config.get(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name()));
   }
 
+  public void setPrivateModus(boolean b) {
+    setProperty(CONFIGURATION.PRIVATE_MODUS.name(), Boolean.toString(b));
+  }
+
+  public boolean getPrivateModus() {
+    return Boolean.parseBoolean((String) config.get(CONFIGURATION.PRIVATE_MODUS.name()));
+  }
+
+  public static boolean getPrivateModusStatic() {
+    return Boolean.parseBoolean((String) config.get(CONFIGURATION.PRIVATE_MODUS.name()));
+  }
+
   public void setEmailServerSender(String s) {
     setProperty(CONFIGURATION.EMAIL_SERVER_SENDER.name(), s);
   }
@@ -747,12 +761,6 @@ public class ConfigurationBean {
 
   public void setLanguages(String value) {
     setProperty(CONFIGURATION.LANGUAGES.name(), value);
-    // InternationalizationBean internationalizationBean =
-    // (InternationalizationBean) BeanHelper
-    // .getApplicationBean(InternationalizationBean.class);
-    // internationalizationBean.init();
-    // // internationalizationBean.readSupportedLanguagesProperty();
-    // // internationalizationBean.initLanguagesMenu();
   }
 
   public static String getDoiUserStatic() {

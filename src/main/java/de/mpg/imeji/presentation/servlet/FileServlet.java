@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
@@ -31,7 +30,6 @@ import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.impl.ExternalStorage;
-import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -39,6 +37,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -58,10 +57,7 @@ public class FileServlet extends HttpServlet {
   private Navigation navivation;
   private String domain;
   private String digilibUrl;
-  /**
-   * If property imeji.storage.path= /data/imeji/files/ then, internalStorageRoot = files
-   */
-  private String internalStorageRoot;
+
   /**
    * The path for this servlet as defined in the web.xml
    */
@@ -80,9 +76,6 @@ public class FileServlet extends HttpServlet {
       if (digilibUrl != null && !digilibUrl.isEmpty()) {
         digilibUrl = StringHelper.normalizeURI(digilibUrl);
       }
-      InternalStorageManager ism = new InternalStorageManager();
-      internalStorageRoot =
-          FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
     } catch (Exception e) {
       throw new RuntimeException("Image servlet not initialized! " + e);
     }
@@ -104,9 +97,9 @@ public class FileServlet extends HttpServlet {
     }
     resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
     SessionBean session = getSession(req);
-    User user; 
+    User user;
     try {
-      user =  getUser(req, session);
+      user = getUser(req, session);
       if ("NO_THUMBNAIL_URL".equals(url)) {
         ExternalStorage eStorage = new ExternalStorage();
         eStorage.read("http://localhost:8080/imeji/resources/icon/empty.png",
@@ -215,7 +208,8 @@ public class FileServlet extends HttpServlet {
   private boolean isPublicCollection(URI collectionId) {
     List<String> r =
         ImejiSPARQL.exec(JenaCustomQueries.selectCollectionStatus(collectionId.toString()), null);
-    return !r.isEmpty() && r.get(0).equals(Status.RELEASED.getUriString());
+    return !ConfigurationBean.getPrivateModusStatic() && !r.isEmpty()
+        && r.get(0).equals(Status.RELEASED.getUriString());
   }
 
 
@@ -241,10 +235,9 @@ public class FileServlet extends HttpServlet {
    * 
    * @param req
    * @return
-   * @throws AuthenticationError 
+   * @throws AuthenticationError
    */
   private User getUser(HttpServletRequest req, SessionBean session) throws AuthenticationError {
-
     User user = AuthenticationFactory.factory(req).doLogin();
     if (user != null) {
       return user;

@@ -138,15 +138,6 @@ public class AuthenticationFilter implements Filter {
     return "partial/ajax".equals(req.getHeader("Faces-Request"));
   }
 
-  /**
-   * True if the method is a POST request
-   * 
-   * @param req
-   * @return
-   */
-  private boolean isPostRequest(HttpServletRequest req) {
-    return "POST".equals(req.getMethod());
-  }
 
   /*
    * (non-Javadoc)

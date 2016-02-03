@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.Album;
@@ -54,7 +52,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  */
 public class AuthUtil {
   private static Authorization authorization = new Authorization();
-  private static final Logger logger = Logger.getLogger(AuthUtil.class);
+
 
   /**
    * Return the {@link Authorization} as static
@@ -259,7 +257,8 @@ public class AuthUtil {
         CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
         if (c != null) {
           roles.add(new SharedHistory(user, SharedObjectType.COLLECTION, sharedWith,
-              c.getProfile() != null ? c.getProfile().toString() : null, c.getMetadata().getTitle()));
+              c.getProfile() != null ? c.getProfile().toString() : null,
+              c.getMetadata().getTitle()));
         }
       } else if (sharedWith.contains("/album/")) {
         Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);

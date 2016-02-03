@@ -14,6 +14,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -49,7 +50,7 @@ public class LoginBean {
   }
 
   @PostConstruct
-  public void init() {
+  public void init() throws ImejiException {
     this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
       if (UrlHelper.getParameterBoolean("logout")) {
@@ -59,10 +60,11 @@ public class LoginBean {
       if (!isNullOrEmptyTrim(login)) {
         setLogin(login);
       }
-      if (UrlHelper.getParameterValue("redirect") != null)
+      if (UrlHelper.getParameterValue("redirect") != null) {
         this.redirect = URLDecoder.decode(UrlHelper.getParameterValue("redirect"), "UTF-8");
+      }
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new ImejiException(e.getMessage());
     }
   }
 
@@ -88,21 +90,20 @@ public class LoginBean {
 
   public void doLogin() throws Exception {
     Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
-    
+
     try {
-    User user = auth.doLogin();
-     sb.setUser(user);
+      User user = auth.doLogin();
+      sb.setUser(user);
       BeanHelper.cleanMessages();
       BeanHelper.info(sb.getMessage("success_log_in"));
-    } 
-    
+    }
+
     catch (Exception e) {
-      String name =
-          ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-              .getInstanceName();
+      String name = ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
+          .getInstanceName();
       BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", name));
-      BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX",
-          name));
+      BeanHelper
+          .error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX", name));
     }
     if (isNullOrEmptyTrim(redirect)) {
       HistoryPage current =

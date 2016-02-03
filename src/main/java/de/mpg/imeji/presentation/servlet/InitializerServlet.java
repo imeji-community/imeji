@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
@@ -75,7 +76,6 @@ public class InitializerServlet extends HttpServlet {
     } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
       logger.error("!!! Error initalizing API Key !!!", e);
     }
-
   }
 
   /**
@@ -111,6 +111,17 @@ public class InitializerServlet extends HttpServlet {
     }
     m.appendTail(sb);
     return sb.toString();
+  }
+
+  /**
+   * Return the {@link ConfigurationBean}
+   * 
+   * @param req
+   * @return
+   */
+  private ConfigurationBean getConfiguration(HttpServletRequest req) {
+    return (ConfigurationBean) req.getSession(true)
+        .getAttribute(ConfigurationBean.class.getSimpleName());
   }
 
   @Override

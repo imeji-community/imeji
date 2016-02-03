@@ -14,7 +14,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -29,6 +28,7 @@ import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.ocpsoft.pretty.PrettyContext;
 import com.ocpsoft.pretty.faces.config.PrettyConfig;
@@ -42,6 +42,7 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.ServletUtil;
 
 /**
  * {@link Filter} for the imeji history
@@ -52,7 +53,8 @@ import de.mpg.imeji.presentation.session.SessionBean;
  */
 public class HistoryFilter implements Filter {
   private FilterConfig filterConfig = null;
-  private ServletContext servletContext;
+  private static final Logger LOGGER = Logger.getLogger(HistoryFilter.class);
+  private static final Navigation navigation = new Navigation();
 
   @Override
   public void destroy() {
@@ -65,36 +67,26 @@ public class HistoryFilter implements Filter {
     try {
       // Limit the case to filter: dispachertype only forward, and only
       // HTTP GET method
-      if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0) {
-        HttpServletRequest request = (HttpServletRequest) serv;
-        servletContext = request.getSession().getServletContext();
-        if ("GET".equals(request.getMethod())) {
-          dofilterImpl(request, resp);
-        }
+      if (ServletUtil.isGetRequest(serv)) {
+        dofilterImpl((HttpServletRequest) serv, resp);
       }
-
-    } catch (Exception e) {
-      if (e instanceof NotFoundException || e instanceof NullPointerException) {
-        if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
-          ((HttpServletResponse) resp)
-              .sendRedirect(getNavigation((HttpServletRequest) serv, resp).getApplicationUrl());
-        } else {
-          ((HttpServletResponse) resp).sendError(Status.NOT_FOUND.getStatusCode(),
-              "RESOURCE_NOT_FOUND");
-        }
-
-      } else if (e instanceof AuthenticationError) {
-        redirectToLoginPage(serv, resp);
-      } else if (e instanceof NotAllowedError || e instanceof NotAllowedException) {
-        ((HttpServletResponse) resp).sendError(Status.FORBIDDEN.getStatusCode(), "FORBIDDEN");
-      } else if (e instanceof BadRequestException) {
-        ((HttpServletResponse) resp).sendError(Status.BAD_REQUEST.getStatusCode(), "BAD_REQUEST");
+    } catch (NotFoundException | NullPointerException e) {
+      if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
+        ((HttpServletResponse) resp).sendRedirect(navigation.getApplicationUrl());
       } else {
-
-        ((HttpServletResponse) resp).sendError(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
-            "INTERNAL_SERVER_ERROR");
+        ((HttpServletResponse) resp).sendError(Status.NOT_FOUND.getStatusCode(),
+            "RESOURCE_NOT_FOUND");
       }
-
+    } catch (AuthenticationError e) {
+      redirectToLoginPage(serv, resp);
+    } catch (NotAllowedException | NotAllowedError e) {
+      ((HttpServletResponse) resp).sendError(Status.FORBIDDEN.getStatusCode(), "FORBIDDEN");
+    } catch (BadRequestException e) {
+      ((HttpServletResponse) resp).sendError(Status.BAD_REQUEST.getStatusCode(), "BAD_REQUEST");
+    } catch (Exception e) {
+      ((HttpServletResponse) resp).sendError(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+          "INTERNAL_SERVER_ERROR");
+      LOGGER.error(e);
     } finally {
       chain.doFilter(serv, resp);
     }
@@ -111,9 +103,8 @@ public class HistoryFilter implements Filter {
   private void redirectToLoginPage(ServletRequest serv, ServletResponse resp)
       throws UnsupportedEncodingException, IOException {
     HttpServletRequest request = (HttpServletRequest) serv;
-    Navigation nav = getNavigation(request, resp);
-    String url =
-        nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+    String url = navigation.getApplicationUri()
+        + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
     Map<String, String[]> params =
         PrettyContext.getCurrentInstance(request).getRequestQueryString().getParameterMap();
     ((HttpServletResponse) resp)
@@ -130,13 +121,12 @@ public class HistoryFilter implements Filter {
    * @throws Exception
    */
   private void dofilterImpl(HttpServletRequest request, ServletResponse resp) throws Exception {
-    HistorySession hs = getHistorySession(request, resp);
-    Navigation nav = getNavigation(request, resp);
-    SessionBean session = getSessionBean(request, resp);
-    if (session != null) {
+    getFacesContext(request, resp);
+    SessionBean session = ServletUtil.getSessionBean(request);
+    HistorySession hs = ServletUtil.getHistorySession(request);
+    if (session != null && hs != null) {
       checkSpaceMatching(request, session, hs);
-      String h = request.getParameter("h");
-      String url = nav.getApplicationUri()
+      String url = navigation.getApplicationUri()
           + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
       Map<String, String[]> params =
           PrettyContext.getCurrentInstance(request).getRequestQueryString().getParameterMap();
@@ -146,88 +136,12 @@ public class HistoryFilter implements Filter {
       HistoryPage p = new HistoryPage(url, params, session.getUser());
       hs.addPage(p);
     }
+
   }
 
   @Override
   public void init(FilterConfig arg0) throws ServletException {
     this.setFilterConfig(arg0);
-  }
-
-  /**
-   * Return the {@link SessionBean}
-   * 
-   * @param req
-   * @return
-   */
-  private SessionBean getSessionBean(HttpServletRequest req, ServletResponse resp) {
-    return (SessionBean) getBean(SessionBean.class, req, resp);
-
-  }
-
-  /**
-   * Get the {@link HistorySession} from the {@link FacesContext}
-   * 
-   * @param request
-   * @param resp
-   * @return
-   */
-  private HistorySession getHistorySession(HttpServletRequest req, ServletResponse resp) {
-    return (HistorySession) getBean(HistorySession.class, req, resp);
-  }
-
-  /**
-   * return the current {@link Navigation}
-   * 
-   * @param request
-   * @param resp
-   * @return
-   */
-  private Navigation getNavigation(HttpServletRequest req, ServletResponse resp) {
-    return (Navigation) getBean(Navigation.class, req, resp);
-  }
-
-  private Object getBean(Class<?> c, ServletRequest request, ServletResponse resp) {
-    String name = c.getSimpleName();
-    FacesContext fc = getFacesContext(request, resp);
-    Object result = fc.getExternalContext().getSessionMap().get(name);
-    if (result == null) {
-      try {
-        Object b = c.newInstance();
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, b);
-        return b;
-      } catch (Exception e) {
-        throw new RuntimeException("Error creating History Session", e);
-      }
-    } else {
-      return result;
-    }
-  }
-
-  /**
-   * Get {@link FacesContext} from Filter
-   * 
-   * @param request
-   * @param response
-   * @return
-   */
-  private FacesContext getFacesContext(ServletRequest request, ServletResponse response) {
-    // Try to get it first
-    FacesContext facesContext = FacesContext.getCurrentInstance();
-    // if (facesContext != null) return facesContext;
-    FacesContextFactory contextFactory =
-        (FacesContextFactory) FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-    LifecycleFactory lifecycleFactory =
-        (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-    Lifecycle lifecycle = lifecycleFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-    facesContext = contextFactory.getFacesContext(servletContext, request, response, lifecycle);
-    // Set using our inner class
-    InnerFacesContext.setFacesContextAsCurrentInstance(facesContext);
-    // set a new viewRoot, otherwise context.getViewRoot returns null
-    UIViewRoot view =
-        facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
-    facesContext.setViewRoot(view);
-
-    return facesContext;
   }
 
   public FilterConfig getFilterConfig() {
@@ -238,19 +152,13 @@ public class HistoryFilter implements Filter {
     this.filterConfig = filterConfig;
   }
 
-  public abstract static class InnerFacesContext extends FacesContext {
-    protected static void setFacesContextAsCurrentInstance(FacesContext facesContext) {
-      FacesContext.setCurrentInstance(facesContext);
-    }
-  }
+
 
   private void checkSpaceMatching(HttpServletRequest request, SessionBean session,
       HistorySession hs) throws NotFoundException, ImejiException {
     // TODO CHANGE ME
     String spaceHome = "space_home";
-
     String matchingUrl = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-
     PrettyConfig pc =
         PrettyContext.getCurrentInstance(FacesContext.getCurrentInstance()).getConfig();
 
@@ -288,4 +196,44 @@ public class HistoryFilter implements Filter {
       }
     }
   }
+
+  /**
+   * Used to initialized FacesContext
+   * 
+   * @author bastiens
+   *
+   */
+  public abstract static class InnerFacesContext extends FacesContext {
+    protected static void setFacesContextAsCurrentInstance(FacesContext facesContext) {
+      FacesContext.setCurrentInstance(facesContext);
+    }
+  }
+
+  /**
+   * Get {@link FacesContext} from Filter
+   * 
+   * @param request
+   * @param response
+   * @return
+   */
+  private FacesContext getFacesContext(ServletRequest request, ServletResponse response) {
+    ServletContext servletContext = ((HttpServletRequest) request).getSession().getServletContext();
+    // Try to get it first
+    FacesContext facesContext = FacesContext.getCurrentInstance();
+    // if (facesContext != null) return facesContext;
+    FacesContextFactory contextFactory =
+        (FacesContextFactory) FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+    LifecycleFactory lifecycleFactory =
+        (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+    Lifecycle lifecycle = lifecycleFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+    facesContext = contextFactory.getFacesContext(servletContext, request, response, lifecycle);
+    // Set using our inner class
+    InnerFacesContext.setFacesContextAsCurrentInstance(facesContext);
+    // set a new viewRoot, otherwise context.getViewRoot returns null
+    UIViewRoot view =
+        facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
+    facesContext.setViewRoot(view);
+    return facesContext;
+  }
+
 }

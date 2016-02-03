@@ -23,7 +23,6 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -87,7 +86,7 @@ public class JenaUtil {
       Imeji.init(TDB_PATH);
       initTestUser();
       // init imeji configuration
-      new ConfigurationBean();
+      // new ConfigurationBean();
       // ElasticService.start();
 
     } catch (Exception e) {

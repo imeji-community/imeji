@@ -51,6 +51,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -252,6 +253,11 @@ public class DigilibServlet extends Scaler {
    */
   private SessionBean getSession(HttpServletRequest req) {
     return (SessionBean) req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
+  }
+
+  private ConfigurationBean getConfiguration(HttpServletRequest req) {
+    return (ConfigurationBean) req.getSession(true)
+        .getAttribute(ConfigurationBean.class.getSimpleName());
   }
 
   /*

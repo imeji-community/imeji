@@ -50,7 +50,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 @ViewScoped
 public class ImejiAuthBean implements Serializable {
   private static final long serialVersionUID = 4905896901833448372L;
-  private static Authorization auth = new Authorization();
+  private Authorization auth = new Authorization();
   private User sessionUser;
 
   /**

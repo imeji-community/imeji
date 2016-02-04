@@ -91,7 +91,8 @@ public class StorageController implements Serializable {
    * @return
    * @throws ImejiException
    */
-  public UploadResult upload(String filename, File file, String collectionId) throws ImejiException {
+  public UploadResult upload(String filename, File file, String collectionId)
+      throws ImejiException {
     filename = FilenameUtils.getName(filename);
     UploadResult result = storage.upload(filename, file, collectionId);
     result.setChecksum(calculateChecksum(file));
@@ -189,16 +190,21 @@ public class StorageController implements Serializable {
     // Imeji will uprfont guess the extension for the uploaded file if it is
     // not provided
     // Thus this method is not public and cannot be used as public method
-    if ("".equals(extension.trim()))
+    if ("".equals(extension.trim())) {
       return false;
+    }
     // check in white list, if found then allowed
-    for (String s : formatWhiteList.split(","))
-      if (compareExtension(extension, s.trim()))
+    for (String s : formatWhiteList.split(",")) {
+      if (compareExtension(extension, s.trim())) {
         return true;
+      }
+    }
     // check black list, if found then forbidden
-    for (String s : formatBlackList.split(","))
-      if (compareExtension(extension, s.trim()))
+    for (String s : formatBlackList.split(",")) {
+      if (compareExtension(extension, s.trim())) {
         return false;
+      }
+    }
     // Not found in both list: if white list is empty, allowed
     return "".equals(formatWhiteList.trim());
   }

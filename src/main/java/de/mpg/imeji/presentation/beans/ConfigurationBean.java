@@ -143,7 +143,6 @@ public class ConfigurationBean {
       config.loadFromXML(in);
     } catch (Exception e) {
       logger.info("conf.xml can not be read, probably emtpy");
-      return;
     }
     this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
     Object ft = config.get(CONFIGURATION.FILE_TYPES.name());

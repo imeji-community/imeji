@@ -98,6 +98,7 @@ public class ModusFilter implements Filter {
    * @return
    */
   private boolean isLoggedIn(HttpServletRequest request) {
+    System.out.println(ServletUtil.getSessionBean(request) == null);
     return ServletUtil.getSessionBean(request) != null
         && ServletUtil.getSessionBean(request).getUser() != null;
   }
@@ -129,7 +130,6 @@ public class ModusFilter implements Filter {
         .getRequestQueryString().getParameterMap();
     ((HttpServletResponse) resp).sendRedirect(serv.getServletContext().getContextPath()
         + "?redirect=" + URLEncoder.encode(url + HistoryUtil.paramsMapToString(params), "UTF-8"));
-
   }
 
   /**
@@ -143,6 +143,4 @@ public class ModusFilter implements Filter {
     String url = URLDecoder.decode(serv.getParameter(REDIRECT_PARAM), "UTF-8");
     ((HttpServletResponse) resp).sendRedirect(url);
   }
-
-
 }

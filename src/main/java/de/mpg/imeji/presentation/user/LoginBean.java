@@ -14,7 +14,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import de.mpg.imeji.exceptions.ImejiException;
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -41,6 +42,7 @@ public class LoginBean {
   private String passwd;
   private SessionBean sb;
   private String redirect;
+  private final static Logger LOGGER = Logger.getLogger(LoginBean.class);
 
   /**
    * Constructor
@@ -50,7 +52,7 @@ public class LoginBean {
   }
 
   @PostConstruct
-  public void init() throws ImejiException {
+  public void init() {
     this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
       if (UrlHelper.getParameterBoolean("logout")) {
@@ -64,7 +66,7 @@ public class LoginBean {
         this.redirect = URLDecoder.decode(UrlHelper.getParameterValue("redirect"), "UTF-8");
       }
     } catch (Exception e) {
-      throw new ImejiException(e.getMessage());
+      LOGGER.error("Error initializing LoginBean", e);
     }
   }
 

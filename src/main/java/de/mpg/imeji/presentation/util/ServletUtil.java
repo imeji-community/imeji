@@ -45,7 +45,7 @@ public class ServletUtil {
    * @return
    */
   public static SessionBean getSessionBean(HttpServletRequest req) {
-    return (SessionBean) req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
+    return (SessionBean) getSession(req, SessionBean.class.getSimpleName());
   }
 
 
@@ -56,6 +56,17 @@ public class ServletUtil {
    * @return
    */
   public static HistorySession getHistorySession(HttpServletRequest req) {
-    return (HistorySession) req.getSession(true).getAttribute(HistorySession.class.getSimpleName());
+    return (HistorySession) getSession(req, HistorySession.class.getSimpleName());
+  }
+
+  /**
+   * Return a Session Object
+   * 
+   * @param req
+   * @param classSimpleName
+   * @return
+   */
+  private static Object getSession(HttpServletRequest req, String classSimpleName) {
+    return req.getSession(true).getAttribute(classSimpleName);
   }
 }

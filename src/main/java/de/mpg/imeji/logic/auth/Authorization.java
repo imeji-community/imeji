@@ -24,6 +24,7 @@
  */
 package de.mpg.imeji.logic.auth;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
@@ -55,7 +56,9 @@ import de.mpg.imeji.presentation.collection.CollectionListItem;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class Authorization {
+public class Authorization implements Serializable {
+  private static final long serialVersionUID = -4745899890554497793L;
+
   /**
    * Return true if the {@link User} can create the object
    * 

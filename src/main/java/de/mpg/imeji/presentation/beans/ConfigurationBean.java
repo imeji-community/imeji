@@ -51,6 +51,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -85,16 +86,15 @@ public class ConfigurationBean {
   private static String lang = "en";
   private final static Logger logger = Logger.getLogger(ConfigurationBean.class);
   // A list of predefined file types, which is set when imeji is initialized
-  private final static String predefinedFileTypes =
+  private final static String DEFAULT_SEARCH_FILE_TYPE_LIST =
       "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
-  private final static String predefinedUploadBlackList =
+  private final static String DEFAULT_FILE_BLACKLIST =
       "386,aru,atm,aut,bat,bin,bkd,blf,bll,bmw,boo,bqf,buk,bxz,cc,ce0,ceo,cfxxe,chm,cih,cla,class,cmd,com,cpl,cxq,cyw,dbd,dev,dlb,dli,dll,dllx,dom,drv,dx,dxz,dyv,dyz,eml,exe,exe1,exe_renamed,ezt,fag,fjl,fnr,fuj,hlp,hlw,hsq,hts,ini,iva,iws,jar,js,kcd,let,lik,lkh,lnk,lok,mfu,mjz,nls,oar,ocx,osa,ozd,pcx,pgm,php2,php3,pid,pif,plc,pr,qit,rhk,rna,rsc_tmp,s7p,scr,scr,shs,ska,smm,smtmp,sop,spam,ssy,swf,sys,tko,tps,tsa,tti,txs,upa,uzy,vb,vba,vbe,vbs,vbx,vexe,vsd,vxd,vzr,wlpginstall,wmf,ws,wsc,wsf,wsh,wss,xdu,xir,xlm,xlv,xnt,zix,zvz";
-  private final static String predefinedLanguages = "en,de,ja,es";
-  private final static String predefinedRegistrationTokenExpirationDays = "1";
-  private final static String predefinedCarouselConfig = "true";
-  // default quota is 25GB
-  private final static String predefinedDefaultDiskSpaceQuota =
-      Long.toString(25l * 1024l * 1024l * 1024l);
+  private final static String DEFAULT_LANGUAGE_LIST = "en,de,ja,es";
+  private final static String DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS = "1";
+  private final static String DEFAULT_CAROUSEL_SHOW = "true";
+  private final static String DEFAULT_USER_QUOTA = Long.toString(25l * 1024l * 1024l * 1024l);// 25GB
+  private final static String DEFAULT_USER_QUOTA_LIST = "1, 10, 20";
   private String dataViewerUrl;
 
   public enum BROWSE_VIEW {
@@ -109,25 +109,43 @@ public class ConfigurationBean {
    * 
    * @throws URISyntaxException
    * @throws IOException
+   * @throws ImejiException
    */
-  public ConfigurationBean() throws IOException, URISyntaxException {
-    initializeConfigFile();
+  public ConfigurationBean() throws IOException, URISyntaxException, ImejiException {
+    getConfigurationFile();
     readConfig();
   }
 
   /**
-   * Initialize the Configuration File
+   * IGet the Configuration File from the filesystem. If not existing, create a new one with default
+   * values
    * 
    * @throws IOException
    * @throws URISyntaxException
    */
-  private synchronized void initializeConfigFile() throws IOException, URISyntaxException {
-    if (configFile == null) {
-      configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
-      if (!configFile.exists()) {
-        configFile.createNewFile();
-      }
+  private synchronized void getConfigurationFile() throws IOException, URISyntaxException {
+    configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
+    if (!configFile.exists()) {
+      configFile.createNewFile();
+      setDefaultConfig();
     }
+  }
+
+
+  /**
+   * Write the Default Configuration to the Disk. This should be called when the Configuration is
+   * initialized for the first time.
+   */
+  private synchronized void setDefaultConfig() {
+    config = new Properties();
+    fileTypes = new FileTypes(DEFAULT_SEARCH_FILE_TYPE_LIST);
+    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA, DEFAULT_USER_QUOTA);
+    initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
+    initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
+    initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
+    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, DEFAULT_CAROUSEL_SHOW);
+    initPropertyWithDefaultValue(CONFIGURATION.QUOTA_LIMITS, DEFAULT_USER_QUOTA_LIST);
+    saveConfig();
   }
 
   /**
@@ -135,33 +153,26 @@ public class ConfigurationBean {
    * 
    * @param f
    * @throws IOException
+   * @throws ImejiException
    */
-  private synchronized void readConfig() throws IOException {
+  private synchronized void readConfig() throws IOException, ImejiException {
     try {
-      config = new Properties();
       FileInputStream in = new FileInputStream(configFile);
       config.loadFromXML(in);
     } catch (Exception e) {
-      logger.info("conf.xml can not be read, probably emtpy");
+      throw new ImejiException(
+          "conf.xml could not be read. Please check in tdb directory if exsting and not empty. If Emtpy, remove it.");
+      // logger.info("conf.xml can not be read, probably emtpy");
+      // return;
     }
-    this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
-    Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
-    if (ft == null) {
-      fileTypes = new FileTypes(predefinedFileTypes);
-    } else {
-      fileTypes = new FileTypes((String) ft);
-    }
-    Object o = config.get(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name());
-    if (o == null) {
-      initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA,
-          predefinedDefaultDiskSpaceQuota);
-    }
-    initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, predefinedUploadBlackList);
-    initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, predefinedLanguages);
+    dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
+    fileTypes = new FileTypes((String) config.get(CONFIGURATION.FILE_TYPES.name()));
+    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA, DEFAULT_USER_QUOTA);
+    initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
+    initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
     initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
-    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED,
-        predefinedCarouselConfig);
-    saveConfig();
+    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, DEFAULT_CAROUSEL_SHOW);
+    initPropertyWithDefaultValue(CONFIGURATION.QUOTA_LIMITS, DEFAULT_USER_QUOTA_LIST);
   }
 
 
@@ -824,8 +835,8 @@ public class ConfigurationBean {
     } catch (NumberFormatException e) {
       logger.info(
           "Could not understand the Registration Token Expiry Setting, setting it to default ("
-              + predefinedRegistrationTokenExpirationDays + " day).");
-      s = predefinedRegistrationTokenExpirationDays;
+              + DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS + " day).");
+      s = DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS;
     }
 
     setProperty(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name(), s);
@@ -853,8 +864,8 @@ public class ConfigurationBean {
     } catch (NumberFormatException e) {
       logger.info(
           "Could not understand the Default Disk Space Quota property, setting it to default ("
-              + predefinedDefaultDiskSpaceQuota + " bytes).");
-      s = predefinedDefaultDiskSpaceQuota;
+              + DEFAULT_USER_QUOTA + " bytes).");
+      s = DEFAULT_USER_QUOTA;
     }
     setProperty(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name(), s);
   }
@@ -870,7 +881,7 @@ public class ConfigurationBean {
   public static String calculateDefaultDiskSpaceQuota() {
     String quota =
         config != null ? (String) config.get(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name()) : null;
-    return isNullOrEmptyTrim(quota) ? predefinedDefaultDiskSpaceQuota : quota;
+    return isNullOrEmptyTrim(quota) ? DEFAULT_USER_QUOTA : quota;
   }
 
   /**
@@ -903,14 +914,14 @@ public class ConfigurationBean {
 
   private static String registrationTokenCompute() {
     String myToken = (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
-    return isNullOrEmptyTrim(myToken) ? predefinedRegistrationTokenExpirationDays : myToken;
+    return isNullOrEmptyTrim(myToken) ? DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS : myToken;
   }
 
   public static String getRsaPublicKey() {
     return (String) config.get(CONFIGURATION.RSA_PUBLIC_KEY.name());
   }
 
-  public static void setRsaPublicKey(String string) {
+  public void setRsaPublicKey(String string) {
     config.put(CONFIGURATION.RSA_PUBLIC_KEY.name(), string);
   }
 
@@ -918,7 +929,7 @@ public class ConfigurationBean {
     return (String) config.get(CONFIGURATION.RSA_PRIVATE_KEY.name());
   }
 
-  public static void setRsaPrivateKey(String string) {
+  public void setRsaPrivateKey(String string) {
     config.put(CONFIGURATION.RSA_PRIVATE_KEY.name(), string);
   }
 

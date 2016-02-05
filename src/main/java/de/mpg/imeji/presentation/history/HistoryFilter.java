@@ -122,8 +122,8 @@ public class HistoryFilter implements Filter {
    */
   private void dofilterImpl(HttpServletRequest request, ServletResponse resp) throws Exception {
     getFacesContext(request, resp);
-    SessionBean session = ServletUtil.getSessionBean(request);
-    HistorySession hs = ServletUtil.getHistorySession(request);
+    SessionBean session = getSessionBean(request, resp);
+    HistorySession hs = getHistorySession(request, resp);
     if (session != null && hs != null) {
       checkSpaceMatching(request, session, hs);
       String url = navigation.getApplicationUri()
@@ -194,6 +194,46 @@ public class HistoryFilter implements Filter {
           session.setSpaceId("");
         }
       }
+    }
+  }
+
+  /**
+   * Return the {@link SessionBean}
+   * 
+   * @param req
+   * @return
+   */
+  private SessionBean getSessionBean(HttpServletRequest req, ServletResponse resp) {
+    return (SessionBean) getBean(SessionBean.class, req, resp);
+
+  }
+
+  /**
+   * Get the {@link HistorySession} from the {@link FacesContext}
+   * 
+   * @param request
+   * @param resp
+   * @return
+   */
+  private HistorySession getHistorySession(HttpServletRequest req, ServletResponse resp) {
+    return (HistorySession) getBean(HistorySession.class, req, resp);
+  }
+
+
+  private Object getBean(Class<?> c, ServletRequest request, ServletResponse resp) {
+    String name = c.getSimpleName();
+    FacesContext fc = getFacesContext(request, resp);
+    Object result = fc.getExternalContext().getSessionMap().get(name);
+    if (result == null) {
+      try {
+        Object b = c.newInstance();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, b);
+        return b;
+      } catch (Exception e) {
+        throw new RuntimeException("Error creating History Session", e);
+      }
+    } else {
+      return result;
     }
   }
 

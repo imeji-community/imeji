@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
@@ -36,45 +35,47 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
  * @author saquet
  */
 public class InitializerServlet extends HttpServlet {
-  private static final long serialVersionUID = 1L;
-  private final static Logger logger = Logger.getLogger(InitializerServlet.class);
+  private static final long serialVersionUID = -3826737851602585061L;
+  private final static Logger LOGGER = Logger.getLogger(InitializerServlet.class);
   private ConfigurationBean config;
 
   @Override
   public void init() throws ServletException {
-    super.init();
-    new PropertyBean();
     try {
+      super.init();
+      new PropertyBean();
       config = new ConfigurationBean();
-    } catch (IOException | URISyntaxException e) {
-      logger.error("Error reading Configuration", e);
+      Imeji.locksSurveyor.start();
+      initModel();
+      Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
+      initRsaKeys();
+    } catch (Exception e) {
+      LOGGER.error("imeji didn't initialize correctly", e);
     }
-    Imeji.locksSurveyor.start();
-    initModel();
-    Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
-    initRsaPublicKey();
   }
 
   /**
    * Initialize the imeji jena tdb
+   * 
+   * @throws URISyntaxException
+   * @throws IOException
    */
-  public void initModel() {
-    try {
-      Imeji.init();
-      runMigration();
-    } catch (Exception e) {
-      throw new RuntimeException("Error Initializing model: ", e);
-    }
+  public void initModel() throws IOException, URISyntaxException {
+    Imeji.init();
+    runMigration();
   }
 
-  private void initRsaPublicKey() {
+  /**
+   * Initialize the RSA Keys, used to generate API Keys
+   */
+  private void initRsaKeys() {
     try {
       ImejiRsaKeys.init(ConfigurationBean.getRsaPublicKey(), ConfigurationBean.getRsaPrivateKey());
-      ConfigurationBean.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
-      ConfigurationBean.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
+      config.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
+      config.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
       config.saveConfig();
     } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-      logger.error("!!! Error initalizing API Key !!!", e);
+      LOGGER.error("!!! Error initalizing API Key !!!", e);
     }
   }
 
@@ -89,19 +90,25 @@ public class InitializerServlet extends HttpServlet {
     try {
       in = new FileInputStream(f);
     } catch (FileNotFoundException e) {
-      logger.info("No " + f.getAbsolutePath() + " found, no migration runs");
+      LOGGER.info("No " + f.getAbsolutePath() + " found, no migration runs");
     }
     if (in != null) {
       String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
       migrationRequests = migrationRequests.replaceAll("XXX_BASE_URI_XXX", PropertyBean.baseURI());
       migrationRequests = addNewIdToMigration(migrationRequests);
-      logger.info("Running migration with query: ");
-      logger.info(migrationRequests);
+      LOGGER.info("Running migration with query: ");
+      LOGGER.info(migrationRequests);
       ImejiSPARQL.execUpdate(migrationRequests);
-      logger.info("Migration done!");
+      LOGGER.info("Migration done!");
     }
   }
 
+  /**
+   * Replace XXX_NEW_ID_XXX by a new ID in Migration File
+   * 
+   * @param migrationRequests
+   * @return
+   */
   private String addNewIdToMigration(String migrationRequests) {
     Pattern p = Pattern.compile("XXX_NEW_ID_XXX");
     Matcher m = p.matcher(migrationRequests);
@@ -111,17 +118,6 @@ public class InitializerServlet extends HttpServlet {
     }
     m.appendTail(sb);
     return sb.toString();
-  }
-
-  /**
-   * Return the {@link ConfigurationBean}
-   * 
-   * @param req
-   * @return
-   */
-  private ConfigurationBean getConfiguration(HttpServletRequest req) {
-    return (ConfigurationBean) req.getSession(true)
-        .getAttribute(ConfigurationBean.class.getSimpleName());
   }
 
   @Override

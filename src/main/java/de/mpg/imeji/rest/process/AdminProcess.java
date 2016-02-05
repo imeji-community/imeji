@@ -57,8 +57,6 @@ public class AdminProcess {
    *
    */
   public static JSONResponse invalidMethod() {
-    System.out.println("RETURNING INVLAID METHOD");
-    //return Response.status(405).entity("").build();
       return RestProcessUtils.buildResponse(Status.METHOD_NOT_ALLOWED.getStatusCode(), null);
   }
 
@@ -66,8 +64,6 @@ public class AdminProcess {
   *
   */
  public static JSONResponse invalidResource() {
-   System.out.println("RETURNING INVLAID METHOD");
-   //return Response.status(405).entity("").build();
      return RestProcessUtils.buildResponse(Status.NOT_FOUND.getStatusCode(), null);
  }
 

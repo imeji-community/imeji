@@ -49,17 +49,60 @@ public class AuthenticationResource {
      return RestProcessUtils.buildJSONResponse(AdminProcess.logout(authHeader));
     }
   
+  @GET
+  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
+  @Path("/login")
+  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response badMethodGetlogin() {
+    return RestProcessUtils.buildJSONResponse(AdminProcess.invalidResource());
+  }
 
- /* @POST
-  @Path("/logoutagain")
-  @ApiOperation(value = "Logout from the API",
-      notes = "The APIKey of the current User (according to authorization header) will be invalidated. User will need to login with Basic Authentication to get a new Key")
-   @Produces(MediaType.APPLICATION_JSON)
-   public Response logoutagain(@HeaderParam("authorization") String authHeader) {
-    return RestProcessUtils.buildJSONResponse(AdminProcess.logout(authHeader));
-   }*/
- 
-   
+  @GET
+  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
+  @Path("/logout")
+  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response badMethodGetlogout() {
+    return RestProcessUtils.buildJSONResponse(AdminProcess.invalidResource());
+  }
+
+  @PUT
+  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
+  @Path("/login")
+  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response badMethodPutlogin() {
+    return RestProcessUtils.buildJSONResponse(AdminProcess.invalidMethod());
+  }
+
+  @PUT
+  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
+  @Path("/logout")
+  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response badMethodPutlogout() {
+    return RestProcessUtils.buildJSONResponse(AdminProcess.invalidMethod());
+  }
+
+  @DELETE
+  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
+  @Path("/login")
+  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response badMethodDeletelogin() {
+    return RestProcessUtils.buildJSONResponse(AdminProcess.invalidMethod());
+  }
+
+  @DELETE
+  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
+  @Path("/logout")
+  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response badMethodDeletelogout() {
+    return RestProcessUtils.buildJSONResponse(AdminProcess.invalidMethod());
+  }
+  
   /* NOTE 
   
   DO NOT DELETE FOLLOWING METHODS HERE
@@ -67,39 +110,34 @@ public class AuthenticationResource {
   Thus we get proper error message and no entity returned (instead of previously returned jsf page in the response which is stated in the web.xml)
   If method is not already matched by any of the other resources, these error methods will be given
   
+  FOR some reason, for /login and /logout there have to be special methods (below matcher does not catch them).
+  
   */
 
   @POST
-  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
+
   @Path("/{text: (/?.*)}")
-  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
   @Produces(MediaType.APPLICATION_JSON)
   public Response badMethodPost() {
     return RestProcessUtils.buildJSONResponse(AdminProcess.invalidMethod());
   }
   
   @PUT
-  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
   @Path("/{text: (/?.*)}")
-  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
   @Produces(MediaType.APPLICATION_JSON)
   public Response badMethodPut() {
     return RestProcessUtils.buildJSONResponse(AdminProcess.invalidMethod());
   }
 
   @GET
-  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
   @Path("/{text: (/?.*)}")
-  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
   @Produces(MediaType.APPLICATION_JSON)
   public Response badMethodGet() {
     return RestProcessUtils.buildJSONResponse(AdminProcess.invalidResource());
   }
   
   @DELETE
-  // @Path("/{text: (/!((items|collections|albums|profiles|storage)/?)).*}")
   @Path("/{text: (/?.*)}")
-  //Pattern.compile ("(((https?|ftp|gopher|telnet|file|Unsure|http):)*((/)|(//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
   @Produces(MediaType.APPLICATION_JSON)
   public Response badMethodDelete() {
     return RestProcessUtils.buildJSONResponse(AdminProcess.invalidMethod());

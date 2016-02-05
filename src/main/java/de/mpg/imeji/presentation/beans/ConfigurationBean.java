@@ -156,6 +156,7 @@ public class ConfigurationBean {
    * @throws ImejiException
    */
   private synchronized void readConfig() throws IOException, ImejiException {
+    config = new Properties();
     try {
       FileInputStream in = new FileInputStream(configFile);
       config.loadFromXML(in);

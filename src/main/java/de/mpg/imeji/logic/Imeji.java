@@ -29,6 +29,7 @@ import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
 import de.mpg.imeji.exceptions.AlreadyExistsException;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
@@ -45,6 +46,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
@@ -71,6 +73,7 @@ public class Imeji {
   public static MetadataProfile defaultMetadataProfile;
   private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
   private static final String ADMIN_PASSWORD_INIT = "admin";
+  public static ConfigurationBean CONFIG;
   /**
    * Thread to check if locked objects can be unlocked
    */
@@ -90,9 +93,10 @@ public class Imeji {
    * 
    * @throws URISyntaxException
    * @throws IOException
+   * @throws ImejiException
    * 
    */
-  public static void init() throws IOException, URISyntaxException {
+  public static void init() throws IOException, URISyntaxException, ImejiException {
     tdbPath = PropertyReader.getProperty("imeji.tdb.path");
     init(tdbPath);
     ElasticService.start();
@@ -125,8 +129,11 @@ public class Imeji {
    * Initialize a {@link Jena} database according at one path location in filesystem
    * 
    * @param path
+   * @throws ImejiException
+   * @throws URISyntaxException
+   * @throws IOException
    */
-  public static void init(String path) {
+  public static void init(String path) throws IOException, URISyntaxException, ImejiException {
     if (path != null) {
       File f = new File(path);
       if (!f.exists()) {
@@ -154,6 +161,7 @@ public class Imeji {
     initModel(spaceModel);
     logger.info("... models done!");
     initadminUser();
+    CONFIG = new ConfigurationBean();
     initDefaultMetadataProfile();
   }
 

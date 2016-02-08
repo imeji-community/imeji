@@ -33,6 +33,7 @@ import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.Authorization;
@@ -48,9 +49,11 @@ import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.workflow.WorkflowManager;
 
 /**
  * Facade implementing Writer {@link Authorization}
@@ -62,6 +65,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
 public class WriterFacade {
   private Writer writer;
   private SearchIndexer indexer;
+  private WorkflowManager workflowManager = new WorkflowManager();
 
   /**
    * Constructor for one model
@@ -112,6 +116,7 @@ public class WriterFacade {
     if (objects.isEmpty()) {
       return;
     }
+    checkWorkflowForDelete(objects);
     checkSecurity(objects, user, GrantType.DELETE);
     validate(objects, null, Validator.Method.DELETE);
     writer.delete(objects, user);
@@ -129,6 +134,7 @@ public class WriterFacade {
     if (objects.isEmpty()) {
       return;
     }
+    checkWorkflowForUpdate(objects);
     if (doCheckSecurity) {
       checkSecurity(objects, user, GrantType.UPDATE);
     }
@@ -147,6 +153,7 @@ public class WriterFacade {
     if (objects.isEmpty()) {
       return;
     }
+    checkWorkflowForUpdate(objects);
     checkSecurity(objects, user, GrantType.UPDATE);
     validate(objects, profile, Validator.Method.UPDATE);
     writer.updateLazy(objects, user);
@@ -184,6 +191,28 @@ public class WriterFacade {
         (Validator<Object>) ValidatorFactory.newValidator(list.get(0), method);
     for (Object o : list) {
       validator.validate(o, profile, method);
+    }
+  }
+
+  /**
+   * Check worforflow for update operation
+   * 
+   * @param objects
+   * @throws WorkflowException
+   */
+  private void checkWorkflowForUpdate(List<Object> objects) throws WorkflowException {
+    for (Object o : objects) {
+      if (o instanceof Properties) {
+        workflowManager.isValidUpdate((Properties) o);
+      }
+    }
+  }
+
+  private void checkWorkflowForDelete(List<Object> objects) throws WorkflowException {
+    for (Object o : objects) {
+      if (o instanceof Properties) {
+        workflowManager.isValidDelete((Properties) o);
+      }
     }
   }
 

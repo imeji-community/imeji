@@ -37,7 +37,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -178,9 +177,6 @@ public class AlbumController extends ImejiController {
     album = (Album) ic.searchAndSetContainerItems(album, user, -1, 0);
     if (album.getImages().isEmpty()) {
       throw new UnprocessableError("An empty album can not be released!");
-    } else if (album.getStatus().equals(Status.RELEASED)) {
-      throw new UnprocessableError(
-          "The status of album is " + album.getStatus() + " and can not be released again!");
     } else {
       writeReleaseProperty(album, user);
       update(album, user);
@@ -198,11 +194,7 @@ public class AlbumController extends ImejiController {
     if (album == null) {
       throw new NotFoundException("Album does not exists");
     }
-    if (!Status.RELEASED.equals(album.getStatus())) {
-      throw new UnprocessableError("Withdraw album: Album must be released");
-    }
-    album.setStatus(Status.WITHDRAWN);
-    album.setVersionDate(DateHelper.getCurrentDate());
+    writeWithdrawProperties(album, album.getDiscardComment());
     album.getImages().clear();
     update(album, user);
   }

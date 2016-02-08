@@ -254,10 +254,6 @@ public class ItemController extends ImejiController {
     CollectionImeji collection;
     try {
       collection = cc.retrieve(item.getCollection(), u);
-      // if (collection.getStatus().equals(Status.WITHDRAWN)) {
-      // throw new UnprocessableError(
-      // "Collection is withdrawn, you can not create an item.");
-      // }
     } catch (Exception e) {
       throw new UnprocessableError(
           "There was a problem with specified collection: " + e.getLocalizedMessage());
@@ -507,21 +503,11 @@ public class ItemController extends ImejiController {
    * @return
    * @throws ImejiException
    */
-  public int delete(List<Item> items, User user) throws ImejiException {
-    int count = 0;
-    List<Object> toDelete = new ArrayList<Object>();
+  public void delete(List<Item> items, User user) throws ImejiException {
+    writer.delete(new ArrayList<Object>(items), user);
     for (Item item : items) {
-      if (item != null) {
-        if (!Status.PENDING.equals(item.getStatus())) {
-          throw new UnprocessableError("Item status must be PENDING.");
-        }
-        removeFileFromStorage(item.getStorageId());
-        toDelete.add(item);
-        count++;
-      }
+      removeFileFromStorage(item.getStorageId());
     }
-    writer.delete(toDelete, user);
-    return count;
   }
 
   /**
@@ -532,11 +518,11 @@ public class ItemController extends ImejiController {
    * @return
    * @throws ImejiException
    */
-  public int delete(String itemId, User u) throws ImejiException {
+  public void delete(String itemId, User u) throws ImejiException {
     Item item = retrieve(ObjectHelper.getURI(Item.class, itemId), u);
     List<Item> items = new ArrayList<Item>();
     items.add(item);
-    return delete(items, u);
+    delete(items, u);
   }
 
   /**
@@ -601,15 +587,9 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public void release(List<Item> l, User user) throws ImejiException {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
     for (Item item : l) {
-      if (Status.PENDING.equals(item.getStatus())) {
-        triples.addAll(getReleaseTriples(item.getId().toString(), item));
-        triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
-        writeReleaseProperty(item, user);
-      }
+      writeReleaseProperty(item, user);
     }
-    // patch(triples, user); //TODO faster but doesnt work with indexer
     updateBatch(l, user);
   }
 
@@ -636,24 +616,14 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public void withdraw(List<Item> items, String comment, User user) throws ImejiException {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
     for (Item item : items) {
-      if (!item.getStatus().equals(Status.RELEASED)) {
-        throw new RuntimeException(
-            "Error discard " + item.getId() + " must be release (found: " + item.getStatus() + ")");
-      } else {
-        triples.addAll(getWithdrawTriples(item.getId().toString(), item, comment));
-        triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
-        writeWithdrawProperties(item, comment);
-        item.setVisibility(Visibility.PUBLIC);
-        if (item.getEscidocId() != null) {
-          removeFileFromStorage(item.getStorageId());
-          item.setEscidocId(null);
-        }
-      }
+      writeWithdrawProperties(item, comment);
+      item.setVisibility(Visibility.PUBLIC);
     }
-    // patch(triples, user);//TODO faster but doesnt work with indexer
     updateBatch(items, user);
+    for (Item item : items) {
+      removeFileFromStorage(item.getStorageId());
+    }
   }
 
   /**
@@ -761,7 +731,7 @@ public class ItemController extends ImejiController {
    */
   private void validateChecksum(URI collectionURI, File file, Boolean isUpdate)
       throws UnprocessableError, ImejiException {
-    if (isValidateChecksumInCollection()) {
+    if (Imeji.isValidateChecksumInCollection()) {
       if (checksumExistsInCollection(collectionURI, StorageUtils.calculateChecksum(file))) {
         throw new UnprocessableError((!isUpdate)
             ? "Same file already exists in the collection (with same checksum). Please choose another file."
@@ -782,16 +752,6 @@ public class ItemController extends ImejiController {
         null, 0, -1).getNumberOfRecords() > 0;
   }
 
-  private boolean isValidateChecksumInCollection() {
-    return Imeji.isValidateChecksumInCollection();
-  }
-
-  public void validateCollectionStatus(Status st) throws UnprocessableError {
-
-    if (Status.WITHDRAWN.equals(st))
-      throw new UnprocessableError(
-          "Collection status does not allow item upload! The collection is discarded!");
-  }
 
   /**
    * Clean the values of all {@link Metadata} of an {@link Item}

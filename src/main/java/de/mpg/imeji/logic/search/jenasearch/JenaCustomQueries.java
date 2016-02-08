@@ -449,12 +449,23 @@ public class JenaCustomQueries {
   }
 
   /**
-   * select {@link CollectionImeji} status
+   * select status
    * 
    * @return
    */
-  public static final String selectCollectionStatus(String collectionId) {
-    return "SELECT ?s WHERE { <" + collectionId + "> <" + ImejiNamespaces.STATUS + "> ?s}";
+  public static final String selectStatus(String id) {
+    return "SELECT ?s WHERE { <" + id + "> <" + ImejiNamespaces.STATUS + "> ?s}";
+  }
+
+  /**
+   * SElect the Version number of the object
+   * 
+   * @param id
+   * @return
+   */
+  public static final String selectVersion(String id) {
+    return "SELECT (str(?version) AS ?s) WHERE { <" + id + "> <" + ImejiNamespaces.VERSION
+        + "> ?version}";
   }
 
   /**

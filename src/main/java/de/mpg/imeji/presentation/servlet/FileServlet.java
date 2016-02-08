@@ -207,7 +207,7 @@ public class FileServlet extends HttpServlet {
    */
   private boolean isPublicCollection(URI collectionId) {
     List<String> r =
-        ImejiSPARQL.exec(JenaCustomQueries.selectCollectionStatus(collectionId.toString()), null);
+        ImejiSPARQL.exec(JenaCustomQueries.selectStatus(collectionId.toString()), null);
     return !ConfigurationBean.getPrivateModusStatic() && !r.isEmpty()
         && r.get(0).equals(Status.RELEASED.getUriString());
   }

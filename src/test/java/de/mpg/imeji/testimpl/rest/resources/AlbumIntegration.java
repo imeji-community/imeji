@@ -39,7 +39,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
@@ -393,24 +392,24 @@ public class AlbumIntegration extends ImejiTestBase {
     assertEquals(response.getStatus(), Status.NOT_FOUND.getStatusCode());
   }
 
-  @Test
-  public void test_5_AddWithdrawnItemsToAlbum_6_WithAuth() throws ImejiException, IOException {
-    initCollection();
-    initItem();
-    initAlbum();
-    CollectionService s = new CollectionService();
-    s.release(collectionId, JenaUtil.testUser);
-    s.withdraw(collectionId, JenaUtil.testUser, "Test discard comment");
-
-    Response response =
-        target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUser)
-            .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
-
-    assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-    AlbumService as = new AlbumService();
-    assertEquals(as.readItems(albumId, JenaUtil.testUser, "", 0, -1).getNumberOfResults(), 0);
-  }
+  // @Test
+  // public void test_5_AddWithdrawnItemsToAlbum_6_WithAuth() throws ImejiException, IOException {
+  // initCollection();
+  // initItem();
+  // initAlbum();
+  // CollectionService s = new CollectionService();
+  // s.release(collectionId, JenaUtil.testUser);
+  // s.withdraw(collectionId, JenaUtil.testUser, "Test discard comment");
+  //
+  // Response response =
+  // target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUser)
+  // .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
+  //
+  // assertEquals(Status.OK.getStatusCode(), response.getStatus());
+  //
+  // AlbumService as = new AlbumService();
+  // assertEquals(as.readItems(albumId, JenaUtil.testUser, "", 0, -1).getNumberOfResults(), 0);
+  // }
 
   @Test
   public void test_6_WithdrawAlbum_1_WithAuth() throws ImejiException {

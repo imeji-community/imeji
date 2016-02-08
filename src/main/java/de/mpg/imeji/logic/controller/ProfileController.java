@@ -329,7 +329,6 @@ public class ProfileController extends ImejiController {
    */
 
   public MetadataProfile initDefaultMetadataProfile() throws ImejiException {
-
     MetadataProfile mdpVO = retrieveDefaultProfile();
 
     if (mdpVO == null) {

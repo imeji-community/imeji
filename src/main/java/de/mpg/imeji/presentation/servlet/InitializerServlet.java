@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
 import org.jose4j.lang.JoseException;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.ImejiRsaKeys;
@@ -37,14 +38,12 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
 public class InitializerServlet extends HttpServlet {
   private static final long serialVersionUID = -3826737851602585061L;
   private final static Logger LOGGER = Logger.getLogger(InitializerServlet.class);
-  private ConfigurationBean config;
 
   @Override
   public void init() throws ServletException {
     try {
       super.init();
       new PropertyBean();
-      config = new ConfigurationBean();
       Imeji.locksSurveyor.start();
       initModel();
       Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
@@ -59,8 +58,9 @@ public class InitializerServlet extends HttpServlet {
    * 
    * @throws URISyntaxException
    * @throws IOException
+   * @throws ImejiException
    */
-  public void initModel() throws IOException, URISyntaxException {
+  public void initModel() throws IOException, URISyntaxException, ImejiException {
     Imeji.init();
     runMigration();
   }
@@ -71,9 +71,9 @@ public class InitializerServlet extends HttpServlet {
   private void initRsaKeys() {
     try {
       ImejiRsaKeys.init(ConfigurationBean.getRsaPublicKey(), ConfigurationBean.getRsaPrivateKey());
-      config.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
-      config.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
-      config.saveConfig();
+      Imeji.CONFIG.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
+      Imeji.CONFIG.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
+      Imeji.CONFIG.saveConfig();
     } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
       LOGGER.error("!!! Error initalizing API Key !!!", e);
     }

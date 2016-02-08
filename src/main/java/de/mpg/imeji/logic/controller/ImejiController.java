@@ -95,7 +95,7 @@ public abstract class ImejiController {
    * @param user
    */
   protected void writeReleaseProperty(Properties properties, User user) {
-    properties.setVersion(1);
+    properties.setVersion(properties.getVersion() + 1);
     properties.setVersionDate(DateHelper.getCurrentDate());
     properties.setStatus(Status.RELEASED);
   }

@@ -34,6 +34,7 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
@@ -256,11 +257,13 @@ public class RestProcessUtils {
     } else if (eX instanceof NotAllowedError) {
       resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.FORBIDDEN.getStatusCode(),
           localMessage);
-
     } else if (eX instanceof NotFoundException) {
       resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),
           localMessage);
     } else if (eX instanceof UnprocessableError) {
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(
+          ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), localMessage);
+    } else if (eX instanceof WorkflowException) {
       resp = RestProcessUtils.buildJSONAndExceptionResponse(
           ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), localMessage);
     } else if (eX instanceof InternalServerErrorException) {

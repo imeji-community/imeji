@@ -269,7 +269,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initFacets() {
     try {
-      SearchResult searchRes = search(getSearchQuery(), sortCriterion, 0, this.getTotalNumberOfElements());
+      SearchResult searchRes =
+          search(getSearchQuery(), sortCriterion, 0, this.getTotalNumberOfElements());
       this.setFacets(new FacetsBean(null, SearchQueryParser.parseStringQuery(query), searchRes));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(facets);
@@ -386,8 +387,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   private void delete(List<String> uris) throws Exception {
     Collection<Item> items = loadImages(uris);
     ItemController ic = new ItemController();
-    int count = ic.delete((List<Item>) items, session.getUser());
-    BeanHelper.info(count + " " + session.getLabel("images_deleted"));
+    ic.delete((List<Item>) items, session.getUser());
+    BeanHelper.info(uris.size() + " " + session.getLabel("images_deleted"));
     unselect(uris);
   }
 

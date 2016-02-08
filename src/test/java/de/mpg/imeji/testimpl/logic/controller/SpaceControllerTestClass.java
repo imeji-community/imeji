@@ -50,7 +50,6 @@ public class SpaceControllerTestClass extends ControllerTest {
 
   @Test
   public void test_1_Create() throws Exception {
-
     Space sp1 = ImejiFactory.newSpace();
     sp1.setTitle("Space 1");
     sp1.setDescription("Space 1 Description");
@@ -152,15 +151,6 @@ public class SpaceControllerTestClass extends ControllerTest {
         new File(sc.transformUrlToPath(space.getLogoUrl().toURL().toString()))));
   }
 
-  @Test
-  public void test_8_Delete() throws Exception {
-    for (Space s : sc.retrieveAll()) {
-      sc.delete(s, adminUser);
-    }
-    assertThat(sc.retrieveAll(), empty());
-  }
-
-
 
   @Test
   public void test_9_RetrieveSpaceCollections() throws Exception {
@@ -178,30 +168,4 @@ public class SpaceControllerTestClass extends ControllerTest {
     assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace));
   }
 
-  /*
-   * @Ignore
-   * 
-   * @Test public void test_999_Performance() throws Exception {
-   * 
-   * 
-   * //create space Space sp1 = ImejiFactory.newSpace(); sp1.setTitle("Space 1");
-   * sp1.setSlug("space_1"); space = sc.create(sp1, adminUser); spaceId = space.getId();
-   * assertThat(sp1.getTitle(), equalTo(space.getTitle()));
-   * 
-   * List<String> results = ImejiSPARQL.exec(SPARQLQueries.countTriplesAll(), null);
-   * 
-   * //create COL_NUM collections String[] colIds = new String[COL_NUM]; collectionTO=
-   * (CollectionTO) RestProcessUtils.buildTOFromJSON( getStringFromPath(STATIC_CONTEXT_REST +
-   * "/createCollection.json"), CollectionTO.class); CollectionService cs = new CollectionService();
-   * long startTime = System.currentTimeMillis(); for (int i = 0; i < COL_NUM; i++) {
-   * collectionTO.setTitle("Collection " + i); colIds[i] = cs.create(collectionTO,
-   * JenaUtil.testUser).getId(); } LOGGER.info("creation time: " + (System.currentTimeMillis() -
-   * startTime ) + "ms");
-   * 
-   * startTime = System.currentTimeMillis(); //add collections to space for (int i = 0; i < COL_NUM;
-   * i++) { sc.addCollection(space, colIds[i], adminUser); } LOGGER.info("addition time:" +
-   * (System.currentTimeMillis() - startTime ) + "ms");
-   * 
-   * }
-   */
 }

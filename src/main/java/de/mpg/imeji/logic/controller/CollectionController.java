@@ -390,25 +390,23 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(collection.getId(), null, null, user, null, -1, 0).getResults();
 
-
     if (hasImageLocked(itemUris, user)) {
       throw new UnprocessableError(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
           .getMessage("collection_locked"));
     } else if (itemUris.isEmpty()) {
       throw new UnprocessableError("An empty collection can not be released!");
-    } else if (collection.getStatus().equals(Status.RELEASED)) {
-      throw new UnprocessableError("The status of collection is " + collection.getStatus()
-          + " and can not be released again!");
     } else {
-      writeReleaseProperty(collection, user);
       List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.release(items, user);
+      writeReleaseProperty(collection, user);
       update(collection, user);
-
       if (collection.getProfile() != null
           && AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
         ProfileController pc = new ProfileController();
-        pc.release(pc.retrieve(collection.getProfile(), user), user);
+        MetadataProfile profile = pc.retrieve(collection.getProfile(), user);
+        if (profile.getStatus() == Status.PENDING) {
+          pc.release(profile, user);
+        }
       }
     }
   }

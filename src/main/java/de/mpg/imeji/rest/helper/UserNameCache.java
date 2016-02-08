@@ -19,6 +19,9 @@ public class UserNameCache {
   private static final Logger logger = Logger.getLogger(UserNameCache.class);
 
   public String getUserName(URI userId) {
+    if (userId == null) {
+      return null;
+    }
     if (userNameMap.containsKey(userId.toString())) {
       return userNameMap.get(userId.toString());
     } else {

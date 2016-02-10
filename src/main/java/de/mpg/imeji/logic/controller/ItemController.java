@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -88,9 +89,7 @@ public class ItemController extends ImejiController {
    * @return
    */
   public Item create(Item item, URI coll, User user) throws ImejiException {
-    Collection<Item> l = new ArrayList<Item>();
-    l.add(item);
-    create(l, coll, user);
+    create(Arrays.asList(item), coll, user);
     return item;
   }
 
@@ -218,7 +217,7 @@ public class ItemController extends ImejiController {
     }
     cleanMetadata(items);
     ProfileController pc = new ProfileController();
-    writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
+    writer.create(J2JHelper.cast2ObjectList((List<?>) items),
         pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user);
     List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user, items.iterator().next());
     // Update the collection
@@ -375,9 +374,7 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public Item update(Item item, User user) throws ImejiException {
-    Collection<Item> l = new ArrayList<Item>();
-    l.add(item);
-    updateBatch(l, user);
+    updateBatch(Arrays.asList(item), user);
     return retrieve(item.getId(), user);
   }
 
@@ -437,8 +434,9 @@ public class ItemController extends ImejiController {
       item.setWidth(uploadResult.getWidth());
       item.setHeight(uploadResult.getHeight());
     }
-    if (filename != null)
+    if (filename != null) {
       item.setFilename(filename);
+    }
 
     return update(item, user);
   }
@@ -520,9 +518,7 @@ public class ItemController extends ImejiController {
    */
   public void delete(String itemId, User u) throws ImejiException {
     Item item = retrieve(ObjectHelper.getURI(Item.class, itemId), u);
-    List<Item> items = new ArrayList<Item>();
-    items.add(item);
-    delete(items, u);
+    delete(Arrays.asList(item), u);
   }
 
   /**
@@ -667,11 +663,14 @@ public class ItemController extends ImejiController {
   }
 
   private String firstNonNullOrEmtpy(String... strs) {
-    if (strs == null)
+    if (strs == null) {
       return null;
-    for (String str : strs)
-      if (str != null && !"".equals(str.trim()))
+    }
+    for (String str : strs) {
+      if (str != null && !"".equals(str.trim())) {
         return str;
+      }
+    }
     return null;
   }
 

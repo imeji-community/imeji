@@ -27,6 +27,7 @@ package de.mpg.imeji.logic.writer;
 import java.net.URI;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
@@ -297,9 +298,7 @@ public class WriterFacade {
    * @return
    */
   public static List<Object> toList(Object o) {
-    List<Object> list = new ArrayList<Object>();
-    list.add(o);
-    return list;
+    return Arrays.asList(o);
   }
 
 }

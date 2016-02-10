@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -344,17 +345,15 @@ public class ItemBean {
     this.sessionBean = sessionBean;
   }
 
-  @SuppressWarnings("unchecked")
-  public void makePublic() throws Exception {
+  public void makePublic() throws ImejiException {
     ItemController c = new ItemController();
-    c.release((List<Item>) c.toList(item), sessionBean.getUser());
+    c.release(Arrays.asList(item), sessionBean.getUser());
     item = c.retrieve(item.getId(), sessionBean.getUser());
   }
 
-  @SuppressWarnings("unchecked")
-  public void makePrivate() throws Exception {
+  public void makePrivate() throws ImejiException {
     ItemController c = new ItemController();
-    c.unRelease((List<Item>) c.toList(item), sessionBean.getUser());
+    c.unRelease(Arrays.asList(item), sessionBean.getUser());
     item = c.retrieve(item.getId(), sessionBean.getUser());
   }
 

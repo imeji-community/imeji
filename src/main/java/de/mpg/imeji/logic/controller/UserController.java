@@ -277,20 +277,22 @@ public class UserController {
     try {
       User activateUser = retrieveRegisteredUser(registrationToken);
 
-      if (activateUser.isActive())
+      if (activateUser.isActive()) {
         throw new UnprocessableError("User is already activated!");
+      }
 
       Calendar now = DateHelper.getCurrentDate();
-      if (!(activateUser.getCreated().before(now)))
+      if (!(activateUser.getCreated().before(now))) {
         throw new UnprocessableError(
             "Registration date does not match, its bigger then the current date!");
-
+      }
       // TODO: wait for the ConfigurationBean setting here
       Calendar validUntil = activateUser.getCreated();
       validUntil.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic());
 
-      if ((now.after(validUntil)))
+      if ((now.after(validUntil))) {
         throw new UnprocessableError("Activation period expired, user should be deleted!");
+      }
 
       activateUser.setUserStatus(User.UserStatus.ACTIVE);
       activateUser

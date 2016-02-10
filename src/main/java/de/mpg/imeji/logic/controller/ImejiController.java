@@ -198,18 +198,6 @@ public abstract class ImejiController {
   }
 
   /**
-   * Return a single object as a list of object
-   * 
-   * @param o
-   * @return
-   */
-  public List<?> toList(Object o) {
-    List<Object> list = new ArrayList<Object>();
-    list.add(o);
-    return list;
-  }
-
-  /**
    * Update logo of {@link Container}
    * 
    * @param Container

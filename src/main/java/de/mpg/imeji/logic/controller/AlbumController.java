@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,9 +85,7 @@ public class AlbumController extends ImejiController {
    * @throws ImejiException
    */
   public Album retrieve(URI albumUri, User user) throws ImejiException {
-    List<String> uri = new ArrayList<>();
-    uri.add(albumUri.toString());
-    return retrieveBatch(uri, user, 0, -1).get(0);
+    return retrieveBatch(Arrays.asList(albumUri.toString()), user, 0, -1).get(0);
   }
 
   /**
@@ -98,9 +97,7 @@ public class AlbumController extends ImejiController {
    * @throws ImejiException
    */
   public Album retrieveLazy(URI albumUri, User user) throws ImejiException {
-    List<String> uri = new ArrayList<>();
-    uri.add(albumUri.toString());
-    return retrieveBatchLazy(uri, user, -1, 0).get(0);
+    return retrieveBatchLazy(Arrays.asList(albumUri.toString()), user, -1, 0).get(0);
   }
 
   /**

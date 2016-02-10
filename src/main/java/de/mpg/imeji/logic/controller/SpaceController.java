@@ -181,10 +181,8 @@ public class SpaceController extends ImejiController {
    * @throws ImejiException
    */
   public Space updateFile(Space space, File f, User user) throws ImejiException, IOException {
-
     space.setLogoUrl(URI.create(generateUrl(ObjectHelper.getId(space.getId()), f.getName())));
     update(f, transformUrlToPath(space.getLogoUrl().toURL().toString()));
-
     return update(space, user);
   }
 
@@ -197,7 +195,6 @@ public class SpaceController extends ImejiController {
    * @throws IOException
    */
   private String update(File toCopy, String path) throws IOException {
-
     File f = new File(path);
     if (f.getParentFile().exists()) {
       // clean space dir

@@ -138,10 +138,9 @@ public class ProfileController extends ImejiController {
     CollectionImeji c;
     try {
       c = cc.retrieve(collectionId, user);
-
-      if (c.getProfile() == null)
+      if (c.getProfile() == null) {
         return null;
-
+      }
       return retrieve(c.getProfile(), user);
     } catch (NotFoundException e) {
       throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
@@ -245,7 +244,6 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public void withdraw(MetadataProfile mdp, User user) throws ImejiException {
-
     if (mdp.getDefault()) {
       throw new UnprocessableError("error_profile_is_default_cannot_be_withdrawn");
     }
@@ -431,7 +429,6 @@ public class ProfileController extends ImejiController {
     }
 
     for (String s : retrieveUris) {
-
       cols.add((MetadataProfile) J2JHelper.setId(new MetadataProfile(), URI.create(s)));
     }
 

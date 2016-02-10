@@ -304,5 +304,10 @@ public class Navigation implements Serializable {
       this.path = file;
     }
 
+    public boolean hasSamePath(String path) {
+      return this.path.equals(path) || (this.path + "/").equals(path)
+          || ("/" + this.path).equals(path) || ("/" + this.path + "/").equals(path);
+    }
+
   }
 }

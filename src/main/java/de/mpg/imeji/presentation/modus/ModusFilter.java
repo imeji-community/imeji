@@ -58,6 +58,8 @@ public class ModusFilter implements Filter {
 
   }
 
+
+
   /**
    * True if a redirect parameter is defined in the url
    * 
@@ -77,18 +79,18 @@ public class ModusFilter implements Filter {
    * @return
    */
   private boolean isPrivate(HttpServletRequest request) {
-    return isPrivateModus() && !isStartPage(request) && !isLoggedIn(request);
+    return isPrivateModus() && !isPublicPage(request) && !isLoggedIn(request);
   }
 
   /**
-   * True if the current page is the start page
+   * True if the page which is public even in private mode. For instance the Help Page
    * 
    * @param request
    * @return
    */
-  private boolean isStartPage(HttpServletRequest request) {
-    return PrettyContext.getCurrentInstance(request).getRequestURL().toURL().isEmpty()
-        || "/".equals(PrettyContext.getCurrentInstance(request).getRequestURL().toURL());
+  private boolean isPublicPage(HttpServletRequest request) {
+    String path = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+    return Navigation.HELP.hasSamePath(path) || Navigation.HOME.hasSamePath(path);
   }
 
   /**

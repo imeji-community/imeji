@@ -16,16 +16,11 @@
 	
 	<ui:define name="actionsMenu">
 
-		<menu:context_actionMenu id="action"  isUserLoggedIn="#{Auth.loggedIn}" 
+		<menu:context_actionMenu id="action" 
 									curMainMenu="#{currentMainMenu}" 
-									navBean="#{Navigation}" 
-									isDeletable="#{Auth.delete(itemBean.image)}" 
-									isEditable="#{Auth.update(itemBean.image)}" 
-									isAdmin="#{Auth.admin(itemBean.image) }"
+									vo="#{itemBean.image}"
 									downloadEnabled="true"
 									contextDownloadParam="&amp;col=#{logicBean.id}"
-									isContentDeletable="#{isContentDeletable}"
-									allowedToShare="#{logicBean.collection.status != 'WITHDRAWN' and Auth.admin(logicBean.collection)}"
 									activeMenu="item"/>
 	</ui:define>
 	

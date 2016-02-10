@@ -128,7 +128,6 @@ public class DataViewerServlet extends HttpServlet {
   private String viewGenericUrl(String originalUrl, String fileType,
       String dataViewerServiceTargetURL)
           throws FileNotFoundException, IOException, URISyntaxException {
-    // System.out.println(dataViewerServiceTargetURL+"?"+"mimetype="+fileType+"&url="+originalUrl);
     return dataViewerServiceTargetURL + "?" + "mimetype=" + fileType + "&url=" + originalUrl;
   }
 

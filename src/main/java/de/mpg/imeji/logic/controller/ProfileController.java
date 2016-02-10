@@ -85,7 +85,7 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public MetadataProfile create(MetadataProfile p, User user) throws ImejiException {
-    writeCreateProperties(p, user);
+    prepareCreate(p, user);
     p.setStatus(Status.PENDING);
     writer.create(WriterFacade.toList(p), null, user);
     ShareController shareController = new ShareController();
@@ -177,7 +177,7 @@ public class ProfileController extends ImejiController {
    */
   public void update(MetadataProfile mdp, User user) throws ImejiException {
     isLoggedInUser(user);
-    writeUpdateProperties(mdp, user);
+    prepareUpdate(mdp, user);
     writer.update(WriterFacade.toList(mdp), null, user, true);
     Imeji.executor.submit(new CleanMetadataJob(mdp));
   }
@@ -190,7 +190,7 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public void release(MetadataProfile mdp, User user) throws ImejiException {
-    writeReleaseProperty(mdp, user);
+    prepareRelease(mdp, user);
     update(mdp, user);
   }
 

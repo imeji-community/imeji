@@ -150,6 +150,14 @@ public class SpaceControllerTestClass extends ControllerTest {
     assertTrue(FileUtils.contentEquals(uploadFile,
         new File(sc.transformUrlToPath(space.getLogoUrl().toURL().toString()))));
   }
+  //
+  // @Test
+  // public void test_8_Delete() throws Exception {
+  // for (Space s : sc.retrieveAll()) {
+  // sc.delete(s, adminUser);
+  // }
+  // assertThat(sc.retrieveAll(), empty());
+  // }
 
 
   @Test

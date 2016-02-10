@@ -163,22 +163,13 @@ public class HistoryFilter implements Filter {
         PrettyContext.getCurrentInstance(FacesContext.getCurrentInstance()).getConfig();
 
     if (pc.isURLMapped(new URL(matchingUrl))) {
-      // System.out.println("URL IS MAPPED "+matchingUrl);
       UrlMapping myMap =
           pc.getMappingForUrl(PrettyContext.getCurrentInstance(request).getRequestURL());
-      // System.out.println("URL IS MAPPED with pattern "+myMap.getPattern()+" and id
-      // "+myMap.getId());
-
       if (myMap.getId().startsWith("space_")) {
         String mySpaceId = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-        // System.out.println("PreCalculated mySpaceId= "+mySpaceId+" 2");
-        // System.out.println(StringUtils.substringAfter(matchingUrl,
-        // "/space/"));
         mySpaceId = spaceHome.equals(myMap.getId())
             ? StringUtils.substringAfter(matchingUrl, "/space/")
             : StringUtils.substringBefore(StringUtils.substringAfter(matchingUrl, "/space/"), "/");
-        // System.out.println("Calculated mySpaceId= "+mySpaceId+
-        // " sessopmSüace= "+session.getSpaceId());
         if (!mySpaceId.equals(session.getSpaceId())) {
           hs.getPages().clear();
           SpaceController sc = new SpaceController();

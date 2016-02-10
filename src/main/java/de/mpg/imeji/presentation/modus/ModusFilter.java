@@ -98,7 +98,6 @@ public class ModusFilter implements Filter {
    * @return
    */
   private boolean isLoggedIn(HttpServletRequest request) {
-    System.out.println(ServletUtil.getSessionBean(request) == null);
     return ServletUtil.getSessionBean(request) != null
         && ServletUtil.getSessionBean(request).getUser() != null;
   }

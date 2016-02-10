@@ -67,7 +67,7 @@ public class AlbumController extends ImejiController {
    */
   public URI create(Album album, User user) throws ImejiException {
     isLoggedInUser(user);
-    writeCreateProperties(album, user);
+    prepareCreate(album, user);
     ShareController shareController = new ShareController();
     shareController.shareToCreator(user, album.getId().toString());
     writer.create(WriterFacade.toList(album), null, user);
@@ -148,7 +148,7 @@ public class AlbumController extends ImejiController {
    * @throws ImejiException
    */
   public Album update(Album album, User user) throws ImejiException {
-    writeUpdateProperties(album, user);
+    prepareUpdate(album, user);
     writer.update(WriterFacade.toList(album), null, user, true);
     return retrieve(album.getId(), user);
   }
@@ -178,7 +178,7 @@ public class AlbumController extends ImejiController {
     if (album.getImages().isEmpty()) {
       throw new UnprocessableError("An empty album can not be released!");
     } else {
-      writeReleaseProperty(album, user);
+      prepareRelease(album, user);
       update(album, user);
     }
   }
@@ -194,7 +194,7 @@ public class AlbumController extends ImejiController {
     if (album == null) {
       throw new NotFoundException("Album does not exists");
     }
-    writeWithdrawProperties(album, album.getDiscardComment());
+    prepareWithdraw(album, album.getDiscardComment());
     album.getImages().clear();
     update(album, user);
   }

@@ -160,8 +160,8 @@ public class Imeji {
     initModel(profileModel);
     initModel(spaceModel);
     logger.info("... models done!");
-    initadminUser();
     CONFIG = new ConfigurationBean();
+    initadminUser();
     initDefaultMetadataProfile();
   }
 

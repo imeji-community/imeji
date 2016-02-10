@@ -458,7 +458,6 @@ public class UserController {
    * @return
    */
   private Collection<Person> searchPersonByNameInUsers(String name) {
-    System.out.println("searching by person name in users");
     Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
     return loadPersons(search
         .searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1).getResults(),

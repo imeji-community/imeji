@@ -115,7 +115,7 @@ public class CollectionController extends ImejiController {
       }
     }
 
-    writeCreateProperties(c, user);
+    prepareCreate(c, user);
 
     if (p != null) {
       c.setProfile(p.getId());
@@ -217,7 +217,7 @@ public class CollectionController extends ImejiController {
    * @throws ImejiException
    */
   public CollectionImeji update(CollectionImeji ic, User user) throws ImejiException {
-    writeUpdateProperties(ic, user);
+    prepareUpdate(ic, user);
     writer.update(WriterFacade.toList(ic), null, user, true);
     return retrieve(ic.getId(), user);
   }
@@ -233,7 +233,7 @@ public class CollectionController extends ImejiController {
   public CollectionImeji updateWithProfile(CollectionImeji ic, MetadataProfile mp, User user,
       MetadataProfileCreationMethod method) throws ImejiException {
     updateCollectionProfile(ic, mp, user, method);
-    writeUpdateProperties(ic, user);
+    prepareUpdate(ic, user);
     return update(ic, user);
   }
 
@@ -267,7 +267,7 @@ public class CollectionController extends ImejiController {
    * @throws ImejiException
    */
   public CollectionImeji updateLazy(CollectionImeji ic, User user) throws ImejiException {
-    writeUpdateProperties(ic, user);
+    prepareUpdate(ic, user);
     writer.updateLazy(WriterFacade.toList(ic), null, user);
     return retrieveLazy(ic.getId(), user);
   }
@@ -316,7 +316,7 @@ public class CollectionController extends ImejiController {
   public CollectionImeji updateLazyWithProfile(CollectionImeji ic, MetadataProfile mp, User user,
       MetadataProfileCreationMethod method) throws ImejiException {
     updateCollectionProfile(ic, mp, user, method);
-    writeUpdateProperties(ic, user);
+    prepareUpdate(ic, user);
     return updateLazy(ic, user);
   }
 
@@ -398,7 +398,7 @@ public class CollectionController extends ImejiController {
     } else {
       List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.release(items, user);
-      writeReleaseProperty(collection, user);
+      prepareRelease(collection, user);
       update(collection, user);
       if (collection.getProfile() != null
           && AuthUtil.staticAuth().administrate(user, collection.getProfile().toString())) {
@@ -473,7 +473,7 @@ public class CollectionController extends ImejiController {
     } else {
       List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
       itemController.withdraw(items, coll.getDiscardComment(), user);
-      writeWithdrawProperties(coll, null);
+      prepareWithdraw(coll, null);
       update(coll, user);
       if (coll.getProfile() != null
           && !coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())

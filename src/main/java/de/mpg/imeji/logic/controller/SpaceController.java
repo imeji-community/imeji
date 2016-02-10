@@ -91,7 +91,7 @@ public class SpaceController extends ImejiController {
    */
   public Space create(Space space, User user) throws ImejiException {
     space.setStatus(Properties.Status.RELEASED);
-    writeCreateProperties(space, user);
+    prepareCreate(space, user);
     // TODO: here is future grants definitions
     /*
      * GrantController gc = new GrantController(); gc.addGrants(user,
@@ -166,7 +166,7 @@ public class SpaceController extends ImejiController {
    * @throws ImejiException
    */
   public Space update(Space space, User user) throws ImejiException {
-    writeUpdateProperties(space, user);
+    prepareUpdate(space, user);
     writer.update(WriterFacade.toList(space), null, user, true);
     return retrieve(space.getId(), user);
   }
@@ -271,7 +271,7 @@ public class SpaceController extends ImejiController {
    * @throws ImejiException
    */
   public void updateLazy(Space space, User user) throws ImejiException {
-    writeUpdateProperties(space, user);
+    prepareUpdate(space, user);
     writer.updateLazy(WriterFacade.toList(space), null, user);
   }
 

@@ -53,7 +53,7 @@ import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.logic.workflow.WorkflowManager;
+import de.mpg.imeji.logic.workflow.WorkflowValidator;
 
 /**
  * Facade implementing Writer {@link Authorization}
@@ -65,7 +65,7 @@ import de.mpg.imeji.logic.workflow.WorkflowManager;
 public class WriterFacade {
   private Writer writer;
   private SearchIndexer indexer;
-  private WorkflowManager workflowManager = new WorkflowManager();
+  private WorkflowValidator workflowManager = new WorkflowValidator();
 
   /**
    * Constructor for one model
@@ -134,7 +134,6 @@ public class WriterFacade {
     if (objects.isEmpty()) {
       return;
     }
-    checkWorkflowForUpdate(objects);
     if (doCheckSecurity) {
       checkSecurity(objects, user, GrantType.UPDATE);
     }
@@ -153,7 +152,6 @@ public class WriterFacade {
     if (objects.isEmpty()) {
       return;
     }
-    checkWorkflowForUpdate(objects);
     checkSecurity(objects, user, GrantType.UPDATE);
     validate(objects, profile, Validator.Method.UPDATE);
     writer.updateLazy(objects, user);
@@ -194,24 +192,10 @@ public class WriterFacade {
     }
   }
 
-  /**
-   * Check worforflow for update operation
-   * 
-   * @param objects
-   * @throws WorkflowException
-   */
-  private void checkWorkflowForUpdate(List<Object> objects) throws WorkflowException {
-    for (Object o : objects) {
-      if (o instanceof Properties) {
-        workflowManager.isValidUpdate((Properties) o);
-      }
-    }
-  }
-
   private void checkWorkflowForDelete(List<Object> objects) throws WorkflowException {
     for (Object o : objects) {
       if (o instanceof Properties) {
-        workflowManager.isValidDelete((Properties) o);
+        workflowManager.isDeleteAllowed((Properties) o);
       }
     }
   }

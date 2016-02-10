@@ -204,7 +204,7 @@ public class ItemController extends ImejiController {
     CollectionController cc = new CollectionController();
     CollectionImeji ic = cc.retrieveLazy(coll, user);
     for (Item img : items) {
-      writeCreateProperties(img, user);
+      prepareCreate(img, user);
       if (Status.PENDING.equals(ic.getStatus())) {
         img.setVisibility(Visibility.PRIVATE);
       } else {
@@ -391,7 +391,7 @@ public class ItemController extends ImejiController {
   public void updateBatch(Collection<Item> items, User user) throws ImejiException {
     List<Object> imBeans = new ArrayList<Object>();
     for (Item item : items) {
-      writeUpdateProperties(item, user);
+      prepareUpdate(item, user);
       item.setFilename(FilenameUtils.getName(item.getFilename()));
       imBeans.add(createFulltextForMetadata(item));
     }
@@ -588,7 +588,7 @@ public class ItemController extends ImejiController {
    */
   public void release(List<Item> l, User user) throws ImejiException {
     for (Item item : l) {
-      writeReleaseProperty(item, user);
+      prepareRelease(item, user);
     }
     updateBatch(l, user);
   }
@@ -617,7 +617,7 @@ public class ItemController extends ImejiController {
    */
   public void withdraw(List<Item> items, String comment, User user) throws ImejiException {
     for (Item item : items) {
-      writeWithdrawProperties(item, comment);
+      prepareWithdraw(item, comment);
       item.setVisibility(Visibility.PUBLIC);
     }
     updateBatch(items, user);

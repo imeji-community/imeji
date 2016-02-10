@@ -203,7 +203,6 @@ public class ConfigurationBean {
       }
       config.storeToXML(new FileOutputStream(configFile), "imeji configuration File", "UTF-8");
       logger.info("saving imeji config");
-      // BeanHelper.removeBeanFromMap(this.getClass());
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

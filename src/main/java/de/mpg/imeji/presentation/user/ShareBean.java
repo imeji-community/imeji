@@ -222,7 +222,6 @@ public class ShareBean implements Serializable {
   }
 
 
-
   /**
    * Reload the current page
    */
@@ -328,7 +327,7 @@ public class ShareBean implements Serializable {
     if (grants != null && grants.size() > 0) {
       try {
         this.getEmailMessage(this.user.getPerson().getCompleteName(),
-            dest.getPerson().getCompleteName(), title, getShareToUri());
+            dest.getPerson().getCompleteName(), title, getLinkToSharedObject());
       } catch (Exception e) {
         BeanHelper.error(sb.getMessage("error") + ": Email not sent\n" + "User: " + user
             + "\nDestination:" + dest);
@@ -419,7 +418,8 @@ public class ShareBean implements Serializable {
     SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     for (URI uri : group.getUsers()) {
       try {
-        List<Grant> grants = ShareController.transformRolesToGrants(selectedRoles, getShareToUri());
+        List<Grant> grants =
+            ShareController.transformRolesToGrants(selectedRoles, getLinkToSharedObject());
         // User u = ObjectLoader.loadUser(uri, Imeji.adminUser);
         // GrantController gc = new GrantController();
         // gc.addGrants(u, grants, u);
@@ -655,8 +655,22 @@ public class ShareBean implements Serializable {
   }
 
   public String getShareToUri() {
-    if (shareTo instanceof Properties)
+    if (shareTo instanceof Properties) {
       return ((Properties) shareTo).getId().toString();
+    }
+    return null;
+  }
+
+  private String getLinkToSharedObject() {
+    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    switch (type) {
+      case COLLECTION:
+        return navigation.getCollectionUrl() + ((Properties) shareTo).getIdString();
+      case ALBUM:
+        return navigation.getAlbumUrl() + ((Properties) shareTo).getIdString();
+      case ITEM:
+        return navigation.getItemUrl() + ((Properties) shareTo).getIdString();
+    }
     return null;
   }
 

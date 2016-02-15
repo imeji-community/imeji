@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
@@ -92,7 +93,6 @@ public class UserController {
     // Now set up the creator to Admin User, as necessary for permissions
     user = Imeji.adminUser;
     u.setUserStatus(User.UserStatus.ACTIVE);
-
     switch (type) {
       case ADMIN:
         u.setGrants(AuthorizationPredefinedRoles.imejiAdministrator(u.getId().toString()));
@@ -115,8 +115,6 @@ public class UserController {
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
     u.setModified(now);
-    u.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
-
     writer.create(WriterFacade.toList(u), null, user);
     return u;
   }
@@ -339,10 +337,9 @@ public class UserController {
     }
     long needed = currentDiskUsage + file.length();
     if (needed > targetCollectionUser.getQuota()) {
-      throw new QuotaExceededException("Disk quota: " + targetCollectionUser.getQuota()
-          + "B has been exceeded by " + (needed - targetCollectionUser.getQuota())
-          + "B; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
-          + targetCollectionUser.getEmail());
+      throw new QuotaExceededException("Data quota (" + targetCollectionUser.getQuotaHumanReadable()
+          + " allowed) has been exceeded (" + FileUtils.byteCountToDisplaySize(currentDiskUsage)
+          + " used)");
     }
     return targetCollectionUser.getQuota() - needed;
   }

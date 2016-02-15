@@ -32,7 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -54,7 +54,6 @@ import org.codehaus.jettison.json.JSONException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -77,7 +76,7 @@ public class ConfigurationBean {
    * @version $Revision$ $LastChangedDate$
    */
   private enum CONFIGURATION {
-    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_DISK_SPACE_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS, PRIVATE_MODUS;
+    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS, PRIVATE_MODUS;
   }
 
   private static Properties config;
@@ -93,8 +92,9 @@ public class ConfigurationBean {
   private final static String DEFAULT_LANGUAGE_LIST = "en,de,ja,es";
   private final static String DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS = "1";
   private final static String DEFAULT_CAROUSEL_SHOW = "true";
-  private final static String DEFAULT_USER_QUOTA = Long.toString(25l * 1024l * 1024l * 1024l);// 25GB
+  private final static String DEFAULT_USER_QUOTA = "1";
   private final static String DEFAULT_USER_QUOTA_LIST = "1, 10, 20";
+  public final static String QUOTA_UNLIMITED = "unlimited";
   private String dataViewerUrl;
 
   public enum BROWSE_VIEW {
@@ -139,11 +139,11 @@ public class ConfigurationBean {
   private synchronized void setDefaultConfig() {
     config = new Properties();
     fileTypes = new FileTypes(DEFAULT_SEARCH_FILE_TYPE_LIST);
-    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA, DEFAULT_USER_QUOTA);
     initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
     initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
     initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
     initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, DEFAULT_CAROUSEL_SHOW);
+    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_QUOTA, DEFAULT_USER_QUOTA);
     initPropertyWithDefaultValue(CONFIGURATION.QUOTA_LIMITS, DEFAULT_USER_QUOTA_LIST);
     saveConfig();
   }
@@ -168,7 +168,7 @@ public class ConfigurationBean {
     }
     dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
     fileTypes = new FileTypes((String) config.get(CONFIGURATION.FILE_TYPES.name()));
-    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA, DEFAULT_USER_QUOTA);
+    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_QUOTA, DEFAULT_USER_QUOTA);
     initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
     initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
     initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
@@ -858,31 +858,7 @@ public class ConfigurationBean {
     config.setProperty(CONFIGURATION.REGISTRATION_ENABLED.name(), Boolean.toString(enabled));
   }
 
-  public void setDefaultDiskSpaceQuota(String s) {
-    try {
-      Long.parseLong(s);
-    } catch (NumberFormatException e) {
-      logger.info(
-          "Could not understand the Default Disk Space Quota property, setting it to default ("
-              + DEFAULT_USER_QUOTA + " bytes).");
-      s = DEFAULT_USER_QUOTA;
-    }
-    setProperty(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name(), s);
-  }
 
-  public static long getDefaultDiskSpaceQuotaStatic() {
-    return Long.valueOf(calculateDefaultDiskSpaceQuota());
-  }
-
-  public String getDefaultDiskSpaceQuota() {
-    return calculateDefaultDiskSpaceQuota();
-  }
-
-  public static String calculateDefaultDiskSpaceQuota() {
-    String quota =
-        config != null ? (String) config.get(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name()) : null;
-    return isNullOrEmptyTrim(quota) ? DEFAULT_USER_QUOTA : quota;
-  }
 
   /**
    * Return the url of the favicon
@@ -955,25 +931,26 @@ public class ConfigurationBean {
     }
   }
 
+  public String getDefaultQuota() {
+    return getPropertyAsNonNullString(CONFIGURATION.DEFAULT_QUOTA.name());
+  }
+
+  public void setdefaultQuota(String defaultQuota) {
+    setProperty(CONFIGURATION.DEFAULT_QUOTA.name(), defaultQuota);
+  }
+
+  public static String getDefaultQuotaStatic() {
+    return getPropertyAsNonNullStringStatic(CONFIGURATION.DEFAULT_QUOTA.name());
+  }
+
   public String getQuotaLimits() {
     return (String) config.get(CONFIGURATION.QUOTA_LIMITS.name());
   }
 
-  public static LinkedHashMap<String, Long> getQuotaLimitsStatic() {
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    int bytesPerGigabyte = 1073741824;
-
-    String limits = (String) config.get(CONFIGURATION.QUOTA_LIMITS.name());
-    String[] limitArray = limits != null ? limits.split(",") : new String[0];
-
-    LinkedHashMap<String, Long> quotaLimits = new LinkedHashMap<String, Long>();
-    quotaLimits.put(sb.getLabel("unlimited"), Long.MAX_VALUE);
-    for (int i = 0; i < limitArray.length; i++) {
-      quotaLimits.put(limitArray[i],
-          (long) ((Double.parseDouble(limitArray[i])) * bytesPerGigabyte));
-    }
-    return quotaLimits;
-
+  public static List<String> getQuotaLimitsStaticAsList() {
+    String limitString =
+        (String) config.get(CONFIGURATION.QUOTA_LIMITS.name()) + "," + QUOTA_UNLIMITED;
+    return Arrays.asList(limitString.split(","));
   }
 
 }

@@ -200,7 +200,6 @@ public class UserControllerTestClass extends ControllerTest {
 
     UserController c = new UserController(Imeji.adminUser);
     User u = c.create(user, USER_TYPE.DEFAULT);
-    assertThat(u.getQuota(), equalTo(ConfigurationBean.getDefaultDiskSpaceQuotaStatic()));
 
     // change quota
     long NEW_QUOTA = 25 * 1024;

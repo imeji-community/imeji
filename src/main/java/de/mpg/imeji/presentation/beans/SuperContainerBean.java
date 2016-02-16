@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -61,7 +60,6 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
    */
   public SuperContainerBean() {
     sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-
     initMenus();
     selectedSortCriterion = SearchIndex.SearchFields.modified.name();
     selectedSortOrder = SortOrder.DESCENDING.name();
@@ -95,23 +93,17 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
   public String getInit() {
     setSelectedFilterSearch(null);
     setSearchQuery(null);
-    if (UrlHelper.getParameterValue("f") != null && !UrlHelper.getParameterValue("f").equals("")) {
+    if (UrlHelper.hasParameter("f") && !UrlHelper.getParameterValue("f").isEmpty()) {
       selectedFilter = UrlHelper.getParameterValue("f");
     }
-    if (UrlHelper.getParameterValue("tab") != null
-        && !UrlHelper.getParameterValue("tab").equals("")) {
+    if (UrlHelper.hasParameter("tab") && !UrlHelper.getParameterValue("tab").isEmpty()) {
       selectedMenu = UrlHelper.getParameterValue("tab");
     }
-    if (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-        .containsKey("q")) {
+    if (UrlHelper.hasParameter("q")) {
       query = UrlHelper.getParameterValue("q");
     }
-    if (selectedFilter == null || UrlHelper.getParameterBoolean("login") || sb.getUser() == null) {
-      if (sb.getUser() != null) {
-        selectedFilter = "my";
-      } else {
-        selectedFilter = "all";
-      }
+    if (selectedFilter == null) {
+      selectedFilter = "all";
     }
     if (selectedMenu == null) {
       selectedMenu = "SORTING";

@@ -30,7 +30,7 @@ import de.mpg.imeji.presentation.util.ServletUtil;
  */
 public class ModusFilter implements Filter {
   private static final Navigation navigation = new Navigation();
-  private static final String REDIRECT_PARAM = "redirect";
+  private static final String REDIRECT_AFTER_LOGIN_PARAM = "redirectAfterLogin";
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -67,7 +67,7 @@ public class ModusFilter implements Filter {
    * @return
    */
   private boolean isRedirected(HttpServletRequest request) {
-    return request.getParameter(REDIRECT_PARAM) != null && isLoggedIn(request);
+    return request.getParameter(REDIRECT_AFTER_LOGIN_PARAM) != null && isLoggedIn(request);
   }
 
 
@@ -129,8 +129,9 @@ public class ModusFilter implements Filter {
         + PrettyContext.getCurrentInstance((HttpServletRequest) serv).getRequestURL().toURL();
     Map<String, String[]> params = PrettyContext.getCurrentInstance((HttpServletRequest) serv)
         .getRequestQueryString().getParameterMap();
-    ((HttpServletResponse) resp).sendRedirect(serv.getServletContext().getContextPath()
-        + "?redirect=" + URLEncoder.encode(url + HistoryUtil.paramsMapToString(params), "UTF-8"));
+    ((HttpServletResponse) resp)
+        .sendRedirect(serv.getServletContext().getContextPath() + "?" + REDIRECT_AFTER_LOGIN_PARAM
+            + "=" + URLEncoder.encode(url + HistoryUtil.paramsMapToString(params), "UTF-8"));
   }
 
   /**
@@ -141,7 +142,7 @@ public class ModusFilter implements Filter {
    * @throws IOException
    */
   private void redirect(ServletRequest serv, ServletResponse resp) throws IOException {
-    String url = URLDecoder.decode(serv.getParameter(REDIRECT_PARAM), "UTF-8");
+    String url = URLDecoder.decode(serv.getParameter(REDIRECT_AFTER_LOGIN_PARAM), "UTF-8");
     ((HttpServletResponse) resp).sendRedirect(url);
   }
 }

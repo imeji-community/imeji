@@ -139,6 +139,7 @@ public class ConfigurationBean {
   private synchronized void setDefaultConfig() {
     config = new Properties();
     fileTypes = new FileTypes(DEFAULT_SEARCH_FILE_TYPE_LIST);
+    initPropertyWithDefaultValue(CONFIGURATION.FILE_TYPES, fileTypes.toString());
     initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
     initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
     initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
@@ -198,13 +199,16 @@ public class ConfigurationBean {
    */
   public void saveConfig() {
     try {
+      if (fileTypes != null) {
+        setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
+      }
       if (dataViewerUrl != null) {
         setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
       }
       config.storeToXML(new FileOutputStream(configFile), "imeji configuration File", "UTF-8");
       logger.info("saving imeji config");
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      logger.error("Error saving configuration:", e);
     }
   }
 

@@ -52,12 +52,16 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class FileServlet extends HttpServlet {
   private static final long serialVersionUID = 5502546330318540997L;
-  private static Logger logger = Logger.getLogger(FileServlet.class);
+  private static final Logger LOGGER = Logger.getLogger(FileServlet.class);
   private StorageController storageController;
   private Authorization authorization;
   private Navigation navivation;
   private String domain;
   private String digilibUrl;
+  private SpaceController spaceController;
+  private ExternalStorage externalStorage;
+  private static final String RESOURCE_EMTPY_ICON_URL =
+      "http://localhost:8080/imeji/resources/icon/empty.png";
 
   /**
    * The path for this servlet as defined in the web.xml
@@ -68,7 +72,8 @@ public class FileServlet extends HttpServlet {
   public void init() {
     try {
       storageController = new StorageController();
-      logger.info("File Servlet initialized");
+      spaceController = new SpaceController();
+      externalStorage = new ExternalStorage();
       authorization = new Authorization();
       navivation = new Navigation();
       domain = StringHelper.normalizeURI(navivation.getDomain());
@@ -77,8 +82,9 @@ public class FileServlet extends HttpServlet {
       if (digilibUrl != null && !digilibUrl.isEmpty()) {
         digilibUrl = StringHelper.normalizeURI(digilibUrl);
       }
+      LOGGER.info("File Servlet initialized");
     } catch (Exception e) {
-      throw new RuntimeException("Image servlet not initialized! " + e);
+      LOGGER.info("Error intializing File Servlet", e);
     }
   }
 
@@ -102,14 +108,11 @@ public class FileServlet extends HttpServlet {
     try {
       user = getUser(req, session);
       if ("NO_THUMBNAIL_URL".equals(url)) {
-        ExternalStorage eStorage = new ExternalStorage();
-        eStorage.read("http://localhost:8080/imeji/resources/icon/empty.png",
-            resp.getOutputStream(), true);
+        externalStorage.read(RESOURCE_EMTPY_ICON_URL, resp.getOutputStream(), true);
       } else {
         if (download) {
           downloadFile(resp, url, session, user);
         } else {
-          System.out.println("REading File with DIGHILIB?");
           readFile(url, resp, false, user);
         }
       }
@@ -124,25 +127,19 @@ public class FileServlet extends HttpServlet {
         resp.sendError(HttpServletResponse.SC_NOT_FOUND,
             "The resource you are trying to retrieve does not exist!");
       } else {
-        logger.error(e.getMessage());
+        LOGGER.error(e.getMessage());
         if (!resp.isCommitted()) {
           resp.sendError(422, "Unprocessable entity!");
         }
-
-        /*
-         * ExternalStorage eStorage = new ExternalStorage(); eStorage.read(domain +
-         * "/imeji/resources/icon/empty.png", resp.getOutputStream(), true);
-         */}
+      }
     }
   }
 
   private void downloadFile(HttpServletResponse resp, String url, SessionBean session, User user)
       throws Exception {
-    boolean iSpaceLogo =
-        url.contains("/file/spaces") || url.matches(".*/file/\\w*[^/]/thumbnail/.*\\..+");
     resp.setHeader("Content-disposition", "attachment;");
     boolean isExternalStorage = false;
-    if (!iSpaceLogo) {
+    if (!isSpaceUrl(url)) {
       Item fileItem = getItem(url, user);
       NotificationUtils.notifyByItemDownload(user, fileItem, session);
       isExternalStorage = StringHelper.isNullOrEmptyTrim(fileItem.getStorageId());
@@ -193,7 +190,7 @@ public class FileServlet extends HttpServlet {
    */
   private void checkSecurity(String url, User user) throws NotAllowedError {
     if (isSpaceUrl(url)) {
-      //For space Logos do not check any security (spaces are always public) 
+      // For space Logos do not check any security (spaces are always public)
       return;
     }
     URI uri = getCollectionURI(url);
@@ -217,11 +214,9 @@ public class FileServlet extends HttpServlet {
     return !ConfigurationBean.getPrivateModusStatic() && !r.isEmpty()
         && r.get(0).equals(Status.RELEASED.getUriString());
   }
-  
-  private boolean isSpaceUrl(String url){
-    
-    SpaceController sc = new SpaceController();
-    return sc.isSpaceLogoURL(url);
+
+  private boolean isSpaceUrl(String url) {
+    return spaceController.isSpaceLogoURL(url);
   }
 
 
@@ -235,11 +230,8 @@ public class FileServlet extends HttpServlet {
    */
   private void readExternalFile(String url, HttpServletResponse resp)
       throws ImejiException, IOException {
-    ExternalStorage eStorage = new ExternalStorage();
-    eStorage.read(url, resp.getOutputStream(), true);
+    externalStorage.read(url, resp.getOutputStream(), true);
   }
-
-
 
   /**
    * Return the {@link User} of the request. Check first is a user is send with the request. If not,
@@ -258,7 +250,6 @@ public class FileServlet extends HttpServlet {
       return session.getUser();
     }
     return null;
-
   }
 
   /**

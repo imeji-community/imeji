@@ -42,6 +42,7 @@ import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.servlet.FileServlet;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -53,7 +54,6 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class SpaceController extends ImejiController {
   private static final Logger LOGGER = LoggerFactory.getLogger(SpaceController.class);
-
   private static final ReaderFacade reader = new ReaderFacade(Imeji.spaceModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.spaceModel);
   public static final String SPACES_STORAGE_SUBDIRECTORY = "/spaces";
@@ -508,14 +508,13 @@ public class SpaceController extends ImejiController {
     }
     return false;
   }
-  
+
   /**
    * @param url
-   * @return
-   * Checks if the URL provided is URL for Space Logo 
+   * @return Checks if the URL provided is URL for Space Logo
    */
-  public boolean isSpaceLogoURL(String url){
-      return  url.contains("/file"+SPACES_STORAGE_SUBDIRECTORY); 
-   }
+  public boolean isSpaceLogoURL(String url) {
+    return url.contains(FileServlet.SERVLET_PATH + SPACES_STORAGE_SUBDIRECTORY);
+  }
 
 }

@@ -508,5 +508,14 @@ public class SpaceController extends ImejiController {
     }
     return false;
   }
+  
+  /**
+   * @param url
+   * @return
+   * Checks if the URL provided is URL for Space Logo 
+   */
+  public boolean isSpaceLogoURL(String url){
+      return  url.contains("/file"+SPACES_STORAGE_SUBDIRECTORY); 
+   }
 
 }

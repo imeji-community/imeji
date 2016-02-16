@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -108,6 +109,7 @@ public class FileServlet extends HttpServlet {
         if (download) {
           downloadFile(resp, url, session, user);
         } else {
+          System.out.println("REading File with DIGHILIB?");
           readFile(url, resp, false, user);
         }
       }
@@ -190,6 +192,10 @@ public class FileServlet extends HttpServlet {
    * @throws NotAllowedError
    */
   private void checkSecurity(String url, User user) throws NotAllowedError {
+    if (isSpaceUrl(url)) {
+      //For space Logos do not check any security (spaces are always public) 
+      return;
+    }
     URI uri = getCollectionURI(url);
     if (authorization.read(user, uri) || isPublicCollection(uri)) {
       // ok!
@@ -210,6 +216,12 @@ public class FileServlet extends HttpServlet {
         ImejiSPARQL.exec(JenaCustomQueries.selectStatus(collectionId.toString()), null);
     return !ConfigurationBean.getPrivateModusStatic() && !r.isEmpty()
         && r.get(0).equals(Status.RELEASED.getUriString());
+  }
+  
+  private boolean isSpaceUrl(String url){
+    
+    SpaceController sc = new SpaceController();
+    return sc.isSpaceLogoURL(url);
   }
 
 

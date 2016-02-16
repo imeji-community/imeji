@@ -76,7 +76,8 @@ public class FileServlet extends HttpServlet {
       externalStorage = new ExternalStorage();
       authorization = new Authorization();
       navivation = new Navigation();
-      domain = StringHelper.normalizeURI(navivation.getDomain()).substring(0, domain.length() - 1);
+      domain = StringHelper.normalizeURI(navivation.getDomain());
+      domain = domain.substring(0, domain.length() - 1);
       digilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
       if (digilibUrl != null && !digilibUrl.isEmpty()) {
         digilibUrl = StringHelper.normalizeURI(digilibUrl);

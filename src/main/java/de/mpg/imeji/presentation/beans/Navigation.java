@@ -53,6 +53,7 @@ public class Navigation implements Serializable {
   public static final Page DIGILIB = new Page("Digilib", "digilib");
   public static final Page SINGLEUPLOAD = new Page("Single upload", "singleupload");
   public static final Page REGISTRATION = new Page("Registration", "register");
+  public static final Page IMPRINT = new Page("IMPRINT", "imprint");
   public static final String spaceCommonSlug = "space/";
   public static final String spacesAllSlug = "spaces";
 
@@ -138,6 +139,10 @@ public class Navigation implements Serializable {
   public String getSpacesUrl() {
     // No need to getSpacePath() Space Path HERE
     return applicationUrl + "spaces";
+  }
+
+  public String getImprintUrl() {
+    return applicationUrl + getSpacePath() + IMPRINT.getPath();
   }
 
   public String getSingleUploadUrl() {

@@ -90,7 +90,8 @@ public class ModusFilter implements Filter {
    */
   private boolean isPublicPage(HttpServletRequest request) {
     String path = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-    return Navigation.HELP.hasSamePath(path) || Navigation.HOME.hasSamePath(path);
+    return Navigation.HELP.hasSamePath(path) || Navigation.HOME.hasSamePath(path)
+        || Navigation.REGISTRATION.hasSamePath(path) || Navigation.IMPRINT.hasSamePath(path);
   }
 
   /**
@@ -130,8 +131,8 @@ public class ModusFilter implements Filter {
     Map<String, String[]> params = PrettyContext.getCurrentInstance((HttpServletRequest) serv)
         .getRequestQueryString().getParameterMap();
     ((HttpServletResponse) resp)
-        .sendRedirect(serv.getServletContext().getContextPath() + "?" + REDIRECT_AFTER_LOGIN_PARAM
-            + "=" + URLEncoder.encode(url + HistoryUtil.paramsMapToString(params), "UTF-8"));
+        .sendRedirect(navigation.getApplicationUri() + "?" + REDIRECT_AFTER_LOGIN_PARAM + "="
+            + URLEncoder.encode(url + HistoryUtil.paramsMapToString(params), "UTF-8"));
   }
 
   /**

@@ -357,7 +357,8 @@ public class ConfigurationBean {
   }
 
   public static boolean getStartPageCarouselEnabledStatic() {
-    return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()));
+    return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()))
+        && !getPrivateModusStatic();
   }
 
   public void setStartPageCarouselEnabled(boolean input) {
@@ -365,7 +366,8 @@ public class ConfigurationBean {
   }
 
   public boolean getStartPageCarouselEnabled() {
-    return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()));
+    return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()))
+        && !getPrivateModus();
   }
 
   /**

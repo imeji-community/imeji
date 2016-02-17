@@ -361,8 +361,11 @@ public class EditItemMetadataBean {
    * @throws IOException
    */
   public void saveAndRedirect() throws IOException {
-    editor.save();
-    redirectToView();
+    if (editor.save()) {
+      redirectToView();
+    } else {
+      reload();
+    }
   }
 
   /**

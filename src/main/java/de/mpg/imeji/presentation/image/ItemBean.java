@@ -180,9 +180,9 @@ public class ItemBean {
       loadCollection(user);
       loadProfile(user);
       labels.init(profile);
-      edit = new SingleEditBean(item, profile, getPageUrl());
+      edit = new SingleEditBean(item, profile);
       if (profile != null) {
-        edit = new SingleEditBean(item, profile, getPageUrl());
+        edit = new SingleEditBean(item, profile);
         mds = edit.getEditor().getItems().get(0).getMds();
       }
     }

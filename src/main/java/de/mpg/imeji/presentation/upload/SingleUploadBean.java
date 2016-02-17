@@ -121,7 +121,7 @@ public class SingleUploadBean implements Serializable {
   public String save() {
     try {
       Item item = ImejiFactory.newItem(getCollection());
-      SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
+      SingleEditBean edit = new SingleEditBean(item, sus.getProfile());
       MetadataSetBean newSet = getMdSetBean();
       edit.getEditor().getItems().get(0).setMds(newSet);
       edit.getEditor().validateAndFormatItemsForSaving();
@@ -250,8 +250,9 @@ public class SingleUploadBean implements Serializable {
         MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
         ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 
-        MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId()) : ImejiFactory.newMetadataSet(null);
-        MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);        
+        MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId())
+            : ImejiFactory.newMetadataSet(null);
+        MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
         MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
         labels.init(profile);
         sus.setCollection(collection);
@@ -337,7 +338,8 @@ public class SingleUploadBean implements Serializable {
   private List<CollectionImeji> retrieveAllUserCollections() throws ImejiException {
     CollectionController cc = new CollectionController();
     SearchQuery sq = new SearchQuery();
-    SortCriterion sortCriterion = new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.DESCENDING);
+    SortCriterion sortCriterion =
+        new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.DESCENDING);
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
     return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
   }

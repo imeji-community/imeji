@@ -116,8 +116,8 @@ public class MetadataAndProfileHelper {
     } else if (md instanceof Geolocation) {
       return (((Geolocation) md).getName() == null
           || ((Geolocation) md).getName().trim().equals(""))
-          && (Double.isNaN(((Geolocation) md).getLatitude())
-              || Double.isNaN(((Geolocation) md).getLongitude()));
+          && Double.isNaN(((Geolocation) md).getLatitude())
+          && Double.isNaN(((Geolocation) md).getLongitude());
     } else if (md instanceof License) {
       if ((((License) md).getLicense() == null || "".equals(((License) md).getLicense().trim()))
           && ((License) md).getExternalUri() == null)

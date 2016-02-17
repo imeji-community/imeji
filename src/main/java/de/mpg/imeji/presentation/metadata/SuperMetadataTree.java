@@ -100,10 +100,11 @@ public class SuperMetadataTree implements Serializable {
    * @return
    */
   private boolean isChild(SuperMetadataBean smb, SuperMetadataBean parent) {
-    if (parent == null || smb.getParent() == null)
+    if (parent == null || smb.getParent() == null) {
       return false;
-    else
+    } else {
       return smb.getParent().getMetadata().getId().compareTo(parent.getMetadata().getId()) == 0;
+    }
   }
 
   /**
@@ -114,7 +115,8 @@ public class SuperMetadataTree implements Serializable {
    * @param smb
    * @return
    */
-  private List<SuperMetadataBean> removeFromList(List<SuperMetadataBean> list, SuperMetadataBean smb) {
+  private List<SuperMetadataBean> removeFromList(List<SuperMetadataBean> list,
+      SuperMetadataBean smb) {
     List<SuperMetadataBean> subList = new ArrayList<SuperMetadataBean>(list);
     subList.remove(smb);
     return subList;
@@ -150,8 +152,9 @@ public class SuperMetadataTree implements Serializable {
    */
   public void remove(SuperMetadataBean smd) {
     map.remove(smd.getTreeIndex());
-    for (SuperMetadataBean child : getChilds(smd.getTreeIndex()))
+    for (SuperMetadataBean child : getChilds(smd.getTreeIndex())) {
       map.remove(child.getTreeIndex());
+    }
   }
 
   /**
@@ -317,7 +320,7 @@ public class SuperMetadataTree implements Serializable {
    * @param md
    * @param list
    * @return
-   */  
+   */
   private SuperMetadataBean findBestParent(SuperMetadataBean child, List<SuperMetadataBean> list) {
     // If the statement has no parent, the metadata doens't as well
     if (child.getStatement().getParent() == null)
@@ -330,8 +333,8 @@ public class SuperMetadataTree implements Serializable {
         candidates.add(md);
     }
     // Return the best candidate
-    for(int i = candidates.size()-1; i>=0; i--){
-      if(candidates.get(i).getPos() < child.getPos()){
+    for (int i = candidates.size() - 1; i >= 0; i--) {
+      if (candidates.get(i).getPos() < child.getPos()) {
         return candidates.get(i);
       }
     }

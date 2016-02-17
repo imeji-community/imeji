@@ -337,7 +337,7 @@ public class UploadBean implements Serializable {
       getsFiles().add(item);
       return item;
     } catch (Exception e) {
-      getfFiles().add(" File " + title + " not uploaded: " + e.getLocalizedMessage());
+      getfFiles().add(" File " + title + " not uploaded: " + session.getMessage(e.getMessage()));
       logger.error("Error uploading item: ", e);
       return null;
     }

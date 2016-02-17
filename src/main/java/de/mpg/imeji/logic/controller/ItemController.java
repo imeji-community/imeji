@@ -127,8 +127,7 @@ public class ItemController extends ImejiController {
 
     String guessedNotAllowedFormat = sc.guessNotAllowedFormat(f);
     if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
-      throw new UnprocessableError(
-          "upload_format_not_allowed: " + " (" + guessedNotAllowedFormat + ")");
+      throw new UnprocessableError("upload_format_not_allowed");
     }
 
     String mimeType = StorageUtils.getMimeType(guessedNotAllowedFormat);

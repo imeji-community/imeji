@@ -182,7 +182,7 @@
 									</ui:fragment>
 									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and Auth.updateContent(cc.attrs.vo) and !(cc.attrs.profile == null or cc.attrs.profile.statements.size() == 0)}">	
 										<li class="#{curMenuClass}Item">
-											<h:outputLink  value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2">
+											<h:outputLink  value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.vo.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2">
 												<h:outputText value="#{lbl.edit_all}"/>
 											</h:outputLink>
 										</li>

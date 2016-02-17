@@ -313,6 +313,21 @@ public class JenaCustomQueries {
         + path + "', 'i') || REGEX(str(?url2), '" + path + "', 'i') || REGEX(str(?url3), '" + path
         + "', 'i'))} LIMIT 1 ";
   }
+  
+  /**
+   * @param fileUrl
+   * @return
+   */
+  public static final String selectItemReleasedStatusOfFile(String fileUrl) {
+    String path = URI.create(fileUrl).getPath();
+    
+    return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
+        + "?s <http://imeji.org/terms/webImageUrl> ?url1 . ?s <http://imeji.org/terms/thumbnailImageUrl> ?url2 . ?s <http://imeji.org/terms/fullImageUrl> ?url3 ."
+        + " ?s <" + ImejiNamespaces.STATUS + ">  <"+Status.RELEASED.getUriString()+"> ."
+        + "FILTER(REGEX(str(?url1), '"
+        + path + "', 'i') || REGEX(str(?url2), '" + path + "', 'i') || REGEX(str(?url3), '" + path
+        + "', 'i'))} LIMIT 1 ";
+  }
 
   /**
    * @param fileUrl

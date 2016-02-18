@@ -186,22 +186,17 @@ public class FileServlet extends HttpServlet {
    * @param url
    * @param user
    * @return
-   * @throws Exception 
+   * @throws Exception
    */
   private void checkSecurity(String url, User user) throws NotAllowedError {
     if (isSpaceUrl(url)) {
       // For space Logos do not check any security (spaces are always public)
       return;
     }
-    
-    
-    if ( isItemReleasedFile( url)  ){
-      //jena Query to check if the item is released (before checking the collection), fastest for not invoking the controller!
-      return;
-    }
-    
+
     URI uri = getCollectionURI(url);
-    if (authorization.read(user, uri) || isPublicCollection(uri)) {
+
+    if (authorization.read(user, uri) || isPublicCollection(uri, user)) {
       // ok!
     } else {
       throw new NotAllowedError("You are not allowed to read this file");
@@ -215,11 +210,13 @@ public class FileServlet extends HttpServlet {
    * @param collectionId
    * @return
    */
-  private boolean isPublicCollection(URI collectionId) {
+  private boolean isPublicCollection(URI collectionId, User user) {
+    if (user == null && ConfigurationBean.getPrivateModusStatic()) {
+      return false;
+    }
     List<String> r =
         ImejiSPARQL.exec(JenaCustomQueries.selectStatus(collectionId.toString()), null);
-    return !ConfigurationBean.getPrivateModusStatic() && !r.isEmpty()
-        && r.get(0).equals(Status.RELEASED.getUriString());
+    return !r.isEmpty() && r.get(0).equals(Status.RELEASED.getUriString());
   }
 
   private boolean isSpaceUrl(String url) {
@@ -267,7 +264,6 @@ public class FileServlet extends HttpServlet {
    */
   private URI getCollectionURI(String url) {
     String id = storageController.getCollectionId(url);
-    
     if (id != null) {
       return ObjectHelper.getURI(CollectionImeji.class, id);
     } else {
@@ -302,19 +298,6 @@ public class FileServlet extends HttpServlet {
     }
   }
 
-  private boolean isItemReleasedFile(String url) {
-    Search s = SearchFactory.create();
-    System.out.println(JenaCustomQueries.selectItemReleasedStatusOfFile(url));
-    List<String> r =
-        s.searchString(JenaCustomQueries.selectItemReleasedStatusOfFile(url), null, null, 0, -1).getResults();
-    if (!r.isEmpty() && r.get(0) != null) {
-       return true;
-    } else {
-      return false;
-    }
-  }
-  
-  
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
    * 

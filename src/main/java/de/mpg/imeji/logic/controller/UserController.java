@@ -94,8 +94,8 @@ public class UserController {
     // Now set up the creator to Admin User, as necessary for permissions
     user = Imeji.adminUser;
     u.setUserStatus(User.UserStatus.ACTIVE);
-    if (user.getQuota() == -1) {
-      user.setQuota(QuotaUtil.getQuotaInBytes(ConfigurationBean.getDefaultQuotaStatic()));
+    if (u.getQuota() < 0) {
+      u.setQuota(QuotaUtil.getQuotaInBytes(ConfigurationBean.getDefaultQuotaStatic()));
     }
     switch (type) {
       case ADMIN:

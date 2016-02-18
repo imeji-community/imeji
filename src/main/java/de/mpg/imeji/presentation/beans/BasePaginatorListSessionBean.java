@@ -126,7 +126,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
         setCurrentPageNumber(1);
       }
       setGoToPage(Integer.toString(currentPageNumber));
-      currentPartList = new ArrayList<>();
+      currentPartList.clear();
       currentPartList = retrieveList(getOffset(), elementsPerPage);
       totalNumberOfElements = getTotalNumberOfRecords();
       paginatorPageList.clear();

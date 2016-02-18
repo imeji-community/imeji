@@ -11,6 +11,7 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
@@ -82,7 +83,7 @@ public class UserCreationBean extends QuotaSuperBean {
     PasswordGenerator generator = new PasswordGenerator();
     String password = generator.generatePassword();
     user.setEncryptedPassword(StringHelper.convertToMD5(password));
-    user.setQuota(getQuotaInBytes());
+    user.setQuota(QuotaUtil.getQuotaInBytes(getQuota()));
     uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT : USER_TYPE.RESTRICTED);
     return password;
   }

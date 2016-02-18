@@ -6,7 +6,6 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -24,8 +23,6 @@ public class QuotaSuperBean {
 
   private String quota = ConfigurationBean.getDefaultQuotaStatic();
   private List<SelectItem> quotaMenu;
-  private static final int BYTES_PER_GB = 1073741824;
-  private static final Logger LOGGER = Logger.getLogger(QuotaSuperBean.class);
 
   /**
    * default Constructor
@@ -42,24 +39,6 @@ public class QuotaSuperBean {
     }
   }
 
-  /**
-   * Return the Quota define in GB in bytes
-   * 
-   * @param gigabyte
-   * @return
-   */
-  public long getQuotaInBytes() {
-    try {
-      if (ConfigurationBean.QUOTA_UNLIMITED.equals(quota)) {
-        return Long.MAX_VALUE;
-      }
-      return (long) ((Double.parseDouble(quota)) * BYTES_PER_GB);
-    } catch (Exception e) {
-      LOGGER.error("Error parsing quota: ", e);
-      return 0;
-    }
-
-  }
 
   /**
    * 

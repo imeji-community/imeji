@@ -161,9 +161,8 @@ public class ElasticIndexer implements SearchIndexer {
   private static Object toESEntity(Object obj, String dataType) {
     if (obj instanceof Item) {
       obj = setAlbums((Item) obj);
-      ElasticItem es = new ElasticItem((Item) obj);
-      es.setSpace(getSpace((Item) obj, ElasticTypes.folders.name(), ElasticService.DATA_ALIAS));
-      return es;
+      return new ElasticItem((Item) obj,
+          getSpace((Item) obj, ElasticTypes.folders.name(), ElasticService.DATA_ALIAS));
     } else if (obj instanceof CollectionImeji) {
       ElasticFolder ef = new ElasticFolder((CollectionImeji) obj);
       return ef;

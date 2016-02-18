@@ -33,6 +33,7 @@ import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -93,6 +94,9 @@ public class UserController {
     // Now set up the creator to Admin User, as necessary for permissions
     user = Imeji.adminUser;
     u.setUserStatus(User.UserStatus.ACTIVE);
+    if (user.getQuota() == -1) {
+      user.setQuota(QuotaUtil.getQuotaInBytes(ConfigurationBean.getDefaultQuotaStatic()));
+    }
     switch (type) {
       case ADMIN:
         u.setGrants(AuthorizationPredefinedRoles.imejiAdministrator(u.getId().toString()));

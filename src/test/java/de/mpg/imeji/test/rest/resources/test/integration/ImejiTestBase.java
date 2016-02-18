@@ -69,7 +69,7 @@ public class ImejiTestBase extends JerseyTest {
   protected static AlbumTO albumTO;
   protected static DefaultItemTO itemTO;
   protected static DefaultItemTO defaultItemTO;
-  private static Logger logger = Logger.getLogger(ImejiTestBase.class);
+  private static Logger LOGGER = Logger.getLogger(ImejiTestBase.class);
 
   private static MyApplication app = null;
 
@@ -123,7 +123,7 @@ public class ImejiTestBase extends JerseyTest {
       p.getStatements().add(s);
       profileId = pc.create(p, JenaUtil.testUser).getIdString();
     } catch (Exception e) {
-      logger.error("Cannot init profile", e);
+      LOGGER.error("Cannot init profile", e);
     }
   }
 
@@ -144,7 +144,7 @@ public class ImejiTestBase extends JerseyTest {
       collectionTO = s.create(collectionTO, JenaUtil.testUser);
       collectionId = collectionTO.getId();
     } catch (Exception e) {
-      logger.error("Cannot init Collection", e);
+      LOGGER.error("Cannot init Collection", e);
     }
     return collectionId;
   }
@@ -160,7 +160,7 @@ public class ImejiTestBase extends JerseyTest {
       collectionTO = s.create(collectionTO, JenaUtil.testUser);
       collectionId = collectionTO.getId();
     } catch (Exception e) {
-      logger.error("Cannot init Collection", e);
+      LOGGER.error("Cannot init Collection", e);
     }
     return collectionId;
   }
@@ -182,7 +182,7 @@ public class ImejiTestBase extends JerseyTest {
       albumId = albumTO.getId();
 
     } catch (Exception e) {
-      logger.error("Cannot init Album", e);
+      LOGGER.error("Cannot init Album", e);
     }
   }
 
@@ -219,7 +219,7 @@ public class ImejiTestBase extends JerseyTest {
 
 
     } catch (Exception e) {
-      logger.error("Cannot init Item", e);
+      LOGGER.error("Cannot init Item", e);
     }
   }
 

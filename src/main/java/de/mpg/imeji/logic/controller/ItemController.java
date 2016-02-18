@@ -65,7 +65,7 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class ItemController extends ImejiController {
-  private static final Logger logger = Logger.getLogger(ItemController.class);
+  private static final Logger LOGGER = Logger.getLogger(ItemController.class);
   private static final ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.imageModel);
   public static final String NO_THUMBNAIL_URL = "NO_THUMBNAIL_URL";
@@ -631,7 +631,7 @@ public class ItemController extends ImejiController {
     try {
       storageController.delete(id);
     } catch (Exception e) {
-      logger.error("error deleting file", e);
+      LOGGER.error("error deleting file", e);
     }
   }
 
@@ -715,7 +715,7 @@ public class ItemController extends ImejiController {
     try {
       return new ImejiTriple(itemUri, profileProperty, new URI(profileUri), permissionObject);
     } catch (URISyntaxException e) {
-      logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
     }
     return null;
   }

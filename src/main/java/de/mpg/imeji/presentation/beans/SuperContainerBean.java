@@ -48,7 +48,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
   protected SessionBean sb;
   private List<SelectItem> sortMenu = new ArrayList<SelectItem>();
   protected List<SelectItem> filterMenu = new ArrayList<SelectItem>();
-  private static Logger logger = Logger.getLogger(SuperContainerBean.class);
+  private static final Logger LOGGER = Logger.getLogger(SuperContainerBean.class);
   // private SearchQuery searchQuery ;
   protected SearchPair selectedFilterSearch;
   protected SearchQuery searchQuery = new SearchQuery();
@@ -70,7 +70,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         getElementsPerPageSelectItems().add(new SelectItem(option));
       }
     } catch (Exception e) {
-      logger.error("Error reading property imeji.container.list.size.options", e);
+      LOGGER.error("Error reading property imeji.container.list.size.options", e);
     }
   }
 

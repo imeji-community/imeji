@@ -35,7 +35,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class ImageUtils {
-  private static Logger logger = Logger.getLogger(ImageUtils.class);
+  private static final Logger LOGGER = Logger.getLogger(ImageUtils.class);
   /**
    * If true, the rescale will keep the better quality of the images
    */
@@ -78,7 +78,7 @@ public class ImageUtils {
         return image2Jpeg(bytes);
       }
     } catch (Exception e) {
-      logger.info("Image could not be transformed to jpeg: " + e.getMessage());
+      LOGGER.info("Image could not be transformed to jpeg: " + e.getMessage());
     }
     return null;
   }
@@ -326,7 +326,7 @@ public class ImageUtils {
         }
       }
     } catch (Exception e) {
-      logger.error("Error reading image dimension: ", e);
+      LOGGER.error("Error reading image dimension: ", e);
     }
     return null;
   }

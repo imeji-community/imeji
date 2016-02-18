@@ -59,7 +59,7 @@ import de.mpg.j2j.helper.J2JHelper;
 public class CollectionController extends ImejiController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.collectionModel);
-  private static Logger logger = Logger.getLogger(CollectionController.class);
+  private static final Logger LOGGER = Logger.getLogger(CollectionController.class);
   private Search search =
       SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC);
 
@@ -359,16 +359,16 @@ public class CollectionController extends ImejiController {
               collection.getId().toString()))
               || (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString()))
               || collectionMdp.getDefault()) {
-            logger.info(
+            LOGGER.info(
                 "Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
                     + "Profile <" + collectionMdp.getId().toString() + "> will not be deleted!");
           } else {
-            logger.info("Metadata profile <" + collectionMdp.getId().toString()
+            LOGGER.info("Metadata profile <" + collectionMdp.getId().toString()
                 + "> is not referenced elsewhere, will be deleted!");
             pc.delete(collectionMdp, user, collection.getId().toString());
           }
         } catch (NotFoundException e) {
-          logger.info("Collection profile does not exist, could not be deleted.");
+          LOGGER.info("Collection profile does not exist, could not be deleted.");
         }
       }
 
@@ -555,7 +555,7 @@ public class CollectionController extends ImejiController {
             try {
               return retrieve(URI.create(id), u);
             } catch (ImejiException e) {
-              logger.info("Cannot retrieve collection: " + id);
+              LOGGER.info("Cannot retrieve collection: " + id);
             }
             return null;
           }

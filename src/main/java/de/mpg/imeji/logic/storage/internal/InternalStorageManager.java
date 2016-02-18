@@ -75,7 +75,7 @@ public class InternalStorageManager implements Serializable {
    * The {@link InternalStorageAdministrator}
    */
   private InternalStorageAdministrator administrator;
-  private static Logger logger = Logger.getLogger(InternalStorageManager.class);
+  private static final Logger LOGGER = Logger.getLogger(InternalStorageManager.class);
 
   /**
    * Constructor for a specific path and url

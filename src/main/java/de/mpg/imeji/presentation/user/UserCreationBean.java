@@ -33,7 +33,7 @@ public class UserCreationBean extends QuotaSuperBean {
   private User user;
   private SessionBean sb;
   private boolean sendEmail = false;
-  private static Logger logger = Logger.getLogger(UserCreationBean.class);
+  private static final Logger LOGGER = Logger.getLogger(UserCreationBean.class);
   private boolean allowedToCreateCollection = true;
 
 
@@ -67,7 +67,7 @@ public class UserCreationBean extends QuotaSuperBean {
         BeanHelper.error(sb.getMessage(errorM));
       }
     } catch (Exception e) {
-      logger.error("Error creating user:", e);
+      LOGGER.error("Error creating user:", e);
       BeanHelper.error(sb.getMessage(e.getMessage()));
     }
     return "pretty:";
@@ -103,7 +103,7 @@ public class UserCreationBean extends QuotaSuperBean {
       uc.retrieve(user.getEmail());
       return true;
     } catch (NotFoundException e) {
-      logger.info("User not found: " + user.getEmail());
+      LOGGER.info("User not found: " + user.getEmail());
       return false;
     }
   }
@@ -121,7 +121,7 @@ public class UserCreationBean extends QuotaSuperBean {
           emailMessages.getEmailOnAccountAction_Subject(true), emailMessages
               .getNewAccountMessage(password, user.getEmail(), user.getPerson().getCompleteName()));
     } catch (Exception e) {
-      logger.error("Error sending email", e);
+      LOGGER.error("Error sending email", e);
       BeanHelper.error(sb.getMessage("error") + ": Email not sent");
     }
   }

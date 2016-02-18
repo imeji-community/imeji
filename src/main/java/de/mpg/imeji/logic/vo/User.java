@@ -82,7 +82,7 @@ public class User implements Serializable {
   private Collection<String> observedCollections = new ArrayList<String>();
 
 
-  private static final Logger logger = Logger.getLogger(User.class);
+  private static final Logger LOGGER = Logger.getLogger(User.class);
 
   /**
      * 
@@ -119,7 +119,7 @@ public class User implements Serializable {
       try {
         c.update(group, Imeji.adminUser);
       } catch (Exception e) {
-        logger.error("Could not update the user group i think", e);
+        LOGGER.error("Could not update the user group i think", e);
       }
     }
     clone.person = person.clone();

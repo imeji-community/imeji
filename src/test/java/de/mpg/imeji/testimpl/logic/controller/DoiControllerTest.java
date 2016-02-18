@@ -15,14 +15,14 @@ import de.mpg.imeji.test.logic.controller.ControllerTest;
 
 public class DoiControllerTest extends ControllerTest{
   
-  private static final Logger logger = Logger.getLogger(ItemControllerTestClass.class);
+  private static final Logger LOGGER = Logger.getLogger(ItemControllerTestClass.class);
 
   @Before
   public void specificSetup() {
     try {
       createCollection();
     } catch (ImejiException e) {
-      logger.error("Error initializing collection or item", e);
+      LOGGER.error("Error initializing collection or item", e);
     }
 
   }

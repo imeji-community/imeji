@@ -85,7 +85,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
         getElementsPerPageSelectItems().add(new SelectItem(option));
       }
     } catch (Exception e) {
-      logger.error("Error reading property imeji.image.list.size.options", e);
+      LOGGER.error("Error reading property imeji.image.list.size.options", e);
     }
   }
 
@@ -215,7 +215,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       }
     } catch (Exception e) {
       BeanHelper.error("Error parsing query: " + e.getMessage());
-      logger.error("Error parsing query", e);
+      LOGGER.error("Error parsing query", e);
     }
   }
 
@@ -264,7 +264,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       executor.submit(facets);
       executor.shutdown();
     } catch (Exception e) {
-      logger.error("Error Initializing the facets", e);
+      LOGGER.error("Error Initializing the facets", e);
     }
   }
 

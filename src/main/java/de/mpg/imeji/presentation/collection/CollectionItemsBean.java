@@ -99,7 +99,7 @@ public class CollectionItemsBean extends ItemsBean {
       executor.submit(getFacets());
       executor.shutdown();
     } catch (Exception e) {
-      logger.error("Error initialising the facets", e);
+      LOGGER.error("Error initialising the facets", e);
     }
   }
 
@@ -154,7 +154,7 @@ public class CollectionItemsBean extends ItemsBean {
     } catch (Exception e) {
       BeanHelper.error(sb.getMessage("error_collection_release"));
       BeanHelper.error(e.getMessage());
-      logger.error("Error releasing collection", e);
+      LOGGER.error("Error releasing collection", e);
     }
     return "pretty:";
   }
@@ -172,7 +172,7 @@ public class CollectionItemsBean extends ItemsBean {
       BeanHelper.info(sb.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sb.getMessage("error_doi_creation_" + e.getMessage()));
-      logger.error("Error during doi creation", e);
+      LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";
   }
@@ -190,7 +190,7 @@ public class CollectionItemsBean extends ItemsBean {
     } catch (Exception e) {
       BeanHelper.error(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
       BeanHelper.error(e.getMessage());
-      logger.error("Error deleting collection", e);
+      LOGGER.error("Error deleting collection", e);
     }
     return sb.getPrettySpacePage("pretty:collections");
   }
@@ -210,7 +210,7 @@ public class CollectionItemsBean extends ItemsBean {
     } catch (Exception e) {
       BeanHelper.error(sb.getMessage("error_collection_withdraw"));
       BeanHelper.error(e.getMessage());
-      logger.error("Error discarding collection", e);
+      LOGGER.error("Error discarding collection", e);
     }
     return "pretty:";
   }

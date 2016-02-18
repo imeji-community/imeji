@@ -31,7 +31,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 public class ViewCollectionBean extends CollectionBean {
   private static final long serialVersionUID = 6473181109648137472L;
   private List<Person> persons = null;
-  private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
+  private static final Logger LOGGER = Logger.getLogger(ViewCollectionBean.class);
   /**
    * Maximum number of items displayed on collection start page
    */
@@ -83,7 +83,7 @@ public class ViewCollectionBean extends CollectionBean {
         getCollection().getMetadata().setPersons(persons);
       }
     } catch (Exception e) {
-      logger.error("", e);
+      LOGGER.error("", e);
       // Has to be in try/catch block, otherwise redirect from
       // HistoryFilter will not work.
       // Here simply do nothing

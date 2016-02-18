@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
+
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.Album;
@@ -107,8 +109,10 @@ public class AuthUtil {
     List<String> uris = new ArrayList<>();
     for (Grant g : getAllGrantsOfUser(user)) {
       if (g.getGrantFor().toString().contains("/collection/")
-          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ))) {
         uris.add(g.getGrantFor().toString());
+      }
+
     }
     return uris;
   }
@@ -124,8 +128,10 @@ public class AuthUtil {
     List<String> uris = new ArrayList<>();
     for (Grant g : getAllGrantsOfUser(user)) {
       if (g.getGrantFor().toString().contains("/metadataProfile/")
-          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ))) {
         uris.add(g.getGrantFor().toString());
+      }
+
     }
     return uris;
   }
@@ -141,8 +147,9 @@ public class AuthUtil {
     List<String> uris = new ArrayList<>();
     for (Grant g : getAllGrantsOfUser(user)) {
       if (g.getGrantFor().toString().contains("/item/")
-          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ))) {
         uris.add(g.getGrantFor().toString());
+      }
     }
     return uris;
   }
@@ -157,8 +164,9 @@ public class AuthUtil {
     List<String> uris = new ArrayList<>();
     for (Grant g : getAllGrantsOfUser(user)) {
       if (g.getGrantFor().toString().contains("/album/")
-          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+          && g.getGrantType().equals(toGrantTypeURI(GrantType.READ))) {
         uris.add(g.getGrantFor().toString());
+      }
     }
     return uris;
   }
@@ -173,8 +181,9 @@ public class AuthUtil {
   public static List<Grant> getAllGrantsOfUser(User user) {
     if (user != null) {
       List<Grant> l = new ArrayList<>(filterUnvalidGrants(user.getGrants()));
-      for (UserGroup ug : user.getGroups())
+      for (UserGroup ug : user.getGroups()) {
         l.addAll(filterUnvalidGrants(ug.getGrants()));
+      }
       return l;
     }
     return new ArrayList<>();
@@ -190,8 +199,9 @@ public class AuthUtil {
   public static List<Grant> extractGrantsFor(List<Grant> grants, String grantForUri) {
     List<Grant> l = new ArrayList<Grant>();
     for (Grant g : filterUnvalidGrants(grants)) {
-      if (g.getGrantFor().toString().equals(grantForUri))
+      if (g.getGrantFor().toString().equals(grantForUri)) {
         l.add(g);
+      }
     }
     return l;
   }
@@ -207,9 +217,11 @@ public class AuthUtil {
    * @return
    */
   public static Grant extractGrant(List<Grant> grants, String grantForUri, GrantType type) {
-    for (Grant g : AuthUtil.extractGrantsFor(grants, PropertyBean.baseURI()))
-      if (g.getGrantType().compareTo(AuthUtil.toGrantTypeURI(type)) == 0)
+    for (Grant g : AuthUtil.extractGrantsFor(grants, PropertyBean.baseURI())) {
+      if (g.getGrantType().compareTo(AuthUtil.toGrantTypeURI(type)) == 0) {
         return g;
+      }
+    }
     return null;
   }
 
@@ -221,9 +233,11 @@ public class AuthUtil {
    */
   private static Collection<Grant> filterUnvalidGrants(Collection<Grant> l) {
     Collection<Grant> nl = new ArrayList<Grant>();
-    for (Grant g : l)
-      if (g.getGrantFor() != null && g.getGrantType() != null)
+    for (Grant g : l) {
+      if (g.getGrantFor() != null && g.getGrantType() != null) {
         nl.add(g);
+      }
+    }
     return nl;
   }
 
@@ -247,8 +261,9 @@ public class AuthUtil {
     List<String> shareToList = new ArrayList<String>();
     for (Grant g : user.getGrants()) {
       if (g.getGrantFor() != null) {
-        if (!shareToList.contains(g.getGrantFor().toString()))
+        if (!shareToList.contains(g.getGrantFor().toString())) {
           shareToList.add(g.getGrantFor().toString());
+        }
       }
     }
     List<SharedHistory> roles = new ArrayList<SharedHistory>();
@@ -288,8 +303,9 @@ public class AuthUtil {
       throws Exception {
     List<String> shareToList = new ArrayList<String>();
     for (Grant g : group.getGrants()) {
-      if (!shareToList.contains(g.getGrantFor().toString()))
+      if (!shareToList.contains(g.getGrantFor().toString())) {
         shareToList.add(g.getGrantFor().toString());
+      }
     }
     List<SharedHistory> roles = new ArrayList<SharedHistory>();
     for (String sharedWith : shareToList) {

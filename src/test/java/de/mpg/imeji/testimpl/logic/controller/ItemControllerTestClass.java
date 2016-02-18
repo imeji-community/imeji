@@ -27,7 +27,7 @@ import util.JenaUtil;
  */
 public class ItemControllerTestClass extends ControllerTest {
   private static Item item;
-  private static final Logger logger = Logger.getLogger(ItemControllerTestClass.class);
+  private static final Logger LOGGER = Logger.getLogger(ItemControllerTestClass.class);
   private static File originalFile = new File("src/test/resources/storage/test.jpg");
   private static File thumbnailFile = new File("src/test/resources/storage/test.png");
 
@@ -37,7 +37,7 @@ public class ItemControllerTestClass extends ControllerTest {
       createCollection();
       createItem();
     } catch (ImejiException e) {
-      logger.error("Error initializing collection or item", e);
+      LOGGER.error("Error initializing collection or item", e);
     }
 
   }

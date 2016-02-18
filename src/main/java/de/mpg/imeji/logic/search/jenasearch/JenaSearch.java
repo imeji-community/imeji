@@ -49,7 +49,7 @@ import de.mpg.j2j.helper.SortHelper;
 public class JenaSearch implements Search {
   private String containerURI = null;
   private SearchObjectTypes type = SearchObjectTypes.ITEM;
-  private static Logger logger = Logger.getLogger(JenaSearch.class);
+  private static final Logger LOGGER = Logger.getLogger(JenaSearch.class);
   public static Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
   /**
@@ -322,7 +322,7 @@ public class JenaSearch implements Search {
       }
       return index;
     } catch (Exception e) {
-      logger.error("Unknown index: " + indexName);
+      LOGGER.error("Unknown index: " + indexName);
       throw new RuntimeException("Unknown index: " + indexName);
     }
   }

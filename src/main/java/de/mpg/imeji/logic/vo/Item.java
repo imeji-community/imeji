@@ -193,7 +193,7 @@ public class Item extends Properties implements Serializable {
           try {
             methodTo.invoke(this, methodFrom.invoke(copyFrom, (Object) null));
           } catch (Exception e) {
-            // logger.error("Could not copy field from method: " +
+            // LOGGER.error("Could not copy field from method: " +
             // methodFrom.getName(), e);
           }
         }

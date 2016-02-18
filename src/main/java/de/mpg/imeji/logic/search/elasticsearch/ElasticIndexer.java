@@ -47,7 +47,7 @@ import de.mpg.imeji.logic.vo.Space;
  * 
  */
 public class ElasticIndexer implements SearchIndexer {
-  private static Logger logger = Logger.getLogger(ElasticIndexer.class);
+  private static final Logger LOGGER = Logger.getLogger(ElasticIndexer.class);
   private static final ObjectMapper mapper = new ObjectMapper();
   private String index = "data";
   private String dataType;
@@ -72,7 +72,7 @@ public class ElasticIndexer implements SearchIndexer {
       commit();
       reindexFoldersItems(collectionsToReindex);
     } catch (Exception e) {
-      logger.error("Error indexing object ", e);
+      LOGGER.error("Error indexing object ", e);
     }
   }
 
@@ -88,7 +88,7 @@ public class ElasticIndexer implements SearchIndexer {
       commit();
       reindexFoldersItems(collectionsToReindex);
     } catch (Exception e) {
-      logger.error("error indexing object ", e);
+      LOGGER.error("error indexing object ", e);
     }
   }
 
@@ -216,7 +216,7 @@ public class ElasticIndexer implements SearchIndexer {
       ElasticService.client.admin().indices().preparePutMapping(this.index).setType(dataType)
           .setSource(jsonMapping).execute().actionGet();
     } catch (Exception e) {
-      logger.error("Error initializing the Elastic Search Mapping", e);
+      LOGGER.error("Error initializing the Elastic Search Mapping", e);
     }
   }
 

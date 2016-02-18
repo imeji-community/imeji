@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class BeanHelper {
-  private static final Logger logger = Logger.getLogger(BeanHelper.class);
+  private static final Logger LOGGER = Logger.getLogger(BeanHelper.class);
 
   /**
    * Private Constructor
@@ -37,7 +37,7 @@ public class BeanHelper {
     name = cls.getSimpleName();
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(name);
-    logger.debug("Getting bean " + name + ": " + result);
+    LOGGER.debug("Getting bean " + name + ": " + result);
     if (result == null) {
       result = addRequestBean(cls, name);
     }
@@ -57,7 +57,7 @@ public class BeanHelper {
     if (result != null)
       return result;
     try {
-      logger.debug("Creating new session bean: " + name);
+      LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
       FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(name, newBean);
       return newBean;
@@ -77,7 +77,7 @@ public class BeanHelper {
     name = cls.getSimpleName();
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(name);
-    logger.debug("Getting bean " + name + ": " + result);
+    LOGGER.debug("Getting bean " + name + ": " + result);
     if (result == null) {
       result = addSessionBean(cls, name);
     }
@@ -97,7 +97,7 @@ public class BeanHelper {
     if (result != null)
       return result;
     try {
-      logger.debug("Creating new session bean: " + name);
+      LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, newBean);
       return newBean;
@@ -117,7 +117,7 @@ public class BeanHelper {
     name = cls.getSimpleName();
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
-    logger.debug("Getting bean " + name + ": " + result);
+    LOGGER.debug("Getting bean " + name + ": " + result);
     if (result == null) {
       result = addApplicationBean(cls, name);
     }
@@ -137,7 +137,7 @@ public class BeanHelper {
     if (result != null)
       return result;
     try {
-      logger.debug("Creating new session bean: " + name);
+      LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
       FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put(name, newBean);
       return newBean;

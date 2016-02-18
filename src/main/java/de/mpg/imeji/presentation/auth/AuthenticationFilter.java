@@ -54,7 +54,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 public class AuthenticationFilter implements Filter {
   private FilterConfig filterConfig = null;
   private Pattern jsfPattern = Pattern.compile(".*\\/jsf\\/.*\\.xhtml");
-  private static Logger logger = Logger.getLogger(AuthenticationFilter.class);
+  private static final Logger LOGGER = Logger.getLogger(AuthenticationFilter.class);
 
   /*
    * (non-Javadoc)
@@ -89,7 +89,7 @@ public class AuthenticationFilter implements Filter {
         }
       }
     } catch (Exception e) {
-      logger.info("We had some exception in Authentication filter", e);
+      LOGGER.info("We had some exception in Authentication filter", e);
     } finally {
       chain.doFilter(serv, resp);
     }

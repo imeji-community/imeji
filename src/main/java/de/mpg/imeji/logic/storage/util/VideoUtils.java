@@ -24,7 +24,7 @@ public class VideoUtils {
   final static float IMAGE_DETECTION_LOWER_THRESHOLD = 0.8F;
   final static String IMAGE_FILE_EXTENTION = "jpg";
   final static int SNAPSHOT_CREATION_METHOD = 0;
-  private static Logger logger = Logger.getLogger(VideoUtils.class);
+  private static final Logger LOGGER = Logger.getLogger(VideoUtils.class);
 
   /**
    * @return the thresholds for finding good snapshot image within the video.
@@ -42,7 +42,7 @@ public class VideoUtils {
         return new float[] {Float.parseFloat(thresholds[0]), Float.parseFloat(thresholds[1])};
       }
     } catch (Exception e) {
-      logger.info("Some problems with Image detection", e);
+      LOGGER.info("Some problems with Image detection", e);
       return new float[] {IMAGE_DETECTION_UPPER_THRESHOLD, IMAGE_DETECTION_LOWER_THRESHOLD};
     }
   }
@@ -55,7 +55,7 @@ public class VideoUtils {
       return Integer.parseInt(PropertyReader
           .getProperty("imeji.internal.video.imagedetection.method"));
     } catch (Exception e) {
-      logger.info("Could not get snapshot creation method", e);
+      LOGGER.info("Could not get snapshot creation method", e);
       return VideoUtils.SNAPSHOT_CREATION_METHOD;
     }
   }

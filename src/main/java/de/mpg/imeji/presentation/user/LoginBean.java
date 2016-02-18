@@ -42,7 +42,7 @@ public class LoginBean {
   private String passwd;
   private SessionBean sb;
   private String redirect;
-  private final static Logger LOGGER = Logger.getLogger(LoginBean.class);
+  private static final Logger LOGGER = Logger.getLogger(LoginBean.class);
 
   /**
    * Constructor

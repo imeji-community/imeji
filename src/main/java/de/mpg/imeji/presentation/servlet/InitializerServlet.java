@@ -37,7 +37,7 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
  */
 public class InitializerServlet extends HttpServlet {
   private static final long serialVersionUID = -3826737851602585061L;
-  private final static Logger LOGGER = Logger.getLogger(InitializerServlet.class);
+  private static final Logger LOGGER = Logger.getLogger(InitializerServlet.class);
 
   @Override
   public void init() throws ServletException {

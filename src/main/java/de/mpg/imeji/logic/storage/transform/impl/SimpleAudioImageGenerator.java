@@ -42,7 +42,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  * @version $Revision$ $LastChangedDate$
  */
 public class SimpleAudioImageGenerator implements ImageGenerator {
-  private static Logger logger = Logger.getLogger(SimpleAudioImageGenerator.class);
+  private static final Logger LOGGER = Logger.getLogger(SimpleAudioImageGenerator.class);
   private static String PATH_TO_AUDIO_ICON = "images/audio_file_icon.jpg";
 
   /*

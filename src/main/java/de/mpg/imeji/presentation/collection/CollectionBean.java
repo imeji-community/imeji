@@ -203,7 +203,7 @@ public abstract class CollectionBean extends ContainerBean {
       BeanHelper.info(
           getSuccessCollectionDeleteMessage(this.collection.getMetadata().getTitle(), sessionBean));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
+      BeanHelper.error(sessionBean.getMessage(e.getLocalizedMessage()));
       logger.error("Error delete collection", e);
     }
     return sessionBean.getPrettySpacePage("pretty:collections");

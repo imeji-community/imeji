@@ -337,10 +337,15 @@ public class CollectionController extends ImejiController {
           .getMessage("collection_locked"));
     } else {
       if (collection.getStatus() != Status.PENDING && !user.isAdmin()) {
-        throw new UnprocessableError("Collection is not pending and can not be deleted!");
+        throw new UnprocessableError("collection_is_not_pending");
       }
       // Delete images
       List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
+      for (Item it:items){
+        if ( it.getStatus().equals(Status.RELEASED) ) {
+          throw new UnprocessableError("collection_has_released_items");
+        }
+      }
 
       itemController.delete(items, user);
 

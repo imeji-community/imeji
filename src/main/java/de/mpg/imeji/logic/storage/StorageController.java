@@ -30,12 +30,16 @@ import static de.mpg.imeji.logic.storage.util.StorageUtils.guessExtension;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.URISyntaxException;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -50,27 +54,23 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class StorageController implements Serializable {
+public final class StorageController implements Serializable {
   private static final long serialVersionUID = -2651970941029421673L;;
   public static final String IMEJI_STORAGE_NAME_PROPERTY = "imeji.storage.name";
-  private Storage storage;
-
-  private String formatWhiteList;
-  private String formatBlackList;
+  private final Storage storage;
+  private final Authorization authorization = new Authorization();
+  private final String formatWhiteList;
+  private final String formatBlackList;
+  private static final Logger LOGGER = Logger.getLogger(StorageController.class);
 
   /**
    * Create new {@link StorageController} for the {@link Storage} defined in imeji.properties
+   * 
+   * @throws URISyntaxException
+   * @throws IOException
    */
   public StorageController() {
-    String name;
-    try {
-      name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
-      formatBlackList = ConfigurationBean.getUploadBlackListStatic();
-      formatWhiteList = ConfigurationBean.getUploadWhiteListStatic();
-    } catch (Exception e) {
-      throw new RuntimeException("Error reading property: ", e);
-    }
-    storage = StorageFactory.create(name);
+    this(null);
   }
 
   /**
@@ -79,7 +79,16 @@ public class StorageController implements Serializable {
    * @param name - The name of the storage, as defined by getName() method
    */
   public StorageController(String name) {
+    try {
+      if (name == null) {
+        name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
+      }
+    } catch (Exception e) {
+      LOGGER.error("Error initializing StorageController", e);
+    }
     storage = StorageFactory.create(name);
+    formatBlackList = ConfigurationBean.getUploadBlackListStatic();
+    formatWhiteList = ConfigurationBean.getUploadWhiteListStatic();
   }
 
   /**

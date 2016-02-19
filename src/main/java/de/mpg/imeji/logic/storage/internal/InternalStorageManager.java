@@ -65,7 +65,7 @@ public class InternalStorageManager implements Serializable {
   /**
    * The directory path where files are stored
    */
-  private final String storagePath;
+  private String storagePath;
   /**
    * The URL used to access the storage (this is a dummy url, used by the internal storage to parse
    * file location)
@@ -87,11 +87,9 @@ public class InternalStorageManager implements Serializable {
       storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
       storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"))
           + "file" + StringHelper.urlSeparator;
-      // storageUrl = StringHelper.normalizeURI(PropertyBean.baseURI()) +
-      // "file" + StringHelper.urlSeparator;
       administrator = new InternalStorageAdministrator(storagePath);
     } catch (Exception e) {
-      throw new RuntimeException("Internal storage couldn't be initialized!!!!!", e);
+      LOGGER.error("Internal storage couldn't be initialized!!!!!", e);
     }
   }
 
@@ -173,10 +171,20 @@ public class InternalStorageManager implements Serializable {
    * @return
    */
   public String transformUrlToPath(String url) {
-    // String filename = getFileName(url, StringHelper.urlSeparator);
     return URI.create(url).getPath().replace(URI.create(storageUrl).getPath(), storagePath)
         .replace(StringHelper.urlSeparator, StringHelper.fileSeparator);
-    // .replace(filename, StringHelper.normalizeFilename(filename));
+  }
+
+  /**
+   * Get the Storage Id according to the url
+   * 
+   * @param url
+   * @return
+   */
+  public String getStorageId(String url) {
+    return transformUrlToPath(url).replace(storagePath, "")
+        .replace(getFileName(url, StringHelper.urlSeparator), "").replace("/web/", "")
+        .replace("/thumbnail/", "").replace("/original/", "");
   }
 
   /**
@@ -199,8 +207,9 @@ public class InternalStorageManager implements Serializable {
    * @return
    */
   public String getFileName(String pathOrUrl, String separator) {
-    if (pathOrUrl.endsWith(separator))
+    if (pathOrUrl.endsWith(separator)) {
       pathOrUrl = pathOrUrl.substring(0, pathOrUrl.lastIndexOf(separator));
+    }
     return pathOrUrl.substring(pathOrUrl.lastIndexOf(separator) + 1);
   }
 

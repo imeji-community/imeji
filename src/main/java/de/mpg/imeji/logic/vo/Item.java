@@ -127,8 +127,9 @@ public class Item extends Properties implements Serializable {
   }
 
   public MetadataSet getMetadataSet() {
-    if (metadataSets.size() == 0)
+    if (metadataSets.size() == 0) {
       metadataSets.add(new MetadataSet());
+    }
     return metadataSets.get(0);
   }
 

@@ -31,8 +31,11 @@ import java.util.List;
 
 import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -53,7 +56,8 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * @version $Revision$ $LastChangedDate$
  */
 public class AuthUtil {
-  private static Authorization authorization = new Authorization();
+  private static final Authorization authorization = new Authorization();
+  private static final StorageController STORAGE_CONTROLLER = new StorageController();
 
 
   /**
@@ -64,6 +68,38 @@ public class AuthUtil {
   public static Authorization staticAuth() {
     return authorization;
   }
+
+  /**
+   * True if the user is allowed to view this file
+   * 
+   * @param fileUrl
+   * @param user
+   * @return
+   */
+  public static boolean isAllowedToViewFile(String fileUrl, User user) {
+    if (isSpaceUrl(fileUrl)) {
+      // For space Logos do not check any security (spaces are always public)
+      return true;
+    }
+    try {
+      new ItemController()
+          .retrieveLazyForFile(STORAGE_CONTROLLER.getStorage().getStorageId(fileUrl), user);
+      return true;
+    } catch (ImejiException e) {
+      return false;
+    }
+  }
+
+  /**
+   * True if the file is the logo of a space
+   * 
+   * @param url
+   * @return
+   */
+  public static boolean isSpaceUrl(String url) {
+    return new SpaceController().isSpaceLogoURL(url);
+  }
+
 
   /**
    * True if the user is Administrator of Imeji

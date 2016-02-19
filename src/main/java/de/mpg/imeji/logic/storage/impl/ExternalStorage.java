@@ -98,6 +98,7 @@ public class ExternalStorage implements Storage {
         // client.executeMethod(get);
         ProxyHelper.executeMethod(client, get);
       }
+      System.out.println(get.getStatusCode());
       StorageUtils.writeInOut(get.getResponseBodyAsStream(), out, close);
     } catch (Exception e) {
       // throw new RuntimeException("Error reading " + url, e);
@@ -158,5 +159,10 @@ public class ExternalStorage implements Storage {
   @Override
   public String readFileStringContent(String url) {
     return null;
+  }
+
+  @Override
+  public String getStorageId(String url) {
+    return url;
   }
 }

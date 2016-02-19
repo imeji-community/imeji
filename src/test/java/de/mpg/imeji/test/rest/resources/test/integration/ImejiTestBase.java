@@ -27,9 +27,6 @@ import org.junit.runner.Description;
 
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -38,9 +35,6 @@ import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.DefaultItemService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
-import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
@@ -68,8 +62,7 @@ public class ImejiTestBase extends JerseyTest {
   protected static CollectionTO collectionTO;
   protected static AlbumTO albumTO;
   protected static DefaultItemTO itemTO;
-  protected static DefaultItemTO defaultItemTO;
-  private static Logger LOGGER = Logger.getLogger(ImejiTestBase.class);
+  private static final Logger LOGGER = Logger.getLogger(ImejiTestBase.class);
 
   private static MyApplication app = null;
 
@@ -208,16 +201,6 @@ public class ImejiTestBase extends JerseyTest {
     try {
       itemTO = s.create(to, JenaUtil.testUser);
       itemId = itemTO.getId();
-      defaultItemTO = new DefaultItemTO();
-      MetadataProfile profile = new ProfileController().retrieveByCollectionId(
-          ObjectHelper.getURI(CollectionImeji.class, collectionId), JenaUtil.testUser);
-      Item itemVo = new Item();
-      ReverseTransferObjectFactory.transferDefaultItem(itemTO, itemVo, profile, JenaUtil.testUser,
-          TRANSFER_MODE.UPDATE);
-      defaultItemTO.setCollectionId(collectionId);
-      TransferObjectFactory.transferDefaultItem(itemVo, defaultItemTO, profile);
-
-
     } catch (Exception e) {
       LOGGER.error("Cannot init Item", e);
     }

@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -294,7 +295,26 @@ public class ItemController extends ImejiController {
 
   public Item retrieveLazy(URI imgUri, User user) throws ImejiException {
     return (Item) reader.readLazy(imgUri.toString(), user, new Item());
+  }
 
+  /**
+   * Lazy Retrieve the Item containing the file with the passed storageid
+   * 
+   * @param storageId
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public Item retrieveLazyForFile(String storageId, User user) throws ImejiException {
+    Search s = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
+    List<String> r =
+        s.searchString(JenaCustomQueries.selectItemOfFile(storageId), null, null, 0, -1)
+            .getResults();
+    if (!r.isEmpty() && r.get(0) != null) {
+      return retrieveLazy(URI.create(r.get(0)), user);
+    } else {
+      throw new NotFoundException("Can not find the resource requested");
+    }
   }
 
   /**

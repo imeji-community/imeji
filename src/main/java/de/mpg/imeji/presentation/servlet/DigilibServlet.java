@@ -200,7 +200,7 @@ public class DigilibServlet extends Scaler {
   private Item loadItem(String url, SessionBean session) throws ImejiException {
     Search s = SearchFactory.create();
     List<String> r =
-        s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
+        s.searchString(JenaCustomQueries.selectItemIdOfFileUrl(url), null, null, 0, -1).getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
       return c.retrieveLazy(URI.create(r.get(0)), session.getUser());

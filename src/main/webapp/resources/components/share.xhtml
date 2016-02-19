@@ -47,12 +47,12 @@
 				</div>
 				<ui:fragment rendered="#{ShareBean.userGroup != null}">
 					<h2 class="imj_sectionHeadline">
-						<h:outputText value="#{lbl.share_with}"/>
+						<h:outputText value="#{lbl.share_with}: "/>
 					</h2>
 					<div class="imj_metadataSet">
-					<div class="imj_metadataLabel">
-						<h:outputText value="#{lbl.admin_userGroup}: #{ShareBean.userGroup.name}"/>
-					</div>
+						<div class="imj_metadataLabel">
+							#{ShareBean.userGroup.name}
+						</div>
 					<h:form prependId="false">
 						<h:panelGroup layout="block" styleClass="imj_metadataValue">
 							<div class="imj_metadataSet">

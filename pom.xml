@@ -193,7 +193,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 			</plugin>
-			<!-- <plugin>
+			 <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<version>1.4</version>
@@ -211,7 +211,7 @@
 						<item>timestamp</item>
 					</items>
 				</configuration>
-			</plugin>  -->
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>

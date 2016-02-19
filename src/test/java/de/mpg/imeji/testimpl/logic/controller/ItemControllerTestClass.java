@@ -13,7 +13,6 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 import util.JenaUtil;
 
@@ -24,7 +23,6 @@ import util.JenaUtil;
  * 
  */
 public class ItemControllerTestClass extends ControllerTest {
-  private static Item item;
   private static final Logger LOGGER = Logger.getLogger(ItemControllerTestClass.class);
 
 

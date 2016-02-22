@@ -50,7 +50,7 @@ public class CollectionListItem {
   private String creationDate = null;
   private String lastModificationDate = null;
   private String versionDate = null;
-  private static Logger logger = Logger.getLogger(CollectionListItem.class);
+  private static final Logger LOGGER = Logger.getLogger(CollectionListItem.class);
   private ThumbnailBean thumbnail = null;
   private String selectedGrant;
   private URI profileURI;
@@ -99,7 +99,7 @@ public class CollectionListItem {
         isOwner = collection.getCreatedBy().equals(user.getId());
       }
     } catch (Exception e) {
-      logger.error("Error creating collectionListItem", e);
+      LOGGER.error("Error creating collectionListItem", e);
     }
   }
 
@@ -165,7 +165,7 @@ public class CollectionListItem {
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_release"));
       BeanHelper.error(sessionBean.getMessage(e.getMessage()));
-      logger.error(sessionBean.getMessage("error_collection_release"), e);
+      LOGGER.error(sessionBean.getMessage("error_collection_release"), e);
     }
     return "pretty:";
   }
@@ -184,7 +184,7 @@ public class CollectionListItem {
       BeanHelper.info(getSuccessCollectionDeleteMessage(c.getMetadata().getTitle(), sessionBean));
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_delete") + ":" + e.getMessage());
-      logger.error(sessionBean.getMessage("error_collection_delete"), e);
+      LOGGER.error(sessionBean.getMessage("error_collection_delete"), e);
     }
     return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
         .getPrettySpacePage("pretty:collections");
@@ -206,7 +206,7 @@ public class CollectionListItem {
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
-      logger.error("Error during doi creation", e);
+      LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";
   }
@@ -227,7 +227,7 @@ public class CollectionListItem {
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
       BeanHelper.error(e.getMessage());
-      logger.error(sessionBean.getMessage("error_collection_withdraw"), e);
+      LOGGER.error(sessionBean.getMessage("error_collection_withdraw"), e);
     }
     return "pretty:";
   }

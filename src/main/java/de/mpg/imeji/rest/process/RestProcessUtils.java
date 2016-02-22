@@ -44,7 +44,7 @@ import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 public class RestProcessUtils {
 
-  private static Logger logger = Logger.getLogger(RestProcessUtils.class);
+  private static final Logger LOGGER = Logger.getLogger(RestProcessUtils.class);
 
   /**
    * Parse a json file and construct a new Object of type T
@@ -121,7 +121,7 @@ public class RestProcessUtils {
       }
 
     } catch (Exception e) {
-      logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
     }
     return easyTO;
 
@@ -174,7 +174,7 @@ public class RestProcessUtils {
     try {
       json = ow.writeValueAsString(resp.getObject());
     } catch (JsonProcessingException e) {
-      logger.error("Have a JSON Processing Exception during building JSON Response", e);
+      LOGGER.error("Have a JSON Processing Exception during building JSON Response", e);
     }
     return Response.status(resp.getStatus()).entity(json).type(MediaType.APPLICATION_JSON).build();
   }

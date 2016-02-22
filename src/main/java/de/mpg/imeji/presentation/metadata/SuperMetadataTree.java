@@ -56,8 +56,9 @@ public class SuperMetadataTree implements Serializable {
     // Create the map
     map = createMap(list, null, "0");
     // Set the childs
-    for (SuperMetadataBean smb : map.values())
+    for (SuperMetadataBean smb : map.values()) {
       smb.setChilds(getChilds(smb.getTreeIndex()));
+    }
   }
 
   /**
@@ -208,9 +209,11 @@ public class SuperMetadataTree implements Serializable {
   public List<SuperMetadataBean> getChilds(String parentIndex) {
     List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
     // for (SuperMetadataBean smb : getList())
-    for (SuperMetadataBean smb : map.values())
-      if (isParent(parentIndex, smb.getTreeIndex()))
+    for (SuperMetadataBean smb : map.values()) {
+      if (isParent(parentIndex, smb.getTreeIndex())) {
         childs.add(smb);
+      }
+    }
     return childs;
   }
 
@@ -236,8 +239,9 @@ public class SuperMetadataTree implements Serializable {
     String[] indexes = index.split(",");
     int i = Integer.parseInt(indexes[indexes.length - 1]) + 1;
     int endIndex = index.lastIndexOf(",");
-    if (endIndex > 0)
+    if (endIndex > 0) {
       return addIndex(index.substring(0, endIndex), Integer.toString(i));
+    }
     return Integer.toString(i);
   }
 
@@ -285,15 +289,17 @@ public class SuperMetadataTree implements Serializable {
       for (int i = 0; i < minLength; i++) {
         int v1 = Integer.parseInt(index1[i]);
         int v2 = Integer.parseInt(index2[i]);
-        if (v1 > v2)
+        if (v1 > v2) {
           return 1;
-        else if (v1 < v2)
+        } else if (v1 < v2) {
           return -1;
+        }
       }
-      if (index1.length > index2.length)
+      if (index1.length > index2.length) {
         return 1;
-      else if (index1.length < index2.length)
+      } else if (index1.length < index2.length) {
         return -1;
+      }
       return 0;
     }
   }
@@ -329,8 +335,9 @@ public class SuperMetadataTree implements Serializable {
     List<SuperMetadataBean> candidates = new ArrayList<SuperMetadataBean>();
     // Find all candidates
     for (SuperMetadataBean md : list) {
-      if (child.getStatement().getParent().compareTo(md.getStatement().getId()) == 0)
+      if (child.getStatement().getParent().compareTo(md.getStatement().getId()) == 0) {
         candidates.add(md);
+      }
     }
     // Return the best candidate
     for (int i = candidates.size() - 1; i >= 0; i--) {

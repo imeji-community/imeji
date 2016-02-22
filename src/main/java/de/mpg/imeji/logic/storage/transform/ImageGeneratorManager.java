@@ -53,7 +53,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  */
 public class ImageGeneratorManager {
   private List<ImageGenerator> generators = null;
-  private static Logger logger = Logger.getLogger(ImageGeneratorManager.class);
+  private static final Logger LOGGER = Logger.getLogger(ImageGeneratorManager.class);
 
   /**
    * Default constructor of {@link ImageGeneratorManager}
@@ -170,7 +170,7 @@ public class ImageGeneratorManager {
           break;
         }
       } catch (Exception e) {
-        logger.warn("Error generating image", e);
+        LOGGER.warn("Error generating image", e);
       }
     }
     if (jpeg == null || jpeg.length == 0)

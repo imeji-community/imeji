@@ -26,7 +26,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class EmailMessages {
 
-  private static Logger LOGGER = Logger.getLogger(EmailMessages.class);
+  private static final Logger LOGGER = Logger.getLogger(EmailMessages.class);
 
   /**
    * Email content when a new Account is sent

@@ -69,7 +69,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 @ViewScoped
 public class SingleUploadBean implements Serializable {
   private static final long serialVersionUID = -2731118794797476328L;
-  private static Logger logger = Logger.getLogger(SingleUploadBean.class);
+  private static final Logger LOGGER = Logger.getLogger(SingleUploadBean.class);
 
   // private Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
 
@@ -231,7 +231,7 @@ public class SingleUploadBean implements Serializable {
         }
         ii.setFile(tmp);
       } catch (IOException | FileUploadException e) {
-        logger.info("Could not get uploaded ingest file", e);
+        LOGGER.info("Could not get uploaded ingest file", e);
       }
     }
     return ii;
@@ -259,7 +259,7 @@ public class SingleUploadBean implements Serializable {
         sus.setProfile(profile);
         sus.setMdSetBean(mdSetBean);
       } catch (URISyntaxException e) {
-        logger.info("Pure URI Syntax issue ", e);
+        LOGGER.info("Pure URI Syntax issue ", e);
       }
     } else {
 

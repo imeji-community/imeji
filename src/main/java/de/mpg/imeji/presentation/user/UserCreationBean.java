@@ -11,6 +11,7 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
@@ -32,7 +33,7 @@ public class UserCreationBean extends QuotaSuperBean {
   private User user;
   private SessionBean sb;
   private boolean sendEmail = false;
-  private static Logger logger = Logger.getLogger(UserCreationBean.class);
+  private static final Logger LOGGER = Logger.getLogger(UserCreationBean.class);
   private boolean allowedToCreateCollection = true;
 
 
@@ -66,7 +67,7 @@ public class UserCreationBean extends QuotaSuperBean {
         BeanHelper.error(sb.getMessage(errorM));
       }
     } catch (Exception e) {
-      logger.error("Error creating user:", e);
+      LOGGER.error("Error creating user:", e);
       BeanHelper.error(sb.getMessage(e.getMessage()));
     }
     return "pretty:";
@@ -82,7 +83,7 @@ public class UserCreationBean extends QuotaSuperBean {
     PasswordGenerator generator = new PasswordGenerator();
     String password = generator.generatePassword();
     user.setEncryptedPassword(StringHelper.convertToMD5(password));
-    user.setQuota(getQuotaInBytes());
+    user.setQuota(QuotaUtil.getQuotaInBytes(getQuota()));
     uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT : USER_TYPE.RESTRICTED);
     return password;
   }
@@ -102,7 +103,7 @@ public class UserCreationBean extends QuotaSuperBean {
       uc.retrieve(user.getEmail());
       return true;
     } catch (NotFoundException e) {
-      logger.info("User not found: " + user.getEmail());
+      LOGGER.info("User not found: " + user.getEmail());
       return false;
     }
   }
@@ -120,7 +121,7 @@ public class UserCreationBean extends QuotaSuperBean {
           emailMessages.getEmailOnAccountAction_Subject(true), emailMessages
               .getNewAccountMessage(password, user.getEmail(), user.getPerson().getCompleteName()));
     } catch (Exception e) {
-      logger.error("Error sending email", e);
+      LOGGER.error("Error sending email", e);
       BeanHelper.error(sb.getMessage("error") + ": Email not sent");
     }
   }

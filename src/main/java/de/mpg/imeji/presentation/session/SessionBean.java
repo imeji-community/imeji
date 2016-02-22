@@ -486,7 +486,6 @@ public class SessionBean implements Serializable {
    * @return
    */
   public Album getActiveAlbum() {
-    //
     if (activeAlbum != null && (!AuthUtil.staticAuth().read(getUser(), activeAlbum.getId())
         || !AuthUtil.staticAuth().create(getUser(), activeAlbum.getId()))) {
       setActiveAlbum(null);
@@ -632,8 +631,9 @@ public class SessionBean implements Serializable {
    * @return
    */
   public String getInstituteNameByIP() {
-    if (StringUtils.isEmpty(institute))
+    if (StringUtils.isEmpty(institute)) {
       return "unknown";
+    }
     return institute;
   }
 
@@ -644,8 +644,9 @@ public class SessionBean implements Serializable {
    * @return
    */
   public String getInstituteIdByIP() {
-    if (StringUtils.isEmpty(institute))
+    if (StringUtils.isEmpty(institute)) {
       return "unknown";
+    }
     return instituteId;
   }
 
@@ -655,8 +656,9 @@ public class SessionBean implements Serializable {
    * @return
    */
   public String getInstituteByUser() {
-    if (user != null)
+    if (user != null) {
       return user.getEmail().split("@")[1];
+    }
     return "";
   }
 
@@ -692,8 +694,9 @@ public class SessionBean implements Serializable {
     if (ipAddress == null) {
       ipAddress = request.getRemoteAddr();
     }
-    if (ipAddress != null && ipAddress.split(",").length > 1)
+    if (ipAddress != null && ipAddress.split(",").length > 1) {
       ipAddress = ipAddress.split(",")[0];
+    }
     return ipAddress;
   }
 
@@ -751,8 +754,9 @@ public class SessionBean implements Serializable {
   }
 
   public String getPrettySpacePage(String prettyPage) {
-    if (isNullOrEmpty(this.spaceId))
+    if (isNullOrEmpty(this.spaceId)) {
       return prettyPage;
+    }
     return prettyPage.replace("pretty:", "pretty:space_");
 
   }

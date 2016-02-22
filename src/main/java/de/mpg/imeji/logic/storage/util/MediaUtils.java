@@ -26,7 +26,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class MediaUtils {
-  private static Logger logger = Logger.getLogger(MediaUtils.class);
+  private static final Logger LOGGER = Logger.getLogger(MediaUtils.class);
 
   /**
    * Return true if imagemagick is installed on the current system<br/>
@@ -46,7 +46,7 @@ public class MediaUtils {
     try {
       cmd.run(op);
     } catch (Exception e) {
-      logger.error("imagemagick not installed", e);
+      LOGGER.error("imagemagick not installed", e);
       return false;
     }
     return true;
@@ -126,7 +126,7 @@ public class MediaUtils {
       if (cs != null)
         return cs;
     } catch (Exception e) {
-      logger.error("No color space found!", e);
+      LOGGER.error("No color space found!", e);
     }
     return "RGB";
   }
@@ -163,7 +163,7 @@ public class MediaUtils {
         if (!info.getImageGeometry().contains("1x1"))
           return count;
       } catch (Exception e) {
-        logger.info("Some problems with getting non blank frame!", e);
+        LOGGER.info("Some problems with getting non blank frame!", e);
       } finally {
         String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
         f = new File(newPath);

@@ -59,7 +59,7 @@ import de.mpg.j2j.annotations.j2jModel;
  * @version $Revision$ $LastChangedDate$
  */
 public class Imeji {
-  private static final Logger logger = Logger.getLogger(Imeji.class);
+  private static final Logger LOGGER = Logger.getLogger(Imeji.class);
   public static String tdbPath = null;
   public static String collectionModel;
   public static String albumModel;
@@ -114,14 +114,14 @@ public class Imeji {
     try {
       in = new FileInputStream(f);
     } catch (FileNotFoundException e) {
-      logger.info("No" + f.getAbsolutePath() + " found, no migration runs");
+      LOGGER.info("No" + f.getAbsolutePath() + " found, no migration runs");
     }
     if (in != null) {
       String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
-      logger.info("Running migration with query: ");
-      logger.info(migrationRequests);
+      LOGGER.info("Running migration with query: ");
+      LOGGER.info(migrationRequests);
       ImejiSPARQL.execUpdate(migrationRequests);
-      logger.info("Migration done!");
+      LOGGER.info("Migration done!");
     }
   }
 
@@ -141,10 +141,10 @@ public class Imeji {
       }
       tdbPath = f.getAbsolutePath();
     }
-    logger.info("Initializing Jena dataset (" + tdbPath + ")...");
+    LOGGER.info("Initializing Jena dataset (" + tdbPath + ")...");
     dataset = tdbPath != null ? TDBFactory.createDataset(tdbPath) : TDBFactory.createDataset();
-    logger.info("... dataset done!");
-    logger.info("Initializing Jena models...");
+    LOGGER.info("... dataset done!");
+    LOGGER.info("Initializing Jena models...");
     albumModel = getModelName(Album.class);
     collectionModel = getModelName(CollectionImeji.class);
     imageModel = getModelName(Item.class);
@@ -159,7 +159,7 @@ public class Imeji {
     initModel(statementModel);
     initModel(profileModel);
     initModel(spaceModel);
-    logger.info("... models done!");
+    LOGGER.info("... models done!");
     CONFIG = new ConfigurationBean();
     initadminUser();
     initDefaultMetadataProfile();
@@ -216,22 +216,22 @@ public class Imeji {
         try {
           uc.retrieve(Imeji.adminUser.getEmail());
         } catch (NotFoundException e) {
-          logger.info(
+          LOGGER.info(
               "!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
           uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
-          logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
+          LOGGER.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
         }
       } else {
-        logger.info("Admin user already exists:");
+        LOGGER.info("Admin user already exists:");
         for (User admin : admins) {
-          logger.info(admin.getEmail() + " is admin + (" + admin.getId() + ")");
+          LOGGER.info(admin.getEmail() + " is admin + (" + admin.getId() + ")");
         }
       }
     } catch (AlreadyExistsException e) {
-      logger.warn(Imeji.adminUser.getEmail() + " already exists");
+      LOGGER.warn(Imeji.adminUser.getEmail() + " already exists");
     } catch (Exception e) {
       if (e.getCause() instanceof AlreadyExistsException) {
-        logger.warn(Imeji.adminUser.getEmail() + " already exists");
+        LOGGER.warn(Imeji.adminUser.getEmail() + " already exists");
       } else {
         throw new RuntimeException("Error initializing Admin user! ", e);
       }
@@ -240,50 +240,50 @@ public class Imeji {
 
   private static void initDefaultMetadataProfile() {
     ProfileController pc = new ProfileController();
-    logger.info("Initializing default metadata profile...");
+    LOGGER.info("Initializing default metadata profile...");
     try {
       defaultMetadataProfile = pc.initDefaultMetadataProfile();
     } catch (Exception e) {
-      logger.error("error retrieving/creating default metadata profile: ", e);
+      LOGGER.error("error retrieving/creating default metadata profile: ", e);
     }
     if (defaultMetadataProfile != null) {
-      logger.info("Default metadata profile is set-up to " + defaultMetadataProfile.getId());
+      LOGGER.info("Default metadata profile is set-up to " + defaultMetadataProfile.getId());
     } else {
-      logger.info(
+      LOGGER.info(
           "Checking for default metadata profile is finished: no default metadata profile has been set.");
 
     }
   }
 
   public static void shutdown() {
-    logger.info("Shutting down thread executor...");
+    LOGGER.info("Shutting down thread executor...");
     Imeji.executor.shutdown();
     nightlyExecutor.stop();
-    logger.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
+    LOGGER.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
     ElasticService.shutdown();
-    logger.info("Ending LockSurveyor...");
+    LOGGER.info("Ending LockSurveyor...");
     locksSurveyor.terminate();
-    logger.info("...done");
-    logger.info("Closing Jena! TDB...");
+    LOGGER.info("...done");
+    LOGGER.info("Closing Jena! TDB...");
     TDB.sync(Imeji.dataset);
-    logger.info("sync done");
+    LOGGER.info("sync done");
     Imeji.dataset.close();
-    logger.info("dataset closed");
+    LOGGER.info("dataset closed");
     TDB.closedown();
-    logger.info("tdb closed");
+    LOGGER.info("tdb closed");
     TDBMaker.releaseLocation(Location.create(Imeji.tdbPath));
-    logger.info("location released");
-    logger.info("...done!");
+    LOGGER.info("location released");
+    LOGGER.info("...done!");
 
     // This is a bug of com.hp.hpl.jena.sparql.engine.QueryExecutionBase
     // implementation:
     // AlarmClock is not correctly released, it leads to the memory leaks
     // after tomcat stop
     // see https://github.com/imeji-community/imeji/issues/966!
-    logger.info("Release AlarmClock...");
+    LOGGER.info("Release AlarmClock...");
     AlarmClock alarmClock = AlarmClock.get();
     alarmClock.release();
-    logger.info("done");
+    LOGGER.info("done");
   }
 
   /**

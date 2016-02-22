@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
@@ -198,11 +199,10 @@ public class UserBean extends QuotaSuperBean {
   public void updateUser() throws ImejiException {
     if (user != null) {
       UserController controller = new UserController(session.getUser());
-      user.setQuota(getQuotaInBytes());
+      user.setQuota(QuotaUtil.getQuotaInBytes(getQuota()));
       try {
         controller.update(user, session.getUser());
         reloadPage();
-
       } catch (UnprocessableError e) {
         BeanHelper.cleanMessages();
         BeanHelper.error(session.getMessage("error_during_user_update"));

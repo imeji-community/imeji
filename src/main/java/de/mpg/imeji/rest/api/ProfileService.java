@@ -10,11 +10,8 @@ import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
-import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -122,21 +119,20 @@ public class ProfileService implements API<MetadataProfileTO> {
   @Override
   public SearchResultTO<MetadataProfileTO> search(String q, int offset, int size, User u)
       throws ImejiException {
-    ProfileController cc = new ProfileController();
-    List<MetadataProfileTO> tos = new ArrayList<>();
-    SearchResult result =
-        SearchFactory.create(SearchObjectTypes.PROFILE, SEARCH_IMPLEMENTATIONS.JENA)
-            .search(SearchQueryParser.parseStringQuery(q), null, u, null, null, offset, size);
+    ProfileController controller = new ProfileController();
 
-    for (MetadataProfile vo : cc.retrieveLazy(result.getResults(), -1, 0, u)) {
+    SearchResult result = controller.search(SearchQueryParser.parseStringQuery(q), u, null);
+
+    List<MetadataProfileTO> tos = new ArrayList<>();
+    for (MetadataProfile vo : controller.retrieveLazy(result.getResults(), -1, 0, u)) {
       MetadataProfileTO to = new MetadataProfileTO();
       TransferObjectFactory.transferMetadataProfile(vo, to);
       tos.add(to);
     }
-    
-    return new SearchResultTO.Builder<MetadataProfileTO>().numberOfRecords(result.getResults().size())
-        .offset(offset).results(tos).query(q).size(size)
+
+    return new SearchResultTO.Builder<MetadataProfileTO>()
+        .numberOfRecords(result.getResults().size()).offset(offset).results(tos).query(q).size(size)
         .totalNumberOfRecords(result.getNumberOfRecords()).build();
   }
- 
+
 }

@@ -37,6 +37,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -68,9 +69,7 @@ import digilib.servlet.Scaler;
  * @version $Revision$ $LastChangedDate$
  */
 public class DigilibServlet extends Scaler {
-  /**
-     * 
-     */
+  private static final Logger LOGGER = Logger.getLogger(DigilibServlet.class);
   private static final long serialVersionUID = 1271326569919483929L;
   /**
    * imeji authentification and authorization
@@ -108,9 +107,9 @@ public class DigilibServlet extends Scaler {
       // Force Digilib to use the correct path
       super.dirCache.getBaseDirNames()[0] =
           FilenameUtils.normalizeNoEndSeparator(filePath.replace(internalStorageBase, ""));
-      logger.info("digilib started for directory: " + super.dirCache.getBaseDirNames()[0]);
+      LOGGER.info("digilib started for directory: " + super.dirCache.getBaseDirNames()[0]);
     } else {
-      logger.info("Digilib Viewer is disabled.");
+      LOGGER.info("Digilib Viewer is disabled.");
     }
   }
 
@@ -142,7 +141,7 @@ public class DigilibServlet extends Scaler {
         }
       }
     } catch (Exception e) {
-      logger.error(e);
+      LOGGER.error(e);
       throw new RuntimeException(e);
     }
   }
@@ -201,7 +200,7 @@ public class DigilibServlet extends Scaler {
   private Item loadItem(String url, SessionBean session) throws ImejiException {
     Search s = SearchFactory.create();
     List<String> r =
-        s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
+        s.searchString(JenaCustomQueries.selectItemIdOfFileUrl(url), null, null, 0, -1).getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
       return c.retrieveLazy(URI.create(r.get(0)), session.getUser());

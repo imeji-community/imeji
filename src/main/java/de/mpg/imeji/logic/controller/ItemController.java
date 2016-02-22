@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -65,7 +66,7 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class ItemController extends ImejiController {
-  private static final Logger logger = Logger.getLogger(ItemController.class);
+  private static final Logger LOGGER = Logger.getLogger(ItemController.class);
   private static final ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.imageModel);
   public static final String NO_THUMBNAIL_URL = "NO_THUMBNAIL_URL";
@@ -294,7 +295,26 @@ public class ItemController extends ImejiController {
 
   public Item retrieveLazy(URI imgUri, User user) throws ImejiException {
     return (Item) reader.readLazy(imgUri.toString(), user, new Item());
+  }
 
+  /**
+   * Lazy Retrieve the Item containing the file with the passed storageid
+   * 
+   * @param storageId
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public Item retrieveLazyForFile(String storageId, User user) throws ImejiException {
+    Search s = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
+    List<String> r =
+        s.searchString(JenaCustomQueries.selectItemOfFile(storageId), null, null, 0, -1)
+            .getResults();
+    if (!r.isEmpty() && r.get(0) != null) {
+      return retrieveLazy(URI.create(r.get(0)), user);
+    } else {
+      throw new NotFoundException("Can not find the resource requested");
+    }
   }
 
   /**
@@ -631,7 +651,7 @@ public class ItemController extends ImejiController {
     try {
       storageController.delete(id);
     } catch (Exception e) {
-      logger.error("error deleting file", e);
+      LOGGER.error("error deleting file", e);
     }
   }
 
@@ -715,7 +735,7 @@ public class ItemController extends ImejiController {
     try {
       return new ImejiTriple(itemUri, profileProperty, new URI(profileUri), permissionObject);
     } catch (URISyntaxException e) {
-      logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
     }
     return null;
   }

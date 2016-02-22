@@ -19,9 +19,9 @@ import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.notification.NotificationUtils;
@@ -32,13 +32,9 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -139,7 +135,7 @@ public class FileServlet extends HttpServlet {
       throws Exception {
     resp.setHeader("Content-disposition", "attachment;");
     boolean isExternalStorage = false;
-    if (!isSpaceUrl(url)) {
+    if (!AuthUtil.isSpaceUrl(url)) {
       Item fileItem = getItem(url, user);
       NotificationUtils.notifyByItemDownload(user, fileItem, session);
       isExternalStorage = StringHelper.isNullOrEmptyTrim(fileItem.getStorageId());
@@ -186,44 +182,12 @@ public class FileServlet extends HttpServlet {
    * @param url
    * @param user
    * @return
-   * @throws Exception 
+   * @throws Exception
    */
   private void checkSecurity(String url, User user) throws NotAllowedError {
-    if (isSpaceUrl(url)) {
-      // For space Logos do not check any security (spaces are always public)
-      return;
-    }
-    
-    
-    if ( isItemReleasedFile( url)  ){
-      //jena Query to check if the item is released (before checking the collection), fastest for not invoking the controller!
-      return;
-    }
-    
-    URI uri = getCollectionURI(url);
-    if (authorization.read(user, uri) || isPublicCollection(uri)) {
-      // ok!
-    } else {
+    if (!AuthUtil.isAllowedToViewFile(url, user)) {
       throw new NotAllowedError("You are not allowed to read this file");
     }
-  }
-
-
-  /**
-   * True if the collection is public
-   * 
-   * @param collectionId
-   * @return
-   */
-  private boolean isPublicCollection(URI collectionId) {
-    List<String> r =
-        ImejiSPARQL.exec(JenaCustomQueries.selectStatus(collectionId.toString()), null);
-    return !ConfigurationBean.getPrivateModusStatic() && !r.isEmpty()
-        && r.get(0).equals(Status.RELEASED.getUriString());
-  }
-
-  private boolean isSpaceUrl(String url) {
-    return spaceController.isSpaceLogoURL(url);
   }
 
 
@@ -260,30 +224,6 @@ public class FileServlet extends HttpServlet {
   }
 
   /**
-   * Return the uri of the {@link CollectionImeji} of the file with this url
-   * 
-   * @param url
-   * @return
-   */
-  private URI getCollectionURI(String url) {
-    String id = storageController.getCollectionId(url);
-    
-    if (id != null) {
-      return ObjectHelper.getURI(CollectionImeji.class, id);
-    } else {
-      Search s = SearchFactory.create();
-      List<String> r =
-          s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1)
-              .getResults();
-      if (!r.isEmpty()) {
-        return URI.create(r.get(0));
-      } else {
-        return null;
-      }
-    }
-  }
-
-  /**
    * Find the {@link Item} which is owner of the file
    * 
    * @param url
@@ -293,7 +233,7 @@ public class FileServlet extends HttpServlet {
   private Item getItem(String url, User user) throws Exception {
     Search s = SearchFactory.create();
     List<String> r =
-        s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
+        s.searchString(JenaCustomQueries.selectItemIdOfFileUrl(url), null, null, 0, -1).getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
       return c.retrieveLazy(URI.create(r.get(0)), user);
@@ -302,19 +242,6 @@ public class FileServlet extends HttpServlet {
     }
   }
 
-  private boolean isItemReleasedFile(String url) {
-    Search s = SearchFactory.create();
-    System.out.println(JenaCustomQueries.selectItemReleasedStatusOfFile(url));
-    List<String> r =
-        s.searchString(JenaCustomQueries.selectItemReleasedStatusOfFile(url), null, null, 0, -1).getResults();
-    if (!r.isEmpty() && r.get(0) != null) {
-       return true;
-    } else {
-      return false;
-    }
-  }
-  
-  
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
    * 

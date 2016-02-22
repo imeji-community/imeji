@@ -63,7 +63,7 @@ public class AlbumBean extends ContainerBean {
    */
   // protected boolean create;
   private boolean selected;
-  private static Logger logger = Logger.getLogger(AlbumBean.class);
+  private static final Logger LOGGER = Logger.getLogger(AlbumBean.class);
   /**
    * Maximum number of character displayed in the list for the description
    */
@@ -160,7 +160,7 @@ public class AlbumBean extends ContainerBean {
 
       }
     } catch (Exception e) {
-      logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       // Has to be in try/catch block, otherwise redirct from
       // HistoryFilter will not work.
       // Here simply do nothing
@@ -178,7 +178,7 @@ public class AlbumBean extends ContainerBean {
       setIngestImage(null);
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
-      logger.error("Error init album edit", e);
+      LOGGER.error("Error init album edit", e);
     }
     if (UrlHelper.getParameterBoolean("start")) {
       try {
@@ -433,7 +433,7 @@ public class AlbumBean extends ContainerBean {
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_album_release"));
       BeanHelper.error(e.getMessage());
-      logger.error("Issue during release", e);
+      LOGGER.error("Issue during release", e);
     }
     return "pretty:";
   }
@@ -453,7 +453,7 @@ public class AlbumBean extends ContainerBean {
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_album_delete"));
       BeanHelper.error(e.getMessage());
-      logger.error("Error during delete album", e);
+      LOGGER.error("Error during delete album", e);
     }
     return sessionBean.getPrettySpacePage("pretty:albums");
   }
@@ -472,7 +472,7 @@ public class AlbumBean extends ContainerBean {
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
       BeanHelper.error(e.getMessage());
-      logger.error("Error during withdraw album", e);
+      LOGGER.error("Error during withdraw album", e);
     }
     return "pretty:";
   }

@@ -40,7 +40,7 @@ import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSe
 @ViewScoped
 public class RegistrationBean {
 
-  private static Logger logger = Logger.getLogger(RegistrationBean.class);
+  private static final Logger LOGGER = Logger.getLogger(RegistrationBean.class);
 
   private UserController uc = new UserController(Imeji.adminUser);
 
@@ -142,7 +142,7 @@ public class RegistrationBean {
           .getEmailOnRegistrationRequest_Body(getUser(), password, getContactEmailStatic(), sb,
               nb.getRegistrationUrl()));
     } catch (Exception e) {
-      logger.error("Error sending email", e);
+      LOGGER.error("Error sending email", e);
       BeanHelper.error(sb.getMessage("error") + ": Email not sent");
     }
   }

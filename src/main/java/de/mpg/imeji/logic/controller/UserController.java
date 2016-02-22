@@ -33,6 +33,7 @@ import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -56,7 +57,7 @@ public class UserController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
   private User user;
-  static Logger logger = Logger.getLogger(UserController.class);
+  static Logger LOGGER = Logger.getLogger(UserController.class);
 
   /**
    * User type (restricted: can not create collection)
@@ -93,6 +94,9 @@ public class UserController {
     // Now set up the creator to Admin User, as necessary for permissions
     user = Imeji.adminUser;
     u.setUserStatus(User.UserStatus.ACTIVE);
+    if (u.getQuota() < 0) {
+      u.setQuota(QuotaUtil.getQuotaInBytes(ConfigurationBean.getDefaultQuotaStatic()));
+    }
     switch (type) {
       case ADMIN:
         u.setGrants(AuthorizationPredefinedRoles.imejiAdministrator(u.getId().toString()));
@@ -517,7 +521,7 @@ public class UserController {
       try {
         users.add((User) reader.read(uri, user, new User()));
       } catch (ImejiException e) {
-        logger.info("Could not find user with URI " + uri, e);
+        LOGGER.info("Could not find user with URI " + uri, e);
       }
     }
 
@@ -546,7 +550,7 @@ public class UserController {
         ReaderFacade reader = new ReaderFacade(model);
         orgs.add((Organization) reader.read(uri, user, new Organization()));
       } catch (ImejiException e) {
-        logger.info("Organization with " + uri + " not found");
+        LOGGER.info("Organization with " + uri + " not found");
       }
     }
     return orgs;
@@ -603,7 +607,7 @@ public class UserController {
       try {
         admins.add(retrieve(URI.create(uri)));
       } catch (ImejiException e) {
-        logger.info("Could not retrieve any admin in the list. Something is wrong!");
+        LOGGER.info("Could not retrieve any admin in the list. Something is wrong!");
       }
     }
     return admins;
@@ -651,7 +655,7 @@ public class UserController {
           i++;
         } catch (ImejiException e) {
           // TODO Auto-generated catch block
-          logger.info("There has been an error in the expiry for users. Inactive user with email "
+          LOGGER.info("There has been an error in the expiry for users. Inactive user with email "
               + u.getEmail() + " could not be removed!", e);
         }
       }

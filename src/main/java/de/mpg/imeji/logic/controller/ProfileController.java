@@ -67,7 +67,7 @@ public class ProfileController extends ImejiController {
   private static final WriterFacade writer = new WriterFacade(Imeji.profileModel);
   public static final String DEFAULT_METADATA_PROFILE_PATH_PROPERTY =
       "default-metadata-profile.json";
-  private static Logger logger = Logger.getLogger(ProfileController.class);
+  private static final Logger LOGGER = Logger.getLogger(ProfileController.class);
 
   /**
    * Default Constructor
@@ -281,7 +281,7 @@ public class ProfileController extends ImejiController {
       return (List<MetadataProfile>) retrieveLazy(result.getResults(),
           getMin(result.getResults().size(), 500), 0, user);
     } catch (Exception e) {
-      logger.error("Cannot retrieve profiles:", e);
+      LOGGER.error("Cannot retrieve profiles:", e);
     }
     return null;
   }
@@ -314,7 +314,7 @@ public class ProfileController extends ImejiController {
       throw new ImejiException(
           "Data inconsistency: " + uris.size() + " + default metadata profile have been found.");
     } else {
-      logger.info("Cannot find default metadata profile...");
+      LOGGER.info("Cannot find default metadata profile...");
     }
     return null;
   }
@@ -337,7 +337,7 @@ public class ProfileController extends ImejiController {
         path = new File(this.getClass().getClassLoader()
             .getResource(DEFAULT_METADATA_PROFILE_PATH_PROPERTY).toURI()).getAbsolutePath();
         if (isNullOrEmpty(path)) {
-          logger.info(
+          LOGGER.info(
               "There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!"
                   + "Check more about it at the IMEJI Documentation.");
           return null;
@@ -436,7 +436,7 @@ public class ProfileController extends ImejiController {
       reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
       return cols;
     } catch (ImejiException e) {
-      logger.error("Error loading metadataProfiles: " + e.getMessage(), e);
+      LOGGER.error("Error loading metadataProfiles: " + e.getMessage(), e);
       return null;
     }
   }

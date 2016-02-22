@@ -426,7 +426,7 @@ public class ItemCreate extends ItemTestBase {
   }
 
   /**
-   * @return the logger
+   * @return the LOGGER
    */
   public static Logger getLogger() {
     return LOGGER;

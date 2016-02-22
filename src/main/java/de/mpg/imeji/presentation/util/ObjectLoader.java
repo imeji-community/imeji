@@ -33,7 +33,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
  * @version $Revision$ $LastChangedDate$
  */
 public class ObjectLoader {
-  private static Logger logger = Logger.getLogger(ObjectLoader.class);
+  private static final Logger LOGGER = Logger.getLogger(ObjectLoader.class);
 
   /**
    * Private Constructor
@@ -55,7 +55,7 @@ public class ObjectLoader {
     } catch (NotFoundException e) {
       writeErrorNotFound("collection", id);
     } catch (ImejiException e) {
-      // logger.error("Error Object loader for " + id, e);
+      // LOGGER.error("Error Object loader for " + id, e);
       // Commented out no need to log handled ImejiException
       throw e;
     }
@@ -218,7 +218,7 @@ public class ObjectLoader {
       MetadataProfile p = pc.retrieve(id, user);
       return p;
     } catch (Exception e) {
-      logger.info("There was a problem loading the profile with id " + id.toString());
+      LOGGER.info("There was a problem loading the profile with id " + id.toString());
     }
     return null;
   }
@@ -244,7 +244,7 @@ public class ObjectLoader {
    * @throws Exception
    */
   private static void writeException(ImejiException e, String id) throws ImejiException {
-    // logger.error("Error Object loader for " + id, e);
+    // LOGGER.error("Error Object loader for " + id, e);
     // No need to log handled ImejiException
     throw e;
   }

@@ -26,7 +26,7 @@ import de.mpg.imeji.logic.vo.User;
  *
  */
 public class APIKeyAuthentication implements Authentication {
-  private static final Logger logger = Logger.getLogger(APIKeyAuthentication.class);
+  private static final Logger LOGGER = Logger.getLogger(APIKeyAuthentication.class);
   private String key;
 
   public APIKeyAuthentication(String key) {
@@ -42,9 +42,9 @@ public class APIKeyAuthentication implements Authentication {
         return user;
       }
     } catch (Exception e) {
-      logger.error("Invalid Key authorization");
+      LOGGER.error("Invalid Key authorization");
     }
-    logger.error(
+    LOGGER.error(
         "Error APIKeyAuthentication user could not be authenticated with provided credentials");
     throw new AuthenticationError("Invalid Key authorization");
   }
@@ -115,7 +115,7 @@ public class APIKeyAuthentication implements Authentication {
       JwtClaims jwtClaims = jwtConsumer.processToClaims(token);
       return jwtClaims.getSubject();
     } catch (InvalidJwtException | MalformedClaimException e) {
-      logger.error("Wrong APi Key!", e);
+      LOGGER.error("Wrong APi Key!", e);
     }
     return null;
 

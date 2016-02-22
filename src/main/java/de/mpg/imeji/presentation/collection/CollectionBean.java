@@ -39,7 +39,7 @@ public abstract class CollectionBean extends ContainerBean {
     COLLECTION, PROFILE, HOME, UTIL;
   }
 
-  private static Logger logger = Logger.getLogger(CollectionBean.class);
+  private static final Logger LOGGER = Logger.getLogger(CollectionBean.class);
   private TabType tab = TabType.HOME;
 
   protected SessionBean sessionBean;
@@ -168,7 +168,7 @@ public abstract class CollectionBean extends ContainerBean {
       BeanHelper.info(sessionBean.getMessage("success_collection_release"));
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_release: " + e.getMessage()));
-      logger.error("Error during collection release", e);
+      LOGGER.error("Error during collection release", e);
     }
     return "pretty:";
   }
@@ -186,7 +186,7 @@ public abstract class CollectionBean extends ContainerBean {
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
-      logger.error("Error during doi creation", e);
+      LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";
   }
@@ -204,7 +204,7 @@ public abstract class CollectionBean extends ContainerBean {
           getSuccessCollectionDeleteMessage(this.collection.getMetadata().getTitle(), sessionBean));
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage(e.getLocalizedMessage()));
-      logger.error("Error delete collection", e);
+      LOGGER.error("Error delete collection", e);
     }
     return sessionBean.getPrettySpacePage("pretty:collections");
   }
@@ -223,7 +223,7 @@ public abstract class CollectionBean extends ContainerBean {
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
       BeanHelper.error(e.getMessage());
-      logger.error("Error discarding collection:", e);
+      LOGGER.error("Error discarding collection:", e);
     }
     return "pretty:";
   }

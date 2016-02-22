@@ -48,22 +48,21 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
+  private final SessionBean session;
+  private final Navigation navigation;
   private int totalNumberOfRecords;
-  private SessionBean session;
   private List<SelectItem> sortMenu;
   private String selectedSortCriterion;
   private String selectedSortOrder = SortOrder.DESCENDING.name();
   private FacetsBean facets;
   protected FiltersBean filters;
   private String query;
-  private Navigation navigation;
   private Filter searchFilter;
   private boolean isSimpleSearch;
   private SearchQuery searchQuery = new SearchQuery();
   private String discardComment;
   private String selectedImagesContext;
   private SearchResult searchResult;
-  protected SortCriterion sortCriterion;
 
   /**
    * The context of the browse page (browse, collection browse, album browse)
@@ -86,7 +85,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
         getElementsPerPageSelectItems().add(new SelectItem(option));
       }
     } catch (Exception e) {
-      logger.error("Error reading property imeji.image.list.size.options", e);
+      LOGGER.error("Error reading property imeji.image.list.size.options", e);
     }
   }
 
@@ -111,7 +110,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void browseInit() {
     parseSearchQuery();
-    parseSorting();
     initMenus();
     cleanSelectItems();
     initFilters();
@@ -139,7 +137,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public List<ThumbnailBean> retrieveList(int offset, int size) {
     try {
       // Search the items of the page
-      searchResult = search(searchQuery, sortCriterion, offset, size);
+      searchResult = search(searchQuery, getSortCriterion(), offset, size);
       totalNumberOfRecords = searchResult.getNumberOfRecords();
       // load the item
       Collection<Item> items = loadImages(searchResult.getResults());
@@ -217,23 +215,14 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       }
     } catch (Exception e) {
       BeanHelper.error("Error parsing query: " + e.getMessage());
-      logger.error("Error parsing query", e);
+      LOGGER.error("Error parsing query", e);
     }
   }
 
-  /**
-   * Parse the {@link SortCriterion} according to the selected value in the sort menu.
-   * 
-   * @return
-   */
-  public void parseSorting() {
-    sortCriterion = new SortCriterion();
-    if (getSelectedSortCriterion() != null && !getSelectedSortCriterion().trim().equals("")) {
-      sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
-      sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-    } else {
-      sortCriterion.setIndex(null);
-    }
+
+  public SortCriterion getSortCriterion() {
+    return new SortCriterion(JenaSearch.getIndex(getSelectedSortCriterion()),
+        SortOrder.valueOf(getSelectedSortOrder()));
   }
 
   /**
@@ -269,14 +258,14 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initFacets() {
     try {
-      SearchResult searchRes =
-          search(getSearchQuery(), sortCriterion, 0, this.getTotalNumberOfElements());
-      this.setFacets(new FacetsBean(null, SearchQueryParser.parseStringQuery(query), searchRes));
+      // SearchResult searchRes = search(getSearchQuery(), null, 0,
+      // this.getTotalNumberOfElements());
+      this.setFacets(new FacetsBean(SearchQueryParser.parseStringQuery(query)));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(facets);
       executor.shutdown();
     } catch (Exception e) {
-      logger.error("Error Initializing the facets", e);
+      LOGGER.error("Error Initializing the facets", e);
     }
   }
 

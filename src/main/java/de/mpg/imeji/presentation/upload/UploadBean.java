@@ -69,7 +69,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 @ViewScoped
 public class UploadBean implements Serializable {
   private static final long serialVersionUID = -2731118794797476328L;
-  private static Logger logger = Logger.getLogger(UploadBean.class);
+  private static final Logger LOGGER = Logger.getLogger(UploadBean.class);
   private CollectionImeji collection = new CollectionImeji();
   private int collectionSize = 0;
   private String id;
@@ -199,12 +199,12 @@ public class UploadBean implements Serializable {
         externalUrl = null;
       } catch (Exception e) {
         getfFiles().add(e.getMessage() + ": " + findFileName(url));
-        logger.error("Error uploading file from link: " + externalUrl, e);
+        LOGGER.error("Error uploading file from link: " + externalUrl, e);
       } finally {
         FileUtils.deleteQuietly(tmp);
       }
     } catch (Exception e) {
-      logger.error("Error uploading file from link: " + externalUrl, e);
+      LOGGER.error("Error uploading file from link: " + externalUrl, e);
       BeanHelper.error(e.getMessage());
     }
     HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
@@ -290,7 +290,7 @@ public class UploadBean implements Serializable {
         // the same name is not possible
         if (!((isImportImageToFile() || isUploadFileToItem()))
             && filenameExistsInCollection(title)) {
-          logger.error("There is already at least one item with the filename "
+          LOGGER.error("There is already at least one item with the filename "
               + FilenameUtils.getBaseName(title));
         }
         // throw new RuntimeException("There is already at least one item with the filename "
@@ -301,7 +301,7 @@ public class UploadBean implements Serializable {
       String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
       if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
         SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-        logger.error(sessionBean.getMessage("upload_format_not_allowed") + " ("
+        LOGGER.error(sessionBean.getMessage("upload_format_not_allowed") + " ("
             + StorageUtils.guessExtension(file) + ")");
       }
     }
@@ -338,7 +338,7 @@ public class UploadBean implements Serializable {
       return item;
     } catch (Exception e) {
       getfFiles().add(" File " + title + " not uploaded: " + session.getMessage(e.getMessage()));
-      logger.error("Error uploading item: ", e);
+      LOGGER.error("Error uploading item: ", e);
       return null;
     }
   }
@@ -430,7 +430,7 @@ public class UploadBean implements Serializable {
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
       BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
-      logger.error("Error during doi creation", e);
+      LOGGER.error("Error during doi creation", e);
     }
     return "";
   }
@@ -474,7 +474,7 @@ public class UploadBean implements Serializable {
           getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sessionBean));
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
-      logger.error("Error delete collection", e);
+      LOGGER.error("Error delete collection", e);
     }
     return sessionBean.getPrettySpacePage("pretty:collections");
   }
@@ -494,7 +494,7 @@ public class UploadBean implements Serializable {
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
       BeanHelper.error(e.getMessage());
-      logger.error("Error discarding collection:", e);
+      LOGGER.error("Error discarding collection:", e);
     }
 
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);

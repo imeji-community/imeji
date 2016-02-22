@@ -60,7 +60,7 @@ import de.mpg.imeji.exceptions.UnprocessableError;
  * @version $Revision$ $LastChangedDate$
  */
 public class StorageUtils {
-  private static Logger logger = Logger.getLogger(StorageUtils.class);
+  private static final Logger LOGGER = Logger.getLogger(StorageUtils.class);
   /**
    * The generic mime-type, when no mime-type is known
    */
@@ -174,7 +174,7 @@ public class StorageUtils {
         }
       }
     } catch (Exception e) {
-      logger.error("Error guessing file format", e);
+      LOGGER.error("Error guessing file format", e);
     }
 
     return BAD_FORMAT;

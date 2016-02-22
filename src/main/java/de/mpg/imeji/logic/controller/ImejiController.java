@@ -39,7 +39,7 @@ import de.mpg.j2j.helper.DateHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public abstract class ImejiController {
-  private final static WorkflowManager WORKFLOW_MANAGER = new WorkflowManager();
+  private static final WorkflowManager WORKFLOW_MANAGER = new WorkflowManager();
 
   public static final String LOGO_STORAGE_SUBDIRECTORY = "/thumbnail";
 

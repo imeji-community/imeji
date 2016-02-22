@@ -1,6 +1,5 @@
-This folder contains 3 files, migration_1.txt to migration_3.txt.
-
-Files contain SPARQL queries for each imeji Model respectively, and update the URL from old URI to a new URI structure.
+Files in this folder contain SPARQL queries for each imeji Model respectively, 
+and update the URL from old URI to a new URI structure.
 Files can be run during imeji instance startup, with automatic migration utility of imeji.
 For these purpose:
 
@@ -12,5 +11,5 @@ After completing the queries, imeji instance is started and the JENA database co
 If your imeji instance runs with the elastic search, make sure you reindex all your data once again.
 
 If your imeji instance should run with URL without "/imeji" in its path, 
-then the file "migration_imeji_prefix.txt" should also be appended to the migration.txt file from step b) .  
+then the file "migration_4_imeji_string_from_url_of_data.txt" should also be appended to the migration.txt file from step b) .  
 

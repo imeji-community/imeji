@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.auth.authentication;
+package de.mpg.imeji.logic.auth.authentication.impl;
 
 import java.net.URI;
 
@@ -13,9 +13,10 @@ import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.InactiveAuthenticationError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.ImejiRsaKeys;
+import de.mpg.imeji.logic.auth.authentication.Authentication;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.User;
 
@@ -38,7 +39,10 @@ public class APIKeyAuthentication implements Authentication {
     try {
       UserController controller = new UserController(Imeji.adminUser);
       User user = controller.retrieve(URI.create(consumeJsonWebToken(key)));
-      if (key.equals(user.getApiKey())) {
+      if (!user.isActive()) {
+        throw new InactiveAuthenticationError(
+            "Not active user: please activate your account with the limk sent after your registration");
+      } else if (key.equals(user.getApiKey())) {
         return user;
       }
     } catch (Exception e) {

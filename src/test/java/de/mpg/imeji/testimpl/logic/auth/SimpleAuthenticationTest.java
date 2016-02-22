@@ -6,8 +6,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
+import de.mpg.imeji.logic.auth.authentication.Authentication;
+import de.mpg.imeji.logic.auth.authentication.impl.DefaultAuthentication;
 import de.mpg.imeji.logic.vo.User;
 import util.JenaUtil;
 
@@ -32,7 +32,7 @@ public class SimpleAuthenticationTest {
   @Test
   public void testLoginWrongPassword() {
     Authentication simpAuth =
-        new SimpleAuthentication(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD + "a");
+        new DefaultAuthentication(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD + "a");
     User user = null;
     try {
       user = simpAuth.doLogin();
@@ -46,7 +46,7 @@ public class SimpleAuthenticationTest {
   @Test
   public void testUserNotExist() {
     Authentication simpAuth =
-        new SimpleAuthentication("abdc" + JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
+        new DefaultAuthentication("abdc" + JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
     User user = null;
     try {
       user = simpAuth.doLogin();
@@ -61,7 +61,7 @@ public class SimpleAuthenticationTest {
   public void testDoLogin() {
     // test if login if working for test user
     Authentication simpAuth =
-        new SimpleAuthentication(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
+        new DefaultAuthentication(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
     User user = null;
     try {
       user = simpAuth.doLogin();

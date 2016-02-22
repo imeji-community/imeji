@@ -150,7 +150,6 @@ public class UserController {
     return retrieve(email, user);
   }
 
-
   public User retrieve(String email, User currentUser) throws ImejiException {
     Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
     SearchResult result =
@@ -171,6 +170,8 @@ public class UserController {
   public User retrieve(URI uri) throws ImejiException {
     return retrieve(uri, user);
   }
+
+
 
   /**
    * Retrieve a {@link User} according to its uri (id)
@@ -288,7 +289,7 @@ public class UserController {
         throw new UnprocessableError(
             "Registration date does not match, its bigger then the current date!");
       }
-      // TODO: wait for the ConfigurationBean setting here
+
       Calendar validUntil = activateUser.getCreated();
       validUntil.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic());
 
@@ -325,12 +326,9 @@ public class UserController {
         : retrieve(col.getCreatedBy(), Imeji.adminUser);
 
     Search search = SearchFactory.create();
-    List<String> results = search
-        .searchString(
-            // TODO: who is checked by quota?
-            // Current implementation: owner of target collection
-            JenaCustomQueries.selectUserFileSize(col.getCreatedBy().toString()), null, null, 0, -1)
-        .getResults();
+    List<String> results =
+        search.searchString(JenaCustomQueries.selectUserFileSize(col.getCreatedBy().toString()),
+            null, null, 0, -1).getResults();
     long currentDiskUsage = 0L;
     try {
       currentDiskUsage = Long.parseLong(results.get(0).toString());
@@ -467,18 +465,6 @@ public class UserController {
         Imeji.userModel);
   }
 
-  /**
-   * Search all {@link Person} which are defined as person of a {@link CollectionImeji}
-   * 
-   * @param name
-   * @return
-   */
-  private Collection<Person> searchPersonByNameInCollections(String name) {
-    Search search = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.JENA);
-    return loadPersons(search
-        .searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1).getResults(),
-        Imeji.collectionModel);
-  }
 
   /**
    * Search all {@link Organization} which are defined in a {@link User}
@@ -492,20 +478,6 @@ public class UserController {
         search.searchString(JenaCustomQueries.selectOrganizationByName(name), null, null, 0, -1)
             .getResults(),
         Imeji.userModel);
-  }
-
-  /**
-   * Search all {@link Organization} which are defined as person of a {@link CollectionImeji}
-   * 
-   * @param name
-   * @return
-   */
-  private Collection<Organization> searchOrganizationByNameInCollections(String name) {
-    Search search = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.JENA);
-    return loadOrganizations(
-        search.searchString(JenaCustomQueries.selectOrganizationByName(name), null, null, 0, -1)
-            .getResults(),
-        Imeji.collectionModel);
   }
 
   /**
@@ -654,7 +626,6 @@ public class UserController {
           delete(u);
           i++;
         } catch (ImejiException e) {
-          // TODO Auto-generated catch block
           LOGGER.info("There has been an error in the expiry for users. Inactive user with email "
               + u.getEmail() + " could not be removed!", e);
         }

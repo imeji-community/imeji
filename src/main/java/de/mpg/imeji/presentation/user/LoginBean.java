@@ -16,8 +16,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.AuthenticationFactory;
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.InactiveAuthenticationError;
+import de.mpg.imeji.logic.auth.authentication.Authentication;
+import de.mpg.imeji.logic.auth.authentication.AuthenticationFactory;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -90,22 +92,21 @@ public class LoginBean {
     sb.setShowLogin(true);
   }
 
-  public void doLogin() throws Exception {
+  public void doLogin() throws IOException {
+    String instanceName =
+        ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
+            .getInstanceName();
     Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
-
     try {
       User user = auth.doLogin();
       sb.setUser(user);
       BeanHelper.cleanMessages();
       BeanHelper.info(sb.getMessage("success_log_in"));
-    }
-
-    catch (Exception e) {
-      String name = ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-          .getInstanceName();
-      BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", name));
+    } catch (InactiveAuthenticationError e) {
+      BeanHelper.error(sb.getMessage("error_log_in_inactive"));
+    } catch (AuthenticationError e) {
       BeanHelper
-          .error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX", name));
+          .error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", instanceName));
     }
     if (isNullOrEmptyTrim(redirect)) {
       HistoryPage current =

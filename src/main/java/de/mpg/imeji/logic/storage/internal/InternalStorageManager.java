@@ -183,8 +183,9 @@ public class InternalStorageManager implements Serializable {
    */
   public String getStorageId(String url) {
     return transformUrlToPath(url).replace(storagePath, "")
-        .replace(getFileName(url, StringHelper.urlSeparator), "").replace("/web/", "")
-        .replace("/thumbnail/", "").replace("/original/", "");
+        .replace(getFileName(url, StringHelper.urlSeparator), "").replace(StringHelper.fileSeparator+"web"+StringHelper.fileSeparator, "")
+        .replace(StringHelper.fileSeparator+"thumbnail"+StringHelper.fileSeparator, "").replace(StringHelper.fileSeparator+"original"+StringHelper.fileSeparator, "")
+        .replace(StringHelper.fileSeparator, StringHelper.urlSeparator);
   }
 
   /**

@@ -28,7 +28,8 @@
 									curMainMenu="#{currentMainMenu}" 
 									vo="#{logicBean.album}"
 									downloadEnabled="#{logicBean.size > 0}"
-									contextDownloadParam="&amp;album=#{logicBean.id}"/>
+									contextDownloadParam="&amp;album=#{logicBean.id}"
+									hasContent="#{logicBean.size > 0}"/>
 		</ui:fragment>
 	</ui:define>
 	

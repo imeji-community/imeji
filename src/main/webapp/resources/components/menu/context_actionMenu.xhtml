@@ -191,8 +191,41 @@
 							</div>
 						</div>
 					</ui:fragment>
-					<!-- ACTION MENU -->
-					<ui:fragment  rendered="#{(Auth.admin(cc.attrs.vo) or Auth.deleteContent(cc.attrs.vo) or Auth.delete(cc.attrs.vo) and WorkflowBean.delete(cc.attrs.vo)) and cc.attrs.vo.status != 'WITHDRAWN'}">
+					
+					<!-- Action Menu for item page WITHOUT an album-->
+					<ui:fragment rendered="#{cc.attrs.activeMenu == 'item' and cc.attrs.curMainMenu != 'album'}">
+						<ui:param name="deleteSingleItem" value="#{Auth.delete(cc.attrs.vo) and WorkflowBean.delete(cc.attrs.vo)}" />
+						<ui:param name="withdrawSingleItem" value="#{Auth.admin(cc.attrs.vo) and WorkflowBean.withdraw(cc.attrs.vo)}" />
+						
+						<ui:fragment rendered="#{deleteSingleItem or withdrawSingleItem}">
+							<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
+								<div class="imj_menuHeader" >
+		                            <span class="fa fa-bars">&#160;</span>
+									<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
+								</div>
+								<div class="imj_menuBody">
+									<ul class="imj_overlayMenuList">
+										<ui:fragment rendered="#{deleteSingleItem}">
+											<li>
+												<h:outputLink id="actionMenuDeleteItem" value="#" onclick="openDialog('deleteMenuItemDialog');">
+													<h:outputText value="#{lbl.delete_item}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+										<ui:fragment rendered="#{withdrawSingleItem}">
+											<li>
+												<h:outputLink id="actionMenuDiscardItem" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
+													<h:outputText value="#{lbl.item_withdraw}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+									</ul>
+								</div>
+							</div>
+						</ui:fragment>
+					</ui:fragment>
+					<!-- Action Menu for item page WITHIN album -->
+					<ui:fragment rendered="#{cc.attrs.activeMenu == 'item' and cc.attrs.curMainMenu == 'album' and Auth.create(itemBean.album)}">
 						<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
 							<div class="imj_menuHeader" >
 	                            <span class="fa fa-bars">&#160;</span>
@@ -200,79 +233,106 @@
 							</div>
 							<div class="imj_menuBody">
 								<ul class="imj_overlayMenuList">
-									<ui:fragment rendered="#{Auth.delete(cc.attrs.vo) and WorkflowBean.delete(cc.attrs.vo)}">
-										<li>
-											<h:outputLink id="actionMenuDelete" value="#" onclick="openDialog('deleteMenuItemDialog');">
-												<h:outputText value="#{lbl.collection_delete}" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}"/>
-												<h:outputText value="#{lbl.album_delete}" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}"/>
-												<h:outputText value="#{lbl.delete_item}" rendered="#{ cc.attrs.activeMenu == 'item'}"/>
-											</h:outputLink>
-										</li>
-									</ui:fragment>
-									<ui:fragment rendered="#{Auth.admin(cc.attrs.vo) and WorkflowBean.release(cc.attrs.vo) and cc.attrs.hasContent}">
-										<li>
-											<h:outputLink id="actionMenuRelease" value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">
-												<h:outputText value="#{lbl.collection_release}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
-												<h:outputText value="#{lbl.album_release}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
-											</h:outputLink>
-										</li>
-									</ui:fragment>
-									<ui:fragment rendered="#{Auth.admin(cc.attrs.vo) and WorkflowBean.withdraw(cc.attrs.vo)}">
-										<li>
-											<h:outputLink id="actionMenuDiscard" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
-												<h:outputText value="#{lbl.collection_withdraw}" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}"/>
-												<h:outputText value="#{lbl.album_withdraw}" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}"/>
-												<h:outputText value="#{lbl.item_withdraw}" rendered="#{cc.attrs.activeMenu == 'item'}"/>
-											</h:outputLink>
-										</li>
-										
-									<ui:fragment rendered ="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}">
-										<li>
-											<h:outputLink value="#" onclick="openDialog('doiInput');" title="#{lbl.change_doi}" rendered="#{ConfigurationBean.doiServiceUrl != null and ConfigurationBean.doiServiceUrl != '' and cc.attrs.hasDoi}">
-												<h:outputText value="#{lbl.change_doi}"/>
-											</h:outputLink>
-											<h:outputLink id="lnkCreateDOI" value="#" onclick="openDialog('createDOIDialog');" title="#{lbl.createDOI}" rendered="#{ConfigurationBean.doiServiceUrl != null and ConfigurationBean.doiServiceUrl != ''}">
-												<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
-											</h:outputLink>
-											<h:outputLink id="lnkInputDOI" value="#" onclick="openDialog('doiInput');" title="#{lbl.createDOI}" rendered="#{ConfigurationBean.doiServiceUrl == null or ConfigurationBean.doiServiceUrl == ''}">
-												<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
-												<h:outputText value="#{lbl.change_doi}" rendered="#{cc.attrs.hasDoi}"/>
-											</h:outputLink>
-										</li>
-										</ui:fragment>
-									</ui:fragment>
-
-									
-									<ui:fragment rendered="#{Auth.deleteContent(cc.attrs.vo) and cc.attrs.activeMenu != 'item'}">
-										<li>
-											<h:outputLink value="#" onclick="openDialog('dialogDeleteAll')" 
-																rendered="#{cc.attrs.vo.status == 'PENDING' and itemBean.navigationString != 'pretty:albumItem'}">
-												<h:outputText value="#{lbl.delete_all}"/>
-											</h:outputLink>
-											<h:outputLink value="#" onclick="openDialog('dialogWithdrawAll')"
-															rendered="#{cc.attrs.vo.status == 'RELEASED' and itemBean.navigationString != 'pretty:albumItem'}" >
-												<h:outputText value="#{lbl.withdraw_all}"/>
-											</h:outputLink>
-											<h:form>
-												<h:commandLink id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem'}">
-													<h:outputText value="#{lbl.remove_from_album}"/>
-												</h:commandLink>
-											</h:form>
-										</li>
-									</ui:fragment>
-									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and Auth.admin(cc.attrs.vo) and cc.attrs.profile != null}">
-										<li>
-											<h:outputLink rendered="#{metadataBean.profile.statements.size() == 0}" value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}">
-												<h:outputText value="#{lbl.add_profile}"/>
-											</h:outputLink>
-											<h:outputLink rendered="#{metadataBean.profile.statements.size() > 0}" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.profile_change}" >
-												<h:outputText value="#{lbl.profile_change}"/>
-											</h:outputLink>
-										</li>
-									</ui:fragment>
+									<li>
+										<h:form>
+											<h:commandLink id="lnkRemoveFromAlbum" action="#{itemBean.removeFromAlbum}">
+												<h:outputText value="#{lbl.remove_from_album}"/>
+											</h:commandLink>
+										</h:form>
+									</li>					
 								</ul>
 							</div>
 						</div>
+					</ui:fragment>
+					
+					<!-- ACTION MENU for all other pages -->
+					<ui:fragment rendered="#{cc.attrs.activeMenu != 'item'}">
+						<ui:param name="adminVO" value="#{Auth.admin(cc.attrs.vo)}"/>
+						<ui:param name="deleteContentVO" value="Auth.deleteContent(cc.attrs.vo)"/>
+						<ui:param name="deleteVO" value="Auth.delete(cc.attrs.vo)"/>
+						
+						<ui:fragment rendered="#{(adminVO or deleteContentVO or deleteVO and WorkflowBean.delete(cc.attrs.vo)) and cc.attrs.vo.status != 'WITHDRAWN'}">
+							<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
+								<div class="imj_menuHeader" >
+		                            <span class="fa fa-bars">&#160;</span>
+									<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
+								</div>
+								<div class="imj_menuBody">
+									<ul class="imj_overlayMenuList">
+										<ui:fragment rendered="#{deleteVO and WorkflowBean.delete(cc.attrs.vo)}">
+											<li>
+												<h:outputLink id="actionMenuDelete" value="#" onclick="openDialog('deleteMenuItemDialog');">
+													<h:outputText value="#{lbl.collection_delete}" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}"/>
+													<h:outputText value="#{lbl.album_delete}" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+										<ui:fragment rendered="#{adminVO and WorkflowBean.release(cc.attrs.vo) and cc.attrs.hasContent}">
+											<li>
+												<h:outputLink id="actionMenuRelease" value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">
+													<h:outputText value="#{lbl.collection_release}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
+													<h:outputText value="#{lbl.album_release}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+										<ui:fragment rendered="#{adminVO and WorkflowBean.withdraw(cc.attrs.vo)}">
+											<li>
+												<h:outputLink id="actionMenuDiscard" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
+													<h:outputText value="#{lbl.collection_withdraw}" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}"/>
+													<h:outputText value="#{lbl.album_withdraw}" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}"/>
+												</h:outputLink>
+											</li>
+											
+										<ui:fragment rendered ="#{adminVO and cc.attrs.curMainMenu == 'collection'}">
+											<li>
+												<h:outputLink value="#" onclick="openDialog('doiInput');" title="#{lbl.change_doi}" rendered="#{ConfigurationBean.doiServiceUrl != null and ConfigurationBean.doiServiceUrl != '' and cc.attrs.hasDoi}">
+													<h:outputText value="#{lbl.change_doi}"/>
+												</h:outputLink>
+												<h:outputLink id="lnkCreateDOI" value="#" onclick="openDialog('createDOIDialog');" title="#{lbl.createDOI}" rendered="#{ConfigurationBean.doiServiceUrl != null and ConfigurationBean.doiServiceUrl != ''}">
+													<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
+												</h:outputLink>
+												<h:outputLink id="lnkInputDOI" value="#" onclick="openDialog('doiInput');" title="#{lbl.createDOI}" rendered="#{ConfigurationBean.doiServiceUrl == null or ConfigurationBean.doiServiceUrl == ''}">
+													<h:outputText value="#{lbl.createDOI}" rendered="#{!cc.attrs.hasDoi}"/>
+													<h:outputText value="#{lbl.change_doi}" rendered="#{cc.attrs.hasDoi}"/>
+												</h:outputLink>
+											</li>
+											</ui:fragment>
+										</ui:fragment>							
+										<ui:fragment rendered="#{deleteContentVO and cc.attrs.curMainMenu == 'collection'}">
+											<li>
+												<h:outputLink value="#" onclick="openDialog('dialogDeleteAll')" rendered="#{cc.attrs.vo.status == 'PENDING'}">
+													<h:outputText value="#{lbl.delete_all}"/>
+												</h:outputLink>
+												<h:outputLink value="#" onclick="openDialog('dialogWithdrawAll')" rendered="#{cc.attrs.vo.status == 'RELEASED'}" >
+													<h:outputText value="#{lbl.withdraw_all}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+										
+										<ui:fragment rendered="#{deleteContentVO and cc.attrs.curMainMenu == 'album'}">
+											<li>
+												<h:form>
+													<h:commandLink id="lnkRemoveAllFromAlbum" action="#{paginatorListSessionBean.removeAllFromAlbum}">
+														<h:outputText value="#{lbl.remove_from_album_all}"/>
+													</h:commandLink>
+												</h:form>
+											</li>
+										</ui:fragment>							
+										
+										<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and adminVO and cc.attrs.profile != null}">
+											<li>
+												<h:outputLink rendered="#{metadataBean.profile.statements.size() == 0}" value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}">
+													<h:outputText value="#{lbl.add_profile}"/>
+												</h:outputLink>
+												<h:outputLink rendered="#{metadataBean.profile.statements.size() > 0}" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.profile_change}" >
+													<h:outputText value="#{lbl.profile_change}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+									</ul>
+								</div>
+							</div>
+						</ui:fragment>
 					</ui:fragment>
 				</ui:fragment>
 				<!-- ACTIVE ALBUM MENU -->

@@ -52,9 +52,9 @@ public class FacetsBean implements Callable<Boolean> {
    * 
    * @param searchQuery
    */
-  public FacetsBean(SearchQuery searchQuery) {
+  public FacetsBean(SearchQuery searchQuery, SearchResult searchRes) {
     try {
-      facetsClass = new TechnicalFacets(searchQuery);
+      facetsClass = new TechnicalFacets(searchQuery, searchRes);
     } catch (Exception e) {
       BeanHelper
           .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")

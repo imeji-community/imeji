@@ -258,9 +258,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initFacets() {
     try {
-      // SearchResult searchRes = search(getSearchQuery(), null, 0,
-      // this.getTotalNumberOfElements());
-      this.setFacets(new FacetsBean(SearchQueryParser.parseStringQuery(query)));
+      SearchResult searchRes = search(getSearchQuery(), null, 0, this.getTotalNumberOfElements());
+      this.setFacets(new FacetsBean(SearchQueryParser.parseStringQuery(query), searchRes));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(facets);
       executor.shutdown();

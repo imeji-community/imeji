@@ -181,11 +181,6 @@ public class ItemTestBase extends ImejiTestBase {
         }
       }
     }
-
-    for (Statement st1 : statements) {
-      System.out.println("LABEL= " + st1.getLabel());
-    }
-
     return statements;
   }
 

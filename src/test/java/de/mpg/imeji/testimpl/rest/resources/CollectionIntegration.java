@@ -18,9 +18,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -36,8 +36,6 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsSame;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
@@ -46,13 +44,10 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.JenaUtil;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.DefaultItemService;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
@@ -62,6 +57,7 @@ import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.test.rest.resources.test.integration.ImejiTestBase;
+import util.JenaUtil;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CollectionIntegration extends ImejiTestBase {
@@ -84,26 +80,25 @@ public class CollectionIntegration extends ImejiTestBase {
         .request(MediaType.APPLICATION_JSON_TYPE)
         .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
     assertEquals(response.getStatus(), CREATED.getStatusCode());
-    
-    
+
+
     Map<String, Object> collData = jsonToPOJO(response);
     assertNotNull("Created collection is null", collData);
-    collectionId = (String)collData.get("id");
-    
+    collectionId = (String) collData.get("id");
+
     assertThat("Empty collection id", collectionId, not(isEmptyOrNullString()));
-    
+
     CollectionService s = new CollectionService();
     collectionTO = s.read(collectionId, Imeji.adminUser);
     assertNull(collectionTO.getProfile().getId());
   }
 
- @Test
+  @Test
   public void test_1_CreateCollection_2_CopyProfile()
       throws ImejiException, UnsupportedEncodingException, IOException {
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
-    jsonString = jsonString.replace("___PROFILE_ID___", profileId)
-        .replace("___METHOD___", "copy");
+    jsonString = jsonString.replace("___PROFILE_ID___", profileId).replace("___METHOD___", "copy");
 
     Response response = target(pathPrefix).register(authAsUser).register(MultiPartFeature.class)
         .request(MediaType.APPLICATION_JSON_TYPE)
@@ -117,8 +112,8 @@ public class CollectionIntegration extends ImejiTestBase {
 
     CollectionService s = new CollectionService();
     collectionTO = s.read(collectionId, Imeji.adminUser);
-    assertNotEquals(profileId,  collectionTO.getProfile().getId());
-    
+    assertNotEquals(profileId, collectionTO.getProfile().getId());
+
   }
 
   @Test
@@ -126,8 +121,8 @@ public class CollectionIntegration extends ImejiTestBase {
       throws ImejiException, UnsupportedEncodingException, IOException {
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
-    jsonString = jsonString.replace("___PROFILE_ID___", profileId)
-        .replace("___METHOD___", "reference");
+    jsonString =
+        jsonString.replace("___PROFILE_ID___", profileId).replace("___METHOD___", "reference");
 
     Response response =
         target(pathPrefix).register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE)
@@ -140,10 +135,10 @@ public class CollectionIntegration extends ImejiTestBase {
     assertThat("Empty collection id", collectionId, not(isEmptyOrNullString()));
 
     CollectionService s = new CollectionService();
-   
-    
+
+
     collectionTO = s.read(collectionId, Imeji.adminUser);
-    assertEquals(profileId,  collectionTO.getProfile().getId() );
+    assertEquals(profileId, collectionTO.getProfile().getId());
   }
 
   @Test
@@ -151,9 +146,8 @@ public class CollectionIntegration extends ImejiTestBase {
       throws ImejiException, UnsupportedEncodingException, IOException {
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
-    jsonString =
-        jsonString.replace("___PROFILE_ID___", profileId + "shmarrn")
-            .replace("___METHOD___", "reference");
+    jsonString = jsonString.replace("___PROFILE_ID___", profileId + "shmarrn")
+        .replace("___METHOD___", "reference");
     Response response =
         target(pathPrefix).register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE)
             .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
@@ -168,8 +162,8 @@ public class CollectionIntegration extends ImejiTestBase {
 
     String jsonString =
         getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
-    jsonString = jsonString.replace("___PROFILE_ID___", profileId)
-        .replace("___METHOD___", "reference");
+    jsonString =
+        jsonString.replace("___PROFILE_ID___", profileId).replace("___METHOD___", "reference");
     Response response =
         target(pathPrefix).register(authAsUser2).request(MediaType.APPLICATION_JSON_TYPE)
             .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
@@ -184,18 +178,18 @@ public class CollectionIntegration extends ImejiTestBase {
       throws ImejiException, UnsupportedEncodingException, IOException {
 
 
-    //First set the collection profile, as it is created without a profile
-   CollectionProfileTO colProfile = new CollectionProfileTO();
-   initProfile();
-   
-   colProfile.setId(profileId);
-   colProfile.setMethod("copy");
-   collectionTO.setProfile(colProfile);
-   
-   CollectionService s = new CollectionService();
-   collectionTO = s.update(collectionTO, JenaUtil.testUser);
-   collectionId = collectionTO.getId();
-   
+    // First set the collection profile, as it is created without a profile
+    CollectionProfileTO colProfile = new CollectionProfileTO();
+    initProfile();
+
+    colProfile.setId(profileId);
+    colProfile.setMethod("copy");
+    collectionTO.setProfile(colProfile);
+
+    CollectionService s = new CollectionService();
+    collectionTO = s.update(collectionTO, JenaUtil.testUser);
+    collectionId = collectionTO.getId();
+
 
 
     initItem();
@@ -313,7 +307,7 @@ public class CollectionIntegration extends ImejiTestBase {
     DefaultItemService service = new DefaultItemService();
 
     initItem();
-    assertEquals("PENDING",service.read(itemId, JenaUtil.testUser).getStatus());
+    assertEquals("PENDING", service.read(itemId, JenaUtil.testUser).getStatus());
 
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
@@ -330,7 +324,7 @@ public class CollectionIntegration extends ImejiTestBase {
   @Test
   public void test_3_ReleaseCollection_2_WithUnauth() throws ImejiException {
     initCollection();
-    initItem(); 
+    initItem();
     DefaultItemService itemService = new DefaultItemService();
     assertEquals("PENDING", itemService.read(itemId, JenaUtil.testUser).getStatus());
     initItem();
@@ -538,7 +532,7 @@ public class CollectionIntegration extends ImejiTestBase {
       colService.release(collectionId, JenaUtil.testUser);
       assertEquals("RELEASED", colService.read(collectionId, JenaUtil.testUser).getStatus());
     } catch (ImejiException e) {
-      System.out.println("Could not release collection");
+      LOGGER.error("Could not release collection");
     }
 
     Response response = target(pathPrefix).path("/" + collectionId).register(authAsUser)
@@ -551,7 +545,7 @@ public class CollectionIntegration extends ImejiTestBase {
           "test_3_DeleteCollection_3_NotPendingCollection");
       assertEquals("WITHDRAWN", colService.read(collectionId, JenaUtil.testUser).getStatus());
     } catch (ImejiException e) {
-      System.out.println("Could not discard the collection");
+      LOGGER.error("Could not discard the collection");
     }
 
     response = target(pathPrefix).path("/" + collectionId).register(authAsUser)

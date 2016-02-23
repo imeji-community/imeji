@@ -98,7 +98,7 @@ public class ImejiTestBase extends JerseyTest {
   @Rule
   public TestRule watcher = new TestWatcher() {
     protected void starting(Description description) {
-      LOGGER.info("Starting test: " + description.getMethodName()));
+      LOGGER.info("Starting test: " + description.getMethodName());
     }
   };
 

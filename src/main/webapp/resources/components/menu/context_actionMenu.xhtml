@@ -248,8 +248,8 @@
 					<!-- ACTION MENU for all other pages -->
 					<ui:fragment rendered="#{cc.attrs.activeMenu != 'item'}">
 						<ui:param name="adminVO" value="#{Auth.admin(cc.attrs.vo)}"/>
-						<ui:param name="deleteContentVO" value="Auth.deleteContent(cc.attrs.vo)"/>
-						<ui:param name="deleteVO" value="Auth.delete(cc.attrs.vo)"/>
+						<ui:param name="deleteContentVO" value="#{Auth.deleteContent(cc.attrs.vo)}"/>
+						<ui:param name="deleteVO" value="#{Auth.delete(cc.attrs.vo)}"/>
 						
 						<ui:fragment rendered="#{(adminVO or deleteContentVO or deleteVO and WorkflowBean.delete(cc.attrs.vo)) and cc.attrs.vo.status != 'WITHDRAWN'}">
 							<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">

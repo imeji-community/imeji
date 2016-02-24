@@ -19,12 +19,16 @@ import org.openimaj.video.xuggle.XuggleVideo;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
-public class VideoUtils {
-  final static float IMAGE_DETECTION_UPPER_THRESHOLD = 0.1F;
-  final static float IMAGE_DETECTION_LOWER_THRESHOLD = 0.8F;
-  final static String IMAGE_FILE_EXTENTION = "jpg";
-  final static int SNAPSHOT_CREATION_METHOD = 0;
+public final class VideoUtils {
+  private static final float IMAGE_DETECTION_UPPER_THRESHOLD = 0.1F;
+  private static final float IMAGE_DETECTION_LOWER_THRESHOLD = 0.8F;
+  private static final String IMAGE_FILE_EXTENTION = "jpg";
+  private static final int SNAPSHOT_CREATION_METHOD = 0;
   private static final Logger LOGGER = Logger.getLogger(VideoUtils.class);
+
+  private VideoUtils() {
+    // private Constructor
+  }
 
   /**
    * @return the thresholds for finding good snapshot image within the video.
@@ -33,9 +37,10 @@ public class VideoUtils {
     try {
       String threshold =
           PropertyReader.getProperty("imeji.internal.video.imagedetection.threshold");
-      String thresholds[] = threshold.split(",");
-      if (thresholds.length <= 0)
+      String[] thresholds = threshold.split(",");
+      if (thresholds.length <= 0) {
         return new float[] {IMAGE_DETECTION_UPPER_THRESHOLD, IMAGE_DETECTION_LOWER_THRESHOLD};
+      }
       if (thresholds.length == 1) {
         return new float[] {Float.parseFloat(thresholds[0]), IMAGE_DETECTION_LOWER_THRESHOLD};
       } else {
@@ -52,8 +57,8 @@ public class VideoUtils {
    */
   private static int getSnapshotCreationMethod() {
     try {
-      return Integer.parseInt(PropertyReader
-          .getProperty("imeji.internal.video.imagedetection.method"));
+      return Integer
+          .parseInt(PropertyReader.getProperty("imeji.internal.video.imagedetection.method"));
     } catch (Exception e) {
       LOGGER.info("Could not get snapshot creation method", e);
       return VideoUtils.SNAPSHOT_CREATION_METHOD;
@@ -199,10 +204,12 @@ public class VideoUtils {
       }
       float lb = Math.min(threshold[0], threshold[1]);
       float ub = Math.max(threshold[0], threshold[1]);
-      if (lb < 0 || lb > 1)
+      if (lb < 0 || lb > 1) {
         lb = VideoUtils.IMAGE_DETECTION_LOWER_THRESHOLD;
-      if (ub < 0 || ub > 1)
+      }
+      if (ub < 0 || ub > 1) {
         ub = VideoUtils.IMAGE_DETECTION_UPPER_THRESHOLD;
+      }
       if (m >= lb && m <= ub) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {

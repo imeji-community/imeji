@@ -64,10 +64,10 @@ public class StorageUtils {
   /**
    * The generic mime-type, when no mime-type is known
    */
-  public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
-  public final static String BAD_FORMAT = "bad-extension/other";
+  public static final String DEFAULT_MIME_TYPE = "application/octet-stream";
+  public static final String BAD_FORMAT = "bad-extension/other";
   private static Tika tika = new Tika();
-  public final static MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
+  public static final MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
 
   /**
    * Transform an {@link InputStream} to a {@link Byte} array

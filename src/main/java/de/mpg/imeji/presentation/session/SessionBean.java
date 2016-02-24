@@ -90,11 +90,11 @@ public class SessionBean implements Serializable {
   /*
    * Cookies name
    */
-  public final static String styleCookieName = "IMEJI_STYLE";
-  public final static String langCookieName = "IMEJI_LANG";
-  public final static String numberOfItemsPerPageCookieName = "IMEJI_ITEMS_PER_PAGE";
-  public final static String numberOfContainersPerPageCookieName = "IMEJI_CONTAINERS_PER_PAGE";
-  public final static String browseViewCookieName = "IMEJI_BROWSE_VIEW";
+  public static final String styleCookieName = "IMEJI_STYLE";
+  public static final String langCookieName = "IMEJI_LANG";
+  public static final String numberOfItemsPerPageCookieName = "IMEJI_ITEMS_PER_PAGE";
+  public static final String numberOfContainersPerPageCookieName = "IMEJI_CONTAINERS_PER_PAGE";
+  public static final String browseViewCookieName = "IMEJI_BROWSE_VIEW";
 
   /*
    * Specific variables for the May Planck Inistute

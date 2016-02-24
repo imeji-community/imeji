@@ -19,13 +19,17 @@ import com.sun.pdfview.PDFPage;
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
-public class PdfUtils {
-  final static String IMAGE_FILE_EXTENSION = "jpg";
-  final static int PAGENUMBERTOIMAGE = 0;
-  final static int DPI_WEB = 92;
-  final static int DPI_THUMB = 72;
-  final static int RESOLUTION_DPI_SCREEN = 72;
-  final static int RESOLUTION_DPI_IMAGE = 150;
+public final class PdfUtils {
+  private static final String IMAGE_FILE_EXTENSION = "jpg";
+  private static final int PAGENUMBERTOIMAGE = 0;
+  private static final int DPI_WEB = 92;
+  private static final int DPI_THUMB = 72;
+  private static final int RESOLUTION_DPI_SCREEN = 72;
+  private static final int RESOLUTION_DPI_IMAGE = 150;
+
+  private PdfUtils() {
+    // private constructor
+  }
 
   /**
    * @return the pdf rendering DPI
@@ -105,9 +109,6 @@ public class PdfUtils {
    */
   public static byte[] pdfFileToByteAray(PDFFile pdfFile, int pageNumber, int imageType,
       int resolution) throws IOException {
-    // if (pageNumber < 0 || pageNumber > pdfFile.getNumPages()) // hn: randomize a page number if
-    // provided page
-    // pageNumber = new Random().nextInt(pdfFile.getNumPages()); // number is not proper
     byte[] bytes = null;
     try {
       bytes = PdfUtils.pdfPageToByteAray(pdfFile.getPage(pageNumber, true), imageType, resolution);

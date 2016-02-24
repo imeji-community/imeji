@@ -24,6 +24,12 @@
 	</composite:interface>
 	
 	<composite:implementation>
+		<ui:param name="adminVO" value="#{Auth.admin(cc.attrs.vo)}"/>
+		<ui:param name="deleteContentVO" value="#{Auth.deleteContent(cc.attrs.vo)}"/>
+		<ui:param name="deleteVO" value="#{Auth.delete(cc.attrs.vo)}"/>
+		<ui:param name="updateVO" value="#{Auth.update(cc.attrs.vo)}"/>
+		<ui:param name="updateContentVO" value="#{Auth.updateContent(cc.attrs.vo)}"/>
+		
 		<div class="#{cc.attrs.menuClass.trim()}">		
 			<ui:fragment rendered="#{Auth.loggedIn}">
 				<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
@@ -128,7 +134,7 @@
 				</h:panelGroup>
 				<ui:fragment  rendered="#{cc.attrs.actionEnabled and cc.attrs.vo.status != 'WITHDRAWN'}">
 					<!-- SHARE MENU -->
-					<ui:fragment rendered="#{Auth.admin(cc.attrs.vo)}">
+					<ui:fragment rendered="#{adminVO}">
 						<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="sharingMenu">
 							<div class="imj_menuHeader" >
 	                            <span class="fa fa-share">&#160;</span>
@@ -152,7 +158,7 @@
 						</div>
 					</ui:fragment>
 					<!-- EDIT MENU -->
-					<ui:fragment  rendered="#{(Auth.admin(cc.attrs.vo) or Auth.updateContent(cc.attrs.vo) or Auth.update(cc.attrs.vo) or Auth.update(cc.attrs.profile)) and cc.attrs.vo.status != 'WITHDRAWN'}">
+					<ui:fragment  rendered="#{(adminVO or updateContentVO or updateVO or Auth.update(cc.attrs.profile)) and cc.attrs.vo.status != 'WITHDRAWN'}">
 						<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="editMenu">
 							<div class="imj_menuHeader" >
 	                            <span class="fa fa-pencil">&#160;</span>
@@ -160,9 +166,9 @@
 							</div>
 							<div class="imj_menuBody">
 								<ul class="imj_overlayMenuList">	
-									<ui:fragment rendered="#{Auth.update(cc.attrs.vo)}">						
+									<ui:fragment rendered="#{updateVO}">						
 										<li class="#{curMenuClass}Item">
-											<h:outputLink  id="actionMenuEditCollection" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item' and Auth.update(cc.attrs.vo)}" value="#{Navigation.collectionUrl}#{cc.attrs.vo.idString}/edit?init=1">
+											<h:outputLink  id="actionMenuEditCollection" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item' and updateVO}" value="#{Navigation.collectionUrl}#{cc.attrs.vo.idString}/edit?init=1">
 												<h:outputText value="#{lbl.collection_edit_metadata}"/>
 											</h:outputLink>
 											<h:outputLink  id="actionMenuEditAlbum" rendered="#{cc.attrs.curMainMenu == 'album' and cc.attrs.activeMenu != 'item'}" value="#{Navigation.albumUrl}#{cc.attrs.vo.idString}/edit?init=1">
@@ -180,7 +186,7 @@
 											</h:outputLink>
 										</li>
 									</ui:fragment>
-									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and Auth.updateContent(cc.attrs.vo) and !(cc.attrs.profile == null or cc.attrs.profile.statements.size() == 0)}">	
+									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and updateContentVO and !(cc.attrs.profile == null or cc.attrs.profile.statements.size() == 0)}">	
 										<li class="#{curMenuClass}Item">
 											<h:outputLink  value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.vo.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2">
 												<h:outputText value="#{lbl.edit_all}"/>
@@ -194,8 +200,8 @@
 					
 					<!-- Action Menu for item page WITHOUT an album-->
 					<ui:fragment rendered="#{cc.attrs.activeMenu == 'item' and cc.attrs.curMainMenu != 'album'}">
-						<ui:param name="deleteSingleItem" value="#{Auth.delete(cc.attrs.vo) and WorkflowBean.delete(cc.attrs.vo)}" />
-						<ui:param name="withdrawSingleItem" value="#{Auth.admin(cc.attrs.vo) and WorkflowBean.withdraw(cc.attrs.vo)}" />
+						<ui:param name="deleteSingleItem" value="#{deleteVO and WorkflowBean.delete(cc.attrs.vo)}" />
+						<ui:param name="withdrawSingleItem" value="#{adminVO and WorkflowBean.withdraw(cc.attrs.vo)}" />
 						
 						<ui:fragment rendered="#{deleteSingleItem or withdrawSingleItem}">
 							<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
@@ -247,9 +253,7 @@
 					
 					<!-- ACTION MENU for all other pages -->
 					<ui:fragment rendered="#{cc.attrs.activeMenu != 'item'}">
-						<ui:param name="adminVO" value="#{Auth.admin(cc.attrs.vo)}"/>
-						<ui:param name="deleteContentVO" value="#{Auth.deleteContent(cc.attrs.vo)}"/>
-						<ui:param name="deleteVO" value="#{Auth.delete(cc.attrs.vo)}"/>
+						
 						
 						<ui:fragment rendered="#{(adminVO or deleteContentVO or deleteVO and WorkflowBean.delete(cc.attrs.vo)) and cc.attrs.vo.status != 'WITHDRAWN'}">
 							<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">

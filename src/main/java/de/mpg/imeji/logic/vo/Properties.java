@@ -77,7 +77,7 @@ public class Properties implements Serializable {
   }
 
   public Properties() {
-    // TODO Auto-generated constructor stub
+    
   }
 
   public void setCreatedBy(URI createdBy) {

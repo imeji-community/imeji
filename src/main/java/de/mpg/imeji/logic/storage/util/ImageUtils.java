@@ -34,12 +34,16 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImageUtils {
+public final class ImageUtils {
   private static final Logger LOGGER = Logger.getLogger(ImageUtils.class);
   /**
    * If true, the rescale will keep the better quality of the images
    */
-  private static boolean RESCALE_HIGH_QUALITY = true;
+  private static final boolean RESCALE_HIGH_QUALITY = true;
+
+  private ImageUtils() {
+    // private constructor
+  }
 
   /**
    * Resize an image (only for jpeg) to the given {@link FileResolution}
@@ -78,7 +82,7 @@ public class ImageUtils {
         return image2Jpeg(bytes);
       }
     } catch (Exception e) {
-      LOGGER.info("Image could not be transformed to jpeg: " + e.getMessage());
+      LOGGER.info("Image could not be transformed to jpeg: ", e);
     }
     return null;
   }
@@ -106,27 +110,31 @@ public class ImageUtils {
         newImg = new BufferedImage(height, height, colorSpace);
         Graphics g1 = newImg.createGraphics();
         g1.drawImage(image, (height - width) / 2, 0, null);
-        if (height > size)
+        if (height > size) {
           rescaledImage = getScaledInstance(newImg, size, size,
               RenderingHints.VALUE_INTERPOLATION_BILINEAR, RESCALE_HIGH_QUALITY);
-        else
+        } else {
           rescaledImage = newImg;
-      } else
+        }
+      } else {
         rescaledImage = getScaledInstance(image, size, height * size / width,
             RenderingHints.VALUE_INTERPOLATION_BILINEAR, RESCALE_HIGH_QUALITY);
+      }
     } else {
       if (FileResolution.THUMBNAIL.equals(resolution)) {
         newImg = new BufferedImage(width, width, colorSpace);
         Graphics g1 = newImg.createGraphics();
         g1.drawImage(image, 0, (width - height) / 2, null);
-        if (width > size)
+        if (width > size) {
           rescaledImage = getScaledInstance(newImg, size, size,
               RenderingHints.VALUE_INTERPOLATION_BILINEAR, RESCALE_HIGH_QUALITY);
-        else
+        } else {
           rescaledImage = newImg;
-      } else
+        }
+      } else {
         rescaledImage = getScaledInstance(image, width * size / height, size,
             RenderingHints.VALUE_INTERPOLATION_BILINEAR, RESCALE_HIGH_QUALITY);
+      }
     }
     BufferedImage rescaledBufferedImage =
         new BufferedImage(rescaledImage.getWidth(null), rescaledImage.getHeight(null), colorSpace);

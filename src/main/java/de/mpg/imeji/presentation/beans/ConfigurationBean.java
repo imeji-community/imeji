@@ -94,7 +94,7 @@ public class ConfigurationBean {
   private static final String DEFAULT_CAROUSEL_SHOW = "true";
   private static final String DEFAULT_USER_QUOTA = "1";
   private static final String DEFAULT_USER_QUOTA_LIST = "1, 10, 20";
-  public final static String QUOTA_UNLIMITED = "unlimited";
+  public static final String QUOTA_UNLIMITED = "unlimited";
   private String dataViewerUrl;
 
   public enum BROWSE_VIEW {
@@ -916,11 +916,11 @@ public class ConfigurationBean {
   }
 
   public String getDefaultBrowseView() {
-    return (String) config.get(CONFIGURATION.BROWSE_DEFAULT_VIEW.name());
+    return getPropertyAsNonNullString(CONFIGURATION.BROWSE_DEFAULT_VIEW.name());
   }
 
   public void setDefaultBrowseView(String string) {
-    config.put(CONFIGURATION.BROWSE_DEFAULT_VIEW, BROWSE_VIEW.valueOf(string).name());
+    setProperty(CONFIGURATION.BROWSE_DEFAULT_VIEW.name(), BROWSE_VIEW.valueOf(string).name());
   }
 
   public void setQuotaLimits(String limits) {

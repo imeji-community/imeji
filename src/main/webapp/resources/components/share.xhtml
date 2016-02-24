@@ -160,6 +160,11 @@
 						</table>
 						
 						<div class="imj_submitPanel">
+								<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmailUpdate"/>
+								<h:outputLabel for="selSendEmailUpdate" value="#{lbl.user_send_mail}"/>
+						</div>
+						
+						<div class="imj_submitPanel">
 							<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}" rendered="#{cc.attrs.type != 'item'}">
 								<h:outputText value="#{lbl.reset}"/>
 							</h:outputLink>

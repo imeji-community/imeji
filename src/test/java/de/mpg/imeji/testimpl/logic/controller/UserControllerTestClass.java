@@ -82,7 +82,6 @@ public class UserControllerTestClass extends ControllerTest {
 
   @Test
   public void createActiveUserTestAsNoUser() {
-
     UserController c = new UserController(null);
     // Create a new user with a new id but with the same email
     User user = new User();
@@ -97,7 +96,6 @@ public class UserControllerTestClass extends ControllerTest {
     }
 
   }
-
 
 
   @Test
@@ -155,7 +153,6 @@ public class UserControllerTestClass extends ControllerTest {
     }
 
     try {
-
       user = c.activate(user.getRegistrationToken());
       LOGGER.info("OK, double registration!");
       Assert.fail("An error happened by activating the user again!");
@@ -224,8 +221,6 @@ public class UserControllerTestClass extends ControllerTest {
       fail("Disk Quota should be exceeded!");
     } catch (QuotaExceededException e) {
     }
-
-
   }
 
 }

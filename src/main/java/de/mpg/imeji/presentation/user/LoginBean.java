@@ -111,19 +111,14 @@ public class LoginBean {
     if (isNullOrEmptyTrim(redirect)) {
       HistoryPage current =
           ((HistorySession) BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
-      if (current != null) {
+      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+      if (current != null && !current.getUrl().equals(navigation.getRegistrationUrl())) {
         redirect = current.getCompleteUrl();
+      } else {
+        redirect = navigation.getHomeUrl();
       }
     }
     FacesContext.getCurrentInstance().getExternalContext().redirect(redirect);
-  }
-
-  public boolean loginWithEscidocAccount() {
-    return false;
-  }
-
-  public boolean loginWithImejiAccount() {
-    return false;
   }
 
   /**

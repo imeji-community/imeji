@@ -21,6 +21,7 @@ import de.mpg.imeji.exceptions.InactiveAuthenticationError;
 import de.mpg.imeji.logic.auth.authentication.Authentication;
 import de.mpg.imeji.logic.auth.authentication.AuthenticationFactory;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
@@ -96,6 +97,9 @@ public class LoginBean {
     String instanceName =
         ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
             .getInstanceName();
+    if (StringHelper.isNullOrEmptyTrim(getLogin())) {
+      return;
+    }
     Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
     try {
       User user = auth.doLogin();
@@ -118,6 +122,7 @@ public class LoginBean {
         redirect = navigation.getHomeUrl();
       }
     }
+
     FacesContext.getCurrentInstance().getExternalContext().redirect(redirect);
   }
 
@@ -140,6 +145,5 @@ public class LoginBean {
     fc = FacesContext.getCurrentInstance();
     Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     FacesContext.getCurrentInstance().getExternalContext().redirect(nav.getHomeUrl());
-
   }
 }

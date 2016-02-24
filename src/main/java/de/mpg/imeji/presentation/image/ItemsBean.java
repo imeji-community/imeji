@@ -15,6 +15,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -318,7 +319,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @return
    * @throws Exception
    */
-  public String deleteAll() throws Exception {
+  public String deleteAll() {
     delete(search(searchQuery, null, 0, -1).getResults());
     return "pretty:";
   }
@@ -352,7 +353,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @throws Exception
    */
   private void withdraw(List<String> uris) throws Exception {
-
     Collection<Item> items = loadImages(uris);
     int count = items.size();
     if ("".equals(discardComment.trim())) {
@@ -372,12 +372,20 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @param uris
    * @throws Exception
    */
-  private void delete(List<String> uris) throws Exception {
-    Collection<Item> items = loadImages(uris);
-    ItemController ic = new ItemController();
-    ic.delete((List<Item>) items, session.getUser());
-    BeanHelper.info(uris.size() + " " + session.getLabel("images_deleted"));
-    unselect(uris);
+  private void delete(List<String> uris) {
+    try {
+      Collection<Item> items = loadImages(uris);
+      ItemController ic = new ItemController();
+      ic.delete((List<Item>) items, session.getUser());
+      BeanHelper.info(uris.size() + " " + session.getLabel("images_deleted"));
+      unselect(uris);
+    } catch (WorkflowException e) {
+      BeanHelper.error(session.getMessage("error_delete_items_public"));
+      LOGGER.error("Error deleting items", e);
+    } catch (ImejiException e) {
+      LOGGER.error("Error deleting items", e);
+      BeanHelper.error(e.getMessage());
+    }
   }
 
   /**

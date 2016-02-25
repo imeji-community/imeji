@@ -11,7 +11,6 @@ import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static net.java.dev.webdav.jaxrs.ResponseStatus.UNPROCESSABLE_ENTITY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
@@ -33,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -152,7 +152,7 @@ public class CollectionIntegration extends ImejiTestBase {
         target(pathPrefix).register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE)
             .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-    assertEquals(response.getStatus(), UNPROCESSABLE_ENTITY.getStatusCode());
+    assertEquals(response.getStatus(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
 
   }
 
@@ -168,7 +168,7 @@ public class CollectionIntegration extends ImejiTestBase {
         target(pathPrefix).register(authAsUser2).request(MediaType.APPLICATION_JSON_TYPE)
             .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
 
   }
 
@@ -341,7 +341,7 @@ public class CollectionIntegration extends ImejiTestBase {
     initCollection();
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
   }
 
   @Test
@@ -364,7 +364,7 @@ public class CollectionIntegration extends ImejiTestBase {
     assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
     Response response = target(pathPrefix).path("/" + collectionId + "/release")
         .register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
   }
 
   @Test
@@ -459,7 +459,7 @@ public class CollectionIntegration extends ImejiTestBase {
         .register(authAsUser).request((MediaType.APPLICATION_JSON_TYPE))
         .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
   }
 
   @Test
@@ -480,7 +480,7 @@ public class CollectionIntegration extends ImejiTestBase {
         .register(authAsUser).request((MediaType.APPLICATION_JSON_TYPE))
         .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
   }
 
   @Test
@@ -538,7 +538,7 @@ public class CollectionIntegration extends ImejiTestBase {
     Response response = target(pathPrefix).path("/" + collectionId).register(authAsUser)
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
 
     try {
       colService.withdraw(collectionId, JenaUtil.testUser,
@@ -551,7 +551,7 @@ public class CollectionIntegration extends ImejiTestBase {
     response = target(pathPrefix).path("/" + collectionId).register(authAsUser)
         .request(MediaType.APPLICATION_JSON_TYPE).delete();
 
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
 
   }
 
@@ -689,7 +689,7 @@ public class CollectionIntegration extends ImejiTestBase {
     stored = collectionTO.getTitle();
     collectionTO.setTitle("");
     Response response = getResponse(request, collectionTO);
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
     // TODO: BAD_REQUEST response message is not correctly generated
     collectionTO.setTitle(stored);
 
@@ -706,7 +706,7 @@ public class CollectionIntegration extends ImejiTestBase {
     stored = contrib.getFamilyName();
     contrib.setFamilyName("");
     response = getResponse(request, collectionTO);
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
     contrib.setFamilyName(stored);
 
     // empty organization name
@@ -714,14 +714,14 @@ public class CollectionIntegration extends ImejiTestBase {
     stored = org.getName();
     org.setName("");
     response = getResponse(request, collectionTO);
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
     org.setName(stored);
 
     // wrong profile id
     stored = collectionTO.getProfile().getId();
     collectionTO.getProfile().setId(stored + CHANGED);
     response = getResponse(request, collectionTO);
-    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
     collectionTO.getProfile().setId(stored);
 
     // wrong profile method, we need another collection profile..

@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -40,7 +41,6 @@ import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
-import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 public class RestProcessUtils {
 
@@ -189,8 +189,8 @@ public class RestProcessUtils {
     if (localStatus != null) {
       errorTitleLocal = localStatus.getReasonPhrase();
     } else {
-      if (errorCode == ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode()) {
-        errorTitleLocal = ResponseStatus.UNPROCESSABLE_ENTITY.getReasonPhrase();
+      if (errorCode == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
+        errorTitleLocal = "Unprocessable entity";
       } else {
         errorTitleLocal = Status.INTERNAL_SERVER_ERROR.getReasonPhrase();
       }
@@ -261,11 +261,11 @@ public class RestProcessUtils {
       resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),
           localMessage);
     } else if (eX instanceof UnprocessableError) {
-      resp = RestProcessUtils.buildJSONAndExceptionResponse(
-          ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(HttpStatus.SC_UNPROCESSABLE_ENTITY,
+          localMessage);
     } else if (eX instanceof WorkflowException) {
-      resp = RestProcessUtils.buildJSONAndExceptionResponse(
-          ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(HttpStatus.SC_UNPROCESSABLE_ENTITY,
+          localMessage);
     } else if (eX instanceof InternalServerErrorException) {
       resp = RestProcessUtils.buildJSONAndExceptionResponse(
           Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);

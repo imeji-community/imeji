@@ -305,8 +305,8 @@ public class StorageUtils {
    */
   public static String calculateChecksum(File file) throws ImejiException {
     try {
-      return DigestUtils.md5Hex(toBytes(new FileInputStream(file)));
-    } catch (IOException e) {
+      return DigestUtils.md5Hex(new FileInputStream(file));
+    } catch (Exception e) {
       throw new UnprocessableError("Error calculating the cheksum of the file: ", e);
     }
   }

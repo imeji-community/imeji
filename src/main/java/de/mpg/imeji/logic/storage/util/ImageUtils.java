@@ -84,7 +84,7 @@ public final class ImageUtils {
     } catch (Exception e) {
       LOGGER.info("Image could not be transformed to jpeg: ", e);
     }
-    return null;
+    return new byte[0];
   }
 
   /**

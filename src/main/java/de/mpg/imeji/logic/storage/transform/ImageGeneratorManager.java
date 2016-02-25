@@ -50,8 +50,8 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImageGeneratorManager {
-  private List<ImageGenerator> generators = null;
+public final class ImageGeneratorManager {
+  private final List<ImageGenerator> generators;
   private static final Logger LOGGER = Logger.getLogger(ImageGeneratorManager.class);
 
   /**
@@ -103,10 +103,9 @@ public class ImageGeneratorManager {
       try {
         return generateGif(FileUtils.readFileToByteArray(file), extension, resolution);
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        LOGGER.error("Error reading gif file to byte array", e);
       }
     }
-
     return generateJpeg(file, extension, resolution);
   }
 
@@ -123,8 +122,9 @@ public class ImageGeneratorManager {
     try {
       return GifUtils.resizeAnimatedGif(bytes, resolution);
     } catch (Exception e) {
-      throw new RuntimeException("Error transforming gif", e);
+      LOGGER.error("Error generating gif", e);
     }
+    return new byte[0];
   }
 
   /**
@@ -137,12 +137,13 @@ public class ImageGeneratorManager {
    */
   private byte[] generateJpeg(File file, String extension, FileResolution resolution) {
     // Make a jpg out of the file
-    byte[] bytes = toJpeg(file, extension);
     try {
-      return ImageUtils.resizeJPEG(bytes, resolution);
+      return ImageUtils.resizeJPEG(toJpeg(file, extension), resolution);
     } catch (Exception e) {
-      throw new RuntimeException("Error transforming image", e);
+      LOGGER.error("Error generatiing JPEG from File: ", e);
     }
+    return new byte[0];
+
   }
 
   /**
@@ -151,14 +152,12 @@ public class ImageGeneratorManager {
    * @param bytes
    * @param extension
    * @return
+   * @throws IOException
    */
-  private byte[] toJpeg(File file, String extension) {
-    if (StorageUtils.compareExtension(extension, "jpg"))
-      try {
-        return FileUtils.readFileToByteArray(file);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+  private byte[] toJpeg(File file, String extension) throws IOException {
+    if (StorageUtils.compareExtension(extension, "jpg")) {
+      FileUtils.readFileToByteArray(file);
+    }
     for (ImageGenerator imageGenerator : generators) {
       try {
         byte[] jpeg = imageGenerator.generateJPG(file, extension);
@@ -166,7 +165,7 @@ public class ImageGeneratorManager {
           return jpeg;
         }
       } catch (Exception e) {
-        LOGGER.warn("Error generating image", e);
+        LOGGER.warn("Error generating image (generator: " + imageGenerator.getClass().getName(), e);
       }
     }
     throw new RuntimeException("Unsupported file format (requested was " + extension + ")");

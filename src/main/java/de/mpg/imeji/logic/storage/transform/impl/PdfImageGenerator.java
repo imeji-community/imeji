@@ -47,8 +47,9 @@ public class PdfImageGenerator implements ImageGenerator {
    */
   @Override
   public byte[] generateJPG(File file, String extension) throws FileNotFoundException, IOException {
-    if (StorageUtils.getMimeType(extension).equals("application/pdf"))
+    if (StorageUtils.getMimeType(extension).equals("application/pdf")) {
       return PdfUtils.pdfsToImageBytes(file);
-    return null;
+    }
+    return new byte[0];
   }
 }

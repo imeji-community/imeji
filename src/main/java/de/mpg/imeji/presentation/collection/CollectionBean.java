@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.collection;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
@@ -15,6 +14,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.doi.DoiService;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -66,6 +66,17 @@ public abstract class CollectionBean extends ContainerBean {
     collection = new CollectionImeji();
     sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+  }
+
+  /**
+   * Read the profile of the current collection
+   * 
+   * @param user
+   * @throws ImejiException
+   */
+  protected void initCollectionProfile() throws ImejiException {
+    this.profile = new ProfileController().retrieve(collection.getProfile(), sessionBean.getUser());
+    this.profileId = profile != null ? profile.getIdString() : null;
   }
 
   @Override
@@ -174,18 +185,17 @@ public abstract class CollectionBean extends ContainerBean {
   }
 
   public String createDOI() {
-    String doi =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
-    CollectionController cc = new CollectionController();
     try {
+      String doi = UrlHelper.getParameterValue("doi");
+      DoiService doiService = new DoiService();
       if (doi != null) {
-        cc.createDOIManually(doi, collection, sessionBean.getUser());
+        doiService.addDoiToCollection(doi, collection, sessionBean.getUser());
       } else {
-        cc.createDOI(collection, sessionBean.getUser());
+        doiService.addDoiToCollection(collection, sessionBean.getUser());
       }
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
-      BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
+      BeanHelper.error(sessionBean.getMessage("error_doi_creation") + " " + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";

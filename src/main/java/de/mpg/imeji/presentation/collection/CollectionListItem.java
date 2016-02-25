@@ -8,7 +8,6 @@ import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectio
 import java.net.URI;
 import java.util.Collection;
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
@@ -17,7 +16,9 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.doi.DoiService;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Person;
@@ -192,20 +193,18 @@ public class CollectionListItem {
 
   public String createDOI() {
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    String doi =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
-    CollectionController cc = new CollectionController();
-
     try {
-      CollectionImeji collection = cc.retrieve(uri, sessionBean.getUser());
+      String doi = UrlHelper.getParameterValue("doi");
+      CollectionImeji collection = new CollectionController().retrieve(uri, sessionBean.getUser());
+      DoiService doiService = new DoiService();
       if (doi != null) {
-        cc.createDOIManually(doi, collection, sessionBean.getUser());
+        doiService.addDoiToCollection(doi, collection, sessionBean.getUser());
       } else {
-        cc.createDOI(collection, sessionBean.getUser());
+        doiService.addDoiToCollection(collection, sessionBean.getUser());
       }
       BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
-      BeanHelper.error(sessionBean.getMessage("error_doi_creation_" + e.getMessage()));
+      BeanHelper.error(sessionBean.getMessage("error_doi_creation") + " " + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";

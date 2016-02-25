@@ -162,7 +162,7 @@ public abstract class ContainerBean implements Serializable {
         uris.add(uri.toString());
       }
       ItemController ic = new ItemController();
-      setItems((List<Item>) ic.retrieveBatch(uris, size, 0, user));
+      setItems((List<Item>) ic.retrieveBatchLazy(uris, size, 0, user));
     }
   }
 

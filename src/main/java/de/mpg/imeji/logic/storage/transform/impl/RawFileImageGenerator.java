@@ -38,7 +38,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageInputStream;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
@@ -52,7 +51,6 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  * @version $Revision$ $LastChangedDate$
  */
 public class RawFileImageGenerator implements ImageGenerator {
-  private static final Logger LOGGER = Logger.getLogger(RawFileImageGenerator.class);
   private static String PATH_TO_DEFAULT_IMAGE = "images/file-icon.jpg";
   /**
    * Coordinates where the text is written on the image

@@ -43,7 +43,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
@@ -341,8 +340,8 @@ public class CollectionController extends ImejiController {
       }
       // Delete images
       List<Item> items = (List<Item>) itemController.retrieveBatch(itemUris, -1, 0, user);
-      for (Item it:items){
-        if ( it.getStatus().equals(Status.RELEASED) ) {
+      for (Item it : items) {
+        if (it.getStatus().equals(Status.RELEASED)) {
           throw new UnprocessableError("collection_has_released_items");
         }
       }
@@ -416,43 +415,7 @@ public class CollectionController extends ImejiController {
     }
   }
 
-  public void createDOI(CollectionImeji coll, User user) throws ImejiException {
-    isLoggedInUser(user);
-    if (coll == null) {
-      throw new NotFoundException("Collection does not exists");
-    }
 
-    if (!Status.RELEASED.equals(coll.getStatus())) {
-      throw new ImejiException("Collection has to be released to create a DOI");
-    }
-
-    DoiController doicontr = new DoiController();
-
-    String doiServiceUrl = ConfigurationBean.getDoiServiceUrlStatic();
-    String doiUser = ConfigurationBean.getDoiUserStatic();
-    String doiPassword = ConfigurationBean.getDoiPasswordStatic();
-
-    String doi = doicontr.getNewDoi(coll, doiServiceUrl, doiUser, doiPassword);
-    coll.setDoi(doi);
-    update(coll, user);
-  }
-
-  public void createDOIManually(String doi, CollectionImeji collection, User user)
-      throws ImejiException {
-    isLoggedInUser(user);
-
-    if (collection == null) {
-      throw new NotFoundException("Collection does not exists");
-    }
-
-    if (!Status.RELEASED.equals(collection.getStatus())) {
-      throw new ImejiException("Collection has to be released to create a DOI");
-    }
-
-    collection.setDoi(doi);
-    update(collection, user);
-
-  }
 
   /**
    * Withdraw a {@link CollectionImeji} and all its {@link Item}

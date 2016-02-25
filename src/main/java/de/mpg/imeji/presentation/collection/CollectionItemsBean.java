@@ -14,11 +14,13 @@ import javax.faces.context.FacesContext;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.doi.DoiService;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -160,18 +162,17 @@ public class CollectionItemsBean extends ItemsBean {
   }
 
   public String createDOI() {
-    String doi =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("doi");
-    CollectionController cc = new CollectionController();
     try {
+      String doi = UrlHelper.getParameterValue("doi");
+      DoiService doiService = new DoiService();
       if (doi != null) {
-        cc.createDOIManually(doi, collection, sb.getUser());
+        doiService.addDoiToCollection(doi, collection, sb.getUser());
       } else {
-        cc.createDOI(collection, sb.getUser());
+        doiService.addDoiToCollection(collection, sb.getUser());
       }
       BeanHelper.info(sb.getMessage("success_doi_creation"));
     } catch (ImejiException e) {
-      BeanHelper.error(sb.getMessage("error_doi_creation_" + e.getMessage()));
+      BeanHelper.error(sb.getMessage("error_doi_creation") + " " + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";

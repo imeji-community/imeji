@@ -186,7 +186,7 @@
 											</h:outputLink>
 										</li>
 									</ui:fragment>
-									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and  cc.attrs.hasContent and updateContentVO and !(cc.attrs.profile == null or cc.attrs.profile.statements.size() == 0)}">	
+									<ui:fragment rendered="#{cc.attrs.curMainMenu == 'collection' and paginatorListSessionBean!= null and cc.attrs.hasContent and updateContentVO and !(cc.attrs.profile == null or cc.attrs.profile.statements.size() == 0)}">	
 										<li class="#{curMenuClass}Item">
 											<h:outputLink  value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.vo.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2">
 												<h:outputText value="#{lbl.edit_all}"/>
@@ -301,7 +301,7 @@
 											</li>
 											</ui:fragment>
 										</ui:fragment>							
-										<ui:fragment rendered="#{deleteContentVO and cc.attrs.curMainMenu == 'collection'}">
+										<ui:fragment rendered="#{deleteContentVO and cc.attrs.curMainMenu == 'collection' and paginatorListSessionBean!=null}">
 											<li>
 												<h:outputLink value="#" onclick="openDialog('dialogDeleteAll')" rendered="#{cc.attrs.vo.status == 'PENDING'}">
 													<h:outputText value="#{lbl.delete_all}"/>
@@ -312,7 +312,7 @@
 											</li>
 										</ui:fragment>
 										
-										<ui:fragment rendered="#{deleteContentVO and cc.attrs.curMainMenu == 'album'}">
+										<ui:fragment rendered="#{deleteContentVO and cc.attrs.curMainMenu == 'album' and paginatorListSessionBean != null}">
 											<li>
 												<h:form>
 													<h:commandLink id="lnkRemoveAllFromAlbum" action="#{paginatorListSessionBean.removeAllFromAlbum}">

@@ -77,10 +77,11 @@ public class ObjectLoader {
     } catch (NotFoundException e) {
       writeErrorNotFound("collection", id);
     } catch (ImejiException e) {
-      if (id != null)
+      if (id != null) {
         writeException(e, id.toString());
-      else
+      } else {
         writeException(e, null);
+      }
     }
     return null;
   }

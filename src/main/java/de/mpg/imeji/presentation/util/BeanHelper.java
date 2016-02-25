@@ -24,7 +24,9 @@ public class BeanHelper {
   /**
    * Private Constructor
    */
-  private BeanHelper() {}
+  private BeanHelper() {
+
+  }
 
   /**
    * Return any bean stored in request scope under the specified name.

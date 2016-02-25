@@ -253,8 +253,7 @@
 					
 					<!-- ACTION MENU for all other pages -->
 					<ui:fragment rendered="#{cc.attrs.activeMenu != 'item'}">
-						
-						
+
 						<ui:fragment rendered="#{(adminVO or deleteContentVO or deleteVO and WorkflowBean.delete(cc.attrs.vo)) and cc.attrs.vo.status != 'WITHDRAWN'}">
 							<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" id="actionMenu">
 								<div class="imj_menuHeader" >

@@ -68,6 +68,17 @@ public abstract class CollectionBean extends ContainerBean {
     navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
   }
 
+  /**
+   * Read the profile of the current collection
+   * 
+   * @param user
+   * @throws ImejiException
+   */
+  protected void initCollectionProfile() throws ImejiException {
+    this.profile = new ProfileController().retrieve(collection.getProfile(), sessionBean.getUser());
+    this.profileId = profile != null ? profile.getIdString() : null;
+  }
+
   @Override
   protected String getErrorMessageNoAuthor() {
     return "error_collection_need_one_author";

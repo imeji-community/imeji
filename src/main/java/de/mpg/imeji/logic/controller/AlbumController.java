@@ -229,10 +229,12 @@ public class AlbumController extends ImejiController {
     for (String uri : albumItemsSet) {
       album.getImages().add(URI.create(uri));
     }
+    
     // save the album
     update(album, user);
     // Update the new items, to add the relation item -> album in the index
-    itemController.updateBatch(items, Imeji.adminUser);
+    // We do not update Items of the Album!!!
+    //itemController.updateBatch(items, Imeji.adminUser);
     // return all items of the album
     return itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
         .getResults();
@@ -268,7 +270,8 @@ public class AlbumController extends ImejiController {
     // save the album
     update(album, user);
     // Update the removed items, to remove the relation item -> album in the index
-    itemController.updateBatch(items, Imeji.adminUser);
+    //We do not update items of the album
+    //itemController.updateBatch(items, Imeji.adminUser);
     // Get the new size of the album
     int afterSize = itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
         .getNumberOfRecords();
@@ -372,6 +375,28 @@ public class AlbumController extends ImejiController {
           getContainerLogoTriples(album.getId().toString(), album, album.getLogoUrl().toString());
       patch(triples, u, true);
     }
+  }
+  
+  
+  /**
+   * Remove a all items from an Album
+   * 
+   * @param album
+   * @param toDelete
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public int removeAllFromAlbum(Album album, User user) throws ImejiException {
+    if (album.getStatus() == Status.RELEASED) {
+      throw new UnprocessableError("A released album can not be empty! ");
+    }
+    int beforeSize = album.getImages().size();
+    album.setImages(new ArrayList<URI>());
+    // save the album
+    update(album, user);
+    //Return how many items have been removed from album
+    return beforeSize;
   }
 
 }

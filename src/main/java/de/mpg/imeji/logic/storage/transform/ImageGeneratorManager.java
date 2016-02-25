@@ -27,7 +27,6 @@ package de.mpg.imeji.logic.storage.transform;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -154,27 +153,22 @@ public class ImageGeneratorManager {
    * @return
    */
   private byte[] toJpeg(File file, String extension) {
-    byte[] jpeg = null;
-    Iterator<ImageGenerator> it = generators.iterator();
     if (StorageUtils.compareExtension(extension, "jpg"))
       try {
         return FileUtils.readFileToByteArray(file);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
-    while (it.hasNext() && (jpeg == null || jpeg.length == 0)) {
+    for (ImageGenerator imageGenerator : generators) {
       try {
-        ImageGenerator imageGenerator = it.next();
-        jpeg = imageGenerator.generateJPG(file, extension);
-        if (jpeg != null) {
-          break;
+        byte[] jpeg = imageGenerator.generateJPG(file, extension);
+        if (jpeg.length > 0) {
+          return jpeg;
         }
       } catch (Exception e) {
         LOGGER.warn("Error generating image", e);
       }
     }
-    if (jpeg == null || jpeg.length == 0)
-      throw new RuntimeException("Unsupported file format (requested was " + extension + ")");
-    return jpeg;
+    throw new RuntimeException("Unsupported file format (requested was " + extension + ")");
   }
 }

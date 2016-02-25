@@ -51,6 +51,6 @@ public class XuggleImageGenerator implements ImageGenerator {
     if (StorageUtils.getMimeType(extension).contains("video")) {
       return VideoUtils.videoToImageBytes(file);
     }
-    return null;
+    return new byte[0];
   }
 }

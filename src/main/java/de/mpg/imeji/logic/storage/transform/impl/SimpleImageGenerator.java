@@ -49,9 +49,10 @@ public class SimpleImageGenerator implements ImageGenerator {
    */
   @Override
   public byte[] generateJPG(File file, String extension) throws IOException {
-    if (StorageUtils.getMimeType(extension).contains("image"))
+    if (StorageUtils.getMimeType(extension).contains("image")) {
       return ImageUtils.toJpeg(FileUtils.readFileToByteArray(file),
           StorageUtils.getMimeType(extension));
-    return null;
+    }
+    return new byte[0];
   }
 }

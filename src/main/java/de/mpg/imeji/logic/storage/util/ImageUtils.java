@@ -27,6 +27,7 @@ import javax.imageio.stream.ImageInputStream;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -285,7 +286,7 @@ public final class ImageUtils {
    * @throws IOException
    */
   public static File toFile(BufferedImage image, String mimeType) throws IOException {
-    File file = File.createTempFile("ImageUtils", null);
+    File file = TempFileUtil.createTempFile("ImageUtils_toFile", null);
     FileOutputStream fos = new FileOutputStream(file);
     ImageIO.write(image, ImageUtils.getImageFormat(mimeType), fos);
     return file;
@@ -308,7 +309,6 @@ public final class ImageUtils {
     } else {
       size = image.getWidth() > image.getHeight() ? image.getWidth() : image.getHeight();
       bufferedImage = scaleImageFast(image, size, resolution);
-      // bufferedImage = image;
     }
     return bufferedImage;
   }

@@ -51,6 +51,7 @@ import org.apache.tools.ant.taskdefs.Get;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.TempFileUtil;
 
 /**
  * Util class fore the storage package
@@ -92,7 +93,7 @@ public class StorageUtils {
    */
   public static File toFile(byte[] bytes) {
     try {
-      File f = File.createTempFile("toFile", null);
+      File f = TempFileUtil.createTempFile("storageUtils_toFile", null);
       IOUtils.write(bytes, new FileOutputStream(f));
       return f;
     } catch (IOException e) {

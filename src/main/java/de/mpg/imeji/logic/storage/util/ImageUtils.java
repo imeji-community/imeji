@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -54,14 +56,14 @@ public final class ImageUtils {
    * @throws IOException
    * @throws Exception
    */
-  public static byte[] resizeJPEG(byte[] bytes, FileResolution resolution)
+  public static File resizeJPEG(File file, FileResolution resolution)
       throws IOException, Exception {
     // If it is original resolution, don't touch the file, otherwise resize
     if (!FileResolution.ORIGINAL.equals(resolution)) {
-      BufferedImage image = JpegUtils.readJpeg(bytes);
-      bytes = toBytes(scaleImage(image, resolution), StorageUtils.getMimeType("jpg"));
+      BufferedImage image = JpegUtils.readJpeg(file);
+      return toFile(scaleImage(image, resolution), StorageUtils.getMimeType("jpg"));
     }
-    return bytes;
+    return file;
   }
 
   /**
@@ -85,6 +87,22 @@ public final class ImageUtils {
       LOGGER.info("Image could not be transformed to jpeg: ", e);
     }
     return new byte[0];
+  }
+
+  public static File toJpeg(File file, String mimeType) {
+    try {
+      if (mimeType.equals(StorageUtils.getMimeType("jpg"))) {
+        return file;
+      } else if (mimeType.equals(StorageUtils.getMimeType("gif"))) {
+        return StorageUtils
+            .toFile(GifUtils.toJPEG(StorageUtils.toBytes(new FileInputStream(file))));
+      } else {
+        return image2Jpeg(file);
+      }
+    } catch (Exception e) {
+      LOGGER.info("Image could not be transformed to jpeg: ", e);
+    }
+    return null;
   }
 
   /**
@@ -217,6 +235,20 @@ public final class ImageUtils {
     return ous.toByteArray();
   }
 
+
+  /**
+   * Transform a image to a jpeg image. The input image must have a format supported by
+   * {@link ImageIO}
+   * 
+   * @param File
+   * @return
+   * @throws IOException
+   */
+  private static File image2Jpeg(File file) throws IOException {
+    BufferedImage image = ImageIO.read(new FileInputStream(file));
+    return toFile(image, StorageUtils.getMimeType("jpg"));
+  }
+
   /**
    * Return the format of an image (jpg, tif), according to its mime-type
    * 
@@ -240,9 +272,23 @@ public final class ImageUtils {
    */
   public static byte[] toBytes(BufferedImage image, String mimeType) throws IOException {
     ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-    // use imageIO.write to encode the image back into a byte[]
     ImageIO.write(image, ImageUtils.getImageFormat(mimeType), byteOutput);
     return byteOutput.toByteArray();
+  }
+
+  /**
+   * Wrinte a {@link BufferedImage} into a File
+   * 
+   * @param image
+   * @param mimeType
+   * @return
+   * @throws IOException
+   */
+  public static File toFile(BufferedImage image, String mimeType) throws IOException {
+    File file = File.createTempFile("ImageUtils", null);
+    FileOutputStream fos = new FileOutputStream(file);
+    ImageIO.write(image, ImageUtils.getImageFormat(mimeType), fos);
+    return file;
   }
 
   /**

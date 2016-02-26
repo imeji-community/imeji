@@ -26,10 +26,10 @@ package de.mpg.imeji.logic.storage.util;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -76,9 +76,29 @@ public class StorageUtils {
    * @return
    */
   public static byte[] toBytes(InputStream stream) {
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    writeInOut(stream, bos, true);
-    return bos.toByteArray();
+    try {
+      return IOUtils.toByteArray(stream);
+    } catch (IOException e) {
+      LOGGER.error("Error writing stream to byte array", e);
+      return new byte[0];
+    }
+  }
+
+  /**
+   * Write a byte array into a File
+   * 
+   * @param bytes
+   * @return
+   */
+  public static File toFile(byte[] bytes) {
+    try {
+      File f = File.createTempFile("toFile", null);
+      IOUtils.write(bytes, new FileOutputStream(f));
+      return f;
+    } catch (IOException e) {
+      LOGGER.error("Error creating a temp File", e);
+    }
+    return null;
   }
 
   /**

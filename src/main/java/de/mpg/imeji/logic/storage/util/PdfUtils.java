@@ -25,13 +25,13 @@ public final class PdfUtils {
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] pdfsToImageBytes(File file) throws FileNotFoundException, IOException {
+  public static File pdfToImage(File file) throws FileNotFoundException, IOException {
     PDDocument document = PDDocument.load(file);
     try {
       List<?> pages = document.getDocumentCatalog().getAllPages();
       PDPage page = (PDPage) pages.get(0); // first one
       BufferedImage bufferedImage = page.convertToImage();
-      return ImageUtils.toBytes(bufferedImage, StorageUtils.getMimeType("jpg"));
+      return ImageUtils.toFile(bufferedImage, StorageUtils.getMimeType("jpg"));
     } finally {
       document.close();
     }

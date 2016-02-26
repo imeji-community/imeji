@@ -62,8 +62,8 @@ public class MediaUtils {
    * @throws InterruptedException
    * @throws IM4JavaException
    */
-  public static byte[] convertToJPEG(File tmp, String extension) throws IOException,
-      URISyntaxException, InterruptedException, IM4JavaException {
+  public static File convertToJPEG(File tmp, String extension)
+      throws IOException, URISyntaxException, InterruptedException, IM4JavaException {
     // In case the file is made of many frames, (for instance videos), generate only the frames from
     // 0 to 48 to
     // avoid high memory consumption
@@ -83,12 +83,11 @@ public class MediaUtils {
       cmd.run(op);
       int frame = getNonBlankFrame(jpeg.getAbsolutePath());
       if (frame >= 0) {
-        File f =
-            new File(FilenameUtils.getFullPath(jpeg.getAbsolutePath())
-                + FilenameUtils.getBaseName(jpeg.getAbsolutePath()) + "-" + frame + ".jpg");
-        return FileUtils.readFileToByteArray(f);
+        File f = new File(FilenameUtils.getFullPath(jpeg.getAbsolutePath())
+            + FilenameUtils.getBaseName(jpeg.getAbsolutePath()) + "-" + frame + ".jpg");
+        return f;
       }
-      return FileUtils.readFileToByteArray(jpeg);
+      return jpeg;
     } finally {
       removeFilesCreatedByImageMagick(jpeg.getAbsolutePath());
       FileUtils.deleteQuietly(jpeg);
@@ -142,8 +141,8 @@ public class MediaUtils {
    * @throws InterruptedException
    * @throws IM4JavaException
    */
-  private static int getNonBlankFrame(String path) throws IOException, URISyntaxException,
-      InterruptedException, IM4JavaException {
+  private static int getNonBlankFrame(String path)
+      throws IOException, URISyntaxException, InterruptedException, IM4JavaException {
     ConvertCmd cmd = getConvert();
     int count = 0;
     String dir = FilenameUtils.getFullPath(path);

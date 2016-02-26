@@ -74,7 +74,7 @@ public final class ImageGeneratorManager {
    * @param extension
    * @return
    */
-  public byte[] generateThumbnail(File file, String extension) {
+  public File generateThumbnail(File file, String extension) {
     return generate(file, extension, FileResolution.THUMBNAIL);
   }
 
@@ -85,7 +85,7 @@ public final class ImageGeneratorManager {
    * @param extension
    * @return
    */
-  public byte[] generateWebResolution(File file, String extension) {
+  public File generateWebResolution(File file, String extension) {
     return generate(file, extension, FileResolution.WEB);
   }
 
@@ -98,7 +98,7 @@ public final class ImageGeneratorManager {
    * @param resolution
    * @return
    */
-  public byte[] generate(File file, String extension, FileResolution resolution) {
+  public File generate(File file, String extension, FileResolution resolution) {
     if (StorageUtils.compareExtension("gif", extension)) {
       try {
         return generateGif(FileUtils.readFileToByteArray(file), extension, resolution);
@@ -118,13 +118,13 @@ public final class ImageGeneratorManager {
    * @param resolution
    * @return
    */
-  private byte[] generateGif(byte[] bytes, String extension, FileResolution resolution) {
+  private File generateGif(byte[] bytes, String extension, FileResolution resolution) {
     try {
-      return GifUtils.resizeAnimatedGif(bytes, resolution);
+      return StorageUtils.toFile(GifUtils.resizeAnimatedGif(bytes, resolution));
     } catch (Exception e) {
       LOGGER.error("Error generating gif", e);
     }
-    return new byte[0];
+    return null;
   }
 
   /**
@@ -135,14 +135,14 @@ public final class ImageGeneratorManager {
    * @param resolution
    * @return
    */
-  private byte[] generateJpeg(File file, String extension, FileResolution resolution) {
+  private File generateJpeg(File file, String extension, FileResolution resolution) {
     // Make a jpg out of the file
     try {
       return ImageUtils.resizeJPEG(toJpeg(file, extension), resolution);
     } catch (Exception e) {
-      LOGGER.error("Error generatiing JPEG from File: ", e);
+      LOGGER.error("Error generating JPEG from File: ", e);
     }
-    return new byte[0];
+    return null;
 
   }
 
@@ -154,14 +154,14 @@ public final class ImageGeneratorManager {
    * @return
    * @throws IOException
    */
-  private byte[] toJpeg(File file, String extension) throws IOException {
+  private File toJpeg(File file, String extension) throws IOException {
     if (StorageUtils.compareExtension(extension, "jpg")) {
-      FileUtils.readFileToByteArray(file);
+      return file;
     }
     for (ImageGenerator imageGenerator : generators) {
       try {
-        byte[] jpeg = imageGenerator.generateJPG(file, extension);
-        if (jpeg.length > 0) {
+        File jpeg = imageGenerator.generateJPG(file, extension);
+        if (jpeg != null && jpeg.length() > 0) {
           return jpeg;
         }
       } catch (Exception e) {

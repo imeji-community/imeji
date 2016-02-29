@@ -69,12 +69,12 @@ public class RawFileImageGenerator implements ImageGenerator {
    * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
   @Override
-  public byte[] generateJPG(File file, String extension)
+  public File generateJPG(File file, String extension)
       throws FileNotFoundException, IOException, URISyntaxException {
     BufferedImage icon = ImageIO.read(new FileImageInputStream(new File(
         RawFileImageGenerator.class.getClassLoader().getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
     icon = writeTextOnImage(icon, extension, file.getName());
-    return ImageUtils.toBytes(icon, StorageUtils.getMimeType("jpg"));
+    return ImageUtils.toFile(icon, StorageUtils.getMimeType("jpg"));
   }
 
   /**

@@ -260,21 +260,6 @@ public class AlbumBean extends ContainerBean {
   }
 
   /**
-   * True if the current user is the owner of the albun
-   * 
-   * @return
-   */
-  // public boolean getIsOwner()
-  // {
-  // if (sessionBean.getUser() != null)
-  // {
-  // return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class,
-  // sessionBean.getUser().getEmail()));
-  // }
-  // else
-  // return false;
-  // }
-  /**
    * Save (create or update) the {@link Album} in the database
    * 
    * @return
@@ -316,12 +301,6 @@ public class AlbumBean extends ContainerBean {
         setIngestImage(null);
         sessionBean.setSpaceLogoIngestImage(null);
       }
-
-      // if (active) {
-      // sessionBean.setActiveAlbum(ac.retrieveLazy(album.getId(),
-      // sessionBean.getUser()));
-      // }
-      //
       BeanHelper.info(sessionBean.getMessage("success_album_update"));
       return true;
     } catch (UnprocessableError e) {
@@ -483,10 +462,11 @@ public class AlbumBean extends ContainerBean {
    * @return
    */
   public boolean getSelected() {
-    if (sessionBean.getSelectedAlbums().contains(album.getId()))
+    if (sessionBean.getSelectedAlbums().contains(album.getId())) {
       selected = true;
-    else
+    } else {
       selected = false;
+    }
     return selected;
   }
 
@@ -498,10 +478,12 @@ public class AlbumBean extends ContainerBean {
    */
   public void setSelected(boolean selected) {
     if (selected) {
-      if (!(sessionBean.getSelectedAlbums().contains(album.getId())))
+      if (!(sessionBean.getSelectedAlbums().contains(album.getId()))) {
         sessionBean.getSelectedAlbums().add(album.getId());
-    } else
+      }
+    } else {
       sessionBean.getSelectedAlbums().remove(album.getId());
+    }
     this.selected = selected;
   }
 
@@ -524,8 +506,9 @@ public class AlbumBean extends ContainerBean {
   }
 
   public String getFormattedDescription() {
-    if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null)
+    if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null) {
       return "";
+    }
     return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
   }
 
@@ -600,8 +583,9 @@ public class AlbumBean extends ContainerBean {
    * of album data in a general template system
    */
   public String getTitle() {
-    if (getContainer() != null)
+    if (getContainer() != null) {
       return getContainer().getMetadata().getTitle();
+    }
     return null;
   }
 

@@ -50,8 +50,8 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImageGeneratorManager {
-  private List<ImageGenerator> generators = null;
+public final class ImageGeneratorManager {
+  private final List<ImageGenerator> generators;
   private static final Logger LOGGER = Logger.getLogger(ImageGeneratorManager.class);
 
   /**
@@ -74,7 +74,7 @@ public class ImageGeneratorManager {
    * @param extension
    * @return
    */
-  public byte[] generateThumbnail(File file, String extension) {
+  public File generateThumbnail(File file, String extension) {
     return generate(file, extension, FileResolution.THUMBNAIL);
   }
 
@@ -85,7 +85,7 @@ public class ImageGeneratorManager {
    * @param extension
    * @return
    */
-  public byte[] generateWebResolution(File file, String extension) {
+  public File generateWebResolution(File file, String extension) {
     return generate(file, extension, FileResolution.WEB);
   }
 
@@ -98,15 +98,14 @@ public class ImageGeneratorManager {
    * @param resolution
    * @return
    */
-  public byte[] generate(File file, String extension, FileResolution resolution) {
+  public File generate(File file, String extension, FileResolution resolution) {
     if (StorageUtils.compareExtension("gif", extension)) {
       try {
         return generateGif(FileUtils.readFileToByteArray(file), extension, resolution);
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        LOGGER.error("Error reading gif file to byte array", e);
       }
     }
-
     return generateJpeg(file, extension, resolution);
   }
 
@@ -119,12 +118,13 @@ public class ImageGeneratorManager {
    * @param resolution
    * @return
    */
-  private byte[] generateGif(byte[] bytes, String extension, FileResolution resolution) {
+  private File generateGif(byte[] bytes, String extension, FileResolution resolution) {
     try {
-      return GifUtils.resizeAnimatedGif(bytes, resolution);
+      return StorageUtils.toFile(GifUtils.resizeAnimatedGif(bytes, resolution));
     } catch (Exception e) {
-      throw new RuntimeException("Error transforming gif", e);
+      LOGGER.error("Error generating gif", e);
     }
+    return null;
   }
 
   /**
@@ -135,14 +135,15 @@ public class ImageGeneratorManager {
    * @param resolution
    * @return
    */
-  private byte[] generateJpeg(File file, String extension, FileResolution resolution) {
+  private File generateJpeg(File file, String extension, FileResolution resolution) {
     // Make a jpg out of the file
-    byte[] bytes = toJpeg(file, extension);
     try {
-      return ImageUtils.resizeJPEG(bytes, resolution);
+      return ImageUtils.resizeJPEG(toJpeg(file, extension), resolution);
     } catch (Exception e) {
-      throw new RuntimeException("Error transforming image", e);
+      LOGGER.error("Error generating JPEG from File: ", e);
     }
+    return null;
+
   }
 
   /**
@@ -151,22 +152,20 @@ public class ImageGeneratorManager {
    * @param bytes
    * @param extension
    * @return
+   * @throws IOException
    */
-  private byte[] toJpeg(File file, String extension) {
-    if (StorageUtils.compareExtension(extension, "jpg"))
-      try {
-        return FileUtils.readFileToByteArray(file);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+  private File toJpeg(File file, String extension) throws IOException {
+    if (StorageUtils.compareExtension(extension, "jpg")) {
+      return file;
+    }
     for (ImageGenerator imageGenerator : generators) {
       try {
-        byte[] jpeg = imageGenerator.generateJPG(file, extension);
-        if (jpeg.length > 0) {
+        File jpeg = imageGenerator.generateJPG(file, extension);
+        if (jpeg != null && jpeg.length() > 0) {
           return jpeg;
         }
       } catch (Exception e) {
-        LOGGER.warn("Error generating image", e);
+        LOGGER.warn("Error generating image (generator: " + imageGenerator.getClass().getName(), e);
       }
     }
     throw new RuntimeException("Unsupported file format (requested was " + extension + ")");

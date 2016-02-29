@@ -148,10 +148,11 @@ public abstract class CollectionBean extends ContainerBean {
    * @return the selected
    */
   public boolean getSelected() {
-    if (sessionBean.getSelectedCollections().contains(collection.getId()))
+    if (sessionBean.getSelectedCollections().contains(collection.getId())) {
       selected = true;
-    else
+    } else {
       selected = false;
+    }
     return selected;
   }
 
@@ -160,10 +161,12 @@ public abstract class CollectionBean extends ContainerBean {
    */
   public void setSelected(boolean selected) {
     if (selected) {
-      if (!(sessionBean.getSelectedCollections().contains(collection.getId())))
+      if (!(sessionBean.getSelectedCollections().contains(collection.getId()))) {
         sessionBean.getSelectedCollections().add(collection.getId());
-    } else
+      }
+    } else {
       sessionBean.getSelectedCollections().remove(collection.getId());
+    }
     this.selected = selected;
   }
 
@@ -360,10 +363,7 @@ public abstract class CollectionBean extends ContainerBean {
       } catch (ImejiException e) {
         BeanHelper.error(sessionBean.getMessage("error_retrieving_metadata_profile"));
       }
-      if (collectionProfile.getStatements().isEmpty())
-        return true;
-      else
-        return false;
+      return collectionProfile.getStatements().isEmpty();
     }
   }
 }

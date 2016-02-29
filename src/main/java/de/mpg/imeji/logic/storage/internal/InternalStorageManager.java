@@ -183,8 +183,10 @@ public class InternalStorageManager implements Serializable {
    */
   public String getStorageId(String url) {
     return transformUrlToPath(url).replace(storagePath, "")
-        .replace(getFileName(url, StringHelper.urlSeparator), "").replace(StringHelper.fileSeparator+"web"+StringHelper.fileSeparator, "")
-        .replace(StringHelper.fileSeparator+"thumbnail"+StringHelper.fileSeparator, "").replace(StringHelper.fileSeparator+"original"+StringHelper.fileSeparator, "")
+        .replace(getFileName(url, StringHelper.urlSeparator), "")
+        .replace(StringHelper.fileSeparator + "web" + StringHelper.fileSeparator, "")
+        .replace(StringHelper.fileSeparator + "thumbnail" + StringHelper.fileSeparator, "")
+        .replace(StringHelper.fileSeparator + "original" + StringHelper.fileSeparator, "")
         .replace(StringHelper.fileSeparator, StringHelper.urlSeparator);
   }
 
@@ -369,12 +371,12 @@ public class InternalStorageManager implements Serializable {
    * @return
    * @throws IOException
    */
-  private String write(byte[] bytes, String path) throws IOException {
+  private String write(File srcFile, String path) throws IOException {
     File file = new File(path);
     if (!file.exists()) {
       file.getParentFile().mkdirs();
       file.createNewFile();
-      FileUtils.writeByteArrayToFile(file, bytes);
+      FileUtils.copyFile(srcFile, file);
       return file.getAbsolutePath();
     } else {
       throw new RuntimeException("File " + path + " already exists in internal storage!");

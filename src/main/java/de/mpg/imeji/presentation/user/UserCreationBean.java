@@ -70,7 +70,7 @@ public class UserCreationBean extends QuotaSuperBean {
       LOGGER.error("Error creating user:", e);
       BeanHelper.error(sb.getMessage(e.getMessage()));
     }
-    return "pretty:";
+    return "";
   }
 
   /**

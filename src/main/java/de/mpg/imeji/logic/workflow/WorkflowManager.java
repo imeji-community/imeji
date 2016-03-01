@@ -4,6 +4,8 @@ import java.util.Calendar;
 
 import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
@@ -64,6 +66,9 @@ public class WorkflowManager {
     p.setVersion(p.getVersion() + 1);
     p.setVersionDate(DateHelper.getCurrentDate());
     p.setStatus(Status.RELEASED);
+    if (p instanceof Item) {
+      ((Item) p).setVisibility(Visibility.PUBLIC);
+    }
   }
 
   /**
@@ -78,6 +83,8 @@ public class WorkflowManager {
       throw new WorkflowException("Discard error: A Discard comment is needed");
     }
     p.setStatus(Status.WITHDRAWN);
+    if (p instanceof Item) {
+      ((Item) p).setVisibility(Visibility.PUBLIC);
+    }
   }
-
 }

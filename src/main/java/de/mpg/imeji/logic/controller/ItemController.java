@@ -20,6 +20,9 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
@@ -405,16 +408,19 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public void updateBatch(Collection<Item> items, User user) throws ImejiException {
-    List<Object> imBeans = new ArrayList<Object>();
-    for (Item item : items) {
-      prepareUpdate(item, user);
-      item.setFilename(FilenameUtils.getName(item.getFilename()));
-      imBeans.add(createFulltextForMetadata(item));
+    if (items != null && !items.isEmpty()) {
+      List<Object> imBeans = new ArrayList<Object>();
+      for (Item item : items) {
+        prepareUpdate(item, user);
+        item.setFilename(FilenameUtils.getName(item.getFilename()));
+        imBeans.add(createFulltextForMetadata(item));
+      }
+      cleanMetadata(items);
+      ProfileController pc = new ProfileController();
+      writer.update(imBeans,
+          pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user, true);
+
     }
-    cleanMetadata(items);
-    ProfileController pc = new ProfileController();
-    writer.update(imBeans, pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user),
-        user, true);
   }
 
   /**
@@ -602,10 +608,11 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public void release(List<Item> l, User user) throws ImejiException {
-    for (Item item : l) {
+    Collection<Item> items = filterItemsByStatus(l, Status.PENDING);
+    for (Item item : items) {
       prepareRelease(item, user);
     }
-    updateBatch(l, user);
+    updateBatch(items, user);
   }
 
   /**
@@ -616,29 +623,46 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public void unRelease(List<Item> l, User user) throws ImejiException {
-    for (Item item : l) {
+    Collection<Item> items = filterItemsByStatus(l, Status.RELEASED);
+    for (Item item : items) {
       item.setStatus(Status.PENDING);
     }
-    updateBatch(l, user);
+    updateBatch(items, user);
   }
 
   /**
    * Set the status of a {@link List} of {@link Item} to withdraw and delete its files from the
    * {@link Storage}
    * 
-   * @param items
+   * @param l
    * @param comment
    * @throws ImejiException
    */
-  public void withdraw(List<Item> items, String comment, User user) throws ImejiException {
+  public void withdraw(List<Item> l, String comment, User user) throws ImejiException {
+    Collection<Item> items = filterItemsByStatus(l, Status.RELEASED);
     for (Item item : items) {
       prepareWithdraw(item, comment);
-      item.setVisibility(Visibility.PUBLIC);
     }
     updateBatch(items, user);
     for (Item item : items) {
       removeFileFromStorage(item.getStorageId());
     }
+  }
+
+  /**
+   * Return a new filtered List of only item with the requested {@link Status}
+   * 
+   * @param items
+   * @param status
+   * @return
+   */
+  private Collection<Item> filterItemsByStatus(List<Item> items, Status status) {
+    return new ArrayList<>(Collections2.filter(items, new Predicate<Item>() {
+      @Override
+      public boolean apply(Item item) {
+        return item.getStatus() == status;
+      }
+    }));
   }
 
   /**

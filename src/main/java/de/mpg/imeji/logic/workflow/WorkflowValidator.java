@@ -57,7 +57,7 @@ public class WorkflowValidator implements Serializable {
       throw new WorkflowException("Object publication is disabled!");
     }
     if (p.getStatus() != Status.PENDING) {
-      throw new WorkflowException("Only PENDING objects ca be released");
+      throw new WorkflowException("Only PENDING objects can be released");
     }
   }
 
@@ -70,7 +70,7 @@ public class WorkflowValidator implements Serializable {
    */
   public void isWithdrawAllowed(Properties p) throws WorkflowException {
     if (p.getStatus() != Status.RELEASED) {
-      throw new WorkflowException("Only WITHDRAWN objects ca be released");
+      throw new WorkflowException("Only WITHDRAWN objects can be released");
     }
   }
 }

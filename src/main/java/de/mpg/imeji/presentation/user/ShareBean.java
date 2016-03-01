@@ -214,8 +214,14 @@ public class ShareBean implements Serializable {
    * Check the input and add all correct entry to the list of elements to be saved
    */
   public void share() {
-    shareTo(checkInput());
-    reloadPage();
+    
+    List<String> emailsToShare = new ArrayList<String>();
+    emailsToShare = checkInput();
+    if (isEmptyErrorList()){
+      shareTo(emailsToShare);
+      reloadPage();
+    }
+    
   }
 
   /**
@@ -257,7 +263,6 @@ public class ShareBean implements Serializable {
     List<String> l = new ArrayList<String>();
     l.add(userGroup.getId().toString());
     shareTo(l);
-    // init();
     reloadPage();
   }
 
@@ -306,6 +311,9 @@ public class ShareBean implements Serializable {
    */
   private List<String> checkInput() {
     List<String> emails = new ArrayList<>();
+    //Empty the error list from old failures
+    setErrorList(new ArrayList<String>());
+
     if (getEmailInput() != null) {
       List<String> inputValues = Arrays.asList(getEmailInput().split("\\s*[|,;\\n]\\s*"));
       for (String value : inputValues) {
@@ -663,6 +671,7 @@ public class ShareBean implements Serializable {
 
   public List<String> getErrorList() {
     return errorList;
+    
   }
 
   public void setErrorList(List<String> errorList) {
@@ -904,5 +913,9 @@ public class ShareBean implements Serializable {
 
   public void setUserGroupsBean(UserGroupsBean ugroupsBean) {
     this.userGroupsBean = ugroupsBean;
+  }
+  
+  public boolean isEmptyErrorList(){
+      return ( this.errorList.size() == 0 );
   }
 }

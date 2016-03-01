@@ -3,7 +3,10 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
@@ -15,6 +18,7 @@ import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
@@ -59,7 +63,7 @@ public class UserCreationBean extends QuotaSuperBean {
         sendNewAccountEmail(password);
       }
       BeanHelper.info(sb.getMessage("success_user_create"));
-      return sb.getPrettySpacePage("pretty:users");
+      reloadUserPage();
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
       BeanHelper.error(sb.getMessage("error_during_user_create"));
@@ -70,7 +74,7 @@ public class UserCreationBean extends QuotaSuperBean {
       LOGGER.error("Error creating user:", e);
       BeanHelper.error(sb.getMessage(e.getMessage()));
     }
-    return "pretty:";
+    return "";
   }
 
   /**
@@ -197,6 +201,17 @@ public class UserCreationBean extends QuotaSuperBean {
   public void setAllowedToCreateCollection(boolean allowedToCreateCollection) {
     this.allowedToCreateCollection = allowedToCreateCollection;
   }
+  
+  
+  private void reloadUserPage() {
+    try {
+      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+      FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+    } catch (IOException e) {
+      Logger.getLogger(UserBean.class).info("Some reloadPage exception", e);
+    }
+  }
+ 
 
 }
 

@@ -160,11 +160,11 @@ public class UserGroupBean implements Serializable {
         return "";
       } else
         c.create(userGroup, sessionUser);
+        reload();
     } catch (Exception e) {
       BeanHelper.error("Error creating user group");
     }
-    return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-        .getPrettySpacePage("pretty:userGroups");
+    return "";
   }
 
   /**

@@ -93,8 +93,8 @@
 	</mailingLists>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<!-- Setting this property so that generated project uses correct version 
 			of richfaces. -->
 		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
@@ -193,7 +193,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 			</plugin>
-			<plugin>
+			 <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
 				<version>1.4</version>
@@ -323,6 +323,16 @@
 			<version>3.3.2</version>
 		</dependency>
 		<dependency>
+		  <groupId>commons-codec</groupId>
+		  <artifactId>commons-codec</artifactId>
+		  <version>1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
 			<type>pom</type>
@@ -425,12 +435,6 @@
 			<artifactId>im4java</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		<!-- pdf handling -->
-		<dependency>
-			<groupId>org.swinglabs</groupId>
-			<artifactId>pdf-renderer</artifactId>
-			<version>1.0.5</version>
-		</dependency>
 		<!-- image/video hanlding -->
 		<dependency>
 			<groupId>org.openimaj</groupId>
@@ -508,11 +512,6 @@
 			<version>2.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>net.java.dev.webdav</groupId>
-			<artifactId>webdav-jaxrs</artifactId>
-			<version>1.2.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
 			<version>2.13</version>
@@ -588,6 +587,11 @@
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.pdfbox</groupId>
+		    <artifactId>pdfbox</artifactId>
+		    <version>1.8.10</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->
@@ -598,7 +602,7 @@
 					encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
-				<jdk.version>1.7</jdk.version>
+				<jdk.version>1.8</jdk.version>
 			</properties>
 			<build>
 				<plugins>
@@ -657,7 +661,7 @@
 					encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
-				<jdk.version>1.7</jdk.version>
+				<jdk.version>1.8</jdk.version>
 				<project.build.finalName>imeji</project.build.finalName>
 			</properties>
 			<build>

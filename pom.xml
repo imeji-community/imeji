@@ -4,7 +4,7 @@
 	<groupId>org.imeji</groupId>
 	<name>imeji</name>
 	<packaging>war</packaging>
-	<version>3.2.0.1-SNAPSHOT</version>
+	<version>3.3.1.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
 	<description>The imeji open source software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</description>
 	<licenses>
@@ -102,6 +102,8 @@
 		<project.warName>imeji</project.warName>
 		<!-- <sonar.host.url>http://localhost:9000</sonar.host.url> -->
 		<!-- <sonar.exclusions></sonar.exclusions> -->
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
 	</properties>
 	<repositories>
 		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 

@@ -501,8 +501,9 @@ public class SpaceController extends ImejiController {
   }
 
   public boolean isSpaceByLabel(String spaceId) {
-    if (isNullOrEmptyTrim(spaceId))
+    if (isNullOrEmptyTrim(spaceId)) {
       return false;
+    }
     if (ImejiSPARQL.exec(JenaCustomQueries.getSpaceByLabel(spaceId), Imeji.spaceModel).size() > 0) {
       return true;
     }

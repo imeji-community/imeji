@@ -20,10 +20,8 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.authentication.AuthenticationFactory;
-import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -50,11 +48,9 @@ public class FileServlet extends HttpServlet {
   private static final long serialVersionUID = 5502546330318540997L;
   private static final Logger LOGGER = Logger.getLogger(FileServlet.class);
   private StorageController storageController;
-  private Authorization authorization;
   private Navigation navivation;
   private String domain;
   private String digilibUrl;
-  private SpaceController spaceController;
   private ExternalStorage externalStorage;
   private static final String RESOURCE_EMTPY_ICON_URL =
       "http://localhost:8080/imeji/resources/icon/empty.png";
@@ -68,9 +64,7 @@ public class FileServlet extends HttpServlet {
   public void init() {
     try {
       storageController = new StorageController();
-      spaceController = new SpaceController();
       externalStorage = new ExternalStorage();
-      authorization = new Authorization();
       navivation = new Navigation();
       domain = StringHelper.normalizeURI(navivation.getDomain());
       domain = domain.substring(0, domain.length() - 1);
@@ -232,8 +226,8 @@ public class FileServlet extends HttpServlet {
    */
   private Item getItem(String url, User user) throws Exception {
     Search s = SearchFactory.create();
-    List<String> r =
-        s.searchString(JenaCustomQueries.selectItemIdOfFileUrl(url), null, null, 0, -1).getResults();
+    List<String> r = s.searchString(JenaCustomQueries.selectItemIdOfFileUrl(url), null, null, 0, -1)
+        .getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
       return c.retrieveLazy(URI.create(r.get(0)), user);

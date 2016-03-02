@@ -3,6 +3,8 @@ package de.mpg.imeji.testimpl.logic.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -10,9 +12,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 import util.JenaUtil;
 
@@ -75,4 +79,46 @@ public class ItemControllerTestClass extends ControllerTest {
 
   }
 
+
+  @Test
+  public void batchUpdateItemProfiles() throws ImejiException  {
+  //Create one collection
+    createCollection();
+    List<Item> itemsToUpdate = new ArrayList<Item>();
+    itemsToUpdate.add(createItemWithFile());
+    
+    createProfile();
+    createCollection();
+    
+    itemsToUpdate.add(createItemWithFile());
+    ItemController controller = new ItemController();
+    
+    try {
+      controller.updateBatch(itemsToUpdate, JenaUtil.testUser);
+      
+    } catch (Exception e) {
+      Assert.assertTrue(e instanceof UnprocessableError);
+      LOGGER.info("Files with different profiles could not be updated!");
+    }
+
+    createCollection();
+    itemsToUpdate.add(createItemWithFile());
+    
+    try {
+      controller.updateBatch(itemsToUpdate, JenaUtil.testUser);
+      
+    } catch (Exception e) {
+      Assert.assertTrue(e instanceof UnprocessableError);
+      LOGGER.info("Second Time Files with different profiles could not be updated!");
+    }
+    
+    itemsToUpdate = new ArrayList<Item>();
+    createCollection();
+    itemsToUpdate.add(createItemWithFile());
+    itemsToUpdate.add(createItem());
+    
+    controller.updateBatch(itemsToUpdate, JenaUtil.testUser);
+    LOGGER.info("Files with same profiles could be updated!");
+
+  }
 }

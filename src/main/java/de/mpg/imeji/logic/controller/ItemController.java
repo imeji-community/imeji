@@ -406,11 +406,25 @@ public class ItemController extends ImejiController {
    */
   public void updateBatch(Collection<Item> items, User user) throws ImejiException {
     List<Object> imBeans = new ArrayList<Object>();
+    List<String> profileLists = new ArrayList<String>();
+    String profileToAdd = "";
     for (Item item : items) {
+
+      profileToAdd = item.getMetadataSet().getProfile()!= null? item.getMetadataSet().getProfile().toString():"profileisnull";
+      if (!profileLists.contains(profileToAdd)){          
+        profileLists.add(profileToAdd);
+      }
+
+      if ( profileLists.size()>1 ) {
+        throw new UnprocessableError("Error during batch update, items for batch update do not have same metadata profile!");
+      }
+      
       prepareUpdate(item, user);
       item.setFilename(FilenameUtils.getName(item.getFilename()));
       imBeans.add(createFulltextForMetadata(item));
+      
     }
+    
     cleanMetadata(items);
     ProfileController pc = new ProfileController();
     writer.update(imBeans, pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user),

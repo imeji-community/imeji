@@ -289,8 +289,7 @@ public class ItemDefaultMdUpdateHierarchical extends ItemTestBase {
     // LOGGER.info(response.readEntity(String.class));
     assertEquals(HttpStatus.SC_UNPROCESSABLE_ENTITY, response.getStatus());
   }
-
-
+  
   private Invocation.Builder getTargetAuth(String itemId) {
     return target(pathPrefix + "/" + itemId).register(authAsUser).register(MultiPartFeature.class)
         .register(JacksonFeature.class).request(MediaType.APPLICATION_JSON_TYPE);

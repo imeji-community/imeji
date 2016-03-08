@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
@@ -32,6 +33,8 @@ public class ContainerMetadata implements Serializable {
   @j2jList("http://xmlns.com/foaf/0.1/person")
   protected Collection<Person> persons = new ArrayList<Person>();
   private URI id = IdentifierUtil.newURI(ContainerMetadata.class);
+  @j2jList("http://imeji.org/AdditionalInfo")
+  private List<ContainerAdditionalInfo> additionalInformations = new ArrayList<>();
 
   public String getTitle() {
     return title;
@@ -63,5 +66,19 @@ public class ContainerMetadata implements Serializable {
 
   public URI getId() {
     return id;
+  }
+
+  /**
+   * @return the additionalInformations
+   */
+  public List<ContainerAdditionalInfo> getAdditionalInformations() {
+    return additionalInformations;
+  }
+
+  /**
+   * @param additionalInformations the additionalInformations to set
+   */
+  public void setAdditionalInformations(List<ContainerAdditionalInfo> additionalInformations) {
+    this.additionalInformations = additionalInformations;
   }
 }

@@ -48,6 +48,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.doi.DoiService;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
@@ -58,6 +59,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
@@ -125,6 +127,13 @@ public abstract class ContainerBean implements Serializable {
    * @return
    */
   protected abstract String getErrorMessageNoAuthor();
+
+  /**
+   * The url of the current page
+   * 
+   * @return
+   */
+  protected abstract String getPageUrl();
 
   /**
    * Find the first {@link Item} of the current {@link Container} (fast method)
@@ -214,6 +223,41 @@ public abstract class ContainerBean implements Serializable {
       }
     }
     return personString;
+  }
+
+  public String getCitation() {
+    String url = getDoiUrl().isEmpty() ? getPageUrl() : getDoiUrl();
+    return getAuthorsWithOrg() + ". " + getContainer().getMetadata().getTitle() + ". <a href=\""
+        + url + "\">" + url + "</a>";
+  }
+
+  /**
+   * The Url to view the DOI
+   * 
+   * @return
+   */
+  public String getDoiUrl() {
+    return getContainer().getDoi().isEmpty() ? ""
+        : DoiService.DOI_URL_RESOLVER + getContainer().getDoi();
+  }
+
+  /**
+   * Add an addtionial Info at the passed position
+   * 
+   * @param pos
+   */
+  public void addAdditionalInfo(int pos) {
+    getContainer().getMetadata().getAdditionalInformations().add(pos,
+        new ContainerAdditionalInfo("", "", ""));
+  }
+
+  /**
+   * Remove the nth additional Info
+   * 
+   * @param pos
+   */
+  public void removeAdditionalInfo(int pos) {
+    getContainer().getMetadata().getAdditionalInformations().remove(pos);
   }
 
   /**

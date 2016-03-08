@@ -206,6 +206,11 @@ public class AlbumBean extends ContainerBean {
     return "error_album_need_one_author";
   }
 
+  @Override
+  public String getPageUrl() {
+    return ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl() + id;
+  }
+
   /**
    * Listener for the discard comment
    * 
@@ -505,13 +510,6 @@ public class AlbumBean extends ContainerBean {
     this.thumbnail = thumbnail;
   }
 
-  public String getFormattedDescription() {
-    if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null) {
-      return "";
-    }
-    return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
-  }
-
   public void setDescription(String description) {
     this.description = description;
   }
@@ -539,9 +537,7 @@ public class AlbumBean extends ContainerBean {
     this.tab = tab.toUpperCase();
   }
 
-  public String getPageUrl() {
-    return ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl() + id;
-  }
+
 
   public User getAlbumCreator() throws Exception {
     UserController uc = new UserController(sessionBean.getUser());
@@ -549,14 +545,6 @@ public class AlbumBean extends ContainerBean {
     return user;
   }
 
-  public String getCitation() {
-    String title = album.getMetadata().getTitle();
-    String author = this.getPersonString();
-    String url = this.getPageUrl();
-    String citation =
-        title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
-    return citation;
-  }
 
   /*
    * (non-Javadoc)

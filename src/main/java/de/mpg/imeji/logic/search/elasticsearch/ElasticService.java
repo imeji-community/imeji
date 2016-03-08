@@ -152,7 +152,7 @@ public class ElasticService {
           .execute().actionGet();
       return indexName;
     } catch (Exception e) {
-      LOGGER.info("Error creating index", e);
+      LOGGER.error("Error creating index", e);
     }
     return null;
   }

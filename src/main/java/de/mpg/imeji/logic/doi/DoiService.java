@@ -21,6 +21,7 @@ import de.mpg.imeji.presentation.beans.ConfigurationBean;
  */
 public final class DoiService {
 
+  public static final String DOI_URL_RESOLVER = "http://dx.doi.org/";
   private final CollectionController collectionController = new CollectionController();
   private final Authorization authorization = new Authorization();
 

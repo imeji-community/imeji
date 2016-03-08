@@ -49,7 +49,7 @@
 	                    <ui:repeat id="persons" var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
 	                        <div class="imj_authorMetadataSet">
 	                            <div class="imj_sectionHeadline">
-	                                <h4> <!-- TODO NB: sectionHeadlines please not additionally style with h4, this should be in the class definition -->
+	                                <h4>
 	                                    <!-- Add/Remove Author buttons -->
 	                                    <span class="imj_inlineButtonGroup">
 	                                        <h:commandLink styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
@@ -69,6 +69,56 @@
 	
 	                        </div>
 	                    </ui:repeat>
+              		</h:panelGroup>
+              		
+              		<!-- additional Infos -->
+              		<h:panelGroup id="additionalInfos">
+              			<div class="imj_sectionHeadline">
+                             <h4><h:outputText value="#{lbl.colUtil}"/></h4>
+                             <span class="imj_noDisplay">: </span>
+                         </div>
+	                    <ui:repeat id="list" var="info" value="#{cc.attrs.formularContextBean.metadata.additionalInformations}" varStatus="indexA">
+                            <div class="imj_sectionHeadline">
+                                 <!-- Add/Remove Author buttons -->
+                                 <span class="imj_inlineButtonGroup">
+                                     <h:commandLink styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAdditionalInfo(indexA.index)}">
+                                         <f:ajax execute="editContainer:mediaContainerForm:additionalInfos" render="editContainer:mediaContainerForm:additionalInfos" />
+                                     </h:commandLink>
+                                     <h:commandLink styleClass="fa fa-minus-square-o" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAdditionalInfo(indexA.index)}">
+                                         <f:ajax execute="editContainer:mediaContainerForm:additionalInfos" render="editContainer:mediaContainerForm:additionalInfos" />
+                                     </h:commandLink>
+                                 </span>
+                                 <span class="imj_noDisplay">: </span>
+                            </div>
+	                        <div class="imj_metadataSet">
+		                        <label class="imj_metadataLabel">
+		                       	 <h:outputText value="#{lbl.label} *" /> <span class="imj_noDisplay">: </span>
+		                        </label>
+		                        <h:inputText id="inputInfoLabel" styleClass="imj_metadataValue" value="#{info.label}" />
+		                   	</div>
+		                   	<div class="imj_metadataSet">
+		                        <label class="imj_metadataLabel">
+		                        	<h:outputText  value="#{lbl.text}" /> 
+		                        	<span class="imj_noDisplay">: </span>
+		                        </label>
+		                        <h:inputTextarea id="inputInfoText" styleClass="imj_metadataValue" value="#{info.text}" />
+		                   	</div>
+		                   	<div class="imj_metadataSet">
+		                        <label class="imj_metadataLabel">
+		                        	<h:outputText  value="#{lbl.url}" /> <span class="imj_noDisplay">: </span>
+		                        </label>
+		                        <h:inputText id="inputInfoUrl" styleClass="imj_metadataValue"  value="#{info.url}" />
+		                   	</div>
+	                    </ui:repeat>
+	                    <div class="imj_sectionHeadline">
+	                        <span class="imj_inlineButtonGroup">
+	                            <h:commandLink styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAdditionalInfo(cc.attrs.formularContextBean.metadata.additionalInformations.size())}">
+	                                <f:ajax execute="editContainer:mediaContainerForm:additionalInfos" render="editContainer:mediaContainerForm:additionalInfos" />
+	                            </h:commandLink>
+	                        </span>
+	                        <span class="imj_noDisplay">: </span>
+	                  	</div>
+	                <span class="imj_noDisplay">: </span>
               		</h:panelGroup>
 
 

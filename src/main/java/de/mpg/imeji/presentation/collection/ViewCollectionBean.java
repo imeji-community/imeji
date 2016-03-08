@@ -102,24 +102,4 @@ public class ViewCollectionBean extends CollectionBean {
       return this.getCollection().getMetadata().getDescription();
     }
   }
-
-  /**
-   * @return
-   */
-  public String getFormattedDescription() {
-    if (getCollection() == null || getCollection().getMetadata().getDescription() == null) {
-      return "";
-    }
-    return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
-  }
-
-  /**
-   * @return
-   */
-  public String getCitation() {
-    String title = super.getCollection().getMetadata().getTitle();
-    String author = this.getPersonString();
-    String url = super.getPageUrl();
-    return title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
-  }
 }

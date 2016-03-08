@@ -37,7 +37,6 @@ public class Link extends Metadata {
   private URI uri;
   @j2jLiteral("http://www.w3.org/2000/01/rdf-schema#label")
   private String label;
-
   @j2jResource("http://imeji.org/terms/statement")
   private URI statement;
 

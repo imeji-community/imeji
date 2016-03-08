@@ -28,160 +28,139 @@
 				};
 			</script>
 	
-		<!-- MetaDataList - START -->
 		<div class="imj_metadataList">
-		
-			<!-- MetaDataTypes - ListHeader - show media meta data, info, description, other -->
-			<div class="imj_listHeader">
-				<h:outputLink id="lnkViewColUtilPage" styleClass="imj_active" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=UTIL" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
-					<h:outputText value="#{lbl.view_util}"/>
-				</h:outputLink>
-				<h:outputLink id="lnkViewColUtilPage2" styleClass="" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=UTIL" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
-					<h:outputText value="#{lbl.view_util}"/>
-				</h:outputLink>
-				<h:panelGroup styleClass="imj_separator"/>
-				<h:outputLink id="lnkViewColPage" styleClass="imj_active" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=HOME" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
-					<h:outputText value="#{lbl.view_desc}"/>
-				</h:outputLink>
-				<h:outputLink id="lnkViewColPage2" styleClass="" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=HOME" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
-					<h:outputText value="#{lbl.view_desc}"/>
-				</h:outputLink>
-			</div>
-			
 			<!-- MetaDataList - LIST BODY START -->		
-			<h:panelGroup id="metadata" layout="block" styleClass="imj_listBody">
-			
-				<!-- MetaDataList - Tab Description - Title -->	
-				<h:panelGroup id="description" layout="block" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
+			<div id="metadata" class="imj_listBody">	
+				<div id="description">
 					<h2 class="imj_entryPageTitle">
 						<h:outputText value="#{cc.attrs.infoLogicBean.container.metadata.title}"/>
 					</h2>
 					<h:outputText value="#{lbl.by}: #{cc.attrs.infoLogicBean.authorsWithOrg}" styleClass="imj_itemAuthorPanel"/>
-					<!-- MetaDataList - Tab Description - Description -->
-					<p class="imj_entryPageDescription">
-						<h:outputText escape="false" value="#{cc.attrs.infoLogicBean.formattedDescription}"/>
-					</p>
+					<p class="imj_entryPageDescription"></p>
+					<pre>
+						<h:outputText escape="false" value="#{cc.attrs.infoLogicBean.container.metadata.description}"/>
+					</pre>	
+				</div>
+				<div class="imj_metadataSubPanel">
+					<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" styleClass="imj_metadataSubPanelItem"/>
+				</div>
+				<ui:repeat var="info" value="#{cc.attrs.infoLogicBean.container.metadata.additionalInformations}">
+					<div class="imj_infodataSet">
+						<span class="imj_infodataLabel">
+							<h:outputText value="#{info.label}"/>
+							<span class="imj_invisible">: </span>
+						</span>
+						<span class="imj_infodataValue">
+							<ui:fragment rendered="#{info.url != null and info.url != '' and info.text != null and info.text != ''}">
+								<h:outputLink value="#{info.url}" target="_blank">
+									<pre>#{info.text}</pre>
+								</h:outputLink>
+							</ui:fragment>
+							<ui:fragment rendered="#{info.url == null || info.url == ''}">
+								<pre>#{info.text}</pre>
+							</ui:fragment>
+							<ui:fragment rendered="#{info.text == null || info.text == ''}">
+								<h:outputLink value="#{info.url}" target="_blank">
+									#{info.url}
+								</h:outputLink>
+							</ui:fragment>
+						</span>
+					</div>
+				</ui:repeat>
+				<!--  Citation -->
+				<div class="imj_infodataSet">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.cite}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<h:outputText value="#{cc.attrs.infoLogicBean.citation}" escape="false"/>
+					</span>
+				</div>
+				
+				<!--  Number of items -->
+				<div class="imj_infodataSet">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{cc.attrs.infoLogicBean.type == 'COLLECTION' ? lbl.colNumItems : lbl.albumNumItems}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<h:outputText value="#{cc.attrs.infoLogicBean.size}"/>
+					</span>
+				</div>
+				
+				<!-- DOI -->
+				<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION' and cc.attrs.infoLogicBean.collection.status == 'RELEASED' and cc.attrs.infoLogicBean.collection.doi != ''}">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.doi}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<a href="http://dx.doi.org/#{cc.attrs.infoLogicBean.collection.doi}" target="_blank">http://dx.doi.org/#{cc.attrs.infoLogicBean.collection.doi}</a>
+					</span>
 				</h:panelGroup>
-				
-				
-				<!-- Utilities List Body - Tab Utilities -->
-				<h:panelGroup id="util" layout="block" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
-					
-					<h:panelGroup layout="block" styleClass="imj_infodataWrapper">
-						
-						<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
-							<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" styleClass="imj_metadataSubPanelItem"/>
-						</h:panelGroup>
-						
-						<!-- Tab Utilities - Citation -->
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.cite}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.citation}" escape="false"/>
-							</span>
-						</h:panelGroup>
-						
-						<!-- Tab Utilities - Dates -->
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.date_creation}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.container.created.time}"/>
-							</span>
-						</h:panelGroup>
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.date_last_modification}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.container.modified.time}"/>
-							</span>
-						</h:panelGroup>
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.item.status == 'RELEASED'}">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.date_released}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.container.versionDate.time}"/>
-							</span>
-						</h:panelGroup>
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.date_withdraw}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.container.versionDate.time}"/>
-							</span>
-						</h:panelGroup>
-						<!-- Tab Utilities - Creator -->
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{cc.attrs.infoLogicBean.type == 'COLLECTION' ? lbl.colCreator : lbl.albumCreator}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.authorsWithOrg}"/>
-							</span>
-						</h:panelGroup>
+							
+				<!--  Dates -->
+				<div class="imj_infodataSet">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.date_creation}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<h:outputText value="#{cc.attrs.infoLogicBean.container.created.time}"/>
+					</span>
+				</div>
+				<div class="imj_infodataSet">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.date_last_modification}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<h:outputText value="#{cc.attrs.infoLogicBean.container.modified.time}"/>
+					</span>
+				</div>
+				<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.item.status == 'RELEASED'}">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.date_released}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<h:outputText value="#{cc.attrs.infoLogicBean.container.versionDate.time}"/>
+					</span>
+				</h:panelGroup>
+				<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.date_withdraw}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<h:outputText value="#{cc.attrs.infoLogicBean.container.versionDate.time}"/>
+					</span>
+				</h:panelGroup>
 								
-						<!-- Tab Utilities - Number of items -->
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{cc.attrs.infoLogicBean.type == 'COLLECTION' ? lbl.colNumItems : lbl.albumNumItems}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.size}"/>
-							</span>
-						</h:panelGroup>
-						
-						<!-- Tab Utilities - Identifier -->
-						<h:panelGroup styleClass="imj_infodataSet">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.permalink}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.pageUrl}"/>
-							</span>
-						</h:panelGroup>
-						
-						<!-- DOI -->
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION' and cc.attrs.infoLogicBean.collection.status == 'RELEASED'}">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.doi}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.collection.doi}"/>
-							</span>
-						</h:panelGroup>
-						
-						<!-- Tab Utilities - QR-Tag -->
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION'}">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.qrcode}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue qr" id="qr"></span>
-							<h:outputScript>var qrHtml = document.getElementById('qr'); qrHtml.innerHTML = create_qrcode('{key:"#{SessionBean.user.apiKey}",col:"#{cc.attrs.infoLogicBean.collection.id}"}');</h:outputScript>
-						</h:panelGroup>
-						
-					</h:panelGroup>
-					
-				</h:panelGroup>
+				<!--  Permalink -->
+				<div class="imj_infodataSet">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.permalink}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue">
+						<h:outputText value="#{cc.attrs.infoLogicBean.pageUrl}"/>
+					</span>
+				</div>
 				
-			</h:panelGroup> <!-- END LIST BODY -->
-		</div> <!-- END LIST -->
-		
-
+				
+				
+				<!--  QR-Tag -->
+				<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.type == 'COLLECTION'}">
+					<span class="imj_infodataLabel">
+						<h:outputText value="#{lbl.qrcode}"/>
+						<span class="imj_invisible">: </span>
+					</span>
+					<span class="imj_infodataValue qr" id="qr"></span>
+					<h:outputScript>var qrHtml = document.getElementById('qr'); qrHtml.innerHTML = create_qrcode('{key:"#{SessionBean.user.apiKey}",col:"#{cc.attrs.infoLogicBean.collection.id}"}');</h:outputScript>
+				</h:panelGroup>
+			</div>					 
+		</div> 
 	</composite:implementation>
 </html>

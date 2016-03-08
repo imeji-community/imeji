@@ -35,6 +35,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
     // Check if the alias is used by only 1 index. If not, reset completely the indexes
     ElasticService.getIndexNameFromAliasName(ElasticService.DATA_ALIAS);
     String index = ElasticService.createIndex();
+    addAllMappings(index);
     reindexAlbums(index);
     reindexItems(index);
     reindexFolders(index);
@@ -46,6 +47,17 @@ public class ElasticReIndexJob implements Callable<Integer> {
   }
 
   /**
+   * Add the Mapping first, to avoid conflicts in mappings
+   * 
+   * @param index
+   */
+  private void addAllMappings(String index) {
+    for (ElasticTypes type : ElasticTypes.values()) {
+      new ElasticIndexer(index, type, ElasticService.ANALYSER).addMapping();
+    }
+  }
+
+  /**
    * Reindex all the {@link CollectionImeji} stored in the database
    * 
    * @throws ImejiException
@@ -54,7 +66,6 @@ public class ElasticReIndexJob implements Callable<Integer> {
     LOGGER.info("Indexing Folders...");
     ElasticIndexer indexer =
         new ElasticIndexer(index, ElasticTypes.folders, ElasticService.ANALYSER);
-    indexer.addMapping();
     CollectionController c = new CollectionController();
     List<CollectionImeji> collections = (List<CollectionImeji>) c.retrieveAll(Imeji.adminUser);
     indexer.indexBatch(collections);
@@ -71,7 +82,6 @@ public class ElasticReIndexJob implements Callable<Integer> {
     LOGGER.info("Indexing Albums...");
     ElasticIndexer indexer =
         new ElasticIndexer(index, ElasticTypes.albums, ElasticService.ANALYSER);
-    indexer.addMapping();
     AlbumController controller = new AlbumController();
     List<Album> albums = controller.retrieveAll(Imeji.adminUser);
     indexer.indexBatch(albums);
@@ -88,7 +98,6 @@ public class ElasticReIndexJob implements Callable<Integer> {
   private void reindexItems(String index) throws ImejiException {
     LOGGER.info("Indexing Items...");
     ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items, ElasticService.ANALYSER);
-    indexer.addMapping();
     ItemController controller = new ItemController();
     List<Item> items = (List<Item>) controller.retrieveAll(Imeji.adminUser);
     LOGGER.info("+++ " + items.size() + " items to index +++");
@@ -107,7 +116,6 @@ public class ElasticReIndexJob implements Callable<Integer> {
     LOGGER.info("Indexing Spaces...");
     ElasticIndexer indexer =
         new ElasticIndexer(index, ElasticTypes.spaces, ElasticService.ANALYSER);
-    indexer.addMapping();
     SpaceController controller = new SpaceController();
     List<Space> items = (List<Space>) controller.retrieveAll();
     LOGGER.info("+++ " + items.size() + " items to index +++");

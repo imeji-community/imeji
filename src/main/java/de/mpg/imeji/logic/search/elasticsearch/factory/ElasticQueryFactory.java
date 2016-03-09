@@ -420,6 +420,15 @@ public class ElasticQueryFactory {
         break;
       case pid:
         return fieldQuery(ElasticFields.PID, pair.getValue(), pair.getOperator(), pair.isNot());
+      case info_label:
+        return fieldQuery(ElasticFields.INFO_LABEL, pair.getValue(), pair.getOperator(),
+            pair.isNot());
+      case info_text:
+        return fieldQuery(ElasticFields.INFO_TEXT, pair.getValue(), pair.getOperator(),
+            pair.isNot());
+      case info_url:
+        return fieldQuery(ElasticFields.INFO_URL, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       default:
         break;
     }

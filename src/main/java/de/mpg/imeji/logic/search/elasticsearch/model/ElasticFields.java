@@ -19,7 +19,9 @@ public enum ElasticFields {
                                       "author.organization.name"), AUTHOR_ORGANIZATION_CITY(
                                           "author.organization.city"), AUTHOR_ORGANIZATION_COUNTRY(
                                               "author.organization.country"), AUTHOR_ORGANIZATION_DESCRIPTION(
-                                                  "author.organization.description");
+                                                  "author.organization.description"), INFO_LABEL(
+                                                      "info.label"), INFO_TEXT(
+                                                          "info.text"), INFO_URL("info.url");
   /**
    * The field which must be used to search in elasticsearch
    */

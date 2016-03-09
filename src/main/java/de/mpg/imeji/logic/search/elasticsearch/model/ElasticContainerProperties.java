@@ -7,6 +7,7 @@ import java.util.List;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 import de.mpg.imeji.logic.vo.Person;
 
 /**
@@ -21,6 +22,7 @@ public class ElasticContainerProperties extends ElasticProperties {
   private final String space;
   private final List<String> pid;
   private final List<ElasticPerson> author = new ArrayList<>();
+  private final List<ElasticContainerAdditionalInfo> info = new ArrayList<>();
 
   /**
    * Default Constructor
@@ -36,6 +38,13 @@ public class ElasticContainerProperties extends ElasticProperties {
     for (Person p : c.getMetadata().getPersons()) {
       author.add(new ElasticPerson(p));
     }
+    for (ContainerAdditionalInfo i : c.getMetadata().getAdditionalInformations()) {
+      info.add(new ElasticContainerAdditionalInfo(i));
+    }
+  }
+
+  public List<ElasticContainerAdditionalInfo> getInfo() {
+    return info;
   }
 
   /**

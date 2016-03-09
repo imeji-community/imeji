@@ -21,6 +21,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -40,6 +41,8 @@ import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.ProfileTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ContainerAdditionalInformationTO;
+import de.mpg.imeji.rest.to.ContainerTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.LiteralConstraintTO;
@@ -76,14 +79,9 @@ public class ReverseTransferObjectFactory {
    */
   public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode,
       User u) {
-    ContainerMetadata metadata = new ContainerMetadata();
-    metadata.setTitle(to.getTitle());
-    metadata.setDescription(to.getDescription());
-    // set contributors
-    transferCollectionContributors(to.getContributors(), metadata, u, mode);
-    vo.setMetadata(metadata);
-
+    vo.setMetadata(transferContainerMetatadata(to, mode, u));
   }
+
 
   /**
    * Transfer an {@link AlbumTO} to an {@link Album}
@@ -94,13 +92,44 @@ public class ReverseTransferObjectFactory {
    * @param u
    */
   public static void transferAlbum(AlbumTO to, Album vo, TRANSFER_MODE mode, User u) {
+    vo.setMetadata(transferContainerMetatadata(to, mode, u));
+  }
+
+  /**
+   * Transfer the ContainerTO into a ContainerMedatata
+   * 
+   * @param to
+   * @param mode
+   * @param u
+   * @return
+   */
+  private static ContainerMetadata transferContainerMetatadata(ContainerTO to, TRANSFER_MODE mode,
+      User u) {
     ContainerMetadata metadata = new ContainerMetadata();
     metadata.setTitle(to.getTitle());
     metadata.setDescription(to.getDescription());
+    metadata.setAdditionalInformations(transferAdditionalInfos(to.getAdditionalInfos()));
     // set contributors
     transferCollectionContributors(to.getContributors(), metadata, u, mode);
-    vo.setMetadata(metadata);
+    return metadata;
   }
+
+  /**
+   * Transfer the list of ContainerAdditionalInformationTO to List of ContainerAdditionalInfo
+   * 
+   * @param infosTO
+   * @return
+   */
+  private static List<ContainerAdditionalInfo> transferAdditionalInfos(
+      List<ContainerAdditionalInformationTO> infosTO) {
+    List<ContainerAdditionalInfo> infos = new ArrayList<>();
+    for (ContainerAdditionalInformationTO infoTO : infosTO) {
+      infos.add(new ContainerAdditionalInfo(infoTO.getLabel(), infoTO.getText(), infoTO.getUrl()));
+    }
+    return infos;
+  }
+
+
 
   /**
    * Transfer a {@link DefaultItemTO} to an {@link Item}

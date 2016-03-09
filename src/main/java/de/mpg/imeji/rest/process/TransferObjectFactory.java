@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -31,6 +33,8 @@ import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.UserNameCache;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ContainerAdditionalInformationTO;
+import de.mpg.imeji.rest.to.ContainerTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.LabelTO;
@@ -85,7 +89,13 @@ public class TransferObjectFactory {
     transferStatements(vo.getStatements(), to);
   }
 
-  public static void transferStatements(Collection<Statement> stats, MetadataProfileTO to) {
+  /**
+   * Transfer a list Statement in to MetadataProfileTO
+   * 
+   * @param stats
+   * @param to
+   */
+  private static void transferStatements(Collection<Statement> stats, MetadataProfileTO to) {
     for (Statement t : stats) {
       StatementTO sto = new StatementTO();
       sto.setId(CommonUtils.extractIDFromURI(t.getId()));
@@ -108,42 +118,64 @@ public class TransferObjectFactory {
 
   }
 
+  /**
+   * Transfer an CollectionImeji to a CollectionTO
+   * 
+   * @param vo
+   * @param to
+   */
   public static void transferCollection(CollectionImeji vo, CollectionTO to) {
-    transferProperties(vo, to);
-
-    // TODO: Container
-    to.setTitle(vo.getMetadata().getTitle());
-    to.setDescription(vo.getMetadata().getDescription());
-
-    // TODO: versionOf
-
+    transferContainer(vo, to);
     // in output jsen reference to mdprofile
-    if (vo.getProfile() != null ) {
+    if (vo.getProfile() != null) {
       to.getProfile().setId(CommonUtils.extractIDFromURI(vo.getProfile()));
       to.getProfile().setMethod("");
     }
-
-    for (Person p : vo.getMetadata().getPersons()) {
-      PersonTO pto = new PersonTO();
-      transferPerson(p, pto);
-      to.getContributors().add(pto);
-    }
   }
 
+  /**
+   * Transfer an Album to an AlbumTO
+   * 
+   * @param vo
+   * @param to
+   */
   public static void transferAlbum(Album vo, AlbumTO to) {
-    transferProperties(vo, to);
+    transferContainer(vo, to);
+  }
 
-    // TODO: Container
+  /**
+   * Transfer a container to a containerTO
+   * 
+   * @param vo
+   * @param to
+   */
+  private static void transferContainer(Container vo, ContainerTO to) {
+    transferProperties(vo, to);
     to.setTitle(vo.getMetadata().getTitle());
     to.setDescription(vo.getMetadata().getDescription());
-
+    to.setAdditionalInfos(transferAdditionalInfos(vo.getMetadata().getAdditionalInformations()));
     for (Person p : vo.getMetadata().getPersons()) {
       PersonTO pto = new PersonTO();
       transferPerson(p, pto);
       to.getContributors().add(pto);
     }
-
   }
+
+  /**
+   * Transfer a list of ContainerAdditionalInfo to a list of ContainerAdditionalInformationTO
+   * 
+   * @param vos
+   * @return
+   */
+  private static List<ContainerAdditionalInformationTO> transferAdditionalInfos(
+      List<ContainerAdditionalInfo> vos) {
+    List<ContainerAdditionalInformationTO> tos = new ArrayList<>();
+    for (ContainerAdditionalInfo vo : vos) {
+      tos.add(new ContainerAdditionalInformationTO(vo.getLabel(), vo.getText(), vo.getUrl()));
+    }
+    return tos;
+  }
+
 
   /**
    * Transfer a {@link User} to a {@link UserTO}

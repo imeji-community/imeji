@@ -60,7 +60,7 @@ All rights reserved. Use is subject to license terms.
 			   			</h:commandLink>
 					</h:panelGroup>
 					<h:panelGroup rendered="#{SessionBean.showLogin}">
-						<h:inputText value="#{LoginBean.login}" p:placeholder="#{lbl.admin_user}"/>
+						<h:inputText value="#{LoginBean.login}"  p:placeholder="#{lbl.admin_user}"/>
 						<h:inputSecret value="#{LoginBean.passwd}" p:placeholder="#{lbl.password}"/>
 						<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}" styleClass="imj_metaMenuItem"/>
 					</h:panelGroup>

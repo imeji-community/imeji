@@ -5,7 +5,8 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:imjc="http://java.sun.com/jsf/composite/components"
-      xmlns:mdprofile="http://java.sun.com/jsf/composite/components/mdProfile">
+      xmlns:mdprofile="http://java.sun.com/jsf/composite/components/mdProfile"
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
 
     <composite:interface>
         <composite:attribute name="formularBean" required="true" />
@@ -15,6 +16,12 @@
     </composite:interface>
 
     <composite:implementation>
+    	
+    	<style>
+    		.ui-menu .ui-menu-item .ui-state-focus {
+	            color: white;
+       		}
+    	</style>
         <h:form id="mediaContainerForm">
             <div class="imj_headline">
                 <br/>
@@ -73,6 +80,7 @@
               		
               		<!-- additional Infos -->
               		<h:panelGroup id="additionalInfos">
+              		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/combobox.js"/>
               			<div class="imj_sectionHeadline">
                              <h4><h:outputText value="#{lbl.colUtil}"/></h4>
                              <span class="imj_noDisplay">: </span>
@@ -92,22 +100,22 @@
                             </div>
 	                        <div class="imj_metadataSet">
 		                        <label class="imj_metadataLabel">
-		                       	 <h:outputText value="#{lbl.label} *" /> <span class="imj_noDisplay">: </span>
+		                       	 	<h:outputText value="#{lbl.label} *" /> <span class="imj_noDisplay">: </span>
 		                        </label>
-		                        <h:inputText id="inputInfoLabel" styleClass="imj_metadataValue" value="#{info.label}" />
+		                        <h:inputText id="inputInfoLabel" styleClass="imj_metadataValue fa-list" autocomplete="off" value="#{info.label}" html5:placeholder="#{lbl.placeholder_additional_info_label}"/>
 		                   	</div>
 		                   	<div class="imj_metadataSet">
 		                        <label class="imj_metadataLabel">
 		                        	<h:outputText  value="#{lbl.text}" /> 
 		                        	<span class="imj_noDisplay">: </span>
 		                        </label>
-		                        <h:inputTextarea id="inputInfoText" styleClass="imj_metadataValue" value="#{info.text}" />
+		                        <h:inputTextarea id="inputInfoText" styleClass="imj_metadataValue" value="#{info.text}" html5:placeholder="#{lbl.placeholder_text}"/>
 		                   	</div>
 		                   	<div class="imj_metadataSet">
 		                        <label class="imj_metadataLabel">
 		                        	<h:outputText  value="#{lbl.url}" /> <span class="imj_noDisplay">: </span>
 		                        </label>
-		                        <h:inputText id="inputInfoUrl" styleClass="imj_metadataValue"  value="#{info.url}" />
+		                        <h:inputText id="inputInfoUrl" styleClass="imj_metadataValue"  value="#{info.url}" html5:placeholder="#{lbl.placeholder_url}"/>
 		                   	</div>
 	                    </ui:repeat>
 	                    <div class="imj_sectionHeadline">

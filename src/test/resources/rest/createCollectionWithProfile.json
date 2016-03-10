@@ -1,7 +1,6 @@
 {
   "title": "TestCollection",
   "description": "some description",
-  "versionOf": "",
   "profile": {
     "id": "___PROFILE_ID___",
     "method": "___METHOD___"

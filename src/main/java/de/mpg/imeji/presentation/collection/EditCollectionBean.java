@@ -5,15 +5,14 @@ package de.mpg.imeji.presentation.collection;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -38,11 +37,7 @@ public class EditCollectionBean extends CollectionBean {
 
   public void init() throws Exception {
     super.setTab(TabType.COLLECTION);
-    // sets explicitely Edit mode for the collection Bean, to avoid
-    // classname comparisons
     setCollectionCreateMode(false);
-    //
-    // //retrieves the parameter with which edit collection Bean is set-up
     getProfileSelect();
     String id = super.getId();
     if (id != null) {
@@ -79,7 +74,6 @@ public class EditCollectionBean extends CollectionBean {
       } catch (Exception e) {
         BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
       }
-
     }
 
   }
@@ -94,6 +88,11 @@ public class EditCollectionBean extends CollectionBean {
     return "";
   }
 
+  /**
+   * Save Collection
+   * 
+   * @return
+   */
   public boolean saveEditedCollection() {
     try {
       CollectionController collectionController = new CollectionController();
@@ -105,23 +104,15 @@ public class EditCollectionBean extends CollectionBean {
       }
       UserController uc = new UserController(user);
       uc.update(user, user);
-
-      // here separate update for the Logo only, as it will only be
-      // allowed by edited collection through the web application
-      // not yet for REST
-      // getIngestImage is inherited from Container!
-
       if (getIngestImage() != null) {
         collectionController.updateLogo(ic, getIngestImage().getFile(), user);
         setIngestImage(null);
       }
       BeanHelper.info(sessionBean.getMessage("success_collection_save"));
       return true;
-    } catch (ImejiException e) {
+    } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(sessionBean.getMessage("error_collection_save"));
-      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
-      for (String errorM : listOfErrors) {
+      for (String errorM : e.getMessages()) {
         BeanHelper.error(sessionBean.getMessage(errorM));
       }
       return false;
@@ -131,8 +122,10 @@ public class EditCollectionBean extends CollectionBean {
     } catch (URISyntaxException e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
       return false;
+    } catch (ImejiException e) {
+      BeanHelper.error(sessionBean.getMessage("error_collection_save"));
+      return false;
     }
-
   }
 
   /**

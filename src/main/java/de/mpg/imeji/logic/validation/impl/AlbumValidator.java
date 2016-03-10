@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -20,7 +19,7 @@ import de.mpg.imeji.logic.vo.Person;
  * @author saquet
  *
  */
-public class AlbumValidator extends ObjectValidator implements Validator<Album> {
+public class AlbumValidator extends ContainerValidator implements Validator<Album> {
   private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
 
 
@@ -28,17 +27,8 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
   public void validate(Album album, Method method) throws UnprocessableError {
     exception = new UnprocessableError(new HashSet<String>());
     setValidateForMethod(method);
-    if (isDelete()) {
-      return;
-    }
 
-    if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())) {
-      exception.getMessages().add("error_bad_format_description");
-    }
-
-    if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
-      exception.getMessages().add("error_album_need_title");
-    }
+    validateContainerMetadata(album);
 
     List<Person> pers = new ArrayList<Person>();
 
@@ -76,6 +66,11 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
   @Override
   public void validate(Album t, MetadataProfile p, Method method) throws UnprocessableError {
     validate(t, method);
+  }
+
+  @Override
+  protected UnprocessableError getException() {
+    return exception;
   }
 
 }

@@ -83,19 +83,16 @@ public class CreateAlbumBean extends AlbumBean {
    * @see de.mpg.imeji.presentation.album.AlbumBean#save()
    */
   @Override
-  public String save() throws Exception {
+  public void save() throws Exception {
     try {
       AlbumController ac = new AlbumController();
       ac.create(getAlbum(), sessionBean.getUser());
       UserController uc = new UserController(sessionBean.getUser());
       sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
       BeanHelper.info(sessionBean.getMessage("success_album_create"));
-
       Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-
       ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setAlbum(getAlbum());
       sessionBean.setActiveAlbum(getAlbum());
-
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(nav.getAlbumUrl() + getAlbum().getIdString());
     } catch (UnprocessableError e) {
@@ -106,6 +103,5 @@ public class CreateAlbumBean extends AlbumBean {
       }
       getAlbum().setId(null);
     }
-    return "";
   }
 }

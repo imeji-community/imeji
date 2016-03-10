@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.album;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -197,8 +196,7 @@ public class AlbumBean extends ContainerBean {
    * @return
    */
   public String getCancel() {
-    Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
+    return getPageUrl();
   }
 
   @Override
@@ -270,14 +268,10 @@ public class AlbumBean extends ContainerBean {
    * @return
    * @throws Exception
    */
-  public String save() throws Exception {
+  public void save() throws Exception {
     if (update()) {
-      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-      FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getAlbumUrl()
-          + ObjectHelper.getId(getAlbum().getId()) + "/" + navigation.getInfosPath() + "?init=1");
-
+      FacesContext.getCurrentInstance().getExternalContext().redirect(getPageUrl());
     }
-    return "";
   }
 
   /**
@@ -310,9 +304,7 @@ public class AlbumBean extends ContainerBean {
       return true;
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(sessionBean.getMessage("error_album_update"));
-      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
-      for (String errorM : listOfErrors) {
+      for (String errorM : e.getMessages()) {
         BeanHelper.error(sessionBean.getMessage(errorM));
       }
       return false;

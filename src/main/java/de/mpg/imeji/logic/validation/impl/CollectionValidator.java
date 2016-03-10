@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -22,32 +21,28 @@ import de.mpg.imeji.logic.vo.Person;
  * @author saquet
  *
  */
-public class CollectionValidator extends ObjectValidator implements Validator<CollectionImeji> {
+public class CollectionValidator extends ContainerValidator implements Validator<CollectionImeji> {
 
   private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
   private static final Pattern DOI_VALIDATION_PATTERN = Pattern.compile("10\\.\\d+\\/\\S+");
 
+  @Override
+  protected UnprocessableError getException() {
+    return exception;
+  }
 
   @Override
   public void validate(CollectionImeji collection, Method m) throws UnprocessableError {
     exception = new UnprocessableError(new HashSet<String>());
     setValidateForMethod(m);
-    exception.getMessages().clear();
-    if (isDelete()) {
-      return;
-    }
-    if (StringHelper.hasInvalidTags(collection.getMetadata().getDescription())) {
-      exception.getMessages().add("error_bad_format_description");
-    }
-    if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
-      exception.getMessages().add("error_collection_need_title");
-    }
+    validateContainerMetadata(collection);
     validateCollectionPersons(collection);
     validateDOI(collection.getDoi());
     if (!exception.getMessages().isEmpty()) {
       throw exception;
     }
   }
+
 
   /**
    * Validate the Persons of a {@link CollectionImeji}

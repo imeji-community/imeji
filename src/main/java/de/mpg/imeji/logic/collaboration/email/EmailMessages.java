@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.user.util;
+package de.mpg.imeji.logic.collaboration.email;
 
 import java.util.Date;
 
@@ -26,7 +26,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class EmailMessages {
 
-  private static final Logger LOGGER = Logger.getLogger(EmailMessages.class);
 
   /**
    * Email content when a new Account is sent
@@ -38,6 +37,12 @@ public class EmailMessages {
    */
   public String getNewAccountMessage(String password, String email, String username) {
     return getEmailOnAccountAction_Body(password, email, username, "email_new_user");
+  }
+
+
+  public static String getSuccessCollectionDeleteMessage(String collectionName, SessionBean sb) {
+    return sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+        collectionName);
   }
 
   /**
@@ -287,7 +292,7 @@ public class EmailMessages {
   public String getEmailOnZipDownload_Subject(SessionBean session) {
     return session.getMessage("email_zip_images_downloaded_subject");
   }
-  
+
   /**
    * Email content when a collection has been shared with the addressee by the sender
    * 
@@ -297,8 +302,7 @@ public class EmailMessages {
    * @param collectionLink
    * @return
    */
-  public String getUnshareMessage(String sender, String dest, String title,
-      String collectionLink) {
+  public String getUnshareMessage(String sender, String dest, String title, String collectionLink) {
     String message = getBundle("email_unshared_object");
     message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", title)
         .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);

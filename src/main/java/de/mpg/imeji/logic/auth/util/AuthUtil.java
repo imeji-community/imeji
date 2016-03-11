@@ -49,8 +49,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
-import de.mpg.imeji.presentation.user.SharedHistory;
+import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
+import de.mpg.imeji.presentation.share.ShareListItem;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
@@ -354,7 +354,7 @@ public class AuthUtil {
    * @return
    * @throws Exception
    */
-  public static List<SharedHistory> getAllRoles(User user, User sessionUser) throws Exception {
+  public static List<ShareListItem> getAllRoles(User user, User sessionUser) throws Exception {
     List<String> shareToList = new ArrayList<String>();
     for (Grant g : user.getGrants()) {
       if (g.getGrantFor() != null) {
@@ -363,27 +363,27 @@ public class AuthUtil {
         }
       }
     }
-    List<SharedHistory> roles = new ArrayList<SharedHistory>();
+    List<ShareListItem> roles = new ArrayList<ShareListItem>();
     for (String sharedWith : shareToList) {
       if (sharedWith.contains("/collection/")) {
         CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
         if (c != null) {
-          roles.add(new SharedHistory(user, SharedObjectType.COLLECTION, sharedWith,
-              c.getProfile() != null ? c.getProfile().toString() : null,
-              c.getMetadata().getTitle()));
+          roles.add(new ShareListItem(user, SharedObjectType.COLLECTION, sharedWith,
+              c.getProfile() != null ? c.getProfile().toString() : null, c.getMetadata().getTitle(),
+              sessionUser));
         }
       } else if (sharedWith.contains("/album/")) {
         Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
         if (a != null) {
-          roles.add(new SharedHistory(user, SharedObjectType.ALBUM, sharedWith, null,
-              a.getMetadata().getTitle()));
+          roles.add(new ShareListItem(user, SharedObjectType.ALBUM, sharedWith, null,
+              a.getMetadata().getTitle(), sessionUser));
         }
       } else if (sharedWith.contains("/item/")) {
         ItemController c = new ItemController();
         Item it = c.retrieveLazy(URI.create(sharedWith), sessionUser);
         if (it != null) {
-          roles.add(
-              new SharedHistory(user, SharedObjectType.ITEM, sharedWith, null, it.getFilename()));
+          roles.add(new ShareListItem(user, SharedObjectType.ITEM, sharedWith, null,
+              it.getFilename(), sessionUser));
         }
       }
     }
@@ -396,7 +396,7 @@ public class AuthUtil {
    * @return
    * @throws Exception
    */
-  public static List<SharedHistory> getAllRoles(UserGroup group, User sessionUser)
+  public static List<ShareListItem> getAllRoles(UserGroup group, User sessionUser)
       throws Exception {
     List<String> shareToList = new ArrayList<String>();
     for (Grant g : group.getGrants()) {
@@ -404,21 +404,21 @@ public class AuthUtil {
         shareToList.add(g.getGrantFor().toString());
       }
     }
-    List<SharedHistory> roles = new ArrayList<SharedHistory>();
+    List<ShareListItem> roles = new ArrayList<ShareListItem>();
     for (String sharedWith : shareToList) {
       if (sharedWith.contains("/collection/")) {
         CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
-        roles.add(new SharedHistory(group, SharedObjectType.COLLECTION, sharedWith,
-            c.getProfile().toString(), c.getMetadata().getTitle()));
+        roles.add(new ShareListItem(group, SharedObjectType.COLLECTION, sharedWith,
+            c.getProfile().toString(), c.getMetadata().getTitle(), sessionUser));
       } else if (sharedWith.contains("/album/")) {
         Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
-        roles.add(new SharedHistory(group, SharedObjectType.ALBUM, sharedWith, null,
-            a.getMetadata().getTitle()));
+        roles.add(new ShareListItem(group, SharedObjectType.ALBUM, sharedWith, null,
+            a.getMetadata().getTitle(), sessionUser));
       } else if (sharedWith.contains("/item/")) {
         ItemController c = new ItemController();
         Item it = c.retrieveLazy(URI.create(sharedWith), sessionUser);
-        roles.add(
-            new SharedHistory(group, SharedObjectType.ITEM, sharedWith, null, it.getFilename()));
+        roles.add(new ShareListItem(group, SharedObjectType.ITEM, sharedWith, null,
+            it.getFilename(), sessionUser));
       }
     }
     return roles;

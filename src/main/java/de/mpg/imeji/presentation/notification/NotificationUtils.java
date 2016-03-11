@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.notification;
+package de.mpg.imeji.presentation.notification;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.export.Export;
@@ -22,8 +24,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -34,7 +34,7 @@ public class NotificationUtils {
   private static final Logger LOGGER = Logger.getLogger(NotificationUtils.class);
 
   private static EmailMessages msgs = new EmailMessages();
-  private static final EmailClient emailClient = new EmailClient();
+  private static final EmailService emailClient = new EmailService();
   private static UserController uc = new UserController(Imeji.adminUser);
   private static CollectionController cc = new CollectionController();
 

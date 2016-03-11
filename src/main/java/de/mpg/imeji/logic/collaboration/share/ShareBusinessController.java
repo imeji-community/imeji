@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.controller;
+package de.mpg.imeji.logic.collaboration.share;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +14,8 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
@@ -27,9 +29,10 @@ import de.mpg.imeji.logic.writer.WriterFacade;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ShareController extends ImejiController {
+public class ShareBusinessController {
+  // Writer for user model, but only used to deleted Grants
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
-  private static final Logger LOGGER = Logger.getLogger(ShareController.class);
+  private static final Logger LOGGER = Logger.getLogger(ShareBusinessController.class);
 
   /**
    * The Roles which can be shared to every object
@@ -183,7 +186,7 @@ public class ShareController extends ImejiController {
    * @return
    */
   public static List<String> rolesAsList(ShareRoles... roles) {
-    List<String> l = new ArrayList<String>();
+    List<String> l = new ArrayList<String>(roles.length);
     for (ShareRoles r : roles) {
       l.add(r.toString());
     }
@@ -327,41 +330,6 @@ public class ShareController extends ImejiController {
     return l;
   }
 
-  /**
-   * REplace method with share
-   * 
-   * @param user
-   * @param toRemove
-   * @param currentUser
-   */
-  @Deprecated
-  public User removeGrants(User user, List<Grant> toRemove, User currentUser) {
-    user.setGrants(getNotRemovedGrants(user.getGrants(), toRemove));
-    UserController c = new UserController(currentUser);
-    try {
-      user = c.update(user, currentUser);
-      writer.delete(new ArrayList<Object>(toRemove), currentUser);
-    } catch (Exception e) {
-      LOGGER.error(e);
-    }
-    return user;
-  }
-
-  /**
-   * Return the {@link List} of {@link Grants} which are not to be removed
-   * 
-   * @param current
-   * @param toRemove
-   * @return
-   */
-  private List<Grant> getNotRemovedGrants(Collection<Grant> current, List<Grant> toRemove) {
-    List<Grant> notRemovedGrants = new ArrayList<>();
-    for (Grant g : current) {
-      if (!toRemove.contains(g))
-        notRemovedGrants.add(g);
-    }
-    return notRemovedGrants;
-  }
 
   /**
    * Return the {@link Grant} which are new for the {@link User}
@@ -442,9 +410,11 @@ public class ShareController extends ImejiController {
    */
   private static boolean grantNotExist(List<Grant> userGrants, List<Grant> grantList) {
     boolean b = false;
-    for (Grant g : grantList)
-      if (!userGrants.contains(g))
+    for (Grant g : grantList) {
+      if (!userGrants.contains(g)) {
         b = true;
+      }
+    }
     return b;
   }
 

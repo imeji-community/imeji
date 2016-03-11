@@ -17,17 +17,17 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -138,7 +138,7 @@ public class UsersBean implements Serializable {
    * @throws IOException
    */
   public void sendEmail(String email, String password, String username) {
-    EmailClient emailClient = new EmailClient();
+    EmailService emailClient = new EmailService();
     EmailMessages emailMessages = new EmailMessages();
     try {
       emailClient.sendMail(email, null, emailMessages.getEmailOnAccountAction_Subject(false),

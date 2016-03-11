@@ -26,6 +26,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
@@ -122,7 +123,7 @@ public class CollectionController extends ImejiController {
 
     writer.create(WriterFacade.toList(c), p, user);
     // Prepare grants
-    ShareController shareController = new ShareController();
+    ShareBusinessController shareController = new ShareBusinessController();
     user = shareController.shareToCreator(user, c.getId().toString());
     // check the space
     // Just read SessionBean for SpaceId

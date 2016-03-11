@@ -3,7 +3,7 @@
  */
 package de.mpg.imeji.presentation.upload;
 
-import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+import static de.mpg.imeji.presentation.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 import java.io.File;
 import java.io.FileOutputStream;

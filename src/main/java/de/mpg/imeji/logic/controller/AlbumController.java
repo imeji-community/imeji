@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
@@ -69,7 +70,7 @@ public class AlbumController extends ImejiController {
   public URI create(Album album, User user) throws ImejiException {
     isLoggedInUser(user);
     prepareCreate(album, user);
-    ShareController shareController = new ShareController();
+    ShareBusinessController shareController = new ShareBusinessController();
     shareController.shareToCreator(user, album.getId().toString());
     writer.create(WriterFacade.toList(album), null, user);
     return album.getId();

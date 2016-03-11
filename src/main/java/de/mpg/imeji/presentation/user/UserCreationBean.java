@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.QuotaUtil;
@@ -20,8 +22,6 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -118,7 +118,7 @@ public class UserCreationBean extends QuotaSuperBean {
    * @param password
    */
   public void sendNewAccountEmail(String password) {
-    EmailClient emailClient = new EmailClient();
+    EmailService emailClient = new EmailService();
     EmailMessages emailMessages = new EmailMessages();
     try {
       emailClient.sendMail(user.getEmail(), null,
@@ -201,17 +201,18 @@ public class UserCreationBean extends QuotaSuperBean {
   public void setAllowedToCreateCollection(boolean allowedToCreateCollection) {
     this.allowedToCreateCollection = allowedToCreateCollection;
   }
-  
-  
+
+
   private void reloadUserPage() {
     try {
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-      FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+      FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
     } catch (IOException e) {
       Logger.getLogger(UserBean.class).info("Some reloadPage exception", e);
     }
   }
- 
+
 
 }
 

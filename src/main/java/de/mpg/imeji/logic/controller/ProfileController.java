@@ -26,6 +26,7 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -88,7 +89,7 @@ public class ProfileController extends ImejiController {
     prepareCreate(p, user);
     p.setStatus(Status.PENDING);
     writer.create(WriterFacade.toList(p), null, user);
-    ShareController shareController = new ShareController();
+    ShareBusinessController shareController = new ShareBusinessController();
     shareController.shareToCreator(user, p.getId().toString());
     return p;
   }

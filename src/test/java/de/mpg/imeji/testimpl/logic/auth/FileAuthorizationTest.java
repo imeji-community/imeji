@@ -10,10 +10,10 @@ import org.junit.Test;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ShareController;
-import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 import util.JenaUtil;
@@ -85,9 +85,9 @@ public class FileAuthorizationTest extends ControllerTest {
   public void loggedInReadPrivateItemOfsharedCollection() throws ImejiException {
     createCollection();
     createItemWithFile();
-    ShareController c = new ShareController();
+    ShareBusinessController c = new ShareBusinessController();
     c.shareToUser(JenaUtil.testUser, JenaUtil.testUser2, collection.getId().toString(),
-        ShareController.rolesAsList(ShareRoles.READ));
+        ShareBusinessController.rolesAsList(ShareRoles.READ));
     Assert.assertTrue(AuthUtil.isAllowedToViewFile(item.getFullImageLink(), JenaUtil.testUser2));
     Assert
         .assertTrue(AuthUtil.isAllowedToViewFile(item.getThumbnailImageLink(), JenaUtil.testUser2));
@@ -98,9 +98,9 @@ public class FileAuthorizationTest extends ControllerTest {
   public void loggedInReadPrivateItemOfsharedItem() throws ImejiException {
     createCollection();
     createItemWithFile();
-    ShareController c = new ShareController();
+    ShareBusinessController c = new ShareBusinessController();
     c.shareToUser(JenaUtil.testUser, JenaUtil.testUser2, item.getId().toString(),
-        ShareController.rolesAsList(ShareRoles.READ));
+        ShareBusinessController.rolesAsList(ShareRoles.READ));
     Assert.assertTrue(AuthUtil.isAllowedToViewFile(item.getFullImageLink(), JenaUtil.testUser2));
     Assert
         .assertTrue(AuthUtil.isAllowedToViewFile(item.getThumbnailImageLink(), JenaUtil.testUser2));

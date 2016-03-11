@@ -5,8 +5,6 @@ import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailS
 import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSenderStatic;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -16,16 +14,17 @@ import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -87,13 +86,14 @@ public class RegistrationBean {
       user.setEncryptedPassword(StringHelper.convertToMD5(password));
       user = uc.create(user, UserController.USER_TYPE.INACTIVE);
       this.registration_success = true;
-    } catch (Exception e) {
+    } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(sb.getMessage("error_during_user_registration"));
-      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
-      for (String errorM : listOfErrors) {
+      for (String errorM : e.getMessages()) {
         BeanHelper.error(sb.getMessage(errorM));
       }
+    } catch (Exception e) {
+      BeanHelper.error(sb.getMessage("error_during_user_registration"));
+      LOGGER.error("error registering user", e);
     }
 
     if (this.registration_success) {
@@ -130,7 +130,7 @@ public class RegistrationBean {
    * Send registration email
    */
   private void sendRegistrationNotification(String password) {
-    EmailClient emailClient = new EmailClient();
+    EmailService emailClient = new EmailService();
     EmailMessages emailMessages = new EmailMessages();
     try {
       // send to requester

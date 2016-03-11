@@ -4,7 +4,7 @@
 package de.mpg.imeji.presentation.collection;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+import static de.mpg.imeji.presentation.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 import javax.faces.event.ValueChangeEvent;
 

@@ -53,6 +53,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.share.ShareListItem;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -71,7 +72,7 @@ public class UserGroupBean implements Serializable {
   @ManagedProperty(value = "#{SessionBean.user}")
   private User sessionUser;
   private static final Logger LOGGER = Logger.getLogger(UserGroupsBean.class);
-  private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+  private List<ShareListItem> roles = new ArrayList<ShareListItem>();
 
   @PostConstruct
   public void init() {
@@ -131,8 +132,8 @@ public class UserGroupBean implements Serializable {
    * @param sh
    * @throws IOException
    */
-  public void revokeGrants(SharedHistory sh) throws IOException {
-    sh.getSharedType().clear();
+  public void revokeGrants(ShareListItem sh) throws IOException {
+    sh.getRoles().clear();
     sh.update();
     reload();
   }
@@ -160,7 +161,7 @@ public class UserGroupBean implements Serializable {
         return "";
       } else
         c.create(userGroup, sessionUser);
-        reload();
+      reload();
     } catch (Exception e) {
       BeanHelper.error("Error creating user group");
     }
@@ -245,14 +246,14 @@ public class UserGroupBean implements Serializable {
   /**
    * @return the roles
    */
-  public List<SharedHistory> getRoles() {
+  public List<ShareListItem> getRoles() {
     return roles;
   }
 
   /**
    * @param roles the roles to set
    */
-  public void setRoles(List<SharedHistory> roles) {
+  public void setRoles(List<ShareListItem> roles) {
     this.roles = roles;
   }
 }

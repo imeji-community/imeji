@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.user.util;
+package de.mpg.imeji.logic.collaboration.email;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerEnableAuthenticationStatic;
@@ -41,8 +41,8 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class EmailClient {
-  private static final Logger LOGGER = Logger.getLogger(EmailClient.class);
+public class EmailService {
+  private static final Logger LOGGER = Logger.getLogger(EmailService.class);
 
   /**
    * Is true if the Email is valid
@@ -55,15 +55,22 @@ public class EmailClient {
   /**
    * Send an email according to the properties define in imeji.properties
    */
-  public void sendMail(String to, String from, String subject, String message) throws IOException,
-      URISyntaxException {
+  public void sendMail(String to, String from, Email email) throws IOException, URISyntaxException {
+    sendMail(to, from, null, email.getSubject(), email.getBody());
+  }
+
+  /**
+   * Send an email according to the properties define in imeji.properties
+   */
+  public void sendMail(String to, String from, String subject, String message)
+      throws IOException, URISyntaxException {
     sendMail(to, from, null, subject, message);
   }
 
   /**
    * Send an email according to the properties define in imeji.properties
    */
-  public void sendMail(String to, String from, String[] replyTo, String subject, String message)
+  private void sendMail(String to, String from, String[] replyTo, String subject, String message)
       throws IOException, URISyntaxException {
     String emailUser = getEmailServerUserStatic();
     String password = getEmailServerPasswordStatic();
@@ -77,8 +84,8 @@ public class EmailClient {
       sender = from;
     }
     String[] recipientsAdress = {to};
-    sendMail(server, port, auth, emailUser, password, sender, recipientsAdress, null, null,
-        replyTo, subject, message);
+    sendMail(server, port, auth, emailUser, password, sender, recipientsAdress, null, null, replyTo,
+        subject, message);
   }
 
   /**
@@ -168,8 +175,8 @@ public class EmailClient {
       LOGGER.debug("Email sent!");
     } catch (MessagingException e) {
       SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-      BeanHelper.error(sessionBean.getMessage("email_error").replace("XXX_USER_EMAIL_XXX", to)
-          + ": " + e);
+      BeanHelper.error(
+          sessionBean.getMessage("email_error").replace("XXX_USER_EMAIL_XXX", to) + ": " + e);
       LOGGER.error("Error in sendMail(...)", e);
     }
     return status;

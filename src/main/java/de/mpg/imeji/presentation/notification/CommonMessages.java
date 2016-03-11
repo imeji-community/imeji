@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.notification;
+package de.mpg.imeji.presentation.notification;
 
 import de.mpg.imeji.presentation.session.SessionBean;
 

@@ -20,8 +20,8 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.ShareController;
-import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.util.QuotaUtil;
@@ -32,6 +32,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.share.ShareListItem;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -42,7 +43,7 @@ public class UserBean extends QuotaSuperBean {
   private String repeatedPassword = null;
   private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
   private String id;
-  private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+  private List<ShareListItem> roles = new ArrayList<ShareListItem>();
   private boolean edit = false;
 
   public UserBean() {
@@ -159,13 +160,13 @@ public class UserBean extends QuotaSuperBean {
    * @throws Exception
    */
   public void toggleAdmin() throws Exception {
-    ShareController shareController = new ShareController();
+    ShareBusinessController shareController = new ShareBusinessController();
     if (user.isAdmin()) {
       shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
-          ShareController.rolesAsList(ShareRoles.CREATE));
+          ShareBusinessController.rolesAsList(ShareRoles.CREATE));
     } else {
       shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
-          ShareController.rolesAsList(ShareRoles.ADMIN));
+          ShareBusinessController.rolesAsList(ShareRoles.ADMIN));
     }
   }
 
@@ -179,14 +180,14 @@ public class UserBean extends QuotaSuperBean {
    * @throws Exception
    */
   public void toggleCreateCollection() throws Exception {
-    ShareController shareController = new ShareController();
+    ShareBusinessController shareController = new ShareBusinessController();
     if (!user.isAdmin()) {
       // admin can not be forbidden to create collections
       if (user.isAllowedToCreateCollection()) {
         shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(), null);
       } else {
         shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
-            ShareController.rolesAsList(ShareController.ShareRoles.CREATE));
+            ShareBusinessController.rolesAsList(ShareBusinessController.ShareRoles.CREATE));
       }
     }
   }
@@ -264,11 +265,11 @@ public class UserBean extends QuotaSuperBean {
   /**
    * @return the roles
    */
-  public List<SharedHistory> getRoles() {
+  public List<ShareListItem> getRoles() {
     return roles;
   }
 
-  public List<SharedHistory> getGroupRoles(UserGroup userGroup) throws Exception {
+  public List<ShareListItem> getGroupRoles(UserGroup userGroup) throws Exception {
     if (userGroup != null)
       return AuthUtil.getAllRoles(userGroup, session.getUser());
     else
@@ -280,7 +281,7 @@ public class UserBean extends QuotaSuperBean {
   /**
    * @param roles the roles to set
    */
-  public void setRoles(List<SharedHistory> roles) {
+  public void setRoles(List<ShareListItem> roles) {
     this.roles = roles;
   }
 

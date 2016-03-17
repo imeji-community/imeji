@@ -3,7 +3,6 @@ package de.mpg.imeji.presentation.share;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -21,10 +20,8 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
-import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -51,12 +48,10 @@ public class ShareBean implements Serializable {
   private URI uri;
   // The object (collection, album or item) which is going to be shared
   private Object shareTo;
-  // the user whom the shareto object belongs
+  // the user whom the shared object belongs
   private URI owner;
   private String title;
   private String profileUri;
-  private String emailInput;
-  private List<ShareListItem> shareListItem = new ArrayList<ShareListItem>();
   private boolean isAdmin;
   private boolean sendEmail = false;
   private UserGroup userGroup;
@@ -68,6 +63,7 @@ public class ShareBean implements Serializable {
   @ManagedProperty("#{SessionBean}")
   private SessionBean sb;
   private ShareInput input;
+  private ShareList shareList;
 
   public enum SharedObjectType {
     COLLECTION, ALBUM, ITEM
@@ -140,15 +136,13 @@ public class ShareBean implements Serializable {
    * Init method for {@link ShareBean}
    */
   public void init() {
-    input = new ShareInput(uri.toString(), type, profileUri, sb);
-    this.shareListItem = new ArrayList<ShareListItem>();
-    this.retrieveSharedUserWithGrants();
-    this.emailInput = "";
-    this.isAdmin = AuthUtil.staticAuth().administrate(sb.getUser(), shareTo);
-    this.pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString()
+    input = new ShareInput(uri.toString(), type, profileUri, title, sb);
+    shareList = new ShareList(owner, uri.toString(), profileUri, type, sb.getUser());
+    isAdmin = AuthUtil.staticAuth().administrate(sb.getUser(), shareTo);
+    pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString()
         + PrettyContext.getCurrentInstance().getRequestQueryString();
-    this.pageUrl = this.pageUrl.split("[&\\?]group=")[0];
-    this.initShareWithGroup();
+    pageUrl = pageUrl.split("[&\\?]group=")[0];
+    initShareWithGroup();
   }
 
   /**
@@ -171,11 +165,10 @@ public class ShareBean implements Serializable {
    * @return
    */
   public void update() {
-    for (ShareListItem sh : shareListItem) {
-      boolean modified = sh.update();
+    for (ShareListItem item : shareList.getItems()) {
+      boolean modified = item.update();
       if (sendEmail && modified) {
-        sendEmail(sh.getUser(), title,
-            ShareBusinessController.transformRolesToGrants(sh.getRoles(), getShareToUri()));
+        sendEmailForShare(item, title);
       }
     }
     reloadPage();
@@ -186,6 +179,11 @@ public class ShareBean implements Serializable {
    */
   public void share() {
     if (input.share()) {
+      if (sendEmail) {
+        for (ShareListItem item : input.getExistingUsersAsShareListItems()) {
+          sendEmailForShare(item, title);
+        }
+      }
       reloadPage();
     }
   }
@@ -204,24 +202,13 @@ public class ShareBean implements Serializable {
    * 
    * @param sh
    */
-  public void unshare(ShareListItem sh) {
-    sh.getRoles().clear();
-    sh.update();
+  public void unshare(ShareListItem item) {
+    item.getRoles().clear();
+    item.update();
     if (sendEmail) {
-      if (sh.getUser() != null) {
-        sendEmailUnshare(sh.getUser(), title);
-      } else if (sh.getGroup() != null) {
-        UserController c = new UserController(Imeji.adminUser);
-        for (URI uriUser : sh.getGroup().getUsers()) {
-          try {
-            sendEmailUnshare(c.retrieve(uriUser), title);
-          } catch (ImejiException e) {
-            LOGGER.info("Error retrieving user " + uriUser + " who is member of the user group "
-                + sh.getGroup().getName());
-          }
-        }
-      }
+      sendEmailUnshare(item, title);
     }
+    reloadPage();
   }
 
   /**
@@ -233,6 +220,7 @@ public class ShareBean implements Serializable {
     groupListItem.update();
     reloadPage();
   }
+
 
   /**
    * Remove an unknow Email from the list (no invitation will be sent to him)
@@ -281,190 +269,56 @@ public class ShareBean implements Serializable {
   }
 
   /**
-   * Retrieve all {@link User} with {@link Grant} for the currentContainer
-   */
-  public void retrieveSharedUserWithGrants() {
-    UserController uc = new UserController(Imeji.adminUser);
-    Collection<User> allUser = uc.searchByGrantFor(getShareToUri());
-    shareListItem = new ArrayList<>();
-    for (User u : allUser) {
-      // Do not display the creator of this collection here
-      if (!u.getId().toString().equals(owner.toString())) {
-        shareListItem
-            .add(new ShareListItem(u, type, getShareToUri(), profileUri, null, sb.getUser()));
-      }
-    }
-    UserGroupController ugc = new UserGroupController();
-    Collection<UserGroup> groups = ugc.searchByGrantFor(getShareToUri(), Imeji.adminUser);
-    for (UserGroup group : groups) {
-      shareListItem
-          .add(new ShareListItem(group, type, getShareToUri(), profileUri, null, sb.getUser()));
-    }
-  }
-
-  /**
-   * Send email to the person to share with
+   * Send an Email...
    * 
-   * @param dest
+   * @param email
    * @param subject
-   * @param grants
+   * @param body
    */
-  private void sendEmail(User dest, String subject, List<Grant> grants) {
-    EmailService emailClient = new EmailService();
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    if (grants != null && grants.size() > 0) {
-      try {
-        this.getEmailMessage(sb.getUser().getPerson().getCompleteName(),
-            dest.getPerson().getCompleteName(), title, getLinkToSharedObject());
-      } catch (Exception e) {
-        BeanHelper.error(sb.getMessage("error") + ": Email not sent\n" + "User: " + sb.getUser()
-            + "\nDestination:" + dest);
-      }
-      try {
-        this.addRoles(grants);
-        emailClient.sendMail(dest.getEmail(), null,
-            subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
-      } catch (Exception e) {
-        LOGGER.error("Error sending email", e);
-        BeanHelper.error(sb.getMessage("error") + ": Email not sent");
-      }
-    }
-  }
-
-  /**
-   * Send email to the person to share with
-   * 
-   * @param dest
-   * @param subject
-   * @param grants
-   */
-  private void sendEmailUnshare(User dest, String subject) {
-    EmailService emailClient = new EmailService();
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-
+  private void sendEmail(String email, String subject, String body) {
     try {
-      this.emailInput =
-          new EmailMessages().getUnshareMessage(sb.getUser().getPerson().getCompleteName(),
-              dest.getPerson().getCompleteName(), title, getLinkToSharedObject());
-      emailClient.sendMail(dest.getEmail(), null,
-          subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
+      new EmailService().sendMail(email, null,
+          subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), body);
     } catch (Exception e) {
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent\n" + "User: " + sb.getUser()
-          + "\nDestination:" + dest);
+      LOGGER.error("Error sending email", e);
+      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
     }
-  }
-
-  private void addRoles(List<Grant> grants) {
-    String grantsStr = "";
-    List<String> roles = ShareBusinessController.transformGrantsToRoles(grants, getShareToUri());
-
-    // Addition for the metadata Profile stuff
-    List<String> metadataProfileRoles = getProfileUri() != null
-        ? ShareBusinessController.transformGrantsToRoles(grants, getProfileUri())
-        : new ArrayList<String>();
-    for (String profileRole : metadataProfileRoles) {
-      if (profileRole.equals("EDIT")) {
-        roles.add("EDIT_PROFILE");
-      }
-    }
-
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    if (this.type.equals(SharedObjectType.ALBUM)) {
-      for (int i = 0; i < roles.size(); i++) {
-        String role = roles.get(i);
-        switch (role) {
-          case "READ":
-            grantsStr += "- " + sb.getLabel("album_share_read") + "\n";
-            break;
-          case "CREATE":
-            grantsStr += "- " + sb.getLabel("album_share_image_add") + "\n";
-            break;
-          case "EDIT":
-            grantsStr += "- " + sb.getLabel("album_share_album_edit") + "\n";
-            break;
-          case "ADMIN":
-            grantsStr += "- " + sb.getLabel("album_share_admin") + "\n";
-            break;
-        }
-      }
-    }
-    if (this.type.equals(SharedObjectType.COLLECTION)) {
-      for (int i = 0; i < roles.size(); i++) {
-        String role = roles.get(i);
-        switch (role) {
-          case "READ":
-            grantsStr += "- " + sb.getLabel("collection_share_read") + "\n";
-            break;
-          case "CREATE":
-            grantsStr += "- " + sb.getLabel("collection_share_image_upload") + "\n";
-            break;
-          case "EDIT_ITEM":
-            grantsStr += "- " + sb.getLabel("collection_share_image_edit") + "\n";
-            break;
-          case "DELETE_ITEM":
-            grantsStr += "- " + sb.getLabel("collection_share_image_delete") + "\n";
-            break;
-          case "EDIT":
-            grantsStr += "- " + sb.getLabel("collection_share_collection_edit") + "\n";
-            break;
-          case "EDIT_PROFILE":
-            grantsStr += "- " + sb.getLabel("collection_share_profile_edit") + ":  "
-                + getProfileUri() + "\n";
-            break;
-          case "ADMIN":
-            grantsStr += "- " + sb.getLabel("collection_share_admin") + "\n";
-            break;
-        }
-      }
-    }
-
-    if (this.type.equals(SharedObjectType.ITEM)) {
-      for (int i = 0; i < roles.size(); i++) {
-        String role = roles.get(i);
-        switch (role) {
-          case "READ":
-            grantsStr += "- " + sb.getLabel("collection_share_read");
-            break;
-        }
-      }
-    }
-    this.emailInput = this.emailInput.replaceAll("XXX_RIGHTS_XXX", grantsStr.trim());
   }
 
   /**
-   * Send an Email to all {@link User} of a {@link UserGroup}
+   * Send Email for each ShareListItem (User of Group) that object has been shared and with which
+   * Grants
    * 
-   * @param group
+   * @param item
    * @param subject
    */
-  private void sendEmailToGroup(UserGroup group, String subject, List<Grant> grants) {
-    UserController c = new UserController(Imeji.adminUser);
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    for (URI uri : group.getUsers()) {
-      try {
-        sendEmail(c.retrieve(uri), subject, grants);
-      } catch (Exception e) {
-        LOGGER.error("Error sending email", e);
-        BeanHelper.error(sb.getMessage("error") + ": Email not sent");
-      }
+  private void sendEmailForShare(ShareListItem item, String subject) {
+    for (User user : item.getUsers()) {
+      ShareEmailMessage emailMessage = new ShareEmailMessage(user.getPerson().getCompleteName(),
+          title, getLinkToSharedObject(), getShareToUri(), profileUri, item.getRoles(), type, sb);
+      sendEmail(user.getEmail(), subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()),
+          emailMessage.getBody());
     }
   }
 
 
-
-  private void getEmailMessage(String from, String to, String name, String link) {
-    EmailMessages emailMessages = new EmailMessages();
-    this.emailInput = "";
-    if (this.type.equals(SharedObjectType.COLLECTION)) {
-      this.emailInput = emailMessages.getSharedCollectionMessage(from, to, name, link);
-    }
-    if (this.type.equals(SharedObjectType.ALBUM)) {
-      this.emailInput = emailMessages.getSharedAlbumMessage(from, to, name, link);
-    }
-    if (this.type.equals(SharedObjectType.ITEM)) {
-      this.emailInput = emailMessages.getSharedItemMessage(from, to, name, link);
+  /**
+   * Send email to the user(s) for which the object has been unshared
+   * 
+   * @param dest
+   * @param subject
+   * @param grants
+   */
+  private void sendEmailUnshare(ShareListItem item, String subject) {
+    subject = subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName());
+    for (User user : item.getUsers()) {
+      String body =
+          new EmailMessages().getUnshareMessage(sb.getUser().getPerson().getCompleteName(),
+              user.getPerson().getCompleteName(), title, getLinkToSharedObject());
+      sendEmail(user.getEmail(), subject, body);
     }
   }
+
 
   /**
    * Search a {@link UserGroup} by name
@@ -487,14 +341,6 @@ public class ShareBean implements Serializable {
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public String getEmailInput() {
-    return emailInput;
-  }
-
-  public void setEmailInput(String emailInput) {
-    this.emailInput = emailInput.toLowerCase();
   }
 
   public boolean isAdmin() {
@@ -531,22 +377,6 @@ public class ShareBean implements Serializable {
 
   public void setShareToUri(Object shareTo) {
     this.shareTo = shareTo;
-  }
-
-  public String getProfileUri() {
-    return profileUri;
-  }
-
-  public void setProfileUri(String profileUri) {
-    this.profileUri = profileUri;
-  }
-
-  public List<ShareListItem> getSharedWith() {
-    return shareListItem;
-  }
-
-  public void setSharedWith(List<ShareListItem> sharedWith) {
-    this.shareListItem = sharedWith;
   }
 
   public String getTitle() {
@@ -607,10 +437,6 @@ public class ShareBean implements Serializable {
 
   public void setSb(SessionBean sb) {
     this.sb = sb;
-  }
-
-  public int getSharedWithNum() {
-    return getSharedWith().size();
   }
 
   /**
@@ -680,5 +506,19 @@ public class ShareBean implements Serializable {
    */
   public void setInput(ShareInput input) {
     this.input = input;
+  }
+
+  /**
+   * @return the shareList
+   */
+  public ShareList getShareList() {
+    return shareList;
+  }
+
+  /**
+   * @param shareList the shareList to set
+   */
+  public void setShareList(ShareList shareList) {
+    this.shareList = shareList;
   }
 }

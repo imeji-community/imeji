@@ -31,6 +31,7 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -61,10 +62,16 @@ public class EmailService {
 
   /**
    * Send an email according to the properties define in imeji.properties
+   * 
+   * @throws ImejiException
    */
   public void sendMail(String to, String from, String subject, String message)
-      throws IOException, URISyntaxException {
-    sendMail(to, from, null, subject, message);
+      throws ImejiException {
+    try {
+      sendMail(to, from, null, subject, message);
+    } catch (IOException | URISyntaxException e) {
+      throw new ImejiException("Error sending email");
+    }
   }
 
   /**

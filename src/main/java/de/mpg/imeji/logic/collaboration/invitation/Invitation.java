@@ -1,8 +1,9 @@
 package de.mpg.imeji.logic.collaboration.invitation;
 
+import java.io.Serializable;
 import java.util.List;
 
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 
 /**
  * An invitation sent by a user to another user for a Object with some roles
@@ -10,8 +11,9 @@ import de.mpg.imeji.logic.vo.User;
  * @author bastiens
  *
  */
-public class Invitation {
-  private final User invitor;
+public class Invitation implements Serializable {
+  private static final long serialVersionUID = 658949804870284864L;
+  private final String id = IdentifierUtil.newUniversalUniqueId();
   private final String inviteeEmail;
   private final String objectUri;
   private final List<String> roles;
@@ -24,18 +26,10 @@ public class Invitation {
    * @param objectUri
    * @param roles
    */
-  public Invitation(User invitor, String inviteeEmail, String objectUri, List<String> roles) {
+  public Invitation(String inviteeEmail, String objectUri, List<String> roles) {
     this.inviteeEmail = inviteeEmail;
-    this.invitor = invitor;
     this.objectUri = objectUri;
     this.roles = roles;
-  }
-
-  /**
-   * @return the invitor
-   */
-  public User getInvitor() {
-    return invitor;
   }
 
   /**
@@ -57,6 +51,13 @@ public class Invitation {
    */
   public List<String> getRoles() {
     return roles;
+  }
+
+  /**
+   * @return the id
+   */
+  public String getId() {
+    return id;
   }
 
 }

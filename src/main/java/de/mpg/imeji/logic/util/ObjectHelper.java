@@ -36,7 +36,9 @@ public class ObjectHelper {
   /**
    * Private constructor
    */
-  private ObjectHelper() {}
+  private ObjectHelper() {
+    // avoid to create it
+  }
 
   /**
    * Ensure that the {@link URI} uses the correct base uri (see property

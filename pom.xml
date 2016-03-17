@@ -599,6 +599,11 @@
 		    <artifactId>pdfbox</artifactId>
 		    <version>1.8.10</version>
 		</dependency>
+		<dependency>
+		   <groupId>org.fusesource.leveldbjni</groupId>
+		   <artifactId>leveldbjni-all</artifactId>
+		   <version>1.8</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

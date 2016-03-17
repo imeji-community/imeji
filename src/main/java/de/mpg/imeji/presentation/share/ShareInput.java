@@ -36,16 +36,19 @@ public class ShareInput implements Serializable {
   private final String profileUri;
   private final SharedObjectType type;
   private final SessionBean sb;
+  private final String title;
 
   /**
    * Constructor
    * 
    * @param objectUri
    */
-  public ShareInput(String objectUri, SharedObjectType type, String profileUri, SessionBean sb) {
+  public ShareInput(String objectUri, SharedObjectType type, String profileUri, String title,
+      SessionBean sb) {
     this.objectUri = objectUri;
     this.type = type;
     this.profileUri = profileUri;
+    this.title = title;
     this.sb = sb;
     this.menu = new ShareListItem(type, objectUri, profileUri, sb.getUser());
   }
@@ -67,15 +70,34 @@ public class ShareInput implements Serializable {
    */
   public void shareAndSendInvitations() {
     shareWithValidEmails();
+    InvitationBusinessController invitationBC = new InvitationBusinessController();
+    EmailService emailService = new EmailService();
     for (String invitee : unknownEmails) {
       try {
-        new InvitationBusinessController()
-            .invite(new Invitation(sb.getUser(), invitee, objectUri, menu.getRoles()));
+        invitationBC.invite(new Invitation(invitee, objectUri, menu.getRoles()));
+        emailService.sendMail(invitee, null, sb.getMessage("invitation_share_subject"),
+            getInvitationMessage());
       } catch (ImejiException e) {
         BeanHelper.error(sb.getMessage("error_send_invitation"));
         LOGGER.error("Error sending invitation:", e);
       }
     }
+  }
+
+  /**
+   * @return the invitation message
+   */
+  private String getInvitationMessage() {
+    return sb.getMessage("invitation_share_body").replace("XXX_OBJECT_NAME_XXX", title);
+  }
+
+  /**
+   * Return the existing users as list of {@link ShareListItem}
+   * 
+   * @return
+   */
+  public List<ShareListItem> getExistingUsersAsShareListItems() {
+    return toShareListItem(validEmails);
   }
 
   /**
@@ -105,10 +127,12 @@ public class ShareInput implements Serializable {
    * @return
    */
   private List<ShareListItem> toShareListItem(List<String> emails) {
-    List<ShareListItem> listItems = new ArrayList<>();
+    List<ShareListItem> listItems = new ArrayList<ShareListItem>();
     for (String email : emails) {
-      listItems.add(
-          new ShareListItem(retrieveUser(email), type, objectUri, profileUri, null, sb.getUser()));
+      ShareListItem item =
+          new ShareListItem(retrieveUser(email), type, objectUri, profileUri, null, sb.getUser());
+      item.setRoles(menu.getRoles());
+      listItems.add(item);
     }
     return listItems;
   }

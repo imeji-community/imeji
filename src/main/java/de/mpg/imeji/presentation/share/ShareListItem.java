@@ -1,6 +1,7 @@
 package de.mpg.imeji.presentation.share;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,8 +9,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
+import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
@@ -43,8 +46,6 @@ public class ShareListItem implements Serializable {
     this.currentUser = currentUser;
     init(new ArrayList<>(), containerUri, profileUri);
   }
-
-
 
   /**
    * Constructor with a {@link User}
@@ -104,7 +105,7 @@ public class ShareListItem implements Serializable {
   }
 
   /**
-   * According to the selected roles, add necessary roles
+   * According to the selected roles, add necessary roles (called from page as well)
    */
   public void checkRoles() {
     switch (type) {
@@ -132,28 +133,13 @@ public class ShareListItem implements Serializable {
         roles = Arrays.asList(ShareRoles.READ.toString());
         break;
     }
+    // transform abstract list to real list, to allow modifications
+    roles = new ArrayList<>(roles);
   }
 
   public void revokeGrants() {
     roles.clear();
     update();
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public List<String> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<String> roles) {
-    this.roles = roles;
-    checkRoles();
   }
 
   /**
@@ -185,6 +171,29 @@ public class ShareListItem implements Serializable {
       LOGGER.error("Error updating grants: ", e);
     }
     return false;
+  }
+
+  /**
+   * Return all users in this items. This might be many user if the item contains a group
+   * 
+   * @return
+   */
+  public List<User> getUsers() {
+    UserController controller = new UserController(Imeji.adminUser);
+    List<User> users = new ArrayList<>();
+    if (group != null) {
+      for (URI uri : group.getUsers()) {
+        try {
+          users.add(controller.retrieve(uri));
+        } catch (ImejiException e) {
+          LOGGER.error("Error retrieving user:" + uri);
+        }
+      }
+    }
+    if (user != null) {
+      users.add(user);
+    }
+    return users;
   }
 
   /**
@@ -241,5 +250,22 @@ public class ShareListItem implements Serializable {
    */
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public List<String> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<String> roles) {
+    this.roles = roles;
+    checkRoles();
   }
 }

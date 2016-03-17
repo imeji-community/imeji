@@ -37,6 +37,7 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
+import de.mpg.imeji.logic.message.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -100,6 +101,7 @@ public class Imeji {
     tdbPath = PropertyReader.getProperty("imeji.tdb.path");
     init(tdbPath);
     ElasticService.start();
+    KeyValueStoreBusinessController.startStore();
     nightlyExecutor.start();
   }
 
@@ -261,6 +263,7 @@ public class Imeji {
     nightlyExecutor.stop();
     LOGGER.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
     ElasticService.shutdown();
+    KeyValueStoreBusinessController.stopStore();
     LOGGER.info("Ending LockSurveyor...");
     locksSurveyor.terminate();
     LOGGER.info("...done");

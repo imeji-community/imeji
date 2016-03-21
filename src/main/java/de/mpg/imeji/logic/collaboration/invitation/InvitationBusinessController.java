@@ -1,5 +1,6 @@
 package de.mpg.imeji.logic.collaboration.invitation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import de.mpg.imeji.logic.message.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.vo.User;
 
 /**
- * Business Controller for invitation of Users
+ * Business Controller for invitation of Users.
  * 
  * @author bastiens
  *
@@ -40,6 +41,22 @@ public class InvitationBusinessController {
     } else {
       throw new AlreadyExistsException(invitation.getInviteeEmail() + "exists already");
     }
+  }
+
+  /**
+   * Check for pending invitations of this User, add grants to this users according to the
+   * invitation, remove the invitations
+   * 
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public User consume(User user) throws ImejiException {
+    for (Invitation invitation : retrieveInvitationOfUser(user.getEmail())) {
+      shareBC.shareToUser(Imeji.adminUser, user, invitation.getObjectUri(), invitation.getRoles());
+      cancel(invitation.getId());
+    }
+    return user;
   }
 
   /**
@@ -74,39 +91,32 @@ public class InvitationBusinessController {
    * @param objectUri
    * @return
    * @throws ImejiException
+   * @throws IOException
+   * @throws ClassNotFoundException
    */
-  public List<Invitation> retrieveRelatedInvitations(String objectUri) throws ImejiException {
-    InvitationList invitationList =
-        (InvitationList) keyValueStoreBC.get(new InvitationList(objectUri).getId());
-    return retrieveInvitations(invitationList);
+  public List<Invitation> retrieveInvitationsOfObject(String objectUri) throws ImejiException {
+    return keyValueStoreBC.getList("invitation:.*:" + objectUri, Invitation.class);
   }
 
-
   /**
-   * Check for pending invitations of this User, add grants to this users according to the
-   * invitation, remove the invitations
+   * Return all Invitationd for this user (according to his Email)
    * 
-   * @param user
+   * @param email
    * @return
    * @throws ImejiException
    */
-  public User consume(User user) throws ImejiException {
-    InvitationList invitationList =
-        (InvitationList) keyValueStoreBC.get(new InvitationList(user.getEmail()).getId());
-    for (Invitation invitation : retrieveInvitations(invitationList)) {
-      shareBC.shareToUser(Imeji.adminUser, user, invitation.getObjectUri(), invitation.getRoles());
-      cancel(invitation.getId());
-    }
-    return user;
+  public List<Invitation> retrieveInvitationOfUser(String email) throws ImejiException {
+    return keyValueStoreBC.getList("invitation:" + email + ":.*", Invitation.class);
   }
 
   /**
-   * Get all pending invitations TODO
+   * Get all pending invitations
    * 
    * @return
+   * @throws ImejiException
    */
-  public List<Invitation> retrieveAll() {
-    return null;
+  public List<Invitation> retrieveAll() throws ImejiException {
+    return keyValueStoreBC.getList("invitation:.*:.*", Invitation.class);
   }
 
   /**
@@ -128,8 +138,6 @@ public class InvitationBusinessController {
    */
   private void add(Invitation invitation) throws ImejiException {
     keyValueStoreBC.put(invitation.getId(), invitation);
-    addObjectToInvitationRelation(invitation);
-    addEmailToInvitationRelation(invitation);
   }
 
   /**
@@ -139,8 +147,6 @@ public class InvitationBusinessController {
    * @throws ImejiException
    */
   private void remove(Invitation invitation) throws ImejiException {
-    removeEmailToInvitationRelation(invitation);
-    removeObjectToInvitationRelation(invitation);
     keyValueStoreBC.delete(invitation.getId());
   }
 
@@ -173,78 +179,6 @@ public class InvitationBusinessController {
       }
     }
     return invitations;
-  }
-
-  /**
-   * Add the relation Object -> Invitation to the store.
-   * 
-   * @param invitation
-   * @throws ImejiException
-   */
-  private void addObjectToInvitationRelation(Invitation invitation) throws ImejiException {
-    addRelationToInvitation(invitation, invitation.getObjectUri());
-  }
-
-  /**
-   * Add the relation email -> Invitation to the store
-   * 
-   * @param invitation
-   * @throws ImejiException
-   */
-  private void addEmailToInvitationRelation(Invitation invitation) throws ImejiException {
-    addRelationToInvitation(invitation, invitation.getInviteeEmail());
-  }
-
-  /**
-   * Add relation key -> Invitation. If the relation exists, add the invitation to this relation
-   * 
-   * @param invitation
-   * @param relatedId
-   * @throws ImejiException
-   */
-  private void addRelationToInvitation(Invitation invitation, String key) throws ImejiException {
-    InvitationList invitationList = new InvitationList(key);
-    try {
-      invitationList = (InvitationList) keyValueStoreBC.get(invitationList.getId());
-      invitationList.add(invitation);
-    } catch (NotFoundException e) {
-      // Doesn't exist, ok, will be then created
-    }
-    keyValueStoreBC.put(invitationList.getId(), invitationList);
-  }
-
-  /**
-   * Remove the relation Object -> Invitation to the store.
-   * 
-   * @param invitation
-   * @throws ImejiException
-   */
-  private void removeObjectToInvitationRelation(Invitation invitation) throws ImejiException {
-    removeRelationToInvitation(invitation, invitation.getObjectUri());
-  }
-
-  /**
-   * Remove the relation email -> Invitation to the store
-   * 
-   * @param invitation
-   * @throws ImejiException
-   */
-  private void removeEmailToInvitationRelation(Invitation invitation) throws ImejiException {
-    removeRelationToInvitation(invitation, invitation.getInviteeEmail());
-  }
-
-  /**
-   * Remove the relation to an invitation
-   * 
-   * @param invitation
-   * @param key
-   * @throws ImejiException
-   */
-  private void removeRelationToInvitation(Invitation invitation, String key) throws ImejiException {
-    InvitationList invitationList = new InvitationList(key);
-    invitationList = (InvitationList) keyValueStoreBC.get(invitationList.getId());
-    invitationList.remove(invitation);
-    keyValueStoreBC.put(invitationList.getId(), invitationList);
   }
 
 }

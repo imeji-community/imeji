@@ -6,10 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.fusesource.leveldbjni.JniDBFactory;
 import org.iq80.leveldb.DB;
+import org.iq80.leveldb.DBIterator;
 import org.iq80.leveldb.Options;
 
 import de.mpg.imeji.exceptions.ImejiException;
@@ -70,6 +73,38 @@ public class KeyValueStoreBusinessController {
       throw new NotFoundException(
           "Key " + key + " not found in key/value store: " + e.getMessage());
     }
+  }
+
+  /**
+   * Return all elements with a Key matching the Key pattern (according to REGEX Rules)
+   * 
+   * @param keyPattern
+   * @return
+   * @throws ImejiException
+   * @throws ClassNotFoundException
+   * @throws IOException
+   */
+
+  public <T> List<T> getList(String keyPattern, Class<T> clazz) throws ImejiException {
+    DBIterator iterator = STORE.iterator();
+    List<T> list = new ArrayList<>();
+    try {
+      try {
+        for (iterator.seekToFirst(); iterator.hasNext(); iterator.next()) {
+          String key = (String) deserialize(iterator.peekNext().getKey());
+          if (key.matches(keyPattern)) {
+            list.add(clazz.cast(deserialize(iterator.peekNext().getValue())));
+          }
+        }
+      } finally {
+        iterator.close();
+      }
+    } catch (Exception e) {
+      LOGGER.error("Error reading list from key/value store with Pattern: " + keyPattern, e);
+      throw new ImejiException(
+          "Error reading list from key/value store with Pattern: " + keyPattern);
+    }
+    return list;
   }
 
   /**

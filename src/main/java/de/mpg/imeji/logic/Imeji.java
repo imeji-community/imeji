@@ -163,6 +163,7 @@ public class Imeji {
     initModel(spaceModel);
     LOGGER.info("... models done!");
     CONFIG = new ConfigurationBean();
+    KeyValueStoreBusinessController.startStore();
     initadminUser();
     initDefaultMetadataProfile();
   }

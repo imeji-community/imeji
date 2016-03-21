@@ -18,6 +18,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.message.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
@@ -105,6 +106,7 @@ public class JenaUtil {
     LOGGER.info("TDB Location released!");
     deleteTDBDirectory();
     ElasticService.reset();
+    KeyValueStoreBusinessController.stopStore();
   }
 
   private static void initTestUser() throws Exception {

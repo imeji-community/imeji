@@ -53,7 +53,8 @@ public class InvitationBusinessController {
    */
   public User consume(User user) throws ImejiException {
     for (Invitation invitation : retrieveInvitationOfUser(user.getEmail())) {
-      shareBC.shareToUser(Imeji.adminUser, user, invitation.getObjectUri(), invitation.getRoles());
+      user = shareBC.shareToUser(Imeji.adminUser, user, invitation.getObjectUri(),
+          invitation.getRoles());
       cancel(invitation.getId());
     }
     return user;

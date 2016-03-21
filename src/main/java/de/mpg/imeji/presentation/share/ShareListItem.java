@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.collaboration.invitation.Invitation;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
@@ -23,6 +24,7 @@ public class ShareListItem implements Serializable {
   private static final long serialVersionUID = -1637916656299359982L;
   private static final Logger LOGGER = Logger.getLogger(ShareListItem.class);
   private final User currentUser;
+  private Invitation invitation;
   private User user;
   private UserGroup group;
   private String shareToUri;
@@ -45,6 +47,25 @@ public class ShareListItem implements Serializable {
     this.shareToUri = containerUri;
     this.currentUser = currentUser;
     init(new ArrayList<>(), containerUri, profileUri);
+  }
+
+  /**
+   * Constructor with a {@link Invitation}
+   * 
+   * @param user
+   * @param isCollection
+   * @param containerUri
+   * @param profileUri
+   * @param roles
+   */
+  public ShareListItem(Invitation invitation, SharedObjectType type, String containerUri,
+      String profileUri, User currentUser) {
+    this.invitation = invitation;
+    this.type = type;
+    this.shareToUri = containerUri;
+    this.currentUser = currentUser;
+    init(ShareBusinessController.transformRolesToGrants(invitation.getRoles(), containerUri),
+        containerUri, profileUri);
   }
 
   /**
@@ -258,6 +279,10 @@ public class ShareListItem implements Serializable {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public Invitation getInvitation() {
+    return invitation;
   }
 
   public List<String> getRoles() {

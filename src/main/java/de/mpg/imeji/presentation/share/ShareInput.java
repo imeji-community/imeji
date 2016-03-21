@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.collaboration.invitation.Invitation;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -75,8 +76,7 @@ public class ShareInput implements Serializable {
     for (String invitee : unknownEmails) {
       try {
         invitationBC.invite(new Invitation(invitee, objectUri, menu.getRoles()));
-        emailService.sendMail(invitee, null, sb.getMessage("invitation_share_subject"),
-            getInvitationMessage());
+        emailService.sendMail(invitee, null, getInvitationEmailSubject(), getInvitationEmailBody());
       } catch (ImejiException e) {
         BeanHelper.error(sb.getMessage("error_send_invitation"));
         LOGGER.error("Error sending invitation:", e);
@@ -87,8 +87,20 @@ public class ShareInput implements Serializable {
   /**
    * @return the invitation message
    */
-  private String getInvitationMessage() {
-    return sb.getMessage("invitation_share_body").replace("XXX_OBJECT_NAME_XXX", title);
+  private String getInvitationEmailBody() {
+    Navigation nav = new Navigation();
+    return sb.getMessage("email_invitation_body")
+        .replace("XXX_SENDER_NAME_XXX", sb.getUser().getPerson().getCompleteName())
+        .replace("XXX_INSTANCE_NAME_XXX", sb.getInstanceName())
+        .replace("XXX_REGISTRATION_LINK_XXX", nav.getRegistrationUrl())
+        .replace("XXX_SENDER_EMAIL", sb.getUser().getEmail());
+
+  }
+
+  private String getInvitationEmailSubject() {
+    return sb.getMessage("email_invitation_subject")
+        .replace("XXX_SENDER_NAME_XXX", sb.getUser().getPerson().getCompleteName())
+        .replace("XXX_INSTANCE_NAME_XXX", sb.getInstanceName());
   }
 
   /**

@@ -149,7 +149,7 @@
 										<h:outputLink   id="actionMenuShareCollection" rendered="#{cc.attrs.curMainMenu == 'collection' and cc.attrs.activeMenu != 'item'}" value="#{Navigation.collectionUrl}#{cc.attrs.vo.idString}/share">
 											<h:outputText value="#{lbl.collection_share}"/>
 										</h:outputLink>
-										<h:outputLink   id="actionMenuShareItem" rendered="#{cc.attrs.activeMenu == 'item' and itemBean.image.status!='WITHDRAWN'}" value="?tab=share#itemMetadata">
+										<h:outputLink   id="actionMenuShareItem" rendered="#{cc.attrs.activeMenu == 'item' and itemBean.image.status!='WITHDRAWN'}" value="#{Navigation.itemUrl}#{cc.attrs.vo.idString}/share">
 											<h:outputText value="#{lbl.item_share}"/>
 										</h:outputLink>
 									</li>							

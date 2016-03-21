@@ -240,7 +240,7 @@
 													<dialog:confirmationDialog submitAction="revokeGrants" bean="#{shareHistory}" confirmationText="#{msg.confirmation_revoke_grant} &quot;#{shareHistory.title}&quot; ?" submitLabel="#{lbl.revoke}" dialogId="revokeDialog#{row.index}"/>
 												</div>
 												<div class="imj_admindataValueEntry">
-													<h:selectManyCheckbox id="role" value="#{shareHistory.sharedType}" disabled="true" layout="pageDirection">
+													<h:selectManyCheckbox id="role" value="#{shareHistory.roles}" disabled="true" layout="pageDirection">
 														<f:selectItems value="#{roles}"/>
 													</h:selectManyCheckbox>
 												</div>

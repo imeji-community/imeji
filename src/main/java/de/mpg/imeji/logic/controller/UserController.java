@@ -300,8 +300,9 @@ public class UserController {
       }
 
       activateUser.setUserStatus(User.UserStatus.ACTIVE);
-      activateUser
-          .setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId().toString()));
+
+      activateUser.getGrants()
+          .addAll(AuthorizationPredefinedRoles.defaultUser(activateUser.getId().toString()));
       writer.update(WriterFacade.toList(activateUser), null, activateUser, true);
       return activateUser;
 

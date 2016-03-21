@@ -20,6 +20,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserGroupController;
@@ -116,7 +117,7 @@ public class ShareBean implements Serializable {
    * @return
    * @throws Exception
    */
-  public String getInitShareItem() throws ImejiException {
+  public String initShareItem() throws ImejiException {
     this.type = SharedObjectType.ITEM;
     this.profileUri = null;
     this.shareTo = null;
@@ -134,8 +135,10 @@ public class ShareBean implements Serializable {
 
   /**
    * Init method for {@link ShareBean}
+   * 
+   * @throws ImejiException
    */
-  public void init() {
+  public void init() throws ImejiException {
     input = new ShareInput(uri.toString(), type, profileUri, title, sb);
     shareList = new ShareList(owner, uri.toString(), profileUri, type, sb.getUser());
     isAdmin = AuthUtil.staticAuth().administrate(sb.getUser(), shareTo);
@@ -197,6 +200,16 @@ public class ShareBean implements Serializable {
   }
 
   /**
+   * Cancel Invitation
+   * 
+   * @throws ImejiException
+   */
+  public void cancelInvitation(ShareListItem item) throws ImejiException {
+    new InvitationBusinessController().cancel(item.getInvitation().getId());
+    reloadPage();
+  }
+
+  /**
    * Unshare theContainer for one {@link User} (i.e, remove all {@link Grant} of this {@link User}
    * related to theContainer)
    * 
@@ -235,7 +248,7 @@ public class ShareBean implements Serializable {
   /**
    * Reload the current page
    */
-  private void reloadPage() {
+  public void reloadPage() {
     try {
       sb.reloadUser();
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
@@ -439,12 +452,22 @@ public class ShareBean implements Serializable {
     this.sb = sb;
   }
 
+  public List<SelectItem> getRolesMenu() {
+    if (type == SharedObjectType.COLLECTION) {
+      return getShareCollectionGrantItems();
+    }
+    if (type == SharedObjectType.ALBUM) {
+      return getShareAlbumGrantItems();
+    }
+    return getShareItemGrantItems();
+  }
+
   /**
    * Menu for sharing collection
    * 
    * @return
    */
-  public List<SelectItem> getShareCollectionGrantItems() {
+  private List<SelectItem> getShareCollectionGrantItems() {
     List<SelectItem> itemList = new ArrayList<SelectItem>();
     itemList.add(new SelectItem(ShareRoles.READ, sb.getLabel("collection_share_read")));
     itemList.add(new SelectItem(ShareRoles.CREATE, sb.getLabel("collection_share_image_upload")));
@@ -465,7 +488,7 @@ public class ShareBean implements Serializable {
    * 
    * @return
    */
-  public List<SelectItem> getShareItemGrantItems() {
+  private List<SelectItem> getShareItemGrantItems() {
     List<SelectItem> itemList = new ArrayList<SelectItem>();
     itemList.add(new SelectItem(ShareRoles.READ, sb.getLabel("collection_share_read")));
     return itemList;
@@ -476,7 +499,7 @@ public class ShareBean implements Serializable {
    * 
    * @return
    */
-  public List<SelectItem> getShareAlbumGrantItems() {
+  private List<SelectItem> getShareAlbumGrantItems() {
     List<SelectItem> itemList = new ArrayList<SelectItem>();
     itemList.add(new SelectItem(ShareRoles.READ, sb.getLabel("album_share_read")));
     itemList.add(new SelectItem(ShareRoles.CREATE, sb.getLabel("album_share_image_add")));

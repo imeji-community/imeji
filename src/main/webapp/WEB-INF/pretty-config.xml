@@ -34,6 +34,11 @@
 		<pattern value="/item/#{ItemBean.id}" />
 		<view-id>/jsf/Item.xhtml</view-id>
 	</url-mapping>
+	<url-mapping id="shareItem">
+		<pattern value="/item/#{ShareBean.id}/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+		<action onPostback="false">#{ShareBean.initShareItem}</action>
+	</url-mapping>
 	<url-mapping id="upload">
 		<pattern value="/collection/#{UploadBean.id}/upload" />
 		<view-id>/jsf/Upload.xhtml</view-id>

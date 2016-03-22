@@ -2,7 +2,8 @@
 <f:view encoding="UTF-8" locale="#{SessionBean.locale}" 
         xmlns:f="http://java.sun.com/jsf/core" 
         xmlns:h="http://java.sun.com/jsf/html" 
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:imjc="http://java.sun.com/jsf/composite/components">
     <f:loadBundle var="lbl" basename="labels"/>
     <f:loadBundle var="msg" basename="messages"/>
     <ui:param name="siteWrapperClass" value="#{Auth.admin ? 'imj_siteWrapper imj_isAdmin' : 'imj_siteWrapper'}" />
@@ -24,16 +25,21 @@
                 <ui:include src="component/header/header_default.xhtml"/>
                 <ui:fragment rendered="#{!Configuration.privateModus or SessionBean.user != null}">
 	                 <!-- headline -->
-	                <h:panelGroup rendered="#{!displayQuery}" layout="block" styleClass="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
-	                    <h1>
-	                        #{headline.toString().trim()}
-	                        <h:outputText value="imeji" rendered="#{headline.toString().trim().length() == 0}"/>
-	                        <ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
-	                            <br/>
-	                            #{headlineSecondRow.toString().trim()}
-	                        </ui:fragment>
-	                    </h1>
-	                </h:panelGroup>
+	                 <ui:fragment rendered="#{!displayQuery}">
+		                 <div class="imj_siteContentHeadline #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
+		                    <h1>
+		                        #{headline.toString().trim()}
+		                        <h:outputText value="imeji" rendered="#{headline.toString().trim().length() == 0}"/>
+		                        <ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
+		                            <br/>
+		                            #{headlineSecondRow.toString().trim()}
+		                        </ui:fragment>
+		                    </h1>
+		                </div>
+		                <div class="imj_siteContentStatus #{headline.toString().trim().length() == 0 ? 'imj_invisible' : ''}">
+		                	<imjc:iconStatus id="status" imejiResource="#{imejiResource}"/>
+		                </div>
+	                 </ui:fragment>
 	                <!-- Search Query -->
 	                <ui:insert name="searchQuery"/>
 	                <!-- Actions Menu -->

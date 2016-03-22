@@ -75,7 +75,6 @@ public class EditCollectionBean extends CollectionBean {
         BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
       }
     }
-
   }
 
   public String save() throws Exception {

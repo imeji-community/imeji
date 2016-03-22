@@ -60,7 +60,6 @@ public class CreateCollectionBean extends CollectionBean {
         sessionBean.getUser().getPerson().clone());
     profileSelector =
         new ProfileSelector(null, sessionBean.getUser(), sessionBean.getSelectedSpaceString());
-
   }
 
   /**

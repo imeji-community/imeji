@@ -38,7 +38,6 @@ import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * The javabean for the {@link Album}
@@ -128,6 +127,16 @@ public class AlbumBean extends ContainerBean {
   }
 
   /**
+   * Initialize the bean
+   * 
+   * @throws ImejiException
+   */
+  private void init() throws ImejiException {
+    album = new AlbumController().retrieveLazy(ObjectHelper.getURI(Album.class, id),
+        sessionBean.getUser());
+  }
+
+  /**
    * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and
    * initialize it.
    * 
@@ -136,8 +145,7 @@ public class AlbumBean extends ContainerBean {
   public void initView() throws Exception {
     try {
       if (id != null) {
-        album =
-            ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+        init();
         if (album != null) {
           findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
           loadItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
@@ -160,7 +168,7 @@ public class AlbumBean extends ContainerBean {
       }
     } catch (Exception e) {
       LOGGER.error(e.getMessage());
-      // Has to be in try/catch block, otherwise redirct from
+      // Has to be in try/catch block, otherwise redirect from
       // HistoryFilter will not work.
       // Here simply do nothing
     }
@@ -170,9 +178,8 @@ public class AlbumBean extends ContainerBean {
    * Initialize the album form to edit the metadata of the album
    */
   public void initEdit() {
-    AlbumController ac = new AlbumController();
     try {
-      setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
+      init();
       sessionBean.setSpaceLogoIngestImage(null);
       setIngestImage(null);
     } catch (Exception e) {
@@ -189,6 +196,8 @@ public class AlbumBean extends ContainerBean {
       }
     }
   }
+
+
 
   /**
    * Return the link for the Cancel button

@@ -33,6 +33,10 @@ public class ObjectHelper {
 
   private static final Logger LOGGER = Logger.getLogger(ObjectHelper.class);
 
+  public enum ObjectType {
+    COLLECTION, ITEM, ALBUM, PROFILE;
+  }
+
   /**
    * Private constructor
    */
@@ -89,6 +93,22 @@ public class ObjectHelper {
     }
     return uri.toString().substring(uri.toString().lastIndexOf("/"), uri.toString().length())
         .replace("/", "");
+  }
+
+  /**
+   * Parse an object URI to get its {@link ObjectType}
+   * 
+   * @param uri
+   * @return
+   */
+  public static ObjectType getObjectType(URI uri) {
+    String path = uri.getPath();
+    for (ObjectType type : ObjectType.values()) {
+      if (path.contains("/" + type.name().toLowerCase())) {
+        return type;
+      }
+    }
+    return null;
   }
 
   /**

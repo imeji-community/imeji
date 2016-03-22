@@ -89,6 +89,7 @@ public abstract class ContainerBean implements Serializable {
   private IngestImage ingestImage;
   private int sizeDiscarded;
 
+
   /**
    * Types of containers
    * 

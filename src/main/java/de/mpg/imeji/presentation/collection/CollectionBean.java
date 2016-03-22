@@ -54,9 +54,7 @@ public abstract class CollectionBean extends ContainerBean {
   private boolean selected;
 
   private boolean sendEmailNotification = false;
-
   private boolean collectionCreateMode = true;
-
   private boolean profileSelectMode = false;
 
   /**

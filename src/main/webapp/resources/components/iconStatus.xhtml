@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="imejiResource"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<ui:fragment rendered="#{StatusBean.init(cc.attrs.imejiResource)}">
+			<div class="imj_statusHeaderArea">
+				<ui:fragment rendered="#{StatusBean.status != 'PENDING'}">
+					<div class="imj_overlayMenu imj_menuRight">
+						<div class="imj_menuHeader">
+		                    <span class="#{StatusBean.status == 'RELEASED' ? 'fa fa-globe' : 'fa fa-minus-circle'} fa-size-3">&#160;</span>
+						</div>
+						<div class="imj_menuBody">
+							<ul class="imj_overlayMenuList">
+								<li>#{StatusBean.status}</li>
+							</ul>
+						</div>
+					</div>
+				</ui:fragment>
+				<ui:fragment rendered="#{!empty StatusBean.users or !empty StatusBean.groups}">
+					<div class="imj_overlayMenu imj_menuRight">
+						<div class="imj_menuHeader">
+		                    <span class="fa fa-users fa-size-3">&#160;</span>
+						</div>
+						<div class="imj_menuBody">
+							<span class="imj_menuText" style="display: block;">#{lbl.shared_with}... </span>
+							<ul class="imj_overlayMenuList">
+								<li>#{StatusBean.owner} (<span style="font-style:italic;">#{lbl.role_owner}</span>)</li>
+								<ui:repeat var="sharedWith" value="#{StatusBean.users}">
+									<li>#{sharedWith}</li>
+								</ui:repeat>
+								<ui:repeat var="sharedWith" value="#{StatusBean.groups}">
+									<li>#{sharedWith} <span style="font-style:italic;">(#{lbl.group})</span></li>
+								</ui:repeat>
+								<li class="imj_listDottedSeparator">
+									<a href="#{StatusBean.linkToSharePage}">
+										#{lbl.manage}
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</ui:fragment>
+			</div>
+		</ui:fragment>
+		
+		<style>
+			.imj_statusHeaderArea{
+				padding : 0.9em 3%;
+			}
+			.imj_statusHeaderArea .imj_listDottedSeparator{border-top: 1px dashed #292929; padding: 0.5em 1em}			
+		</style>
+		
+	</composite:implementation>
+</html>

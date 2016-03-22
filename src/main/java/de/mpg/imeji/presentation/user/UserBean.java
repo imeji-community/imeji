@@ -105,6 +105,7 @@ public class UserBean extends QuotaSuperBean {
         user.setEncryptedPassword(StringHelper.convertToMD5(newPassword));
         updateUser();
         BeanHelper.info(session.getMessage("success_change_user_password"));
+        return;
       } else {
         BeanHelper.error(session.getMessage("error_user_repeat_password"));
       }

@@ -230,12 +230,12 @@ public class AlbumController extends ImejiController {
     for (String uri : albumItemsSet) {
       album.getImages().add(URI.create(uri));
     }
-    
+
     // save the album
     update(album, user);
     // Update the new items, to add the relation item -> album in the index
     // We do not update Items of the Album!!!
-    //itemController.updateBatch(items, Imeji.adminUser);
+    // itemController.updateBatch(items, Imeji.adminUser);
     // return all items of the album
     return itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
         .getResults();
@@ -271,8 +271,8 @@ public class AlbumController extends ImejiController {
     // save the album
     update(album, user);
     // Update the removed items, to remove the relation item -> album in the index
-    //We do not update items of the album
-    //itemController.updateBatch(items, Imeji.adminUser);
+    // We do not update items of the album
+    // itemController.updateBatch(items, Imeji.adminUser);
     // Get the new size of the album
     int afterSize = itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
         .getNumberOfRecords();
@@ -369,7 +369,7 @@ public class AlbumController extends ImejiController {
    */
   public void updateLogo(Album album, File f, User u)
       throws ImejiException, IOException, URISyntaxException {
-    album = (Album) updateFile(album, f, u);
+    album = (Album) updateFile(album, f);
     if (f != null && f.exists()) {
       // Update the collection as a patch only with collection Logo Triple
       List<ImejiTriple> triples =
@@ -377,8 +377,8 @@ public class AlbumController extends ImejiController {
       patch(triples, u, true);
     }
   }
-  
-  
+
+
   /**
    * Remove a all items from an Album
    * 
@@ -396,7 +396,7 @@ public class AlbumController extends ImejiController {
     album.setImages(new ArrayList<URI>());
     // save the album
     update(album, user);
-    //Return how many items have been removed from album
+    // Return how many items have been removed from album
     return beforeSize;
   }
 

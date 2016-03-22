@@ -247,7 +247,7 @@ public class CollectionController extends ImejiController {
   public void updateLogo(CollectionImeji ic, File f, User u)
       throws ImejiException, IOException, URISyntaxException {
 
-    ic = (CollectionImeji) updateFile(ic, f, u);
+    ic = (CollectionImeji) updateFile(ic, f);
     if (f != null && f.exists()) {
 
       // Update the collection as a patch only with collection Logo Triple

@@ -17,7 +17,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class ContainerAdditionalInfo implements Serializable {
   private static final long serialVersionUID = -1920870551000242907L;
-  private URI id;
+  private URI id;// = IdentifierUtil.newURI(ContainerAdditionalInfo.class, "universal");
   @j2jLiteral("http://www.w3.org/2000/01/rdf-schema#label")
   private String label;
   @j2jLiteral("http://imeji.org/terms/text")

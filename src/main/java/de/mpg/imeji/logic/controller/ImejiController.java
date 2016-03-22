@@ -207,7 +207,7 @@ public abstract class ImejiController {
    * @throws ImejiException
    * @throws URISyntaxException
    */
-  protected Container updateFile(Container container, File f, User user)
+  protected Container updateFile(Container container, File f)
       throws ImejiException, IOException, URISyntaxException {
     InternalStorageManager ism = new InternalStorageManager();
     if (f != null) {

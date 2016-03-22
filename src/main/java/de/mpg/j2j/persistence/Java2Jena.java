@@ -71,10 +71,11 @@ public class Java2Jena {
     if (J2JHelper.getId(o) == null) {
       throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
     }
-    if (lazy)
+    if (lazy) {
       removeLazy(o);
-    else
+    } else {
       remove(o);
+    }
     write(o);
   }
 
@@ -119,7 +120,6 @@ public class Java2Jena {
       if (o != null) {
         model.add(r, p, o);
       }
-
     } else {
       Literal o = literalHelper.java2Literal(obj);
       if (o != null) {
@@ -233,9 +233,26 @@ public class Java2Jena {
           String objectName = ns.getPath().replaceAll("/terms/", "");
           String subjectId = s.getURI();
           listElement =
-              J2JHelper.setId(listElement, URI.create(subjectId + "/" + objectName + "/" + i));
+              J2JHelper.setId(listElement, URI.create(subjectId + "/" + objectName + "@pos" + i));
         }
+        updatePosition(listElement, i);
         addProperty(s, listElement, f);
+      }
+    }
+  }
+
+  /**
+   * Update the position according to the current place of this list element in the list
+   * 
+   * @param id
+   * @return
+   */
+  private void updatePosition(Object listElement, int pos) {
+    URI id = J2JHelper.getId(listElement);
+    if (id != null) {
+      String[] s = id.getPath().split("@pos");
+      if (s.length > 1 && pos != Integer.parseInt(s[1])) {
+        listElement = J2JHelper.setId(listElement, URI.create(s[0] + "@pos" + pos));
       }
     }
   }

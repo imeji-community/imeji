@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.invitation.Invitation;
+import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
@@ -31,6 +34,7 @@ public class ShareListItem implements Serializable {
   private SharedObjectType type;
   private List<String> roles = new ArrayList<String>();
   private String title;
+  private String profileUri;
 
   /**
    * Constructor without User of Group (To be used as menu)
@@ -115,6 +119,7 @@ public class ShareListItem implements Serializable {
    */
   private void init(List<Grant> grants, String uri, String profileUri) {
     roles = ShareBusinessController.transformGrantsToRoles((List<Grant>) grants, uri);
+    this.profileUri = profileUri;
     if (profileUri != null) {
       List<String> profileRoles =
           ShareBusinessController.transformGrantsToRoles((List<Grant>) grants, profileUri);
@@ -195,6 +200,20 @@ public class ShareListItem implements Serializable {
   }
 
   /**
+   * Update the invitation
+   * 
+   * @throws ImejiException
+   */
+  public void updateInvitation() throws ImejiException {
+    if (invitation != null) {
+      InvitationBusinessController invitationBC = new InvitationBusinessController();
+      Invitation newInvitation =
+          new Invitation(invitation.getInviteeEmail(), invitation.getObjectUri(), roles);
+      invitationBC.invite(newInvitation);
+    }
+  }
+
+  /**
    * Return all users in this items. This might be many user if the item contains a group
    * 
    * @return
@@ -215,6 +234,16 @@ public class ShareListItem implements Serializable {
       users.add(user);
     }
     return users;
+  }
+
+  public List<SelectItem> getRolesMenu() {
+    if (type == SharedObjectType.COLLECTION) {
+      return ShareUtil.getCollectionRoleMenu(profileUri);
+    }
+    if (type == SharedObjectType.ALBUM) {
+      return ShareUtil.getAlbumRoleMenu();
+    }
+    return ShareUtil.getItemRoleMenu();
   }
 
   /**

@@ -9,7 +9,7 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<ui:param name="rolesMenu" value="#{ShareBean.rolesMenu}"/>
+		<ui:param name="rolesMenu" value="#{ShareBean.input.menu.	rolesMenu}"/>
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin(ShareBean.shareTo)}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
 			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
@@ -115,32 +115,25 @@
 					</h:form>
 				</div>
 				
-				<h:panelGroup id="unknownEmails" rendered="#{!empty ShareBean.input.unknownEmails}">
-					<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.share_confirm_invitation}"/></div>
-					<div class="imj_messageList">
+				<h:panelGroup  styleClass="imj_pageMessageArea" id="unknownEmails" rendered="#{!empty ShareBean.input.unknownEmails}">
+					<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>		
+					<ul class="imj_messageList">
+						<li class="imj_messageInfo"><h:outputText value="#{lbl.share_confirm_invitation}"/></li>
 						<h:form>
-							<table class="imj_rightsTable">
-								<tbody>
-									<ui:repeat var="email" value="#{ShareBean.input.unknownEmails}" varStatus="status">
-										<tr>
-											<td>
-												<h2><h:outputText value="#{email} "/></h2>									
-											</td>
-											<td class="imj_rightsAction">
-												<h:commandButton action="#{ShareBean.input.removeUnknownEmail(status.index)}" styleClass="imj_cancelButton" value="#{lbl.remove}">
-													<f:ajax render="@form"/>
-												</h:commandButton>											
-											</td>						
-										</tr>
-									</ui:repeat>
-								</tbody>
-							</table>
+							<ui:repeat var="email" value="#{ShareBean.input.unknownEmails}" varStatus="status">
+								<li>
+									<h:outputText value="#{email} "/>
+									<h:commandButton action="#{ShareBean.input.removeUnknownEmail(status.index)}" styleClass="imj_cancelButton" value="#{lbl.remove}">
+										<f:ajax render="@form"/>
+									</h:commandButton>
+								</li>
+							</ui:repeat>
 							<div class="imj_submitPanel">
 								<h:commandButton value="#{lbl.cancel}" action="#{ShareBean.reloadPage}" styleClass="imj_cancelButton"/>
 								<h:commandButton action="#{ShareBean.invite}" styleClass="imj_submitButton" value="#{lbl.invite}"/>
 							</div>
 						</h:form>
-					</div>
+					</ul>
 				</h:panelGroup>			
 				
 				<!-- user table which shows all user with existing rights -->
@@ -219,7 +212,7 @@
 												<h:outputText value="#{sh.invitation.inviteeEmail}"/>
 											</td>
 											<td colspan="#{rolesMenu.size()}">
-												<h:selectManyCheckbox id="role" value="#{sh.roles}" enabledClass="imj_noDisplay" immediate="true" layout="lineDirection" onclick="document.getElementById('share:users:#{pos.index}:checkGrants').click();">
+												<h:selectManyCheckbox id="role" value="#{sh.roles}" enabledClass="imj_noDisplay" immediate="true" layout="lineDirection" onclick="document.getElementById('share:invitations:#{pos.index}:checkGrants').click();">
 													<f:selectItems value="#{rolesMenu}"/>
 												</h:selectManyCheckbox>
 												<h:commandButton id="checkGrants" value="Check Grants" action="#{sh.checkRoles}" styleClass="imj_noDisplay">
@@ -238,10 +231,12 @@
 				</ui:fragment>
 				<ui:fragment rendered="#{ShareBean.shareList.invitations.size() > 0 or ShareBean.shareList.items.size() > 0}">		
 					<div class="imj_submitPanel">
-						<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmailUpdate"/>
-						<h:outputLabel for="selSendEmailUpdate" value="#{lbl.user_send_mail}"/>
-						<h:commandButton value="#{lbl.cancel}" action="#{ShareBean.reloadPage}" styleClass="imj_cancelButton"/>
-						<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton" rendered="#{cc.attrs.type != 'item'}"/>
+						<h:form>
+							<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmailUpdate"/>
+							<h:outputLabel for="selSendEmailUpdate" value="#{lbl.user_send_mail}"/>
+							<h:commandButton value="#{lbl.cancel}" action="#{ShareBean.reloadPage}" styleClass="imj_cancelButton"/>
+							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton" rendered="#{cc.attrs.type != 'item'}"/>
+						</h:form>
 					</div>				
 				</ui:fragment>					
 			</div>

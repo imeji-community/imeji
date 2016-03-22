@@ -270,11 +270,12 @@ public class UserBean extends QuotaSuperBean {
   }
 
   public List<ShareListItem> getGroupRoles(UserGroup userGroup) throws Exception {
-    if (userGroup != null)
+    if (userGroup != null) {
       return AuthUtil.getAllRoles(userGroup, session.getUser());
-    else
+    } else {
       return null;
-  };
+    }
+  }
 
 
 

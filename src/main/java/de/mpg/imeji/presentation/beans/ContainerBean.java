@@ -436,8 +436,6 @@ public abstract class ContainerBean implements Serializable {
     HttpServletResponse response =
         (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     setIngestImage(getUploadedIngestFile(request, response));
-
-
   }
 
 

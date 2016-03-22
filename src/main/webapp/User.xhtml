@@ -225,9 +225,6 @@
 									
 									<div class="imj_admindataValue">
 										<ui:repeat var="shareHistory" value="#{UserBean.roles}" rows="0" varStatus="row">
-											<ui:param name="roles" value="#{shareHistory.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
-											<ui:param name="roles" value="#{shareHistory.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
-											
 											<div class="imj_admindataSet">
 												<div class="imj_admindataLabel">
 													<h:outputText value="#{SessionBean.getLabel(shareHistory.type)}: #{shareHistory.title}" title="#{shareHistory.title}"/>
@@ -241,7 +238,7 @@
 												</div>
 												<div class="imj_admindataValueEntry">
 													<h:selectManyCheckbox id="role" value="#{shareHistory.roles}" disabled="true" layout="pageDirection">
-														<f:selectItems value="#{roles}"/>
+														<f:selectItems value="#{shareHistory.rolesMenu}"/>
 													</h:selectManyCheckbox>
 												</div>
 											</div>
@@ -254,34 +251,30 @@
 									<!-- usergroups -->
 									<div class="imj_admindataSetEdit imj_admindataSet imj_connectedUserGroups">
 										<h3 class="imj_headline"><h:outputText value=" #{lbl.in_following_user_groups}" styleClass="imj_admindataValueEntry"/></h3>
-											<ui:repeat var="ug" value="#{UserBean.user.groups}" rows="0">
-												<div class="imj_admindataValueEntry">
-													<h4 class="imj_admindataValueEntry"><h:outputText value="#{lbl.admin_userGroup}: #{ug.name}" styleClass="imj_admindataValueEntry"/></h4>
-
-															<div class="imj_admindataSetEdit">
-																<div class="imj_admindataValue">
-																	<div class="imj_admindataValueEntry">
-																		<h:form>
-																			<ui:repeat var="sh" value="#{UserBean.getGroupRoles(ug)}">
-																				<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
-																				<ui:param name="roles" value="#{sh.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
-																				<div>
-																					<h4 styleClass="imj_admindataValueEntry"><h:outputText value="#{SessionBean.getLabel(sh.type)}: #{sh.title}" /></h4>
-																					<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
-																						<f:selectItems value="#{roles}" />
-																					</h:selectManyCheckbox>
-																				</div>
-																				<br/>
-																			</ui:repeat>
-																		</h:form>
+										<ui:repeat var="ug" value="#{UserBean.user.groups}" rows="0">
+											<div class="imj_admindataValueEntry">
+												<h4 class="imj_admindataValueEntry"><h:outputText value="#{lbl.admin_userGroup}: #{ug.name}" styleClass="imj_admindataValueEntry"/></h4>
+												<div class="imj_admindataSetEdit">
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:form>
+																<ui:repeat var="sh" value="#{UserBean.getGroupRoles(ug)}">
+																	<div>
+																		<h4 class="imj_admindataValueEntry"><h:outputText value="#{SessionBean.getLabel(sh.type)}: #{sh.title}" /></h4>
+																		<h:selectManyCheckbox id="role" value="#{sh.roles}" disabled="true" layout="pageDirection">
+																			<f:selectItems value="#{sh.rolesMenu}" />
+																		</h:selectManyCheckbox>
 																	</div>
-																</div>
-															</div>
+																	<br/>
+																</ui:repeat>
+															</h:form>
+														</div>
+													</div>
 												</div>
-											</ui:repeat>
+											</div>
+										</ui:repeat>
 									</div>
-								</h:form>
-					
+								</h:form>		
 							</div> <!-- END CONTENT -->
 							
 						</h:panelGroup>

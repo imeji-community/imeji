@@ -2,14 +2,11 @@ package de.mpg.imeji.presentation.share;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
@@ -21,7 +18,6 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
-import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -166,13 +162,17 @@ public class ShareBean implements Serializable {
    * Update the page accodring to new changes
    * 
    * @return
+   * @throws ImejiException
    */
-  public void update() {
+  public void update() throws ImejiException {
     for (ShareListItem item : shareList.getItems()) {
       boolean modified = item.update();
       if (sendEmail && modified) {
         sendEmailForShare(item, title);
       }
+    }
+    for (ShareListItem item : shareList.getInvitations()) {
+      item.updateInvitation();
     }
     reloadPage();
   }
@@ -451,63 +451,6 @@ public class ShareBean implements Serializable {
   public void setSb(SessionBean sb) {
     this.sb = sb;
   }
-
-  public List<SelectItem> getRolesMenu() {
-    if (type == SharedObjectType.COLLECTION) {
-      return getShareCollectionGrantItems();
-    }
-    if (type == SharedObjectType.ALBUM) {
-      return getShareAlbumGrantItems();
-    }
-    return getShareItemGrantItems();
-  }
-
-  /**
-   * Menu for sharing collection
-   * 
-   * @return
-   */
-  private List<SelectItem> getShareCollectionGrantItems() {
-    List<SelectItem> itemList = new ArrayList<SelectItem>();
-    itemList.add(new SelectItem(ShareRoles.READ, sb.getLabel("collection_share_read")));
-    itemList.add(new SelectItem(ShareRoles.CREATE, sb.getLabel("collection_share_image_upload")));
-    itemList.add(new SelectItem(ShareRoles.EDIT_ITEM, sb.getLabel("collection_share_image_edit")));
-    itemList
-        .add(new SelectItem(ShareRoles.DELETE_ITEM, sb.getLabel("collection_share_image_delete")));
-    itemList.add(new SelectItem(ShareRoles.EDIT, sb.getLabel("collection_share_collection_edit")));
-    if (AuthUtil.staticAuth().administrate(sb.getUser(), profileUri)) {
-      itemList.add(
-          new SelectItem(ShareRoles.EDIT_PROFILE, sb.getLabel("collection_share_profile_edit")));
-    }
-    itemList.add(new SelectItem(ShareRoles.ADMIN, sb.getLabel("collection_share_admin")));
-    return itemList;
-  }
-
-  /**
-   * Menu for sharing items
-   * 
-   * @return
-   */
-  private List<SelectItem> getShareItemGrantItems() {
-    List<SelectItem> itemList = new ArrayList<SelectItem>();
-    itemList.add(new SelectItem(ShareRoles.READ, sb.getLabel("collection_share_read")));
-    return itemList;
-  }
-
-  /**
-   * Menu for sharing Album
-   * 
-   * @return
-   */
-  private List<SelectItem> getShareAlbumGrantItems() {
-    List<SelectItem> itemList = new ArrayList<SelectItem>();
-    itemList.add(new SelectItem(ShareRoles.READ, sb.getLabel("album_share_read")));
-    itemList.add(new SelectItem(ShareRoles.CREATE, sb.getLabel("album_share_image_add")));
-    itemList.add(new SelectItem(ShareRoles.EDIT, sb.getLabel("album_share_album_edit")));
-    itemList.add(new SelectItem(ShareRoles.ADMIN, sb.getLabel("album_share_admin")));
-    return itemList;
-  }
-
 
   public UserGroupsBean getUserGroupsBean() {
     return userGroupsBean;

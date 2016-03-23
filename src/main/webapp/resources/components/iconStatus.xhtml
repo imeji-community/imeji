@@ -9,7 +9,7 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<ui:fragment rendered="#{StatusBean.init(cc.attrs.imejiResource)}">
+		<ui:fragment rendered="#{SessionBean.user != null and StatusBean.init(cc.attrs.imejiResource)}">
 			<div class="imj_statusHeaderArea">
 				<ui:fragment rendered="#{StatusBean.status != 'PENDING'}">
 					<div class="imj_overlayMenu imj_menuRight">
@@ -18,7 +18,7 @@
 						</div>
 						<div class="imj_menuBody">
 							<ul class="imj_overlayMenuList">
-								<li>#{StatusBean.status}</li>
+								<li>#{StatusBean.statusLabel}</li>
 							</ul>
 						</div>
 					</div>
@@ -31,18 +31,22 @@
 						<div class="imj_menuBody">
 							<span class="imj_menuText" style="display: block;">#{lbl.shared_with}... </span>
 							<ul class="imj_overlayMenuList">
-								<li>#{StatusBean.owner} (<span style="font-style:italic;">#{lbl.role_owner}</span>)</li>
+								<ui:fragment rendered="#{StatusBean.owner != null}">
+									<li>#{StatusBean.owner} (<span style="font-style:italic;">#{lbl.role_owner}</span>)</li>
+								</ui:fragment>
 								<ui:repeat var="sharedWith" value="#{StatusBean.users}">
 									<li>#{sharedWith}</li>
 								</ui:repeat>
 								<ui:repeat var="sharedWith" value="#{StatusBean.groups}">
 									<li>#{sharedWith} <span style="font-style:italic;">(#{lbl.group})</span></li>
 								</ui:repeat>
-								<li class="imj_listDottedSeparator">
-									<a href="#{StatusBean.linkToSharePage}">
-										#{lbl.manage}
-									</a>
-								</li>
+								<ui:fragment rendered="#{StatusBean.showManage}">
+									<li class="imj_listDottedSeparator">
+										<a href="#{StatusBean.linkToSharePage}">
+											#{lbl.manage}
+										</a>
+									</li>
+								</ui:fragment>
 							</ul>
 						</div>
 					</div>
@@ -53,6 +57,8 @@
 		<style>
 			.imj_statusHeaderArea{
 				padding : 0.9em 3%;
+				width:10em;
+				float:right;
 			}
 			.imj_statusHeaderArea .imj_listDottedSeparator{border-top: 1px dashed #292929; padding: 0.5em 1em}			
 		</style>

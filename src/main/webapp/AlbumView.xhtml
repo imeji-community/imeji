@@ -17,6 +17,8 @@
 	<!--  <ui:param name="metadataBean" value="#{itemContextBean.metadata}"/> -->
 	<ui:param name="navigationContextURL" value="#{Navigation.albumUrl}"/>
 	<ui:param name="headline" value="#{metadataBean.title}"/>
+	<ui:param name="imejiResource" value="#{AlbumBean.album}"/>
+	
 	
 	<ui:define name="actionsMenu">
 		<ui:fragment rendered="#{Auth.read(metadataBean.album)}">

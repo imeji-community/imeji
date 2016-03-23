@@ -89,7 +89,19 @@ public class Authorization implements Serializable {
   public boolean read(User user, Object obj) {
     if (isPublic(obj, user)) {
       return true;
-    } else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
+    }
+    return hasReadGrant(user, obj);
+  }
+
+  /**
+   * True if a the {@link User} has read gratn for this object
+   * 
+   * @param user
+   * @param obj
+   * @return
+   */
+  public boolean hasReadGrant(User user, Object obj) {
+    if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
         getGrantTypeAccordingToObjectType(obj, GrantType.READ)))) {
       return true;
     } else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),

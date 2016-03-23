@@ -12,6 +12,8 @@
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumItemsBean.id}/browse?q="/>
 	<ui:param name="containerId" value="#{paginatorListSessionBean.id}"/>
+	<ui:param name="imejiResource" value="#{AlbumItemsBean.album}"/>
+	
 	
 	<ui:define name="actionsMenu">
 		<ui:fragment rendered="#{Auth.read(paginatorListSessionBean.album)}">

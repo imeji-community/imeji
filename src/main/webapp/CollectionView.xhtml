@@ -12,9 +12,9 @@
 	<ui:param name="containerHeadline" value="#{lbl.collection_basics}"/>
 	<ui:param name="metadataBean" value="#{ViewCollectionBean}"/>
 	<ui:param name="metadataContextBean" value="#{ViewCollectionBean.collection}"/>
-	<!-- <ui:param name="metadataBean" value="#{ViewCollectionBean.collection.metadata}"/> -->
 	<ui:param name="headline" value="#{metadataContextBean.metadata.title}"/>
 	<ui:param name="navigationContextURL" value="#{Navigation.collectionUrl}"/>
+	<ui:param name="imejiResource" value="#{ViewCollectionBean.collection}"/>
 	
 	<ui:define name="actionsMenu">
 		<ui:fragment rendered="#{Auth.read(metadataBean.collection)}">

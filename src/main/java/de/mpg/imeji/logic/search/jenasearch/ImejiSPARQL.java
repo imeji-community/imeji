@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic;
+package de.mpg.imeji.logic.search.jenasearch;
 
 import java.util.ArrayList;
 import java.util.List;

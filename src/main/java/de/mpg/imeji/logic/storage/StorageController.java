@@ -39,12 +39,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.auth.authorization.Authorization;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -58,7 +57,6 @@ public final class StorageController implements Serializable {
   private static final long serialVersionUID = -2651970941029421673L;;
   public static final String IMEJI_STORAGE_NAME_PROPERTY = "imeji.storage.name";
   private final Storage storage;
-  private final Authorization authorization = new Authorization();
   private final String formatWhiteList;
   private final String formatBlackList;
   private static final Logger LOGGER = Logger.getLogger(StorageController.class);
@@ -87,8 +85,8 @@ public final class StorageController implements Serializable {
       LOGGER.error("Error initializing StorageController", e);
     }
     storage = StorageFactory.create(name);
-    formatBlackList = ConfigurationBean.getUploadBlackListStatic();
-    formatWhiteList = ConfigurationBean.getUploadWhiteListStatic();
+    formatBlackList = Imeji.CONFIG.getUploadBlackList();
+    formatWhiteList = Imeji.CONFIG.getUploadWhiteList();
   }
 
   /**

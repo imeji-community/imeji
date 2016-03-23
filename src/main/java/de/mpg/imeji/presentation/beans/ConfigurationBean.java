@@ -24,38 +24,19 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiConfiguration.HtmlSnippet;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * JavaBean managing the imeji configuration which is made directly by the administrator from the
@@ -68,180 +49,12 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 @ManagedBean(name = "Configuration")
 @ApplicationScoped
 public class ConfigurationBean {
-  /**
-   * Enumeration of available configuration
-   * 
-   * @author saquet (initial creation)
-   * @author $Author$ (last modification)
-   * @version $Revision$ $LastChangedDate$
-   */
-  private enum CONFIGURATION {
-    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS, PRIVATE_MODUS;
-  }
-
-  private static Properties config;
-  private static File configFile;
-  private static FileTypes fileTypes;
-  private static String lang = "en";
-  private static final Logger LOGGER = Logger.getLogger(ConfigurationBean.class);
-  // A list of predefined file types, which is set when imeji is initialized
-  private static final String DEFAULT_SEARCH_FILE_TYPE_LIST =
-      "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
-  private static final String DEFAULT_FILE_BLACKLIST =
-      "386,aru,atm,aut,bat,bin,bkd,blf,bll,bmw,boo,bqf,buk,bxz,cc,ce0,ceo,cfxxe,chm,cih,cla,class,cmd,com,cpl,cxq,cyw,dbd,dev,dlb,dli,dll,dllx,dom,drv,dx,dxz,dyv,dyz,eml,exe,exe1,exe_renamed,ezt,fag,fjl,fnr,fuj,hlp,hlw,hsq,hts,ini,iva,iws,jar,js,kcd,let,lik,lkh,lnk,lok,mfu,mjz,nls,oar,ocx,osa,ozd,pcx,pgm,php2,php3,pid,pif,plc,pr,qit,rhk,rna,rsc_tmp,s7p,scr,scr,shs,ska,smm,smtmp,sop,spam,ssy,swf,sys,tko,tps,tsa,tti,txs,upa,uzy,vb,vba,vbe,vbs,vbx,vexe,vsd,vxd,vzr,wlpginstall,wmf,ws,wsc,wsf,wsh,wss,xdu,xir,xlv,xnt,zix,zvz";
-  private static final String DEFAULT_LANGUAGE_LIST = "en,de,ja,es";
-  private static final String DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS = "1";
-  private static final String DEFAULT_CAROUSEL_SHOW = "true";
-  private static final String DEFAULT_USER_QUOTA = "1";
-  private static final String DEFAULT_USER_QUOTA_LIST = "1, 10, 20";
-  public static final String QUOTA_UNLIMITED = "unlimited";
-  private String dataViewerUrl;
-
-  public enum BROWSE_VIEW {
-    LIST, THUMBNAIL;
-  }
-
-  private static final BROWSE_VIEW predefinedBrowseView = BROWSE_VIEW.THUMBNAIL;
-
-
-  /**
-   * Constructor, create the file if not existing
-   * 
-   * @throws URISyntaxException
-   * @throws IOException
-   * @throws ImejiException
-   */
-  public ConfigurationBean() throws IOException, URISyntaxException, ImejiException {
-    getConfigurationFile();
-    readConfig();
-  }
-
-  /**
-   * IGet the Configuration File from the filesystem. If not existing, create a new one with default
-   * values
-   * 
-   * @throws IOException
-   * @throws URISyntaxException
-   */
-  private synchronized void getConfigurationFile() throws IOException, URISyntaxException {
-    configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
-    if (!configFile.exists()) {
-      configFile.createNewFile();
-      setDefaultConfig();
-    }
-  }
-
-
-  /**
-   * Write the Default Configuration to the Disk. This should be called when the Configuration is
-   * initialized for the first time.
-   */
-  private synchronized void setDefaultConfig() {
-    config = new Properties();
-    fileTypes = new FileTypes(DEFAULT_SEARCH_FILE_TYPE_LIST);
-    initPropertyWithDefaultValue(CONFIGURATION.FILE_TYPES, fileTypes.toString());
-    initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
-    initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
-    initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
-    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, DEFAULT_CAROUSEL_SHOW);
-    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_QUOTA, DEFAULT_USER_QUOTA);
-    initPropertyWithDefaultValue(CONFIGURATION.QUOTA_LIMITS, DEFAULT_USER_QUOTA_LIST);
-    saveConfig();
-  }
-
-  /**
-   * Load the imeji configuration from a {@link File}
-   * 
-   * @param f
-   * @throws IOException
-   * @throws ImejiException
-   */
-  private synchronized void readConfig() throws IOException, ImejiException {
-    config = new Properties();
-    try {
-      FileInputStream in = new FileInputStream(configFile);
-      config.loadFromXML(in);
-    } catch (Exception e) {
-      throw new ImejiException(
-          "conf.xml could not be read. Please check in tdb directory if exsting and not empty. If Emtpy, remove it.");
-      // LOGGER.info("conf.xml can not be read, probably emtpy");
-      // return;
-    }
-    dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
-    fileTypes = new FileTypes((String) config.get(CONFIGURATION.FILE_TYPES.name()));
-    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_QUOTA, DEFAULT_USER_QUOTA);
-    initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
-    initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
-    initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
-    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, DEFAULT_CAROUSEL_SHOW);
-    initPropertyWithDefaultValue(CONFIGURATION.QUOTA_LIMITS, DEFAULT_USER_QUOTA_LIST);
-  }
-
-
-  /**
-   * Init a property with its default value if null or empty
-   * 
-   * @param c
-   * @param defaultValue
-   */
-  private void initPropertyWithDefaultValue(CONFIGURATION c, String defaultValue) {
-    String currentValue = (String) config.get(c.name());
-    if (currentValue != null && !"".equals(currentValue)) {
-      setProperty(c.name(), currentValue);
-    } else {
-      setProperty(c.name(), defaultValue);
-    }
-
-  }
 
   /**
    * Save the configuration in the config file
    */
   public void saveConfig() {
-    try {
-      if (fileTypes != null) {
-        setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
-      }
-      if (dataViewerUrl != null) {
-        setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
-      }
-      config.storeToXML(new FileOutputStream(configFile), "imeji configuration File", "UTF-8");
-      LOGGER.info("saving imeji config");
-    } catch (Exception e) {
-      LOGGER.error("Error saving configuration:", e);
-    }
-  }
-
-  /**
-   * Set the value of a configuration property, and save it on disk
-   * 
-   * @param name
-   * @param value
-   */
-  private void setProperty(String name, String value) {
-    config.setProperty(name, value);
-  }
-
-  /**
-   * Return a property as a non null String to avoid null pointer exception
-   * 
-   * @param name
-   * @return
-   */
-  private String getPropertyAsNonNullString(String name) {
-    String v = (String) config.get(name);
-    return v == null ? "" : v;
-  }
-
-  /**
-   * Return a property as a non null String to avoid null pointer exception for static methods
-   * 
-   * @param name
-   * @return
-   */
-  private static String getPropertyAsNonNullStringStatic(String name) {
-    String v = (String) config.get(name);
-    return v == null ? "" : v;
+    Imeji.CONFIG.saveConfig();
   }
 
   /**
@@ -250,7 +63,7 @@ public class ConfigurationBean {
    * @param str
    */
   public void setSnippet(String str) {
-    setProperty(CONFIGURATION.SNIPPET.name(), str);
+    Imeji.CONFIG.setSnippet(str);
   }
 
   /**
@@ -259,11 +72,11 @@ public class ConfigurationBean {
    * @return
    */
   public String getSnippet() {
-    return (String) config.get(CONFIGURATION.SNIPPET.name());
+    return Imeji.CONFIG.getSnippet();
   }
 
   public boolean isImageMagickInstalled() throws IOException, URISyntaxException {
-    return MediaUtils.verifyImageMagickInstallation();
+    return Imeji.CONFIG.isImageMagickInstalled();
   }
 
   /**
@@ -272,7 +85,7 @@ public class ConfigurationBean {
    * @param url
    */
   public void setDefaultCss(String url) {
-    setProperty(CONFIGURATION.CSS_DEFAULT.name(), url);
+    Imeji.CONFIG.setDefaultCss(url);
   }
 
   /**
@@ -281,7 +94,7 @@ public class ConfigurationBean {
    * @return
    */
   public String getDefaultCss() {
-    return (String) config.get(CONFIGURATION.CSS_DEFAULT.name());
+    return Imeji.CONFIG.getDefaultCss();
   }
 
   /**
@@ -290,7 +103,7 @@ public class ConfigurationBean {
    * @param url
    */
   public void setAlternativeCss(String url) {
-    setProperty(CONFIGURATION.CSS_ALT.name(), url);
+    Imeji.CONFIG.setAlternativeCss(url);
   }
 
   /**
@@ -299,7 +112,7 @@ public class ConfigurationBean {
    * @return
    */
   public String getAlternativeCss() {
-    return (String) config.get(CONFIGURATION.CSS_ALT.name());
+    return Imeji.CONFIG.getAlternativeCss();
   }
 
   /**
@@ -308,12 +121,7 @@ public class ConfigurationBean {
    * @param md_url
    */
   public void setUploadMaxFileSize(String size) {
-    try {
-      Integer.parseInt(size);
-    } catch (Exception e) {
-      setProperty(CONFIGURATION.MAX_FILE_SIZE.name(), "");
-    }
-    setProperty(CONFIGURATION.MAX_FILE_SIZE.name(), size);
+    Imeji.CONFIG.setUploadMaxFileSize(size);
   }
 
   /**
@@ -322,11 +130,7 @@ public class ConfigurationBean {
    * @return
    */
   public String getUploadMaxFileSize() {
-    String size = (String) config.get(CONFIGURATION.MAX_FILE_SIZE.name());
-    if (size == null || size.equals("")) {
-      return "0";
-    }
-    return size;
+    return Imeji.CONFIG.getUploadMaxFileSize();
   }
 
   /**
@@ -335,7 +139,7 @@ public class ConfigurationBean {
    * @return
    */
   public FileTypes getFileTypes() {
-    return fileTypes;
+    return Imeji.CONFIG.getFileTypes();
   }
 
   /**
@@ -344,30 +148,15 @@ public class ConfigurationBean {
    * @param types
    */
   public void setFileTypes(FileTypes types) {
-    setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
-  }
-
-  /**
-   * Get the type of Files
-   * 
-   * @return
-   */
-  public static FileTypes getFileTypesStatic() {
-    return fileTypes;
-  }
-
-  public static boolean getStartPageCarouselEnabledStatic() {
-    return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()))
-        && !getPrivateModusStatic();
+    Imeji.CONFIG.setFileTypes(types);
   }
 
   public void setStartPageCarouselEnabled(boolean input) {
-    setProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name(), String.valueOf(input));
+    Imeji.CONFIG.setStartPageCarouselEnabled(input);
   }
 
   public boolean getStartPageCarouselEnabled() {
-    return Boolean.valueOf(config.getProperty(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED.name()))
-        && !getPrivateModus();
+    return Imeji.CONFIG.getStartPageCarouselEnabled();
   }
 
   /**
@@ -377,8 +166,7 @@ public class ConfigurationBean {
    * @return
    */
   public String getStartPageHTML(String lang) {
-    String html = (String) config.get(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang);
-    return html != null ? html : "";
+    return Imeji.CONFIG.getStartPageHTML(lang);
   }
 
   /**
@@ -387,8 +175,7 @@ public class ConfigurationBean {
    * @return
    */
   public String getStartPageFooterLogos() {
-    String html = (String) config.get(CONFIGURATION.STARTPAGE_FOOTER_LOGOS.name());
-    return html != null ? html : "";
+    return Imeji.CONFIG.getStartPageFooterLogos();
   }
 
   /**
@@ -396,44 +183,7 @@ public class ConfigurationBean {
    * @param html
    */
   public void setStartPageFooterLogos(String html) {
-    setProperty(CONFIGURATION.STARTPAGE_FOOTER_LOGOS.name(), html);
-  }
-
-  /**
-   * Utility class to parse the html snippets
-   * 
-   * @author saquet
-   * 
-   */
-  public class HtmlSnippet {
-    private String html;
-    private String lang;
-
-    public HtmlSnippet(String lang, String html) {
-      this.lang = lang;
-      this.html = html;
-    }
-
-    public void listener(ValueChangeEvent event) {
-      html = (String) event.getNewValue();
-      setProperty(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang, html);
-    }
-
-    public String getLang() {
-      return lang;
-    }
-
-    public void setLang(String lang) {
-      this.lang = lang;
-    }
-
-    public String getHtml() {
-      return html;
-    }
-
-    public void setHtml(String html) {
-      this.html = html;
-    }
+    Imeji.CONFIG.setStartPageFooterLogos(html);
   }
 
   /**
@@ -442,36 +192,30 @@ public class ConfigurationBean {
    * @return
    */
   public List<HtmlSnippet> getSnippets() {
-    InternationalizationBean internationalizationBean =
+    de.mpg.imeji.presentation.lang.InternationalizationBean internationalizationBean =
         (InternationalizationBean) BeanHelper.getApplicationBean(InternationalizationBean.class);
-    List<HtmlSnippet> snippets = new ArrayList<ConfigurationBean.HtmlSnippet>();
-    for (SelectItem lang : internationalizationBean.getLanguages()) {
-      String html =
-          (String) config.get(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang.getValue());
-      snippets.add(new HtmlSnippet((String) lang.getValue(), html != null ? html : ""));
-    }
-    return snippets;
+    return Imeji.CONFIG.getSnippets(internationalizationBean.getLanguages());
   }
 
   /**
    * @return the lang
    */
   public String getLang() {
-    return lang;
+    return Imeji.CONFIG.getLang();
   }
 
   /**
    * @param lang the lang to set
    */
   public void setLang(String s) {
-    lang = s;
+    Imeji.CONFIG.setLang(s);
   }
 
   /**
    * @return the list of all formats supported by the data viewer service
    */
   public String getDataViewerFormatListString() {
-    return config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name());
+    return Imeji.CONFIG.getDataViewerFormatListString();
   }
 
   /**
@@ -479,8 +223,7 @@ public class ConfigurationBean {
    * 
    */
   public void setDataViewerFormatListString(String str) {
-    config.setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
-
+    Imeji.CONFIG.setDataViewerFormatListString(str);
   }
 
   /**
@@ -490,24 +233,14 @@ public class ConfigurationBean {
    * @return
    */
   public boolean isDataViewerSupportedFormats(String format) {
-    String l = getDataViewerFormatListString();
-    if (l == null || "".equals(format))
-      return false;
-    return l.contains(format);
+    return Imeji.CONFIG.isDataViewerSupportedFormats(format);
   }
 
   /**
    * @return the url of the data viewer service
    */
   public String getDataViewerUrl() {
-    return config.getProperty(CONFIGURATION.DATA_VIEWER_URL.name());
-  }
-
-  /**
-   * @return the url of the data viewer service in a static way
-   */
-  public static String getDataViewerUrlStatic() {
-    return config.getProperty(CONFIGURATION.DATA_VIEWER_URL.name());
+    return Imeji.CONFIG.getDataViewerUrl();
   }
 
   /**
@@ -515,65 +248,28 @@ public class ConfigurationBean {
    * 
    */
   public void setDataViewerUrl(String str) {
-    dataViewerUrl = str;
+    Imeji.CONFIG.setDataViewerUrl(str);
   }
 
   public String fetchDataViewerFormats() throws JSONException {
-    String connURL;
-    if (dataViewerUrl.endsWith("/")) {
-      connURL = dataViewerUrl + "api/explain/formats";
-    } else {
-      connURL = dataViewerUrl + "/api/explain/formats";
-    }
-    // String connURL = dataViewerUrl + "/api/explain/formats";
-    DefaultHttpClient httpclient = new DefaultHttpClient();
-    HttpGet httpget = new HttpGet(connURL);
-    HttpResponse resp;
-    String str = "";
-    try {
-      resp = httpclient.execute(httpget);
-
-      if (200 == resp.getStatusLine().getStatusCode()) {
-        HttpEntity entity = resp.getEntity();
-        if (entity != null) {
-          String retSrc = EntityUtils.toString(entity);
-          JSONArray array = new JSONArray(retSrc);
-
-          int i = 0;
-          while (i < array.length()) {
-            str += array.get(i) + ", ";
-            i++;
-          }
-
-        }
-      }
-    } catch (ClientProtocolException e) {
-      LOGGER.error(e.getMessage(), e.fillInStackTrace());
-    } catch (IOException e) {
-      LOGGER.error(e.getMessage(), e.fillInStackTrace());
-    } catch (IllegalStateException e) {
-      LOGGER.error(e.getMessage(), e.fillInStackTrace());
-    }
-    setDataViewerFormatListString(str);
+    Imeji.CONFIG.fetchDataViewerFormats();
     return "";
   }
 
   public String getAutosuggestForOrganizations() {
-    return config.getProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name());
+    return Imeji.CONFIG.getAutosuggestForOrganizations();
   }
 
   public void setAutosuggestForOrganizations(String s) {
-    config.setProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name(), s);
-
+    Imeji.CONFIG.setAutosuggestForOrganizations(s);
   }
 
   public String getAutoSuggestForUsers() {
-    return config.getProperty(CONFIGURATION.AUTOSUGGEST_USERS.name());
+    return Imeji.CONFIG.getAutoSuggestForUsers();
   }
 
   public void setAutoSuggestForUsers(String s) {
-    config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(), s);
-
+    Imeji.CONFIG.setAutoSuggestForUsers(s);
   }
 
   /**
@@ -582,7 +278,7 @@ public class ConfigurationBean {
    * @param md_url
    */
   public void setMetaDescription(String s) {
-    setProperty(CONFIGURATION.META_DESCRIPTION.name(), s);
+    Imeji.CONFIG.setMetaDescription(s);
   }
 
   /**
@@ -591,7 +287,7 @@ public class ConfigurationBean {
    * @return
    */
   public String getMetaDescription() {
-    return (String) config.get(CONFIGURATION.META_DESCRIPTION.name());
+    return Imeji.CONFIG.getMetaDescription();
   }
 
   /**
@@ -600,7 +296,7 @@ public class ConfigurationBean {
    * @param md_url
    */
   public void setInstanceName(String s) {
-    setProperty(CONFIGURATION.INSTANCE_NAME.name(), s);
+    Imeji.CONFIG.setInstanceName(s);
   }
 
   /**
@@ -609,7 +305,7 @@ public class ConfigurationBean {
    * @return
    */
   public String getInstanceName() {
-    return getPropertyAsNonNullString(CONFIGURATION.INSTANCE_NAME.name());
+    return Imeji.CONFIG.getInstanceName();
   }
 
   /**
@@ -618,7 +314,7 @@ public class ConfigurationBean {
    * @param md_url
    */
   public void setContactEmail(String s) {
-    setProperty(CONFIGURATION.CONTACT_EMAIL.name(), s);
+    Imeji.CONFIG.setContactEmail(s);
   }
 
   /**
@@ -627,336 +323,204 @@ public class ConfigurationBean {
    * @return
    */
   public String getContactEmail() {
-    if ((String) config.get(CONFIGURATION.CONTACT_EMAIL.name()) != null)
-      return (String) config.get(CONFIGURATION.CONTACT_EMAIL.name());
-    return "";
+    return Imeji.CONFIG.getContactEmail();
   }
-
-  public static String getContactEmailStatic() {
-    return (String) config.get(CONFIGURATION.CONTACT_EMAIL.name());
-  }
-
 
   public void setEmailServer(String s) {
-    setProperty(CONFIGURATION.EMAIL_SERVER.name(), s);
+    Imeji.CONFIG.setEmailServer(s);
   }
 
   public String getEmailServer() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER.name());
-  }
-
-  public static String getEmailServerStatic() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER.name());
+    return Imeji.CONFIG.getEmailServer();
   }
 
   public void setEmailServerUser(String s) {
-    setProperty(CONFIGURATION.EMAIL_SERVER_USER.name(), s);
+    Imeji.CONFIG.setEmailServerUser(s);
   }
 
   public String getEmailServerUser() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_USER.name());
-  }
-
-  public static String getEmailServerUserStatic() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_USER.name());
+    return Imeji.CONFIG.getEmailServerUser();
   }
 
   public void setEmailServerPassword(String s) {
-    setProperty(CONFIGURATION.EMAIL_SERVER_PASSWORD.name(), s);
+    Imeji.CONFIG.setEmailServerPassword(s);
   }
 
   public String getEmailServerPassword() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_PASSWORD.name());
-  }
-
-  public static String getEmailServerPasswordStatic() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_PASSWORD.name());
+    return Imeji.CONFIG.getEmailServerPassword();
   }
 
   public void setEmailServerEnableAuthentication(boolean b) {
-    setProperty(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name(), Boolean.toString(b));
+    Imeji.CONFIG.setEmailServerEnableAuthentication(b);
   }
 
   public boolean getEmailServerEnableAuthentication() {
-    return Boolean
-        .parseBoolean((String) config.get(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name()));
-  }
-
-  public static boolean getEmailServerEnableAuthenticationStatic() {
-    return Boolean
-        .parseBoolean((String) config.get(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name()));
+    return Imeji.CONFIG.getEmailServerEnableAuthentication();
   }
 
   public void setPrivateModus(boolean b) {
-    setProperty(CONFIGURATION.PRIVATE_MODUS.name(), Boolean.toString(b));
+    Imeji.CONFIG.setPrivateModus(b);
   }
 
   public boolean getPrivateModus() {
-    return Boolean.parseBoolean((String) config.get(CONFIGURATION.PRIVATE_MODUS.name()));
-  }
-
-  public static boolean getPrivateModusStatic() {
-    return Boolean.parseBoolean((String) config.get(CONFIGURATION.PRIVATE_MODUS.name()));
+    return Imeji.CONFIG.getPrivateModus();
   }
 
   public void setEmailServerSender(String s) {
-    setProperty(CONFIGURATION.EMAIL_SERVER_SENDER.name(), s);
+    Imeji.CONFIG.setEmailServerSender(s);
   }
 
   public String getEmailServerSender() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_SENDER.name());
-  }
-
-  public static String getEmailServerSenderStatic() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_SENDER.name());
+    return Imeji.CONFIG.getEmailServerSender();
   }
 
   public void setEmailServerPort(String s) {
-    setProperty(CONFIGURATION.EMAIL_SERVER_PORT.name(), s);
+    Imeji.CONFIG.setEmailServerPort(s);
   }
 
   public String getEmailServerPort() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_PORT.name());
-  }
-
-  public static String getEmailServerPortStatic() {
-    return (String) config.get(CONFIGURATION.EMAIL_SERVER_PORT.name());
+    return Imeji.CONFIG.getEmailServerPort();
   }
 
   public void setStartPageCarouselQuery(String s) {
-    setProperty(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY.name(), s);
+    Imeji.CONFIG.setStartPageCarouselQuery(s);
   }
 
   public String getStartPageCarouselQuery() {
-    return (String) config.get(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY.name());
+    return Imeji.CONFIG.getStartPageCarouselQuery();
   }
 
   public void setStartPageCarouselQueryOrder(String s) {
-    setProperty(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY_ORDER.name(), s);
+    Imeji.CONFIG.setStartPageCarouselQueryOrder(s);
   }
 
   public String getStartPageCarouselQueryOrder() {
-    return (String) config.get(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY_ORDER.name());
+    return Imeji.CONFIG.getStartPageCarouselQueryOrder();
   }
 
   public void setUploadBlackList(String s) {
-    setProperty(CONFIGURATION.UPLOAD_BLACK_LIST.name(), s);
+    Imeji.CONFIG.setUploadBlackList(s);
   }
 
   public String getUploadBlackList() {
-    return (String) config.get(CONFIGURATION.UPLOAD_BLACK_LIST.name());
-  }
-
-  public static String getUploadBlackListStatic() {
-    return (String) config.get(CONFIGURATION.UPLOAD_BLACK_LIST.name());
+    return Imeji.CONFIG.getUploadBlackList();
   }
 
   public void setUploadWhiteList(String s) {
-    setProperty(CONFIGURATION.UPLOAD_WHITE_LIST.name(), s);
+    Imeji.CONFIG.setUploadWhiteList(s);
   }
 
   public String getUploadWhiteList() {
-    if (config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name()) != null)
-      return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
-    return "";
-  }
-
-  public static String getUploadWhiteListStatic() {
-    if (config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name()) != null)
-      return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
-    return "";
+    return Imeji.CONFIG.getUploadWhiteList();
   }
 
   public String getLanguages() {
-    return getPropertyAsNonNullString(CONFIGURATION.LANGUAGES.name());
-  }
-
-  public static String getLanguagesStatic() {
-    return getPropertyAsNonNullStringStatic(CONFIGURATION.LANGUAGES.name());
+    return Imeji.CONFIG.getLanguages();
   }
 
   public void setLanguages(String value) {
-    setProperty(CONFIGURATION.LANGUAGES.name(), value);
-  }
-
-  public static String getDoiUserStatic() {
-    return (String) config.get(CONFIGURATION.DOI_USER.name());
+    Imeji.CONFIG.setLanguages(value);
   }
 
   public String getDoiUser() {
-    return (String) config.get(CONFIGURATION.DOI_USER.name());
+    return Imeji.CONFIG.getDoiUser();
   }
 
   public void setDoiUser(String s) {
-    setProperty(CONFIGURATION.DOI_USER.name(), s);
-  }
-
-  public static String getDoiPasswordStatic() {
-    return (String) config.get(CONFIGURATION.DOI_PASSWORD.name());
+    Imeji.CONFIG.setDoiUser(s);
   }
 
   public String getDoiPassword() {
-    return (String) config.get(CONFIGURATION.DOI_PASSWORD.name());
+    return Imeji.CONFIG.getDoiPassword();
   }
 
   public void setDoiPassword(String s) {
-    setProperty(CONFIGURATION.DOI_PASSWORD.name(), s);
-  }
-
-  public static String getDoiServiceUrlStatic() {
-    return (String) config.get(CONFIGURATION.DOI_SERVICE_URL.name());
+    Imeji.CONFIG.setDoiPassword(s);
   }
 
   public String getDoiServiceUrl() {
-    return (String) config.get(CONFIGURATION.DOI_SERVICE_URL.name());
+    return Imeji.CONFIG.getDoiServiceUrl();
   }
 
   public void setDoiServiceUrl(String s) {
-    setProperty(CONFIGURATION.DOI_SERVICE_URL.name(), s);
+    Imeji.CONFIG.setDoiServiceUrl(s);
   }
 
   public void setImpressumUrl(String s) {
-    setProperty(CONFIGURATION.IMPRESSUM_URL.name(), s);
+    Imeji.CONFIG.setImpressumUrl(s);
   }
 
   public String getImpressumUrl() {
-    return (String) config.get(CONFIGURATION.IMPRESSUM_URL.name());
+    return Imeji.CONFIG.getImpressumUrl();
   }
 
   public void setImpressumText(String s) {
-    setProperty(CONFIGURATION.IMPRESSUM_TEXT.name(), s);
+    Imeji.CONFIG.setImpressumText(s);
   }
 
   public String getImpressumText() {
-    return (String) config.get(CONFIGURATION.IMPRESSUM_TEXT.name());
+    return Imeji.CONFIG.getImpressumText();
   }
 
   public void setFaviconUrl(String s) {
-    setProperty(CONFIGURATION.FAVICON_URL.name(), s);
+    Imeji.CONFIG.setFaviconUrl(s);
+  }
+
+  public String getFaviconUrl() {
+    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    return Imeji.CONFIG.getFaviconUrl(navigation.getApplicationUri());
   }
 
   public void setRegistrationTokenExpiry(String s) {
-    try {
-      Integer.valueOf(s);
-    } catch (NumberFormatException e) {
-      LOGGER.info(
-          "Could not understand the Registration Token Expiry Setting, setting it to default ("
-              + DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS + " day).");
-      s = DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS;
-    }
-
-    setProperty(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name(), s);
-  }
-
-  public static int getRegistrationTokenExpiryStatic() {
-    return Integer.valueOf(registrationTokenCompute());
+    Imeji.CONFIG.setRegistrationTokenExpiry(s);
   }
 
   public String getRegistrationTokenExpiry() {
-    return registrationTokenCompute();
+    return Imeji.CONFIG.getRegistrationTokenExpiry();
   }
 
   public boolean isRegistrationEnabled() {
-    return Boolean.parseBoolean((String) config.get(CONFIGURATION.REGISTRATION_ENABLED.name()));
+    return Imeji.CONFIG.isRegistrationEnabled();
   }
 
   public void setRegistrationEnabled(boolean enabled) {
-    config.setProperty(CONFIGURATION.REGISTRATION_ENABLED.name(), Boolean.toString(enabled));
-  }
-
-
-
-  /**
-   * Return the url of the favicon
-   * 
-   * @return
-   */
-  public String getFaviconUrl() {
-    String myFavicon = (String) config.get(CONFIGURATION.FAVICON_URL.name());
-    if (myFavicon == null || "".equals(myFavicon)) {
-      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-      return navigation.getApplicationUrl() + "resources/icon/imeji.ico";
-    } else {
-      return (String) config.get(CONFIGURATION.FAVICON_URL.name());
-    }
+    Imeji.CONFIG.setRegistrationEnabled(enabled);
   }
 
   public void setLogoUrl(String s) {
-    setProperty(CONFIGURATION.LOGO.name(), s);
+    Imeji.CONFIG.setLogoUrl(s);
   }
 
-  /**
-   * Return the url of the favicon
-   * 
-   * @return
-   */
   public String getLogoUrl() {
-    return (String) config.get(CONFIGURATION.LOGO.name());
-  }
-
-  private static String registrationTokenCompute() {
-    String myToken = (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
-    return isNullOrEmptyTrim(myToken) ? DEFAULT_REGISTRATION_TOKEN_EXPIRATION_IN_DAYS : myToken;
-  }
-
-  public static String getRsaPublicKey() {
-    return (String) config.get(CONFIGURATION.RSA_PUBLIC_KEY.name());
-  }
-
-  public void setRsaPublicKey(String string) {
-    config.put(CONFIGURATION.RSA_PUBLIC_KEY.name(), string);
-  }
-
-  public static String getRsaPrivateKey() {
-    return (String) config.get(CONFIGURATION.RSA_PRIVATE_KEY.name());
-  }
-
-  public void setRsaPrivateKey(String string) {
-    config.put(CONFIGURATION.RSA_PRIVATE_KEY.name(), string);
+    return Imeji.CONFIG.getLogoUrl();
   }
 
   public String getDefaultBrowseView() {
-    return getPropertyAsNonNullString(CONFIGURATION.BROWSE_DEFAULT_VIEW.name());
+    return Imeji.CONFIG.getDefaultBrowseView();
   }
 
   public void setDefaultBrowseView(String string) {
-    setProperty(CONFIGURATION.BROWSE_DEFAULT_VIEW.name(), BROWSE_VIEW.valueOf(string).name());
+    Imeji.CONFIG.setDefaultBrowseView(string);
   }
 
   public void setQuotaLimits(String limits) {
     try {
-      String[] limitArray = limits.split(",");
-      for (int i = 0; i < limitArray.length; i++) {
-        Double.parseDouble(limitArray[i]);
-      }
-      setProperty(CONFIGURATION.QUOTA_LIMITS.name(), limits);
-    } catch (NumberFormatException e) {
-      LOGGER.info("Wrong format for quota definition! Has to be comma separated list");
+      Imeji.CONFIG.setQuotaLimits(limits);
+    } catch (Exception e) {
       BeanHelper.error("Wrong format for quota definition! Has to be comma separated list. "
           + "Wrong input " + e.getMessage());
     }
   }
 
+  public String getQuotaLimits() {
+    return Imeji.CONFIG.getQuotaLimits();
+  }
+
   public String getDefaultQuota() {
-    return getPropertyAsNonNullString(CONFIGURATION.DEFAULT_QUOTA.name());
+    return Imeji.CONFIG.getDefaultQuota();
   }
 
   public void setdefaultQuota(String defaultQuota) {
-    setProperty(CONFIGURATION.DEFAULT_QUOTA.name(), defaultQuota);
+    Imeji.CONFIG.setdefaultQuota(defaultQuota);
   }
-
-  public static String getDefaultQuotaStatic() {
-    return getPropertyAsNonNullStringStatic(CONFIGURATION.DEFAULT_QUOTA.name());
-  }
-
-  public String getQuotaLimits() {
-    return (String) config.get(CONFIGURATION.QUOTA_LIMITS.name());
-  }
-
-  public static List<String> getQuotaLimitsStaticAsList() {
-    String limitString =
-        (String) config.get(CONFIGURATION.QUOTA_LIMITS.name()) + "," + QUOTA_UNLIMITED;
-    return Arrays.asList(limitString.split(","));
-  }
-
 }

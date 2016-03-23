@@ -1,8 +1,6 @@
 package de.mpg.imeji.presentation.user;
 
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSenderStatic;
 
 import java.io.IOException;
 
@@ -134,10 +132,10 @@ public class RegistrationBean {
     EmailMessages emailMessages = new EmailMessages();
     try {
       // send to requester
-      emailClient.sendMail(getUser().getEmail(), getEmailServerSenderStatic(),
+      emailClient.sendMail(getUser().getEmail(), Imeji.CONFIG.getEmailServerSender(),
           emailMessages.getEmailOnRegistrationRequest_Subject(sb),
           emailMessages.getEmailOnRegistrationRequest_Body(getUser(), password,
-              getContactEmailStatic(), sb, nb.getRegistrationUrl()));
+              Imeji.CONFIG.getContactEmail(), sb, nb.getRegistrationUrl()));
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
       BeanHelper.error(sb.getMessage("error") + ": Email not sent");

@@ -15,7 +15,6 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchIndexer;
 import de.mpg.imeji.logic.search.SearchResult;

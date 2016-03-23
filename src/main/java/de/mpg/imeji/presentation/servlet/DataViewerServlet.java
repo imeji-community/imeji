@@ -24,12 +24,12 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
@@ -62,10 +62,10 @@ public class DataViewerServlet extends HttpServlet {
       String fileExtensionName = FilenameUtils.getExtension(item.getFilename());
       String dataViewerUrl = "api/view";
 
-      if (ConfigurationBean.getDataViewerUrlStatic().endsWith("/")) {
-        dataViewerUrl = ConfigurationBean.getDataViewerUrlStatic() + dataViewerUrl;
+      if (Imeji.CONFIG.getDataViewerUrl().endsWith("/")) {
+        dataViewerUrl = Imeji.CONFIG.getDataViewerUrl() + dataViewerUrl;
       } else {
-        dataViewerUrl = ConfigurationBean.getDataViewerUrlStatic() + "/" + dataViewerUrl;
+        dataViewerUrl = Imeji.CONFIG.getDataViewerUrl() + "/" + dataViewerUrl;
       }
 
       if (isPublicItem) {

@@ -29,8 +29,9 @@ import java.net.URI;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;
@@ -44,7 +45,6 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 
@@ -362,7 +362,7 @@ public class Authorization implements Serializable {
    * @return
    */
   private boolean isPublic(Object obj, User user) {
-    if (ConfigurationBean.getPrivateModusStatic() && user == null) {
+    if (Imeji.CONFIG.getPrivateModus() && user == null) {
       return false;
     } else if (obj instanceof Item) {
       return isPublicStatus(((Item) obj).getStatus());

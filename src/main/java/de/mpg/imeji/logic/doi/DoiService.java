@@ -4,6 +4,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.WorkflowException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.doi.models.DOICollection;
@@ -11,7 +12,6 @@ import de.mpg.imeji.logic.doi.util.DOIUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 
 /**
  * Service for using MPDL DOI Service
@@ -34,9 +34,9 @@ public final class DoiService {
    */
   public void addDoiToCollection(CollectionImeji coll, User user) throws ImejiException {
     isValidDOIOperation(coll, user);
-    String doiServiceUrl = ConfigurationBean.getDoiServiceUrlStatic();
-    String doiUser = ConfigurationBean.getDoiUserStatic();
-    String doiPassword = ConfigurationBean.getDoiPasswordStatic();
+    String doiServiceUrl = Imeji.CONFIG.getDoiServiceUrl();
+    String doiUser = Imeji.CONFIG.getDoiUser();
+    String doiPassword = Imeji.CONFIG.getDoiPassword();
     String doi = getNewDoi(coll, doiServiceUrl, doiUser, doiPassword);
     coll.setDoi(doi);
     collectionController.update(coll, user);

@@ -1,7 +1,6 @@
 package de.mpg.imeji.presentation.notification;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,8 +12,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.export.Export;
@@ -137,7 +136,7 @@ public class NotificationUtils {
     // EmailMessages emailMessages = new EmailMessages();
     try {
       // send to support
-      emailClient.sendMail(getContactEmailStatic(), null,
+      emailClient.sendMail(Imeji.CONFIG.getContactEmail(), null,
           msgs.getEmailOnAccountActivation_Subject(user, sb),
           msgs.getEmailOnAccountActivation_Body(user, sb));
     } catch (Exception e) {

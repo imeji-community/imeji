@@ -1,9 +1,9 @@
 package de.mpg.imeji.logic.workflow;
 
 import de.mpg.imeji.exceptions.WorkflowException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import scala.Serializable;
 
 /**
@@ -38,7 +38,7 @@ public class WorkflowValidator implements Serializable {
    * @throws WorkflowException
    */
   public void isCreateAllowed(Properties p) throws WorkflowException {
-    if (ConfigurationBean.getPrivateModusStatic() && p.getStatus() != Status.PENDING) {
+    if (Imeji.CONFIG.getPrivateModus() && p.getStatus() != Status.PENDING) {
       throw new WorkflowException("Object publication is disabled!");
     }
   }
@@ -53,7 +53,7 @@ public class WorkflowValidator implements Serializable {
    * @throws WorkflowException
    */
   public void isReleaseAllowed(Properties p) throws WorkflowException {
-    if (ConfigurationBean.getPrivateModusStatic()) {
+    if (Imeji.CONFIG.getPrivateModus()) {
       throw new WorkflowException("Object publication is disabled!");
     }
     if (p.getStatus() != Status.PENDING) {

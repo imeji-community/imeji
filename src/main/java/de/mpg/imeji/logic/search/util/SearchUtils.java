@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.util.DateFormatter;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.FileTypes.Type;
 
 /**
@@ -44,7 +44,7 @@ public class SearchUtils {
   public static List<String> parseFileTypesAsExtensionList(String fileTypes) {
     List<String> extensions = new ArrayList<>();
     for (String typeName : fileTypes.split(Pattern.quote("|"))) {
-      Type type = ConfigurationBean.getFileTypesStatic().getType(typeName);
+      Type type = Imeji.CONFIG.getFileTypes().getType(typeName);
       for (String ext : type.getExtensionArray()) {
         extensions.add(ext);
       }

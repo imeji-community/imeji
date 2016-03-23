@@ -7,7 +7,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class QuotaSuperBean {
 
-  private String quota = ConfigurationBean.getDefaultQuotaStatic();
+  private String quota = Imeji.CONFIG.getDefaultQuota();
   private List<SelectItem> quotaMenu;
 
   /**
@@ -30,7 +30,7 @@ public class QuotaSuperBean {
   public QuotaSuperBean() {
     quotaMenu = new ArrayList<>();
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    for (String limit : ConfigurationBean.getQuotaLimitsStaticAsList()) {
+    for (String limit : Imeji.CONFIG.getQuotaLimitsAsList()) {
       if (NumberUtils.isNumber(limit)) {
         quotaMenu.add(new SelectItem(limit));
       } else {

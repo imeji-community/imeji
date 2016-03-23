@@ -43,7 +43,12 @@ public class KeyValueStoreBusinessController {
   public synchronized static void startStore() throws IOException {
     Options options = new Options();
     options.createIfMissing(true);
-    STORE = JniDBFactory.factory.open(STORE_FILE, options);
+    try {
+      STORE = JniDBFactory.factory.open(STORE_FILE, options);
+    } catch (Exception e) {
+      JniDBFactory.factory.repair(STORE_FILE, options);
+      STORE = JniDBFactory.factory.open(STORE_FILE, options);
+    }
   }
 
   /**
@@ -55,7 +60,7 @@ public class KeyValueStoreBusinessController {
     try {
       STORE.close();
     } catch (IOException e) {
-      LOGGER.error("Error stoping key value store: ", e);
+      LOGGER.error("Error stopping key value store: ", e);
     }
   }
 

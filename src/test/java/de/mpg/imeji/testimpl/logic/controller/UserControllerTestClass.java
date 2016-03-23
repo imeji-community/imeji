@@ -27,7 +27,6 @@ import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 import de.mpg.j2j.helper.DateHelper;
@@ -129,7 +128,8 @@ public class UserControllerTestClass extends ControllerTest {
       Calendar now = DateHelper.getCurrentDate();
       // Tests assumes registration token is valid for not more than 20 days
       // ToDo: Change to read from Configuration Bean
-      now.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic() - 5);
+      now.add(Calendar.DAY_OF_MONTH,
+          Integer.parseInt(Imeji.CONFIG.getRegistrationTokenExpiry()) - 5);
       user.setCreated(now);
       user = c.update(user, c.getControllerUser());
       user = c.activate(user.getRegistrationToken());
@@ -177,7 +177,8 @@ public class UserControllerTestClass extends ControllerTest {
       assertTrue(!user.isActive());
       Calendar originalCreateDate = user.getCreated();
       if (i < 7) {
-        now.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic() - 5);
+        now.add(Calendar.DAY_OF_MONTH,
+            Integer.parseInt(Imeji.CONFIG.getRegistrationTokenExpiry()) - 5);
         user.setCreated(now);
         user = c.update(user, c.getControllerUser());
       }

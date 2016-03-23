@@ -10,9 +10,9 @@ import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.reader.JenaReader;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;

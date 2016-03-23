@@ -2,7 +2,7 @@ package de.mpg.imeji.logic.util;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.logic.ImejiConfiguration;
 
 /**
  * Utility Class for imeji Quota
@@ -26,7 +26,7 @@ public class QuotaUtil {
    */
   public static long getQuotaInBytes(String gigaByte) {
     try {
-      if (ConfigurationBean.QUOTA_UNLIMITED.equals(gigaByte)) {
+      if (ImejiConfiguration.QUOTA_UNLIMITED.equals(gigaByte)) {
         return Long.MAX_VALUE;
       }
       return (long) ((Double.parseDouble(gigaByte)) * BYTES_PER_GB);

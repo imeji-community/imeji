@@ -26,7 +26,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -231,7 +230,7 @@ public class JenaQueryFactory {
         String regex = "";
         String types = pair.getValue();
         for (String typeName : types.split(Pattern.quote("|"))) {
-          Type type = ConfigurationBean.getFileTypesStatic().getType(typeName);
+          Type type = Imeji.CONFIG.getFileTypes().getType(typeName);
           if (type != null) {
             if (!regex.equals(""))
               regex += "|";

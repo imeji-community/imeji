@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.ocpsoft.pretty.PrettyContext;
 
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -119,7 +119,7 @@ public class InternationalizationBean {
    * @return
    */
   public static boolean isSupported(String langString) {
-    SUPPORTED_LANGUAGES = ConfigurationBean.getLanguagesStatic().split(",");
+    SUPPORTED_LANGUAGES = Imeji.CONFIG.getLanguages().split(",");
     for (int i = 0; i < SUPPORTED_LANGUAGES.length; i++) {
       if (SUPPORTED_LANGUAGES[i].equals(langString)) {
         return true;

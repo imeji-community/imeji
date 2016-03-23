@@ -64,6 +64,7 @@ public class StatusBean implements Serializable {
    * Initialize the AbstractBean
    */
   private void initialize(Properties properties) {
+    reset();
     if (properties != null) {
       status = properties.getStatus();
       if (AuthUtil.staticAuth().hasReadGrant(session.getUser(), properties)) {
@@ -75,6 +76,19 @@ public class StatusBean implements Serializable {
       linkToSharePage = initLinkToSharePage(properties.getId());
       show = true;
     }
+  }
+
+  /**
+   * Reset this bean
+   */
+  private void reset() {
+    status = null;
+    owner = null;
+    show = false;
+    showManage = false;
+    users = new ArrayList<>();
+    groups = new ArrayList<>();
+    linkToSharePage = null;
   }
 
   /**

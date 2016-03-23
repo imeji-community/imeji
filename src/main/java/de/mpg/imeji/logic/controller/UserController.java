@@ -44,7 +44,6 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
 
 /**
@@ -96,7 +95,7 @@ public class UserController {
     user = Imeji.adminUser;
     u.setUserStatus(User.UserStatus.ACTIVE);
     if (u.getQuota() < 0) {
-      u.setQuota(QuotaUtil.getQuotaInBytes(ConfigurationBean.getDefaultQuotaStatic()));
+      u.setQuota(QuotaUtil.getQuotaInBytes(Imeji.CONFIG.getDefaultQuota()));
     }
     switch (type) {
       case ADMIN:
@@ -293,7 +292,8 @@ public class UserController {
       }
 
       Calendar validUntil = activateUser.getCreated();
-      validUntil.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic());
+      validUntil.add(Calendar.DAY_OF_MONTH,
+          Integer.valueOf(Imeji.CONFIG.getRegistrationTokenExpiry()));
 
       if ((now.after(validUntil))) {
         throw new UnprocessableError("Activation period expired, user should be deleted!");
@@ -623,7 +623,8 @@ public class UserController {
     int i = 0;
     for (User u : cleaningCandidates) {
       Calendar expiry = u.getCreated();
-      expiry.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic());
+      expiry.add(Calendar.DAY_OF_MONTH,
+          Integer.parseInt(Imeji.CONFIG.getRegistrationTokenExpiry()));
       if (!u.isActive() && DateHelper.getCurrentDate().after(expiry)) {
         try {
           delete(u);

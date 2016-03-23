@@ -4,12 +4,6 @@
 package de.mpg.imeji.logic.collaboration.email;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerEnableAuthenticationStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerPasswordStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerPortStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSenderStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerUserStatic;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -32,6 +26,7 @@ import javax.mail.internet.MimeMultipart;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -79,14 +74,15 @@ public class EmailService {
    */
   private void sendMail(String to, String from, String[] replyTo, String subject, String message)
       throws IOException, URISyntaxException {
-    String emailUser = getEmailServerUserStatic();
-    String password = getEmailServerPasswordStatic();
-    String server = getEmailServerStatic();
-    String port = getEmailServerPortStatic();
-    if (isNullOrEmpty(port))
+    String emailUser = Imeji.CONFIG.getEmailServerUser();
+    String password = Imeji.CONFIG.getEmailServerPassword();
+    String server = Imeji.CONFIG.getEmailServer();
+    String port = Imeji.CONFIG.getEmailServerPort();
+    if (isNullOrEmpty(port)) {
       port = "25";
-    String auth = Boolean.toString(getEmailServerEnableAuthenticationStatic());
-    String sender = getEmailServerSenderStatic();
+    }
+    String auth = Boolean.toString(Imeji.CONFIG.getEmailServerEnableAuthentication());
+    String sender = Imeji.CONFIG.getEmailServerSender();
     if (from != null) {
       sender = from;
     }

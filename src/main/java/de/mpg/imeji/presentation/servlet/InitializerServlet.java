@@ -22,12 +22,11 @@ import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.ImejiRsaKeys;
 import de.mpg.imeji.logic.jobs.ReadMaxPlanckIPMappingJob;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
@@ -70,7 +69,7 @@ public class InitializerServlet extends HttpServlet {
    */
   private void initRsaKeys() {
     try {
-      ImejiRsaKeys.init(ConfigurationBean.getRsaPublicKey(), ConfigurationBean.getRsaPrivateKey());
+      ImejiRsaKeys.init(Imeji.CONFIG.getRsaPublicKey(), Imeji.CONFIG.getRsaPrivateKey());
       Imeji.CONFIG.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
       Imeji.CONFIG.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
       Imeji.CONFIG.saveConfig();

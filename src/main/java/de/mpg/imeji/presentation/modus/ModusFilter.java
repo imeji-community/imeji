@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ocpsoft.pretty.PrettyContext;
 
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.util.ServletUtil;
@@ -113,7 +113,7 @@ public class ModusFilter implements Filter {
    * @return
    */
   private boolean isPrivateModus() {
-    return ConfigurationBean.getPrivateModusStatic();
+    return Imeji.CONFIG.getPrivateModus();
   }
 
   /**

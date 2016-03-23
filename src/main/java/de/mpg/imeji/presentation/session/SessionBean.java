@@ -26,6 +26,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.ImejiConfiguration;
+import de.mpg.imeji.logic.ImejiConfiguration.BROWSE_VIEW;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -37,7 +39,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.ConfigurationBean.BROWSE_VIEW;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.upload.IngestImage;
@@ -782,8 +783,9 @@ public class SessionBean implements Serializable {
   }
 
   public void toggleBrowseView() {
-    selectedBrowseListView = selectedBrowseListView.equals(BROWSE_VIEW.LIST.name())
-        ? BROWSE_VIEW.THUMBNAIL.name() : BROWSE_VIEW.LIST.name();
+    selectedBrowseListView =
+        selectedBrowseListView.equals(ImejiConfiguration.BROWSE_VIEW.LIST.name())
+            ? BROWSE_VIEW.THUMBNAIL.name() : BROWSE_VIEW.LIST.name();
     CookieUtils.updateCookieValue(browseViewCookieName, selectedBrowseListView);
   }
 }

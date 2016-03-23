@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -25,7 +26,6 @@ import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.filter.FiltersSession;
@@ -93,7 +93,7 @@ public class AdvancedSearchBean {
     operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and_small")));
     operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or_small")));
     fileTypesMenu = new ArrayList<>();
-    for (Type type : ConfigurationBean.getFileTypesStatic().getTypes()) {
+    for (Type type : Imeji.CONFIG.getFileTypes().getTypes()) {
       fileTypesMenu.add(new SelectItem(type.getName(session.getLocale().getLanguage())));
     }
   }
@@ -121,7 +121,7 @@ public class AdvancedSearchBean {
   private void initFileTypesSelected() {
     fileTypesSelected = new ArrayList<String>();
     for (String t : formular.getFileTypeSearch().getValue().split(Pattern.quote("|"))) {
-      Type type = ConfigurationBean.getFileTypesStatic().getType(t);
+      Type type = Imeji.CONFIG.getFileTypes().getType(t);
       if (type != null) {
         fileTypesSelected.add(type.getName(session.getLocale().getLanguage()));
       }

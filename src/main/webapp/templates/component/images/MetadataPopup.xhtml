@@ -1,7 +1,8 @@
 <div xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	<f:subview id="Details">
 		<!-- TODO: build up as component -->
 		<ui:param name="navigationPath" value="#{cc.attrs.picList.imageBaseUrl}#{Navigation.itemPath}/#{item.id}"/>
@@ -17,12 +18,6 @@
 					<h:outputText value="#{lbl.metadata_edit}"/>
 				</h:outputLink>
 			</h:panelGroup>
-			
-			<ui:fragment rendered="#{item.isPrivate()}">
-				<span class="fa fa-lock" title="#{lbl.privateContent}">
-					<h:outputText value="&#160;"/>
-				</span>
-			</ui:fragment>
 			
 			<div class="imj_metadataSet">
 				<div class="imj_metadataLabel" title="#{lbl.filename}">

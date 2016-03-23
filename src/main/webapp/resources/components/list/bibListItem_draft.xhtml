@@ -3,7 +3,7 @@
 	  xmlns:h="http://java.sun.com/jsf/html"
 	  xmlns:f="http://java.sun.com/jsf/core"
 	  xmlns:composite="http://java.sun.com/jsf/composite"
-		>
+	  xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<composite:interface>
 		<composite:attribute name="itemClass" required="true"/>
@@ -42,8 +42,7 @@
 				</div>
 			</div>
 			<div class="imj_statusArea">
-                <h:outputText value="&#160;" styleClass="fa fa-lock fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'PENDING'}"/>
-                <h:outputText value="&#160;" styleClass="fa fa-trash-o fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}"/>
+				<imjc:iconStatus id="status" imejiResource="#{cc.attrs.item}"/>
 			</div>
 
 			<div class="imj_itemContent">

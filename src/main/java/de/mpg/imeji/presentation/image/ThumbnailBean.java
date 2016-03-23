@@ -50,7 +50,6 @@ public class ThumbnailBean implements Serializable {
   private MetadataProfile profile;
   private MetadataSet mdSet;
   private URI collectionUri;
-  private boolean isPrivate = true;
   private String fileType;
   private String shortFileType;
   private String fileSize;
@@ -75,7 +74,6 @@ public class ThumbnailBean implements Serializable {
     this.id = ObjectHelper.getId(getUri());
     this.link = initThumbnailLink(item);
     this.filename = item.getFilename();
-    this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false);
     this.fileType = item.getFiletype();
     this.fileSize = item.getFileSizeHumanReadable();
     this.modified = DateHelper.printDate(item.getModified());
@@ -319,14 +317,6 @@ public class ThumbnailBean implements Serializable {
 
   public void setProfile(MetadataProfile profile) {
     this.profile = profile;
-  }
-
-  public boolean isPrivate() {
-    return isPrivate;
-  }
-
-  public void setPrivate(boolean isPrivate) {
-    this.isPrivate = isPrivate;
   }
 
   public String getFileType() {

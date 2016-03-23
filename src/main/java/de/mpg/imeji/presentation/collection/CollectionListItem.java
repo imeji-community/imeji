@@ -56,6 +56,7 @@ public class CollectionListItem {
   private String selectedGrant;
   private URI profileURI;
   private boolean isOwner = false;
+  private CollectionImeji collection;
   /**
    * Maximum number of character displayed in the list for the description
    */
@@ -69,6 +70,7 @@ public class CollectionListItem {
    */
   public CollectionListItem(CollectionImeji collection, User user) {
     try {
+      this.collection = collection;
       title = collection.getMetadata().getTitle();
       description = CommonUtils.removeTags(collection.getMetadata().getDescription());
       descriptionFull = description;
@@ -387,6 +389,10 @@ public class CollectionListItem {
 
   public String getType() {
     return CONTAINER_TYPE.COLLECTION.name();
+  }
+
+  public CollectionImeji getCollection() {
+    return collection;
   }
 
 }

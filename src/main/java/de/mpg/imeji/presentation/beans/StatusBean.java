@@ -19,6 +19,8 @@ import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.album.AlbumBean;
+import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
@@ -33,6 +35,7 @@ public class StatusBean implements Serializable {
   private static final long serialVersionUID = 3560140124183947655L;
   private Status status;
   private String owner;
+  private boolean show = false;
   private boolean showManage = false;
   private List<String> users = new ArrayList<>();
   private List<String> groups = new ArrayList<>();
@@ -43,9 +46,24 @@ public class StatusBean implements Serializable {
   private SessionBean session;
 
   /**
+   * Method called from the JSF compomnent
+   * 
+   * @param o
+   */
+  public void init(Object o) {
+    if (o instanceof Properties) {
+      initialize((Properties) o);
+    } else if (o instanceof CollectionListItem) {
+      initialize(((CollectionListItem) o).getCollection());
+    } else if (o instanceof AlbumBean) {
+      initialize(((AlbumBean) o).getAlbum());
+    }
+  }
+
+  /**
    * Initialize the AbstractBean
    */
-  public boolean init(Properties properties) {
+  private void initialize(Properties properties) {
     if (properties != null) {
       status = properties.getStatus();
       if (AuthUtil.staticAuth().hasReadGrant(session.getUser(), properties)) {
@@ -55,9 +73,8 @@ public class StatusBean implements Serializable {
             && !(properties instanceof MetadataProfile);
       }
       linkToSharePage = initLinkToSharePage(properties.getId());
-      return true;
+      show = true;
     }
-    return false;
   }
 
   /**
@@ -183,5 +200,9 @@ public class StatusBean implements Serializable {
 
   public boolean isShowManage() {
     return showManage;
+  }
+
+  public boolean isShow() {
+    return show;
   }
 }

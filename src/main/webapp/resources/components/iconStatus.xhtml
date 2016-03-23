@@ -9,7 +9,8 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<ui:fragment rendered="#{SessionBean.user != null and StatusBean.init(cc.attrs.imejiResource)}">
+		<h:outputText value="#{StatusBean.init(cc.attrs.imejiResource)}"/>
+		<ui:fragment rendered="#{SessionBean.user != null and StatusBean.show}">
 			<div class="imj_statusHeaderArea">
 				<ui:fragment rendered="#{StatusBean.status != 'PENDING'}">
 					<div class="imj_overlayMenu imj_menuRight">
@@ -52,16 +53,15 @@
 					</div>
 				</ui:fragment>
 			</div>
-		</ui:fragment>
-		
+		</ui:fragment>		
 		<style>
 			.imj_statusHeaderArea{
 				padding : 0.9em 3%;
-				width:10em;
 				float:right;
 			}
 			.imj_statusHeaderArea .imj_listDottedSeparator{border-top: 1px dashed #292929; padding: 0.5em 1em}			
 		</style>
+		<script>menuRightOffset();</script>
 		
 	</composite:implementation>
 </html>

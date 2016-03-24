@@ -221,24 +221,7 @@ public class UserController {
     }
   }
 
-  /**
-   * Retrieve a {@link User} according to its email
-   * 
-   * @param registrationToken
-   * @return
-   * @throws ImejiException
-   */
-  public User retrieveRegisteredUser(String registrationToken) throws ImejiException {
-    Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
-    SearchResult result = search.searchString(
-        JenaCustomQueries.selectUserByRegistrationToken(registrationToken), null, null, 0, -1);
-    if (result.getNumberOfRecords() == 1) {
-      String id = result.getResults().get(0);
-      User u = (User) reader.read(id, user, new User());
-      return u;
-    }
-    throw new NotFoundException("Invalid registration token!");
-  }
+
 
   /**
    * Update a {@link User}
@@ -270,46 +253,6 @@ public class UserController {
   }
 
 
-  /**
-   * Activae a {@link User}
-   * 
-   * @param registrationToken
-   * @throws ImejiException
-   * @return
-   */
-  public User activate(String registrationToken) throws ImejiException {
-    try {
-      User activateUser = retrieveRegisteredUser(registrationToken);
-
-      if (activateUser.isActive()) {
-        throw new UnprocessableError("User is already activated!");
-      }
-
-      Calendar now = DateHelper.getCurrentDate();
-      if (!(activateUser.getCreated().before(now))) {
-        throw new UnprocessableError(
-            "Registration date does not match, its bigger then the current date!");
-      }
-
-      Calendar validUntil = activateUser.getCreated();
-      validUntil.add(Calendar.DAY_OF_MONTH,
-          Integer.valueOf(Imeji.CONFIG.getRegistrationTokenExpiry()));
-
-      if ((now.after(validUntil))) {
-        throw new UnprocessableError("Activation period expired, user should be deleted!");
-      }
-
-      activateUser.setUserStatus(User.UserStatus.ACTIVE);
-
-      activateUser.getGrants()
-          .addAll(AuthorizationPredefinedRoles.defaultUser(activateUser.getId().toString()));
-      writer.update(WriterFacade.toList(activateUser), null, activateUser, true);
-      return activateUser;
-
-    } catch (NotFoundException e) {
-      throw new NotFoundException("Invalid registration token!");
-    }
-  }
 
   /**
    * Check user disk space quota. Quota is calculated for user of target collection.

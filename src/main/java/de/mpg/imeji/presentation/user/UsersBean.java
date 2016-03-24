@@ -17,10 +17,11 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.registration.RegistrationBusinessController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -174,6 +175,7 @@ public class UsersBean implements Serializable {
    * @return
    */
   public String activateUser() {
+    final RegistrationBusinessController registrationBC = new RegistrationBusinessController();
     String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .get("email");
     UserController controller = new UserController(sessionUser);
@@ -182,7 +184,7 @@ public class UsersBean implements Serializable {
     try {
       // Activate first
       toActivateUser = controller.retrieve(email, sessionUser);
-      toActivateUser = controller.activate(toActivateUser.getRegistrationToken());
+      toActivateUser = registrationBC.activate(toActivateUser.getRegistrationToken());
       PasswordGenerator generator = new PasswordGenerator();
       newPassword = generator.generatePassword();
       toActivateUser.setEncryptedPassword(StringHelper.convertToMD5(newPassword));

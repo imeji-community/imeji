@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.registration.RegistrationBusinessController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -38,6 +39,8 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 public class RegistrationBean {
   private static final Logger LOGGER = Logger.getLogger(RegistrationBean.class);
   private UserController uc = new UserController(Imeji.adminUser);
+  private final RegistrationBusinessController registrationBC =
+      new RegistrationBusinessController();
 
   private SessionBean sb;
   private Navigation nb;
@@ -111,7 +114,7 @@ public class RegistrationBean {
     try {
       this.activation_submitted = true;
       this.registration_submitted = false;
-      this.user = uc.activate(this.token);
+      this.user = registrationBC.activate(this.token);
       sendActivationNotification();
       this.activation_success = true;
       this.activation_message = sb.getMessage("activation_success");

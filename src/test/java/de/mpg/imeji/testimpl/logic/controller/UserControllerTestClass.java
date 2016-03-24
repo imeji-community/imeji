@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreatio
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.registration.RegistrationBusinessController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
@@ -37,6 +38,8 @@ public class UserControllerTestClass extends ControllerTest {
   private static final Logger LOGGER = Logger.getLogger(UserControllerTestClass.class);
   private static File file1 = new File(STATIC_CONTEXT_STORAGE + "/test.jpg");
   private static File file2 = new File(STATIC_CONTEXT_STORAGE + "/test2.jpg");
+  private final RegistrationBusinessController registrationBC =
+      new RegistrationBusinessController();
 
   @Test
   public void createAlreadyExistingUserTest() {
@@ -113,7 +116,7 @@ public class UserControllerTestClass extends ControllerTest {
     }
 
     try {
-      user = c.activate(user.getRegistrationToken() + "RR");
+      user = registrationBC.activate(user.getRegistrationToken() + "RR");
 
     } catch (NotFoundException e1) {
       // Do Nothing this is OK
@@ -132,7 +135,7 @@ public class UserControllerTestClass extends ControllerTest {
           Integer.parseInt(Imeji.CONFIG.getRegistrationTokenExpiry()) - 5);
       user.setCreated(now);
       user = c.update(user, c.getControllerUser());
-      user = c.activate(user.getRegistrationToken());
+      user = registrationBC.activate(user.getRegistrationToken());
 
     } catch (UnprocessableError e1) {
       LOGGER.info("OK, expired registration token");
@@ -145,7 +148,7 @@ public class UserControllerTestClass extends ControllerTest {
     user = c.update(user, c.getControllerUser());
 
     try {
-      user = c.activate(user.getRegistrationToken());
+      user = registrationBC.activate(user.getRegistrationToken());
       assertTrue(user.isActive());
 
     } catch (Exception e1) {
@@ -153,7 +156,7 @@ public class UserControllerTestClass extends ControllerTest {
     }
 
     try {
-      user = c.activate(user.getRegistrationToken());
+      user = registrationBC.activate(user.getRegistrationToken());
       LOGGER.info("OK, double registration!");
       Assert.fail("An error happened by activating the user again!");
     } catch (Exception e) {

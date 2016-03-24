@@ -1,7 +1,6 @@
 package de.mpg.imeji.logic.collaboration.invitation;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,7 +11,8 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.message.KeyValueStoreBusinessController;
+import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
+import de.mpg.imeji.logic.keyValueStore.stores.HTreeMapStore;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -24,8 +24,8 @@ import de.mpg.imeji.logic.vo.User;
 public class InvitationBusinessController {
   private final UserController userController = new UserController(Imeji.adminUser);
   private final ShareBusinessController shareBC = new ShareBusinessController();
-  private final KeyValueStoreBusinessController keyValueStoreBC =
-      new KeyValueStoreBusinessController();
+  private static final KeyValueStoreBusinessController KEY_VALUE_STORE_BC =
+      new KeyValueStoreBusinessController(new HTreeMapStore("invitationStore"));
   private static final Logger LOGGER = Logger.getLogger(InvitationBusinessController.class);
 
   /**
@@ -79,7 +79,7 @@ public class InvitationBusinessController {
    * @throws ImejiException
    */
   public Invitation retrieve(String id) throws ImejiException {
-    Object invitation = keyValueStoreBC.get(id);
+    Object invitation = KEY_VALUE_STORE_BC.get(id);
     if (invitation instanceof Invitation) {
       return (Invitation) invitation;
     }
@@ -96,7 +96,7 @@ public class InvitationBusinessController {
    * @throws ClassNotFoundException
    */
   public List<Invitation> retrieveInvitationsOfObject(String objectUri) throws ImejiException {
-    return keyValueStoreBC.getList("invitation:.*:" + objectUri, Invitation.class);
+    return KEY_VALUE_STORE_BC.getList(".*:" + objectUri, Invitation.class);
   }
 
   /**
@@ -107,7 +107,7 @@ public class InvitationBusinessController {
    * @throws ImejiException
    */
   public List<Invitation> retrieveInvitationOfUser(String email) throws ImejiException {
-    return keyValueStoreBC.getList("invitation:" + email + ":.*", Invitation.class);
+    return KEY_VALUE_STORE_BC.getList(email + ":.*", Invitation.class);
   }
 
   /**
@@ -117,7 +117,7 @@ public class InvitationBusinessController {
    * @throws ImejiException
    */
   public List<Invitation> retrieveAll() throws ImejiException {
-    return keyValueStoreBC.getList("invitation:.*:.*", Invitation.class);
+    return KEY_VALUE_STORE_BC.getList("*:.*", Invitation.class);
   }
 
   /**
@@ -138,7 +138,7 @@ public class InvitationBusinessController {
    * @throws ImejiException
    */
   private void add(Invitation invitation) throws ImejiException {
-    keyValueStoreBC.put(invitation.getId(), invitation);
+    KEY_VALUE_STORE_BC.put(invitation.getId(), invitation);
   }
 
   /**
@@ -148,7 +148,7 @@ public class InvitationBusinessController {
    * @throws ImejiException
    */
   private void remove(Invitation invitation) throws ImejiException {
-    keyValueStoreBC.delete(invitation.getId());
+    KEY_VALUE_STORE_BC.delete(invitation.getId());
   }
 
   /**
@@ -163,23 +163,4 @@ public class InvitationBusinessController {
       return null;
     }
   }
-
-  /**
-   * Retrieve all Invitations of an InvitationList
-   * 
-   * @param invitationList
-   * @return
-   */
-  private List<Invitation> retrieveInvitations(InvitationList invitationList) {
-    List<Invitation> invitations = new ArrayList<>();
-    for (String invitationId : invitationList.getAllInvitationsId()) {
-      try {
-        invitations.add((Invitation) keyValueStoreBC.get(invitationId));
-      } catch (ImejiException e) {
-        LOGGER.error("Error retrieving invation: " + invitationId, e);
-      }
-    }
-    return invitations;
-  }
-
 }

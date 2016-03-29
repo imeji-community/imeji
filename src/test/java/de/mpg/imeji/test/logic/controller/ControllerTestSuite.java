@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import de.mpg.imeji.testimpl.logic.businesscontroller.InvitationBusinessControllerTest;
+import de.mpg.imeji.testimpl.logic.businesscontroller.RegistratinBusinessControllerTest;
 import de.mpg.imeji.testimpl.logic.controller.ItemControllerTestClass;
 import de.mpg.imeji.testimpl.logic.controller.ShareControllerTestClass;
 import de.mpg.imeji.testimpl.logic.controller.SpaceControllerTestClass;
@@ -15,7 +16,8 @@ import util.SuperTestSuite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ItemControllerTestClass.class, ShareControllerTestClass.class,
     SpaceControllerTestClass.class, StatisticsControllerTestClass.class,
-    UserControllerTestClass.class, InvitationBusinessControllerTest.class})
+    UserControllerTestClass.class, InvitationBusinessControllerTest.class,
+    RegistratinBusinessControllerTest.class})
 public class ControllerTestSuite extends SuperTestSuite {
 
 }

@@ -18,13 +18,11 @@ import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.registration.RegistrationBusinessController;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -74,19 +72,15 @@ public class RegistrationBean {
       } catch (IOException e) {
         BeanHelper.error(e.getLocalizedMessage());
       }
-
   }
 
   public void register() {
     String password = "";
     try {
-      this.activation_submitted = false;
-      this.registration_submitted = true;
-      PasswordGenerator generator = new PasswordGenerator();
-      password = generator.generatePassword();
-      user.setEncryptedPassword(StringHelper.convertToMD5(password));
-      user = uc.create(user, UserController.USER_TYPE.INACTIVE);
-      this.registration_success = true;
+      activation_submitted = false;
+      registration_submitted = true;
+      password = registrationBC.register(user);
+      registration_success = true;
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
       for (String errorM : e.getMessages()) {
@@ -97,7 +91,7 @@ public class RegistrationBean {
       LOGGER.error("error registering user", e);
     }
 
-    if (this.registration_success) {
+    if (registration_success) {
       BeanHelper.cleanMessages();
       BeanHelper.info("Sending registration email and new password.");
       sendRegistrationNotification(password);

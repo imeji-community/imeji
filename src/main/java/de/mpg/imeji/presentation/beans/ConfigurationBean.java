@@ -523,4 +523,12 @@ public class ConfigurationBean {
   public void setdefaultQuota(String defaultQuota) {
     Imeji.CONFIG.setdefaultQuota(defaultQuota);
   }
+
+  public String getRegistrationWhiteList() {
+    return Imeji.CONFIG.getRegistrationWhiteList();
+  }
+
+  public void setRegistrationWhiteList(String s) {
+    Imeji.CONFIG.setRegistrationWhiteList(s);
+  }
 }

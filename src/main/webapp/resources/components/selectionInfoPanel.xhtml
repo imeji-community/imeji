@@ -31,7 +31,6 @@
 					<h:panelGroup layout="block" styleClass="imj_overlayMenu">
 						<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.items}"/>
 					</h:panelGroup>
-					
 					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_overlayMenu" rendered="#{Auth.loggedIn}">
 						<h:panelGroup layout="block"  styleClass="imj_menuHeader" rendered="#{SessionBean.selectedSize > 0}">
 							<h:outputText id="lblSelectedSize" value=" #{SessionBean.selectedSize} #{lbl.selected}"/>
@@ -41,21 +40,23 @@
 						<div class="imj_menuBody">							
 							<ui:fragment rendered="#{SessionBean.selectedSize > 0}">
 								<ul class="imj_overlayMenuList">
-									<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
-										<li class="imj_overlayMenu">
-											<h:outputLink value="#{Navigation.albumsUrl}?q=grant=%22upload%22&amp;add_selected=1" title="#{lbl.activate}">
-												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
-											</h:outputLink>
-										</li>
-									</ui:fragment>
-									
-									<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.containerId}">
-										<li class="imj_overlayMenuListItem">
-											<!-- Add to active album -->
-											<h:commandLink action="#{cc.attrs.facetBean.addSelectedToActiveAlbum}">
-												<h:outputText value="#{lbl.add_to_active_album}"/>
-											</h:commandLink>
-										</li>
+									<ui:fragment rendered="#{Config.albumsEnabled}">
+										<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
+											<li class="imj_overlayMenu">
+												<h:outputLink value="#{Navigation.albumsUrl}?q=grant=%22upload%22&amp;add_selected=1" title="#{lbl.activate}">
+													<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+										
+										<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.containerId}">
+											<li class="imj_overlayMenuListItem">
+												<!-- Add to active album -->
+												<h:commandLink action="#{cc.attrs.facetBean.addSelectedToActiveAlbum}">
+													<h:outputText value="#{lbl.add_to_active_album}"/>
+												</h:commandLink>
+											</li>
+										</ui:fragment>
 									</ui:fragment>
 									
 									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.profile.statements.size() > 0}">

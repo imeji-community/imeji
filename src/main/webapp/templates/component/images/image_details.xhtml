@@ -329,7 +329,7 @@
 					</div>				
 					
 					<!-- InfoDataList -  Image Album Info -->
-					<ui:fragment rendered="#{itemBean.relatedAlbums != null}">
+					<ui:fragment rendered="#{itemBean.relatedAlbums != null and !empty itemBean.relatedAlbums and Config.albumsEnabled}">
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">
 								<h:outputText value="#{lbl.relatedAlbum}"/>

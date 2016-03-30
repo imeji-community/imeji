@@ -531,4 +531,12 @@ public class ConfigurationBean {
   public void setRegistrationWhiteList(String s) {
     Imeji.CONFIG.setRegistrationWhiteList(s);
   }
+
+  public boolean getAlbumsEnabled() {
+    return Imeji.CONFIG.getAlbumsEnabled();
+  }
+
+  public void setAlbumsEnabled(boolean enabled) {
+    Imeji.CONFIG.setAlbumsEnabled(enabled);
+  }
 }

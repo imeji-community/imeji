@@ -648,11 +648,13 @@ jQuery(document).ready(function() {
  ******************************************************************************/
 var selectedSearch = 1;
 var albumsUrl, collectionsUrl, browseUrl;
+var numberOfContext = 3;
 
-function initSimpleSearch(albumsUrlValue, collectionsUrlValue, browseUrlValue) {
+function initSimpleSearch(albumsUrlValue, collectionsUrlValue, browseUrlValue, numberOfContextValue) {
 	albumsUrl = albumsUrlValue;
 	collectionsUrl = collectionsUrlValue;
 	browseUrl = browseUrlValue;
+	numberOfContext = numberOfContextValue;
 }
 
 function getSearchSelectedName() {
@@ -763,7 +765,7 @@ function highlightSearch() {
  * Select the next search 
  */
 function incrementSelectedSearch() {
-	if (selectedSearch < 3) {
+	if (selectedSearch < numberOfContext) {
 		selectedSearch = selectedSearch + 1;
 	}
 }

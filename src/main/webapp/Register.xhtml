@@ -3,17 +3,15 @@
 				xmlns:ui="http://java.sun.com/jsf/facelets"
 				xmlns:h="http://java.sun.com/jsf/html"
 				xmlns:imjc="http://java.sun.com/jsf/composite/components"
-				xmlns:f="http://xmlns.jcp.org/jsf/core"
-		>
+				xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:param name="headline" value="#{lbl.register}"/>
 
     <ui:define name="mainContent">
 		
         <div class="imj_mainContentWrapper">
-
-            <!-- Register form , TODO: switched on by all statuses false -->
-            <h:panelGroup layout="block" id="registerArea" rendered="#{Configuration.registrationEnabled}">
+        
+            <h:panelGroup layout="block" id="registerArea" rendered="#{RegistrationBean.registrationEnabled}">
             
             	<ui:fragment rendered="#{!RegistrationBean.activation_submitted}">
 	            	<h2 class="imj_headline">#{lbl.registration}</h2>

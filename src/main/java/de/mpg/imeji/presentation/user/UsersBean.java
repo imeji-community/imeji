@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.user;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -17,8 +16,10 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.registration.RegistrationBusinessController;
@@ -45,6 +46,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 public class UsersBean implements Serializable {
   private static final long serialVersionUID = 909531319532057429L;
   private List<User> users;
+  private List<User> inactiveUsers;
   private UserGroup group;
   private String query;
   @ManagedProperty(value = "#{SessionBean.user}")
@@ -80,11 +82,8 @@ public class UsersBean implements Serializable {
    * Retrieve all users
    */
   public void doSearch() {
-    UserController controller = new UserController(sessionUser);
-    users = new ArrayList<User>();
-    for (User user : controller.searchUserByName(query)) {
-      users.add(user);
-    }
+    users = (List<User>) new UserController(sessionUser).searchUserByName(query);
+    inactiveUsers = new RegistrationBusinessController().searchInactiveUsers(query);
   }
 
   /**
@@ -170,25 +169,34 @@ public class UsersBean implements Serializable {
   }
 
   /**
-   * Delete a {@link User}
+   * Cancel a pending invitation
+   */
+  public void cancelInvitation() {
+    String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get("email");
+    RegistrationBusinessController registrationBC = new RegistrationBusinessController();
+    try {
+      registrationBC.delete(registrationBC.retrieveByEmail(email));
+    } catch (Exception e) {
+      BeanHelper.error("Error Deleting registration");
+      LOGGER.error("Error Deleting registration", e);
+    }
+  }
+
+  /**
+   * Activat4e a {@link User}
    * 
    * @return
+   * @throws ImejiException
    */
-  public String activateUser() {
+  public String activateUser() throws ImejiException {
     final RegistrationBusinessController registrationBC = new RegistrationBusinessController();
     String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .get("email");
-    UserController controller = new UserController(sessionUser);
     User toActivateUser = null;
-    String newPassword = "";
     try {
       // Activate first
-      toActivateUser = controller.retrieve(email, sessionUser);
-      toActivateUser = registrationBC.activate(toActivateUser.getRegistrationToken());
-      PasswordGenerator generator = new PasswordGenerator();
-      newPassword = generator.generatePassword();
-      toActivateUser.setEncryptedPassword(StringHelper.convertToMD5(newPassword));
-      controller.update(toActivateUser, sessionUser);
+      toActivateUser = registrationBC.activate(registrationBC.retrieveByEmail(email));
     } catch (Exception e) {
       BeanHelper.error("Error during activation of the user ");
       LOGGER.error("Error during activation of the user", e);
@@ -197,14 +205,13 @@ public class UsersBean implements Serializable {
     BeanHelper.cleanMessages();
     BeanHelper.info("Sending activation email and new password.");
     NotificationUtils.sendActivationNotification(toActivateUser,
-        (SessionBean) BeanHelper.getSessionBean(SessionBean.class));
-    sendEmail(email, newPassword, toActivateUser.getPerson().getCompleteName());
+        (SessionBean) BeanHelper.getSessionBean(SessionBean.class),
+        !new InvitationBusinessController().retrieveInvitationOfUser(email).isEmpty());
     if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
       BeanHelper.cleanMessages();
       BeanHelper.info(
           "User account has been activated, but email notification about activation and/or new password could not be performed! Check the eMail Server settings!");
     }
-
     doSearch();
     return "";
   }
@@ -290,5 +297,9 @@ public class UsersBean implements Serializable {
    */
   public void setQuery(String query) {
     this.query = query;
+  }
+
+  public List<User> getInactiveUsers() {
+    return inactiveUsers;
   }
 }

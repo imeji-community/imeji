@@ -21,11 +21,11 @@ import de.mpg.imeji.logic.util.StringHelper;
  */
 public class HTreeMapStore implements KeyValueStore {
   private static final String STORE_FILENAME = "imeji_HTreeMap";
-  private static final File STORE_FILE =
+  protected static final File STORE_FILE =
       new File(StringHelper.normalizePath(Imeji.tdbPath) + STORE_FILENAME);
-  private static DB STORE;
-  private HTreeMap<Object, Object> map;
-  private String name;
+  protected static DB STORE;
+  protected HTreeMap<Object, Object> map;
+  protected String name;
 
   /**
    * Basic HTreeMapStore without expiration date
@@ -82,6 +82,6 @@ public class HTreeMapStore implements KeyValueStore {
 
   @Override
   public boolean isStarted() {
-    return STORE != null;
+    return STORE != null && map != null;
   }
 }

@@ -117,7 +117,7 @@ public class InvitationBusinessController {
    * @throws ImejiException
    */
   public List<Invitation> retrieveAll() throws ImejiException {
-    return KEY_VALUE_STORE_BC.getList("*:.*", Invitation.class);
+    return KEY_VALUE_STORE_BC.getList(".*", Invitation.class);
   }
 
   /**

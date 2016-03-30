@@ -76,7 +76,8 @@ public class ShareInput implements Serializable {
     for (String invitee : unknownEmails) {
       try {
         invitationBC.invite(new Invitation(invitee, objectUri, menu.getRoles()));
-        emailService.sendMail(invitee, null, getInvitationEmailSubject(), getInvitationEmailBody());
+        emailService.sendMail(invitee, null, getInvitationEmailSubject(),
+            getInvitationEmailBody(invitee));
       } catch (ImejiException e) {
         BeanHelper.error(sb.getMessage("error_send_invitation"));
         LOGGER.error("Error sending invitation:", e);
@@ -87,12 +88,12 @@ public class ShareInput implements Serializable {
   /**
    * @return the invitation message
    */
-  private String getInvitationEmailBody() {
+  private String getInvitationEmailBody(String email) {
     Navigation nav = new Navigation();
     return sb.getMessage("email_invitation_body")
         .replace("XXX_SENDER_NAME_XXX", sb.getUser().getPerson().getCompleteName())
         .replace("XXX_INSTANCE_NAME_XXX", sb.getInstanceName())
-        .replace("XXX_REGISTRATION_LINK_XXX", nav.getRegistrationUrl())
+        .replace("XXX_REGISTRATION_LINK_XXX", nav.getRegistrationUrl() + "?login=" + email)
         .replace("XXX_SENDER_EMAIL", sb.getUser().getEmail());
 
   }

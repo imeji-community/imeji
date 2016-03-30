@@ -131,14 +131,14 @@ public class NotificationUtils {
   /**
    * Send account activation email
    */
-  public static void sendActivationNotification(User user, SessionBean sb) {
+  public static void sendActivationNotification(User user, SessionBean sb, boolean invitation) {
     // EmailClient emailClient = new EmailClient();
     // EmailMessages emailMessages = new EmailMessages();
     try {
       // send to support
       emailClient.sendMail(Imeji.CONFIG.getContactEmail(), null,
           msgs.getEmailOnAccountActivation_Subject(user, sb),
-          msgs.getEmailOnAccountActivation_Body(user, sb));
+          msgs.getEmailOnAccountActivation_Body(user, sb, invitation));
     } catch (Exception e) {
       BeanHelper.info(sb.getMessage("error") + ": Account activation email not sent");
       LOGGER.info("Error sending account activation email", e);

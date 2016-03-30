@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -190,15 +191,15 @@ public class EmailMessages {
    * @param session @return
    * @param navigationUrl
    */
-  public String getEmailOnRegistrationRequest_Body(User to, String password, String contactEmail,
-      SessionBean session, String navigationUrl) {
+  public String getEmailOnRegistrationRequest_Body(User to, String token, String password,
+      String contactEmail, SessionBean session, String navigationUrl) {
     return session.getMessage("email_registration_request_body")
         .replace("XXX_USER_NAME_XXX", to.getPerson().getCompleteName())
         .replace("XXX_LOGIN_XXX", to.getEmail())
         .replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", password)
         .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
         .replaceAll("XXX_CONTACT_EMAIL_XXX", contactEmail).replace("XXX_ACTIVATION_LINK_XXX",
-            navigationUrl + "?token=" + to.getRegistrationToken() + "&login=" + to.getEmail());
+            navigationUrl + "?token=" + token + "&login=" + to.getEmail());
   }
 
   /**
@@ -212,13 +213,16 @@ public class EmailMessages {
         u.getPerson().getCompleteName());
   }
 
-  public String getEmailOnAccountActivation_Body(User u, SessionBean session) {
+  public String getEmailOnAccountActivation_Body(User u, SessionBean session, boolean invitation) {
     return session.getMessage("email_account_activation_body")
         .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
         .replace("XXX_USER_NAME_XXX", u.getPerson().getCompleteName())
         .replace("XXX_USER_EMAIL_XXX", u.getEmail())
         .replace("XXX_ORGANIZATION_XXX", u.getPerson().getOrganizationString())
-        .replace("XXX_TIME_XXX", new Date().toString());
+        .replace("XXX_TIME_XXX", new Date().toString())
+        .replace("XXX_CREATE_COLLECTIONS_XXX",
+            Boolean.toString(AuthUtil.isAllowedToCreateCollection(u)))
+        .replace("XXX_INVITATION_XXX", Boolean.toString(invitation));
   }
 
 

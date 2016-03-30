@@ -36,11 +36,8 @@ import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
@@ -551,33 +548,5 @@ public class UserController {
    */
   public User getControllerUser() {
     return user;
-  }
-
-
-  /**
-   * Remove all the {@link Metadata} not having a {@link Statement}. This happens when a
-   * {@link Statement} has been removed from a {@link MetadataProfile}.
-   */
-  public int cleanInactiveUsers() {
-    Search search = SearchFactory.create();
-    List<String> uris =
-        search.searchString(JenaCustomQueries.getInactiveUsers(), null, null, 0, -1).getResults();
-    List<User> cleaningCandidates = (List<User>) loadUsers(uris);
-    int i = 0;
-    for (User u : cleaningCandidates) {
-      Calendar expiry = u.getCreated();
-      expiry.add(Calendar.DAY_OF_MONTH,
-          Integer.parseInt(Imeji.CONFIG.getRegistrationTokenExpiry()));
-      if (!u.isActive() && DateHelper.getCurrentDate().after(expiry)) {
-        try {
-          delete(u);
-          i++;
-        } catch (ImejiException e) {
-          LOGGER.info("There has been an error in the expiry for users. Inactive user with email "
-              + u.getEmail() + " could not be removed!", e);
-        }
-      }
-    }
-    return i;
   }
 }

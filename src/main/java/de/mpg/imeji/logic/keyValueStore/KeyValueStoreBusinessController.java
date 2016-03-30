@@ -105,6 +105,12 @@ public class KeyValueStoreBusinessController {
     }
   }
 
+  /**
+   * Delete the key/value by its key
+   * 
+   * @param key
+   * @throws ImejiException
+   */
   public void delete(String key) throws ImejiException {
     try {
       store.delete(key);
@@ -126,7 +132,6 @@ public class KeyValueStoreBusinessController {
     ObjectInputStream is = new ObjectInputStream(in);
     return is.readObject();
   }
-
 
   /**
    * Serialize an Object to a byte array

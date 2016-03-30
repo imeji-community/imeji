@@ -181,6 +181,7 @@ public class UsersBean implements Serializable {
       BeanHelper.error("Error Deleting registration");
       LOGGER.error("Error Deleting registration", e);
     }
+    doSearch();
   }
 
   /**

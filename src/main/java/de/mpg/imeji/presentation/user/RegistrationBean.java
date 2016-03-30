@@ -52,6 +52,7 @@ public class RegistrationBean {
   private boolean activation_success = false;
   private String activation_message;
   private String redirect;
+  private boolean isInvited = false;
 
 
 
@@ -62,6 +63,7 @@ public class RegistrationBean {
     // get token etc
     this.token = UrlHelper.getParameterValue("token");
     this.user.setEmail(UrlHelper.getParameterValue("login"));
+    this.isInvited = checkInvitations();
     if (sb.getUser() == null) {
       if (!isNullOrEmptyTrim(token)) {
         // if user is not yet activated, activate it
@@ -131,7 +133,7 @@ public class RegistrationBean {
    * @return
    * @throws ImejiException
    */
-  private boolean hasInvitation() {
+  private boolean checkInvitations() {
     try {
       return !new InvitationBusinessController().retrieveInvitationOfUser(user.getEmail())
           .isEmpty();
@@ -162,7 +164,7 @@ public class RegistrationBean {
    * Send account activation email
    */
   private void sendActivationNotification() {
-    NotificationUtils.sendActivationNotification(user, sb, hasInvitation());
+    NotificationUtils.sendActivationNotification(user, sb, isInvited);
   }
 
   public boolean isRegistration_submitted() {
@@ -218,6 +220,6 @@ public class RegistrationBean {
   }
 
   public boolean isRegistrationEnabled() {
-    return Imeji.CONFIG.isRegistrationEnabled() || hasInvitation();
+    return Imeji.CONFIG.isRegistrationEnabled() || isInvited;
   }
 }

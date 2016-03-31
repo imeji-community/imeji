@@ -6,9 +6,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.reader.JenaReader;
-import de.mpg.imeji.logic.writer.JenaWriter;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.persistence.Java2Jena;
@@ -16,7 +13,7 @@ import de.mpg.j2j.persistence.Jena2Java;
 
 /**
  * Controller for {@link RDFResource} Attention: Non transactional!!!! Don't use directly, use
- * {@link JenaWriter} of {@link JenaReader} instead
+ * JenaWriter of JenaReader instead
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -26,22 +23,6 @@ public class ResourceController {
   private Model model = null;
   private Java2Jena java2rdf;
   private Jena2Java rdf2Java;
-
-  /**
-   * Use only without transaction
-   * 
-   * @param modelURI
-   * @param lazy
-   */
-  public ResourceController(String modelURI, boolean lazy) {
-    if (modelURI != null) {
-      model = Imeji.dataset.getNamedModel(modelURI);
-    } else {
-      model = Imeji.dataset.getDefaultModel();
-    }
-    this.java2rdf = new Java2Jena(model, lazy);
-    this.rdf2Java = new Jena2Java(model, lazy);
-  }
 
   /**
    * Use for transaction. The model must have been created/retrieved within the transaction
@@ -66,8 +47,8 @@ public class ResourceController {
    */
   public void create(Object o) throws AlreadyExistsException {
     if (java2rdf.exists(o)) {
-      throw new AlreadyExistsException("Error creating resource " + J2JHelper.getId(o)
-          + ". Resource already exists! ");
+      throw new AlreadyExistsException(
+          "Error creating resource " + J2JHelper.getId(o) + ". Resource already exists! ");
     }
     java2rdf.write(o);
   }
@@ -122,8 +103,8 @@ public class ResourceController {
    */
   public void delete(Object o) throws NotFoundException {
     if (!java2rdf.exists(o)) {
-      throw new NotFoundException("Error deleting resource " + J2JHelper.getId(o)
-          + ". Resource doesn't exists! ");
+      throw new NotFoundException(
+          "Error deleting resource " + J2JHelper.getId(o) + ". Resource doesn't exists! ");
     }
     java2rdf.remove(o);
   }

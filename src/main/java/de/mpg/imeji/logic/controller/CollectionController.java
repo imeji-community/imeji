@@ -23,7 +23,6 @@ import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.reader.ReaderFacade;
@@ -246,16 +245,8 @@ public class CollectionController extends ImejiController {
    */
   public void updateLogo(CollectionImeji ic, File f, User u)
       throws ImejiException, IOException, URISyntaxException {
-
-    ic = (CollectionImeji) updateFile(ic, f);
-    if (f != null && f.exists()) {
-
-      // Update the collection as a patch only with collection Logo Triple
-      List<ImejiTriple> triples =
-          getContainerLogoTriples(ic.getId().toString(), ic, ic.getLogoUrl().toString());
-      patch(triples, u, true);
-
-    }
+    ic = (CollectionImeji) setLogo(ic, f);
+    update(ic, u);
   }
 
 
@@ -543,17 +534,4 @@ public class CollectionController extends ImejiController {
       return collectionSpace.get(0);
     }
   }
-
-  /**
-   * Patch a collection. !!! Use with Care !!! TODO make private
-   * 
-   * @param triples
-   * @param user
-   * @throws ImejiException
-   */
-  public void patch(List<ImejiTriple> triples, User user, boolean checkSecurity)
-      throws ImejiException {
-    writer.patch(triples, user, checkSecurity);
-  }
-
 }

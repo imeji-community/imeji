@@ -27,7 +27,6 @@ package de.mpg.imeji.logic.writer;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -74,14 +73,4 @@ public interface Writer {
    * @throws ImejiException
    */
   public void updateLazy(List<Object> objects, User user) throws ImejiException;
-
-  /**
-   * Patch update: Allow to update single triples. Is faster than update complete objects
-   * 
-   * @param triples
-   * @param user
-   * @throws ImejiException
-   */
-  public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
-      throws ImejiException;
 }

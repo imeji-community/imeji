@@ -9,9 +9,9 @@ import java.util.List;
 import com.hp.hpl.jena.Jena;
 
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.jenasearch.util.SortHelper;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SortCriterion;
-import de.mpg.j2j.helper.SortHelper;
 
 /**
  * Result {@link Object} for {@link JenaSearch}

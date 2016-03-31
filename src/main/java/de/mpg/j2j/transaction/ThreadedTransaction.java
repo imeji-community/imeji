@@ -2,6 +2,7 @@ package de.mpg.j2j.transaction;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
@@ -11,7 +12,6 @@ import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.Imeji;
 
 /**
  * Run a {@link Transaction} in a new {@link Thread}. A new {@link Dataset} is created for this
@@ -23,7 +23,12 @@ import de.mpg.imeji.logic.Imeji;
  * @version $Revision$ $LastChangedDate$
  */
 public class ThreadedTransaction implements Callable<Integer> {
+  /**
+   * The {@link ExecutorService} which runs the thread in imeji
+   */
+  public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
   private Transaction transaction;
+  private String tdbPath;
   protected static Logger LOGGER = Logger.getLogger(ThreadedTransaction.class);
 
   /**
@@ -31,8 +36,9 @@ public class ThreadedTransaction implements Callable<Integer> {
    * 
    * @param transaction
    */
-  public ThreadedTransaction(Transaction transaction) {
+  public ThreadedTransaction(Transaction transaction, String tdbPath) {
     this.transaction = transaction;
+    this.tdbPath = tdbPath;
   }
 
   /*
@@ -42,9 +48,7 @@ public class ThreadedTransaction implements Callable<Integer> {
    */
   @Override
   public Integer call() throws Exception {
-    Dataset ds =
-        Imeji.tdbPath != null ? TDBFactory.createDataset(Imeji.tdbPath) : TDBFactory
-            .createDataset();
+    Dataset ds = TDBFactory.createDataset(tdbPath);
     try {
       transaction.start(ds);
     } finally {
@@ -69,7 +73,7 @@ public class ThreadedTransaction implements Callable<Integer> {
    * @throws Exception
    */
   public static void run(ThreadedTransaction t) throws ImejiException {
-    Future<Integer> f = Imeji.executor.submit(t);
+    Future<Integer> f = EXECUTOR.submit(t);
     // wait for the transaction to be finished
     try {
       f.get();

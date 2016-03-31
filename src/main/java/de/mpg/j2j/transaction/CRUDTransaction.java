@@ -7,7 +7,6 @@ import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.j2j.controler.ResourceController;
 
 /**
@@ -19,8 +18,12 @@ import de.mpg.j2j.controler.ResourceController;
  */
 public class CRUDTransaction extends Transaction {
   private List<Object> objects = new ArrayList<Object>();
-  private GrantType type;
+  private CRUDTransactionType type;
   private boolean lazy = false;
+
+  public enum CRUDTransactionType {
+    CREATE, READ, UPDATE, DELETE;
+  }
 
   /**
    * Constructor for a {@link CRUDTransaction} with a {@link List} of {@link Object}
@@ -30,7 +33,8 @@ public class CRUDTransaction extends Transaction {
    * @param modelURI
    * @param lazy
    */
-  public CRUDTransaction(List<Object> objects, GrantType type, String modelURI, boolean lazy) {
+  public CRUDTransaction(List<Object> objects, CRUDTransactionType type, String modelURI,
+      boolean lazy) {
     super(modelURI);
     this.objects = objects;
     this.type = type;

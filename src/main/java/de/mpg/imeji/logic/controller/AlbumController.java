@@ -21,7 +21,6 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.NotSupportedMethodException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.reader.ReaderFacade;
@@ -351,19 +350,6 @@ public class AlbumController extends ImejiController {
     return albums;
   }
 
-
-  /**
-   * Patch an album. !!! Use with Care !!!
-   * 
-   * @param triples
-   * @param user
-   * @throws ImejiException
-   */
-  private void patch(List<ImejiTriple> triples, User user, boolean checkSecurity)
-      throws ImejiException {
-    writer.patch(triples, user, checkSecurity);
-  }
-
   /**
    * Update a {@link Album} (with its Logo)
    * 
@@ -373,13 +359,8 @@ public class AlbumController extends ImejiController {
    */
   public void updateLogo(Album album, File f, User u)
       throws ImejiException, IOException, URISyntaxException {
-    album = (Album) updateFile(album, f);
-    if (f != null && f.exists()) {
-      // Update the collection as a patch only with collection Logo Triple
-      List<ImejiTriple> triples =
-          getContainerLogoTriples(album.getId().toString(), album, album.getLogoUrl().toString());
-      patch(triples, u, true);
-    }
+    album = (Album) setLogo(album, f);
+    update(album, u);
   }
 
 

@@ -16,7 +16,6 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.tdb.TDB;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.j2j.helper.SortHelper;
 
 /**
  * {@link Transaction} for search operation
@@ -30,6 +29,7 @@ public class SearchTransaction extends Transaction {
   private List<String> results;
   private String modelName = null;
   private boolean count = false;
+  public final static String SORT_VALUE_REGEX = "XXX_SORT_VALUE_PATTERN_XXX";
 
   /**
    * Construct a new {@link SearchTransaction}
@@ -39,7 +39,8 @@ public class SearchTransaction extends Transaction {
    * @param results
    * @param count
    */
-  public SearchTransaction(String modelName, String searchQuery, List<String> results, boolean count) {
+  public SearchTransaction(String modelName, String searchQuery, List<String> results,
+      boolean count) {
     super(null);
     this.searchQuery = searchQuery;
     this.results = results;
@@ -131,7 +132,7 @@ public class SearchTransaction extends Transaction {
       } else if (rdfNode.isURIResource()) {
         sortValue = rdfNode.asResource().getURI();
       }
-      return SortHelper.addSortValue(qs.getResource("s").toString(), sortValue);
+      return addSortValue(qs.getResource("s").toString(), sortValue);
     }
     RDFNode node = qs.get("s");
 
@@ -151,5 +152,16 @@ public class SearchTransaction extends Transaction {
   @Override
   protected ReadWrite getLockType() {
     return ReadWrite.READ;
+  }
+
+  /**
+   * A a sort value to a {@link String}
+   * 
+   * @param s
+   * @param sortValue
+   * @return
+   */
+  private String addSortValue(String s, String sortValue) {
+    return s + SORT_VALUE_REGEX + sortValue;
   }
 }

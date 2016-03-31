@@ -11,17 +11,19 @@ import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.JenaWriter;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.transaction.CRUDTransaction;
+import de.mpg.j2j.transaction.CRUDTransaction.CRUDTransactionType;
 import de.mpg.j2j.transaction.Transaction;
 
 /**
  * imeji READ operations in {@link Jena} <br/>
  * - Use {@link CRUDTransaction} to load objects <br/>
- * - Implements lazy loading ({@link List} contained in objects are then no loaded), for faster load<br/>
+ * - Implements lazy loading ({@link List} contained in objects are then no loaded), for faster load
+ * <br/>
  * - For WRITE operations, uses {@link JenaWriter}
  * 
  * @author saquet (initial creation)
@@ -108,8 +110,8 @@ public class JenaReader implements Reader {
   }
 
   private List<Object> read(List<Object> objects, User user, boolean lazy) throws ImejiException {
-    Transaction t = new CRUDTransaction(objects, GrantType.READ, modelURI, lazy);
-    t.start();
+    Transaction t = new CRUDTransaction(objects, CRUDTransactionType.READ, modelURI, lazy);
+    t.start(Imeji.dataset);
     t.throwException();
     return objects;
   }

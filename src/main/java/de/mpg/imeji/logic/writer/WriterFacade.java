@@ -26,7 +26,6 @@ package de.mpg.imeji.logic.writer;
 
 import java.net.URI;
 import java.security.Security;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,7 +35,6 @@ import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
@@ -157,27 +155,6 @@ public class WriterFacade {
     validate(objects, profile, Validator.Method.UPDATE);
     writer.updateLazy(objects, user);
     indexer.indexBatch(objects);
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see de.mpg.imeji.logic.writer.Writer#updatePatch(java.util.List, de.mpg.imeji.logic.vo.User)
-   */
-  public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
-      throws ImejiException {
-    if (triples.isEmpty()) {
-      return;
-    }
-    List<Object> l = new ArrayList<Object>();
-    for (ImejiTriple t : triples) {
-      l.add(t.getObject());
-    }
-    if (doCheckSecurity) {
-      checkSecurity(l, user, GrantType.UPDATE);
-    }
-    writer.patch(triples, user, doCheckSecurity);
-
   }
 
   @SuppressWarnings("unchecked")

@@ -1,4 +1,4 @@
-package de.mpg.j2j.helper;
+package de.mpg.imeji.logic.search.jenasearch.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import de.mpg.imeji.logic.search.model.ComparableSearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
+import de.mpg.j2j.transaction.SearchTransaction;
 
 /**
  * Helper for sort parameters in SPARQL queries
@@ -16,8 +17,8 @@ import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
  * @version $Revision$ $LastChangedDate$
  */
 public class SortHelper {
-  public final static String SORT_VALUE_REGEX = "XXX_SORT_VALUE_PATTERN_XXX";
-  public static Pattern SORT_VALUE_PATTERN = Pattern.compile(SORT_VALUE_REGEX);
+
+  public static Pattern SORT_VALUE_PATTERN = Pattern.compile(SearchTransaction.SORT_VALUE_REGEX);
 
   /**
    * If a list has a sortValue parameter, sort it, otherwise remove the sortValue pattern
@@ -42,7 +43,7 @@ public class SortHelper {
    * @return
    */
   public final static String parseSortValue(String s) {
-    String[] t = s.split(SortHelper.SORT_VALUE_REGEX);
+    String[] t = s.split(SearchTransaction.SORT_VALUE_REGEX);
     if (t.length > 1) {
       return t[1];
     }
@@ -71,17 +72,6 @@ public class SortHelper {
       return SORT_VALUE_PATTERN.split(l.get(0)).length > 1;
     }
     return false;
-  }
-
-  /**
-   * A a sort value to a {@link String}. The String is then sortable by imeji Sort implementation
-   * 
-   * @param s
-   * @param sortValue
-   * @return
-   */
-  public final static String addSortValue(String s, String sortValue) {
-    return s + SORT_VALUE_REGEX + sortValue;
   }
 
   /**

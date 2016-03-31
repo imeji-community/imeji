@@ -7,7 +7,6 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.Imeji;
 
 /**
  * Transaction for Jena operations
@@ -29,13 +28,6 @@ public abstract class Transaction {
    */
   public Transaction(String modelURI) {
     this.modelURI = modelURI;
-  }
-
-  /**
-   * Do the {@link Transaction} over the complete imeji {@link Dataset}
-   */
-  public void start() {
-    start(Imeji.dataset);
   }
 
   /**

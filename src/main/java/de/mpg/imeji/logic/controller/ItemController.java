@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,7 +28,6 @@ import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -52,13 +50,11 @@ import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -222,9 +218,8 @@ public class ItemController extends ImejiController {
     ProfileController pc = new ProfileController();
     writer.create(J2JHelper.cast2ObjectList((List<?>) items),
         pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user);
-    List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user, items.iterator().next());
     // Update the collection
-    cc.patch(triples, user, false);
+    cc.update(cc.retrieve(coll, user), user);
   }
 
   /**
@@ -272,17 +267,6 @@ public class ItemController extends ImejiController {
     }
 
     return newItem;
-  }
-
-  /**
-   * Patch an Item !!! Use with Care !!!
-   * 
-   * @param triples
-   * @param user
-   * @throws ImejiException
-   */
-  public void patch(List<ImejiTriple> triples, User user) throws ImejiException {
-    writer.patch(triples, user, true);
   }
 
   /**
@@ -409,31 +393,33 @@ public class ItemController extends ImejiController {
    */
   public void updateBatch(Collection<Item> items, User user) throws ImejiException {
     if (items != null && !items.isEmpty()) {
-        List<Object> imBeans = new ArrayList<Object>();
-        List<String> profileLists = new ArrayList<String>();
-        String profileToAdd = "";
-    
-        for (Item item : items) {
-    
-          profileToAdd = item.getMetadataSet().getProfile()!= null? item.getMetadataSet().getProfile().toString():"profileisnull";
-          if (!profileLists.contains(profileToAdd)){          
-            profileLists.add(profileToAdd);
-          }
-    
-          if ( profileLists.size()>1 ) {
-            throw new UnprocessableError("Error during batch update, items for batch update do not have same metadata profile!");
-          }
-          
-          prepareUpdate(item, user);
-          item.setFilename(FilenameUtils.getName(item.getFilename()));
-          imBeans.add(createFulltextForMetadata(item));
-    
+      List<Object> imBeans = new ArrayList<Object>();
+      List<String> profileLists = new ArrayList<String>();
+      String profileToAdd = "";
+
+      for (Item item : items) {
+
+        profileToAdd = item.getMetadataSet().getProfile() != null
+            ? item.getMetadataSet().getProfile().toString() : "profileisnull";
+        if (!profileLists.contains(profileToAdd)) {
+          profileLists.add(profileToAdd);
         }
-        
-        cleanMetadata(items);
-        ProfileController pc = new ProfileController();
-        writer.update(imBeans, pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user),
-            user, true);
+
+        if (profileLists.size() > 1) {
+          throw new UnprocessableError(
+              "Error during batch update, items for batch update do not have same metadata profile!");
+        }
+
+        prepareUpdate(item, user);
+        item.setFilename(FilenameUtils.getName(item.getFilename()));
+        imBeans.add(createFulltextForMetadata(item));
+
+      }
+
+      cleanMetadata(items);
+      ProfileController pc = new ProfileController();
+      writer.update(imBeans,
+          pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user, true);
     }
   }
 
@@ -749,34 +735,13 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public void updateItemsProfile(List<Item> l, User user, String profileUri) throws ImejiException {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
     for (Item item : l) {
-      if (item.getMetadataSet().getProfile() == null
-          || !profileUri.equals(item.getMetadataSet().getProfile().toString())) {
-        triples.add(getProfileTriple(item.getMetadataSet().getId().toString(), item, profileUri));
-        triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
-      }
+      item.getMetadataSet().setProfile(URI.create(profileUri));
+      item.getMetadataSet().getMetadata().clear();
     }
-    patch(triples, user);
+    updateBatch(l, user);
   }
 
-  /**
-   * Get the triples which need to be updated with the profile update
-   * 
-   * @param uri
-   * @param securityUri
-   * @return
-   */
-  protected ImejiTriple getProfileTriple(String itemUri, Object permissionObject,
-      String profileUri) {
-    String profileProperty = MetadataProfile.class.getAnnotation(j2jResource.class).value();
-    try {
-      return new ImejiTriple(itemUri, profileProperty, new URI(profileUri), permissionObject);
-    } catch (URISyntaxException e) {
-      LOGGER.error(e.getMessage());
-    }
-    return null;
-  }
 
   /**
    * Throws an {@link Exception} if the file cannot be uploaded. The validation will only occur when

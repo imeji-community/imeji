@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.j2j.transaction.SPARQLUpdateTransaction;
 import de.mpg.j2j.transaction.SearchTransaction;
 import de.mpg.j2j.transaction.ThreadedTransaction;
@@ -36,7 +37,7 @@ public class ImejiSPARQL {
   public static List<String> exec(String query, String modelName) {
     List<String> results = new ArrayList<String>();
     SearchTransaction transaction = new SearchTransaction(modelName, query, results, false);
-    transaction.start();
+    transaction.start(Imeji.dataset);
     try {
       transaction.throwException();
     } catch (ImejiException e) {
@@ -56,7 +57,7 @@ public class ImejiSPARQL {
     query = query.replace("SELECT DISTINCT ?s WHERE ", "SELECT count(DISTINCT ?s) WHERE ");
     List<String> results = new ArrayList<String>(1);
     SearchTransaction transaction = new SearchTransaction(modelName, query, results, true);
-    transaction.start();
+    transaction.start(Imeji.dataset);
     try {
       transaction.throwException();
     } catch (ImejiException e) {
@@ -75,7 +76,8 @@ public class ImejiSPARQL {
    */
   public static void execUpdate(String query) {
     try {
-      ThreadedTransaction.run(new ThreadedTransaction(new SPARQLUpdateTransaction(null, query)));
+      ThreadedTransaction
+          .run(new ThreadedTransaction(new SPARQLUpdateTransaction(null, query), Imeji.tdbPath));
     } catch (ImejiException e) {
       throw new RuntimeException(e);
     }

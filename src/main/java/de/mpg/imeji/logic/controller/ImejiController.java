@@ -7,15 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.exceptions.WorkflowException;
-import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
@@ -25,10 +22,8 @@ import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.workflow.WorkflowManager;
-import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Abstract class for the controller in imeji dealing with imeji VO: {@link Item}
@@ -102,83 +97,6 @@ public abstract class ImejiController {
     WORKFLOW_MANAGER.prepareWithdraw(properties);
   }
 
-  /**
-   * Get all the triples which need to be updated by a release
-   * 
-   * @param uri
-   * @param securityUri
-   * @return
-   */
-  protected List<ImejiTriple> getUpdateTriples(String uri, User user, Object o) {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.MODIFIED_BY, user.getId(), o));
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.LAST_MODIFICATION_DATE,
-        DateHelper.getCurrentDate(), o));
-    return triples;
-  }
-
-  /**
-   * Get all the triples which need to be updated by an update
-   * 
-   * @param uri
-   * @param securityUri
-   * @return
-   */
-  protected List<ImejiTriple> getReleaseTriples(String uri, Object o) {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.VERSION, 1, o));
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.VERSION_DATE, DateHelper.getCurrentDate(), o));
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.STATUS, Status.RELEASED.getURI(), o));
-    return triples;
-  }
-
-  /**
-   * Get all the triples which need to be updated by an update
-   * 
-   * @param uri
-   * @param securityUri
-   * @return
-   */
-  protected List<ImejiTriple> getContainerLogoTriples(String uri, Object o, String logoUrl) {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.CONTAINER_LOGO, URI.create(logoUrl), o));
-    return triples;
-  }
-
-  /**
-   * Get all the triples which need to be updated by an update of a space
-   * 
-   * @param uri
-   * @param securityUri
-   * @return
-   */
-  protected List<ImejiTriple> getContainerSpaceTriples(String uri, Object o, URI spaceId) {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-    URI.create(uri);
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.SPACE, URI.create(spaceId.toString()), o));
-    return triples;
-  }
-
-  /**
-   * Get all the triples which need to be updated by an update
-   * 
-   * @param uri
-   * @param securityUri
-   * @return
-   * @throws UnprocessableError
-   */
-  protected List<ImejiTriple> getWithdrawTriples(String uri, Object o, String comment)
-      throws UnprocessableError {
-    List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-    if (comment != null && !"".equals(comment)) {
-      triples.add(new ImejiTriple(uri, ImejiNamespaces.DISCARD_COMMENT, comment, o));
-    } else {
-      throw new UnprocessableError("Discard error: A Discard comment is needed");
-    }
-    triples.add(new ImejiTriple(uri, ImejiNamespaces.STATUS, Status.WITHDRAWN.getURI(), o));
-    return triples;
-  }
-
 
 
   /**
@@ -207,7 +125,7 @@ public abstract class ImejiController {
    * @throws ImejiException
    * @throws URISyntaxException
    */
-  protected Container updateFile(Container container, File f)
+  protected Container setLogo(Container container, File f)
       throws ImejiException, IOException, URISyntaxException {
     InternalStorageManager ism = new InternalStorageManager();
     if (f != null) {

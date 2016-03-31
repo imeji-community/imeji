@@ -18,6 +18,7 @@ import java.util.Set;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.NotSupportedMethodException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiTriple;
@@ -68,6 +69,9 @@ public class AlbumController extends ImejiController {
    * @param user
    */
   public URI create(Album album, User user) throws ImejiException {
+    if (!Imeji.CONFIG.getAlbumsEnabled()) {
+      throw new NotSupportedMethodException("Album functionalities are disabled");
+    }
     isLoggedInUser(user);
     prepareCreate(album, user);
     ShareBusinessController shareController = new ShareBusinessController();

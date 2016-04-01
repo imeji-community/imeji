@@ -25,10 +25,10 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ItemsBean;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -70,7 +70,7 @@ public class CollectionItemsBean extends ItemsBean {
     collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
     this.profile = ObjectLoader.loadProfile(collection.getProfile(), sb.getUser());
     // Initialize the metadata labels
-    ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+    MetadataLabelsBean.getBean().init(profile);
     // browse context must be initialized before browseinit(), since the browseinit() will check if
     // the selected
     // items must be removed

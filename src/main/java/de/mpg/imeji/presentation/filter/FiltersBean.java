@@ -35,7 +35,9 @@ public class FiltersBean {
   /**
    * Default constructor
    */
-  public FiltersBean() {}
+  public FiltersBean() {
+    // construct...
+  }
 
   /**
    * Constructor with one string query and one count (total number of elements on the current page)
@@ -51,10 +53,11 @@ public class FiltersBean {
       String t = UrlHelper.getParameterValue("t");
       URI metadataURI = null;
       if (n != null) {
-        if (n.startsWith("No"))
+        if (n.startsWith("No")) {
           metadataURI = ObjectHelper.getURI(Statement.class, n.substring(3));
-        else
+        } else {
           metadataURI = ObjectHelper.getURI(Statement.class, n);
+        }
       }
       if (t == null)
         t = FacetType.SEARCH.name();

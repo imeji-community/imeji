@@ -111,7 +111,7 @@ public class SessionBean implements Serializable {
     selectedAlbums = new ArrayList<URI>();
     profileCached = new HashMap<URI, MetadataProfile>();
     collectionCached = new HashMap<URI, CollectionImeji>();
-    locale = InternationalizationBean.getRequestedLocale();
+    locale = InternationalizationBean.getUserLocale();
     initCssWithCookie();
     initApplicationUrl();
     initNumberOfItemsPerPageWithCookieOrProperties();

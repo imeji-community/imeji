@@ -87,6 +87,17 @@ public class InternationalizationBean {
   }
 
   /**
+   * If the user already set a lang cookie, return its value, else check the lang in the request
+   * (browser dependant)
+   * 
+   * @return
+   */
+  public static Locale getUserLocale() {
+    return Locale.forLanguageTag(
+        CookieUtils.readNonNull(SessionBean.langCookieName, getRequestedLocale().getLanguage()));
+  }
+
+  /**
    * Get the Locale according the user request and to the supported languages in the Configuration.
    * If no valid local could be found, return English
    * 

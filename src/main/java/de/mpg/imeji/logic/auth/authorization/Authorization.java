@@ -28,6 +28,8 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -44,8 +46,7 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.album.AlbumBean;
-import de.mpg.imeji.presentation.collection.CollectionListItem;
+import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one {@link User}
@@ -56,6 +57,7 @@ import de.mpg.imeji.presentation.collection.CollectionListItem;
  */
 public class Authorization implements Serializable {
   private static final long serialVersionUID = -4745899890554497793L;
+  private static final Logger LOGGER = Logger.getLogger(Authorization.class);
 
   /**
    * Return true if the {@link User} can create the object
@@ -278,27 +280,35 @@ public class Authorization implements Serializable {
    */
   public String getRelevantURIForSecurity(Object obj, boolean hasItemGrant, boolean getContext,
       boolean isReadGrant) {
+    if (obj == null) {
+      return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
+    }
     if (obj instanceof Item) {
       return hasItemGrant ? ((Item) obj).getId().toString()
           : ((Item) obj).getCollection().toString();
-    } else if (obj instanceof Container) {
+    }
+    if (obj instanceof Container) {
       return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
           : ((Container) obj).getId().toString();
-    } else if (obj instanceof CollectionListItem) {
-      return ((CollectionListItem) obj).getUri().toString();
-    } else if (obj instanceof AlbumBean) {
-      return ((AlbumBean) obj).getAlbum().getId().toString();
-    } else if (obj instanceof MetadataProfile) {
+    }
+    if (obj instanceof MetadataProfile) {
       return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
           : ((MetadataProfile) obj).getId().toString();
-    } else if (obj instanceof User) {
+    }
+    if (obj instanceof User) {
       return ((User) obj).getId().toString();
-    } else if (obj instanceof URI) {
+    }
+    if (obj instanceof URI) {
       return getCollectionUri(obj.toString(), isReadGrant);
-    } else if (obj instanceof String) {
+    }
+    if (obj instanceof String) {
       return getCollectionUri((String) obj, isReadGrant);
     }
-    return Imeji.PROPERTIES.getBaseURI();
+    if (obj instanceof UserGroup) {
+      return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
+    }
+    LOGGER.fatal("Invalid Object type: " + obj.getClass());
+    return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
   }
 
   /**

@@ -22,7 +22,7 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.presentation.beans;
+package de.mpg.imeji.logic.search.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

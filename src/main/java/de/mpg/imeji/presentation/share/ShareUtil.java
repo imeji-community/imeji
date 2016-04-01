@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.share;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +10,17 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
+import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -99,4 +110,81 @@ public class ShareUtil {
     return (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
   }
 
+
+  /**
+   * Read the role of the {@link User}
+   * 
+   * @return
+   * @throws Exception
+   */
+  public static List<ShareListItem> getAllRoles(User user, User sessionUser) throws Exception {
+    List<String> shareToList = new ArrayList<String>();
+    for (Grant g : user.getGrants()) {
+      if (g.getGrantFor() != null) {
+        if (!shareToList.contains(g.getGrantFor().toString())) {
+          shareToList.add(g.getGrantFor().toString());
+        }
+      }
+    }
+    List<ShareListItem> roles = new ArrayList<ShareListItem>();
+    for (String sharedWith : shareToList) {
+      if (sharedWith.contains("/collection/")) {
+        CollectionImeji c =
+            new CollectionController().retrieveLazy(URI.create(sharedWith), sessionUser);
+        if (c != null) {
+          roles.add(new ShareListItem(user, SharedObjectType.COLLECTION, sharedWith,
+              c.getProfile() != null ? c.getProfile().toString() : null, c.getMetadata().getTitle(),
+              sessionUser));
+        }
+      } else if (sharedWith.contains("/album/")) {
+        Album a = new AlbumController().retrieveLazy(URI.create(sharedWith), sessionUser);
+        if (a != null) {
+          roles.add(new ShareListItem(user, SharedObjectType.ALBUM, sharedWith, null,
+              a.getMetadata().getTitle(), sessionUser));
+        }
+      } else if (sharedWith.contains("/item/")) {
+        Item it = new ItemController().retrieveLazy(URI.create(sharedWith), sessionUser);
+        if (it != null) {
+          roles.add(new ShareListItem(user, SharedObjectType.ITEM, sharedWith, null,
+              it.getFilename(), sessionUser));
+        }
+      }
+    }
+    return roles;
+  }
+
+  /**
+   * Read the role of the {@link UserGroup}
+   * 
+   * @return
+   * @throws Exception
+   */
+  public static List<ShareListItem> getAllRoles(UserGroup group, User sessionUser)
+      throws Exception {
+    List<String> shareToList = new ArrayList<String>();
+    for (Grant g : group.getGrants()) {
+      if (!shareToList.contains(g.getGrantFor().toString())) {
+        shareToList.add(g.getGrantFor().toString());
+      }
+    }
+    List<ShareListItem> roles = new ArrayList<ShareListItem>();
+    for (String sharedWith : shareToList) {
+      if (sharedWith.contains("/collection/")) {
+        CollectionImeji c =
+            new CollectionController().retrieveLazy(URI.create(sharedWith), sessionUser);
+        roles.add(new ShareListItem(group, SharedObjectType.COLLECTION, sharedWith,
+            c.getProfile().toString(), c.getMetadata().getTitle(), sessionUser));
+      } else if (sharedWith.contains("/album/")) {
+        Album a = new AlbumController().retrieveLazy(URI.create(sharedWith), sessionUser);
+        roles.add(new ShareListItem(group, SharedObjectType.ALBUM, sharedWith, null,
+            a.getMetadata().getTitle(), sessionUser));
+      } else if (sharedWith.contains("/item/")) {
+        ItemController c = new ItemController();
+        Item it = c.retrieveLazy(URI.create(sharedWith), sessionUser);
+        roles.add(new ShareListItem(group, SharedObjectType.ITEM, sharedWith, null,
+            it.getFilename(), sessionUser));
+      }
+    }
+    return roles;
+  }
 }

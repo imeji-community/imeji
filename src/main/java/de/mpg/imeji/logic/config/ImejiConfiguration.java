@@ -25,9 +25,9 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.search.model.FileTypes;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.util.PropertyReader;
-import de.mpg.imeji.presentation.beans.FileTypes;
 
 public class ImejiConfiguration {
 

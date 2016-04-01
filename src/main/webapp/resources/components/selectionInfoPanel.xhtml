@@ -40,7 +40,7 @@
 						<div class="imj_menuBody">							
 							<ui:fragment rendered="#{SessionBean.selectedSize > 0}">
 								<ul class="imj_overlayMenuList">
-									<ui:fragment rendered="#{Config.albumsEnabled}">
+									<ui:fragment rendered="#{Configuration.albumsEnabled}">
 										<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
 											<li class="imj_overlayMenu">
 												<h:outputLink value="#{Navigation.albumsUrl}?q=grant=%22upload%22&amp;add_selected=1" title="#{lbl.activate}">

@@ -27,10 +27,10 @@ import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * the Java Bean for the Start Page
@@ -162,7 +162,7 @@ public class StartPageBean implements Serializable {
         uris = sr.getResults().subList(0, sublistSize);
     }
     List<Item> items = (List<Item>) ic.retrieveBatchLazy(uris, -1, 0, session.getUser());
-    carousselImages = ImejiFactory.imageListToThumbList(items);
+    carousselImages = ListUtils.itemListToThumbList(items);
   }
 
   /**

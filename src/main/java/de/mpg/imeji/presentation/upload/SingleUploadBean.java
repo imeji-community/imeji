@@ -54,8 +54,8 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.util.ImejiFactory;
+import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
@@ -255,8 +255,7 @@ public class SingleUploadBean implements Serializable {
         MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId())
             : ImejiFactory.newMetadataSet(null);
         MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
-        MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
-        labels.init(profile);
+        MetadataLabelsBean.getBean().init(profile);
         sus.setCollection(collection);
         sus.setProfile(profile);
         sus.setMdSetBean(mdSetBean);
@@ -438,7 +437,7 @@ public class SingleUploadBean implements Serializable {
     this.sus = sus;
   }
 
-  public MetadataLabels getLabels() {
+  public MetadataLabelsBean getLabels() {
     return sus.getLabels();
   }
 

@@ -37,7 +37,7 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.util.ProfileHelper;
+import de.mpg.imeji.logic.vo.util.MetadataProfileUtil;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
@@ -124,7 +124,7 @@ public class MetadataSetBean implements Serializable {
   private List<SuperMetadataBean> toSuperList(List<Metadata> l) {
     List<SuperMetadataBean> flat = new ArrayList<SuperMetadataBean>();
     for (Metadata md : l) {
-      Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
+      Statement st = MetadataProfileUtil.getStatement(md.getStatement(), profile);
       if (st != null) {
         SuperMetadataBean smd = new SuperMetadataBean(md, st);
         flat.add(smd);
@@ -308,7 +308,7 @@ public class MetadataSetBean implements Serializable {
     for (SuperMetadataBean md : metadataTree.getList()) {
       if (!MetadataHelper.isEmpty(md.getMetadata()))
         if (md.getStatement().getId().compareTo(st.getId()) == 0
-            || ProfileHelper.isParent(st, md.getStatement(), profile))
+            || MetadataProfileUtil.isParent(st, md.getStatement(), profile))
           return true;
     }
     return false;

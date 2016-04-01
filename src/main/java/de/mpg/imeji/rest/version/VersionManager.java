@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
 import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
@@ -53,8 +53,7 @@ public class VersionManager {
 
   private String linkToAPIDoc() {
     try {
-      Navigation navigation = new Navigation();
-      return navigation.getApplicationUrl() + "rest-doc/index.html";
+      return Imeji.PROPERTIES.getApplicationURL() + "rest-doc/index.html";
     } catch (Exception e) {
       LOGGER.error(e.getMessage());
     }

@@ -43,7 +43,6 @@ import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
@@ -54,6 +53,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.share.ShareListItem;
+import de.mpg.imeji.presentation.share.ShareUtil;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -83,7 +83,7 @@ public class UserGroupBean implements Serializable {
       try {
         this.userGroup = c.read(groupId, sessionUser);
         this.users = loadUsers(userGroup);
-        this.roles = AuthUtil.getAllRoles(userGroup, sessionUser);
+        this.roles = ShareUtil.getAllRoles(userGroup, sessionUser);
       } catch (Exception e) {
         BeanHelper.error("Error reading user group " + groupId);
         LOGGER.error(e);

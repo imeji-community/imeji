@@ -1,4 +1,4 @@
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -17,7 +17,9 @@ public class IPUtils {
   /**
    * Private Constructor
    */
-  private IPUtils() {}
+  private IPUtils() {
+    // Avoid creation
+  }
 
   /**
    * True if the ip is include into the IP Range. IP range can be: <br/>

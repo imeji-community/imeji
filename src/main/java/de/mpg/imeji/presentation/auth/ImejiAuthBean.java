@@ -32,6 +32,8 @@ import javax.faces.bean.ViewScoped;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.album.AlbumBean;
+import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -69,7 +71,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean read(User user, Object obj) {
-    return auth.read(user, obj);
+    return auth.read(user, extractVO(obj));
   }
 
   /**
@@ -80,7 +82,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean create(User user, Object obj) {
-    return auth.create(user, obj);
+    return auth.create(user, extractVO(obj));
   }
 
   /**
@@ -91,7 +93,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean update(User user, Object obj) {
-    return auth.update(user, obj);
+    return auth.update(user, extractVO(obj));
   }
 
   /**
@@ -102,7 +104,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean delete(User user, Object obj) {
-    return auth.delete(user, obj);
+    return auth.delete(user, extractVO(obj));
   }
 
   /**
@@ -113,7 +115,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean admin(User user, Object obj) {
-    return auth.administrate(user, obj);
+    return auth.administrate(user, extractVO(obj));
   }
 
   /**
@@ -125,7 +127,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean createContent(User user, Object obj) {
-    return auth.createContent(user, obj);
+    return auth.createContent(user, extractVO(obj));
   }
 
   /**
@@ -136,7 +138,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean updateContent(User user, Object obj) {
-    return auth.updateContent(user, obj);
+    return auth.updateContent(user, extractVO(obj));
   }
 
   /**
@@ -147,7 +149,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean deleteContent(User user, Object obj) {
-    return auth.deleteContent(user, obj);
+    return auth.deleteContent(user, extractVO(obj));
   }
 
   /**
@@ -158,7 +160,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean read(Object obj) {
-    return auth.read(sessionUser, obj);
+    return auth.read(sessionUser, extractVO(obj));
   }
 
   /**
@@ -169,7 +171,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean create(Object obj) {
-    return auth.create(sessionUser, obj);
+    return auth.create(sessionUser, extractVO(obj));
   }
 
   /**
@@ -180,7 +182,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean update(Object obj) {
-    return auth.update(sessionUser, obj);
+    return auth.update(sessionUser, extractVO(obj));
   }
 
   /**
@@ -191,7 +193,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean delete(Object obj) {
-    return auth.delete(sessionUser, obj);
+    return auth.delete(sessionUser, extractVO(obj));
   }
 
   /**
@@ -202,7 +204,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean admin(Object obj) {
-    return auth.administrate(sessionUser, obj);
+    return auth.administrate(sessionUser, extractVO(obj));
   }
 
   /**
@@ -214,7 +216,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean createContent(Object obj) {
-    return auth.createContent(sessionUser, obj);
+    return auth.createContent(sessionUser, extractVO(obj));
   }
 
   /**
@@ -225,7 +227,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean updateContent(Object obj) {
-    return auth.updateContent(sessionUser, obj);
+    return auth.updateContent(sessionUser, extractVO(obj));
   }
 
   /**
@@ -236,7 +238,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean deleteContent(Object obj) {
-    return auth.deleteContent(sessionUser, obj);
+    return auth.deleteContent(sessionUser, extractVO(obj));
   }
 
   /**
@@ -272,6 +274,22 @@ public class ImejiAuthBean implements Serializable {
    */
   public void setSessionUser(User sessionUser) {
     this.sessionUser = sessionUser;
+  }
+
+  /**
+   * Extract the VO out of the object, to be abble to use {@link Authorization}
+   * 
+   * @param obj
+   * @return
+   */
+  private Object extractVO(Object obj) {
+    if (obj instanceof CollectionListItem) {
+      return ((CollectionListItem) obj).getCollection();
+    }
+    if (obj instanceof AlbumBean) {
+      return ((AlbumBean) obj).getAlbum();
+    }
+    return obj;
   }
 
 }

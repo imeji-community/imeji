@@ -29,10 +29,10 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.util.ImejiFactory;
-import de.mpg.imeji.logic.vo.util.ProfileHelper;
+import de.mpg.imeji.logic.vo.util.MetadataProfileUtil;
+import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
 import de.mpg.imeji.presentation.metadata.editors.MetadataMultipleEditor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
@@ -103,10 +103,10 @@ public class EditItemMetadataBean {
           redirectToCollectionItemsPage(collectionId);
           BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("profile_empty", session.getLocale()));
         }
+        MetadataLabelsBean.getBean().init(profile);
         initStatementsMenu();
         initEmtpyEditorItem();
         initEditor(new ArrayList<Item>(allItems));
-        ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         initialized = true;
         noChangesEditor = editor.clone();
         initModeMenu();
@@ -239,7 +239,6 @@ public class EditItemMetadataBean {
    * Initialize the select menu with the possible statement to edit (i.e. statement of the profiles)
    */
   private void initStatementsMenu() {
-    ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
     statementMenu = new ArrayList<SelectItem>();
     for (Statement s : profile.getStatements()) {
       if (s.getParent() == null) {
@@ -247,7 +246,7 @@ public class EditItemMetadataBean {
         // statement. If it has a parent, then it
         // will be editable by choosing the parent in the menu
         statementMenu.add(new SelectItem(s.getId().toString(),
-            ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
+            ((MetadataLabelsBean) BeanHelper.getSessionBean(MetadataLabelsBean.class))
                 .getInternationalizedLabels().get(s.getId())));
       }
     }
@@ -561,7 +560,7 @@ public class EditItemMetadataBean {
    * @return
    */
   public boolean isEditableStatement(Statement st) {
-    URI lastParent = ProfileHelper.getLastParent(st, profile);
+    URI lastParent = MetadataProfileUtil.getLastParent(st, profile);
     return statement.getId().compareTo(st.getId()) == 0
         || (lastParent != null && statement.getId().compareTo(lastParent) == 0);
   }

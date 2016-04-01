@@ -9,14 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Helper methods related to {@link MetadataProfile}
@@ -25,33 +24,33 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ProfileHelper {
+public class MetadataProfileUtil {
   /**
    * Private Constructor
    */
-  private ProfileHelper() {}
+  private MetadataProfileUtil() {
+    // Avoid creation
+  }
 
   /**
    * Load the all th {@link MetadataProfile} found in a {@link List} of {@link Item}
    * 
    * @param imgs
    * @return
+   * @throws ImejiException
    * @throws Exception
    */
-  public static Map<URI, MetadataProfile> loadProfiles(List<Item> imgs) {
+  public static Map<URI, MetadataProfile> loadProfiles(List<Item> imgs) throws ImejiException {
     Map<URI, MetadataProfile> pMap = new HashMap<URI, MetadataProfile>();
 
     for (Item im : imgs) {
       if (pMap.get(im.getMetadataSet().getProfile()) == null) {
         // safe to retrieve the profile as an admin user, as there is only one call to this method
         pMap.put(im.getMetadataSet().getProfile(),
-            ObjectLoader.loadProfile(im.getMetadataSet().getProfile(), Imeji.adminUser));
+            new ProfileController().retrieve(im.getMetadataSet().getProfile(), Imeji.adminUser));
         // ObjectCachedLoader.loadProfile(im.getMetadataSet().getProfile()));
       }
     }
-
-    ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(pMap);
-
     return pMap;
   }
 

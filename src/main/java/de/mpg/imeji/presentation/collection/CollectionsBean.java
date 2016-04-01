@@ -19,10 +19,10 @@ import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * Bean for the collections page
@@ -58,7 +58,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
     search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
     collections = controller.retrieveBatchLazy(searchResult.getResults(), -1, offset, sb.getUser());
-    return ImejiFactory.collectionListToListItem(collections, sb.getUser());
+    return ListUtils.collectionListToListItem(collections, sb.getUser());
   }
 
 

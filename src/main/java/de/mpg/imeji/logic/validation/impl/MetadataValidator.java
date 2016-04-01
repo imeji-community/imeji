@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.util.ProfileHelper;
+import de.mpg.imeji.logic.vo.util.MetadataProfileUtil;
 
 /**
  * {@link Validator} for a {@link Metadata}. Only working with profile
@@ -42,7 +42,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
     if (isDelete()) {
       return;
     }
-    Statement s = ProfileHelper.getStatement(md.getStatement(), p);
+    Statement s = MetadataProfileUtil.getStatement(md.getStatement(), p);
     if (!validataMetadata(md, s))
       throw new UnprocessableError("Invalid value provided for metadata of type " + getTypeLabel(md)
           + " (" + md.asFulltext() + "...)");

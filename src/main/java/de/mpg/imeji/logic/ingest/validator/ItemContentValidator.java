@@ -10,7 +10,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.util.ProfileHelper;
+import de.mpg.imeji.logic.vo.util.MetadataProfileUtil;
 
 /**
  * @author hnguyen
@@ -31,7 +31,7 @@ public class ItemContentValidator {
     MetadataProfile profile =
         new ProfileController().retrieve(item.getMetadataSet().getProfile(), Imeji.adminUser);
     for (Metadata md : item.getMetadataSet().getMetadata()) {
-      Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
+      Statement st = MetadataProfileUtil.getStatement(md.getStatement(), profile);
       if (st == null)
         throw new RuntimeException("Error Ingest: Statement " + md.getStatement()
             + " is not allowed in collection  " + item.getCollection());

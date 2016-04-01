@@ -45,9 +45,9 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
@@ -75,7 +75,6 @@ public class ItemBean {
   private MetadataProfile profile;
   private SingleEditBean edit;
   protected String prettyLink;
-  private MetadataLabels labels;
   private SingleItemBrowse browse = null;
   private MetadataSetBean mds;
   private List<Album> relatedAlbums;
@@ -95,7 +94,6 @@ public class ItemBean {
     sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     prettyLink = sessionBean.getPrettySpacePage("pretty:editImage");
-    labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
   }
 
   /**
@@ -181,7 +179,6 @@ public class ItemBean {
       }
       loadCollection(user);
       loadProfile(user);
-      labels.init(profile);
       edit = new SingleEditBean(item, profile);
       if (profile != null) {
         edit = new SingleEditBean(item, profile);
@@ -255,7 +252,7 @@ public class ItemBean {
   }
 
   public String getInitLabels() throws Exception {
-    labels.init(profile);
+    MetadataLabelsBean.getBean().init(profile);
     return "";
   }
 

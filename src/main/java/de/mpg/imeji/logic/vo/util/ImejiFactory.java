@@ -4,9 +4,6 @@
 package de.mpg.imeji.logic.vo.util;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -24,9 +21,6 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.album.AlbumBean;
-import de.mpg.imeji.presentation.collection.CollectionListItem;
-import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
@@ -226,57 +220,5 @@ public class ImejiFactory {
       item.setStatus(Status.RELEASED);
     }
     return item;
-  }
-
-  /**
-   * Transform a {@link List} of {@link CollectionImeji} to a {@link List} of
-   * {@link CollectionListItem}
-   * 
-   * @param collList
-   * @param user
-   * @return
-   */
-  public static List<CollectionListItem> collectionListToListItem(
-      Collection<CollectionImeji> collList, User user) {
-    List<CollectionListItem> l = new ArrayList<CollectionListItem>();
-    if (collList != null) {
-      for (CollectionImeji c : collList) {
-        l.add(new CollectionListItem(c, user));
-      }
-    }
-    return l;
-  }
-
-  /**
-   * Transform a {@link List} of {@link Album} to a {@link List} of {@link AlbumBean}
-   * 
-   * @param albumList
-   * @return
-   * @throws Exception
-   */
-  public static List<AlbumBean> albumListToBeanList(Collection<Album> albumList) throws Exception {
-    List<AlbumBean> beanList = new ArrayList<AlbumBean>();
-    for (Album album : albumList) {
-      beanList.add(new AlbumBean(album));
-    }
-    return beanList;
-  }
-
-  /**
-   * Transform a {@link List} of {@link Item} to a {@link List} of {@link ThumbnailBean}
-   * 
-   * @param itemList
-   * @return
-   */
-  public static List<ThumbnailBean> imageListToThumbList(Collection<Item> itemList) {
-    List<ThumbnailBean> beanList = new ArrayList<ThumbnailBean>();
-    for (Item img : itemList) {
-      try {
-        beanList.add(new ThumbnailBean(img, true));
-      } catch (Exception e) {
-        LOGGER.error("Error creating ThumbnailBean list", e);
-      }
-    }
-    return beanList;
   }
 }

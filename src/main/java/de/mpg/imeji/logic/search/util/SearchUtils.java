@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.model.FileTypes.Type;
 import de.mpg.imeji.logic.util.DateFormatter;
-import de.mpg.imeji.presentation.beans.FileTypes.Type;
 
 /**
  * Utility class for the {@link Search}

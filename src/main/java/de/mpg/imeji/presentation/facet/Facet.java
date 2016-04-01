@@ -7,7 +7,7 @@ import java.net.URI;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -61,8 +61,9 @@ public class Facet {
       internationalizedLabel =
           Imeji.RESOURCE_BUNDLE.getLabel("facet_" + label.toLowerCase(), BeanHelper.getLocale());
     } else if (FacetType.COLLECTION.name().equals(type.name())) {
-      internationalizedLabel = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-          .getInternationalizedLabels().get(metadataURI);
+      internationalizedLabel =
+          ((MetadataLabelsBean) BeanHelper.getSessionBean(MetadataLabelsBean.class))
+              .getInternationalizedLabels().get(metadataURI);
     } else if (FacetType.SEARCH.name().equals(type.name())) {
       internationalizedLabel = Imeji.RESOURCE_BUNDLE.getLabel("search", BeanHelper.getLocale());
     }
@@ -104,7 +105,7 @@ public class Facet {
    * @return
    */
   public String getNotDefineType() {
-    return ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
+    return ((MetadataLabelsBean) BeanHelper.getSessionBean(MetadataLabelsBean.class))
         .getInternationalizedLabels().get(metadataURI);
   }
 
@@ -114,8 +115,9 @@ public class Facet {
    * @return
    */
   public boolean isNotDefine() {
-    if (label == null)
+    if (label == null) {
       return false;
+    }
     return (label.toLowerCase().startsWith("no "));
   }
 

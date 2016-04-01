@@ -31,7 +31,7 @@
 		<ui:param name="updateContentVO" value="#{Auth.updateContent(cc.attrs.vo)}"/>
 		
 		<div class="#{cc.attrs.menuClass.trim()}">		
-			<ui:fragment rendered="#{Auth.loggedIn and (Auth.sessionUser.allowedToCreateCollection or Config.albumsEnabled)}">
+			<ui:fragment rendered="#{Auth.loggedIn and (Auth.sessionUser.allowedToCreateCollection or Configuration.albumsEnabled)}">
 				<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 					<div class="imj_menuHeader">
                         <span class="fa fa-plus">&#160;</span>
@@ -46,7 +46,7 @@
 									</h:outputLink>
 								</li>
 							</ui:fragment>
-							<ui:fragment rendered="#{Config.albumsEnabled}">
+							<ui:fragment rendered="#{Configuration.albumsEnabled}">
 								<li>
 									<h:outputLink value="#{Navigation.createAlbumUrl}" title="#{lbl.album_create}">
 										<h:outputText value="#{lbl.album_create}"/>

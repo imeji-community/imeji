@@ -15,10 +15,10 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * Bean for the Albums page
@@ -52,7 +52,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
     search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
     albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), -1, offset);
-    return ImejiFactory.albumListToBeanList(albums);
+    return ListUtils.albumListToAlbumBeanList(albums);
   }
 
   @Override

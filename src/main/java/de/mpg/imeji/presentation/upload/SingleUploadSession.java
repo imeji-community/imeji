@@ -10,7 +10,7 @@ import javax.faces.bean.SessionScoped;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 
 
@@ -21,7 +21,7 @@ public class SingleUploadSession implements Serializable {
   private String selectedCollectionItem;
   private CollectionImeji collection;
   private MetadataProfile profile;
-  private MetadataLabels labels;
+  private MetadataLabelsBean labels;
   private IngestImage ingestImage;
   private List<String> techMD = new ArrayList<String>();
   private MetadataSetBean mdSetBean;
@@ -116,11 +116,11 @@ public class SingleUploadSession implements Serializable {
     this.collection = collection;
   }
 
-  public MetadataLabels getLabels() {
+  public MetadataLabelsBean getLabels() {
     return labels;
   }
 
-  public void setLabels(MetadataLabels labels) {
+  public void setLabels(MetadataLabelsBean labels) {
     this.labels = labels;
   }
 

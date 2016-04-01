@@ -30,17 +30,17 @@ import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
+import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersBean;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * The bean for all list of images
@@ -148,10 +148,10 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       Collection<Item> items = loadImages(searchResult.getResults());
       // Init the labels for the item
       if (!items.isEmpty()) {
-        ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init((List<Item>) items);
+        MetadataLabelsBean.getBean().init((List<Item>) items);
       }
       // Return the item as thumbnailBean
-      return ImejiFactory.imageListToThumbList(items);
+      return ListUtils.itemListToThumbList(items);
     } catch (ImejiException e) {
       BeanHelper.error(e.getMessage());
     }
@@ -238,7 +238,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public String getSimpleQuery() {
     if (searchFilter != null && searchFilter.getSearchQuery() != null) {
       return SearchQueryParser.searchQuery2PrettyQuery(searchFilter.getSearchQuery(),
-          session.getLocale());
+          session.getLocale(), MetadataLabelsBean.getBean().getInternationalizedLabels());
     }
     return "";
   }

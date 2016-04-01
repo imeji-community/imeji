@@ -147,7 +147,7 @@
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>MetadataLabels</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.lang.MetadataLabels</managed-bean-class>
+		<managed-bean-class>de.mpg.imeji.presentation.lang.MetadataLabelsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>

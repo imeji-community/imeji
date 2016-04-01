@@ -18,7 +18,6 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
@@ -33,6 +32,7 @@ import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.share.ShareListItem;
+import de.mpg.imeji.presentation.share.ShareUtil;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -71,7 +71,7 @@ public class UserBean extends QuotaSuperBean {
       repeatedPassword = null;
       retrieveUser();
       if (user != null) {
-        this.roles = AuthUtil.getAllRoles(user, session.getUser());
+        this.roles = ShareUtil.getAllRoles(user, session.getUser());
         this.setEdit(false);
       }
     } catch (Exception e) {
@@ -274,7 +274,7 @@ public class UserBean extends QuotaSuperBean {
 
   public List<ShareListItem> getGroupRoles(UserGroup userGroup) throws Exception {
     if (userGroup != null) {
-      return AuthUtil.getAllRoles(userGroup, session.getUser());
+      return ShareUtil.getAllRoles(userGroup, session.getUser());
     } else {
       return null;
     }

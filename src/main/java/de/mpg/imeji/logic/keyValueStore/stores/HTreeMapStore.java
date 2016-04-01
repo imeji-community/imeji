@@ -20,9 +20,7 @@ import de.mpg.imeji.logic.util.StringHelper;
  *
  */
 public class HTreeMapStore implements KeyValueStore {
-  private static final String STORE_FILENAME = "imeji_HTreeMap";
-  protected static final File STORE_FILE =
-      new File(StringHelper.normalizePath(Imeji.tdbPath) + STORE_FILENAME);
+  public static final String STORE_FILENAME_PREFIX = "imeji_HTreeMap_";
   protected static DB STORE;
   protected HTreeMap<Object, Object> map;
   protected String name;
@@ -69,7 +67,10 @@ public class HTreeMapStore implements KeyValueStore {
 
   @Override
   public void start() {
-    STORE = DBMaker.newFileDB(STORE_FILE).make();
+    STORE = DBMaker
+        .newFileDB(
+            new File(StringHelper.normalizePath(Imeji.tdbPath) + STORE_FILENAME_PREFIX + name))
+        .make();
     map = STORE.createHashMap(name).keySerializer(Serializer.STRING).makeOrGet();
   }
 

@@ -90,10 +90,11 @@ public class RegistrationBean {
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
       for (String errorM : e.getMessages()) {
-        BeanHelper.error(sb.getMessage(errorM));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sb.getLocale()));
       }
     } catch (Exception e) {
-      BeanHelper.error(sb.getMessage("error_during_user_registration"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_during_user_registration", sb.getLocale()));
       LOGGER.error("error registering user", e);
     }
 
@@ -117,7 +118,8 @@ public class RegistrationBean {
       this.user = registrationBC.activate(registrationBC.retrieveByToken(token));
       sendActivationNotification();
       this.activation_success = true;
-      this.activation_message = sb.getMessage("activation_success");
+      this.activation_message =
+          Imeji.RESOURCE_BUNDLE.getMessage("activation_success", sb.getLocale());
       LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
       loginBean.setLogin(user.getEmail());
       this.redirect = nb.getHomeUrl();
@@ -147,16 +149,15 @@ public class RegistrationBean {
    */
   private void sendRegistrationNotification(String token, String password) {
     EmailService emailClient = new EmailService();
-    EmailMessages emailMessages = new EmailMessages();
     try {
       // send to requester
       emailClient.sendMail(getUser().getEmail(), Imeji.CONFIG.getEmailServerSender(),
-          emailMessages.getEmailOnRegistrationRequest_Subject(sb),
-          emailMessages.getEmailOnRegistrationRequest_Body(getUser(), token, password,
-              Imeji.CONFIG.getContactEmail(), sb, nb.getRegistrationUrl()));
+          EmailMessages.getEmailOnRegistrationRequest_Subject(sb.getLocale()),
+          EmailMessages.getEmailOnRegistrationRequest_Body(getUser(), token, password,
+              Imeji.CONFIG.getContactEmail(), sb.getLocale(), nb.getRegistrationUrl()));
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+      BeanHelper.error("Error: Email not sent");
     }
   }
 
@@ -164,7 +165,7 @@ public class RegistrationBean {
    * Send account activation email
    */
   private void sendActivationNotification() {
-    NotificationUtils.sendActivationNotification(user, sb, isInvited);
+    NotificationUtils.sendActivationNotification(user, sb.getLocale(), isInvited);
   }
 
   public boolean isRegistration_submitted() {

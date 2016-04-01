@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -26,12 +24,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.ImejiConfiguration;
-import de.mpg.imeji.logic.ImejiConfiguration.BROWSE_VIEW;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.config.ImejiConfiguration;
+import de.mpg.imeji.logic.config.ImejiConfiguration.BROWSE_VIEW;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -44,8 +44,6 @@ import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.upload.IngestImage;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
-import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * The session Bean for imeji.
@@ -63,12 +61,8 @@ public class SessionBean implements Serializable {
     NONE, DEFAULT, ALTERNATIVE;
   }
 
-  private User user = null;
-  // Bundle
-  public static final String LABEL_BUNDLE = "labels";
-  public static final String MESSAGES_BUNDLE = "messages";
-  public static final String METADATA_BUNDLE = "metadata";
   private Locale locale;
+  private User user = null;
   private Page currentPage;
   private List<String> selected;
   private List<URI> selectedCollections;
@@ -117,7 +111,7 @@ public class SessionBean implements Serializable {
     selectedAlbums = new ArrayList<URI>();
     profileCached = new HashMap<URI, MetadataProfile>();
     collectionCached = new HashMap<URI, CollectionImeji>();
-    this.locale = InternationalizationBean.getRequestedLocale();
+    locale = InternationalizationBean.getRequestedLocale();
     initCssWithCookie();
     initApplicationUrl();
     initNumberOfItemsPerPageWithCookieOrProperties();
@@ -194,77 +188,17 @@ public class SessionBean implements Serializable {
     selectedCss = Style.valueOf(CookieUtils.readNonNull(styleCookieName, Style.NONE.name()));
   }
 
-  /**
-   * Returns the label according to the current user locale.
-   * 
-   * @param placeholder A string containing the name of a label.
-   * @return The label.
-   */
-  public String getLabel(String placeholder) {
-    try {
-      try {
-        return ResourceBundle.getBundle(this.getSelectedLabelBundle()).getString(placeholder);
-      } catch (MissingResourceException e) {
-        return ResourceBundle.getBundle(this.getDefaultLabelBundle()).getString(placeholder);
-      }
-    } catch (Exception e) {
-      return placeholder;
-    }
-  }
 
-  /**
-   * Returns the message according to the current user locale.
-   * 
-   * @param placeholder A string containing the name of a message.
-   * @return The label.
-   */
-  public String getMessage(String placeholder) {
-    try {
-      try {
-        return ResourceBundle.getBundle(this.getSelectedMessagesBundle()).getString(placeholder);
-      } catch (MissingResourceException e) {
-        return ResourceBundle.getBundle(this.getDefaultMessagesBundle()).getString(placeholder);
-      }
-    } catch (Exception e) {
-      return placeholder;
-    }
-  }
+  // /**
+  // * Returns the message according to the current user locale.
+  // *
+  // * @param placeholder A string containing the name of a message.
+  // * @return The label.
+  // */
+  // public String getMessage(String placeholder) {
+  // return Imeji.RESOURCE_BUNDLE.getMessage(placeholder);
+  // }
 
-  /**
-   * Get the bundle for the labels
-   * 
-   * @return
-   */
-  private String getSelectedLabelBundle() {
-    return LABEL_BUNDLE + "_" + locale.getLanguage();
-  }
-
-  /**
-   * Get the default bundle for the labels
-   *
-   * @return
-   */
-  private String getDefaultLabelBundle() {
-    return LABEL_BUNDLE + "_" + Locale.ENGLISH.getLanguage();
-  }
-
-  /**
-   * Get the bundle for the messages
-   * 
-   * @return
-   */
-  private String getSelectedMessagesBundle() {
-    return MESSAGES_BUNDLE + "_" + locale.getLanguage();
-  }
-
-  /**
-   * Get the default bundle for the messages
-   *
-   * @return
-   */
-  private String getDefaultMessagesBundle() {
-    return MESSAGES_BUNDLE + "_" + Locale.ENGLISH.getLanguage();
-  }
 
   /**
    * Return the version of the software
@@ -312,7 +246,7 @@ public class SessionBean implements Serializable {
    * @return
    */
   public Locale getLocale() {
-    return locale;
+    return this.locale;
   }
 
   /**

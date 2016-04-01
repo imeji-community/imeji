@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;

@@ -1,7 +1,6 @@
 package de.mpg.imeji.presentation.mdProfile;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -10,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -17,11 +17,11 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
 
 /**
@@ -62,8 +62,8 @@ public class EditMdProfileBean extends MdProfileBean {
           if (colId != null) {
             // load the collection if provided in the url
             CollectionController cc = new CollectionController();
-            setCollection(cc.retrieve(ObjectHelper.getURI(CollectionImeji.class, colId),
-                session.getUser()));
+            setCollection(
+                cc.retrieve(ObjectHelper.getURI(CollectionImeji.class, colId), session.getUser()));
           }
           // load the profile
           ProfileController pc = new ProfileController();
@@ -149,13 +149,15 @@ public class EditMdProfileBean extends MdProfileBean {
       ProfileController profileController = new ProfileController();
       profileController.update(getProfile(), session.getUser());
       session.getProfileCached().clear();
-      BeanHelper.info(session.getMessage("success_profile_save"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_profile_save", session.getLocale()));
       cancel();
     } catch (UnprocessableError e) {
-      BeanHelper.error(session.getMessage(e.getMessage()));
+      BeanHelper.error(e.getMessage());
     } catch (Exception e) {
-      BeanHelper.error(session.getMessage("error_profile_save"), e.getMessage());
-      LOGGER.error(session.getMessage("error_profile_save"), e);
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_profile_save", session.getLocale()),
+          e.getMessage());
+      LOGGER.error("Error saving profile", e);
     }
     return "";
   }

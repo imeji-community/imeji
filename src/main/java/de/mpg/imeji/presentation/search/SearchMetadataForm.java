@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
@@ -226,7 +227,8 @@ public class SearchMetadataForm {
         break;
       default:
         operatorMenu.add(new SelectItem(SearchOperators.REGEX, "--"));
-        operatorMenu.add(new SelectItem(SearchOperators.EQUALS, sessionBean.getLabel("exactly")));
+        operatorMenu.add(new SelectItem(SearchOperators.EQUALS,
+            Imeji.RESOURCE_BUNDLE.getLabel("exactly", sessionBean.getLocale())));
     }
   }
 

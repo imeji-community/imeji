@@ -41,9 +41,8 @@ public class ExportServlet extends HttpServlet {
     User user = session.getUser();
 
     try {
-      ExportManager exportManager =
-          new ExportManager(resp.getOutputStream(), user, req.getParameterMap(),
-              session.getSelected());
+      ExportManager exportManager = new ExportManager(resp.getOutputStream(), user,
+          req.getParameterMap(), session.getSelected());
       String exportName = instanceName + "_";
       exportName += new Date().toString().replace(" ", "_").replace(":", "-");
       if (exportManager.getContentType().equalsIgnoreCase("application/xml")) {
@@ -57,7 +56,7 @@ public class ExportServlet extends HttpServlet {
       resp.setHeader("Content-disposition", "filename=" + exportName);
       resp.setStatus(HttpServletResponse.SC_OK);
       SearchResult result = exportManager.search();
-      exportManager.export(result);
+      exportManager.export(result, user);
 
       NotificationUtils.notifyByExport(user, exportManager.getExport(), session);
 

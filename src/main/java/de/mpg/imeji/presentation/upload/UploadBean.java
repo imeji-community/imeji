@@ -294,16 +294,12 @@ public class UploadBean implements Serializable {
           LOGGER.error("There is already at least one item with the filename "
               + FilenameUtils.getBaseName(title));
         }
-        // throw new RuntimeException("There is already at least one item with the filename "
-        //
-        // + FilenameUtils.getBaseName(title));
       }
       StorageController sc = new StorageController();
       String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
       if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
-        SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-        LOGGER.error(sessionBean.getMessage("upload_format_not_allowed") + " ("
-            + StorageUtils.guessExtension(file) + ")");
+        LOGGER
+            .error("Upload format not allowed: " + " (" + StorageUtils.guessExtension(file) + ")");
       }
     }
   }
@@ -338,7 +334,7 @@ public class UploadBean implements Serializable {
       getsFiles().add(item);
       return item;
     } catch (Exception e) {
-      getfFiles().add(" File " + title + " not uploaded: " + session.getMessage(e.getMessage()));
+      getfFiles().add(" File " + title + " not uploaded: " + e.getMessage());
       LOGGER.error("Error uploading item: ", e);
       return null;
     }
@@ -389,7 +385,6 @@ public class UploadBean implements Serializable {
    * @throws Exception
    */
   public void loadCollection() throws Exception {
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     if (id != null) {
       collection =
           ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user);
@@ -400,7 +395,8 @@ public class UploadBean implements Serializable {
             .getNumberOfRecords();
       }
     } else {
-      BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + "No ID in URL");
       throw new RuntimeException();
     }
   }
@@ -412,8 +408,8 @@ public class UploadBean implements Serializable {
    */
   private void isDiscaded() throws UnprocessableError {
     if (collection.getStatus().equals(Status.WITHDRAWN)) {
-      SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-      throw new UnprocessableError(sessionBean.getMessage("error_collection_discarded_upload"));
+      throw new UnprocessableError(Imeji.RESOURCE_BUNDLE
+          .getMessage("error_collection_discarded_upload", session.getLocale()));
     }
   }
 
@@ -426,9 +422,11 @@ public class UploadBean implements Serializable {
       } else {
         doiService.addDoiToCollection(collection, session.getUser());
       }
-      BeanHelper.info(session.getMessage("success_doi_creation"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", session.getLocale()));
     } catch (ImejiException e) {
-      BeanHelper.error(session.getMessage("error_doi_creation") + " " + e.getMessage());
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", session.getLocale())
+          + " " + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "";
@@ -443,12 +441,13 @@ public class UploadBean implements Serializable {
    */
   public String release() throws IOException {
     CollectionController cc = new CollectionController();
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
       cc.release(collection, user);
-      BeanHelper.info(sessionBean.getMessage("success_collection_release"));
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", session.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_release"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_release", session.getLocale()));
       BeanHelper.error(e.getMessage());
     }
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
@@ -466,16 +465,16 @@ public class UploadBean implements Serializable {
    */
   public String delete() {
     CollectionController cc = new CollectionController();
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
-      cc.delete(collection, sessionBean.getUser());
-      BeanHelper.info(
-          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sessionBean));
+      cc.delete(collection, session.getUser());
+      BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(),
+          session.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_delete", session.getLocale()));
       LOGGER.error("Error delete collection", e);
     }
-    return sessionBean.getPrettySpacePage("pretty:collections");
+    return session.getPrettySpacePage("pretty:collections");
   }
 
   /**
@@ -486,12 +485,13 @@ public class UploadBean implements Serializable {
    */
   public String withdraw() throws Exception {
     CollectionController cc = new CollectionController();
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
-      cc.withdraw(collection, sessionBean.getUser());
-      BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
+      cc.withdraw(collection, session.getUser());
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", session.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", session.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error discarding collection:", e);
     }

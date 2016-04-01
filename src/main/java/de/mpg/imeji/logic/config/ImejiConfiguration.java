@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic;
+package de.mpg.imeji.logic.config;
 
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
@@ -26,8 +26,8 @@ import org.codehaus.jettison.json.JSONException;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.presentation.beans.FileTypes;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 public class ImejiConfiguration {
 

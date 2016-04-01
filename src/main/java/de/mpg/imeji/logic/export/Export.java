@@ -42,7 +42,7 @@ public abstract class Export {
    * @param sr
    * 
    */
-  public abstract void export(OutputStream out, SearchResult sr);
+  public abstract void export(OutputStream out, SearchResult sr, User user);
 
   /**
    * Return the Mime-type of the http response

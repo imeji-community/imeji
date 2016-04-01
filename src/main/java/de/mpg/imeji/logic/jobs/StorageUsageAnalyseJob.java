@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * Analyze the File system of the {@link Storage} and save the results in a property file

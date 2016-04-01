@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -48,10 +49,8 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.share.ShareListItem;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Utility class for the package auth
@@ -169,7 +168,7 @@ public class AuthUtil {
    * @return
    */
   public static boolean isSysAdmin(User user) {
-    return authorization.administrate(user, PropertyBean.baseURI());
+    return authorization.administrate(user, Imeji.PROPERTIES.getBaseURI());
   }
 
   /**
@@ -179,7 +178,7 @@ public class AuthUtil {
    * @return
    */
   public static boolean isAllowedToCreateCollection(User user) {
-    return authorization.create(user, PropertyBean.baseURI());
+    return authorization.create(user, Imeji.PROPERTIES.getBaseURI());
   }
 
   /**
@@ -314,7 +313,7 @@ public class AuthUtil {
    * @return
    */
   public static Grant extractGrant(List<Grant> grants, String grantForUri, GrantType type) {
-    for (Grant g : AuthUtil.extractGrantsFor(grants, PropertyBean.baseURI())) {
+    for (Grant g : AuthUtil.extractGrantsFor(grants, Imeji.PROPERTIES.getBaseURI())) {
       if (g.getGrantType().compareTo(AuthUtil.toGrantTypeURI(type)) == 0) {
         return g;
       }
@@ -366,21 +365,21 @@ public class AuthUtil {
     List<ShareListItem> roles = new ArrayList<ShareListItem>();
     for (String sharedWith : shareToList) {
       if (sharedWith.contains("/collection/")) {
-        CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
+        CollectionImeji c =
+            new CollectionController().retrieveLazy(URI.create(sharedWith), sessionUser);
         if (c != null) {
           roles.add(new ShareListItem(user, SharedObjectType.COLLECTION, sharedWith,
               c.getProfile() != null ? c.getProfile().toString() : null, c.getMetadata().getTitle(),
               sessionUser));
         }
       } else if (sharedWith.contains("/album/")) {
-        Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
+        Album a = new AlbumController().retrieveLazy(URI.create(sharedWith), sessionUser);
         if (a != null) {
           roles.add(new ShareListItem(user, SharedObjectType.ALBUM, sharedWith, null,
               a.getMetadata().getTitle(), sessionUser));
         }
       } else if (sharedWith.contains("/item/")) {
-        ItemController c = new ItemController();
-        Item it = c.retrieveLazy(URI.create(sharedWith), sessionUser);
+        Item it = new ItemController().retrieveLazy(URI.create(sharedWith), sessionUser);
         if (it != null) {
           roles.add(new ShareListItem(user, SharedObjectType.ITEM, sharedWith, null,
               it.getFilename(), sessionUser));
@@ -407,11 +406,12 @@ public class AuthUtil {
     List<ShareListItem> roles = new ArrayList<ShareListItem>();
     for (String sharedWith : shareToList) {
       if (sharedWith.contains("/collection/")) {
-        CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
+        CollectionImeji c =
+            new CollectionController().retrieveLazy(URI.create(sharedWith), sessionUser);
         roles.add(new ShareListItem(group, SharedObjectType.COLLECTION, sharedWith,
             c.getProfile().toString(), c.getMetadata().getTitle(), sessionUser));
       } else if (sharedWith.contains("/album/")) {
-        Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
+        Album a = new AlbumController().retrieveLazy(URI.create(sharedWith), sessionUser);
         roles.add(new ShareListItem(group, SharedObjectType.ALBUM, sharedWith, null,
             a.getMetadata().getTitle(), sessionUser));
       } else if (sharedWith.contains("/item/")) {

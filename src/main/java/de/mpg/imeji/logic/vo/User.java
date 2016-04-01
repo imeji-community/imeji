@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
@@ -21,9 +22,7 @@ import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -251,9 +250,9 @@ public class User implements Serializable {
     return quota;
   }
 
-  public String getQuotaHumanReadable() {
+  public String getQuotaHumanReadable(Locale locale) {
     if (quota == Long.MAX_VALUE) {
-      return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("unlimited");
+      return Imeji.RESOURCE_BUNDLE.getLabel("unlimited", locale);
     } else {
       return FileUtils.byteCountToDisplaySize(quota);
     }

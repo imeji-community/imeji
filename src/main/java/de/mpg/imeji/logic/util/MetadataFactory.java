@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jDataType;
 
 /**

@@ -32,14 +32,15 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
-import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link ExplainExport} for the metadata search index
@@ -59,15 +60,14 @@ public class MetadataExplainExport extends ExplainExport {
    * de.mpg.imeji.logic.search.SearchResult)
    */
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     PrintWriter writer = new PrintWriter(out);
     try {
       writer.append(getRDFTagOpen());
       for (String colURI : sr.getResults()) {
         try {
-          // TODO Change this, logic should not call presentation!!!
-          CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
-          for (Statement st : ObjectLoader.loadProfile(col.getProfile(), Imeji.adminUser)
+          CollectionImeji col = new CollectionController().retrieve(URI.create(colURI), user);
+          for (Statement st : new ProfileController().retrieve(col.getProfile(), Imeji.adminUser)
               .getStatements()) {
             for (SearchIndex index : SearchIndex.getAllIndexForStatement(st)) {
               writer.append(getIndexTag(

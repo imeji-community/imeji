@@ -17,6 +17,8 @@ import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.PasswordGenerator;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
@@ -30,7 +32,6 @@ import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -124,7 +125,7 @@ public class UsersBean implements Serializable {
       BeanHelper.error("Could not update or send new password!");
       LOGGER.error("Could not update or send new password", e);
     }
-    BeanHelper.info(session.getMessage("success_email"));
+    BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_email", session.getLocale()));
     return "";
   }
 
@@ -139,10 +140,10 @@ public class UsersBean implements Serializable {
    */
   public void sendEmail(String email, String password, String username) {
     EmailService emailClient = new EmailService();
-    EmailMessages emailMessages = new EmailMessages();
     try {
-      emailClient.sendMail(email, null, emailMessages.getEmailOnAccountAction_Subject(false),
-          emailMessages.getNewPasswordMessage(password, email, username));
+      emailClient.sendMail(email, null,
+          EmailMessages.getEmailOnAccountAction_Subject(false, BeanHelper.getLocale()),
+          EmailMessages.getNewPasswordMessage(password, email, username, BeanHelper.getLocale()));
     } catch (Exception e) {
       BeanHelper.info("Error: Password Email not sent");
       LOGGER.error("Error sending password email", e);
@@ -205,8 +206,7 @@ public class UsersBean implements Serializable {
 
     BeanHelper.cleanMessages();
     BeanHelper.info("Sending activation email and new password.");
-    NotificationUtils.sendActivationNotification(toActivateUser,
-        (SessionBean) BeanHelper.getSessionBean(SessionBean.class),
+    NotificationUtils.sendActivationNotification(toActivateUser, BeanHelper.getLocale(),
         !new InvitationBusinessController().retrieveInvitationOfUser(email).isEmpty());
     if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
       BeanHelper.cleanMessages();

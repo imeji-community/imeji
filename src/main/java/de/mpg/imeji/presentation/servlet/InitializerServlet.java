@@ -93,7 +93,8 @@ public class InitializerServlet extends HttpServlet {
     }
     if (in != null) {
       String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
-      migrationRequests = migrationRequests.replaceAll("XXX_BASE_URI_XXX", PropertyBean.baseURI());
+      migrationRequests =
+          migrationRequests.replaceAll("XXX_BASE_URI_XXX", Imeji.PROPERTIES.getBaseURI());
       migrationRequests = addNewIdToMigration(migrationRequests);
       LOGGER.info("Running migration with query: ");
       LOGGER.info(migrationRequests);

@@ -29,13 +29,13 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * The Servlet to Read files from imeji {@link Storage}
@@ -55,10 +55,6 @@ public class FileServlet extends HttpServlet {
   private static final String RESOURCE_EMTPY_ICON_URL =
       "http://localhost:8080/imeji/resources/icon/empty.png";
 
-  /**
-   * The path for this servlet as defined in the web.xml
-   */
-  public static final String SERVLET_PATH = "file";
 
   @Override
   public void init() {
@@ -131,7 +127,7 @@ public class FileServlet extends HttpServlet {
     boolean isExternalStorage = false;
     if (!AuthUtil.isSpaceUrl(url)) {
       Item fileItem = getItem(url, user);
-      NotificationUtils.notifyByItemDownload(user, fileItem, session);
+      NotificationUtils.notifyByItemDownload(user, fileItem, session.getLocale());
       isExternalStorage = StringHelper.isNullOrEmptyTrim(fileItem.getStorageId());
     }
     readFile(url, resp, isExternalStorage, user);

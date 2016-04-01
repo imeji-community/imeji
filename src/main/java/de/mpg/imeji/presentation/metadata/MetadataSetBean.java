@@ -37,8 +37,8 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.util.ProfileHelper;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * The Java Bean for a {@link MetadataSet}

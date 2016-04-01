@@ -26,6 +26,7 @@ package de.mpg.imeji.logic.search.jenasearch;
 
 import java.net.URI;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -41,7 +42,6 @@ import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
  * SPARQL queries for imeji
@@ -206,7 +206,7 @@ public class JenaCustomQueries {
     return X_PATH_FUNCTIONS_DECLARATION
         + "  SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantType> <"
         + AuthUtil.toGrantTypeURI(GrantType.ADMIN).toString()
-        + ">. ?g <http://imeji.org/terms/grantFor> <" + PropertyBean.baseURI()
+        + ">. ?g <http://imeji.org/terms/grantFor> <" + Imeji.PROPERTIES.getBaseURI()
         + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user>}";
   }
 
@@ -440,7 +440,7 @@ public class JenaCustomQueries {
     return X_PATH_FUNCTIONS_DECLARATION
         + "  SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/grantFor> ?for"
         + " . not exists{?for ?p ?o} .filter (?for!= <http://imeji.org/> &&  ?for != <"
-        + PropertyBean.baseURI() + ">)}";
+        + Imeji.PROPERTIES.getBaseURI() + ">)}";
   }
 
   /**
@@ -455,7 +455,7 @@ public class JenaCustomQueries {
         + "USING <http://imeji.org/metadataProfile> "
         + " WHERE {?s <http://imeji.org/terms/grantFor> ?for"
         + " . not exists{?for ?p ?o} .filter (?for!= <http://imeji.org/> &&  ?for != <"
-        + PropertyBean.baseURI() + ">) . ?s ?prop ?sub}";
+        + Imeji.PROPERTIES.getBaseURI() + ">) . ?s ?prop ?sub}";
   }
 
   /**

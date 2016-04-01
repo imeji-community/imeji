@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -49,6 +50,7 @@ import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
@@ -57,7 +59,6 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import digilib.servlet.Scaler;
 
 /**
@@ -126,12 +127,12 @@ public class DigilibServlet extends Scaler {
       String fn = req.getParameter("fn");
       if (url != null) {
         String path = internalStorageBase
-            + url.replaceAll(navigation.getApplicationUrl() + FileServlet.SERVLET_PATH, "");
+            + url.replaceAll(navigation.getApplicationUrl() + Imeji.FILE_SERVLET_PATH, "");
         path = path.replace("\\", "/");
         resp.sendRedirect(req.getRequestURL().toString() + "?fn=" + path + "&dw=1000");
       } else if (fn != null) {
         SessionBean session = getSession(req);
-        url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH
+        url = navigation.getApplicationUrl() + Imeji.FILE_SERVLET_PATH
             + fn.replace(internalStorageBase, "");
 
         if (authorization.read(getUser(session), loadItem(url, session))) {
@@ -199,8 +200,8 @@ public class DigilibServlet extends Scaler {
 
   private Item loadItem(String url, SessionBean session) throws ImejiException {
     Search s = SearchFactory.create();
-    List<String> r =
-        s.searchString(JenaCustomQueries.selectItemIdOfFileUrl(url), null, null, 0, -1).getResults();
+    List<String> r = s.searchString(JenaCustomQueries.selectItemIdOfFileUrl(url), null, null, 0, -1)
+        .getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
       return c.retrieveLazy(URI.create(r.get(0)), session.getUser());

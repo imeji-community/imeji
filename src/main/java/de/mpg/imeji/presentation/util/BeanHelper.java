@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.util;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -11,6 +12,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Helper to work with jsf beans
@@ -25,7 +28,7 @@ public class BeanHelper {
    * Private Constructor
    */
   private BeanHelper() {
-
+    // Avoid creation
   }
 
   /**
@@ -303,6 +306,15 @@ public class BeanHelper {
 
   public static void addMessage(String message) {
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(message));
+  }
+
+  /**
+   * Return the Current Locale from the SessionBean
+   * 
+   * @return
+   */
+  public static Locale getLocale() {
+    return ((SessionBean) getSessionBean(SessionBean.class)).getLocale();
   }
 
 }

@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.util;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

@@ -4,19 +4,17 @@
 package de.mpg.imeji.logic.collaboration.email;
 
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * List of text (messages) sent from imeji to users via email
@@ -36,13 +34,14 @@ public class EmailMessages {
    * @param username
    * @return
    */
-  public String getNewAccountMessage(String password, String email, String username) {
-    return getEmailOnAccountAction_Body(password, email, username, "email_new_user");
+  public static String getNewAccountMessage(String password, String email, String username,
+      Locale locale) {
+    return getEmailOnAccountAction_Body(password, email, username, "email_new_user", locale);
   }
 
 
-  public static String getSuccessCollectionDeleteMessage(String collectionName, SessionBean sb) {
-    return sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+  public static String getSuccessCollectionDeleteMessage(String collectionName, Locale locale) {
+    return getBundle("success_collection_delete", locale).replace("XXX_collectionName_XXX",
         collectionName);
   }
 
@@ -54,12 +53,12 @@ public class EmailMessages {
    * @param username
    * @return
    */
-  public String getNewPasswordMessage(String password, String email, String username) {
+  public static String getNewPasswordMessage(String password, String email, String username,
+      Locale locale) {
     String msg = "";
     try {
-      String name = ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-          .getInstanceName();
-      return getEmailOnAccountAction_Body(password, email, username, "email_new_password")
+      String name = Imeji.CONFIG.getInstanceName();
+      return getEmailOnAccountAction_Body(password, email, username, "email_new_password", locale)
           .replace("XXX_INSTANCE_NAME_XXX", name);
     } catch (Exception e) {
       Logger.getLogger(EmailMessages.class).info("Will return empty message, due to some error", e);
@@ -76,9 +75,9 @@ public class EmailMessages {
    * @param collectionLink
    * @return
    */
-  public String getSharedCollectionMessage(String sender, String dest, String collectionName,
-      String collectionLink) {
-    String message = getBundle("email_shared_collection");
+  public static String getSharedCollectionMessage(String sender, String dest, String collectionName,
+      String collectionLink, Locale locale) {
+    String message = getBundle("email_shared_collection", locale);
     message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
         .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
     return message;
@@ -93,8 +92,9 @@ public class EmailMessages {
    * @param itemLink
    * @return
    */
-  public String getSharedItemMessage(String sender, String dest, String itemName, String itemLink) {
-    String message = getBundle("email_shared_item");
+  public static String getSharedItemMessage(String sender, String dest, String itemName,
+      String itemLink, Locale locale) {
+    String message = getBundle("email_shared_item", locale);
     message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", itemName)
         .replace("XXX_LINK_XXX", itemLink).replace("XXX_SENDER_NAME_XXX", sender);
     return message;
@@ -109,9 +109,9 @@ public class EmailMessages {
    * @param collectionLink
    * @return
    */
-  public String getSharedAlbumMessage(String sender, String dest, String collectionName,
-      String collectionLink) {
-    String message = getBundle("email_shared_album");
+  public static String getSharedAlbumMessage(String sender, String dest, String collectionName,
+      String collectionLink, Locale locale) {
+    String message = getBundle("email_shared_album", locale);
     message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
         .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
     return message;
@@ -123,9 +123,8 @@ public class EmailMessages {
    * @param messageBundle
    * @return
    */
-  private String getBundle(String messageBundle) {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    return session.getMessage(messageBundle);
+  private static String getBundle(String messageBundle, Locale locale) {
+    return Imeji.RESOURCE_BUNDLE.getMessage(messageBundle, locale);
   }
 
   /**
@@ -137,20 +136,18 @@ public class EmailMessages {
    * @param message_bundle
    * @return
    */
-  private String getEmailOnAccountAction_Body(String password, String email, String username,
-      String message_bundle) {
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    String userPage = navigation.getApplicationUrl() + "user?id=" + email;
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    String emailMessage = session.getMessage(message_bundle);
+  private static String getEmailOnAccountAction_Body(String password, String email, String username,
+      String message_bundle, Locale locale) {
+    String userPage = Imeji.PROPERTIES.getApplicationURL() + "user?id=" + email;
+    String emailMessage = getBundle(message_bundle, locale);
     if ("email_new_user".equals(message_bundle)) {
       emailMessage =
-          emailMessage.replace("XXX_LINK_TO_APPLICATION_XXX", navigation.getApplicationUrl());
+          emailMessage.replace("XXX_LINK_TO_APPLICATION_XXX", Imeji.PROPERTIES.getApplicationURL());
     }
     emailMessage =
         emailMessage.replace("XXX_USER_NAME_XXX", username).replace("XXX_LOGIN_XXX", email)
             .replace("XXX_PASSWORD_XXX", password).replace("XXX_LINK_TO_USER_PAGE_XXX", userPage)
-            .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
+            .replaceAll("XXX_INSTANCE_NAME_XXX", Imeji.CONFIG.getInstanceName());
     return emailMessage;
   }
 
@@ -160,15 +157,14 @@ public class EmailMessages {
    * @param newAccount
    * @return
    */
-  public String getEmailOnAccountAction_Subject(boolean newAccount) {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  public static String getEmailOnAccountAction_Subject(boolean newAccount, Locale locale) {
     String emailsubject = "";
     if (newAccount) {
-      emailsubject = session.getMessage("email_new_user_subject");
+      emailsubject = getBundle("email_new_user_subject", locale);
     } else {
-      emailsubject = session.getMessage("email_new_password_subject");
+      emailsubject = getBundle("email_new_password_subject", locale);
     }
-    return emailsubject.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
+    return emailsubject.replaceAll("XXX_INSTANCE_NAME_XXX", Imeji.CONFIG.getInstanceName());
   }
 
   /**
@@ -176,9 +172,9 @@ public class EmailMessages {
    *
    * @return
    */
-  public String getEmailOnRegistrationRequest_Subject(SessionBean session) {
-    return session.getMessage("email_registration_request_subject")
-        .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
+  public static String getEmailOnRegistrationRequest_Subject(Locale locale) {
+    return getBundle("email_registration_request_subject", locale)
+        .replaceAll("XXX_INSTANCE_NAME_XXX", Imeji.CONFIG.getInstanceName());
   }
 
 
@@ -191,13 +187,13 @@ public class EmailMessages {
    * @param session @return
    * @param navigationUrl
    */
-  public String getEmailOnRegistrationRequest_Body(User to, String token, String password,
-      String contactEmail, SessionBean session, String navigationUrl) {
-    return session.getMessage("email_registration_request_body")
+  public static String getEmailOnRegistrationRequest_Body(User to, String token, String password,
+      String contactEmail, Locale locale, String navigationUrl) {
+    return getBundle("email_registration_request_body", locale)
         .replace("XXX_USER_NAME_XXX", to.getPerson().getCompleteName())
         .replace("XXX_LOGIN_XXX", to.getEmail())
         .replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", password)
-        .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
+        .replaceAll("XXX_INSTANCE_NAME_XXX", Imeji.CONFIG.getInstanceName())
         .replaceAll("XXX_CONTACT_EMAIL_XXX", contactEmail).replace("XXX_ACTIVATION_LINK_XXX",
             navigationUrl + "?token=" + token + "&login=" + to.getEmail());
   }
@@ -208,14 +204,14 @@ public class EmailMessages {
    * @param session
    * @return
    */
-  public String getEmailOnAccountActivation_Subject(User u, SessionBean session) {
-    return session.getMessage("email_account_activation_subject").replace("XXX_USER_NAME_XXX",
+  public static String getEmailOnAccountActivation_Subject(User u, Locale locale) {
+    return getBundle("email_account_activation_subject", locale).replace("XXX_USER_NAME_XXX",
         u.getPerson().getCompleteName());
   }
 
-  public String getEmailOnAccountActivation_Body(User u, SessionBean session, boolean invitation) {
-    return session.getMessage("email_account_activation_body")
-        .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
+  public static String getEmailOnAccountActivation_Body(User u, Locale locale, boolean invitation) {
+    return getBundle("email_account_activation_body", locale)
+        .replaceAll("XXX_INSTANCE_NAME_XXX", Imeji.CONFIG.getInstanceName())
         .replace("XXX_USER_NAME_XXX", u.getPerson().getCompleteName())
         .replace("XXX_USER_EMAIL_XXX", u.getEmail())
         .replace("XXX_ORGANIZATION_XXX", u.getPerson().getOrganizationString())
@@ -236,9 +232,9 @@ public class EmailMessages {
    * @param session
    * @return
    */
-  public String getEmailOnItemDownload_Body(User to, User actor, Item item, CollectionImeji c,
-      SessionBean session) {
-    return session.getMessage("email_item_downloaded_body")
+  public static String getEmailOnItemDownload_Body(User to, User actor, Item item,
+      CollectionImeji c, Locale locale) {
+    return getBundle("email_item_downloaded_body", locale)
         .replace("XXX_USER_NAME_XXX", to.getPerson().getCompleteName())
         .replace("XXX_ITEM_ID_XXX", ObjectHelper.getId(item.getId()))
         .replace("XXX_ITEM_LINK_XXX", item.getId().toString())
@@ -257,8 +253,8 @@ public class EmailMessages {
    * @param session
    * @return
    */
-  public String getEmailOnItemDownload_Subject(Item item, SessionBean session) {
-    return session.getMessage("email_item_downloaded_subject").replace("XXX_ITEM_ID_XXX",
+  public static String getEmailOnItemDownload_Subject(Item item, Locale locale) {
+    return getBundle("email_item_downloaded_subject", locale).replace("XXX_ITEM_ID_XXX",
         item.getIdString());
   }
 
@@ -272,18 +268,18 @@ public class EmailMessages {
    * @param session
    * @return
    */
-  public String getEmailOnZipDownload_Body(User to, User actor, String itemsDownloaded, String url,
-      SessionBean session) {
-    return session.getMessage("email_zip_images_downloaded_body")
+  public static String getEmailOnZipDownload_Body(User to, User actor, String itemsDownloaded,
+      String url, Locale locale) {
+    return getBundle("email_zip_images_downloaded_body", locale)
         .replace("XXX_USER_NAME_XXX", to.getPerson().getCompleteName())
         .replace("XXX_ACTOR_NAME_XXX",
             (actor != null ? actor.getPerson().getCompleteName() : "non_logged_in_user"))
         .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : ""))
         .replace("XXX_TIME_XXX", new Date().toString())
         .replace("XXX_ITEMS_DOWNLOADED_XXX", itemsDownloaded)
-        .replaceAll("XXX_COLLECTION_XXX", session.getMessage("collection"))
-        .replaceAll("XXX_FILTERED_XXX", session.getMessage("filtered"))
-        .replaceAll("XXX_ITEMS_COUNT_XXX", session.getMessage("items_count"))
+        .replaceAll("XXX_COLLECTION_XXX", getBundle("collection", locale))
+        .replaceAll("XXX_FILTERED_XXX", getBundle("filtered", locale))
+        .replaceAll("XXX_ITEMS_COUNT_XXX", getBundle("items_count", locale))
         .replace("XXX_QUERY_URL_XXX", UrlHelper.encodeQuery(url));
   }
 
@@ -293,8 +289,8 @@ public class EmailMessages {
    * @param session
    * @return
    */
-  public String getEmailOnZipDownload_Subject(SessionBean session) {
-    return session.getMessage("email_zip_images_downloaded_subject");
+  public static String getEmailOnZipDownload_Subject(Locale locale) {
+    return getBundle("email_zip_images_downloaded_subject", locale);
   }
 
   /**
@@ -306,8 +302,9 @@ public class EmailMessages {
    * @param collectionLink
    * @return
    */
-  public String getUnshareMessage(String sender, String dest, String title, String collectionLink) {
-    String message = getBundle("email_unshared_object");
+  public static String getUnshareMessage(String sender, String dest, String title,
+      String collectionLink, Locale locale) {
+    String message = getBundle("email_unshared_object", locale);
     message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", title)
         .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
     return message;

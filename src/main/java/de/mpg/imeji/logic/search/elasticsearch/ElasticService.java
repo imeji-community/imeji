@@ -15,7 +15,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
 
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * elasticsearch service for spot

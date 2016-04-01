@@ -79,7 +79,7 @@ public class ShareInput implements Serializable {
         emailService.sendMail(invitee, null, getInvitationEmailSubject(),
             getInvitationEmailBody(invitee));
       } catch (ImejiException e) {
-        BeanHelper.error(sb.getMessage("error_send_invitation"));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_send_invitation", sb.getLocale()));
         LOGGER.error("Error sending invitation:", e);
       }
     }
@@ -90,7 +90,7 @@ public class ShareInput implements Serializable {
    */
   private String getInvitationEmailBody(String email) {
     Navigation nav = new Navigation();
-    return sb.getMessage("email_invitation_body")
+    return Imeji.RESOURCE_BUNDLE.getMessage("email_invitation_body", sb.getLocale())
         .replace("XXX_SENDER_NAME_XXX", sb.getUser().getPerson().getCompleteName())
         .replace("XXX_INSTANCE_NAME_XXX", sb.getInstanceName())
         .replace("XXX_REGISTRATION_LINK_XXX", nav.getRegistrationUrl() + "?login=" + email)
@@ -99,7 +99,7 @@ public class ShareInput implements Serializable {
   }
 
   private String getInvitationEmailSubject() {
-    return sb.getMessage("email_invitation_subject")
+    return Imeji.RESOURCE_BUNDLE.getMessage("email_invitation_subject", sb.getLocale())
         .replace("XXX_SENDER_NAME_XXX", sb.getUser().getPerson().getCompleteName())
         .replace("XXX_INSTANCE_NAME_XXX", sb.getInstanceName());
   }
@@ -171,7 +171,8 @@ public class ShareInput implements Serializable {
         }
       } else {
         invalidEntries
-            .add(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
+            .add(Imeji.RESOURCE_BUNDLE.getMessage("error_share_invalid_email", sb.getLocale())
+                .replace("XXX_VALUE_XXX", value));
       }
     }
   }

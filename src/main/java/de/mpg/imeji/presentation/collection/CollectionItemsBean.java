@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.doi.DoiService;
@@ -152,9 +153,11 @@ public class CollectionItemsBean extends ItemsBean {
     CollectionController cc = new CollectionController();
     try {
       cc.release(collection, sb.getUser());
-      BeanHelper.info(sb.getMessage("success_collection_release"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", sb.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sb.getMessage("error_collection_release"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_release", sb.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error releasing collection", e);
     }
@@ -170,9 +173,10 @@ public class CollectionItemsBean extends ItemsBean {
       } else {
         doiService.addDoiToCollection(collection, sb.getUser());
       }
-      BeanHelper.info(sb.getMessage("success_doi_creation"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", sb.getLocale()));
     } catch (ImejiException e) {
-      BeanHelper.error(sb.getMessage("error_doi_creation") + " " + e.getMessage());
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", sb.getLocale()) + " "
+          + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";
@@ -187,9 +191,11 @@ public class CollectionItemsBean extends ItemsBean {
     CollectionController cc = new CollectionController();
     try {
       cc.delete(collection, sb.getUser());
-      BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
+      BeanHelper.info(
+          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
+      BeanHelper.error(
+          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error deleting collection", e);
     }
@@ -207,9 +213,11 @@ public class CollectionItemsBean extends ItemsBean {
     try {
       collection.setDiscardComment(getDiscardComment());
       cc.withdraw(collection, sb.getUser());
-      BeanHelper.info(sb.getMessage("success_collection_withdraw"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", sb.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sb.getMessage("error_collection_withdraw"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", sb.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error discarding collection", e);
     }

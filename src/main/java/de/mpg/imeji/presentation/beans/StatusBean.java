@@ -174,11 +174,11 @@ public class StatusBean implements Serializable {
    */
   public String getStatusLabel() {
     if (status == Status.RELEASED) {
-      return session.getLabel("published");
+      return Imeji.RESOURCE_BUNDLE.getLabel("published", session.getLocale());
     } else if (status == Status.WITHDRAWN) {
-      return session.getLabel("withdrawn");
+      return Imeji.RESOURCE_BUNDLE.getLabel("withdrawn", session.getLocale());
     }
-    return session.getLabel("private");
+    return Imeji.RESOURCE_BUNDLE.getLabel("private", session.getLocale());
   }
 
   /**

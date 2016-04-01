@@ -1,4 +1,4 @@
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +28,9 @@ public class PropertyReader {
   /**
    * private constructor
    */
-  private PropertyReader() {}
+  private PropertyReader() {
+    // Avoid construction
+  }
 
   /**
    * Gets the value of a property for the given key from the system properties or the escidoc

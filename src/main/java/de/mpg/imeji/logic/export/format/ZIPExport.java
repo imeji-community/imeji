@@ -47,8 +47,6 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * {@link Export} images in zip
@@ -88,9 +86,9 @@ public class ZIPExport extends Export {
   public void init() {}
 
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     try {
-      exportAllImages(sr, out);
+      exportAllImages(sr, out, user);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       LOGGER.info("Some problems with ZIP Export", e);
@@ -119,18 +117,17 @@ public class ZIPExport extends Export {
    * @throws Exception
    * @throws URISyntaxException
    */
-  public void exportAllImages(SearchResult sr, OutputStream out) throws ImejiException {
+  public void exportAllImages(SearchResult sr, OutputStream out, User user) throws ImejiException {
     List<String> source = sr.getResults();
     ZipOutputStream zip = new ZipOutputStream(out);
     try {
       // Create the ZIP file
       for (int i = 0; i < source.size(); i++) {
-        SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
         ItemController ic = new ItemController();
         Item item = null;
         StorageController sc = null;
         try {
-          item = ic.retrieve(new URI(source.get(i)), session.getUser());
+          item = ic.retrieve(new URI(source.get(i)), user);
           updateMetrics(item);
           sc = new StorageController();
           zip.putNextEntry(new ZipEntry(item.getFilename()));

@@ -10,11 +10,11 @@ import de.mpg.imeji.exceptions.InactiveAuthenticationError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authentication.Authentication;
 import de.mpg.imeji.logic.auth.authentication.impl.DefaultAuthentication;
+import de.mpg.imeji.logic.auth.util.PasswordGenerator;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.user.util.PasswordGenerator;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import util.JenaUtil;
 
 /**

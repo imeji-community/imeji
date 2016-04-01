@@ -11,9 +11,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -30,7 +32,6 @@ import de.mpg.imeji.logic.search.util.StringParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -329,11 +330,11 @@ public class SearchQueryParser {
    * @param sq
    * @return
    */
-  public static String searchQuery2PrettyQuery(SearchQuery sq) {
+  public static String searchQuery2PrettyQuery(SearchQuery sq, Locale locale) {
     if (sq == null) {
       return "";
     }
-    return searchElements2PrettyQuery(sq.getElements());
+    return searchElements2PrettyQuery(sq.getElements(), locale);
   }
 
   /**
@@ -362,30 +363,30 @@ public class SearchQueryParser {
    * @param group
    * @return
    */
-  private static String searchGroup2PrettyQuery(SearchGroup group) {
+  private static String searchGroup2PrettyQuery(SearchGroup group, Locale locale) {
     String str = "";
     int groupSize = group.getElements().size();
     if (isSearchGroupForComplexMetadata(group)) {
       for (SearchElement md : group.getElements()) {
         if (md instanceof SearchMetadata) {
-          str += searchMetadata2PrettyQuery((SearchMetadata) md);
+          str += searchMetadata2PrettyQuery((SearchMetadata) md, locale);
         } else if (md instanceof SearchLogicalRelation) {
-          str += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) md);
+          str += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) md, locale);
         }
       }
       // str =
       // searchMetadata2PrettyQuery((SearchMetadata)group.getElements().get(0));
       // groupSize = 1;
     } else {
-      str = searchElements2PrettyQuery(group.getElements());
+      str = searchElements2PrettyQuery(group.getElements(), locale);
     }
     if ("".equals(str)) {
       return "";
     }
     if (groupSize > 1) {
-      return " (" + removeUseLessLogicalOperation(str) + ") ";
+      return " (" + removeUseLessLogicalOperation(str, locale) + ") ";
     } else {
-      return removeUseLessLogicalOperation(str);
+      return removeUseLessLogicalOperation(str, locale);
     }
   }
 
@@ -417,13 +418,13 @@ public class SearchQueryParser {
    * @param rel
    * @return
    */
-  private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel) {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel,
+      Locale locale) {
     switch (rel.getLogicalRelation()) {
       case AND:
-        return " " + session.getLabel("and_big") + " ";
+        return " " + Imeji.RESOURCE_BUNDLE.getLabel("and_big", locale) + " ";
       default:
-        return " " + session.getLabel("or_big") + " ";
+        return " " + Imeji.RESOURCE_BUNDLE.getLabel("or_big", locale) + " ";
     }
   }
 
@@ -433,7 +434,7 @@ public class SearchQueryParser {
    * @param els
    * @return
    */
-  private static String searchElements2PrettyQuery(List<SearchElement> els) {
+  private static String searchElements2PrettyQuery(List<SearchElement> els, Locale locale) {
     String q = "";
     for (SearchElement el : els) {
       switch (el.getType()) {
@@ -441,19 +442,19 @@ public class SearchQueryParser {
           q += searchPair2PrettyQuery((SearchPair) el);
           break;
         case GROUP:
-          q += searchGroup2PrettyQuery((SearchGroup) el);
+          q += searchGroup2PrettyQuery((SearchGroup) el, locale);
           break;
         case LOGICAL_RELATIONS:
-          q += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) el);
+          q += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) el, locale);
           break;
         case METADATA:
-          q += searchMetadata2PrettyQuery((SearchMetadata) el);
+          q += searchMetadata2PrettyQuery((SearchMetadata) el, locale);
           break;
         default:
           break;
       }
     }
-    return removeUseLessLogicalOperation(q.trim());
+    return removeUseLessLogicalOperation(q.trim(), locale);
   }
 
   /**
@@ -462,10 +463,9 @@ public class SearchQueryParser {
    * @param q
    * @return
    */
-  private static String removeUseLessLogicalOperation(String q) {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    String orString = session.getLabel("or_big");
-    String andString = session.getLabel("and_big");
+  private static String removeUseLessLogicalOperation(String q, Locale locale) {
+    String orString = Imeji.RESOURCE_BUNDLE.getLabel("or_big", locale);
+    String andString = Imeji.RESOURCE_BUNDLE.getLabel("and_big", locale);
     if (q.endsWith(" ")) {
       q = q.substring(0, q.length() - 1);
     }
@@ -481,9 +481,9 @@ public class SearchQueryParser {
     if (q.startsWith(andString)) {
       q = q.substring(andString.length(), q.length());
     }
-    if (q.endsWith(" ") || q.endsWith(" " + session.getLabel("and_big"))
-        || q.endsWith(" " + session.getLabel("or_big"))) {
-      q = removeUseLessLogicalOperation(q);
+    if (q.endsWith(" ") || q.endsWith(" " + Imeji.RESOURCE_BUNDLE.getLabel("and_big", locale))
+        || q.endsWith(" " + Imeji.RESOURCE_BUNDLE.getLabel("or_big", locale))) {
+      q = removeUseLessLogicalOperation(q, locale);
     }
     return q.trim();
   }
@@ -540,7 +540,7 @@ public class SearchQueryParser {
    * @param group
    * @return
    */
-  private static String searchMetadata2PrettyQuery(SearchMetadata md) {
+  private static String searchMetadata2PrettyQuery(SearchMetadata md, Locale locale) {
     String label = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
         .getInternationalizedLabels().get(md.getStatement());
     if (label == null) {
@@ -548,32 +548,22 @@ public class SearchQueryParser {
     }
     switch (md.getField()) {
       case coordinates:
-        label += "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getLabel("geolocation_location") + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("geolocation_location", locale) + ")";
         break;
       case person_family:
-        label += "("
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("family_name")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("family_name", locale) + ")";
         break;
       case person_given:
-        label += "("
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("first_name")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("first_name", locale) + ")";
         break;
       case person_id:
-        label += "( "
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("identifier")
-            + ")";
+        label += "( " + Imeji.RESOURCE_BUNDLE.getLabel("identifier", locale) + ")";
         break;
       case person_org_name:
-        label += "("
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("organization")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("organization", locale) + ")";
         break;
       case url:
-        label += "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("url")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("url", locale) + ")";
         break;
       default:
         break;

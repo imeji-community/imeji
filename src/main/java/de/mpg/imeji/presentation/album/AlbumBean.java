@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -160,8 +161,9 @@ public class AlbumBean extends ContainerBean {
 
           int myPrivateCount = getPrivateCount();
           if (myPrivateCount != 0) {
-            BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX",
-                myPrivateCount + ""));
+            BeanHelper.info(
+                Imeji.RESOURCE_BUNDLE.getMessage("album_Private_Content", sessionBean.getLocale())
+                    .replace("XXX_COUNT_XXX", myPrivateCount + ""));
           }
         }
 
@@ -309,12 +311,13 @@ public class AlbumBean extends ContainerBean {
         setIngestImage(null);
         sessionBean.setSpaceLogoIngestImage(null);
       }
-      BeanHelper.info(sessionBean.getMessage("success_album_update"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_update", sessionBean.getLocale()));
       return true;
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
       for (String errorM : e.getMessages()) {
-        BeanHelper.error(sessionBean.getMessage(errorM));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sessionBean.getLocale()));
       }
       return false;
     }
@@ -414,9 +417,11 @@ public class AlbumBean extends ContainerBean {
     try {
       ac.release(album, sessionBean.getUser());
       makeInactive();
-      BeanHelper.info(sessionBean.getMessage("success_album_release"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_release", sessionBean.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_album_release"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_release", sessionBean.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Issue during release", e);
     }
@@ -433,10 +438,12 @@ public class AlbumBean extends ContainerBean {
     try {
       makeInactive();
       c.delete(album, sessionBean.getUser());
-      BeanHelper.info(sessionBean.getMessage("success_album_delete").replace("XXX_albumName_XXX",
-          this.album.getMetadata().getTitle()));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_delete", sessionBean.getLocale())
+              .replace("XXX_albumName_XXX", this.album.getMetadata().getTitle()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_album_delete"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_delete", sessionBean.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error during delete album", e);
     }
@@ -453,9 +460,11 @@ public class AlbumBean extends ContainerBean {
     AlbumController c = new AlbumController();
     try {
       c.withdraw(album, sessionBean.getUser());
-      BeanHelper.info(sessionBean.getMessage("success_album_withdraw"));
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_album_withdraw", sessionBean.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_withdraw", sessionBean.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error during withdraw album", e);
     }

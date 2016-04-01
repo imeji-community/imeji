@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -48,13 +49,13 @@ public class NotificationUtils {
    * @throws java.io.IOException
    * @throws java.net.URISyntaxException
    */
-  public static void notifyByItemDownload(User user, Item fileItem, SessionBean session)
+  public static void notifyByItemDownload(User user, Item fileItem, Locale locale)
       throws ImejiException, IOException, URISyntaxException {
     final CollectionImeji c = cc.retrieve(fileItem.getCollection(), Imeji.adminUser);
     for (User u : uc.searchUsersToBeNotified(user, c)) {
       emailClient.sendMail(u.getEmail(), null,
-          msgs.getEmailOnItemDownload_Subject(fileItem, session),
-          msgs.getEmailOnItemDownload_Body(u, user, fileItem, c, session));
+          EmailMessages.getEmailOnItemDownload_Subject(fileItem, locale),
+          EmailMessages.getEmailOnItemDownload_Body(u, user, fileItem, c, locale));
       LOGGER.info("Sent notification email to user: " + u.getPerson().getCompleteName() + "<"
           + u.getEmail() + ">" + " by item " + fileItem.getId() + " download");
     }
@@ -96,8 +97,9 @@ public class NotificationUtils {
         String url = reconstructQueryUrl((ZIPExport) export, session);
         for (Map.Entry<String, String> entry : msgsPerEmail.entrySet()) {
           User u = usersPerEmail.get(entry.getKey());
-          emailClient.sendMail(u.getEmail(), null, msgs.getEmailOnZipDownload_Subject(session),
-              msgs.getEmailOnZipDownload_Body(u, user, entry.getValue(), url, session));
+          emailClient.sendMail(u.getEmail(), null,
+              EmailMessages.getEmailOnZipDownload_Subject(session.getLocale()), EmailMessages
+                  .getEmailOnZipDownload_Body(u, user, entry.getValue(), url, session.getLocale()));
           LOGGER.info("Sent notification email to user: " + u.getPerson().getCompleteName() + "<"
               + u.getEmail() + ">;" + " zip download query: <" + url + ">; message: <"
               + entry.getValue().replaceAll("[\\r\\n]]", ";") + ">");
@@ -131,16 +133,17 @@ public class NotificationUtils {
   /**
    * Send account activation email
    */
-  public static void sendActivationNotification(User user, SessionBean sb, boolean invitation) {
+  public static void sendActivationNotification(User user, Locale locale, boolean invitation) {
     // EmailClient emailClient = new EmailClient();
     // EmailMessages emailMessages = new EmailMessages();
     try {
       // send to support
       emailClient.sendMail(Imeji.CONFIG.getContactEmail(), null,
-          msgs.getEmailOnAccountActivation_Subject(user, sb),
-          msgs.getEmailOnAccountActivation_Body(user, sb, invitation));
+          EmailMessages.getEmailOnAccountActivation_Subject(user, locale),
+          EmailMessages.getEmailOnAccountActivation_Body(user, locale, invitation));
     } catch (Exception e) {
-      BeanHelper.info(sb.getMessage("error") + ": Account activation email not sent");
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("error", locale)
+          + ": Account activation email not sent");
       LOGGER.info("Error sending account activation email", e);
     }
   }

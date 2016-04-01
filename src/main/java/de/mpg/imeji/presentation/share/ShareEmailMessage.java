@@ -2,6 +2,7 @@ package de.mpg.imeji.presentation.share;
 
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.vo.Grant;
@@ -50,18 +51,17 @@ public class ShareEmailMessage {
 
   private String initBody(String addresseeName, String sharedObjectName, String sharedObjectLink,
       SharedObjectType type) {
-    EmailMessages emailMessages = new EmailMessages();
     String from = session.getUser().getPerson().getCompleteName();
     switch (type) {
       case ALBUM:
-        return emailMessages.getSharedAlbumMessage(from, addresseeName, sharedObjectName,
-            sharedObjectLink);
+        return EmailMessages.getSharedAlbumMessage(from, addresseeName, sharedObjectName,
+            sharedObjectLink, session.getLocale());
       case COLLECTION:
-        return emailMessages.getSharedCollectionMessage(from, addresseeName, sharedObjectName,
-            sharedObjectLink);
+        return EmailMessages.getSharedCollectionMessage(from, addresseeName, sharedObjectName,
+            sharedObjectLink, session.getLocale());
       case ITEM:
-        return emailMessages.getSharedItemMessage(from, addresseeName, sharedObjectName,
-            sharedObjectLink);
+        return EmailMessages.getSharedItemMessage(from, addresseeName, sharedObjectName,
+            sharedObjectLink, session.getLocale());
     }
     return null;
   }
@@ -82,7 +82,7 @@ public class ShareEmailMessage {
   private String getMessageForShareItem(List<String> roles) {
     for (String role : roles) {
       if ("READ".equals(role)) {
-        return "- " + session.getLabel("collection_share_read");
+        return "- " + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_read", session.getLocale());
       }
     }
     return "";
@@ -93,26 +93,37 @@ public class ShareEmailMessage {
     for (String role : roles) {
       switch (role) {
         case "READ":
-          message += "- " + session.getLabel("collection_share_read") + "\n";
+          message += "- "
+              + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_read", session.getLocale()) + "\n";
           break;
         case "CREATE":
-          message += "- " + session.getLabel("collection_share_image_upload") + "\n";
+          message += "- "
+              + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_image_upload", session.getLocale())
+              + "\n";
           break;
         case "EDIT_ITEM":
-          message += "- " + session.getLabel("collection_share_image_edit") + "\n";
+          message += "- "
+              + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_image_edit", session.getLocale())
+              + "\n";
           break;
         case "DELETE_ITEM":
-          message += "- " + session.getLabel("collection_share_image_delete") + "\n";
+          message += "- "
+              + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_image_delete", session.getLocale())
+              + "\n";
           break;
         case "EDIT":
-          message += "- " + session.getLabel("collection_share_collection_edit") + "\n";
+          message += "- " + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_collection_edit",
+              session.getLocale()) + "\n";
           break;
         case "EDIT_PROFILE":
-          message +=
-              "- " + session.getLabel("collection_share_profile_edit") + ":  " + profileUri + "\n";
+          message += "- "
+              + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_profile_edit", session.getLocale())
+              + ":  " + profileUri + "\n";
           break;
         case "ADMIN":
-          message += "- " + session.getLabel("collection_share_admin") + "\n";
+          message +=
+              "- " + Imeji.RESOURCE_BUNDLE.getLabel("collection_share_admin", session.getLocale())
+                  + "\n";
           break;
       }
     }
@@ -124,16 +135,21 @@ public class ShareEmailMessage {
     for (String role : roles) {
       switch (role) {
         case "READ":
-          message += "- " + session.getLabel("album_share_read") + "\n";
+          message +=
+              "- " + Imeji.RESOURCE_BUNDLE.getLabel("album_share_read", session.getLocale()) + "\n";
           break;
         case "CREATE":
-          message += "- " + session.getLabel("album_share_image_add") + "\n";
+          message += "- "
+              + Imeji.RESOURCE_BUNDLE.getLabel("album_share_image_add", session.getLocale()) + "\n";
           break;
         case "EDIT":
-          message += "- " + session.getLabel("album_share_album_edit") + "\n";
+          message +=
+              "- " + Imeji.RESOURCE_BUNDLE.getLabel("album_share_album_edit", session.getLocale())
+                  + "\n";
           break;
         case "ADMIN":
-          message += "- " + session.getLabel("album_share_admin") + "\n";
+          message += "- " + Imeji.RESOURCE_BUNDLE.getLabel("album_share_admin", session.getLocale())
+              + "\n";
           break;
       }
     }

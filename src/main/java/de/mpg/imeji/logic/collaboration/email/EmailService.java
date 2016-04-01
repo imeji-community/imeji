@@ -27,8 +27,6 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Client to send email
@@ -50,8 +48,11 @@ public class EmailService {
 
   /**
    * Send an email according to the properties define in imeji.properties
+   * 
+   * @throws ImejiException
    */
-  public void sendMail(String to, String from, Email email) throws IOException, URISyntaxException {
+  public void sendMail(String to, String from, Email email)
+      throws IOException, URISyntaxException, ImejiException {
     sendMail(to, from, null, email.getSubject(), email.getBody());
   }
 
@@ -71,9 +72,11 @@ public class EmailService {
 
   /**
    * Send an email according to the properties define in imeji.properties
+   * 
+   * @throws ImejiException
    */
   private void sendMail(String to, String from, String[] replyTo, String subject, String message)
-      throws IOException, URISyntaxException {
+      throws IOException, URISyntaxException, ImejiException {
     String emailUser = Imeji.CONFIG.getEmailServerUser();
     String password = Imeji.CONFIG.getEmailServerPassword();
     String server = Imeji.CONFIG.getEmailServer();
@@ -101,10 +104,13 @@ public class EmailService {
 
   /**
    * Send an email
+   * 
+   * @throws ImejiException
    */
   public String sendMail(String smtpHost, String port, String withAuth, String usr, String pwd,
       String senderAddress, String[] recipientsAddresses, String[] recipientsCCAddresses,
-      String[] recipientsBCCAddresses, String[] replytoAddresses, String subject, String text) {
+      String[] recipientsBCCAddresses, String[] replytoAddresses, String subject, String text)
+          throws ImejiException {
     LOGGER.debug("EmailHandlingBean sendMail...");
     String status = "not sent";
     String to = "";
@@ -177,10 +183,8 @@ public class EmailService {
       status = "sent";
       LOGGER.debug("Email sent!");
     } catch (MessagingException e) {
-      SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-      BeanHelper.error(
-          sessionBean.getMessage("email_error").replace("XXX_USER_EMAIL_XXX", to) + ": " + e);
       LOGGER.error("Error in sendMail(...)", e);
+      throw new ImejiException("Error sending Email", e);
     }
     return status;
   }

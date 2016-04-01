@@ -29,12 +29,11 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.share.ShareListItem;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class UserBean extends QuotaSuperBean {
@@ -104,10 +103,12 @@ public class UserBean extends QuotaSuperBean {
       if (newPassword.equals(repeatedPassword)) {
         user.setEncryptedPassword(StringHelper.convertToMD5(newPassword));
         updateUser();
-        BeanHelper.info(session.getMessage("success_change_user_password"));
+        BeanHelper.info(
+            Imeji.RESOURCE_BUNDLE.getMessage("success_change_user_password", session.getLocale()));
         return;
       } else {
-        BeanHelper.error(session.getMessage("error_user_repeat_password"));
+        BeanHelper.error(
+            Imeji.RESOURCE_BUNDLE.getMessage("error_user_repeat_password", session.getLocale()));
       }
       reloadPage();
     }
@@ -163,10 +164,10 @@ public class UserBean extends QuotaSuperBean {
   public void toggleAdmin() throws Exception {
     ShareBusinessController shareController = new ShareBusinessController();
     if (user.isAdmin()) {
-      shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
+      shareController.shareToUser(session.getUser(), user, Imeji.PROPERTIES.getBaseURI(),
           ShareBusinessController.rolesAsList(ShareRoles.CREATE));
     } else {
-      shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
+      shareController.shareToUser(session.getUser(), user, Imeji.PROPERTIES.getBaseURI(),
           ShareBusinessController.rolesAsList(ShareRoles.ADMIN));
     }
   }
@@ -185,9 +186,9 @@ public class UserBean extends QuotaSuperBean {
     if (!user.isAdmin()) {
       // admin can not be forbidden to create collections
       if (user.isAllowedToCreateCollection()) {
-        shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(), null);
+        shareController.shareToUser(session.getUser(), user, Imeji.PROPERTIES.getBaseURI(), null);
       } else {
-        shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
+        shareController.shareToUser(session.getUser(), user, Imeji.PROPERTIES.getBaseURI(),
             ShareBusinessController.rolesAsList(ShareBusinessController.ShareRoles.CREATE));
       }
     }
@@ -207,9 +208,10 @@ public class UserBean extends QuotaSuperBean {
         reloadPage();
       } catch (UnprocessableError e) {
         BeanHelper.cleanMessages();
-        BeanHelper.error(session.getMessage("error_during_user_update"));
+        BeanHelper.error(
+            Imeji.RESOURCE_BUNDLE.getMessage("error_during_user_update", session.getLocale()));
         for (String errorM : e.getMessages()) {
-          BeanHelper.error(session.getMessage(errorM));
+          BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, session.getLocale()));
         }
       }
     }

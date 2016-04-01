@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.mdProfile;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -36,22 +37,23 @@ public class ViewMdProfileBean extends MdProfileBean {
    * @throws Exception
    */
   @Override
-  public String getInit()  {
+  public String getInit() {
     try {
       if (this.getId() != null) {
 
         ProfileController profileController = new ProfileController();
         this.setProfile(profileController.retrieve(this.getId(), session.getUser()));
         super.getInit();
-      
-    } else {
-      BeanHelper.error(session.getLabel("error") + "  No profile Id found in URL");
-    }
-    return "";
+
+      } else {
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale())
+            + "  No profile Id found in URL");
+      }
+      return "";
 
     } catch (Exception e) {
       return "";
-   }
+    }
   }
 
   /**
@@ -65,10 +67,11 @@ public class ViewMdProfileBean extends MdProfileBean {
       ProfileController profileController = new ProfileController();
       profileController.update(this.getProfile(), session.getUser());
       session.getProfileCached().clear();
-      BeanHelper.info(session.getMessage("success_profile_save"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_profile_save", session.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(session.getMessage("error_profile_save"));
-      LOGGER.error(session.getMessage("error_profile_save"), e);
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_profile_save", session.getLocale()));
+      LOGGER.error("Error saving profile", e);
     }
     return "pretty:";
   }

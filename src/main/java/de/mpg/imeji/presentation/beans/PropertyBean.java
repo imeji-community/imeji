@@ -30,10 +30,7 @@ import java.net.URISyntaxException;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-import org.apache.commons.io.FilenameUtils;
-
-import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.logic.Imeji;
 
 /**
  * Java Bean where property defined in imeji.property can be access
@@ -45,36 +42,6 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 @ManagedBean(name = "Property")
 @ApplicationScoped
 public class PropertyBean {
-  /**
-   * True if Digilib is enabled
-   */
-  private boolean digilibEnabled = false;
-  /**
-   * The base of the path to the internal storage
-   */
-  private String internalStorageBase = "files";
-  /**
-   * The base of the uri of imeji objects
-   */
-  private static String baseURI;
-  private static String applicationURL;
-
-  /**
-   * Default constructor
-   */
-  public PropertyBean() {
-    try {
-      this.digilibEnabled =
-          Boolean.parseBoolean(PropertyReader.getProperty("imeji.digilib.enable"));
-      this.internalStorageBase = FilenameUtils.getBaseName(
-          FilenameUtils.normalizeNoEndSeparator(PropertyReader.getProperty("imeji.storage.path")));
-      applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
-      readBaseUri();
-    } catch (Exception e) {
-      throw new RuntimeException("Error reading properties: ", e);
-    }
-  }
-
 
   /**
    * Function reads each property from imeji.properties file
@@ -83,36 +50,14 @@ public class PropertyBean {
    * @return String - trimmed value of key
    */
   public String getProperty(String key) {
-    try {
-      return PropertyReader.getProperty(key).trim();
-    } catch (Exception e) {
-      throw new RuntimeException("Error reading properties: ", e);
-    }
-  }
-
-  /**
-   * Read in the property the base Uri
-   */
-  private void readBaseUri() {
-    try {
-      baseURI =
-          StringHelper.normalizeURI(PropertyReader.getProperty("imeji.jena.resource.base_uri"));
-    } catch (Exception e) {
-      throw new RuntimeException("Error reading properties: ", e);
-    }
-    if (baseURI == null || baseURI.trim().equals("/")) {
-      baseURI = applicationURL;
-    }
-    if (baseURI == null) {
-      throw new RuntimeException("Error in properties. Check property: imeji.instance.url");
-    }
+    return Imeji.PROPERTIES.getProperty(key);
   }
 
   /**
    * @return the digilibEnabled
    */
   public boolean isDigilibEnabled() {
-    return digilibEnabled;
+    return Imeji.PROPERTIES.isDigilibEnabled();
   }
 
   /**
@@ -120,42 +65,21 @@ public class PropertyBean {
    * @throws URISyntaxException
    * @throws IOException
    */
-  public String getInternalStorageBase() throws IOException, URISyntaxException {
-    this.internalStorageBase = FilenameUtils.getBaseName(
-        FilenameUtils.normalizeNoEndSeparator(PropertyReader.getProperty("imeji.storage.path")));
-    return internalStorageBase;
+  public String getInternalStorageBase() {
+    return Imeji.PROPERTIES.getInternalStorageBase();
   }
 
   /**
    * @return the baseURI
    */
   public String getBaseURI() {
-    return baseURI;
-  }
-
-  /**
-   * Static getter
-   * 
-   * @return
-   */
-  public static String baseURI() {
-    return baseURI;
+    return Imeji.PROPERTIES.getBaseURI();
   }
 
   /**
    * @return the applicationURL
    */
-  public static String getApplicationURL() {
-    return applicationURL;
+  public String getApplicationURL() {
+    return Imeji.PROPERTIES.getApplicationURL();
   }
-
-  /**
-   * Static getter
-   * 
-   * @return
-   */
-  public static String applicationURL() {
-    return applicationURL;
-  }
-
 }

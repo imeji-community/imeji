@@ -12,19 +12,20 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.PasswordGenerator;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Java Bean for the Create new user page
@@ -62,17 +63,18 @@ public class UserCreationBean extends QuotaSuperBean {
       if (sendEmail) {
         sendNewAccountEmail(password);
       }
-      BeanHelper.info(sb.getMessage("success_user_create"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_user_create", sb.getLocale()));
       reloadUserPage();
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(sb.getMessage("error_during_user_create"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_during_user_create", sb.getLocale()));
       for (String errorM : e.getMessages()) {
-        BeanHelper.error(sb.getMessage(errorM));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sb.getLocale()));
       }
     } catch (Exception e) {
       LOGGER.error("Error creating user:", e);
-      BeanHelper.error(sb.getMessage(e.getMessage()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), sb.getLocale()));
     }
     return "";
   }
@@ -119,14 +121,14 @@ public class UserCreationBean extends QuotaSuperBean {
    */
   public void sendNewAccountEmail(String password) {
     EmailService emailClient = new EmailService();
-    EmailMessages emailMessages = new EmailMessages();
     try {
       emailClient.sendMail(user.getEmail(), null,
-          emailMessages.getEmailOnAccountAction_Subject(true), emailMessages
-              .getNewAccountMessage(password, user.getEmail(), user.getPerson().getCompleteName()));
+          EmailMessages.getEmailOnAccountAction_Subject(true, sb.getLocale()),
+          EmailMessages.getNewAccountMessage(password, user.getEmail(),
+              user.getPerson().getCompleteName(), sb.getLocale()));
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+      BeanHelper.error("Error: Email not sent");
     }
   }
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
@@ -83,9 +84,10 @@ public abstract class MetadataEditor {
     try {
       List<Item> itemList = validateAndFormatItemsForSaving();
       ic.updateBatch(itemList, sb.getUser());
-      String str = items.size() + " " + sb.getMessage("success_editor_images");
+      String str = items.size() + " "
+          + Imeji.RESOURCE_BUNDLE.getMessage("success_editor_images", sb.getLocale());
       if (items.size() == 1) {
-        str = sb.getMessage("success_editor_image");
+        str = Imeji.RESOURCE_BUNDLE.getMessage("success_editor_image", sb.getLocale());
       }
       BeanHelper.info(str);
       return true;
@@ -95,7 +97,7 @@ public abstract class MetadataEditor {
         eib.getMds().setTree(eib.getMds().getUncutTree());
       }
       BeanHelper.cleanMessages();
-      BeanHelper.error(sb.getMessage("error_metadata_edit"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", sb.getLocale()));
       List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
       for (String errorM : listOfErrors) {
         BeanHelper.error(errorM);
@@ -120,10 +122,12 @@ public abstract class MetadataEditor {
           itemList.add(eib.asItem());
         }
       } catch (Exception e) {
-        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getLocalizedMessage());
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", sb.getLocale())
+            + ": " + e.getLocalizedMessage());
       }
     } else {
-      BeanHelper.error(sb.getMessage("error_metadata_edit_no_images"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit_no_images", sb.getLocale()));
     }
     return itemList;
 

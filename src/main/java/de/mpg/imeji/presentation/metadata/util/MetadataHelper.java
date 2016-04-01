@@ -3,18 +3,11 @@
  */
 package de.mpg.imeji.presentation.metadata.util;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -25,7 +18,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class MetadataHelper {
- 
+
   /**
    * Return true if the {@link Metadata} has an empty value (which shouldn't be store in the
    * database)
@@ -34,7 +27,7 @@ public class MetadataHelper {
    * @return
    */
   public static boolean isEmpty(Metadata md) {
-      return MetadataAndProfileHelper.isEmpty(md);
+    return MetadataAndProfileHelper.isEmpty(md);
   }
 
   /**
@@ -54,18 +47,16 @@ public class MetadataHelper {
 
         String familyName = ((ConePerson) md).getPerson().getFamilyName();
         String givenName = ((ConePerson) md).getPerson().getGivenName();
-        String completeName =
-            givenName
-                + ((givenName == null || givenName.isEmpty() || familyName == null || familyName
-                    .isEmpty()) ? "" : ", ") + familyName;
+        String completeName = givenName + ((givenName == null || givenName.isEmpty()
+            || familyName == null || familyName.isEmpty()) ? "" : ", ") + familyName;
         completeName = completeName.trim();
 
         if (!StringHelper.isNullOrEmptyTrim(familyName)) {
           ((ConePerson) md).getPerson().setCompleteName(completeName);
         }
       } catch (Exception e) {
-        BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getLabel("error") + " CONE ID");
+        BeanHelper
+            .error(Imeji.RESOURCE_BUNDLE.getLabel("error", BeanHelper.getLocale()) + " CONE ID");
       }
       ((ConePerson) md).setConeId(null);
     }

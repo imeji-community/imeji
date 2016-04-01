@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -282,9 +283,10 @@ public class UserController {
     }
     long needed = currentDiskUsage + file.length();
     if (needed > targetCollectionUser.getQuota()) {
-      throw new QuotaExceededException("Data quota (" + targetCollectionUser.getQuotaHumanReadable()
-          + " allowed) has been exceeded (" + FileUtils.byteCountToDisplaySize(currentDiskUsage)
-          + " used)");
+      throw new QuotaExceededException(
+          "Data quota (" + targetCollectionUser.getQuotaHumanReadable(Locale.ENGLISH)
+              + " allowed) has been exceeded (" + FileUtils.byteCountToDisplaySize(currentDiskUsage)
+              + " used)");
     }
     return targetCollectionUser.getQuota() - needed;
   }

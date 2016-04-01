@@ -36,7 +36,7 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.presentation.util.ProxyHelper;
+import de.mpg.imeji.logic.util.ProxyHelper;
 
 /**
  * The {@link Storage} implementation for external Storages. Can only read files (if the files are

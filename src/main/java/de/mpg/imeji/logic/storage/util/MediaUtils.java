@@ -15,8 +15,8 @@ import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
 
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.TempFileUtil;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Mehtods to help wotk with images

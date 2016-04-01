@@ -16,8 +16,8 @@ import org.openimaj.image.feature.local.keypoints.Keypoint;
 import org.openimaj.video.Video;
 import org.openimaj.video.xuggle.XuggleVideo;
 
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.TempFileUtil;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 public final class VideoUtils {
   private static final float IMAGE_DETECTION_UPPER_THRESHOLD = 0.1F;

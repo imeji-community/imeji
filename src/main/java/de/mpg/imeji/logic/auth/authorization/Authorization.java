@@ -45,7 +45,6 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 
 /**
@@ -248,7 +247,7 @@ public class Authorization implements Serializable {
     if (all.contains(g)) {
       return true;
     }
-    if (all.contains(toGrant(PropertyBean.baseURI(), GrantType.ADMIN))) {
+    if (all.contains(toGrant(Imeji.PROPERTIES.getBaseURI(), GrantType.ADMIN))) {
       return true;
     }
     return false;
@@ -299,7 +298,7 @@ public class Authorization implements Serializable {
     } else if (obj instanceof String) {
       return getCollectionUri((String) obj, isReadGrant);
     }
-    return PropertyBean.baseURI();
+    return Imeji.PROPERTIES.getBaseURI();
   }
 
   /**

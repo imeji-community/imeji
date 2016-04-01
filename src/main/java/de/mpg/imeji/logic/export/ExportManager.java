@@ -63,9 +63,9 @@ public class ExportManager {
    * @param sr
    * 
    */
-  public void export(SearchResult sr) {
+  public void export(SearchResult sr, User user) {
     if (export != null) {
-      export.export(out, sr);
+      export.export(out, sr, user);
     } else {
       try {
         out.write("Unknown format".getBytes());
@@ -108,9 +108,8 @@ public class ExportManager {
     } else {
       if ("collection".equals(searchType) || "metadata".equals(searchType)) {
         CollectionController collectionController = new CollectionController();
-        result =
-            collectionController
-                .search(searchQuery, null, maximumNumberOfRecords, 0, user, spaceId);
+        result = collectionController.search(searchQuery, null, maximumNumberOfRecords, 0, user,
+            spaceId);
       } else if ("album".equals(searchType)) {
         AlbumController albumController = new AlbumController();
         result =
@@ -121,13 +120,11 @@ public class ExportManager {
       } else if ("image".equals(searchType)) {
         ItemController itemController = new ItemController();
         if (collectionId != null) {
-          result =
-              itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId),
-                  searchQuery, null, user, spaceId, -1, 0);
+          result = itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId),
+              searchQuery, null, user, spaceId, -1, 0);
         } else if (albumId != null) {
-          result =
-              itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null,
-                  user, spaceId, -1, 0);
+          result = itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery,
+              null, user, spaceId, -1, 0);
         } else {
           result = itemController.search(null, searchQuery, null, user, spaceId, -1, 0);
         }

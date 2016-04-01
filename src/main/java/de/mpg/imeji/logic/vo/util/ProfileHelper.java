@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.vo.util;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Helper methods related to {@link MetadataProfile}

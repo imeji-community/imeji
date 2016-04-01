@@ -31,12 +31,13 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Java Bean for create album page
@@ -89,7 +90,8 @@ public class CreateAlbumBean extends AlbumBean {
       ac.create(getAlbum(), sessionBean.getUser());
       UserController uc = new UserController(sessionBean.getUser());
       sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
-      BeanHelper.info(sessionBean.getMessage("success_album_create"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_create", sessionBean.getLocale()));
       Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
       ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setAlbum(getAlbum());
       sessionBean.setActiveAlbum(getAlbum());
@@ -97,9 +99,10 @@ public class CreateAlbumBean extends AlbumBean {
           .redirect(nav.getAlbumUrl() + getAlbum().getIdString());
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(sessionBean.getMessage("error_album_create"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_create", sessionBean.getLocale()));
       for (String errorM : e.getMessages()) {
-        BeanHelper.error(sessionBean.getMessage(errorM));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sessionBean.getLocale()));
       }
       getAlbum().setId(null);
     }

@@ -22,7 +22,6 @@ import de.mpg.imeji.logic.export.format.rdf.RDFImageExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFProfileExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
  * {@link Export} in rdf
@@ -58,7 +57,7 @@ public abstract class RDFExport extends Export {
   }
 
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     initNamespaces();
     filterResources(sr, super.user);
     exportIntoOut(sr, out);
@@ -170,7 +169,7 @@ public abstract class RDFExport extends Export {
    * @return
    */
   protected String toUrl(String uri) {
-    return uri.replace(PropertyBean.baseURI(), PropertyBean.applicationURL());
+    return uri.replace(Imeji.PROPERTIES.getBaseURI(), Imeji.PROPERTIES.getApplicationURL());
   }
 
   /**
@@ -196,9 +195,8 @@ public abstract class RDFExport extends Export {
    * @return
    */
   private String openTag(Statement st, String resourceURI) {
-    String tag =
-        "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"
-            + st.getPredicate().getLocalName();
+    String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"
+        + st.getPredicate().getLocalName();
     if (resourceURI != null) {
       tag += " rdf:resource=\"" + resourceURI + "\"";
     }
@@ -215,9 +213,8 @@ public abstract class RDFExport extends Export {
    */
   private String openAndCloseResourceTag(Statement st, String resourceURI) {
     // calculate the element of standard resource statement and close the element immediately
-    String tag =
-        "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"
-            + st.getPredicate().getLocalName();
+    String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"
+        + st.getPredicate().getLocalName();
 
     if (resourceURI != null) {
       tag += " rdf:resource=\"" + resourceURI + "\"/";
@@ -239,9 +236,8 @@ public abstract class RDFExport extends Export {
     // use the resource URI as separate Element within the rdf:parseResource tag
     String resourceURI = st.getObject().toString();
     // calculate the element name which should be appended with rdf:parseResource attribute
-    String tagRegular =
-        "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"
-            + st.getPredicate().getLocalName();
+    String tagRegular = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":"
+        + st.getPredicate().getLocalName();
     // calculate the inner resourceId element name
     String tagInnerResourceId =
         "<" + getNamespace(st.getPredicate().getNameSpace()) + ":" + "resourceId>";
@@ -249,9 +245,8 @@ public abstract class RDFExport extends Export {
     // append the parseType attribute
     tagRegular += " rdf:parseType=\"Resource\">\n";
     // append the resourceId element
-    tagRegular +=
-        tagInnerResourceId + resourceURI + "</" + getNamespace(st.getPredicate().getNameSpace())
-            + ":" + "resourceId>";
+    tagRegular += tagInnerResourceId + resourceURI + "</"
+        + getNamespace(st.getPredicate().getNameSpace()) + ":" + "resourceId>";
 
     // return the regular complex element as two elements, one with parseResource attribute and
     // another subelement of resourceId

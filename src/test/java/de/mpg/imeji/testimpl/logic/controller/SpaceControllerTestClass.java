@@ -25,7 +25,7 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 
 /**

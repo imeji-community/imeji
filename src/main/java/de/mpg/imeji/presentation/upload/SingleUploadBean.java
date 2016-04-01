@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
@@ -52,6 +53,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
@@ -62,7 +64,6 @@ import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.UserBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 @ManagedBean(name = "SingleUploadBean")
@@ -164,7 +165,8 @@ public class SingleUploadBean implements Serializable {
     StorageController sc = new StorageController();
     if (sc.guessNotAllowedFormat(sus.getIngestImage().getFile()).equals(StorageUtils.BAD_FORMAT)) {
       sus.reset();
-      throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
+      throw new TypeNotAllowedException(
+          Imeji.RESOURCE_BUNDLE.getMessage("single_upload_invalid_content_format", sb.getLocale()));
     }
     sus.copyToTemp();
   }
@@ -297,7 +299,8 @@ public class SingleUploadBean implements Serializable {
     }
     if (collectionItems.isEmpty() && !user.isAllowedToCreateCollection()) {
       sus.setCanUpload(false);
-      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
+      throw new BadRequestException(
+          Imeji.RESOURCE_BUNDLE.getMessage("cannot_create_collection", sb.getLocale()));
     }
     sus.setCanUpload(true);
   }
@@ -321,7 +324,8 @@ public class SingleUploadBean implements Serializable {
     }
     // If there is no collection where the user can upload, send error
     if (collectionItems.isEmpty()) {
-      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
+      throw new BadRequestException(
+          Imeji.RESOURCE_BUNDLE.getMessage("cannot_create_collection", sb.getLocale()));
     } else if (collectionItems.size() >= 1) {
       collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
     }

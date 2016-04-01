@@ -10,10 +10,10 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Export} into SiteMap Format
@@ -30,13 +30,12 @@ public class SitemapExport extends Export {
   }
 
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     StringWriter writer = new StringWriter();
     writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    writer
-        .append("<urlset xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
-            + " xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\""
-            + " xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+    writer.append("<urlset xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+        + " xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\""
+        + " xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
     writeURLs(writer, sr);
     writer.append("</urlset>");
     try {
@@ -74,8 +73,7 @@ public class SitemapExport extends Export {
   }
 
   private String getReaUrl(String url) {
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     URI uri = URI.create(url);
-    return navigation.getApplicationUri() + uri.getPath();
+    return Imeji.PROPERTIES.getApplicationURI() + uri.getPath();
   }
 }

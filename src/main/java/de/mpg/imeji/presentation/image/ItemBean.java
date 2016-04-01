@@ -161,7 +161,7 @@ public class ItemBean {
     if (users != null && users.size() > 0) {
       imageUploader = users.get(0);
     } else {
-      imageUploader = sessionBean.getLabel("unknown_user");
+      imageUploader = Imeji.RESOURCE_BUNDLE.getLabel("unknown_user", sessionBean.getLocale());
     }
   }
 
@@ -374,16 +374,13 @@ public class ItemBean {
     int sizeAfterAdd = sessionBean.getActiveAlbumSize();
     boolean added = sizeAfterAdd > sizeBeforeAdd;
     if (!added) {
-      BeanHelper
-          .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
-              + " " + item.getFilename() + " "
-              + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                  .getMessage("already_in_active_album"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("image", sessionBean.getLocale()) + " "
+          + item.getFilename() + " "
+          + Imeji.RESOURCE_BUNDLE.getMessage("already_in_active_album", sessionBean.getLocale()));
     } else {
-      BeanHelper.info(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
-          + " " + item.getFilename() + " "
-          + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getMessage("added_to_active_album"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("image", sessionBean.getLocale()) + " "
+          + item.getFilename() + " "
+          + Imeji.RESOURCE_BUNDLE.getMessage("added_to_active_album", sessionBean.getLocale()));
     }
     return "";
   }
@@ -400,8 +397,9 @@ public class ItemBean {
     }
     new ItemController().delete(Arrays.asList(item), sessionBean.getUser());
     new SessionObjectsController().unselectItem(item.getId().toString());
-    BeanHelper.info(sessionBean.getLabel("image") + " " + item.getFilename() + " "
-        + sessionBean.getMessage("success_collection_remove_from"));
+    BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("image", sessionBean.getLocale()) + " "
+        + item.getFilename() + " " + Imeji.RESOURCE_BUNDLE
+            .getMessage("success_collection_remove_from", sessionBean.getLocale()));
     redirectToBrowsePage();
   }
 
@@ -414,8 +412,9 @@ public class ItemBean {
   public void withdraw() throws ImejiException, IOException {
     new ItemController().withdraw(Arrays.asList(item), getDiscardComment(), sessionBean.getUser());
     new SessionObjectsController().unselectItem(item.getId().toString());
-    BeanHelper.info(sessionBean.getLabel("image") + " " + item.getFilename() + " "
-        + sessionBean.getMessage("success_item_withdraw"));
+    BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("image", sessionBean.getLocale()) + " "
+        + item.getFilename() + " "
+        + Imeji.RESOURCE_BUNDLE.getMessage("success_item_withdraw", sessionBean.getLocale()));
     redirectToBrowsePage();
   }
 
@@ -436,8 +435,9 @@ public class ItemBean {
    */
   public String removeFromActiveAlbum() throws Exception {
     new SessionObjectsController().removeFromActiveAlbum(Arrays.asList(item.getId().toString()));
-    BeanHelper.info(sessionBean.getLabel("image") + " " + item.getFilename() + " "
-        + sessionBean.getMessage("success_album_remove_from"));
+    BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("image", sessionBean.getLocale()) + " "
+        + item.getFilename() + " "
+        + Imeji.RESOURCE_BUNDLE.getMessage("success_album_remove_from", sessionBean.getLocale()));
     return "pretty:";
   }
 

@@ -43,8 +43,8 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Controller for the {@link Storage} objects

@@ -16,15 +16,16 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.mdProfile.ProfileSelector;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
 
 /**
@@ -126,16 +127,18 @@ public class CreateCollectionBean extends CollectionBean {
       setSendEmailNotification(isSendEmailNotification());
       UserController uc = new UserController(sessionBean.getUser());
       uc.update(sessionBean.getUser(), sessionBean.getUser());
-      BeanHelper.info(sessionBean.getMessage("success_collection_create"));
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_create", sessionBean.getLocale()));
       return true;
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
       for (String m : e.getMessages()) {
-        BeanHelper.error(sessionBean.getMessage(m));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(m, sessionBean.getLocale()));
       }
     } catch (ImejiException e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(sessionBean.getMessage(e.getLocalizedMessage()));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage(e.getLocalizedMessage(), sessionBean.getLocale()));
     }
     return false;
   }

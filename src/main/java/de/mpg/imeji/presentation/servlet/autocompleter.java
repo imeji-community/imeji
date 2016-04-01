@@ -29,10 +29,10 @@ import org.w3c.dom.NodeList;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.ProxyHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * Servlet implementation class autocompleter

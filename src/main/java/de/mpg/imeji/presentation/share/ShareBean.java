@@ -294,7 +294,7 @@ public class ShareBean implements Serializable {
           subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), body);
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+      BeanHelper.error("Error: Email not sent");
     }
   }
 
@@ -325,9 +325,8 @@ public class ShareBean implements Serializable {
   private void sendEmailUnshare(ShareListItem item, String subject) {
     subject = subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName());
     for (User user : item.getUsers()) {
-      String body =
-          new EmailMessages().getUnshareMessage(sb.getUser().getPerson().getCompleteName(),
-              user.getPerson().getCompleteName(), title, getLinkToSharedObject());
+      String body = EmailMessages.getUnshareMessage(sb.getUser().getPerson().getCompleteName(),
+          user.getPerson().getCompleteName(), title, getLinkToSharedObject(), sb.getLocale());
       sendEmail(user.getEmail(), subject, body);
     }
   }

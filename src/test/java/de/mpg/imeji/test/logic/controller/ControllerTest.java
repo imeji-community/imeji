@@ -14,8 +14,8 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata.Types;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import util.JenaUtil;
 
 /**

@@ -49,9 +49,9 @@ import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Manage internal storage in file system

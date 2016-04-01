@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
@@ -243,12 +244,12 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
       if (goToPage > 0 && goToPage <= getPaginatorPageSize()) {
         setCurrentPageNumber(goToPage);
       } else {
-        BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getMessage("error_page_not_exists"));
+        BeanHelper.error(
+            Imeji.RESOURCE_BUNDLE.getMessage("error_page_not_exists", BeanHelper.getLocale()));
       }
     } catch (Exception e) {
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("error_integer_required"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_integer_required", BeanHelper.getLocale()));
     }
     return "";
   }

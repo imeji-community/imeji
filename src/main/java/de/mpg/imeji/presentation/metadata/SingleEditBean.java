@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -129,10 +130,12 @@ public class SingleEditBean {
       try {
         Locks.lock(new Lock(item.getId().toString(), sb.getUser().getEmail()));
       } catch (Exception e) {
-        BeanHelper.error(sb.getMessage("error_editor_image_locked"));
+        BeanHelper
+            .error(Imeji.RESOURCE_BUNDLE.getMessage("error_editor_image_locked", sb.getLocale()));
       }
     } else {
-      BeanHelper.error(sb.getMessage("error_editor_not_allowed"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_editor_not_allowed", sb.getLocale()));
     }
     return "";
   }

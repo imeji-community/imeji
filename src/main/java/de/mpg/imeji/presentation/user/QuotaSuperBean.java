@@ -34,7 +34,8 @@ public class QuotaSuperBean {
       if (NumberUtils.isNumber(limit)) {
         quotaMenu.add(new SelectItem(limit));
       } else {
-        quotaMenu.add(new SelectItem(limit, session.getLabel(limit)));
+        quotaMenu
+            .add(new SelectItem(limit, Imeji.RESOURCE_BUNDLE.getLabel(limit, session.getLocale())));
       }
     }
   }

@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -128,7 +129,7 @@ public class AlbumItemsBean extends ItemsBean {
     try {
       removeAllFromAlbum(album);
     } catch (ImejiException e) {
-      BeanHelper.error(sb.getMessage(e.getMessage()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), sb.getLocale()));
     }
     return "pretty:";
   }
@@ -185,7 +186,8 @@ public class AlbumItemsBean extends ItemsBean {
         album = (Album) ic.searchAndSetContainerItems(album, sb.getUser(), -1, 0);
         AlbumController ac = new AlbumController();
         int deletedCount = ac.removeFromAlbum(album, uris, sb.getUser());
-        BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
+        BeanHelper.info(deletedCount + " "
+            + Imeji.RESOURCE_BUNDLE.getMessage("success_album_remove_images", sb.getLocale()));
       }
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
@@ -202,7 +204,8 @@ public class AlbumItemsBean extends ItemsBean {
     SessionObjectsController soc = new SessionObjectsController();
     int deleted = soc.removeFromActiveAlbum(uris);
     sb.getSelected().clear();
-    BeanHelper.info(deleted + " " + sb.getMessage("success_album_remove_images"));
+    BeanHelper.info(deleted + " "
+        + Imeji.RESOURCE_BUNDLE.getMessage("success_album_remove_images", sb.getLocale()));
   }
 
   @Override
@@ -285,8 +288,8 @@ public class AlbumItemsBean extends ItemsBean {
     this.id = id;
     // @Ye set session value to share with AlbumItemsBean, another way is
     // via injection
-    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-        .put("AlbumItemsBean.id", id);
+    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("AlbumItemsBean.id",
+        id);
   }
 
   public void setCollection(CollectionImeji collection) {

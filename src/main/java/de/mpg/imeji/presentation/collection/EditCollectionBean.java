@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -65,14 +66,16 @@ public class EditCollectionBean extends CollectionBean {
       ((CollectionSessionBean) BeanHelper.getSessionBean(CollectionSessionBean.class))
           .setActive(getCollection());
     } else {
-      BeanHelper.error(sessionBean.getLabel("error") + " : no ID in URL");
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getLabel("error", sessionBean.getLocale()) + " : no ID in URL");
     }
 
     if (UrlHelper.getParameterBoolean("start")) {
       try {
         upload();
       } catch (Exception e) {
-        BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
+            sessionBean.getLocale()));
       }
     }
   }
@@ -107,22 +110,26 @@ public class EditCollectionBean extends CollectionBean {
         collectionController.updateLogo(ic, getIngestImage().getFile(), user);
         setIngestImage(null);
       }
-      BeanHelper.info(sessionBean.getMessage("success_collection_save"));
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_save", sessionBean.getLocale()));
       return true;
     } catch (UnprocessableError e) {
       BeanHelper.cleanMessages();
       for (String errorM : e.getMessages()) {
-        BeanHelper.error(sessionBean.getMessage(errorM));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sessionBean.getLocale()));
       }
       return false;
     } catch (IOException e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_logo_save"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_save", sessionBean.getLocale()));
       return false;
     } catch (URISyntaxException e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
+          sessionBean.getLocale()));
       return false;
     } catch (ImejiException e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_save"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_save", sessionBean.getLocale()));
       return false;
     }
   }

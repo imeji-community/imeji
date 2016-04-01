@@ -29,9 +29,9 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -248,7 +248,7 @@ public class ImejiAuthBean implements Serializable {
    * @return
    */
   public boolean isAdmin() {
-    return auth.administrate(sessionUser, PropertyBean.baseURI());
+    return auth.administrate(sessionUser, Imeji.PROPERTIES.getBaseURI());
   }
 
   /**

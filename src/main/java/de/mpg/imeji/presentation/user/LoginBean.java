@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.InactiveAuthenticationError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authentication.Authentication;
 import de.mpg.imeji.logic.auth.authentication.AuthenticationFactory;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -105,12 +106,12 @@ public class LoginBean {
       User user = auth.doLogin();
       sb.setUser(user);
       BeanHelper.cleanMessages();
-      BeanHelper.info(sb.getMessage("success_log_in"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_log_in", sb.getLocale()));
     } catch (InactiveAuthenticationError e) {
-      BeanHelper.error(sb.getMessage("error_log_in_inactive"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_log_in_inactive", sb.getLocale()));
     } catch (AuthenticationError e) {
-      BeanHelper
-          .error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", instanceName));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_log_in", sb.getLocale())
+          .replace("XXX_INSTANCE_NAME_XXX", instanceName));
     }
     if (isNullOrEmptyTrim(redirect)) {
       HistoryPage current =
@@ -141,7 +142,7 @@ public class LoginBean {
     sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     sb.setShowLogin(false);
     sb.setSpaceId(spaceId);
-    BeanHelper.info(sb.getMessage("success_log_out"));
+    BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_log_out", sb.getLocale()));
     fc = FacesContext.getCurrentInstance();
     Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     FacesContext.getCurrentInstance().getExternalContext().redirect(nav.getHomeUrl());

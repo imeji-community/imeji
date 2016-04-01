@@ -1,15 +1,16 @@
 package de.mpg.imeji.logic.ingest.validator;
 
-import java.beans.IntrospectionException;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
-import de.mpg.imeji.presentation.util.ProfileHelper;
+import de.mpg.imeji.logic.vo.util.ProfileHelper;
 
 /**
  * @author hnguyen
@@ -20,14 +21,15 @@ public class ItemContentValidator {
    * * the {@link Statement} of the {@link Metadata} is not found in the {@link MetadataProfile} of
    * the current {@link CollectionImeji} <br/>
    * * The value of the {@link Metadata} is not following the literals constraints (if define for
-   * this {@link Statement})
+   * this {@link Statement}
+   * 
+   * @throws ImejiException
    * 
    * @param item
-   * @throws Exception
-   * @throws IntrospectionException
    */
-  public static void validate(Item item) {
-    MetadataProfile profile = ObjectCachedLoader.loadProfile(item.getMetadataSet().getProfile());
+  public static void validate(Item item) throws ImejiException {
+    MetadataProfile profile =
+        new ProfileController().retrieve(item.getMetadataSet().getProfile(), Imeji.adminUser);
     for (Metadata md : item.getMetadataSet().getMetadata()) {
       Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
       if (st == null)

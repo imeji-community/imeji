@@ -17,6 +17,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export data as they are in stored in Jena
@@ -33,7 +34,7 @@ public class JenaExport extends Export {
   }
 
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     Model m = exportIntoModel(sr);
     m.write(out, "RDF/XML");
   }

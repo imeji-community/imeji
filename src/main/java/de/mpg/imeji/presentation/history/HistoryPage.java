@@ -6,12 +6,12 @@ package de.mpg.imeji.presentation.history;
 import java.net.URI;
 import java.util.Map;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -103,8 +103,7 @@ public class HistoryPage {
 
   public String getInternationalizedName() {
     try {
-      String inter = ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getLabel(imejiPage.getLabel());
+      String inter = Imeji.RESOURCE_BUNDLE.getLabel(imejiPage.getLabel(), BeanHelper.getLocale());
       return title != null ? inter + " " + title : inter;
     } catch (Exception e) {
       return imejiPage.getLabel();

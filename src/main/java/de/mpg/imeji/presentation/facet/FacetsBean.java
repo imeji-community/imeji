@@ -9,10 +9,10 @@ import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -56,9 +56,8 @@ public class FacetsBean implements Callable<Boolean> {
     try {
       facetsClass = new TechnicalFacets(searchQuery, searchRes);
     } catch (Exception e) {
-      BeanHelper
-          .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
-              + ", Technical Facets intialization: " + e.getMessage());
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", BeanHelper.getLocale())
+          + ", Technical Facets intialization: " + e.getMessage());
     }
   }
 
@@ -72,9 +71,8 @@ public class FacetsBean implements Callable<Boolean> {
     try {
       facetsClass = new CollectionFacets(col, searchQuery, searchRes);
     } catch (Exception e) {
-      BeanHelper
-          .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
-              + ", Collection Facets intialization : " + e.getMessage());
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", BeanHelper.getLocale())
+          + ", Collection Facets intialization : " + e.getMessage());
     }
   }
 

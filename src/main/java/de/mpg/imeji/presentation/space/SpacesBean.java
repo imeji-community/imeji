@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -71,7 +72,8 @@ public class SpacesBean implements Serializable {
     try {
       sc.delete(delSpace, sessionBean.getUser());
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_delete_space"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_delete_space", sessionBean.getLocale()));
     }
 
     FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getSpacesUrl());

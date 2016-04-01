@@ -12,16 +12,17 @@ import java.util.List;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Bean for the collections page
@@ -56,8 +57,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
     Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
     search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-    collections =
-        controller.retrieveBatchLazy(searchResult.getResults(), -1, offset, sb.getUser());
+    collections = controller.retrieveBatchLazy(searchResult.getResults(), -1, offset, sb.getUser());
     return ImejiFactory.collectionListToListItem(collections, sb.getUser());
   }
 
@@ -95,11 +95,13 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
       collectionController.delete(collection, sb.getUser());
       count++;
 
-      BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
+      BeanHelper.info(
+          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb.getLocale()));
     }
     sb.getSelectedCollections().clear();
     if (count == 0) {
-      BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
+      BeanHelper.warn(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_delete_no_collection_selected", sb.getLocale()));
     }
     return sb.getPrettySpacePage("pretty:collections");
   }
@@ -149,7 +151,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
   }
 
   public String getTypeLabel() {
-    return sb.getLabel("type_" + getType().toLowerCase());
+    return Imeji.RESOURCE_BUNDLE.getLabel("type_" + getType().toLowerCase(), sb.getLocale());
   }
 
 

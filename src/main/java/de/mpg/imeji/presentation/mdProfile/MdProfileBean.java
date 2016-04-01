@@ -15,17 +15,17 @@ import java.util.Map;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Metadata.Types;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.collection.CollectionBean.TabType;
 import de.mpg.imeji.presentation.collection.CollectionSessionBean;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
@@ -102,9 +102,8 @@ public class MdProfileBean {
   private void initMenus() {
     mdTypesMenu = new ArrayList<SelectItem>();
     for (Metadata.Types t : Metadata.Types.values()) {
-      mdTypesMenu.add(new SelectItem(t.getClazzNamespace(),
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getLabel("facet_" + t.name().toLowerCase())));
+      mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), Imeji.RESOURCE_BUNDLE
+          .getLabel("facet_" + t.name().toLowerCase(), BeanHelper.getLocale())));
     }
   }
 
@@ -123,8 +122,8 @@ public class MdProfileBean {
   public String getTypeLabel(String uri) {
     for (Metadata.Types t : Metadata.Types.values()) {
       if (t.getClazzNamespace().equals(uri)) {
-        return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getLabel("facet_" + t.name().toLowerCase());
+        return Imeji.RESOURCE_BUNDLE.getLabel("facet_" + t.name().toLowerCase(),
+            BeanHelper.getLocale());
       }
     }
     return uri;

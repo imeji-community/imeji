@@ -10,6 +10,7 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -80,8 +81,9 @@ public class AlbumItemBean extends ItemBean {
         l.add(getImage().getId().toString());
         Album album = ObjectLoader.loadAlbum(getAlbum().getId(), session.getUser());
         ac.removeFromAlbum(album, l, session.getUser());
-        BeanHelper.info(session.getLabel("image") + " " + getImage().getFilename() + " "
-            + session.getMessage("success_album_remove_from"));
+        BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("image", session.getLocale()) + " "
+            + getImage().getFilename() + " "
+            + Imeji.RESOURCE_BUNDLE.getMessage("success_album_remove_from", session.getLocale()));
       }
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());

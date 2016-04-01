@@ -28,10 +28,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
  * Defines the predefined roles (for instance the creator of collection) with a {@link List} of
@@ -58,13 +58,13 @@ public class AuthorizationPredefinedRoles {
   // Can edit a profile
   private static final GrantType[] edit_profile = {GrantType.READ, GrantType.UPDATE};
   // Can administrate an album
-  private static final GrantType[] admin_album = {GrantType.READ, GrantType.ADMIN,
-      GrantType.CREATE, GrantType.DELETE, GrantType.UPDATE};
+  private static final GrantType[] admin_album =
+      {GrantType.READ, GrantType.ADMIN, GrantType.CREATE, GrantType.DELETE, GrantType.UPDATE};
   // Can administrate a collection
-  private static final GrantType[] admin_collection = {GrantType.READ, GrantType.ADMIN,
-      GrantType.ADMIN_CONTENT, GrantType.CREATE, GrantType.DELETE, GrantType.DELETE_CONTENT,
-      GrantType.UPDATE, GrantType.UPDATE_CONTENT};
-  public static final String IMEJI_GLOBAL_URI = PropertyBean.baseURI();
+  private static final GrantType[] admin_collection =
+      {GrantType.READ, GrantType.ADMIN, GrantType.ADMIN_CONTENT, GrantType.CREATE, GrantType.DELETE,
+          GrantType.DELETE_CONTENT, GrantType.UPDATE, GrantType.UPDATE_CONTENT};
+  public static final String IMEJI_GLOBAL_URI = Imeji.PROPERTIES.getBaseURI();
 
   /**
    * The default {@link User} role in imeji can create (collection/album) in imeji

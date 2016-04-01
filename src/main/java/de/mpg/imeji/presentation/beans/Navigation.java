@@ -9,10 +9,11 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Defines the page names and Path for imeji. All changes here must be synchronized with
@@ -69,7 +70,7 @@ public class Navigation implements Serializable {
       if (frameworkUrl != null) {
         frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
       }
-      applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
+      applicationUrl = Imeji.PROPERTIES.getApplicationURL();
       externalDigilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
     } catch (Exception e) {
       LOGGER.error(e);

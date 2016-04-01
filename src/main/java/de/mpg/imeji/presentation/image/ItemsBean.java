@@ -16,6 +16,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.WorkflowException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -25,9 +26,11 @@ import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
@@ -38,8 +41,6 @@ import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * The bean for all list of images
@@ -127,11 +128,14 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     if (selectedSortCriterion == null) {
       this.selectedSortCriterion = SearchIndex.SearchFields.modified.name();
     }
-    sortMenu
-        .add(new SelectItem(SearchIndex.SearchFields.modified, session.getLabel("sort_date_mod")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, session.getLabel("filename")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filesize, session.getLabel("file_size")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filetype, session.getLabel("file_type")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified,
+        Imeji.RESOURCE_BUNDLE.getLabel("sort_date_mod", session.getLocale())));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename,
+        Imeji.RESOURCE_BUNDLE.getLabel("filename", session.getLocale())));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filesize,
+        Imeji.RESOURCE_BUNDLE.getLabel("file_size", session.getLocale())));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filetype,
+        Imeji.RESOURCE_BUNDLE.getLabel("file_type", session.getLocale())));
   }
 
   @Override
@@ -233,7 +237,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public String getSimpleQuery() {
     if (searchFilter != null && searchFilter.getSearchQuery() != null) {
-      return SearchQueryParser.searchQuery2PrettyQuery(searchFilter.getSearchQuery());
+      return SearchQueryParser.searchQuery2PrettyQuery(searchFilter.getSearchQuery(),
+          session.getLocale());
     }
     return "";
   }
@@ -356,13 +361,15 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     Collection<Item> items = loadImages(uris);
     int count = items.size();
     if ("".equals(discardComment.trim())) {
-      BeanHelper.error(session.getMessage("error_image_withdraw_discardComment"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_image_withdraw_discardComment",
+          session.getLocale()));
     } else {
       ItemController c = new ItemController();
       c.withdraw((List<Item>) items, discardComment, session.getUser());
       discardComment = null;
       unselect(uris);
-      BeanHelper.info(count + " " + session.getLabel("images_withdraw"));
+      BeanHelper.info(
+          count + " " + Imeji.RESOURCE_BUNDLE.getLabel("images_withdraw", session.getLocale()));
     }
   }
 
@@ -377,10 +384,12 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       Collection<Item> items = loadImages(uris);
       ItemController ic = new ItemController();
       ic.delete((List<Item>) items, session.getUser());
-      BeanHelper.info(uris.size() + " " + session.getLabel("images_deleted"));
+      BeanHelper.info(uris.size() + " "
+          + Imeji.RESOURCE_BUNDLE.getLabel("images_deleted", session.getLocale()));
       unselect(uris);
     } catch (WorkflowException e) {
-      BeanHelper.error(session.getMessage("error_delete_items_public"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_delete_items_public", session.getLocale()));
       LOGGER.error("Error deleting items", e);
     } catch (ImejiException e) {
       LOGGER.error("Error deleting items", e);
@@ -419,10 +428,12 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     String message = "";
     String error = "";
     if (added > 0) {
-      message = " " + added + " " + session.getMessage("images_added_to_active_album");
+      message = " " + added + " "
+          + Imeji.RESOURCE_BUNDLE.getMessage("images_added_to_active_album", session.getLocale());
     }
     if (notAdded > 0) {
-      error += " " + notAdded + " " + session.getMessage("already_in_active_album");
+      error += " " + notAdded + " "
+          + Imeji.RESOURCE_BUNDLE.getMessage("already_in_active_album", session.getLocale());
     }
     if (!"".equals(message))
       BeanHelper.info(message);
@@ -612,7 +623,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   }
 
   public String getTypeLabel() {
-    return session.getLabel("type_" + getType().toLowerCase());
+    return Imeji.RESOURCE_BUNDLE.getLabel("type_" + getType().toLowerCase(), session.getLocale());
   }
 
   public void changeAllSelected(ValueChangeEvent event) {

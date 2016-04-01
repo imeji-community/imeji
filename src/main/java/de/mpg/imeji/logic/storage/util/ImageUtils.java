@@ -27,8 +27,8 @@ import javax.imageio.stream.ImageInputStream;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.TempFileUtil;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Mehtods to help wotk with images

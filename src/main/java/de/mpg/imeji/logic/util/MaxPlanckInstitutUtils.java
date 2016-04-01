@@ -1,4 +1,4 @@
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import de.mpg.imeji.presentation.util.IPUtils;
 
 /**
  * Utility Class for specific method for the Max Planck Institute

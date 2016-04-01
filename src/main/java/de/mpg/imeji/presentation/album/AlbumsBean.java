@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
@@ -14,10 +15,10 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Bean for the Albums page
@@ -75,7 +76,8 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
   public String deleteAll() {
     if (sb.getSelectedAlbums().size() == 0) {
-      BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
+      BeanHelper.warn(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_delete_no_albums_selected", sb.getLocale()));
       return sb.getPrettySpacePage("pretty:albums");
     }
     for (AlbumBean b : getCurrentPartList()) {
@@ -114,7 +116,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
   }
 
   public String getTypeLabel() {
-    return sb.getLabel("type_" + getType().toLowerCase());
+    return Imeji.RESOURCE_BUNDLE.getLabel("type_" + getType().toLowerCase(), sb.getLocale());
   }
 
   public boolean isAddSelected() {

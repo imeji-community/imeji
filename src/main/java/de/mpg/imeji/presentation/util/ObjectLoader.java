@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -21,7 +22,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * imeji objects (item, collection, album, profile) loader. This loader should be used to loads
@@ -231,10 +231,8 @@ public class ObjectLoader {
    * @param id
    */
   private static void writeErrorNotFound(String objectType, URI id) {
-    BeanHelper
-        .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel(objectType)
-            + " " + id + " "
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("not_found"));
+    BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel(objectType, BeanHelper.getLocale()) + " " + id
+        + " " + Imeji.RESOURCE_BUNDLE.getLabel("not_found", BeanHelper.getLocale()));
   }
 
   /**

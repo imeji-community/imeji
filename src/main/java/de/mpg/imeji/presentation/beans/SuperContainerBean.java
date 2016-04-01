@@ -10,6 +10,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
@@ -21,6 +22,7 @@ import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -29,7 +31,6 @@ import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Java Bean for {@link Container} browse pages (collections and albums)
@@ -117,18 +118,24 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
    */
   protected void initMenus() {
     sortMenu = new ArrayList<SelectItem>();
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.title.name(), sb.getLabel("sort_title")));
-    sortMenu.add(
-        new SelectItem(SearchIndex.SearchFields.modified.name(), sb.getLabel("sort_date_mod")));
-    sortMenu
-        .add(new SelectItem(SearchIndex.SearchFields.creator.name(), sb.getLabel("sort_author")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.title.name(),
+        Imeji.RESOURCE_BUNDLE.getLabel("sort_title", sb.getLocale())));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified.name(),
+        Imeji.RESOURCE_BUNDLE.getLabel("sort_date_mod", sb.getLocale())));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.creator.name(),
+        Imeji.RESOURCE_BUNDLE.getLabel("sort_author", sb.getLocale())));
     if (sb.getUser() != null) {
       filterMenu = new ArrayList<SelectItem>();
-      filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
-      filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
-      filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
-      filterMenu.add(new SelectItem("public", sb.getLabel("only_public")));
-      filterMenu.add(new SelectItem("withdrawn", sb.getLabel("only_withdrawn")));
+      filterMenu.add(new SelectItem("all",
+          Imeji.RESOURCE_BUNDLE.getLabel("all_except_withdrawn", sb.getLocale())));
+      filterMenu.add(new SelectItem("my",
+          Imeji.RESOURCE_BUNDLE.getLabel("my_except_withdrawn", sb.getLocale())));
+      filterMenu.add(new SelectItem("private",
+          Imeji.RESOURCE_BUNDLE.getLabel("only_private", sb.getLocale())));
+      filterMenu.add(
+          new SelectItem("public", Imeji.RESOURCE_BUNDLE.getLabel("only_public", sb.getLocale())));
+      filterMenu.add(new SelectItem("withdrawn",
+          Imeji.RESOURCE_BUNDLE.getLabel("only_withdrawn", sb.getLocale())));
     }
 
   }
@@ -311,7 +318,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         return si.getLabel();
       }
     }
-    return sb.getLabel("all_except_withdrawn");
+    return Imeji.RESOURCE_BUNDLE.getLabel("all_except_withdrawn", sb.getLocale());
   }
 
   /**

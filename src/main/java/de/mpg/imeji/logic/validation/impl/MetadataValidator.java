@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.presentation.util.ProfileHelper;
+import de.mpg.imeji.logic.vo.util.ProfileHelper;
 
 /**
  * {@link Validator} for a {@link Metadata}. Only working with profile

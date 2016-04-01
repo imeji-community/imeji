@@ -15,6 +15,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXParseException;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ingest.controller.IngestController;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -129,10 +130,10 @@ public class IngestBean {
       }
     }
     if (error) {
-      BeanHelper.error(session.getLabel("ingestFail"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("ingestFail", session.getLocale()));
       BeanHelper.error(msg);
     } else if (success)
-      BeanHelper.info(session.getLabel("ingestSuccess"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("ingestSuccess", session.getLocale()));
   }
 
   public boolean isSuccess() {
@@ -183,11 +184,11 @@ public class IngestBean {
       ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
           .setId(collectionId);
       ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
-      collection =
-          ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
-              .getCollection();
+      collection = ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
+          .getCollection();
     } else {
-      BeanHelper.error(session.getLabel("error") + " No ID in URL");
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + " No ID in URL");
     }
   }
 

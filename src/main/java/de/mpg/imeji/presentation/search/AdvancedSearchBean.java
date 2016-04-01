@@ -90,8 +90,10 @@ public class AdvancedSearchBean {
    */
   private void initMenus() {
     operatorsMenu = new ArrayList<SelectItem>();
-    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and_small")));
-    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or_small")));
+    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND,
+        Imeji.RESOURCE_BUNDLE.getLabel("and_small", session.getLocale())));
+    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR,
+        Imeji.RESOURCE_BUNDLE.getLabel("or_small", session.getLocale())));
     fileTypesMenu = new ArrayList<>();
     for (Type type : Imeji.CONFIG.getFileTypes().getTypes()) {
       fileTypesMenu.add(new SelectItem(type.getName(session.getLocale().getLanguage())));
@@ -147,7 +149,8 @@ public class AdvancedSearchBean {
    */
   private Map<String, MetadataProfile> loadProfilesAndInitMenu() throws ImejiException {
     profilesMenu = new ArrayList<SelectItem>();
-    profilesMenu.add(new SelectItem(null, session.getLabel("select_profile")));
+    profilesMenu.add(new SelectItem(null,
+        Imeji.RESOURCE_BUNDLE.getLabel("select_profile", session.getLocale())));
     ProfileController controller = new ProfileController();
     Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
     for (MetadataProfile p : controller.search(session.getUser(),
@@ -189,7 +192,7 @@ public class AdvancedSearchBean {
           .redirect(navigation.getBrowseUrl() + "?q=" + q);
     } catch (UnprocessableError e1) {
       for (String m : e1.getMessages()) {
-        BeanHelper.error(session.getMessage(m));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(m, session.getLocale()));
       }
     }
   }
@@ -303,7 +306,8 @@ public class AdvancedSearchBean {
    * @return
    */
   public String getSimpleQuery() {
-    return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
+    return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery(),
+        session.getLocale());
   }
 
   /**

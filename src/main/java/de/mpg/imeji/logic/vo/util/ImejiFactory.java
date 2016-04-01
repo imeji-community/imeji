@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.vo.util;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -42,7 +42,9 @@ public class ImejiFactory {
   /**
    * Private Constructor
    */
-  private ImejiFactory() {};
+  private ImejiFactory() {
+    // avoid creation
+  }
 
   public static Album newAlbum() {
     Album album = new Album();

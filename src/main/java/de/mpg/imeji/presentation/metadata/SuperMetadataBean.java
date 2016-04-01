@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.MetadataFactory;
@@ -18,11 +19,10 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.SearchAndExportHelper;
 
 /**
@@ -739,8 +739,8 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
     if (orgs.size() > 1)
       orgs.remove(organizationPosition);
     else
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("error_author_need_one_organization"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization",
+          BeanHelper.getLocale()));
     return "";
   }
 }

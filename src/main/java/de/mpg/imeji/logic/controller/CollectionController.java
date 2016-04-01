@@ -43,8 +43,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -324,8 +322,7 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(collection.getId(), null, null, user, null, -1, 0).getResults();
     if (hasImageLocked(itemUris, user)) {
-      throw new RuntimeException(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("collection_locked"));
+      throw new RuntimeException("Collection can not be deleted: It contains locked items:");
     } else {
       if (collection.getStatus() != Status.PENDING && !user.isAdmin()) {
         throw new UnprocessableError("collection_is_not_pending");
@@ -387,8 +384,7 @@ public class CollectionController extends ImejiController {
         itemController.search(collection.getId(), null, null, user, null, -1, 0).getResults();
 
     if (hasImageLocked(itemUris, user)) {
-      throw new UnprocessableError(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("collection_locked"));
+      throw new UnprocessableError("Collection has locked items: can not be released");
     } else if (itemUris.isEmpty()) {
       throw new UnprocessableError("An empty collection can not be released!");
     } else {
@@ -426,8 +422,7 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(coll.getId(), null, null, user, null, -1, 0).getResults();
     if (hasImageLocked(itemUris, user)) {
-      throw new UnprocessableError(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("collection_locked"));
+      throw new UnprocessableError("Collection has locked images: can not be withdrawn");
     } else if (!Status.RELEASED.equals(coll.getStatus())) {
       throw new UnprocessableError("Withdraw collection: Collection must be released");
     } else {

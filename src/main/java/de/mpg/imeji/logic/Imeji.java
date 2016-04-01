@@ -33,6 +33,9 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
+import de.mpg.imeji.logic.config.ImejiConfiguration;
+import de.mpg.imeji.logic.config.ImejiProperties;
+import de.mpg.imeji.logic.config.ImejiResourceBundle;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
@@ -40,6 +43,7 @@ import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
 import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -48,8 +52,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jModel;
 
 /**
@@ -75,6 +78,13 @@ public class Imeji {
   private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
   private static final String ADMIN_PASSWORD_INIT = "admin";
   public static ImejiConfiguration CONFIG;
+  public static ImejiProperties PROPERTIES = new ImejiProperties();
+  /**
+   * The path for this servlet as defined in the web.xml
+   */
+  public static final String FILE_SERVLET_PATH = "file";
+
+  public static final ImejiResourceBundle RESOURCE_BUNDLE = new ImejiResourceBundle();
   /**
    * Thread to check if locked objects can be unlocked
    */
@@ -87,6 +97,13 @@ public class Imeji {
    * Executes jobs over night
    */
   public static final NightlyExecutor nightlyExecutor = new NightlyExecutor();
+
+  /**
+   * private Constructor
+   */
+  private Imeji() {
+    // avoid constructor
+  }
 
   /**
    * Initialize the {@link Jena} database according to imeji.properties<br/>

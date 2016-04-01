@@ -13,6 +13,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
@@ -172,7 +173,8 @@ public class SearchGroupForm {
         new SearchPair(SearchFields.prof, SearchOperators.EQUALS, p.getId().toString(), false));
     List<SelectItem> l = new ArrayList<SelectItem>();
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    l.add(new SelectItem(null, session.getLabel("adv_search_collection_restrict")));
+    l.add(new SelectItem(null,
+        Imeji.RESOURCE_BUNDLE.getLabel("adv_search_collection_restrict", session.getLocale())));
     for (String uri : cc.search(q, null, -1, 0, session.getUser(), session.getSelectedSpaceString())
         .getResults()) {
       CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(uri), session.getUser());

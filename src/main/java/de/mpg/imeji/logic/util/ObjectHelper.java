@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -63,7 +63,7 @@ public class ObjectHelper {
    * @return
    */
   public static URI getURI(Class<?> c, String id) {
-    String baseURI = PropertyBean.baseURI();
+    String baseURI = Imeji.PROPERTIES.getBaseURI();
     j2jModel modelName = c.getAnnotation(j2jModel.class);
     if (modelName != null) {
       baseURI = StringHelper.normalizeURI(baseURI + modelName.value());

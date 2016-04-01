@@ -33,7 +33,7 @@ import org.im4java.core.IM4JavaException;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * {@link ImageGenerator} implemented with imagemagick

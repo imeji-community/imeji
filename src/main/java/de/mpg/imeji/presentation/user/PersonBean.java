@@ -17,15 +17,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * The JSF Composite for a {@link Person}
@@ -241,13 +242,12 @@ public class PersonBean implements Serializable {
    * @return
    */
   public String removeOrganization(int organizationPosition) {
-
     List<Organization> orgs = (List<Organization>) getPersonFromParentBean().getOrganizations();
     if (orgs.size() > 1)
       orgs.remove(organizationPosition);
     else
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("error_author_need_one_organization"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization", sb.getLocale()));
     return "";
   }
 

@@ -64,13 +64,13 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.upload.IngestImage;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Super Java Bean for containers bean {@link AlbumBean} and {@link CollectionBean}
@@ -317,8 +317,8 @@ public abstract class ContainerBean implements Serializable {
     if (orgs.size() > 1) {
       orgs.remove(organizationPosition);
     } else {
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("error_author_need_one_organization"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization",
+          BeanHelper.getLocale()));
     }
     return "";
   }
@@ -460,9 +460,8 @@ public abstract class ContainerBean implements Serializable {
             response.getWriter().print(
                 "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}");
             FacesContext.getCurrentInstance().responseComplete();
-            throw new TypeNotAllowedException(
-                ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getMessage("Logo_single_upload_invalid_content_format"));
+            throw new TypeNotAllowedException(Imeji.RESOURCE_BUNDLE
+                .getMessage("Logo_single_upload_invalid_content_format", BeanHelper.getLocale()));
           }
           FileOutputStream fos = new FileOutputStream(tmp);
           if (fis.getName() != null) {

@@ -5,9 +5,9 @@ package de.mpg.imeji.presentation.facet;
 
 import java.net.URI;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -59,15 +59,12 @@ public class Facet {
   private void initInternationalLabel() {
     if (FacetType.TECHNICAL.name().equals(type.name())) {
       internationalizedLabel =
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_"
-              + label.toLowerCase());
+          Imeji.RESOURCE_BUNDLE.getLabel("facet_" + label.toLowerCase(), BeanHelper.getLocale());
     } else if (FacetType.COLLECTION.name().equals(type.name())) {
-      internationalizedLabel =
-          ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-              .getInternationalizedLabels().get(metadataURI);
+      internationalizedLabel = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
+          .getInternationalizedLabels().get(metadataURI);
     } else if (FacetType.SEARCH.name().equals(type.name())) {
-      internationalizedLabel =
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("search");
+      internationalizedLabel = Imeji.RESOURCE_BUNDLE.getLabel("search", BeanHelper.getLocale());
     }
     if (internationalizedLabel == null
         || (label != null && internationalizedLabel.equals("facet_" + label.toLowerCase()))) {

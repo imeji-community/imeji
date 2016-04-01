@@ -31,6 +31,7 @@ import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Explain the index for the search
@@ -47,7 +48,7 @@ public class SearchExplainExport extends ExplainExport {
    * de.mpg.imeji.logic.search.SearchResult)
    */
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     PrintWriter writer = new PrintWriter(out);
     try {
       writer.append(getRDFTagOpen());

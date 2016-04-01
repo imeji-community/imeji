@@ -47,7 +47,7 @@ import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * Test {@link Storage}

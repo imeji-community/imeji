@@ -2,7 +2,7 @@ package de.mpg.imeji.logic.util;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiConfiguration;
+import de.mpg.imeji.logic.config.ImejiConfiguration;
 
 /**
  * Utility Class for imeji Quota

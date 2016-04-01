@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -27,6 +28,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.util.ProfileHelper;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -36,9 +39,7 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for batch and multiple metadata editor
@@ -100,8 +101,7 @@ public class EditItemMetadataBean {
         initProfileAndStatement(allItems);
         if (profile == null) {
           redirectToCollectionItemsPage(collectionId);
-          BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getLabel("profile_empty"));
+          BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("profile_empty", session.getLocale()));
         }
         initStatementsMenu();
         initEmtpyEditorItem();
@@ -112,13 +112,11 @@ public class EditItemMetadataBean {
         initModeMenu();
       } else {
         redirectToCollectionItemsPage(collectionId);
-        BeanHelper.error((((SessionBean) BeanHelper.getSessionBean(SessionBean.class)))
-            .getMessage("no_items_to_edit"));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("no_items_to_edit", session.getLocale()));
       }
     } catch (Exception e) {
       redirectToView();
-      BeanHelper.error(
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + " " + e);
       LOGGER.error("Error init Edit page", e);
     }
   }
@@ -202,12 +200,10 @@ public class EditItemMetadataBean {
       } else {
         LOGGER.error("No statement found");
         isProfileWithStatements = false;
-        BeanHelper.error(
-            ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty"));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("profile_empty", session.getLocale()));
       }
     } catch (Exception e) {
-      BeanHelper.error(
-          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + " " + e);
       LOGGER.error("Error init Edit page", e);
     }
   }
@@ -230,15 +226,13 @@ public class EditItemMetadataBean {
     selectedMode = "basic";
     modeRadio = new ArrayList<SelectItem>();
     modeRadio.add(new SelectItem("basic",
-        ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getMessage("editor_basic")));
+        Imeji.RESOURCE_BUNDLE.getMessage("editor_basic", session.getLocale())));
     if (this.statement.getMaxOccurs().equals("unbounded")) {
-      modeRadio
-          .add(new SelectItem("append", ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getMessage("editor_append")));
+      modeRadio.add(new SelectItem("append",
+          Imeji.RESOURCE_BUNDLE.getMessage("editor_append", session.getLocale())));
     }
-    modeRadio.add(
-        new SelectItem("overwrite", ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getMessage("editor_overwrite")));
+    modeRadio.add(new SelectItem("overwrite",
+        Imeji.RESOURCE_BUNDLE.getMessage("editor_overwrite", session.getLocale())));
   }
 
   /**

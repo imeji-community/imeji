@@ -540,4 +540,12 @@ public class ConfigurationBean {
   public void setAlbumsEnabled(boolean enabled) {
     Imeji.CONFIG.setAlbumsEnabled(enabled);
   }
+
+  public void setHelpUrl(String url) {
+    Imeji.CONFIG.setHelpUrl(url);
+  }
+
+  public String getHelpUrl() {
+    return Imeji.CONFIG.getHelpUrl();
+  }
 }

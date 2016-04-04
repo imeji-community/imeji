@@ -39,7 +39,7 @@ public class ImejiConfiguration {
    * @version $Revision$ $LastChangedDate$
    */
   private enum CONFIGURATION {
-    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS, PRIVATE_MODUS, REGISTRATION_WHITE_LIST, ALBUMS_ENABLED;
+    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_ENABLED, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_QUOTA, RSA_PUBLIC_KEY, RSA_PRIVATE_KEY, BROWSE_DEFAULT_VIEW, DOI_SERVICE_URL, DOI_USER, DOI_PASSWORD, QUOTA_LIMITS, PRIVATE_MODUS, REGISTRATION_WHITE_LIST, ALBUMS_ENABLED, HELP_URL;
   }
 
   private static Properties config;
@@ -59,6 +59,8 @@ public class ImejiConfiguration {
   private static final String DEFAULT_USER_QUOTA_LIST = "1, 10, 20";
   public static final String QUOTA_UNLIMITED = "unlimited";
   public static final String DEFAULT_ALBUMS_ENABLED = "true";
+  public static final String DEFAULT_HELP_URL =
+      "https://raw.githubusercontent.com/imeji-community/imeji-help/master/imeji-help-default.html";
   private String dataViewerUrl;
 
   public enum BROWSE_VIEW {
@@ -103,13 +105,7 @@ public class ImejiConfiguration {
   private synchronized void setDefaultConfig() {
     config = new Properties();
     fileTypes = new FileTypes(DEFAULT_SEARCH_FILE_TYPE_LIST);
-    initPropertyWithDefaultValue(CONFIGURATION.FILE_TYPES, fileTypes.toString());
-    initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
-    initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
-    initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
-    initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, DEFAULT_CAROUSEL_SHOW);
-    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_QUOTA, DEFAULT_USER_QUOTA);
-    initPropertyWithDefaultValue(CONFIGURATION.QUOTA_LIMITS, DEFAULT_USER_QUOTA_LIST);
+    initPropertiesWithDefaultValue();
     saveConfig();
   }
 
@@ -133,13 +129,19 @@ public class ImejiConfiguration {
     }
     dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
     fileTypes = new FileTypes((String) config.get(CONFIGURATION.FILE_TYPES.name()));
-    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_QUOTA, DEFAULT_USER_QUOTA);
+    initPropertiesWithDefaultValue();
+  }
+
+  private void initPropertiesWithDefaultValue() {
+    initPropertyWithDefaultValue(CONFIGURATION.FILE_TYPES, fileTypes.toString());
     initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, DEFAULT_FILE_BLACKLIST);
     initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, DEFAULT_LANGUAGE_LIST);
     initPropertyWithDefaultValue(CONFIGURATION.BROWSE_DEFAULT_VIEW, predefinedBrowseView.name());
     initPropertyWithDefaultValue(CONFIGURATION.STARTPAGE_CAROUSEL_ENABLED, DEFAULT_CAROUSEL_SHOW);
+    initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_QUOTA, DEFAULT_USER_QUOTA);
     initPropertyWithDefaultValue(CONFIGURATION.QUOTA_LIMITS, DEFAULT_USER_QUOTA_LIST);
     initPropertyWithDefaultValue(CONFIGURATION.ALBUMS_ENABLED, DEFAULT_ALBUMS_ENABLED);
+    initPropertyWithDefaultValue(CONFIGURATION.HELP_URL, DEFAULT_HELP_URL);
   }
 
 
@@ -824,6 +826,14 @@ public class ImejiConfiguration {
 
   public void setAlbumsEnabled(boolean enabled) {
     setProperty(CONFIGURATION.ALBUMS_ENABLED.name(), Boolean.toString(enabled));
+  }
+
+  public void setHelpUrl(String url) {
+    setProperty(CONFIGURATION.HELP_URL.name(), url);
+  }
+
+  public String getHelpUrl() {
+    return (String) config.get(CONFIGURATION.HELP_URL.name());
   }
 
 }

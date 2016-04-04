@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -18,24 +19,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author saquet
  */
 public class StaticContentBean {
-  private boolean about = true;
-  private boolean legal = true;
-
-  /**
-   * Construct the {@link StaticContentBean} by reading in the imeji.properties which external
-   * content are defined
-   * 
-   * @throws IOException
-   * @throws URISyntaxException
-   */
-  public StaticContentBean() throws IOException, URISyntaxException {
-    if ("".equals(PropertyReader.getProperty("imeji.about.url"))) {
-      about = false;
-    }
-    if ("".equals(PropertyReader.getProperty("imeji.legal.url"))) {
-      legal = false;
-    }
-  }
 
   /**
    * Read the URL of the logo from the imeji.preporties and return an CSS snippet
@@ -74,7 +57,7 @@ public class StaticContentBean {
   public String getHelpContent() throws IOException, URISyntaxException {
     String html = "";
     try {
-      String helpProp = PropertyReader.getProperty("imeji.help.url");
+      String helpProp = Imeji.CONFIG.getHelpUrl();
       String supportEmail =
           ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
               .getContactEmail();
@@ -82,82 +65,8 @@ public class StaticContentBean {
       html = html.replaceAll("XXX_SUPPORT_EMAIL_XXX", supportEmail);
     } catch (Exception e) {
       html =
-          PropertyReader.getProperty("imeji.help.url")
-              + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>"
-              + "Error message:" + "<br/><br/>" + e.toString();
-    }
-    return html;
-  }
-
-  /**
-   * Get the HTML content of the Home page. URL of the Home page is defined in properties.
-   * 
-   * @return
-   * @throws URISyntaxException
-   * @throws IOException
-   */
-  public String getHomeContent() throws IOException, URISyntaxException {
-    String html = "";
-    try {
-      html = getContent(new URL(PropertyReader.getProperty("imeji.home.url")));
-    } catch (Exception e) {
-      html =
-          PropertyReader.getProperty("imeji.help.url")
-              + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>"
-              + "Error message:" + "<br/><br/>" + e.toString();
-    }
-    return html;
-  }
-
-  /**
-   * Get the HTML content of the About page. URL of the About page is defined in properties.
-   * 
-   * @return
-   * @throws URISyntaxException
-   * @throws IOException
-   */
-  public String getAboutContent() throws IOException, URISyntaxException {
-    String html = "";
-    try {
-      html = getContent(new URL(PropertyReader.getProperty("imeji.about.url")));
-    } catch (Exception e) {
-      html =
-          PropertyReader.getProperty("imeji.help.url")
-              + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>"
-              + "Error message:" + "<br/><br/>" + e.toString();
-    }
-    return html;
-  }
-
-  /**
-   * Get the HTML content of the Legal page. URL of the Legal page is defined in properties.
-   * 
-   * @return
-   * @throws URISyntaxException
-   * @throws IOException
-   */
-  public String getLegalContent() throws IOException, URISyntaxException {
-    String html = "";
-    try {
-      html = getContent(new URL(PropertyReader.getProperty("imeji.legal.url")));
-    } catch (Exception e) {
-      html =
-          PropertyReader.getProperty("imeji.help.url")
-              + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>"
-              + "Error message:" + "<br/><br/>" + e.toString();
-    }
-    return html;
-  }
-
-  public String getConfirmationContent() throws IOException, URISyntaxException {
-    String html = "";
-    try {
-      html = getContent(new URL(PropertyReader.getProperty("imeji.confirmation.url")));
-    } catch (Exception e) {
-      html =
-          PropertyReader.getProperty("imeji.confirmation.url")
-              + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>"
-              + "Error message:" + "<br/><br/>" + e.toString();
+          Imeji.CONFIG.getHelpUrl() + " couldn't be loaded. Url might be either wrong or protected."
+              + "<br/><br/>" + "Error message:" + "<br/><br/>" + e.toString();
     }
     return html;
   }
@@ -184,21 +93,5 @@ public class StaticContentBean {
     } finally {
       in.close();
     }
-  }
-
-  public boolean isAbout() {
-    return about;
-  }
-
-  public void setAbout(boolean about) {
-    this.about = about;
-  }
-
-  public boolean isLegal() {
-    return legal;
-  }
-
-  public void setLegal(boolean legal) {
-    this.legal = legal;
   }
 }

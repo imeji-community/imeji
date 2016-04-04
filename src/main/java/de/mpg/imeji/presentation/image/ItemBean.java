@@ -47,7 +47,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
@@ -636,8 +635,7 @@ public class ItemBean {
    * @return
    */
   public boolean isViewInDigilib() {
-    return ((PropertyBean) BeanHelper.getApplicationBean(PropertyBean.class)).isDigilibEnabled()
-        && isImageFile() && !isSVGFile();
+    return Imeji.PROPERTIES.isDigilibEnabled() && isImageFile() && !isSVGFile();
   }
 
   /**

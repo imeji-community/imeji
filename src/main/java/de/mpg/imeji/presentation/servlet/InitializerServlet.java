@@ -27,7 +27,6 @@ import de.mpg.imeji.logic.jobs.ReadMaxPlanckIPMappingJob;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
  * Initialize application on server start
@@ -42,7 +41,6 @@ public class InitializerServlet extends HttpServlet {
   public void init() throws ServletException {
     try {
       super.init();
-      new PropertyBean();
       Imeji.locksSurveyor.start();
       initModel();
       Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());

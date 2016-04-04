@@ -230,6 +230,10 @@ public class Navigation implements Serializable {
     return "";
   }
 
+  public String getInternalStorageBase() {
+    return Imeji.PROPERTIES.getInternalStorageBase();
+  }
+
   /**
    * Get the context for the context sensitive search.
    * 

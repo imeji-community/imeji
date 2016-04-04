@@ -56,7 +56,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import digilib.servlet.Scaler;
@@ -87,9 +86,8 @@ public class DigilibServlet extends Scaler {
    */
   @Override
   public void init(ServletConfig config) throws ServletException {
-    PropertyBean propBean = new PropertyBean();
     String filePath = "";
-    if (propBean.isDigilibEnabled()) {
+    if (Imeji.PROPERTIES.isDigilibEnabled()) {
       try {
         authorization = new Authorization();
         navigation = new Navigation();

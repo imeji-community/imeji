@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.util.Metadata;
@@ -30,6 +33,8 @@ import de.mpg.j2j.misc.LocalizedString;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
+@ManagedBean(name = "MetadataLabels")
+@SessionScoped
 public class MetadataLabelsBean implements Serializable {
   private static final long serialVersionUID = -5672593145712801376L;
   private String lang = "en";

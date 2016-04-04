@@ -10,10 +10,10 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.keyValueStore.stores.HTreeMapStore;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.vo.User;
 
 /**
  * Business Controller for invitation of Users.

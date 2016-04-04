@@ -11,11 +11,11 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
 import de.mpg.j2j.misc.LocalizedString;

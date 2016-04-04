@@ -11,8 +11,8 @@ import java.util.Map;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.presentation.util.CommonUtils;
 
 /**

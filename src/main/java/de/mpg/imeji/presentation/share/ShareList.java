@@ -9,10 +9,10 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.invitation.Invitation;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.controller.UserGroupController;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.UserGroup;
 import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 
 /**

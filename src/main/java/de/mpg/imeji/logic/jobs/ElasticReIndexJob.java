@@ -7,17 +7,17 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.logic.resource.controller.AlbumController;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.SpaceController;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Space;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticIndexer;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Space;
 
 /**
  * REindex data from the database into elastic search

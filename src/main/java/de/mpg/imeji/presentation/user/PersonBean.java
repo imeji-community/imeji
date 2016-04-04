@@ -18,11 +18,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.session.SessionBean;

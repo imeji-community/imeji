@@ -19,8 +19,8 @@ import javax.imageio.stream.ImageInputStream;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import de.mpg.imeji.logic.resource.vo.Item;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.vo.Item;
 
 /**
  * Extract technical metadata with {@link ImageIO}

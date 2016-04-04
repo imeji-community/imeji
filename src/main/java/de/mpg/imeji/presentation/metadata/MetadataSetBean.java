@@ -32,12 +32,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.resource.util.MetadataProfileUtil;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.MetadataSet;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.util.MetadataFactory;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.util.MetadataProfileUtil;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**

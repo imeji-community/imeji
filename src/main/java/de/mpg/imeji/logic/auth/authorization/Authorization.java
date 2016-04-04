@@ -33,20 +33,20 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.Container;
+import de.mpg.imeji.logic.resource.vo.Grant;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.resource.vo.Space;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.UserGroup;
+import de.mpg.imeji.logic.resource.vo.Grant.GrantType;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one {@link User}

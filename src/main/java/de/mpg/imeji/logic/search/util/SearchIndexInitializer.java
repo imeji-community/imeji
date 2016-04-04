@@ -6,8 +6,8 @@ import java.util.Map;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.resource.vo.Metadata;
 import de.mpg.imeji.logic.search.model.SearchIndex;
-import de.mpg.imeji.logic.vo.Metadata;
 
 /**
  * Initialize the imeji {@link SearchIndex}

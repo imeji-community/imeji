@@ -12,11 +12,11 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.controller.UserGroupController;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.UserGroup;
 
 /**
  * Clean empty {@link MetadataProfile}, which are not referenced by any collection

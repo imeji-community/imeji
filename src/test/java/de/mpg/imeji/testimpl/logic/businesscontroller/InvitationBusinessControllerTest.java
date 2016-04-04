@@ -14,10 +14,10 @@ import de.mpg.imeji.logic.collaboration.invitation.Invitation;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 
 /**

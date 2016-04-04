@@ -9,11 +9,11 @@ import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Space;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Space;
 
 /**
  * {@link Validator} for a {@link Space}

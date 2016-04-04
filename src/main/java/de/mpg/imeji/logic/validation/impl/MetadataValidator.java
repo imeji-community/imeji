@@ -7,21 +7,21 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.resource.util.MetadataProfileUtil;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.metadata.ConePerson;
+import de.mpg.imeji.logic.resource.vo.metadata.Date;
+import de.mpg.imeji.logic.resource.vo.metadata.Geolocation;
+import de.mpg.imeji.logic.resource.vo.metadata.License;
+import de.mpg.imeji.logic.resource.vo.metadata.Link;
+import de.mpg.imeji.logic.resource.vo.metadata.Number;
+import de.mpg.imeji.logic.resource.vo.metadata.Publication;
+import de.mpg.imeji.logic.resource.vo.metadata.Text;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.util.MetadataProfileUtil;
 
 /**
  * {@link Validator} for a {@link Metadata}. Only working with profile

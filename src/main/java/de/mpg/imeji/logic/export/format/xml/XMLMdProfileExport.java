@@ -11,11 +11,11 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export the information for the ingest issue

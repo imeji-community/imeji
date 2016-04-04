@@ -13,12 +13,12 @@ import java.util.List;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;

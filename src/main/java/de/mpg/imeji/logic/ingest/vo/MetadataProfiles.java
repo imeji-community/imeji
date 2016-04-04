@@ -8,7 +8,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 
 /**
  * @author hnguyen

@@ -18,25 +18,25 @@ import com.google.common.collect.Iterables;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.ContainerAdditionalInfo;
+import de.mpg.imeji.logic.resource.vo.ContainerMetadata;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.metadata.ConePerson;
+import de.mpg.imeji.logic.resource.vo.metadata.Geolocation;
+import de.mpg.imeji.logic.resource.vo.metadata.License;
+import de.mpg.imeji.logic.resource.vo.metadata.Link;
+import de.mpg.imeji.logic.resource.vo.metadata.Number;
+import de.mpg.imeji.logic.resource.vo.metadata.Publication;
+import de.mpg.imeji.logic.resource.vo.metadata.Text;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
-import de.mpg.imeji.logic.vo.ContainerMetadata;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.ProfileTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
@@ -81,7 +81,6 @@ public class ReverseTransferObjectFactory {
       User u) {
     vo.setMetadata(transferContainerMetatadata(to, mode, u));
   }
-
 
   /**
    * Transfer an {@link AlbumTO} to an {@link Album}
@@ -227,8 +226,8 @@ public class ReverseTransferObjectFactory {
         case "http://imeji.org/terms/metadata#date":
           DateTO dateTO = (DateTO) mds.getValue();
           if (!isNullOrEmpty(dateTO.getDate())) {
-            de.mpg.imeji.logic.vo.predefinedMetadata.Date mdVO =
-                new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
+            de.mpg.imeji.logic.resource.vo.metadata.Date mdVO =
+                new de.mpg.imeji.logic.resource.vo.metadata.Date();
             mdVO.setStatement(mds.getStatementUri());
             mdVO.setDate(dateTO.getDate());
             mdVO.setPos(i);

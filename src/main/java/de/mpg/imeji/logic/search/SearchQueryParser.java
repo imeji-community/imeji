@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -31,7 +32,6 @@ import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SearchSimpleMetadata;
 import de.mpg.imeji.logic.search.util.StringParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Statement;
 
 /**
  * Static methods to manipulate imeji url search queries

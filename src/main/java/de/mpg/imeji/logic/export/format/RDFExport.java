@@ -20,8 +20,8 @@ import de.mpg.imeji.logic.export.format.rdf.RDFAlbumExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFCollectionExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFImageExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFProfileExport;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Export} in rdf

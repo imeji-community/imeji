@@ -12,6 +12,7 @@ import java.util.Set;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
@@ -21,7 +22,6 @@ import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * The form for the Advanced search. Is composed of {@link SearchGroupForm}

@@ -8,12 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.util.MetadataFactory;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
 import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.session.SessionBean;

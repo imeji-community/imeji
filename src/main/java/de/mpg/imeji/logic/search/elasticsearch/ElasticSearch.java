@@ -10,6 +10,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchIndexer;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -18,7 +19,6 @@ import de.mpg.imeji.logic.search.elasticsearch.factory.ElasticQueryFactory;
 import de.mpg.imeji.logic.search.elasticsearch.factory.ElasticSortFactory;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Search} implemtation for ElasticSearch

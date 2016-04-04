@@ -26,8 +26,8 @@ import de.mpg.imeji.logic.doi.models.DOICollection;
 import de.mpg.imeji.logic.doi.models.DOICreators;
 import de.mpg.imeji.logic.doi.models.DOIIdentifier;
 import de.mpg.imeji.logic.doi.models.DOITitle;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Person;
 
 /**
  * Utility Class for DOI Service

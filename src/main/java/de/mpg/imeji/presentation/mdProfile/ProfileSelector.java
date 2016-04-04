@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 

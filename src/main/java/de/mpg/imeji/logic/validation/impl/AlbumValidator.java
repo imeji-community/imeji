@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
 import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
 
 /**
  * {@link Validator} for {@link Album}

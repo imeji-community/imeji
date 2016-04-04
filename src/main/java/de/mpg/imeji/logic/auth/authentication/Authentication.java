@@ -25,7 +25,7 @@
 package de.mpg.imeji.logic.auth.authentication;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 
 /**
  * Authentication abstract class

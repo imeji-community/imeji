@@ -30,7 +30,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.auth.authentication.Authentication;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 
 /**
  * {@link Authentification} for {@link HttpServletRequest}

@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.j2j.misc.LocalizedString;
 
 @XmlRootElement

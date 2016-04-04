@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.Metadata;
 
 /**
  * Implements Hierarchy for a {@link List} of {@link SuperMetadataBean}

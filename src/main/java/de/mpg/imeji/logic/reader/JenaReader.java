@@ -12,7 +12,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.writer.JenaWriter;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.transaction.CRUDTransaction;

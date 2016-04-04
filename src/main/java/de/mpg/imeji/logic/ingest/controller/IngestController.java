@@ -2,10 +2,10 @@ package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
 
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.User;
 
 /**
  * Controller for ingest

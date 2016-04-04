@@ -26,9 +26,9 @@ package de.mpg.imeji.logic.search;
 
 import java.util.List;
 
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Search Interface for imeji

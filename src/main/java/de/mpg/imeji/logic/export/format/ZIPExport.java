@@ -41,12 +41,12 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Export} images in zip

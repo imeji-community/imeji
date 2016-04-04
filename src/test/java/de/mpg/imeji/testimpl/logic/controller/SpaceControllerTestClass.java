@@ -21,11 +21,11 @@ import org.junit.runners.MethodSorters;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.SpaceController;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.SpaceController;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Space;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 
 /**

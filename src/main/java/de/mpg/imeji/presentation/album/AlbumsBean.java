@@ -8,13 +8,13 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.resource.controller.AlbumController;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;

@@ -11,26 +11,26 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.Metadata.Types;
+import de.mpg.imeji.logic.resource.vo.metadata.ConePerson;
+import de.mpg.imeji.logic.resource.vo.metadata.Date;
+import de.mpg.imeji.logic.resource.vo.metadata.Geolocation;
+import de.mpg.imeji.logic.resource.vo.metadata.License;
+import de.mpg.imeji.logic.resource.vo.metadata.Link;
+import de.mpg.imeji.logic.resource.vo.metadata.Publication;
+import de.mpg.imeji.logic.resource.vo.metadata.Text;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.validation.Validator.Method;
 import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.validation.impl.ItemValidator;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Metadata.Types;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
@@ -125,8 +125,8 @@ public class ItemValidatorTest {
     Item item = getItem();
     Text md1 = (Text) MetadataFactory.createMetadata(TEXT_PREDEFINED);
     md1.setText(ValidatorPredefinedValues.TEXT1.value());
-    de.mpg.imeji.logic.vo.predefinedMetadata.Number md2 =
-        (de.mpg.imeji.logic.vo.predefinedMetadata.Number) MetadataFactory
+    de.mpg.imeji.logic.resource.vo.metadata.Number md2 =
+        (de.mpg.imeji.logic.resource.vo.metadata.Number) MetadataFactory
             .createMetadata(NUMBER_PREDEFINED);
     md2.setNumber(Double.parseDouble(ValidatorPredefinedValues.NUMBER1.value()));
     Date md3 = (Date) MetadataFactory.createMetadata(DATE_PREDEFINED);
@@ -159,8 +159,8 @@ public class ItemValidatorTest {
       // good...
     }
     // NUMBER
-    de.mpg.imeji.logic.vo.predefinedMetadata.Number md2 =
-        (de.mpg.imeji.logic.vo.predefinedMetadata.Number) MetadataFactory
+    de.mpg.imeji.logic.resource.vo.metadata.Number md2 =
+        (de.mpg.imeji.logic.resource.vo.metadata.Number) MetadataFactory
             .createMetadata(NUMBER_PREDEFINED);
     md2.setNumber(0);
     item.getMetadataSet().getMetadata().add(md2);
@@ -200,8 +200,8 @@ public class ItemValidatorTest {
     md1.setText(ValidatorPredefinedValues.TEXT1.value());
     validateMultipleValueNotAllowed(md1);
     // Number
-    de.mpg.imeji.logic.vo.predefinedMetadata.Number md2 =
-        (de.mpg.imeji.logic.vo.predefinedMetadata.Number) MetadataFactory
+    de.mpg.imeji.logic.resource.vo.metadata.Number md2 =
+        (de.mpg.imeji.logic.resource.vo.metadata.Number) MetadataFactory
             .createMetadata(NUMBER_PREDEFINED);
     md2.setNumber(Double.parseDouble(ValidatorPredefinedValues.NUMBER1.value()));
     validateMultipleValueNotAllowed(md2);
@@ -260,8 +260,8 @@ public class ItemValidatorTest {
     md1.setText(ValidatorPredefinedValues.TEXT1.value());
     validateMultipleValueAllowed(md1);
     // Number
-    de.mpg.imeji.logic.vo.predefinedMetadata.Number md2 =
-        (de.mpg.imeji.logic.vo.predefinedMetadata.Number) MetadataFactory
+    de.mpg.imeji.logic.resource.vo.metadata.Number md2 =
+        (de.mpg.imeji.logic.resource.vo.metadata.Number) MetadataFactory
             .createMetadata(NUMBER_PREDEFINED_MULTIPLE);
     md2.setNumber(Double.parseDouble(ValidatorPredefinedValues.NUMBER1.value()));
     validateMultipleValueAllowed(md2);

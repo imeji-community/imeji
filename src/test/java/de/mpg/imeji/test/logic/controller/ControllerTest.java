@@ -7,15 +7,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata.Types;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Metadata.Types;
 import util.JenaUtil;
 
 /**

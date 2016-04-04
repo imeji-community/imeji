@@ -15,8 +15,8 @@ import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.export.format.SitemapExport;
 import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.export.format.ZIPExport;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export of data

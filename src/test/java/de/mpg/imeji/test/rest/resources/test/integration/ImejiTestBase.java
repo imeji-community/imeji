@@ -25,11 +25,11 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.Metadata.Types;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
-import de.mpg.imeji.logic.vo.Metadata.Types;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;

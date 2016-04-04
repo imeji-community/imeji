@@ -12,12 +12,12 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 import util.JenaUtil;
 

@@ -9,13 +9,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Job to import files from escidoc to the internal storage. This is used when you want to switch

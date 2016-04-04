@@ -12,11 +12,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.util.BeanHelper;
 

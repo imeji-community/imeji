@@ -3,9 +3,9 @@ package de.mpg.imeji.presentation.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.metadata.Geolocation;
+import de.mpg.imeji.logic.resource.vo.metadata.License;
 
 /**
  * Common utility class

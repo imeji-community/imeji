@@ -6,12 +6,12 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.doi.models.DOICollection;
 import de.mpg.imeji.logic.doi.util.DOIUtil;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 
 /**
  * Service for using MPDL DOI Service

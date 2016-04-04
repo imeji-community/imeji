@@ -34,9 +34,13 @@ import com.ocpsoft.pretty.PrettyContext;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.doi.DoiService;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -47,10 +51,6 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistorySession;
@@ -305,7 +305,7 @@ public class UploadBean implements Serializable {
   }
 
   /**
-   * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
+   * Upload one File and create the {@link de.mpg.imeji.logic.resource.vo.Item}
    * 
    * @param bytes
    * @throws Exception

@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 
-import de.mpg.imeji.logic.controller.StatisticsController;
+import de.mpg.imeji.logic.resource.business.StatisticsBusinessController;
 
 @ManagedBean
 public class StorageStatisticsBean {
@@ -18,7 +18,7 @@ public class StorageStatisticsBean {
 	private List<Institute> institutes = new ArrayList<>();
 	
 	public StorageStatisticsBean(){
-		StatisticsController controller = new StatisticsController();
+		StatisticsBusinessController controller = new StatisticsBusinessController();
 		for(String institute : controller.getAllInstitute()){
 			institutes.add(new Institute(institute, controller.getUsedStorageSizeForInstitute(institute)));
 		}

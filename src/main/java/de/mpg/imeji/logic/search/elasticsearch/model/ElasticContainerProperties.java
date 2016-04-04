@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
-import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Container;
+import de.mpg.imeji.logic.resource.vo.ContainerAdditionalInfo;
+import de.mpg.imeji.logic.resource.vo.Person;
 
 /**
  * Common Properties to {@link CollectionImeji} and {@link Album}

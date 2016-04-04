@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import de.mpg.imeji.logic.resource.vo.metadata.Publication;
 import de.mpg.imeji.logic.util.ProxyHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 
 /**
  * Utility class to work with PubMan search and export interface

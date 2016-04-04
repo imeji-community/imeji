@@ -5,7 +5,7 @@ import java.util.List;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
-import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.resource.vo.Grant;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 

@@ -10,7 +10,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Item;
 
 /**
  * @author hnguyen

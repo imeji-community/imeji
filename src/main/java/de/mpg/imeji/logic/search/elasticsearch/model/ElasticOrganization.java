@@ -1,6 +1,6 @@
 package de.mpg.imeji.logic.search.elasticsearch.model;
 
-import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Organization;
 
 /**
  * The Elastic representation for an {@link Organization}

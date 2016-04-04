@@ -31,7 +31,7 @@ import javax.faces.bean.ViewScoped;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.session.SessionBean;

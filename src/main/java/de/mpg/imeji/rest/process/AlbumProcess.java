@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response.Status;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.JSONResponse;

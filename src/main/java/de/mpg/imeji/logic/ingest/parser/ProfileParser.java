@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbGenericObject;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 
 /**
  * Parse the {@link MetadataProfile} xml

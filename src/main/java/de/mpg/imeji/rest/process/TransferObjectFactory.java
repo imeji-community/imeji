@@ -9,26 +9,26 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Container;
+import de.mpg.imeji.logic.resource.vo.ContainerAdditionalInfo;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.resource.vo.Properties;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.metadata.ConePerson;
+import de.mpg.imeji.logic.resource.vo.metadata.Geolocation;
+import de.mpg.imeji.logic.resource.vo.metadata.License;
+import de.mpg.imeji.logic.resource.vo.metadata.Link;
+import de.mpg.imeji.logic.resource.vo.metadata.Number;
+import de.mpg.imeji.logic.resource.vo.metadata.Publication;
+import de.mpg.imeji.logic.resource.vo.metadata.Text;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.helper.UserNameCache;
 import de.mpg.imeji.rest.to.AlbumTO;
@@ -413,8 +413,8 @@ public class TransferObjectFactory {
           mdTO.setValue(cpto);
           break;
         case "de.mpg.imeji.logic.vo.predefinedMetadata.Date":
-          de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate =
-              (de.mpg.imeji.logic.vo.predefinedMetadata.Date) md;
+          de.mpg.imeji.logic.resource.vo.metadata.Date mdDate =
+              (de.mpg.imeji.logic.resource.vo.metadata.Date) md;
           DateTO dt = new DateTO();
           dt.setDate(mdDate.getDate());
           mdTO.setValue(dt);

@@ -3,10 +3,10 @@ package de.mpg.imeji.presentation.session;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.resource.controller.AlbumController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.Item;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**

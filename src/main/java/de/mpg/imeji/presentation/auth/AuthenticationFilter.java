@@ -40,8 +40,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.authentication.impl.HttpAuthentication;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 /**

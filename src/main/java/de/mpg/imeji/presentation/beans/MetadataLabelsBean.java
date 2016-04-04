@@ -18,10 +18,10 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.util.Metadata;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.util.MetadataProfileUtil;
+import de.mpg.imeji.logic.resource.util.MetadataProfileUtil;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.misc.LocalizedString;

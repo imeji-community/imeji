@@ -5,14 +5,14 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.ingest.parser.ProfileParser;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Controller to ingest a {@link MetadataProfile}

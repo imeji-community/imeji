@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +19,7 @@ import java.util.concurrent.Executors;
 import org.apache.jena.atlas.lib.AlarmClock;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
+import org.jose4j.lang.JoseException;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
@@ -31,28 +34,30 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.auth.ImejiRsaKeys;
+import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.config.ImejiConfiguration;
 import de.mpg.imeji.logic.config.ImejiProperties;
 import de.mpg.imeji.logic.config.ImejiResourceBundle;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
 import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
+import de.mpg.imeji.logic.resource.business.MetadataProfileBusinessController;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Space;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jModel;
 
 /**
@@ -180,6 +185,7 @@ public class Imeji {
     LOGGER.info("... models done!");
     CONFIG = new ImejiConfiguration();
     KeyValueStoreBusinessController.startAllStores();
+    initRsaKeys();
     initadminUser();
     initDefaultMetadataProfile();
   }
@@ -217,6 +223,20 @@ public class Imeji {
   }
 
   /**
+   * Initialize the RSA Keys, used to generate API Keys
+   */
+  private static void initRsaKeys() {
+    try {
+      ImejiRsaKeys.init(Imeji.CONFIG.getRsaPublicKey(), Imeji.CONFIG.getRsaPrivateKey());
+      Imeji.CONFIG.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
+      Imeji.CONFIG.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
+      Imeji.CONFIG.saveConfig();
+    } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+      LOGGER.error("!!! Error initalizing API Key !!!", e);
+    }
+  }
+
+  /**
    * Initialize the system administrator {@link User}, accoring to credentials in imeji.properties
    */
   private static void initadminUser() {
@@ -228,6 +248,7 @@ public class Imeji {
       adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));
       adminUser.getGrants()
           .addAll(AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
+      adminUser.setApiKey(APIKeyAuthentication.generateKey(adminUser.getId(), Integer.MAX_VALUE));
       // create
       UserController uc = new UserController(Imeji.adminUser);
       List<User> admins = uc.retrieveAllAdmins();
@@ -237,7 +258,7 @@ public class Imeji {
         } catch (NotFoundException e) {
           LOGGER.info(
               "!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
-          uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
+          Imeji.adminUser = uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
           LOGGER.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
         }
       } else {
@@ -258,10 +279,10 @@ public class Imeji {
   }
 
   private static void initDefaultMetadataProfile() {
-    ProfileController pc = new ProfileController();
+    MetadataProfileBusinessController metadataProfileBC = new MetadataProfileBusinessController();
     LOGGER.info("Initializing default metadata profile...");
     try {
-      defaultMetadataProfile = pc.initDefaultMetadataProfile();
+      defaultMetadataProfile = metadataProfileBC.initDefaultMetadataProfile();
     } catch (Exception e) {
       LOGGER.error("error retrieving/creating default metadata profile: ", e);
     }

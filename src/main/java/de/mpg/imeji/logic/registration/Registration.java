@@ -3,7 +3,7 @@ package de.mpg.imeji.logic.registration;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.j2j.helper.DateHelper;
 
 /**

@@ -7,12 +7,12 @@ import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * Clean empty {@link MetadataProfile}, which are not referenced by any collection

@@ -7,11 +7,11 @@ import java.net.URI;
 import java.util.Map;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 

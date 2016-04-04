@@ -9,12 +9,12 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.Item;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
-import de.mpg.imeji.logic.vo.Item;
 
 /**
  * Job which read all Items, read for each {@link Item} the size of the original File, and write the

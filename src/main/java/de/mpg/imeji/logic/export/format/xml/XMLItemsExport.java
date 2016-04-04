@@ -6,13 +6,13 @@ package de.mpg.imeji.logic.export.format.xml;
 import java.io.OutputStream;
 import java.util.Collection;
 
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.ingest.vo.Items;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export the information for the ingest issue

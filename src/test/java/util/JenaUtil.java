@@ -16,15 +16,15 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
 
 /*
  * 

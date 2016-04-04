@@ -5,9 +5,9 @@ package de.mpg.imeji.presentation.metadata.editors;
 
 import java.util.List;
 
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
 
 /**

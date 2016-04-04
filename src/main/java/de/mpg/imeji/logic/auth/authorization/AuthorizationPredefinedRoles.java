@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.Grant;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.Grant.GrantType;
 
 /**
  * Defines the predefined roles (for instance the creator of collection) with a {@link List} of

@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbGenericObject;
 import de.mpg.imeji.logic.ingest.vo.Items;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Item;
 
 public class ItemParser {
   /**

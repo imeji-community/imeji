@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbGenericObject;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 
 public class ItemSchemaFactory {
   public Object create(MetadataProfile mdp) {

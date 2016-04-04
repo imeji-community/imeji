@@ -1,6 +1,6 @@
 package de.mpg.imeji.logic.workflow.status;
 
-import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 
 /**
  * Utility class for {@link Status}

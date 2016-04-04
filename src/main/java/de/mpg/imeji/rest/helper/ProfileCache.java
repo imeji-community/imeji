@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 import de.mpg.imeji.rest.api.ProfileService;
 
 /**

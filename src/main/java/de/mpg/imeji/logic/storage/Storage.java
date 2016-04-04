@@ -29,8 +29,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 
 /**
  * Interface for imeji storage

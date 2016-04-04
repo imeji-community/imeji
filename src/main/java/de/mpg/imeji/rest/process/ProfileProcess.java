@@ -1,16 +1,33 @@
 package de.mpg.imeji.rest.process;
 
+import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.OK;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 
 public class ProfileProcess {
+
+  public static JSONResponse createProfile(HttpServletRequest req) {
+    JSONResponse resp;
+    ProfileService service = new ProfileService();
+    try {
+      User u = BasicAuthentication.auth(req);
+      MetadataProfileTO to =
+          (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(req, MetadataProfileTO.class);
+      resp = RestProcessUtils.buildResponse(CREATED.getStatusCode(), service.create(to, u));
+    } catch (ImejiException e) {
+      resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+    }
+    return resp;
+  }
 
   public static JSONResponse readProfile(HttpServletRequest req, String id) {
     JSONResponse resp;
@@ -29,14 +46,14 @@ public class ProfileProcess {
   public static JSONResponse deleteProfile(HttpServletRequest req, String id) {
     JSONResponse resp;
 
-      ProfileService pcrud = new ProfileService();
-      try {
-        User u = BasicAuthentication.auth(req);
-        resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), pcrud.delete(id, u));
-      } catch (Exception e) {
+    ProfileService pcrud = new ProfileService();
+    try {
+      User u = BasicAuthentication.auth(req);
+      resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), pcrud.delete(id, u));
+    } catch (Exception e) {
 
-        resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
-      }
+      resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+    }
     return resp;
 
   }
@@ -73,15 +90,14 @@ public class ProfileProcess {
     ProfileService service = new ProfileService();
     try {
       User u = BasicAuthentication.auth(req);
-      resp =
-          RestProcessUtils.buildResponse(OK.getStatusCode(),
-              service.withdraw(id, u, discardComment));
+      resp = RestProcessUtils.buildResponse(OK.getStatusCode(),
+          service.withdraw(id, u, discardComment));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
     return resp;
   }
-  
+
   /**
    * Returns an item template of a {@link CollectionImeji}
    * 
@@ -94,11 +110,10 @@ public class ProfileProcess {
 
     ProfileService pcrud = new ProfileService();
     try {
-          User u = BasicAuthentication.auth(req);
+      User u = BasicAuthentication.auth(req);
 
-          resp =
-              RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
-                  pcrud.readItemTemplate(id, u));
+      resp =
+          RestProcessUtils.buildResponse(Status.OK.getStatusCode(), pcrud.readItemTemplate(id, u));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }

@@ -17,8 +17,6 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
 import de.mpg.imeji.logic.jobs.ElasticReIndexJob;
@@ -26,6 +24,17 @@ import de.mpg.imeji.logic.jobs.ImportFileFromEscidocToInternalStorageJob;
 import de.mpg.imeji.logic.jobs.RefreshFileSizeJob;
 import de.mpg.imeji.logic.jobs.StorageUsageAnalyseJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.resource.business.MetadataProfileBusinessController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -36,14 +45,6 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.util.PropertyReader;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -87,12 +88,12 @@ public class AdminBean {
    * @throws ImejiException
    */
   public String getDefaultProfileId() throws ImejiException {
-    ProfileController c = new ProfileController();
-    MetadataProfile p = c.retrieveDefaultProfile();
+    MetadataProfileBusinessController metadataProfileBC = new MetadataProfileBusinessController();
+    MetadataProfile p = metadataProfileBC.retrieveDefaultProfile();
     if (p.getStatus() == Status.PENDING) {
-      c.release(p, sb.getUser());
+      new ProfileController().release(p, sb.getUser());
     }
-    return c.retrieveDefaultProfile().getIdString();
+    return metadataProfileBC.retrieveDefaultProfile().getIdString();
   }
 
   /**

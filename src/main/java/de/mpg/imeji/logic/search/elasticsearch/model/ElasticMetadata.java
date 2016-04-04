@@ -1,14 +1,14 @@
 package de.mpg.imeji.logic.search.elasticsearch.model;
 
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.metadata.ConePerson;
+import de.mpg.imeji.logic.resource.vo.metadata.Date;
+import de.mpg.imeji.logic.resource.vo.metadata.Geolocation;
+import de.mpg.imeji.logic.resource.vo.metadata.License;
+import de.mpg.imeji.logic.resource.vo.metadata.Link;
+import de.mpg.imeji.logic.resource.vo.metadata.Publication;
+import de.mpg.imeji.logic.resource.vo.metadata.Text;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 
 /**
  * The indexed {@link Metadata}<br/>
@@ -50,8 +50,8 @@ public final class ElasticMetadata extends ElasticPerson {
       this.number = Double.NaN;
       this.uri = null;
       this.location = null;
-    } else if (md instanceof de.mpg.imeji.logic.vo.predefinedMetadata.Number) {
-      this.number = ((de.mpg.imeji.logic.vo.predefinedMetadata.Number) md).getNumber();
+    } else if (md instanceof de.mpg.imeji.logic.resource.vo.metadata.Number) {
+      this.number = ((de.mpg.imeji.logic.resource.vo.metadata.Number) md).getNumber();
       this.text = null;
       this.uri = null;
       this.location = null;

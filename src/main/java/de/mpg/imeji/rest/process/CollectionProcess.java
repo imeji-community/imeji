@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response.Status;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;

@@ -8,8 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,11 +16,9 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
-import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.ImejiRsaKeys;
 import de.mpg.imeji.logic.jobs.ReadMaxPlanckIPMappingJob;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.util.IdentifierUtil;
@@ -44,7 +40,6 @@ public class InitializerServlet extends HttpServlet {
       Imeji.locksSurveyor.start();
       initModel();
       Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
-      initRsaKeys();
     } catch (Exception e) {
       LOGGER.error("imeji didn't initialize correctly", e);
     }
@@ -62,19 +57,6 @@ public class InitializerServlet extends HttpServlet {
     runMigration();
   }
 
-  /**
-   * Initialize the RSA Keys, used to generate API Keys
-   */
-  private void initRsaKeys() {
-    try {
-      ImejiRsaKeys.init(Imeji.CONFIG.getRsaPublicKey(), Imeji.CONFIG.getRsaPrivateKey());
-      Imeji.CONFIG.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
-      Imeji.CONFIG.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
-      Imeji.CONFIG.saveConfig();
-    } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-      LOGGER.error("!!! Error initalizing API Key !!!", e);
-    }
-  }
 
   /**
    * look to the migration File (migration.txt)

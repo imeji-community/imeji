@@ -6,10 +6,10 @@ package de.mpg.imeji.presentation.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 import de.mpg.imeji.logic.util.MetadataFactory;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * Session with objects related to {@link CollectionImeji}

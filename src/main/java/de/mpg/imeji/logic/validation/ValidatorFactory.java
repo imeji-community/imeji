@@ -1,5 +1,12 @@
 package de.mpg.imeji.logic.validation;
 
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Space;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.validation.impl.AlbumValidator;
 import de.mpg.imeji.logic.validation.impl.CollectionValidator;
 import de.mpg.imeji.logic.validation.impl.ItemValidator;
@@ -8,13 +15,6 @@ import de.mpg.imeji.logic.validation.impl.ProfileValidator;
 import de.mpg.imeji.logic.validation.impl.PseudoValidator;
 import de.mpg.imeji.logic.validation.impl.SpaceValidator;
 import de.mpg.imeji.logic.validation.impl.UserValidator;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Factory for {@link Validator}

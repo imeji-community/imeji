@@ -10,11 +10,11 @@ import org.jose4j.lang.JoseException;
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.resource.controller.UserController;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.UserTO;
 

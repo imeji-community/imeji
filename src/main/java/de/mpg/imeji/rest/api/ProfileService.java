@@ -9,13 +9,15 @@ import com.google.common.collect.Lists;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.resource.controller.ProfileController;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
@@ -30,15 +32,19 @@ import de.mpg.imeji.rest.to.SearchResultTO;
 public class ProfileService implements API<MetadataProfileTO> {
 
   public static final String DEFAULT_METADATA_PROFILE_ID = "default";
+  private ProfileController profileController = new ProfileController();
 
   public MetadataProfile read(URI uri) throws ImejiException {
-    ProfileController pcon = new ProfileController();
-    return pcon.retrieve(uri, Imeji.adminUser);
+    return profileController.retrieve(uri, Imeji.adminUser);
   }
 
   @Override
-  public MetadataProfileTO create(MetadataProfileTO o, User u) {
-    return null;
+  public MetadataProfileTO create(MetadataProfileTO to, User u) throws ImejiException {
+    MetadataProfile vo = new MetadataProfile();
+    ReverseTransferObjectFactory.transferMetadataProfile(to, vo, TRANSFER_MODE.CREATE);
+    vo = profileController.create(vo, u);
+    TransferObjectFactory.transferMetadataProfile(vo, to);
+    return to;
   }
 
   @Override

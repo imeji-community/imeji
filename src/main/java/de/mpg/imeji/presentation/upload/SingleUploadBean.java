@@ -28,13 +28,21 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.resource.business.MetadataProfileBusinessController;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.util.ImejiFactory;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.MetadataSet;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
@@ -46,14 +54,6 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.util.ImejiFactory;
 import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
@@ -373,9 +373,9 @@ public class SingleUploadBean implements Serializable {
     // Add current user as Author
     newC.getMetadata().getPersons().add(creatorUser);
 
-    ProfileController pc = new ProfileController();
-    newC.setProfile(pc.retrieveDefaultProfile().getId());
-    URI id = cc.create(newC, pc.retrieveDefaultProfile(), user,
+    MetadataProfileBusinessController metadataProfileBC = new MetadataProfileBusinessController();
+    newC.setProfile(metadataProfileBC.retrieveDefaultProfile().getId());
+    URI id = cc.create(newC, metadataProfileBC.retrieveDefaultProfile(), user,
         MetadataProfileCreationMethod.REFERENCE, sb.getSelectedSpaceString());
     newC.setId(id);
     return newC;

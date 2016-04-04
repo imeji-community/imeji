@@ -4,19 +4,19 @@ import java.net.URI;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Organization;
+import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.metadata.ConePerson;
+import de.mpg.imeji.logic.resource.vo.metadata.Date;
+import de.mpg.imeji.logic.resource.vo.metadata.Geolocation;
+import de.mpg.imeji.logic.resource.vo.metadata.License;
+import de.mpg.imeji.logic.resource.vo.metadata.Link;
+import de.mpg.imeji.logic.resource.vo.metadata.Number;
+import de.mpg.imeji.logic.resource.vo.metadata.Publication;
+import de.mpg.imeji.logic.resource.vo.metadata.Text;
 import de.mpg.j2j.misc.LocalizedString;
 
 public class MetadataAndProfileHelper {
@@ -36,8 +36,8 @@ public class MetadataAndProfileHelper {
         md = newT;
         break;
       case NUMBER:
-        de.mpg.imeji.logic.vo.predefinedMetadata.Number newNT =
-            new de.mpg.imeji.logic.vo.predefinedMetadata.Number(999.9);
+        de.mpg.imeji.logic.resource.vo.metadata.Number newNT =
+            new de.mpg.imeji.logic.resource.vo.metadata.Number(999.9);
         md = newNT;
         break;
       case CONE_PERSON:
@@ -55,8 +55,8 @@ public class MetadataAndProfileHelper {
         md = newCone;
         break;
       case DATE:
-        de.mpg.imeji.logic.vo.predefinedMetadata.Date newDT =
-            new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
+        de.mpg.imeji.logic.resource.vo.metadata.Date newDT =
+            new de.mpg.imeji.logic.resource.vo.metadata.Date();
         newDT.setDate("2015-01-01");
         md = newDT;
         break;

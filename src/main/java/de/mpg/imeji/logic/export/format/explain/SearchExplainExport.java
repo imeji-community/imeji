@@ -28,10 +28,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import de.mpg.imeji.logic.export.format.ExplainExport;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.search.model.SearchIndex;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Explain the index for the search

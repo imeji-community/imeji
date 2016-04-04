@@ -8,9 +8,9 @@ import java.util.HashMap;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.export.format.RDFExport;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link Album}

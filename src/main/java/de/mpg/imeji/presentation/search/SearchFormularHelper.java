@@ -6,14 +6,14 @@ package de.mpg.imeji.presentation.search;
 import java.net.URI;
 import java.util.Collection;
 
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchMetadata;
 import de.mpg.imeji.logic.search.model.SearchPair;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 
 public class SearchFormularHelper {
   public static String getCollectionId(SearchGroup searchGroup) {

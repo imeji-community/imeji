@@ -36,19 +36,19 @@ import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.logic.resource.controller.AlbumController;
+import de.mpg.imeji.logic.resource.controller.CollectionController;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.controller.SpaceController;
+import de.mpg.imeji.logic.resource.vo.Album;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.Grant;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.UserGroup;
+import de.mpg.imeji.logic.resource.vo.Grant.GrantType;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Utility class for the package auth
@@ -212,7 +212,7 @@ public class AuthUtil {
   }
 
   /**
-   * Return the {@link List} of uri of all {@link de.mpg.imeji.logic.vo.MetadataProfile}, the
+   * Return the {@link List} of uri of all {@link de.mpg.imeji.logic.resource.vo.MetadataProfile}, the
    * {@link User} is allowed to see
    * 
    * @param user

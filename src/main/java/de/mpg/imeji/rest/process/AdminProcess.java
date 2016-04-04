@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.imeji.rest.to.UserTO;

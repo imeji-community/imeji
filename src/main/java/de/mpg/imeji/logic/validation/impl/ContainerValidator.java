@@ -3,9 +3,9 @@ package de.mpg.imeji.logic.validation.impl;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.resource.vo.Container;
+import de.mpg.imeji.logic.resource.vo.ContainerAdditionalInfo;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 
 /**
  * Abstract call for common container methods

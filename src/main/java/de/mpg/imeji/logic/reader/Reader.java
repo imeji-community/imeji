@@ -27,7 +27,7 @@ package de.mpg.imeji.logic.reader;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.resource.vo.User;
 
 /**
  * Object reader interface for imeji. Important: {@link Reader} doens't check Authorization. Please

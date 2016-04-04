@@ -3,7 +3,7 @@ package de.mpg.imeji.logic.search.elasticsearch.model;
 import java.net.URI;
 import java.util.List;
 
-import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.resource.vo.Album;
 
 /**
  * The Elastic version of an {@link Album}

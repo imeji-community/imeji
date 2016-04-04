@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.registration.RegistrationBusinessController;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Item;
 
 /**
  * Job which read all Items, read for each {@link Item} the size of the original File, and write the

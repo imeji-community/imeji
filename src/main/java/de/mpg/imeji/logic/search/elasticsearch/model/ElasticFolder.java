@@ -1,6 +1,6 @@
 package de.mpg.imeji.logic.search.elasticsearch.model;
 
-import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.resource.vo.CollectionImeji;
 
 /**
  * The elastic Version of a {@link CollectionImeji}

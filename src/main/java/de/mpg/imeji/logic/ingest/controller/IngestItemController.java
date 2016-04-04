@@ -10,18 +10,18 @@ import javax.xml.bind.JAXBException;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.ingest.mapper.ItemMapperTask;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
 import de.mpg.imeji.logic.ingest.validator.ItemContentValidator;
+import de.mpg.imeji.logic.resource.controller.ItemController;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.MetadataSet;
+import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
 
 
 /**

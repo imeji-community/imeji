@@ -37,8 +37,8 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
 
+import de.mpg.imeji.logic.resource.vo.Item;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.vo.Item;
 
 /**
  * User {@link Tika} to extract metadata out of the image

@@ -3,12 +3,12 @@ package de.mpg.imeji.logic.workflow;
 import java.util.Calendar;
 
 import de.mpg.imeji.exceptions.WorkflowException;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Properties;
+import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.resource.vo.Item.Visibility;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 

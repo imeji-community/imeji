@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.resource.vo.Metadata;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
 import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 
 /**
  * {@link Validator} for an {@link Item}. Only working when {@link MetadataProfile} is passed

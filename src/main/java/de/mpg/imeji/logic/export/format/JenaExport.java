@@ -16,8 +16,8 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export data as they are in stored in Jena

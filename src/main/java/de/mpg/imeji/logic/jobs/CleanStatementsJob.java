@@ -10,11 +10,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.resource.vo.Statement;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.annotations.j2jId;
 

@@ -25,7 +25,6 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /*
  * 
@@ -74,8 +73,6 @@ public class JenaUtil {
   public static void initJena() {
 
     try {
-      // Init PropertyBean
-      new PropertyBean();
       // Read tdb location
       TDB_PATH = PropertyReader.getProperty("imeji.tdb.path");
       // remove old Database

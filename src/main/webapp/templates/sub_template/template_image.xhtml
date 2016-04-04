@@ -74,7 +74,9 @@
 					<ui:include src="../component/images/image_details.xhtml"/>
 				</ui:fragment>
 			</h:panelGroup>
-		
+			
+		<dialog:confirmationDialog submitAction="makePublic" bean="#{itemBean}" confirmationText="#{msg.confirmation_make_public}?" submitLabel="#{lbl.make_public}" dialogId="makePublicMenuItemDialog" rendered="#{Auth.admin(itemBean.image)}"/>
+		<dialog:confirmationDialog submitAction="makePrivate" bean="#{itemBean}" confirmationText="#{msg.confirmation_make_private}?" submitLabel="#{lbl.make_private}" dialogId="makePrivateMenuItemDialog" rendered="#{Auth.admin(itemBean.image)}"/>
 		<dialog:confirmationDialog submitAction="delete" bean="#{itemBean}" confirmationText="#{msg.confirmation_delete_item}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(itemBean.image)}"/>
 		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{itemBean}" confirmationText="#{msg.confirmation_withdraw_item}?" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{Auth.admin(itemBean.image) and WorkflowBean.withdraw(itemBean.image)}"/>
 		

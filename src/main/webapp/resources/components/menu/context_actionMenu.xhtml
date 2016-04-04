@@ -29,7 +29,7 @@
 		<ui:param name="deleteVO" value="#{Auth.delete(cc.attrs.vo)}"/>
 		<ui:param name="updateVO" value="#{Auth.update(cc.attrs.vo)}"/>
 		<ui:param name="updateContentVO" value="#{Auth.updateContent(cc.attrs.vo)}"/>
-		
+
 		<div class="#{cc.attrs.menuClass.trim()}">		
 			<ui:fragment rendered="#{Auth.loggedIn and (Auth.sessionUser.allowedToCreateCollection or Configuration.albumsEnabled)}">
 				<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
@@ -224,6 +224,20 @@
 											<li>
 												<h:outputLink id="actionMenuDiscardItem" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
 													<h:outputText value="#{lbl.item_withdraw}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+										<ui:fragment rendered="#{adminVO and WorkflowBean.release(cc.attrs.vo)}">
+											<li>
+												<h:outputLink id="actionMenuMakePublic" value="#" onclick="openDialog('makePublicMenuItemDialog');" title="#{lbl.make_public}">
+													<h:outputText value="#{lbl.make_public}"/>
+												</h:outputLink>
+											</li>
+										</ui:fragment>
+										<ui:fragment rendered="#{adminVO and WorkflowBean.withdraw(cc.attrs.vo)}">
+											<li>
+												<h:outputLink id="actionMenuMakePrivate" value="#" onclick="openDialog('makePrivateMenuItemDialog');" title="#{lbl.make_private}">
+													<h:outputText value="#{lbl.make_private}"/>
 												</h:outputLink>
 											</li>
 										</ui:fragment>

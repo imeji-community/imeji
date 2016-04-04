@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
@@ -107,6 +108,9 @@ public class ObjectHelper {
       if (path.contains("/" + type.name().toLowerCase())) {
         return type;
       }
+    }
+    if (StringUtils.containsIgnoreCase(path, ObjectType.PROFILE.name())) {
+      return ObjectType.PROFILE;
     }
     return null;
   }

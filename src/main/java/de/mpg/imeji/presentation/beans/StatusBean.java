@@ -16,9 +16,10 @@ import de.mpg.imeji.logic.resource.controller.UserGroupController;
 import de.mpg.imeji.logic.resource.vo.Item;
 import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 import de.mpg.imeji.logic.resource.vo.Properties;
+import de.mpg.imeji.logic.resource.vo.Properties.Status;
 import de.mpg.imeji.logic.resource.vo.User;
 import de.mpg.imeji.logic.resource.vo.UserGroup;
-import de.mpg.imeji.logic.resource.vo.Properties.Status;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -164,7 +165,8 @@ public class StatusBean implements Serializable {
    * @return
    */
   private String initLinkToSharePage(URI uri) {
-    return navigation.getApplicationUri() + uri.getPath() + "/" + Navigation.SHARE.getPath();
+    return navigation.getApplicationUrl() + ObjectHelper.getObjectType(uri).name().toLowerCase()
+        + "/" + ObjectHelper.getId(uri) + "/" + Navigation.SHARE.getPath();
   }
 
   /**

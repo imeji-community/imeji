@@ -97,11 +97,9 @@ public class SingleUploadBean implements Serializable {
           sus.reset();
           isAllowedToUpload();
         } else if (UrlHelper.getParameterBoolean("start")) {
-          // loadCollections(false);
           upload();
           // loadCollections(true);
         } else if (UrlHelper.getParameterBoolean("done") && !UrlHelper.hasParameter("h")) {
-          // loadCollections(false);
           loadCollections();
           prepareEditor();
         }
@@ -342,7 +340,7 @@ public class SingleUploadBean implements Serializable {
     CollectionController cc = new CollectionController();
     SearchQuery sq = new SearchQuery();
     SortCriterion sortCriterion =
-        new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.DESCENDING);
+        new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.ASCENDING);
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
     return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
   }

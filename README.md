@@ -6,7 +6,7 @@
 <p>The software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</p>
 <p>All objects within the imeji software have a unique identifier and therefore can be referenced in publications or reused in other contexts (dissemination). Large collections can be organized in different albums to focus special items of interest.</p>
 <p>For a full description of the imeji software and detailed information of the functionalities please visit the <a href="http://imeji.org/" target="_blank" title="imeji software description">imeji software</a> page.</p>
-<p>imeji is developed by the <a href="http://imeji.org/community/" target="_blank" title="imeji community">imeji community</a> under the <a href="http://hub.opensolaris.org/bin/download/Main/licensing/cddllicense.txt" target="_blank">CDDL-License</a>.</p>
+<p>imeji is developed by the <a href="http://imeji.org/community/" target="_blank" title="imeji community">imeji community</a> under the <a href="https://opensource.org/licenses/cddl1.php" target="_blank">CDDL-License</a>.</p>
 
 <h2>REST API v1</h2>
 <p>See <a href="https://github.com/imeji-community/imeji/wiki/A_Home-imeji-API-V1">REST API v1 (imeji Community wiki)</a><p>

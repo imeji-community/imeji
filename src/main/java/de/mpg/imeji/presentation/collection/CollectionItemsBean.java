@@ -13,19 +13,19 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.doi.DoiService;
-import de.mpg.imeji.logic.resource.controller.CollectionController;
-import de.mpg.imeji.logic.resource.controller.ItemController;
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.Item;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ItemsBean;
@@ -70,7 +70,7 @@ public class CollectionItemsBean extends ItemsBean {
     collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
     this.profile = ObjectLoader.loadProfile(collection.getProfile(), sb.getUser());
     // Initialize the metadata labels
-    MetadataLabelsBean.getBean().init(profile);
+    metadataLabels = new MetadataLabels(profile, sb.getLocale());
     // browse context must be initialized before browseinit(), since the browseinit() will check if
     // the selected
     // items must be removed

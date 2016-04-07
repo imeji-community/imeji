@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import de.mpg.imeji.logic.ingest.template.DuplicatedObject;
-import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.vo.Item;
 
 /**
  * @author hnguyen

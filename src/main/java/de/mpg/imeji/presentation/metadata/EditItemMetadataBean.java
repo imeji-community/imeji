@@ -8,33 +8,38 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
-import de.mpg.imeji.logic.resource.controller.ItemController;
-import de.mpg.imeji.logic.resource.util.ImejiFactory;
-import de.mpg.imeji.logic.resource.util.MetadataProfileUtil;
-import de.mpg.imeji.logic.resource.vo.Item;
-import de.mpg.imeji.logic.resource.vo.Metadata;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
+import de.mpg.imeji.logic.controller.util.MetadataProfileUtil;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.SuperViewBean;
 import de.mpg.imeji.presentation.history.HistorySession;
-import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
-import de.mpg.imeji.presentation.metadata.editors.MetadataMultipleEditor;
+import de.mpg.imeji.presentation.metadata.editors.AbstractMetadataEditor;
+import de.mpg.imeji.presentation.metadata.editors.MultipleEditor;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -46,19 +51,22 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * 
  * @author saquet
  */
-public class EditItemMetadataBean {
+@ManagedBean(name = "EditItemMetadataBean")
+@ViewScoped
+public class EditItemMetadataBean extends SuperViewBean {
+  private static final Logger LOGGER = Logger.getLogger(EditItemMetadataBean.class);
   // objects
   private List<Item> allItems;
   // The Metadateditor which is used to edit
-  private MetadataEditor editor = null;
+  private AbstractMetadataEditor editor = null;
   // The editor before the user made any modification
-  private MetadataEditor noChangesEditor = null;
+  private AbstractMetadataEditor noChangesEditor = null;
   private MetadataProfile profile = null;
   private Statement statement = null;
   /**
-   * the {@link EditorItemBean} used to for the editor and which will be copied to all {@link Item}
+   * the {@link ItemWrapper} used to for the editor and which will be copied to all {@link Item}
    */
-  private EditorItemBean editorItem = null;
+  private ItemWrapper editorItem = null;
   // menus
   private List<SelectItem> statementMenu = null;
   private String selectedStatementName = null;
@@ -70,12 +78,13 @@ public class EditItemMetadataBean {
   private boolean isProfileWithStatements = true;
   private int lockedImages = 0;
   private boolean initialized = false;
-  private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-  private static final Logger LOGGER = Logger.getLogger(EditItemMetadataBean.class);
   // url parameters
   private String type = "all";
   private String query = "";
   private String collectionId = null;
+  private MetadataLabels metadataLabels;
+  @ManagedProperty(value = "#{SessionBean.selected}")
+  private List<String> selectedItems;
 
   /**
    * Bean for batch and multiple metadata editor
@@ -101,9 +110,9 @@ public class EditItemMetadataBean {
         initProfileAndStatement(allItems);
         if (profile == null) {
           redirectToCollectionItemsPage(collectionId);
-          BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("profile_empty", session.getLocale()));
+          BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("profile_empty", getLocale()));
         }
-        MetadataLabelsBean.getBean().init(profile);
+        metadataLabels = new MetadataLabels(profile, getLocale());
         initStatementsMenu();
         initEmtpyEditorItem();
         initEditor(new ArrayList<Item>(allItems));
@@ -112,11 +121,11 @@ public class EditItemMetadataBean {
         initModeMenu();
       } else {
         redirectToCollectionItemsPage(collectionId);
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("no_items_to_edit", session.getLocale()));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("no_items_to_edit", getLocale()));
       }
     } catch (Exception e) {
       redirectToView();
-      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + " " + e);
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", getLocale()) + " " + e);
       LOGGER.error("Error init Edit page", e);
     }
   }
@@ -165,7 +174,7 @@ public class EditItemMetadataBean {
    */
   private List<String> findItems() throws ImejiException {
     if ("selected".equals(type)) {
-      return getSelectedItems();
+      return selectedItems;
     } else if ("all".equals(type) && query != null && collectionId != null) {
       return searchItems();
     }
@@ -181,13 +190,13 @@ public class EditItemMetadataBean {
     profile = null;
     if (items != null && items.size() > 0) {
       profile =
-          ObjectLoader.loadProfile(items.get(0).getMetadataSet().getProfile(), session.getUser());
+          ObjectLoader.loadProfile(items.get(0).getMetadataSet().getProfile(), getSessionUser());
     }
     statement = getSelectedStatement();
   }
 
   /**
-   * Init the {@link MetadataEditor}
+   * Init the {@link AbstractMetadataEditor}
    * 
    * @param items
    */
@@ -195,26 +204,27 @@ public class EditItemMetadataBean {
     try {
       isProfileWithStatements = true;
       if (statement != null) {
-        editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
+        editor = new MultipleEditor(items, profile, getSelectedStatement(), getSessionUser(),
+            getLocale());
         ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
       } else {
         LOGGER.error("No statement found");
         isProfileWithStatements = false;
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("profile_empty", session.getLocale()));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("profile_empty", getLocale()));
       }
     } catch (Exception e) {
-      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + " " + e);
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", getLocale()) + " " + e);
       LOGGER.error("Error init Edit page", e);
     }
   }
 
   /**
-   * Initialize the {@link EditorItemBean} with a new emtpy one;
+   * Initialize the {@link ItemWrapper} with a new emtpy one;
    */
   private void initEmtpyEditorItem() {
     Item emtpyItem = new Item();
     emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-    editorItem = new EditorItemBean(emtpyItem, profile, true);
+    editorItem = new ItemWrapper(emtpyItem, profile, true);
     editorItem.getMds().addEmtpyValues();
   }
 
@@ -225,14 +235,14 @@ public class EditItemMetadataBean {
   private void initModeMenu() {
     selectedMode = "basic";
     modeRadio = new ArrayList<SelectItem>();
-    modeRadio.add(new SelectItem("basic",
-        Imeji.RESOURCE_BUNDLE.getMessage("editor_basic", session.getLocale())));
+    modeRadio.add(
+        new SelectItem("basic", Imeji.RESOURCE_BUNDLE.getMessage("editor_basic", getLocale())));
     if (this.statement.getMaxOccurs().equals("unbounded")) {
-      modeRadio.add(new SelectItem("append",
-          Imeji.RESOURCE_BUNDLE.getMessage("editor_append", session.getLocale())));
+      modeRadio.add(
+          new SelectItem("append", Imeji.RESOURCE_BUNDLE.getMessage("editor_append", getLocale())));
     }
     modeRadio.add(new SelectItem("overwrite",
-        Imeji.RESOURCE_BUNDLE.getMessage("editor_overwrite", session.getLocale())));
+        Imeji.RESOURCE_BUNDLE.getMessage("editor_overwrite", getLocale())));
   }
 
   /**
@@ -246,8 +256,7 @@ public class EditItemMetadataBean {
         // statement. If it has a parent, then it
         // will be editable by choosing the parent in the menu
         statementMenu.add(new SelectItem(s.getId().toString(),
-            ((MetadataLabelsBean) BeanHelper.getSessionBean(MetadataLabelsBean.class))
-                .getInternationalizedLabels().get(s.getId())));
+            metadataLabels.getInternationalizedLabels().get(s.getId())));
       }
     }
   }
@@ -287,20 +296,7 @@ public class EditItemMetadataBean {
    */
   public List<Item> loaditems(List<String> uris) throws ImejiException {
     ItemController itemController = new ItemController();
-    return (List<Item>) itemController.retrieveBatch(uris, -1, 0, session.getUser());
-  }
-
-  /**
-   * Load the selected item from the session
-   * 
-   * @return
-   */
-  public List<String> getSelectedItems() {
-    List<String> l = new ArrayList<String>(session.getSelected().size());
-    for (String uri : session.getSelected()) {
-      l.add(uri);
-    }
-    return l;
+    return (List<Item>) itemController.retrieveBatch(uris, -1, 0, getSessionUser());
   }
 
   /**
@@ -313,7 +309,7 @@ public class EditItemMetadataBean {
     SearchQuery sq = SearchQueryParser.parseStringQuery(query);
     ItemController itemController = new ItemController();
     SearchResult sr =
-        itemController.search(URI.create(collectionId), sq, null, session.getUser(), null, -1, 0);
+        itemController.search(URI.create(collectionId), sq, null, getSessionUser(), null, -1, 0);
     return sr.getResults();
   }
 
@@ -354,11 +350,18 @@ public class EditItemMetadataBean {
    * @throws IOException
    */
   public void saveAndRedirect() throws IOException {
-    if (editor.save()) {
+    try {
+      editor.save();
       redirectToView();
-    } else {
-      reload();
+      return;
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, getLocale());
+      LOGGER.error("Error saving batch editor", e);
+    } catch (ImejiException e) {
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", getLocale()));
+      LOGGER.error("Error saving batch editor", e);
     }
+    reload();
   }
 
   /**
@@ -382,7 +385,7 @@ public class EditItemMetadataBean {
     lockedImages = 0;
     for (int i = 0; i < uris.size(); i++) {
       try {
-        Locks.lock(new Lock(uris.get(i), session.getUser().getEmail()));
+        Locks.lock(new Lock(uris.get(i), getSessionUser().getEmail()));
       } catch (Exception e) {
         uris.remove(i);
         lockedImages++;
@@ -396,7 +399,7 @@ public class EditItemMetadataBean {
    */
   private void unlockImages() {
     SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    for (EditorItemBean eib : editor.getItems()) {
+    for (ItemWrapper eib : editor.getItems()) {
       Locks.unLock(new Lock(eib.asItem().getId().toString(), sb.getUser().getEmail()));
     }
   }
@@ -407,7 +410,7 @@ public class EditItemMetadataBean {
    * @return
    */
   public void addToAll() {
-    for (EditorItemBean eib : editor.getItems()) {
+    for (ItemWrapper eib : editor.getItems()) {
       if ("overwrite".equals(selectedMode)) {
         // remove all metadata which have the same statement
         eib.clear(statement);
@@ -466,7 +469,7 @@ public class EditItemMetadataBean {
    * @return
    */
   public String clearAll() {
-    for (EditorItemBean eib : editor.getItems()) {
+    for (ItemWrapper eib : editor.getItems()) {
       eib.clear(statement);
       eib.getMds().addEmtpyValues();
     }
@@ -474,15 +477,15 @@ public class EditItemMetadataBean {
   }
 
   /**
-   * fill all emtpy Metadata of passed {@link EditorItemBean} with the values of the current one
+   * fill all emtpy Metadata of passed {@link ItemWrapper} with the values of the current one
    * 
    * @param im
    * @return
    */
-  private EditorItemBean pasteMetadataIfEmtpy(EditorItemBean eib) {
-    List<SuperMetadataBean> list =
+  private ItemWrapper pasteMetadataIfEmtpy(ItemWrapper eib) {
+    List<MetadataWrapper> list =
         fillEmtpyValues(eib.getMds().getTree().getList(), editorItem.getMds().getTree().getList());
-    list = SuperMetadataTree.resetPosition(list);
+    list = MetadataWrapperTree.resetPosition(list);
     eib.getMds().initTreeFromList(list);
     return eib;
   }
@@ -493,12 +496,12 @@ public class EditItemMetadataBean {
    * @param l1
    * @param l2
    */
-  private List<SuperMetadataBean> fillEmtpyValues(List<SuperMetadataBean> l1,
-      List<SuperMetadataBean> l2) {
-    List<SuperMetadataBean> filled = new ArrayList<SuperMetadataBean>();
-    for (SuperMetadataBean md1 : l1) {
+  private List<MetadataWrapper> fillEmtpyValues(List<MetadataWrapper> l1,
+      List<MetadataWrapper> l2) {
+    List<MetadataWrapper> filled = new ArrayList<MetadataWrapper>();
+    for (MetadataWrapper md1 : l1) {
       boolean emtpy1 = MetadataHelper.isEmpty(md1.asMetadata());
-      for (SuperMetadataBean md2 : l2) {
+      for (MetadataWrapper md2 : l2) {
         boolean emtpy2 = MetadataHelper.isEmpty(md2.asMetadata());
         if (md1.getStatementId().equals(md2.getStatementId())) {
           if (emtpy1 && !emtpy2)
@@ -513,16 +516,16 @@ public class EditItemMetadataBean {
 
   /**
    * Add an emtpy {@link Metadata} accroding to the current {@link Statement} to the
-   * {@link EditorItemBean}. If the {@link EditorItemBean} has already an emtpy {@link Metadata} for
-   * this {@link Statement}, then don't had it.
+   * {@link ItemWrapper}. If the {@link ItemWrapper} has already an emtpy {@link Metadata} for this
+   * {@link Statement}, then don't had it.
    * 
    * @param eib
    */
-  private void appendEmtpyMetadata(EditorItemBean eib) {
-    List<SuperMetadataBean> l = eib.getMds().getTree().getList();
+  private void appendEmtpyMetadata(ItemWrapper eib) {
+    List<MetadataWrapper> l = eib.getMds().getTree().getList();
     for (Statement st : profile.getStatements())
-      l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
-    eib.getMds().initTreeFromList(SuperMetadataTree.resetPosition(l));
+      l.add(new MetadataWrapper(MetadataFactory.createMetadata(st), st));
+    eib.getMds().initTreeFromList(MetadataWrapperTree.resetPosition(l));
   }
 
   /**
@@ -581,11 +584,11 @@ public class EditItemMetadataBean {
     this.imagePosition = imagePosition;
   }
 
-  public MetadataEditor getEditor() {
+  public AbstractMetadataEditor getEditor() {
     return editor;
   }
 
-  public void setEditor(MetadataEditor editor) {
+  public void setEditor(AbstractMetadataEditor editor) {
     this.editor = editor;
   }
 
@@ -676,14 +679,14 @@ public class EditItemMetadataBean {
   /**
    * @return the editorItemBean
    */
-  public EditorItemBean getEditorItem() {
+  public ItemWrapper getEditorItem() {
     return editorItem;
   }
 
   /**
    * @param editorItemBean the editorItemBean to set
    */
-  public void setEditorItem(EditorItemBean editorItemBean) {
+  public void setEditorItem(ItemWrapper editorItemBean) {
     this.editorItem = editorItemBean;
   }
 
@@ -693,5 +696,17 @@ public class EditItemMetadataBean {
     FacesContext.getCurrentInstance().getExternalContext()
         .redirect(navigation.getApplicationSpaceUrl() + navigation.getCollectionPath() + "/"
             + ObjectHelper.getId(URI.create(collectionId)) + "/" + navigation.getBrowsePath());
+  }
+
+  public MetadataLabels getMetadataLabels() {
+    return metadataLabels;
+  }
+
+  public List<String> getSelectedItems() {
+    return selectedItems;
+  }
+
+  public void setSelectedItems(List<String> selectedItems) {
+    this.selectedItems = selectedItems;
   }
 }

@@ -7,11 +7,11 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.Item;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
-import de.mpg.imeji.presentation.metadata.MetadataSetBean;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
+import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
 
 
 @ManagedBean(name = "SingleUploadSession")
@@ -21,10 +21,10 @@ public class SingleUploadSession implements Serializable {
   private String selectedCollectionItem;
   private CollectionImeji collection;
   private MetadataProfile profile;
-  private MetadataLabelsBean labels;
+  private MetadataLabels labels;
   private IngestImage ingestImage;
   private List<String> techMD = new ArrayList<String>();
-  private MetadataSetBean mdSetBean;
+  private MetadataSetWrapper mdSetBean;
   private boolean uploadFileToTemp = false;
   private boolean uploadFileToItem = false;
   private Item uploadedItem;
@@ -88,11 +88,11 @@ public class SingleUploadSession implements Serializable {
     return uploadFileToTemp;
   }
 
-  public MetadataSetBean getMdSetBean() {
+  public MetadataSetWrapper getMdSetBean() {
     return mdSetBean;
   }
 
-  public void setMdSetBean(MetadataSetBean mdSetBean) {
+  public void setMdSetBean(MetadataSetWrapper mdSetBean) {
     this.mdSetBean = mdSetBean;
   }
 
@@ -116,11 +116,11 @@ public class SingleUploadSession implements Serializable {
     this.collection = collection;
   }
 
-  public MetadataLabelsBean getLabels() {
+  public MetadataLabels getLabels() {
     return labels;
   }
 
-  public void setLabels(MetadataLabelsBean labels) {
+  public void setLabels(MetadataLabels labels) {
     this.labels = labels;
   }
 

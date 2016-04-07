@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.junit.Test;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.resource.business.StatisticsBusinessController;
+import de.mpg.imeji.logic.controller.business.StatisticsBusinessController;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.DefaultItemService;
 import de.mpg.imeji.rest.process.RestProcessUtils;

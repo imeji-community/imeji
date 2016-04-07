@@ -4,16 +4,15 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.logic.resource.vo.Organization;
-import de.mpg.imeji.logic.resource.vo.Person;
 import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 
 /**
  * {@link Validator} for {@link CollectionImeji}
@@ -23,7 +22,7 @@ import de.mpg.imeji.logic.validation.Validator;
  */
 public class CollectionValidator extends ContainerValidator implements Validator<CollectionImeji> {
 
-  private UnprocessableError exception = new UnprocessableError(new HashSet<String>());
+  private UnprocessableError exception = new UnprocessableError();
   private static final Pattern DOI_VALIDATION_PATTERN = Pattern.compile("10\\.\\d+\\/\\S+");
 
   @Override
@@ -33,7 +32,6 @@ public class CollectionValidator extends ContainerValidator implements Validator
 
   @Override
   public void validate(CollectionImeji collection, Method m) throws UnprocessableError {
-    exception = new UnprocessableError(new HashSet<String>());
     setValidateForMethod(m);
     validateContainerMetadata(collection);
     validateCollectionPersons(collection);
@@ -57,7 +55,7 @@ public class CollectionValidator extends ContainerValidator implements Validator
       }
     }
     if (validPersons.isEmpty()) {
-      exception.getMessages().add("error_collection_need_one_author");
+      exception = new UnprocessableError("error_collection_need_one_author", exception);
     }
   }
 
@@ -73,10 +71,10 @@ public class CollectionValidator extends ContainerValidator implements Validator
       if (!p.getOrganizations().isEmpty()) {
         return true;
       } else {
-        exception.getMessages().add("error_author_need_one_organization");
+        exception = new UnprocessableError("error_author_need_one_organization", exception);
       }
     } else {
-      exception.getMessages().add("error_author_need_one_family_name");
+      exception = new UnprocessableError("error_author_need_one_family_name", exception);
     }
     return false;
   }

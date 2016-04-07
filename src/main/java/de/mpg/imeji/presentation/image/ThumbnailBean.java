@@ -9,19 +9,19 @@ import java.net.URI;
 import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.resource.controller.ItemController;
-import de.mpg.imeji.logic.resource.vo.Item;
-import de.mpg.imeji.logic.resource.vo.Metadata;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.logic.resource.vo.MetadataSet;
-import de.mpg.imeji.logic.resource.vo.Statement;
-import de.mpg.imeji.logic.resource.vo.Properties.Status;
-import de.mpg.imeji.logic.resource.vo.metadata.Link;
-import de.mpg.imeji.logic.resource.vo.metadata.Publication;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.metadata.MetadataSetBean;
+import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -46,7 +46,7 @@ public class ThumbnailBean implements Serializable {
   private String id;
   private boolean selected = false;
   private boolean isInActiveAlbum = false;
-  private MetadataSetBean mds;
+  private MetadataSetWrapper mds;
   private MetadataProfile profile;
   private MetadataSet mdSet;
   private URI collectionUri;
@@ -92,7 +92,7 @@ public class ThumbnailBean implements Serializable {
 
 
   /**
-   * Initialize the {@link MetadataSetBean} which is used in the Popup
+   * Initialize the {@link MetadataSetWrapper} which is used in the Popup
    * 
    * @throws ImejiException
    */
@@ -101,7 +101,7 @@ public class ThumbnailBean implements Serializable {
     if (getMds() == null) {
       ItemController controller = new ItemController();
       mdSet = controller.retrieve(uri, sessionBean.getUser()).getMetadataSet();
-      setMds(new MetadataSetBean(mdSet, getProfile(), false));
+      setMds(new MetadataSetWrapper(mdSet, getProfile(), false));
     }
   }
 
@@ -290,7 +290,7 @@ public class ThumbnailBean implements Serializable {
    * 
    * @return the mds
    */
-  public MetadataSetBean getMds() {
+  public MetadataSetWrapper getMds() {
     return mds;
   }
 
@@ -299,7 +299,7 @@ public class ThumbnailBean implements Serializable {
    * 
    * @param mds the mds to set
    */
-  public void setMds(MetadataSetBean mds) {
+  public void setMds(MetadataSetWrapper mds) {
     this.mds = mds;
   }
 

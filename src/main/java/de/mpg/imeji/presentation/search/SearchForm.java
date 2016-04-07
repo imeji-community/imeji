@@ -12,7 +12,6 @@ import java.util.Set;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
@@ -22,6 +21,8 @@ import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 
 /**
  * The form for the Advanced search. Is composed of {@link SearchGroupForm}
@@ -53,8 +54,8 @@ public class SearchForm {
    * @param profilesMap
    * @throws ImejiException
    */
-  public SearchForm(SearchQuery searchQuery, Map<String, MetadataProfile> profilesMap)
-      throws ImejiException {
+  public SearchForm(SearchQuery searchQuery, Map<String, MetadataProfile> profilesMap,
+      MetadataLabels metadataLabels) throws ImejiException {
     this();
     this.profilesMap = profilesMap;
     for (SearchElement se : searchQuery.getElements()) {
@@ -62,7 +63,8 @@ public class SearchForm {
         String profileId =
             SearchFormularHelper.getProfileIdFromStatement((SearchGroup) se, profilesMap.values());
         if (profileId != null)
-          groups.add(new SearchGroupForm((SearchGroup) se, profilesMap.get(profileId)));
+          groups.add(
+              new SearchGroupForm((SearchGroup) se, profilesMap.get(profileId), metadataLabels));
       }
       if (se.getType().equals(SEARCH_ELEMENTS.PAIR)) {
         if (((SearchPair) se).getField() == SearchFields.filetype) {
@@ -133,13 +135,13 @@ public class SearchForm {
    * @param pos
    * @throws ImejiException
    */
-  public void changeSearchGroup(int pos) throws ImejiException {
+  public void changeSearchGroup(int pos, MetadataLabels metadataLabels) throws ImejiException {
     SearchGroupForm group = groups.get(pos);
     group.getStatementMenu().clear();
     group.setSearchElementForms(new ArrayList<SearchMetadataForm>());
     if (group.getProfileId() != null) {
       MetadataProfile p = profilesMap.get(group.getProfileId());
-      group.initStatementsMenu(p);
+      group.initStatementsMenu(p, metadataLabels);
       addElement(pos, 0);
     }
   }

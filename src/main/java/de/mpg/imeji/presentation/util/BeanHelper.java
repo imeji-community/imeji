@@ -13,6 +13,8 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
@@ -227,6 +229,20 @@ public class BeanHelper {
    */
   public static void error(String summary) {
     error(summary, null, null);
+  }
+
+  /**
+   * Add all messages of the unprocessable error
+   * 
+   * @param e
+   */
+  public static void error(UnprocessableError e, Locale locale) {
+    for (String m : e.getMessages()) {
+      int i = m.trim().indexOf(" ");
+      String placeholder = i > 0 ? m.substring(0, i) : m.trim();
+      String additionalInfo = i > 0 ? ": " + m.substring(i) : "";
+      error(Imeji.RESOURCE_BUNDLE.getMessage(placeholder, locale) + additionalInfo);
+    }
   }
 
   /**

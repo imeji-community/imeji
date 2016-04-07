@@ -86,18 +86,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
-	<managed-bean>
-		<managed-bean-name>EditItemMetadataBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.metadata.EditItemMetadataBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>SingleEditBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.metadata.SingleEditBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-
 	<!-- Album Beans -->
 	<managed-bean>
 		<managed-bean-name>AlbumsBean</managed-bean-name>

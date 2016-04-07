@@ -62,7 +62,7 @@
 						<h:panelGroup styleClass="imj_simplePageBrowser">
 						
 							<h:outputLink value="#{itemBean.browse.previous}&amp;tab=#{itemBean.tab}" styleClass="#{backwardClass}" disabled="#{itemBean.browse.previous == null}">
-								<h:outputText value="#{lbl.paginator_previous} #{itemBean.initLabels}"/>
+								<h:outputText value="#{lbl.paginator_previous}"/>
 							</h:outputLink>
 							
 							<h:outputLink style="text-align: left" value="#{itemBean.browse.next}&amp;tab=#{itemBean.tab}" styleClass="#{forwardClass}" disabled="#{itemBean.browse.next == null}">

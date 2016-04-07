@@ -112,13 +112,13 @@ public class StringHelper {
   }
 
   /**
-   * Trimmed {@link com.google.common.base.Strings#isNullOrEmpty(String) isNullOrEmpty}
+   * Check if object is null or obj.toString is empty
    *
    * @param str
    * @return
    */
-  public static boolean isNullOrEmptyTrim(String str) {
-    return isNullOrEmpty(str) || "".equals(str.trim());
+  public static boolean isNullOrEmptyTrim(Object obj) {
+    return obj == null || obj.toString().trim().isEmpty();
   }
 
   /**

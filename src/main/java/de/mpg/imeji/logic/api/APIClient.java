@@ -13,8 +13,8 @@ import org.jose4j.lang.JoseException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
-import de.mpg.imeji.logic.resource.controller.UserController;
-import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * A Client to use the imeji REST API

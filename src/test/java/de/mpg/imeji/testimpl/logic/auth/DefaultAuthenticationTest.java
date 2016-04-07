@@ -11,10 +11,10 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authentication.Authentication;
 import de.mpg.imeji.logic.auth.authentication.impl.DefaultAuthentication;
 import de.mpg.imeji.logic.auth.util.PasswordGenerator;
-import de.mpg.imeji.logic.resource.controller.UserController;
-import de.mpg.imeji.logic.resource.util.ImejiFactory;
-import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.User;
 import util.JenaUtil;
 
 /**

@@ -6,8 +6,7 @@ package de.mpg.imeji.presentation.facet;
 import java.net.URI;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -51,6 +50,7 @@ public class Facet {
     this.uri = uri;
     this.type = type;
     this.metadataURI = metadataURI;
+    initInternationalLabel();
   }
 
   /**
@@ -61,9 +61,7 @@ public class Facet {
       internationalizedLabel =
           Imeji.RESOURCE_BUNDLE.getLabel("facet_" + label.toLowerCase(), BeanHelper.getLocale());
     } else if (FacetType.COLLECTION.name().equals(type.name())) {
-      internationalizedLabel =
-          ((MetadataLabelsBean) BeanHelper.getSessionBean(MetadataLabelsBean.class))
-              .getInternationalizedLabels().get(metadataURI);
+      internationalizedLabel = label;
     } else if (FacetType.SEARCH.name().equals(type.name())) {
       internationalizedLabel = Imeji.RESOURCE_BUNDLE.getLabel("search", BeanHelper.getLocale());
     }
@@ -97,28 +95,7 @@ public class Facet {
    * @return
    */
   public String getinternationalizedLabel() {
-    initInternationalLabel();
     return internationalizedLabel;
-  }
-
-  /**
-   * @return
-   */
-  public String getNotDefineType() {
-    return ((MetadataLabelsBean) BeanHelper.getSessionBean(MetadataLabelsBean.class))
-        .getInternationalizedLabels().get(metadataURI);
-  }
-
-  /**
-   * True if the current {@link Facet} is a negation facet
-   * 
-   * @return
-   */
-  public boolean isNotDefine() {
-    if (label == null) {
-      return false;
-    }
-    return (label.toLowerCase().startsWith("no "));
   }
 
   /**

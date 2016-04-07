@@ -11,7 +11,10 @@
       "number": 1.2345678E7,
       "conePerson": {
         "familyName": "test",
-        "givenName": "tester"
+        "givenName": "tester",
+        "organizations": [{
+            "name": "Organization"
+        }]
       },
       "date": "2014-12-11",
       "license": {

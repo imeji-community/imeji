@@ -4,26 +4,23 @@
 package de.mpg.imeji.presentation.facet;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.resource.controller.ItemController;
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.Item;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.presentation.collection.CollectionItemsBean;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -79,25 +76,29 @@ public class CollectionFacets extends Facets {
     int count = 0;
     int sizeAllImages = allImages.getNumberOfRecords();
     HashSet<String> set = new HashSet<String>(allImages.getResults());
-    if(profile != null){
+    if (profile != null) {
+      MetadataLabels metadataLabels = new MetadataLabels(profile, sb.getLocale());
       try {
         for (Statement st : profile.getStatements()) {
           List<Facet> group = new ArrayList<Facet>();
           if (st.isPreview() && !fs.isFilter(getName(st.getId()))) {
-            SearchPair pair =
-                new SearchPair(SearchFields.statement, SearchOperators.EQUALS, st.getId().toString(),
-                    false);
+            SearchPair pair = new SearchPair(SearchFields.statement, SearchOperators.EQUALS,
+                st.getId().toString(), false);
             count = getCount(searchQuery, pair, set);
 
-            group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
-                FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
+            group.add(new Facet(
+                uriFactory.createFacetURI(baseURI, pair, getName(st.getId()), FacetType.COLLECTION),
+                metadataLabels.getInternationalizedLabels().get(st.getId()), count,
+                FacetType.COLLECTION, st.getId()));
 
             // create this facet only if there are no
             if (count <= sizeAllImages) {
               pair.setNot(true);
-              group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No "
-                  + getName(st.getId()), FacetType.COLLECTION), "No " + getName(st.getId()),
-                  sizeAllImages - count, FacetType.COLLECTION, st.getId()));
+              group.add(new Facet(
+                  uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
+                      FacetType.COLLECTION),
+                  "No " + getName(st.getId()), sizeAllImages - count, FacetType.COLLECTION,
+                  st.getId()));
             }
           }
           facets.add(group);
@@ -130,14 +131,14 @@ public class CollectionFacets extends Facets {
   public int getCount(SearchQuery searchQuery, SearchPair pair, HashSet<String> collectionImages) {
     int counter = 0;
     ItemController ic = new ItemController();
-    SearchQuery sq = new SearchQuery(); 
+    SearchQuery sq = new SearchQuery();
     if (pair != null) {
       sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
       sq.addPair(pair);
     }
     SearchResult res = ic.search(colURI, sq, null, sb.getUser(), null, -1, 0);
-    for(String record : res.getResults()){
-      if(collectionImages.contains(record)){
+    for (String record : res.getResults()) {
+      if (collectionImages.contains(record)) {
         counter++;
       }
     }

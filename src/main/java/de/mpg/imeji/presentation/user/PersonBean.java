@@ -18,13 +18,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.resource.controller.UserController;
-import de.mpg.imeji.logic.resource.util.ImejiFactory;
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.Organization;
-import de.mpg.imeji.logic.resource.vo.Person;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
+import de.mpg.imeji.presentation.metadata.MetadataWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -63,8 +63,8 @@ public class PersonBean implements Serializable {
       l.set(position, person.clone());
     } else if (bean instanceof UserBean) {
       ((UserBean) bean).getUser().setPerson(person.clone());
-    } else if (bean instanceof SuperMetadataBean) {
-      ((SuperMetadataBean) bean).setPerson(person);
+    } else if (bean instanceof MetadataWrapper) {
+      ((MetadataWrapper) bean).setPerson(person);
     }
     return ":";
   }
@@ -92,9 +92,9 @@ public class PersonBean implements Serializable {
       List<Organization> l =
           (List<Organization>) ((UserBean) bean).getUser().getPerson().getOrganizations();
       l.set(positionOrga, orga);
-    } else if (bean instanceof SuperMetadataBean) {
+    } else if (bean instanceof MetadataWrapper) {
       List<Organization> l =
-          (List<Organization>) ((SuperMetadataBean) bean).getPerson().getOrganizations();
+          (List<Organization>) ((MetadataWrapper) bean).getPerson().getOrganizations();
       l.set(positionOrga, orga);
     } else if (bean instanceof RegistrationBean) {
       List<Organization> l =

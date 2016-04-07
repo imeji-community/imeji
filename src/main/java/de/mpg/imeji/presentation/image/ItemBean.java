@@ -15,21 +15,16 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
-import de.mpg.imeji.logic.resource.controller.AlbumController;
-import de.mpg.imeji.logic.resource.controller.ItemController;
-import de.mpg.imeji.logic.resource.vo.Album;
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.Item;
-import de.mpg.imeji.logic.resource.vo.Metadata;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.logic.resource.vo.Statement;
-import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -44,11 +39,19 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.metadata.MetadataSetBean;
-import de.mpg.imeji.presentation.metadata.SingleEditBean;
+import de.mpg.imeji.presentation.history.HistorySession;
+import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
+import de.mpg.imeji.presentation.metadata.SingleEditorWrapper;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
@@ -72,16 +75,18 @@ public class ItemBean {
   private List<String> techMd;
   protected Navigation navigation;
   private MetadataProfile profile;
-  private SingleEditBean edit;
+  private SingleEditorWrapper edit;
   protected String prettyLink;
   private SingleItemBrowse browse = null;
-  private MetadataSetBean mds;
+  private MetadataSetWrapper mds;
   private List<Album> relatedAlbums;
   private String dateCreated;
   private String newFilename;
   private String stringContent = null;
   private String imageUploader;
   private String discardComment;
+  private MetadataLabels metadataLabels;
+  private static final Logger LOGGER = Logger.getLogger(ItemBean.class);
 
   /**
    * Construct a default {@link ItemBean}
@@ -178,9 +183,10 @@ public class ItemBean {
       }
       loadCollection(user);
       loadProfile(user);
-      edit = new SingleEditBean(item, profile);
+      metadataLabels = new MetadataLabels(profile, sessionBean.getLocale());
       if (profile != null) {
-        edit = new SingleEditBean(item, profile);
+        edit =
+            new SingleEditorWrapper(item, profile, sessionBean.getUser(), sessionBean.getLocale());
         mds = edit.getEditor().getItems().get(0).getMds();
       }
     }
@@ -248,11 +254,6 @@ public class ItemBean {
    */
   public void loadProfile(User user) {
     profile = ObjectLoader.loadProfile(item.getMetadataSet().getProfile(), user);
-  }
-
-  public String getInitLabels() throws Exception {
-    MetadataLabelsBean.getBean().init(profile);
-    return "";
   }
 
   /**
@@ -353,6 +354,26 @@ public class ItemBean {
     ItemController c = new ItemController();
     c.unRelease(Arrays.asList(item), sessionBean.getUser());
     item = c.retrieve(item.getId(), sessionBean.getUser());
+  }
+
+  public void saveEditor() throws IOException {
+    HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
+    try {
+      edit.getEditor().save();
+      BeanHelper.addMessage(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_editor_image", sessionBean.getLocale()));
+      FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getCurrentPage().getUrl());
+      return;
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, sessionBean.getLocale());
+      LOGGER.error("Error saving item metadata", e);
+    } catch (ImejiException e) {
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", sessionBean.getLocale()));
+      LOGGER.error("Error saving item metadata", e);
+    }
+    FacesContext.getCurrentInstance().getExternalContext()
+        .redirect(hs.getCurrentPage().getCompleteUrl());
   }
 
   /**
@@ -517,11 +538,11 @@ public class ItemBean {
     return statementMenu;
   }
 
-  public SingleEditBean getEdit() {
+  public SingleEditorWrapper getEdit() {
     return edit;
   }
 
-  public void setEdit(SingleEditBean edit) {
+  public void setEdit(SingleEditorWrapper edit) {
     this.edit = edit;
   }
 
@@ -586,7 +607,7 @@ public class ItemBean {
    * 
    * @param mds the mds to set
    */
-  public void setMds(MetadataSetBean mds) {
+  public void setMds(MetadataSetWrapper mds) {
     this.mds = mds;
   }
 
@@ -595,7 +616,7 @@ public class ItemBean {
    * 
    * @return the mds
    */
-  public MetadataSetBean getMds() {
+  public MetadataSetWrapper getMds() {
     return mds;
   }
 
@@ -729,5 +750,9 @@ public class ItemBean {
    */
   public void setDiscardComment(String discardComment) {
     this.discardComment = discardComment;
+  }
+
+  public MetadataLabels getMetadataLabels() {
+    return metadataLabels;
   }
 }

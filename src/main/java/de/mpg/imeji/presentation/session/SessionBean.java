@@ -27,17 +27,17 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.config.ImejiConfiguration;
 import de.mpg.imeji.logic.config.ImejiConfiguration.BROWSE_VIEW;
-import de.mpg.imeji.logic.resource.controller.SpaceController;
-import de.mpg.imeji.logic.resource.controller.UserController;
-import de.mpg.imeji.logic.resource.vo.Album;
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.logic.resource.vo.Space;
-import de.mpg.imeji.logic.resource.vo.User;
+import de.mpg.imeji.logic.controller.resource.SpaceController;
+import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
@@ -187,18 +187,6 @@ public class SessionBean implements Serializable {
   private void initCssWithCookie() {
     selectedCss = Style.valueOf(CookieUtils.readNonNull(styleCookieName, Style.NONE.name()));
   }
-
-
-  // /**
-  // * Returns the message according to the current user locale.
-  // *
-  // * @param placeholder A string containing the name of a message.
-  // * @return The label.
-  // */
-  // public String getMessage(String placeholder) {
-  // return Imeji.RESOURCE_BUNDLE.getMessage(placeholder);
-  // }
-
 
   /**
    * Return the version of the software

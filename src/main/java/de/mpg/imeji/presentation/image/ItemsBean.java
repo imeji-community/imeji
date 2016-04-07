@@ -17,9 +17,7 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.resource.controller.ItemController;
-import de.mpg.imeji.logic.resource.vo.Album;
-import de.mpg.imeji.logic.resource.vo.Item;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -30,8 +28,10 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
@@ -65,6 +65,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   private String discardComment;
   private String selectedImagesContext;
   private SearchResult searchResult;
+  protected MetadataLabels metadataLabels;
 
   /**
    * The context of the browse page (browse, collection browse, album browse)
@@ -148,7 +149,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       Collection<Item> items = loadImages(searchResult.getResults());
       // Init the labels for the item
       if (!items.isEmpty()) {
-        MetadataLabelsBean.getBean().init((List<Item>) items);
+        metadataLabels = new MetadataLabels((List<Item>) items, session.getLocale());
       }
       // Return the item as thumbnailBean
       return ListUtils.itemListToThumbList(items);
@@ -238,7 +239,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public String getSimpleQuery() {
     if (searchFilter != null && searchFilter.getSearchQuery() != null) {
       return SearchQueryParser.searchQuery2PrettyQuery(searchFilter.getSearchQuery(),
-          session.getLocale(), MetadataLabelsBean.getBean().getInternationalizedLabels());
+          session.getLocale(), metadataLabels.getInternationalizedLabels());
     }
     return "";
   }
@@ -635,18 +636,20 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   }
 
   public boolean isAllSelected() {
-    boolean result = true;
     for (ThumbnailBean bean : getCurrentPartList()) {
-      if (bean.isSelected() == false) {
-        result = false;
-        break;
+      if (!bean.isSelected()) {
+        return false;
       }
     }
-    return result;
+    return true;
   }
 
   public void setAllSelected(boolean allSelected) {
 
+  }
+
+  public MetadataLabels getMetadataLabels() {
+    return metadataLabels;
   }
 
 }

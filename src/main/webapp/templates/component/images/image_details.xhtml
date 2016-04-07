@@ -3,10 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components"
-	
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"	
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
-
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}" id="topPanel">
 		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
@@ -179,7 +177,7 @@
 									<h:panelGroup layout="block" rendered="#{!metadata.isEmpty()}" styleClass="imj_metadataSet id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
 									<!-- MetaDataList - MetaData Hierachy Hardcoded! -->
 										<div class="imj_metadataLabel" style="margin-left: #{metadata.hierarchyLevel}em;">
-											<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
+											<h:outputText value="#{itemBean.metadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 											<span class="imj_invisible">: </span>
 										</div>
 										<!-- div class="imj_metadataValue imj_keepFormat" -->
@@ -205,19 +203,19 @@
 											<!-- MetaDataList - edit panel container set -->
 											<div class="imj_metadataSet">
 												<div class="imj_metadataLabel">
-													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
+													<h:outputText value="#{itemBean.metadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 													<span class="imj_invisible">: </span>
 												</div>
 												<div class="imj_metadataValue">
 													<div style="margin-left: #{metadata.hierarchyLevel}em;">
 														<!-- MetaDataInput -->
-														<list:batchEditList_singleStatement id="editMd" itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
+														<list:batchEditList_singleStatement id="editMd" itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{itemBean.metadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
 														<!-- imj_multipleButtons (-) (+) command buttons -->
 														<h:panelGroup class="imj_metadataEditButtonArea" rendered="#{metadata.statement.maxOccurs != '1'}">
-															<h:commandLink type="submit" styleClass="fa fa-plus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="" title="#{lbl.add} #{MetadataLabels.internationalizedLabels[metadata.statement.id]}">
+															<h:commandLink type="submit" styleClass="fa fa-plus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="" title="#{lbl.add} #{itemBean.metadataLabels.internationalizedLabels[metadata.statement.id]}">
 																<f:ajax execute="@form" render="@form"/>
 		                                                    </h:commandLink>
-															<h:commandLink type="submit" styleClass="fa fa-minus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="" title="#{lbl.remove_this_metadata} #{MetadataLabels.internationalizedLabels[metadata.statement.id]}">
+															<h:commandLink type="submit" styleClass="fa fa-minus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="" title="#{lbl.remove_this_metadata} #{itemBean.metadataLabels.internationalizedLabels[metadata.statement.id]}">
 																<f:ajax execute="@form" render="@form"/>
 		                                                    </h:commandLink>                                                
 														</h:panelGroup>
@@ -239,7 +237,7 @@
 										<h:commandLink styleClass="imj_cancelButton" action="#{itemBean.edit.cancel}">
 											<h:outputText value="#{lbl.cancel}"/>
 										</h:commandLink>
-										<h:commandLink type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}"/>
+										<h:commandLink type="submit" styleClass="imj_submitButton"  action="#{itemBean.saveEditor}" value="#{lbl.save}"/>
 									</div>
 								</ui:fragment>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->

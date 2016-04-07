@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 
-import de.mpg.imeji.logic.resource.business.StatisticsBusinessController;
+import de.mpg.imeji.logic.controller.business.StatisticsBusinessController;
 
 @ManagedBean
 public class StorageStatisticsBean {

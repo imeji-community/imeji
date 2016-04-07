@@ -19,15 +19,15 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.resource.controller.ProfileController;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.FileTypes.Type;
 import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -42,6 +42,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class AdvancedSearchBean {
   private SearchForm formular = null;
+  private MetadataLabels metadataLabels;
   // Menus
   private List<SelectItem> profilesMenu;
   private List<SelectItem> collectionsMenu;
@@ -108,8 +109,9 @@ public class AdvancedSearchBean {
    */
   public void initForm(SearchQuery searchQuery) throws Exception {
     Map<String, MetadataProfile> profs = loadProfilesAndInitMenu();
-    MetadataLabelsBean.getBean().init1((new ArrayList<MetadataProfile>(profs.values())));
-    formular = new SearchForm(searchQuery, profs);
+    metadataLabels =
+        new MetadataLabels(new ArrayList<MetadataProfile>(profs.values()), session.getLocale());
+    formular = new SearchForm(searchQuery, profs, metadataLabels);
     if (formular.getGroups().size() == 0) {
       formular.addSearchGroup(0);
     }
@@ -227,7 +229,7 @@ public class AdvancedSearchBean {
   public void changeGroup() throws ImejiException {
     int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
         .getRequestParameterMap().get("gPos"));
-    formular.changeSearchGroup(gPos);
+    formular.changeSearchGroup(gPos, metadataLabels);
   }
 
   /**
@@ -306,7 +308,7 @@ public class AdvancedSearchBean {
    */
   public String getSimpleQuery() {
     return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery(),
-        session.getLocale(), MetadataLabelsBean.getBean().getInternationalizedLabels());
+        session.getLocale(), metadataLabels.getInternationalizedLabels());
   }
 
   /**
@@ -411,6 +413,10 @@ public class AdvancedSearchBean {
 
   public void setCollectionsMenu(List<SelectItem> collectionsMenu) {
     this.collectionsMenu = collectionsMenu;
+  }
+
+  public MetadataLabels getMetadataLabels() {
+    return metadataLabels;
   }
 
 }

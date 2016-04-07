@@ -14,10 +14,7 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.resource.controller.CollectionController;
-import de.mpg.imeji.logic.resource.vo.CollectionImeji;
-import de.mpg.imeji.logic.resource.vo.MetadataProfile;
-import de.mpg.imeji.logic.resource.vo.Statement;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -27,7 +24,10 @@ import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
-import de.mpg.imeji.presentation.beans.MetadataLabelsBean;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -69,7 +69,8 @@ public class SearchGroupForm {
    * @param collectionId
    * @throws ImejiException
    */
-  public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile) throws ImejiException {
+  public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile,
+      MetadataLabels metadataLabels) throws ImejiException {
     this();
     if (profile != null) {
       this.setProfileId(profile.getId().toString());
@@ -91,7 +92,7 @@ public class SearchGroupForm {
               .setLogicalRelation(((SearchLogicalRelation) se).getLogicalRelation());
         }
       }
-      initStatementsMenu(profile);
+      initStatementsMenu(profile, metadataLabels);
     }
   }
 
@@ -142,12 +143,12 @@ public class SearchGroupForm {
    * @param p
    * @throws ImejiException
    */
-  public void initStatementsMenu(MetadataProfile p) throws ImejiException {
+  public void initStatementsMenu(MetadataProfile p, MetadataLabels metadataLabels)
+      throws ImejiException {
     if (p != null) {
       if (p.getStatements() != null) {
         for (Statement st : p.getStatements()) {
-          String stName = ((MetadataLabelsBean) BeanHelper.getSessionBean(MetadataLabelsBean.class))
-              .getInternationalizedLabels().get(st.getId());
+          String stName = metadataLabels.getInternationalizedLabels().get(st.getId());
           statementMenu.add(new SelectItem(st.getId().toString(), stName));
         }
       }

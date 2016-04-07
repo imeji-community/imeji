@@ -7,7 +7,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
@@ -20,10 +24,10 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -34,14 +38,16 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class CollectionFacets extends Facets {
-  private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+public class CollectionFacets extends FacetsAbstract {
   private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
   private List<List<Facet>> facets = new ArrayList<List<Facet>>();
   private URI colURI = null;
   private SearchQuery searchQuery;
   private SearchResult allImages;
   private MetadataProfile profile;
+  private Locale locale;
+  private User user;
+  private static final Logger LOGGER = Logger.getLogger(CollectionFacets.class);
 
   /**
    * Constructor for the {@link Facet}s of one {@link CollectionImeji} with one {@link SearchQuery}
@@ -49,14 +55,17 @@ public class CollectionFacets extends Facets {
    * @param col
    * @param searchQuery
    */
-  public CollectionFacets(CollectionImeji col, SearchQuery searchQuery, SearchResult r) {
-    if (col == null)
+  public CollectionFacets(CollectionImeji col, SearchQuery searchQuery, SearchResult r, User user,
+      Locale locale) {
+    if (col == null) {
       return;
+    }
     allImages = r;
     this.colURI = col.getId();
     this.searchQuery = searchQuery;
-    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    this.profile = ObjectLoader.loadProfile(col.getProfile(), sb.getUser());
+    this.user = user;
+    this.profile = ObjectLoader.loadProfile(col.getProfile(), Imeji.adminUser);
+    this.locale = locale;
   }
 
   /*
@@ -71,13 +80,11 @@ public class CollectionFacets extends Facets {
     // + "/" + nav.getBrowsePath() + "?q=";
     String baseURI = "?q=";
     FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
-
-
     int count = 0;
     int sizeAllImages = allImages.getNumberOfRecords();
     HashSet<String> set = new HashSet<String>(allImages.getResults());
     if (profile != null) {
-      MetadataLabels metadataLabels = new MetadataLabels(profile, sb.getLocale());
+      MetadataLabels metadataLabels = new MetadataLabels(profile, locale);
       try {
         for (Statement st : profile.getStatements()) {
           List<Facet> group = new ArrayList<Facet>();
@@ -89,7 +96,7 @@ public class CollectionFacets extends Facets {
             group.add(new Facet(
                 uriFactory.createFacetURI(baseURI, pair, getName(st.getId()), FacetType.COLLECTION),
                 metadataLabels.getInternationalizedLabels().get(st.getId()), count,
-                FacetType.COLLECTION, st.getId()));
+                FacetType.COLLECTION, st.getId(), locale, metadataLabels));
 
             // create this facet only if there are no
             if (count <= sizeAllImages) {
@@ -98,16 +105,15 @@ public class CollectionFacets extends Facets {
                   uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
                       FacetType.COLLECTION),
                   "No " + getName(st.getId()), sizeAllImages - count, FacetType.COLLECTION,
-                  st.getId()));
+                  st.getId(), locale, metadataLabels));
             }
           }
           facets.add(group);
         }
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        LOGGER.error("Error in collection facets", e);
       }
     }
-
   }
 
   /**
@@ -136,7 +142,7 @@ public class CollectionFacets extends Facets {
       sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
       sq.addPair(pair);
     }
-    SearchResult res = ic.search(colURI, sq, null, sb.getUser(), null, -1, 0);
+    SearchResult res = ic.search(colURI, sq, null, user, null, -1, 0);
     for (String record : res.getResults()) {
       if (collectionImages.contains(record)) {
         counter++;

@@ -27,7 +27,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.facet.FacetsBean;
+import de.mpg.imeji.presentation.facet.FacetsJob;
 import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -97,7 +97,7 @@ public class CollectionItemsBean extends ItemsBean {
     try {
       searchQuery = SearchQueryParser.parseStringQuery(getQuery());
       SearchResult searchRes = search(getSearchQuery(), null, 0, -1);
-      setFacets(new FacetsBean(collection, searchQuery, searchRes));
+      setFacets(new FacetsJob(collection, searchQuery, searchRes, sb.getUser(), sb.getLocale()));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(getFacets());
       executor.shutdown();

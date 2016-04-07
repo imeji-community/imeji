@@ -73,10 +73,10 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
   private List<SelectItem> collectionItems = new ArrayList<SelectItem>();
   private String selectedCollectionItem;
   private MetadataLabels metadataLabels;
-
   @ManagedProperty("#{SingleUploadSession}")
   private SingleUploadSession sus;
-
+  @ManagedProperty("#{SessionBean.hasUploadRights}")
+  private boolean hasUploadRights = false;
   @ManagedProperty("#{SessionBean.selectedSpaceString}")
   private String selectedSpaceString;
 
@@ -87,14 +87,12 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
   }
 
   public void init() throws IOException {
-    if (getSessionUser() != null && getSessionUser().isAllowedToCreateCollection()) {
+    if (getSessionUser() != null && hasUploadRights) {
       try {
         if (UrlHelper.getParameterBoolean("init")) {
           sus.reset();
-          isAllowedToUpload();
         } else if (UrlHelper.getParameterBoolean("start")) {
           upload();
-          // loadCollections(true);
         } else if (UrlHelper.getParameterBoolean("done") && !UrlHelper.hasParameter("h")) {
           loadCollections();
           prepareEditor();
@@ -127,6 +125,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
       reloadItemPage(item.getIdString(), ObjectHelper.getId(item.getCollection()));
     } catch (Exception e) {
       BeanHelper.error("There has been an error during saving of the item: " + e.getMessage());
+      LOGGER.error("Error single upload: ", e);
     }
     sus.reset();
     return "";
@@ -167,7 +166,6 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
   }
 
   private Item uploadFileToItem(Item item, File file, String title) throws ImejiException {
-
     ItemController controller = new ItemController();
     item = controller.create(item, file, title, getSessionUser(), null, null);
     sus.setUploadedItem(item);
@@ -278,26 +276,6 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
   public void removeMetadata(MetadataWrapper smb) {
     sus.getMdSetBean().getTree().remove(smb);
     sus.getMdSetBean().addEmtpyValues();
-  }
-
-  /**
-   * Check if the user has at right to upload in at least one collection. If not, check if the user
-   * can create a collection
-   * 
-   * @throws ImejiException
-   */
-  private void isAllowedToUpload() throws ImejiException {
-    for (CollectionImeji c : retrieveAllUserCollections()) {
-      if (AuthUtil.staticAuth().createContent(getSessionUser(), c)) {
-        collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
-      }
-    }
-    if (collectionItems.isEmpty() && !getSessionUser().isAllowedToCreateCollection()) {
-      sus.setCanUpload(false);
-      throw new BadRequestException(
-          Imeji.RESOURCE_BUNDLE.getMessage("cannot_create_collection", getLocale()));
-    }
-    sus.setCanUpload(true);
   }
 
   /**
@@ -455,4 +433,11 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
     this.selectedSpaceString = selectedSpaceString;
   }
 
+  public boolean isHasUploadRights() {
+    return hasUploadRights;
+  }
+
+  public void setHasUploadRights(boolean hasUploadRights) {
+    this.hasUploadRights = hasUploadRights;
+  }
 }

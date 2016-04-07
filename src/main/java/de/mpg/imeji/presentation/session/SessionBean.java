@@ -27,6 +27,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.config.ImejiConfiguration;
 import de.mpg.imeji.logic.config.ImejiConfiguration.BROWSE_VIEW;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.SpaceController;
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.util.MaxPlanckInstitutUtils;
@@ -75,6 +76,7 @@ public class SessionBean implements Serializable {
   private boolean showLogin = false;
   private int numberOfItemsPerPage = 18;
   private int numberOfContainersPerPage = 10;
+  private boolean hasUploadRights = false;
 
   private String applicationUrl;
   private String spaceId;
@@ -101,6 +103,7 @@ public class SessionBean implements Serializable {
   // Provide better handling for ingest image uploader; here temporary code provided in order to
   // fulfill the sprint deadline
   private IngestImage spaceLogoIngestImage;
+
 
   /**
    * The session Bean for imeji
@@ -268,6 +271,7 @@ public class SessionBean implements Serializable {
     if (user != null) {
       UserController c = new UserController(user);
       user = c.retrieve(user.getId());
+      checkIfHasUploadRights();
     }
   }
 
@@ -709,5 +713,34 @@ public class SessionBean implements Serializable {
         selectedBrowseListView.equals(ImejiConfiguration.BROWSE_VIEW.LIST.name())
             ? BROWSE_VIEW.THUMBNAIL.name() : BROWSE_VIEW.LIST.name();
     CookieUtils.updateCookieValue(browseViewCookieName, selectedBrowseListView);
+  }
+
+  /**
+   * True if the current user has either right to create a collection or to upload items in at least
+   * one collection
+   * 
+   * @return
+   */
+  public boolean isHasUploadRights() {
+    return hasUploadRights;
+  }
+
+  /**
+   * Check and set isHasUploadRights
+   */
+  public void checkIfHasUploadRights() {
+    if (user.isAllowedToCreateCollection()) {
+      hasUploadRights = true;
+      return;
+    }
+    List<String> collectionUris =
+        new CollectionController().search(null, null, -1, 0, user, spaceId).getResults();
+    for (String uri : collectionUris) {
+      if (AuthUtil.staticAuth().createContent(user, uri)) {
+        hasUploadRights = true;
+        return;
+      }
+    }
+    hasUploadRights = false;
   }
 }

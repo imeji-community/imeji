@@ -105,6 +105,7 @@ public class LoginBean {
     try {
       User user = auth.doLogin();
       sb.setUser(user);
+      sb.checkIfHasUploadRights();
       BeanHelper.cleanMessages();
       BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_log_in", sb.getLocale()));
     } catch (InactiveAuthenticationError e) {

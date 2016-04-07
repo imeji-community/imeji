@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.facet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
@@ -13,20 +14,21 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
- * Java Bean for the {@link Facet}
+ * Callable to exectute Facets objects
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class FacetsBean implements Callable<Boolean> {
+public class FacetsJob implements Callable<Boolean> {
   private List<List<Facet>> facets = new ArrayList<List<Facet>>();
   private boolean running = false;
-  private Facets facetsClass;
-  private static final Logger LOGGER = Logger.getLogger(FacetsBean.class);
+  private FacetsAbstract facetsClass;
+  private static final Logger LOGGER = Logger.getLogger(FacetsJob.class);
 
   /*
    * (non-Javadoc)
@@ -48,13 +50,13 @@ public class FacetsBean implements Callable<Boolean> {
   }
 
   /**
-   * Initialize the {@link FacetsBean} for one {@link SearchQuery} from the item browse page
+   * Initialize the {@link FacetsJob} for one {@link SearchQuery} from the item browse page
    * 
    * @param searchQuery
    */
-  public FacetsBean(SearchQuery searchQuery, SearchResult searchRes) {
+  public FacetsJob(SearchQuery searchQuery, User user, Locale locale, String space) {
     try {
-      facetsClass = new TechnicalFacets(searchQuery, searchRes);
+      facetsClass = new TechnicalFacets(searchQuery, user, locale, space);
     } catch (Exception e) {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", BeanHelper.getLocale())
           + ", Technical Facets intialization: " + e.getMessage());
@@ -62,14 +64,15 @@ public class FacetsBean implements Callable<Boolean> {
   }
 
   /**
-   * Initialize the {@link FacetsBean} for one {@link SearchQuery} from the collection browse page
+   * Initialize the {@link FacetsJob} for one {@link SearchQuery} from the collection browse page
    * 
    * @param col
    * @param searchQuery
    */
-  public FacetsBean(CollectionImeji col, SearchQuery searchQuery, SearchResult searchRes) {
+  public FacetsJob(CollectionImeji col, SearchQuery searchQuery, SearchResult searchRes, User user,
+      Locale locale) {
     try {
-      facetsClass = new CollectionFacets(col, searchQuery, searchRes);
+      facetsClass = new CollectionFacets(col, searchQuery, searchRes, user, locale);
     } catch (Exception e) {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", BeanHelper.getLocale())
           + ", Collection Facets intialization : " + e.getMessage());

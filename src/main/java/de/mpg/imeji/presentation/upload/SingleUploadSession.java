@@ -29,7 +29,6 @@ public class SingleUploadSession implements Serializable {
   private boolean uploadFileToItem = false;
   private Item uploadedItem;
   private String fFile;
-  private boolean canUpload = true;
 
   public void reset() {
     selectedCollectionItem = "";
@@ -43,7 +42,6 @@ public class SingleUploadSession implements Serializable {
     uploadFileToItem = false;
     uploadedItem = null;
     fFile = "";
-    canUpload = true;
   }
 
   public void copyToTemp() {
@@ -64,7 +62,6 @@ public class SingleUploadSession implements Serializable {
     uploadFileToTemp = false;
     uploadFileToItem = true;
     fFile = "";
-    canUpload = true;
   }
 
 
@@ -155,14 +152,4 @@ public class SingleUploadSession implements Serializable {
   public void setProfile(MetadataProfile profile) {
     this.profile = profile;
   }
-
-  public void setCanUpload(boolean canUploadHasCollections) {
-    this.canUpload = canUploadHasCollections;
-  }
-
-  public boolean isCanUpload() {
-    return canUpload;
-  }
-
-
 }

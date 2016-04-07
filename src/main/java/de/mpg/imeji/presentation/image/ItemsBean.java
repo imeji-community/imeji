@@ -34,7 +34,7 @@ import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
-import de.mpg.imeji.presentation.facet.FacetsBean;
+import de.mpg.imeji.presentation.facet.FacetsJob;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -56,7 +56,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   private List<SelectItem> sortMenu;
   private String selectedSortCriterion;
   private String selectedSortOrder = SortOrder.DESCENDING.name();
-  private FacetsBean facets;
+  private FacetsJob facets;
   protected FiltersBean filters;
   private String query;
   private Filter searchFilter;
@@ -248,7 +248,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * Init the filters with the new search query
    */
   public void initFilters() {
-    filters = new FiltersBean(searchQuery, totalNumberOfRecords);
+    filters =
+        new FiltersBean(searchQuery, totalNumberOfRecords, session.getLocale(), metadataLabels);
     searchFilter = null;
     for (Filter f : filters.getSession().getFilters()) {
       if (FacetType.SEARCH.equals(f.getType())) {
@@ -265,8 +266,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initFacets() {
     try {
-      SearchResult searchRes = search(getSearchQuery(), null, 0, this.getTotalNumberOfElements());
-      this.setFacets(new FacetsBean(SearchQueryParser.parseStringQuery(query), searchRes));
+      this.setFacets(new FacetsJob(SearchQueryParser.parseStringQuery(query), session.getUser(),
+          session.getLocale(), session.getSelectedSpaceString()));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(facets);
       executor.shutdown();
@@ -520,11 +521,11 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     return getNavigationString();
   }
 
-  public FacetsBean getFacets() {
+  public FacetsJob getFacets() {
     return facets;
   }
 
-  public void setFacets(FacetsBean facets) {
+  public void setFacets(FacetsJob facets) {
     this.facets = facets;
   }
 

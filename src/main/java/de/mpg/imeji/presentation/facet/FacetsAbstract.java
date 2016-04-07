@@ -33,9 +33,9 @@ import java.util.List;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class Facets {
+public abstract class FacetsAbstract {
   /**
-   * Initialize the {@link Facets}
+   * Initialize the {@link FacetsAbstract}
    */
   public abstract void init();
 

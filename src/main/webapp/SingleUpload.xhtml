@@ -25,7 +25,7 @@
 			</h:panelGroup>
 		</ui:fragment>
 
-		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.loggedIn and SingleUploadSession.canUpload}">
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.loggedIn and SessionBean.hasUploadRights}">
 	
 			<h:panelGroup layout="block" styleClass="imj_upload">
 				<div id="container" class="imj_noDisplay"/>			

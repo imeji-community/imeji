@@ -22,7 +22,7 @@ public class ImejiException extends Exception {
    * shows only the message plus the first element of the stacktrace
    */
   protected void minimizeStacktrace() {
-    setStackTrace(Arrays.copyOf(getStackTrace(), 1));
+    setStackTrace(Arrays.copyOf(getStackTrace(), 5));
   }
 
 }

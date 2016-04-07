@@ -49,11 +49,11 @@ import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -219,7 +219,7 @@ public class ItemController extends ImejiController {
     writer.create(J2JHelper.cast2ObjectList((List<?>) items),
         pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user);
     // Update the collection
-    cc.update(cc.retrieve(coll, user), user);
+    cc.update(cc.retrieve(coll, user), Imeji.adminUser);
   }
 
   /**

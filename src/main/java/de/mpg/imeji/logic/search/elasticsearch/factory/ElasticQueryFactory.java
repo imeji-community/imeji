@@ -53,7 +53,6 @@ public class ElasticQueryFactory {
    * @return
    */
   public static QueryBuilder build(SearchQuery query, String folderUri, String spaceId, User user) {
-    buildSearchQuery(query, user);
     return QueryBuilders.boolQuery().must(buildSearchQuery(query, user))
         .must(buildContainerFilter(folderUri)).must(buildSecurityQuery(user, folderUri))
         .must(buildSpaceQuery(spaceId)).must(buildStatusQuery(query, user));
@@ -123,7 +122,6 @@ public class ElasticQueryFactory {
     if (spaceId == null || "".equals(spaceId)) {
       return QueryBuilders.matchAllQuery();
     } else {
-      // TODO: implements when folder are indexed as well
       return fieldQuery(ElasticFields.SPACE, spaceId, SearchOperators.EQUALS, false);
     }
   }
@@ -171,12 +169,7 @@ public class ElasticQueryFactory {
         return QueryBuilders.matchAllQuery();
       } else {
         // normal user
-        Collection<Grant> grants = new ArrayList<Grant>();
-        grants.addAll(user.getGrants());
-        for (UserGroup g : user.getGroups()) {
-          grants.addAll(g.getGrants());
-        }
-        return buildGrantQuery(grants, null);
+        return buildGrantQuery(getAllGrants(user), null);
       }
     }
     return QueryBuilders.matchAllQuery();
@@ -317,7 +310,7 @@ public class ElasticQueryFactory {
         // same as grant_type
         GrantType grant = pair.getValue().equals("upload") ? GrantType.CREATE
             : GrantType.valueOf(pair.getValue().toUpperCase());
-        return buildGrantQuery(user.getGrants(), grant);
+        return buildGrantQuery(getAllGrants(user), grant);
       case grant_for:
         // not indexed
         break;
@@ -646,6 +639,20 @@ public class ElasticQueryFactory {
    */
   private static boolean isFolderUri(String uri) {
     return uri.contains("/collection/") ? true : false;
+  }
+
+  /**
+   * Return all Grants (included user group grants) of the user
+   * 
+   * @param user
+   * @return
+   */
+  private static List<Grant> getAllGrants(User user) {
+    List<Grant> grants = new ArrayList<>(user.getGrants());
+    for (UserGroup group : user.getGroups()) {
+      grants.addAll(group.getGrants());
+    }
+    return grants;
   }
 
 }

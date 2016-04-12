@@ -21,12 +21,14 @@
 						<span id="userShareButton">
 							<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$('#shareGroup').hide();$('#userShareButton').hide();$('#groupShareButton').show();$('#or_big').hide()" id="userShare"/>	
 						</span>
-						<span id="or_big" class="imj_submitPanelSeparator">
-							#{lbl.or_big}
-						</span>
-						<span id="groupShareButton">
-							<h:commandButton value="#{lbl.share_with_group}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#shareGroup').show();$('#share').hide();$('#groupShareButton').hide();$('#userShareButton').show();$('#or_big').hide()" id="userGroupShare"/>
-						</span>
+						<ui:fragment rendered="#{!empty ShareBean.userGroupsBean.userGroups}">
+							<span id="or_big" class="imj_submitPanelSeparator">
+								#{lbl.or_big}
+							</span>
+							<span id="groupShareButton">
+								<h:commandButton value="#{lbl.share_with_group}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#shareGroup').show();$('#share').hide();$('#groupShareButton').hide();$('#userShareButton').show();$('#or_big').hide()" id="userGroupShare"/>
+							</span>
+						</ui:fragment>
 					</div>
 				</ui:fragment>
 				<div id="shareGroup" class="imj_noDisplay">

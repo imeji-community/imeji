@@ -42,16 +42,15 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.controller.resource.UserGroupController;
-import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
-import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.SuperViewBean;
 import de.mpg.imeji.presentation.share.ShareListItem;
 import de.mpg.imeji.presentation.share.ShareUtil;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -65,7 +64,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 @ManagedBean(name = "UserGroup")
 @ViewScoped
-public class UserGroupBean implements Serializable {
+public class UserGroupBean extends SuperViewBean implements Serializable {
   private static final long serialVersionUID = -6501626930686020874L;
   private UserGroup userGroup = new UserGroup();
   private Collection<User> users;
@@ -155,31 +154,14 @@ public class UserGroupBean implements Serializable {
   public String create() {
     UserGroupController c = new UserGroupController();
     try {
-      if (groupNameAlreadyExists(userGroup)) {
-        BeanHelper.warn(
-            Imeji.RESOURCE_BUNDLE.getLabel("group_name_already_exists", BeanHelper.getLocale()));
-        return "";
-      } else
-        c.create(userGroup, sessionUser);
+      c.create(userGroup, sessionUser);
       reload();
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, getLocale());
     } catch (Exception e) {
       BeanHelper.error("Error creating user group");
     }
     return "";
-  }
-
-  /**
-   * True if {@link UserGroup} name already used by another {@link UserGroup}
-   * 
-   * @param group
-   * @return
-   */
-  public boolean groupNameAlreadyExists(UserGroup g) {
-    for (String id : ImejiSPARQL.exec(JenaCustomQueries.selectUserGroupAll(g.getName()), null)) {
-      if (!id.equals(g.getId().toString()))
-        return true;
-    }
-    return false;
   }
 
   /**
@@ -190,11 +172,9 @@ public class UserGroupBean implements Serializable {
   public void save() throws IOException {
     UserGroupController c = new UserGroupController();
     try {
-      if (groupNameAlreadyExists(userGroup)) {
-        BeanHelper.error(
-            Imeji.RESOURCE_BUNDLE.getLabel("group_name_already_exists", BeanHelper.getLocale()));
-      } else
-        c.update(userGroup, sessionUser);
+      c.update(userGroup, sessionUser);
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, getLocale());
     } catch (Exception e) {
       BeanHelper.error("Error updating user group");
     }

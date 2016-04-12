@@ -7,6 +7,7 @@ import de.mpg.imeji.logic.validation.impl.MetadataValidator;
 import de.mpg.imeji.logic.validation.impl.ProfileValidator;
 import de.mpg.imeji.logic.validation.impl.PseudoValidator;
 import de.mpg.imeji.logic.validation.impl.SpaceValidator;
+import de.mpg.imeji.logic.validation.impl.UserGroupValidator;
 import de.mpg.imeji.logic.validation.impl.UserValidator;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -15,6 +16,7 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Factory for {@link Validator}
@@ -31,6 +33,7 @@ public class ValidatorFactory {
   private static final ProfileValidator PROFILE_VALIDATOR = new ProfileValidator();
   private static final UserValidator USER_VALIDATOR = new UserValidator();
   private static final SpaceValidator SPACE_VALIDATOR = new SpaceValidator();
+  private static final UserGroupValidator USER_GROUP_VALIDATOR = new UserGroupValidator();
 
   private ValidatorFactory() {
 
@@ -46,7 +49,7 @@ public class ValidatorFactory {
    */
   public static Validator<?> newValidator(Object obj, Validator.Method method) {
     Validator<?> validator = PSEUDO_VALIDATOR;
-    // For now, do not do anything with Delete, just a possiblity
+    // For now, do not do anything with Delete, just a possibility
     if (Validator.Method.DELETE.equals(method)) {
       return validator;
     }
@@ -64,6 +67,8 @@ public class ValidatorFactory {
       validator = USER_VALIDATOR;
     } else if (obj instanceof Space) {
       validator = SPACE_VALIDATOR;
+    } else if (obj instanceof UserGroup) {
+      validator = USER_GROUP_VALIDATOR;
     }
     return validator;
   }

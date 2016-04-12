@@ -22,6 +22,8 @@
 	                        <li>2. #{lbl.register_activate}</li>
 	                    </ul>
 	                    
+	                    <h:outputText value="#{Configuration.registrationSnippet}" escape="false"/>
+	                    
 	                    <ui:fragment id="formArea">
 	                        <h:form id="userForm" rendered="#{!RegistrationBean.registration_success}">
 	                            <!-- The person component -->

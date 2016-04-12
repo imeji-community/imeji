@@ -548,4 +548,12 @@ public class ConfigurationBean {
   public String getHelpUrl() {
     return Imeji.CONFIG.getHelpUrl();
   }
+
+  public void setRegistrationSnippet(String url) {
+    Imeji.CONFIG.setRegistrationSnippet(url);
+  }
+
+  public String getRegistrationSnippet() {
+    return Imeji.CONFIG.getRegistrationSnippet();
+  }
 }

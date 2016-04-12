@@ -16,8 +16,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -82,7 +82,7 @@ public class ThumbnailBean implements Serializable {
       SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
       this.mdSet = item.getMetadataSet();
       this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet.getProfile());
-      this.caption = filename;// findCaption();
+      this.caption = findCaption();
       this.selected = sessionBean.getSelected().contains(uri.toString());
       if (sessionBean.getActiveAlbum() != null) {
         this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
@@ -118,26 +118,31 @@ public class ThumbnailBean implements Serializable {
         : navigation.getApplicationUrl() + "resources/icon/discarded.png";
   }
 
+
   /**
    * Find the caption for this {@link ThumbnailBean} as defined in the {@link MetadataProfile}. If
    * none defined in the {@link MetadataProfile} return the filename
    * 
    * @return
+   * @throws ImejiException
    */
-  private String findCaption() {
+  private String findCaption() throws ImejiException {
     for (Statement s : profile.getStatements()) {
       if (s.isDescription()) {
+        initPopup();
         for (Metadata md : mdSet.getMetadata()) {
           if (md.getStatement().equals(s.getId())) {
             String str = "";
-            if (md instanceof Link)
+            if (md instanceof Link) {
               str = ((Link) md).getLabel();
-            else if (md instanceof Publication)
+            } else if (md instanceof Publication) {
               str = CommonUtils.removeTags(((Publication) md).getCitation());
-            else
+            } else {
               str = md.asFulltext();
-            if (!"".equals(str.trim()))
+            }
+            if (!"".equals(str.trim())) {
               return str;
+            }
           }
         }
       }

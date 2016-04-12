@@ -18,7 +18,12 @@ import java.util.regex.Pattern;
  */
 public class DateFormatter {
 
-  private DateFormatter() {}
+
+
+  private DateFormatter() {
+    // private construtor
+  }
+
 
   /**
    * Return the time of the {@link Date}, if the format is recognized
@@ -27,6 +32,25 @@ public class DateFormatter {
    * @return
    */
   public static long getTime(String str) {
+    Date d = parseDate(str);
+    if (d != null) {
+      return d.getTime();
+    } else {
+      return Long.MIN_VALUE;
+    }
+  }
+
+
+  /**
+   * Return the date from the String as following: <br/>
+   * * 2016 -> 01.01.2016 - 00:00 <br/>
+   * * 2016-04 -> 01.04.2016 - 00:00 <br/>
+   * * 2016-04-14 -> 14.04.2016 - 00:00
+   * 
+   * @param str
+   * @return
+   */
+  public static Date parseDate(String str) {
     Date d = parseDate(str, "yyyy-MM-dd");
     if (d == null) {
       d = parseDate(str, "yyyy-MM");
@@ -35,10 +59,55 @@ public class DateFormatter {
       d = parseDate(str, "yyyy");
     }
     if (d != null) {
-      return d.getTime();
+      return d;
     } else {
-      return Long.MIN_VALUE;
+      return null;
     }
+  }
+
+  /**
+   * Return the date from the String as following: <br/>
+   * * 2016 -> 31.12.2016 - 23:59:59 <br/>
+   * * 2016-04 -> 31.04.2016 - 23:59:59 <br/>
+   * * 2016-04-14 -> 14.04.2016 - 23:59:59
+   * 
+   * @param str
+   * @return
+   */
+  public static Date parseDate2(String str) {
+    int field = Calendar.DAY_OF_MONTH;
+    Date d = parseDate(str, "yyyy-MM-dd");
+    if (d == null) {
+      d = parseDate(str, "yyyy-MM");
+      field = Calendar.MONTH;
+    }
+    if (d == null) {
+      d = parseDate(str, "yyyy");
+      field = Calendar.YEAR;
+    }
+    if (d != null) {
+      Calendar c = Calendar.getInstance();
+      c.setTime(d);
+      if (field == Calendar.YEAR) {
+        c.set(Calendar.MONTH, c.getActualMaximum(Calendar.MONTH));
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+      } else if (field == Calendar.MONTH) {
+        c.set(Calendar.MONTH, c.getActualMaximum(Calendar.MONTH));
+      }
+      c.set(Calendar.HOUR_OF_DAY, c.getActualMaximum(Calendar.HOUR_OF_DAY));
+      c.set(Calendar.MINUTE, c.getActualMaximum(Calendar.MINUTE));
+      c.set(Calendar.SECOND, c.getActualMaximum(Calendar.SECOND));
+      c.set(Calendar.MILLISECOND, c.getActualMaximum(Calendar.MILLISECOND));
+      return c.getTime();
+    } else {
+      return null;
+    }
+  }
+
+  public static void main(String[] args) {
+    System.out.println(parseDate2("2016"));
+    System.out.println(parseDate2("2016-04"));
+    System.out.println(parseDate2("2016-04-14"));
   }
 
   /**

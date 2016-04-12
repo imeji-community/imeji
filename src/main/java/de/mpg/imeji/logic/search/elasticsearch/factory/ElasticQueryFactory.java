@@ -285,14 +285,12 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case created:
-        return fieldQuery(ElasticFields.CREATED,
-            Long.toString(DateFormatter.getTime(pair.getValue())), pair.getOperator(),
-            pair.isNot());
+        return dateQuery(ElasticFields.CREATED, pair.getValue(), pair.getOperator(), pair.isNot());
       case creator:
         // not indexed
         break;
       case date:
-        return fieldQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
+        return dateQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
             pair.isNot());
       case editor:
         // not indexed
@@ -334,7 +332,7 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case modified:
-        break;
+        return dateQuery(ElasticFields.MODIFIED, pair.getValue(), pair.getOperator(), pair.isNot());
       case number:
         return fieldQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
             pair.isNot());
@@ -527,6 +525,39 @@ public class ElasticQueryFactory {
     }
     return negate(q, not);
   }
+
+  /**
+   * Search for a date saved as a time (i.e) in ElasticSearch
+   * 
+   * @param field
+   * @param dateString
+   * @param operator
+   * @param not
+   * @return
+   */
+  private static QueryBuilder dateQuery(ElasticFields field, String dateString,
+      SearchOperators operator, boolean not) {
+    QueryBuilder q = null;
+    if (operator == null) {
+      operator = SearchOperators.REGEX;
+    }
+    switch (operator) {
+      case GREATER:
+        q = greaterThanQuery(field, Long.toString(DateFormatter.getTime(dateString)));
+        break;
+      case LESSER:
+        q = lessThanQuery(field, Long.toString(DateFormatter.getTime(dateString)));
+        break;
+      default:
+        q = QueryBuilders.rangeQuery(field.field())
+            .gte(Long.toString(DateFormatter.parseDate(dateString).getTime()))
+            .lte(Long.toString(DateFormatter.parseDate2(dateString).getTime()));
+        break;
+    }
+    return negate(q, not);
+  }
+
+
 
   /**
    * Create a {@link QueryBuilder} - used to sarch for metadata which are defined with a statement

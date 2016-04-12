@@ -30,8 +30,8 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
@@ -133,8 +133,8 @@ public class AlbumBean extends ContainerBean {
    * @throws ImejiException
    */
   private void init() throws ImejiException {
-    album = new AlbumController().retrieveLazy(ObjectHelper.getURI(Album.class, id),
-        sessionBean.getUser());
+    album =
+        new AlbumController().retrieve(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
   }
 
   /**

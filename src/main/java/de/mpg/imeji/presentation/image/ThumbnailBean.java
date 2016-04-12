@@ -127,6 +127,9 @@ public class ThumbnailBean implements Serializable {
    * @throws ImejiException
    */
   private String findCaption() throws ImejiException {
+    if (profile == null) {
+      return getFilename();
+    }
     for (Statement s : profile.getStatements()) {
       if (s.isDescription()) {
         initPopup();

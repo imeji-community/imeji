@@ -63,7 +63,7 @@ public final class ElasticMetadata extends ElasticPerson {
     } else if (md instanceof Link) {
       this.text = ((Link) md).getLabel();
       this.number = Double.NaN;
-      this.uri = ((Link) md).getUri().toString();
+      this.uri = ((Link) md).getUri() != null ? ((Link) md).getUri().toString() : null;
       this.location = null;
     } else if (md instanceof ConePerson) {
       this.text = null;

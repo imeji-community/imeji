@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.util.MetadataAndProfileHelper;
 
 /**
  * {@link Validator} for an {@link Item}. Only working when {@link MetadataProfile} is passed

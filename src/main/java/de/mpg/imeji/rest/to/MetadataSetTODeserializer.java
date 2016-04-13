@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import de.mpg.imeji.rest.to.predefinedMetadataTO.MetadataTO;
+
 /**
  * Created by vlad on 11.12.14.
  */

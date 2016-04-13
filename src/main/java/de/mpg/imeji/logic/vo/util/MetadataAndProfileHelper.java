@@ -1,9 +1,10 @@
-package de.mpg.imeji.logic.util;
+package de.mpg.imeji.logic.vo.util;
 
 import java.net.URI;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
@@ -21,7 +22,9 @@ import de.mpg.j2j.misc.LocalizedString;
 
 public class MetadataAndProfileHelper {
 
-  private MetadataAndProfileHelper() {}
+  private MetadataAndProfileHelper() {
+    // private constructor
+  }
 
   public static Metadata getDefaultValueMetadata(Statement statement)
       throws UnprocessableError, IllegalAccessException, InstantiationException {

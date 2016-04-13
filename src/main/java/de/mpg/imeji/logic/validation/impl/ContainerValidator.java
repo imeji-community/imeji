@@ -38,9 +38,6 @@ public abstract class ContainerValidator extends ObjectValidator {
       if (info.getText().isEmpty() && info.getUrl().isEmpty()) {
         getException().getMessages().add("error_additionalinfo_need_value");
       }
-
     }
   }
-
-
 }

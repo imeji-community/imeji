@@ -131,14 +131,13 @@ public class CreateCollectionBean extends CollectionBean {
           Imeji.RESOURCE_BUNDLE.getMessage("success_collection_create", sessionBean.getLocale()));
       return true;
     } catch (UnprocessableError e) {
-      BeanHelper.cleanMessages();
-      for (String m : e.getMessages()) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(m, sessionBean.getLocale()));
-      }
+      BeanHelper.error(e, sessionBean.getLocale());
+      LOGGER.error("Error create collection", e);
     } catch (ImejiException e) {
       BeanHelper.cleanMessages();
       BeanHelper.error(
           Imeji.RESOURCE_BUNDLE.getMessage(e.getLocalizedMessage(), sessionBean.getLocale()));
+      LOGGER.error("Error create collection", e);
     }
     return false;
   }

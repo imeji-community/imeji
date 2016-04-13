@@ -24,12 +24,16 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
@@ -50,6 +54,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 @SessionScoped
 public class CreateAlbumBean extends AlbumBean {
   private static final long serialVersionUID = -3257133789269212025L;
+  private static final Logger LOGGER = Logger.getLogger(CreateAlbumBean.class);
 
   /**
    * DEfault constructor
@@ -84,7 +89,7 @@ public class CreateAlbumBean extends AlbumBean {
    * @see de.mpg.imeji.presentation.album.AlbumBean#save()
    */
   @Override
-  public void save() throws Exception {
+  public void save() throws IOException {
     try {
       AlbumController ac = new AlbumController();
       ac.create(getAlbum(), sessionBean.getUser());
@@ -98,13 +103,12 @@ public class CreateAlbumBean extends AlbumBean {
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(nav.getAlbumUrl() + getAlbum().getIdString());
     } catch (UnprocessableError e) {
-      BeanHelper.cleanMessages();
+      BeanHelper.error(e, sessionBean.getLocale());
+      LOGGER.error("Error creating album, e");
+    } catch (ImejiException e) {
       BeanHelper
           .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_create", sessionBean.getLocale()));
-      for (String errorM : e.getMessages()) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sessionBean.getLocale()));
-      }
-      getAlbum().setId(null);
+      LOGGER.error("Error creating album, e");
     }
   }
 }

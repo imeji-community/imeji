@@ -237,6 +237,7 @@ public class BeanHelper {
    * @param e
    */
   public static void error(UnprocessableError e, Locale locale) {
+    cleanMessages();
     for (String m : e.getMessages()) {
       int i = m.trim().indexOf(" ");
       String placeholder = i > 0 ? m.substring(0, i) : m.trim();

@@ -18,15 +18,13 @@ import java.util.regex.Pattern;
  */
 public class DateFormatter {
 
-
-
   private DateFormatter() {
     // private construtor
   }
 
 
   /**
-   * Return the time of the {@link Date}, if the format is recognized
+   * Return the time of the {@link Date}, if the format is recognized. This method use parseDate()
    * 
    * @param str
    * @return

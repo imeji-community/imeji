@@ -42,7 +42,9 @@ public class Date extends Metadata {
   @j2jResource("http://imeji.org/terms/statement")
   private URI statement;
 
-  public Date() {}
+  public Date() {
+    // constructor
+  }
 
   @XmlElement(name = "date", namespace = "http://imeji.org/terms/")
   public String getDate() {

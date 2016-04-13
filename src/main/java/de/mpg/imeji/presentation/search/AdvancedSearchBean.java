@@ -59,9 +59,13 @@ public class AdvancedSearchBean {
 
   /**
    * Constructor for the {@link AdvancedSearchBean}
+   * 
+   * @throws ImejiException
    */
-  public AdvancedSearchBean() {
+  public AdvancedSearchBean() throws ImejiException {
     session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    metadataLabels = new MetadataLabels(new MetadataProfile(), session.getLocale());
+    formular = new SearchForm(new SearchQuery(), new HashMap<>(), metadataLabels);
   }
 
   /**

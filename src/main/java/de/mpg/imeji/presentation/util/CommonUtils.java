@@ -19,7 +19,9 @@ public class CommonUtils {
   /**
    * Private Constructor
    */
-  private CommonUtils() {}
+  private CommonUtils() {
+    // avoid to construct
+  }
 
   /**
    * Remove html tags from a {@link String}

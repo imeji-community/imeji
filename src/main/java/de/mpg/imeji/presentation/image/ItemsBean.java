@@ -81,6 +81,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     filters = new FiltersBean();
     selectedSortCriterion = null;
+    metadataLabels = new MetadataLabels(new ArrayList<Item>(), session.getLocale());
     setElementsPerPage(session.getNumberOfItemsPerPage());
     try {
       String options = PropertyReader.getProperty("imeji.image.list.size.options");

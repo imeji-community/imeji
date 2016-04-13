@@ -66,8 +66,10 @@ public class FiltersBean {
           metadataURI = ObjectHelper.getURI(Statement.class, n);
         }
       }
-      if (t == null)
+      if (t == null) {
         t = FacetType.SEARCH.name();
+        n = FacetType.SEARCH.name().toLowerCase();
+      }
       if (q != null) {
         List<Filter> filters =
             parseQueryAndSetFilters(q, n, t, metadataURI, locale, metadataLabels);

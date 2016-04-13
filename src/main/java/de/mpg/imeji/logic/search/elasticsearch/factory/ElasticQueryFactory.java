@@ -14,7 +14,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 import com.hp.hpl.jena.util.iterator.Filter;
 
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
 import de.mpg.imeji.logic.search.elasticsearch.util.ElasticSearchUtil;
 import de.mpg.imeji.logic.search.model.SearchElement;
@@ -285,12 +284,12 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case created:
-        return dateQuery(ElasticFields.CREATED, pair.getValue(), pair.getOperator(), pair.isNot());
+        return timeQuery(ElasticFields.CREATED, pair.getValue(), pair.getOperator(), pair.isNot());
       case creator:
         // not indexed
         break;
       case date:
-        return dateQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
+        return timeQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
             pair.isNot());
       case editor:
         // not indexed
@@ -332,7 +331,7 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case modified:
-        return dateQuery(ElasticFields.MODIFIED, pair.getValue(), pair.getOperator(), pair.isNot());
+        return timeQuery(ElasticFields.MODIFIED, pair.getValue(), pair.getOperator(), pair.isNot());
       case number:
         return fieldQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
             pair.isNot());
@@ -392,8 +391,8 @@ public class ElasticQueryFactory {
         return fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), pair.getOperator(),
             pair.isNot());
       case time:
-        // not indexed
-        break;
+        return timeQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case location:
         // not indexed
         break;
@@ -449,41 +448,42 @@ public class ElasticQueryFactory {
   private static QueryBuilder metadataFilter(SearchMetadata md) {
     switch (md.getField()) {
       case text:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case citation:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case number:
-        return metadataQuery(ElasticFields.METADATA_NUMBER, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_NUMBER, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case date:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case url:
-        return metadataQuery(ElasticFields.METADATA_URI, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_URI, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case person_family:
-        return metadataQuery(ElasticFields.METADATA_FAMILYNAME, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(fieldQuery(ElasticFields.METADATA_FAMILYNAME, md.getValue(),
+            md.getOperator(), md.isNot()), md.getStatement());
       case person_given:
-        return metadataQuery(ElasticFields.METADATA_GIVENNAME, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(fieldQuery(ElasticFields.METADATA_GIVENNAME, md.getValue(),
+            md.getOperator(), md.isNot()), md.getStatement());
       case coordinates:
-        return metadataQuery(ElasticFields.METADATA_LOCATION, md.getValue(), SearchOperators.GEO,
-            md.getStatement(), md.isNot());
+        return metadataQuery(fieldQuery(ElasticFields.METADATA_LOCATION, md.getValue(),
+            md.getOperator(), md.isNot()), md.getStatement());
       case time:
-        try {
-          return metadataQuery(ElasticFields.METADATA_NUMBER,
-              Long.toString(SearchUtils.parseDateAsTime(md.getValue())), md.getOperator(),
-              md.getStatement(), md.isNot());
-        } catch (UnprocessableError e) {
-          LOGGER.error("Wrong date format (can not be search): " + md.getValue());
-          return QueryBuilders.matchAllQuery();
-        }
+        return metadataQuery(
+            timeQuery(ElasticFields.METADATA_NUMBER, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       default:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
     }
   }
 
@@ -535,7 +535,7 @@ public class ElasticQueryFactory {
    * @param not
    * @return
    */
-  private static QueryBuilder dateQuery(ElasticFields field, String dateString,
+  private static QueryBuilder timeQuery(ElasticFields field, String dateString,
       SearchOperators operator, boolean not) {
     QueryBuilder q = null;
     if (operator == null) {
@@ -568,12 +568,10 @@ public class ElasticQueryFactory {
    * @param statement
    * @return
    */
-  private static QueryBuilder metadataQuery(ElasticFields field, String value,
-      SearchOperators operator, URI statement, boolean not) {
+  private static QueryBuilder metadataQuery(QueryBuilder valueQuery, URI statement) {
     return QueryBuilders.nestedQuery(ElasticFields.METADATA.field(),
-        QueryBuilders.boolQuery().must(fieldQuery(field, value, operator, not))
-            .must(fieldQuery(ElasticFields.METADATA_STATEMENT, ObjectHelper.getId(statement),
-                SearchOperators.EQUALS, false)));
+        QueryBuilders.boolQuery().must(valueQuery).must(fieldQuery(ElasticFields.METADATA_STATEMENT,
+            ObjectHelper.getId(statement), SearchOperators.EQUALS, false)));
 
   }
 

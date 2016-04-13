@@ -276,8 +276,7 @@ public class SearchMetadataForm {
       switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString())) {
         case DATE:
           if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SearchFields.time, operator,
-                DateFormatter.format(searchValue), ns, not));
+            group.addPair(new SearchMetadata(SearchFields.time, operator, searchValue, ns, not));
           }
           break;
         case GEOLOCATION:

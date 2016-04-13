@@ -8,14 +8,25 @@ import java.util.Collection;
 
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchMetadata;
 import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
 
+/**
+ * Helper for searchFormular
+ * 
+ * @author bastiens
+ *
+ */
 public class SearchFormularHelper {
+
+  private SearchFormularHelper() {
+    // avoid construction
+  }
+
   public static String getCollectionId(SearchGroup searchGroup) {
     String id = null;
     for (SearchElement se : searchGroup.getElements()) {

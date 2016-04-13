@@ -30,6 +30,13 @@ public class UnprocessableError extends ImejiException {
     }
   }
 
+  public UnprocessableError(Throwable e) {
+    super(e.getMessage(), e);
+    if (e instanceof UnprocessableError) {
+      this.messages.addAll(((UnprocessableError) e).getMessages());
+    }
+  }
+
   public UnprocessableError(Set<String> messages, Throwable e) {
     super(e.getMessage(), e);
     this.messages.addAll(messages);

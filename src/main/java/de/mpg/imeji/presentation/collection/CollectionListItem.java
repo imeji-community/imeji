@@ -22,14 +22,13 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean.CONTAINER_TYPE;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Item of the collections page.
@@ -231,7 +230,7 @@ public class CollectionListItem {
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
       CollectionController cc = new CollectionController();
-      CollectionImeji c = ObjectLoader.loadCollectionLazy(uri, sessionBean.getUser());
+      CollectionImeji c = cc.retrieveLazy(uri, sessionBean.getUser());
       c.setDiscardComment(getDiscardComment());
       cc.withdraw(c, sessionBean.getUser());
       BeanHelper.info(

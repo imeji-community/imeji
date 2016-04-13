@@ -17,15 +17,17 @@ public abstract class ContainerValidator extends ObjectValidator {
 
   protected abstract UnprocessableError getException();
 
+  protected abstract void setException(UnprocessableError e);
+
   protected void validateContainerMetadata(Container c) {
     if (isDelete()) {
       return;
     }
     if (StringHelper.hasInvalidTags(c.getMetadata().getDescription())) {
-      getException().getMessages().add("error_bad_format_description");
+      setException(new UnprocessableError("error_bad_format_description", getException()));
     }
     if (isNullOrEmpty(c.getMetadata().getTitle().trim())) {
-      getException().getMessages().add("error_collection_need_title");
+      setException(new UnprocessableError("error_collection_need_title", getException()));
     }
     validateAdditionalInfos(c);
   }
@@ -33,10 +35,10 @@ public abstract class ContainerValidator extends ObjectValidator {
   private void validateAdditionalInfos(Container c) {
     for (ContainerAdditionalInfo info : c.getMetadata().getAdditionalInformations()) {
       if (info.getLabel().isEmpty()) {
-        getException().getMessages().add("error_additionalinfo_need_label");
+        setException(new UnprocessableError("error_additionalinfo_need_label", getException()));
       }
       if (info.getText().isEmpty() && info.getUrl().isEmpty()) {
-        getException().getMessages().add("error_additionalinfo_need_value");
+        setException(new UnprocessableError("error_additionalinfo_need_value", getException()));
       }
     }
   }

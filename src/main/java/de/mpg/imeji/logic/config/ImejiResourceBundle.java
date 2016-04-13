@@ -4,6 +4,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 /**
  * Resource Bundle for imeji
  * 
@@ -13,6 +15,7 @@ import java.util.ResourceBundle;
 public class ImejiResourceBundle {
   public static final String LABEL_BUNDLE = "labels";
   public static final String MESSAGES_BUNDLE = "messages";
+  private static final Logger LOGGER = Logger.getLogger(ImejiResourceBundle.class);
 
   /**
    * Returns the label according to the current user locale.
@@ -25,9 +28,11 @@ public class ImejiResourceBundle {
       try {
         return ResourceBundle.getBundle(getSelectedLabelBundle(locale)).getString(placeholder);
       } catch (MissingResourceException e) {
+        LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
         return ResourceBundle.getBundle(getDefaultLabelBundle()).getString(placeholder);
       }
     } catch (Exception e) {
+      LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
       return placeholder;
     }
   }
@@ -43,9 +48,11 @@ public class ImejiResourceBundle {
       try {
         return ResourceBundle.getBundle(getSelectedMessagesBundle(locale)).getString(placeholder);
       } catch (MissingResourceException e) {
+        LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
         return ResourceBundle.getBundle(getDefaultMessagesBundle()).getString(placeholder);
       }
     } catch (Exception e) {
+      LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
       return placeholder;
     }
   }

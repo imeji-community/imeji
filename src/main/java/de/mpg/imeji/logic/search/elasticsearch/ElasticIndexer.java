@@ -33,14 +33,14 @@ import de.mpg.imeji.logic.search.elasticsearch.model.ElasticItem;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticSpace;
 import de.mpg.imeji.logic.search.elasticsearch.util.ElasticSearchUtil;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.logic.search.model.SearchOperators;
-import de.mpg.imeji.logic.search.model.SearchPair;
-import de.mpg.imeji.logic.search.model.SearchQuery;
 
 /**
  * Indexer for ElasticSearch
@@ -280,7 +280,7 @@ public class ElasticIndexer implements SearchIndexer {
           reindexItemsInContainer(collectionR);
         }
       } catch (Exception e) {
-        LOGGER.error("There has been an error during reindexing of Folder Items!");
+        LOGGER.error("There has been an error during reindexing of Folder Items!", e);
       }
     }
   }
@@ -301,7 +301,7 @@ public class ElasticIndexer implements SearchIndexer {
           null, Imeji.adminUser, null, -1, -1);
       indexer.indexBatch(items);
     } catch (Exception e) {
-      LOGGER.error("There has been an error during reindexing of items in a container! ");
+      LOGGER.error("There has been an error during reindexing of items in a container! ", e);
     }
   }
 
@@ -323,7 +323,7 @@ public class ElasticIndexer implements SearchIndexer {
         indexer.indexBatch(items);
       } catch (Exception e) {
         LOGGER.error(
-            "There has been an error during reindexing of items from provided list of items!");
+            "There has been an error during reindexing of items from provided list of items!", e);
       }
     }
   }
@@ -387,7 +387,8 @@ public class ElasticIndexer implements SearchIndexer {
         }
       } catch (Exception e) {
         LOGGER.error(
-            "There has been an error during creatino of the item list for reindexing of Albums!");
+            "There has been an error during creatino of the item list for reindexing of Albums!",
+            e);
       }
     }
   }

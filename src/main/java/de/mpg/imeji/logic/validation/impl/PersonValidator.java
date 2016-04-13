@@ -2,7 +2,6 @@ package de.mpg.imeji.logic.validation.impl;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
@@ -16,7 +15,7 @@ import de.mpg.imeji.logic.vo.Person;
 public class PersonValidator extends ObjectValidator implements Validator<Person> {
 
   @Override
-  public void validate(Person p, de.mpg.imeji.logic.validation.Validator.Method method)
+  public void validate(Person p, de.mpg.imeji.logic.validation.impl.Validator.Method method)
       throws UnprocessableError {
     UnprocessableError e = new UnprocessableError();
     if (StringHelper.isNullOrEmptyTrim(p.getFamilyName())) {
@@ -38,7 +37,7 @@ public class PersonValidator extends ObjectValidator implements Validator<Person
 
   @Override
   public void validate(Person t, MetadataProfile p,
-      de.mpg.imeji.logic.validation.Validator.Method method) throws UnprocessableError {
+      de.mpg.imeji.logic.validation.impl.Validator.Method method) throws UnprocessableError {
     validate(t, method);
   }
 

@@ -7,6 +7,8 @@ import java.net.URI;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -45,12 +47,13 @@ public class ObjectCachedLoader {
    * 
    * @param uri
    * @return
+   * @throws ImejiException
    */
-  public static MetadataProfile loadProfileWithoutPrivs(URI uri) {
+  public static MetadataProfile loadProfileWithoutPrivs(URI uri) throws ImejiException {
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     MetadataProfile profile = sessionBean.getProfileCached().get(uri);
     if (profile == null) {
-      profile = ObjectLoader.loadProfile(uri, Imeji.adminUser);
+      profile = new ProfileController().retrieve(uri, Imeji.adminUser);
       if (profile != null) {
         sessionBean.getProfileCached().put(profile.getId(), profile);
       }
@@ -70,7 +73,7 @@ public class ObjectCachedLoader {
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     CollectionImeji collection = session.getCollectionCached().get(uri);
     if (collection == null) {
-      collection = ObjectLoader.loadCollectionLazy(uri, session.getUser());
+      collection = new CollectionController().retrieveLazy(uri, session.getUser());
       session.getCollectionCached().put(collection.getId(), collection);
     }
     return collection;

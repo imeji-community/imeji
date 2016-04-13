@@ -33,7 +33,6 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Java Bean for the view users page
@@ -160,7 +159,7 @@ public class UsersBean implements Serializable {
         .get("email");
     UserController controller = new UserController(sessionUser);
     try {
-      controller.delete(ObjectLoader.loadUser(email, sessionUser));
+      controller.delete(controller.retrieve(email));
     } catch (Exception e) {
       BeanHelper.error("Error Deleting user");
       LOGGER.error("Error Deleting user", e);

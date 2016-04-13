@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * The object which is indexed in Elastic search <br/>

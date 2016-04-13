@@ -18,6 +18,8 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
+import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -34,7 +36,6 @@ import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.UserGroupsBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 @ManagedBean(name = "ShareBean")
 @ViewScoped
@@ -78,7 +79,7 @@ public class ShareBean implements Serializable {
     this.profileUri = null;
     this.type = SharedObjectType.COLLECTION;
     this.uri = ObjectHelper.getURI(CollectionImeji.class, getId());
-    CollectionImeji collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
+    CollectionImeji collection = new CollectionController().retrieveLazy(uri, sb.getUser());
     if (collection != null) {
       this.shareTo = collection;
       this.profileUri = collection.getProfile() != null ? collection.getProfile().toString() : null;
@@ -98,7 +99,7 @@ public class ShareBean implements Serializable {
     this.shareTo = null;
     this.profileUri = null;
     this.uri = ObjectHelper.getURI(Album.class, getId());
-    Album album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
+    Album album = new AlbumController().retrieveLazy(uri, sb.getUser());
     if (album != null) {
       this.shareTo = album;
       this.title = album.getMetadata().getTitle();

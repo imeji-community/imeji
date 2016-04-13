@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,7 @@ import de.mpg.imeji.logic.controller.business.MetadataProfileBusinessController;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex;
@@ -63,7 +63,6 @@ import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.user.UserBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 @ManagedBean(name = "SingleUploadBean")
 @ViewScoped
@@ -239,25 +238,20 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
   private void methodColChangeListener() throws ImejiException {
     if (!"".equals(selectedCollectionItem)) {
       sus.setSelectedCollectionItem(selectedCollectionItem);
-      try {
-        CollectionImeji collection =
-            ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), getSessionUser());
-        MetadataProfile profile =
-            ObjectLoader.loadProfile(collection.getProfile(), getSessionUser());
-        ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 
-        MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId())
-            : ImejiFactory.newMetadataSet(null);
-        MetadataSetWrapper mdSetBean = new MetadataSetWrapper(mdSet, profile, true);
-        metadataLabels = new MetadataLabels(profile, getLocale());
-        sus.setCollection(collection);
-        sus.setProfile(profile);
-        sus.setMdSetBean(mdSetBean);
-      } catch (URISyntaxException e) {
-        LOGGER.info("Pure URI Syntax issue ", e);
-      }
-    } else {
+      CollectionImeji collection = new CollectionController()
+          .retrieveLazy(URI.create(selectedCollectionItem), getSessionUser());
+      MetadataProfile profile =
+          new ProfileController().retrieve(collection.getProfile(), getSessionUser());
+      ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 
+      MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId())
+          : ImejiFactory.newMetadataSet(null);
+      MetadataSetWrapper mdSetBean = new MetadataSetWrapper(mdSet, profile, true);
+      metadataLabels = new MetadataLabels(profile, getLocale());
+      sus.setCollection(collection);
+      sus.setProfile(profile);
+      sus.setMdSetBean(mdSetBean);
     }
   }
 

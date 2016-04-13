@@ -90,7 +90,6 @@ public class ZIPExport extends Export {
     try {
       exportAllImages(sr, out, user);
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       LOGGER.info("Some problems with ZIP Export", e);
     }
   }
@@ -142,10 +141,11 @@ public class ZIPExport extends Export {
             // Complete the entry
             zip.closeEntry();
           }
+          LOGGER.error("Error zip export", ze);
         } catch (ImejiException e) {
-          LOGGER.info("Could not retrieve Item for export!");
+          LOGGER.info("Could not retrieve Item for export!", e);
         } catch (URISyntaxException eui) {
-          LOGGER.info("Could not create URI during retrieval and export! ");
+          LOGGER.info("Could not create URI during retrieval and export! ", eui);
         }
       }
     } catch (IOException e) {
@@ -156,7 +156,7 @@ public class ZIPExport extends Export {
       // Complete the ZIP file
       zip.close();
     } catch (IOException ioe) {
-      LOGGER.info("Could not close the ZIP File!");
+      LOGGER.info("Could not close the ZIP File!", ioe);
     }
   }
 

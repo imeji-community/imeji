@@ -3,9 +3,9 @@ package de.mpg.imeji.presentation.metadata;
 import java.net.URI;
 
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Bean for item element in the metadata editors

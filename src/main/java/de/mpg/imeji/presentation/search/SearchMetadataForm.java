@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.util.MetadataTypesHelper;
@@ -36,6 +38,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class SearchMetadataForm {
+  private static final Logger LOGGER = Logger.getLogger(SearchMetadataForm.class);
   private String searchValue;
   private String familyName;
   private String givenName;
@@ -138,7 +141,7 @@ public class SearchMetadataForm {
           try {
             DateFormatter.format(searchValue);
           } catch (Exception e) {
-            throw new UnprocessableError("error_date_format");
+            throw new UnprocessableError("error_date_format", e);
           }
           break;
         case GEOLOCATION:
@@ -162,6 +165,7 @@ public class SearchMetadataForm {
             }
           } catch (Exception e) {
             messages.add("error_latitude_format");
+            LOGGER.error("Search: invalid latitude", e);
           }
           try {
             if (!isEmtpyValue(longitude)) {
@@ -172,6 +176,7 @@ public class SearchMetadataForm {
             }
           } catch (Exception e) {
             messages.add("error_longitude_format");
+            LOGGER.error("Search: invalid longitude", e);
           }
           if (!messages.isEmpty()) {
             throw new UnprocessableError(messages);
@@ -183,7 +188,7 @@ public class SearchMetadataForm {
           try {
             Long.parseLong(searchValue);
           } catch (Exception e) {
-            throw new UnprocessableError("error_number_format");
+            throw new UnprocessableError("error_number_format", e);
           }
           break;
         case CONE_PERSON:

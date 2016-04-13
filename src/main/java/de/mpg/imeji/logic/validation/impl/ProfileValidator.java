@@ -9,10 +9,9 @@ import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**

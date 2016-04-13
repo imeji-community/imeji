@@ -55,7 +55,7 @@ public class UserController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
   private User user;
-  static Logger LOGGER = Logger.getLogger(UserController.class);
+  private static final Logger LOGGER = Logger.getLogger(UserController.class);
 
   /**
    * User type (restricted: can not create collection)
@@ -279,7 +279,7 @@ public class UserController {
     } catch (NumberFormatException e) {
       throw new UnprocessableError("Cannot parse currentDiskSpaceUsage " + results.get(0).toString()
           + "; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
-          + targetCollectionUser.getEmail());
+          + targetCollectionUser.getEmail(), e);
     }
     long needed = currentDiskUsage + file.length();
     if (needed > targetCollectionUser.getQuota()) {
@@ -487,7 +487,7 @@ public class UserController {
         ReaderFacade reader = new ReaderFacade(model);
         p.add((Person) reader.read(uri, user, new Person()));
       } catch (ImejiException e) {
-
+        LOGGER.error("Error reding person", e);
       }
     }
     return p;
@@ -524,7 +524,7 @@ public class UserController {
       try {
         admins.add(retrieve(URI.create(uri)));
       } catch (ImejiException e) {
-        LOGGER.info("Could not retrieve any admin in the list. Something is wrong!");
+        LOGGER.info("Could not retrieve any admin in the list. Something is wrong!", e);
       }
     }
     return admins;

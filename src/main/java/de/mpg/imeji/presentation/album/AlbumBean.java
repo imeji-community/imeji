@@ -169,7 +169,7 @@ public class AlbumBean extends ContainerBean {
 
       }
     } catch (Exception e) {
-      LOGGER.error(e.getMessage());
+      LOGGER.error("Error initializing album page", e);
       // Has to be in try/catch block, otherwise redirect from
       // HistoryFilter will not work.
       // Here simply do nothing
@@ -193,8 +193,10 @@ public class AlbumBean extends ContainerBean {
         upload();
       } catch (FileUploadException e) {
         BeanHelper.error("Could not upload the image " + e.getMessage());
+        LOGGER.error("Error upload album logo", e);
       } catch (TypeNotAllowedException e) {
         BeanHelper.error("Could not upload the image " + e.getMessage());
+        LOGGER.error("Error upload album logo", e);
       }
     }
   }
@@ -315,10 +317,8 @@ public class AlbumBean extends ContainerBean {
           .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_update", sessionBean.getLocale()));
       return true;
     } catch (UnprocessableError e) {
-      BeanHelper.cleanMessages();
-      for (String errorM : e.getMessages()) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sessionBean.getLocale()));
-      }
+      BeanHelper.error(e, sessionBean.getLocale());
+      LOGGER.error("Error update album", e);
       return false;
     }
 

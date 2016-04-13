@@ -1,7 +1,6 @@
 package de.mpg.imeji.logic.validation.impl;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 
@@ -11,11 +10,11 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
  * @author bastiens
  *
  */
-public class GeolocationValidator extends ContainerValidator implements Validator<Geolocation> {
+public class GeolocationValidator implements Validator<Geolocation> {
 
   @Override
   public void validate(Geolocation geolocation,
-      de.mpg.imeji.logic.validation.Validator.Method method) throws UnprocessableError {
+      de.mpg.imeji.logic.validation.impl.Validator.Method method) throws UnprocessableError {
     UnprocessableError e = new UnprocessableError();
     String value = geolocation.getName();
     Double latitude = geolocation.getLatitude();
@@ -41,15 +40,8 @@ public class GeolocationValidator extends ContainerValidator implements Validato
 
   @Override
   public void validate(Geolocation t, MetadataProfile p,
-      de.mpg.imeji.logic.validation.Validator.Method method) throws UnprocessableError {
+      de.mpg.imeji.logic.validation.impl.Validator.Method method) throws UnprocessableError {
     validate(t, method);
 
   }
-
-  @Override
-  protected UnprocessableError getException() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
 }

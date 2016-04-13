@@ -3,8 +3,6 @@
  */
 package de.mpg.imeji.logic.validation.impl;
 
-import de.mpg.imeji.logic.validation.Validator;
-
 /**
  * @author natasab
  *

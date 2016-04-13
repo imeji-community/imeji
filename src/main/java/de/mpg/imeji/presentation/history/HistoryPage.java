@@ -7,13 +7,16 @@ import java.net.URI;
 import java.util.Map;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.ProfileController;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.resource.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * An imeji web page
@@ -58,14 +61,14 @@ public class HistoryPage {
     if (uri != null) {
       String uriStr = UrlHelper.decode(uri.toString());
       if (ImejiPages.COLLECTION_HOME.matches(uriStr)) {
-        return ObjectLoader.loadCollectionLazy(uri, user).getMetadata().getTitle();
+        return new CollectionController().retrieveLazy(uri, user).getMetadata().getTitle();
       } else if (ImejiPages.ALBUM_HOME.matches(uriStr)) {
-        return ObjectLoader.loadAlbumLazy(uri, user).getMetadata().getTitle();
+        return new AlbumController().retrieveLazy(uri, user).getMetadata().getTitle();
       } else if (ImejiPages.ITEM_DETAIL.matches(uriStr)) {
         return new ItemController().retrieveLazy(uri, user).getFilename();
       } else if (ImejiPages.USER_GROUP == imejiPage) {
         String groupUri = UrlHelper.decode(ObjectHelper.getId(uri));
-        return ObjectLoader.loadUserGroupLazy(URI.create(groupUri), user).getName();
+        return new UserGroupController().read(URI.create(groupUri), user).getName();
       } else if (ImejiPages.PROFILE.matches(uriStr)) {
         return new ProfileController().retrieveLazy(uri, user).getTitle();
       } else if (ImejiPages.USER == imejiPage) {
@@ -73,7 +76,7 @@ public class HistoryPage {
         if (user != null && email.equals(user.getEmail())) {
           return user.getPerson().getCompleteName();
         } else {
-          return ObjectLoader.loadUser(email, user).getPerson().getCompleteName();
+          return new UserController(user).retrieve(email).getPerson().getCompleteName();
         }
       }
     }

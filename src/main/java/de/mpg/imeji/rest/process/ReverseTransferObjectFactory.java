@@ -24,7 +24,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
@@ -34,6 +33,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
@@ -326,7 +326,7 @@ public class ReverseTransferObjectFactory {
         lookUpStatement(mp.getStatements(), md.getTypeUri(), md.getStatementUri());
       } catch (NoSuchElementException e) {
         throw new BadRequestException("Cannot find { typeUri: " + md.getTypeUri()
-            + " , statementUri: " + md.getStatementUri() + "} in profile: " + mp.getId());
+            + " , statementUri: " + md.getStatementUri() + "} in profile: " + mp.getId(), e);
       }
     }
   }

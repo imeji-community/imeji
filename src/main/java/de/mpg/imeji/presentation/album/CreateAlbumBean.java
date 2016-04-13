@@ -108,7 +108,7 @@ public class CreateAlbumBean extends AlbumBean {
     } catch (ImejiException e) {
       BeanHelper
           .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_create", sessionBean.getLocale()));
-      LOGGER.error("Error creating album, e");
+      LOGGER.error("Error creating album", e);
     }
   }
 }

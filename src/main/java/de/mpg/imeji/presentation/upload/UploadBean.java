@@ -49,15 +49,14 @@ import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Bean for the upload page
@@ -386,8 +385,8 @@ public class UploadBean implements Serializable {
    */
   public void loadCollection() throws Exception {
     if (id != null) {
-      collection =
-          ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user);
+      collection = new CollectionController()
+          .retrieveLazy(ObjectHelper.getURI(CollectionImeji.class, id), user);
       isDiscaded();
       if (collection != null && getCollection().getId() != null) {
         ItemController ic = new ItemController();

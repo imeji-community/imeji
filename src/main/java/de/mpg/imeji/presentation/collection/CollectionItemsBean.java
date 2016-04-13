@@ -15,6 +15,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.doi.DoiService;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -31,7 +32,6 @@ import de.mpg.imeji.presentation.facet.FacetsJob;
 import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * {@link ItemsBean} to browse {@link Item} of a {@link CollectionImeji}
@@ -67,8 +67,8 @@ public class CollectionItemsBean extends ItemsBean {
   @Override
   public String getInitPage() throws Exception {
     uri = ObjectHelper.getURI(CollectionImeji.class, id);
-    collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
-    this.profile = ObjectLoader.loadProfile(collection.getProfile(), sb.getUser());
+    collection = new CollectionController().retrieveLazy(uri, sb.getUser());
+    profile = new ProfileController().retrieve(collection.getProfile(), sb.getUser());
     // Initialize the metadata labels
     metadataLabels = new MetadataLabels(profile, sb.getLocale());
     // browse context must be initialized before browseinit(), since the browseinit() will check if

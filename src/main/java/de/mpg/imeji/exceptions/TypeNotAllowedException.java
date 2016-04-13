@@ -8,4 +8,8 @@ public class TypeNotAllowedException extends Exception {
     super(message);
   }
 
+  public TypeNotAllowedException(String message, Throwable e) {
+    super(message, e);
+  }
+
 }

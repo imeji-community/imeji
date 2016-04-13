@@ -24,7 +24,9 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -42,10 +44,10 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -56,7 +58,6 @@ import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Bean for a Single image
@@ -114,6 +115,7 @@ public class ItemBean {
     try {
       loadImage();
     } catch (Exception e) {
+      LOGGER.error("Error loading item", e);
       FacesContext.getCurrentInstance().getExternalContext().responseSendError(404,
           "404_NOT_FOUND");
     }
@@ -205,6 +207,7 @@ public class ItemBean {
     } catch (Exception e) {
       techMd = new ArrayList<String>();
       techMd.add(e.getMessage());
+      LOGGER.error("Error reading technical metadata", e);
     }
   }
 
@@ -242,18 +245,21 @@ public class ItemBean {
    */
   public void loadCollection(User user) {
     try {
-      collection = ObjectLoader.loadCollectionLazy(item.getCollection(), user);
+      collection = new CollectionController().retrieveLazy(item.getCollection(), user);
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
       collection = null;
+      LOGGER.error("Error loading collection", e);
     }
   }
 
   /**
    * Load the {@link MetadataProfile} of the {@link Item}
+   * 
+   * @throws ImejiException
    */
-  public void loadProfile(User user) {
-    profile = ObjectLoader.loadProfile(item.getMetadataSet().getProfile(), user);
+  public void loadProfile(User user) throws ImejiException {
+    profile = new ProfileController().retrieve(item.getMetadataSet().getProfile(), user);
   }
 
   /**
@@ -472,6 +478,7 @@ public class ItemBean {
       try {
         activeA = ac.retrieve(sessionBean.getActiveAlbum().getId(), sessionBean.getUser());
       } catch (ImejiException e) {
+        LOGGER.error("Error retrieving active album", e);
         return false;
       }
 
@@ -527,7 +534,7 @@ public class ItemBean {
     this.profile = profile;
   }
 
-  public List<SelectItem> getStatementMenu() {
+  public List<SelectItem> getStatementMenu() throws ImejiException {
     List<SelectItem> statementMenu = new ArrayList<SelectItem>();
     if (profile == null) {
       loadProfile(sessionBean.getUser());

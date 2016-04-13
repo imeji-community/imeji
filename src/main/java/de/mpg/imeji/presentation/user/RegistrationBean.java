@@ -74,6 +74,7 @@ public class RegistrationBean extends SuperViewBean {
         FacesContext.getCurrentInstance().getExternalContext().redirect(nb.getHomeUrl());
       } catch (IOException e) {
         BeanHelper.error(e.getLocalizedMessage());
+        LOGGER.error("Error redirect", e);
       }
   }
 
@@ -122,6 +123,7 @@ public class RegistrationBean extends SuperViewBean {
     } catch (ImejiException e) {
       this.activation_success = false;
       this.activation_message = e.getLocalizedMessage();
+      LOGGER.error("Error activating user", e);
     }
   }
 
@@ -136,6 +138,7 @@ public class RegistrationBean extends SuperViewBean {
       return !new InvitationBusinessController().retrieveInvitationOfUser(user.getEmail())
           .isEmpty();
     } catch (ImejiException e) {
+      LOGGER.error("Error checking user invitations", e);
       return false;
     }
   }

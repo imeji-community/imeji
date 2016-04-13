@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
@@ -21,7 +23,6 @@ import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.image.SingleItemBrowse;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Bean for the detail {@link Item} page within an {@link Album}
@@ -31,6 +32,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * @version $Revision$ $LastChangedDate$
  */
 public class AlbumItemBean extends ItemBean {
+  private static final Logger LOGGER = Logger.getLogger(AlbumItemBean.class);
   private String albumId;
   private Navigation navigation;
   private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
@@ -62,7 +64,8 @@ public class AlbumItemBean extends ItemBean {
   }
 
   private Album loadAlbum() throws Exception {
-    return ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, albumId), session.getUser());
+    return new AlbumController().retrieveLazy(ObjectHelper.getURI(Album.class, albumId),
+        session.getUser());
   }
 
   /**
@@ -79,7 +82,7 @@ public class AlbumItemBean extends ItemBean {
         AlbumController ac = new AlbumController();
         List<String> l = new ArrayList<String>();
         l.add(getImage().getId().toString());
-        Album album = ObjectLoader.loadAlbum(getAlbum().getId(), session.getUser());
+        Album album = ac.retrieve(getAlbum().getId(), session.getUser());
         ac.removeFromAlbum(album, l, session.getUser());
         BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("image", session.getLocale()) + " "
             + getImage().getFilename() + " "
@@ -87,6 +90,7 @@ public class AlbumItemBean extends ItemBean {
       }
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
+      LOGGER.error("Error remove item from album", e);
       return "";
     }
     return session.getPrettySpacePage("pretty:albumBrowse");
@@ -107,7 +111,7 @@ public class AlbumItemBean extends ItemBean {
 
   @Override
   public String getPageUrl() {
-    return navigation.getAlbumUrl() + albumId + "/" + navigation.ITEM.getPath() + "/" + getId();
+    return navigation.getAlbumUrl() + albumId + "/" + Navigation.ITEM.getPath() + "/" + getId();
   }
 
   @Override

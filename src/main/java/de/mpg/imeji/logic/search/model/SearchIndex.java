@@ -5,8 +5,8 @@ import java.util.List;
 
 import de.mpg.imeji.logic.controller.util.MetadataTypesHelper;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Element of a {@link SearchPair}, defines the index of the searched elements

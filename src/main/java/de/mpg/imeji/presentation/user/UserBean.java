@@ -34,9 +34,9 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.share.ShareListItem;
 import de.mpg.imeji.presentation.share.ShareUtil;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class UserBean extends QuotaSuperBean {
+  private static final Logger LOGGER = Logger.getLogger(UserBean.class);
   private User user;
   private String newPassword = null;
   private String repeatedPassword = null;
@@ -86,7 +86,7 @@ public class UserBean extends QuotaSuperBean {
    */
   public void retrieveUser() throws Exception {
     if (id != null && session.getUser() != null) {
-      user = ObjectLoader.loadUser(id, session.getUser());
+      user = new UserController(session.getUser()).retrieve(id, session.getUser());
     } else if (id != null && session.getUser() == null) {
       LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
       loginBean.setLogin(id);
@@ -198,8 +198,9 @@ public class UserBean extends QuotaSuperBean {
    * Update the user in jena
    * 
    * @throws ImejiException
+   * @throws IOException
    */
-  public void updateUser() throws ImejiException {
+  public void updateUser() throws ImejiException, IOException {
     if (user != null) {
       UserController controller = new UserController(session.getUser());
       user.setQuota(QuotaUtil.getQuotaInBytes(getQuota()));
@@ -207,12 +208,8 @@ public class UserBean extends QuotaSuperBean {
         controller.update(user, session.getUser());
         reloadPage();
       } catch (UnprocessableError e) {
-        BeanHelper.cleanMessages();
-        BeanHelper.error(
-            Imeji.RESOURCE_BUNDLE.getMessage("error_during_user_update", session.getLocale()));
-        for (String errorM : e.getMessages()) {
-          BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, session.getLocale()));
-        }
+        BeanHelper.error(e, session.getLocale());
+        LOGGER.error("Error updating user", e);
       }
     }
   }
@@ -222,12 +219,8 @@ public class UserBean extends QuotaSuperBean {
    * 
    * @throws IOException
    */
-  private void reloadPage() {
-    try {
-      FacesContext.getCurrentInstance().getExternalContext().redirect(getUserPageUrl());
-    } catch (IOException e) {
-      Logger.getLogger(UserBean.class).info("Some reloadPage exception", e);
-    }
+  private void reloadPage() throws IOException {
+    FacesContext.getCurrentInstance().getExternalContext().redirect(getUserPageUrl());
   }
 
   /**
@@ -237,7 +230,6 @@ public class UserBean extends QuotaSuperBean {
    */
   public String getUserPageUrl() {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-
     return navigation.getUserUrl() + "?id=" + user.getEmail();
   }
 

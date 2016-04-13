@@ -11,6 +11,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
@@ -31,6 +33,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 @SessionScoped
 public class EditCollectionBean extends CollectionBean {
   private static final long serialVersionUID = 568267990816647451L;
+  private static final Logger LOGGER = Logger.getLogger(EditCollectionBean.class);
 
   public EditCollectionBean() {
     super();
@@ -76,6 +79,7 @@ public class EditCollectionBean extends CollectionBean {
       } catch (Exception e) {
         BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
             sessionBean.getLocale()));
+        LOGGER.error("Error upload collection logo", e);
       }
     }
   }
@@ -114,22 +118,23 @@ public class EditCollectionBean extends CollectionBean {
           Imeji.RESOURCE_BUNDLE.getMessage("success_collection_save", sessionBean.getLocale()));
       return true;
     } catch (UnprocessableError e) {
-      BeanHelper.cleanMessages();
-      for (String errorM : e.getMessages()) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sessionBean.getLocale()));
-      }
+      BeanHelper.error(e, sessionBean.getLocale());
+      LOGGER.error("Error saving collection", e);
       return false;
     } catch (IOException e) {
       BeanHelper.error(
           Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_save", sessionBean.getLocale()));
+      LOGGER.error("Error saving collection", e);
       return false;
     } catch (URISyntaxException e) {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
           sessionBean.getLocale()));
+      LOGGER.error("Error saving collection", e);
       return false;
     } catch (ImejiException e) {
       BeanHelper.error(
           Imeji.RESOURCE_BUNDLE.getMessage("error_collection_save", sessionBean.getLocale()));
+      LOGGER.error("Error saving collection", e);
       return false;
     }
   }

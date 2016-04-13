@@ -3,8 +3,8 @@
  */
 package de.mpg.imeji.logic.controller.util;
 
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Metadata.Types;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
 
 /**
  * Helper to work with {@link Metadata} {@link Types}

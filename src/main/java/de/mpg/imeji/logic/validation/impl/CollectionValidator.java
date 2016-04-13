@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
@@ -32,11 +31,12 @@ public class CollectionValidator extends ContainerValidator implements Validator
 
   @Override
   public void validate(CollectionImeji collection, Method m) throws UnprocessableError {
+    exception = new UnprocessableError();
     setValidateForMethod(m);
     validateContainerMetadata(collection);
     validateCollectionPersons(collection);
     validateDOI(collection.getDoi());
-    if (!exception.getMessages().isEmpty()) {
+    if (exception.hasMessages()) {
       throw exception;
     }
   }
@@ -88,7 +88,7 @@ public class CollectionValidator extends ContainerValidator implements Validator
   private void validateOrgsName(Collection<Organization> organizations) {
     for (Organization o : organizations) {
       if (isNullOrEmpty(o.getName().trim())) {
-        exception.getMessages().add("error_organization_need_name");
+        exception = new UnprocessableError("error_organization_need_name", exception);
       }
     }
   }
@@ -100,7 +100,7 @@ public class CollectionValidator extends ContainerValidator implements Validator
    */
   private void validateDOI(String doi) {
     if (!isNullOrEmpty(doi) && !DOI_VALIDATION_PATTERN.matcher(doi).find()) {
-      exception.getMessages().add("error_doi_format");
+      exception = new UnprocessableError("error_doi_format", exception);
     }
 
   }
@@ -108,6 +108,11 @@ public class CollectionValidator extends ContainerValidator implements Validator
   @Override
   public void validate(CollectionImeji t, MetadataProfile p, Method m) throws UnprocessableError {
     validate(t, m);
+  }
+
+  @Override
+  protected void setException(UnprocessableError e) {
+    this.exception = e;
   }
 
 }

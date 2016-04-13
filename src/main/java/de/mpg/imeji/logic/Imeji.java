@@ -137,7 +137,7 @@ public class Imeji {
     try {
       in = new FileInputStream(f);
     } catch (FileNotFoundException e) {
-      LOGGER.info("No" + f.getAbsolutePath() + " found, no migration runs");
+      LOGGER.info("No" + f.getAbsolutePath() + " found, no migration runs", e);
     }
     if (in != null) {
       String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
@@ -217,6 +217,7 @@ public class Imeji {
       dataset.commit();
     } catch (Exception e) {
       dataset.abort();
+      LOGGER.fatal("Error initialising model " + name, e);
     } finally {
       dataset.end();
     }
@@ -259,7 +260,7 @@ public class Imeji {
           LOGGER.info(
               "!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
           Imeji.adminUser = uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
-          LOGGER.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
+          LOGGER.info("Created admin user successfully:" + Imeji.adminUser.getEmail(), e);
         }
       } else {
         LOGGER.info("Admin user already exists:");
@@ -268,7 +269,7 @@ public class Imeji {
         }
       }
     } catch (AlreadyExistsException e) {
-      LOGGER.warn(Imeji.adminUser.getEmail() + " already exists");
+      LOGGER.warn(Imeji.adminUser.getEmail() + " already exists", e);
     } catch (Exception e) {
       if (e.getCause() instanceof AlreadyExistsException) {
         LOGGER.warn(Imeji.adminUser.getEmail() + " already exists");

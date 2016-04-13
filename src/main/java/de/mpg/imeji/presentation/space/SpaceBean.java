@@ -154,6 +154,7 @@ public abstract class SpaceBean implements Serializable {
     } catch (ImejiException e) {
       BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("could_not_load_collections_for_space",
           sessionBean.getLocale()));
+      LOGGER.error("error reading collection spaces", e);
     }
     if (UrlHelper.getParameterBoolean("start")) {
       try {
@@ -161,9 +162,11 @@ public abstract class SpaceBean implements Serializable {
       } catch (FileUploadException e) {
         BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
             sessionBean.getLocale()));
+        LOGGER.error("error upload space logo", e);
       } catch (TypeNotAllowedException e) {
         BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
             sessionBean.getLocale()));
+        LOGGER.error("error upload space logo", e);
       }
     }
 
@@ -273,6 +276,7 @@ public abstract class SpaceBean implements Serializable {
       } catch (IOException | FileUploadException e) {
         ii.setFile(null);
         BeanHelper.error("Could not process uploaded Logo file");
+        LOGGER.error("Could not process uploaded Logo file", e);
       }
     }
     return ii;

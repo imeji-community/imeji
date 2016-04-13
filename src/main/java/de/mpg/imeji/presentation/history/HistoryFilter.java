@@ -71,6 +71,7 @@ public class HistoryFilter implements Filter {
         dofilterImpl((HttpServletRequest) serv, resp);
       }
     } catch (NotFoundException | NullPointerException e) {
+      LOGGER.error("Error history filter", e);
       if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
         ((HttpServletResponse) resp).sendRedirect(navigation.getApplicationUrl());
       } else {
@@ -78,15 +79,19 @@ public class HistoryFilter implements Filter {
             "RESOURCE_NOT_FOUND");
       }
     } catch (AuthenticationError e) {
+      LOGGER.error("Error history filter", e);
       redirectToLoginPage(serv, resp);
     } catch (NotAllowedException | NotAllowedError e) {
+      LOGGER.error("Error history filter", e);
       ((HttpServletResponse) resp).sendError(Status.FORBIDDEN.getStatusCode(), "FORBIDDEN");
     } catch (BadRequestException e) {
+      LOGGER.error("Error history filter", e);
       ((HttpServletResponse) resp).sendError(Status.BAD_REQUEST.getStatusCode(), "BAD_REQUEST");
     } catch (Exception e) {
+
+      LOGGER.error("Error history filter", e);
       ((HttpServletResponse) resp).sendError(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
           "INTERNAL_SERVER_ERROR");
-      LOGGER.error(e);
     } finally {
       chain.doFilter(serv, resp);
     }

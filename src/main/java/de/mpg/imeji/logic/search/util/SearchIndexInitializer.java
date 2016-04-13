@@ -7,7 +7,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.search.model.SearchIndex;
-import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Initialize the imeji {@link SearchIndex}

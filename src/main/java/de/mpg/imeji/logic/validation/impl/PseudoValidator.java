@@ -1,7 +1,6 @@
 package de.mpg.imeji.logic.validation.impl;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**

@@ -22,6 +22,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.controller.util.MetadataProfileUtil;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -30,9 +31,9 @@ import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.util.MetadataFactory;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -44,7 +45,6 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Bean for batch and multiple metadata editor
@@ -185,12 +185,13 @@ public class EditItemMetadataBean extends SuperViewBean {
    * Load the profile of the images, and set the statement to be edited.
    * 
    * @param items
+   * @throws ImejiException
    */
-  private void initProfileAndStatement(List<Item> items) {
+  private void initProfileAndStatement(List<Item> items) throws ImejiException {
     profile = null;
     if (items != null && items.size() > 0) {
-      profile =
-          ObjectLoader.loadProfile(items.get(0).getMetadataSet().getProfile(), getSessionUser());
+      profile = new ProfileController().retrieve(items.get(0).getMetadataSet().getProfile(),
+          getSessionUser());
     }
     statement = getSelectedStatement();
   }

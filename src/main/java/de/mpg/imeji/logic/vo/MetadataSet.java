@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.ontology.Profile;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jResource;

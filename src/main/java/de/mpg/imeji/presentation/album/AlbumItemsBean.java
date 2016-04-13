@@ -27,7 +27,6 @@ import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * {@link ItemsBean} within an {@link Album}: Used to browse {@link Item} of an {@link Album}
@@ -87,7 +86,7 @@ public class AlbumItemsBean extends ItemsBean {
    * @throws Exception
    */
   public void loadAlbum() throws Exception {
-    album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
+    album = new AlbumController().retrieveLazy(uri, sb.getUser());
   }
 
   @Override

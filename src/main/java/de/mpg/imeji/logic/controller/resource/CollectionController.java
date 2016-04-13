@@ -35,13 +35,13 @@ import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
-import de.mpg.imeji.logic.validation.Validator.Method;
 import de.mpg.imeji.logic.validation.impl.CollectionValidator;
+import de.mpg.imeji.logic.validation.impl.Validator.Method;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -84,7 +84,7 @@ public class CollectionController extends ImejiController {
   public URI create(CollectionImeji c, MetadataProfile p, User user,
       MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
     isLoggedInUser(user);
-    // Validate before creating a profile, in can the collection isn't valid
+    // Validate before creating a profile, in case the collection isn't valid
     new CollectionValidator().validate(c, Method.CREATE);
     ProfileController pc = new ProfileController();
     String metadataProfileName = " (Metadata profile)";

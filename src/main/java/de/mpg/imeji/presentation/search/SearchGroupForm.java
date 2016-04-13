@@ -30,7 +30,6 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * A {@link SearchGroupForm} is a group of {@link SearchMetadataForm}
@@ -178,7 +177,7 @@ public class SearchGroupForm {
         Imeji.RESOURCE_BUNDLE.getLabel("adv_search_collection_restrict", session.getLocale())));
     for (String uri : cc.search(q, null, -1, 0, session.getUser(), session.getSelectedSpaceString())
         .getResults()) {
-      CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(uri), session.getUser());
+      CollectionImeji c = cc.retrieveLazy(URI.create(uri), session.getUser());
       l.add(new SelectItem(c.getId().toString(), c.getMetadata().getTitle()));
     }
     return l;

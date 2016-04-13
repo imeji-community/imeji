@@ -66,12 +66,8 @@ public class UserCreationBean extends QuotaSuperBean {
       BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_user_create", sb.getLocale()));
       reloadUserPage();
     } catch (UnprocessableError e) {
-      BeanHelper.cleanMessages();
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_during_user_create", sb.getLocale()));
-      for (String errorM : e.getMessages()) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sb.getLocale()));
-      }
+      BeanHelper.error(e, sb.getLocale());
+      LOGGER.error("Error creating user", e);
     } catch (Exception e) {
       LOGGER.error("Error creating user:", e);
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), sb.getLocale()));

@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * @author hnguyen

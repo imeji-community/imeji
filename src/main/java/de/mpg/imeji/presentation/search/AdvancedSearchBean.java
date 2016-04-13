@@ -195,10 +195,9 @@ public class AdvancedSearchBean {
       String q = SearchQueryParser.transform2UTF8URL(formular.getFormularAsSearchQuery());
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(navigation.getBrowseUrl() + "?q=" + q);
-    } catch (UnprocessableError e1) {
-      for (String m : e1.getMessages()) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(m, session.getLocale()));
-      }
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, session.getLocale());
+      LOGGER.error("Error invalid search form", e);
     }
   }
 

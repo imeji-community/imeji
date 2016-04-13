@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +18,6 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -58,7 +56,7 @@ public class RestProcessUtils {
       ObjectReader reader = new ObjectMapper().reader().withType(type);
       return reader.readValue(json);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage(), e);
     }
   }
 
@@ -87,7 +85,7 @@ public class RestProcessUtils {
     try {
       data = new ObjectMapper().readValue(json, type);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage(), e);
     }
     return data;
   }
@@ -95,36 +93,7 @@ public class RestProcessUtils {
 
   public static JsonNode buildJsonNode(Object obj) {
     ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
     return mapper.convertValue(obj, JsonNode.class);
-  }
-
-  public static DefaultItemTO buildDefaultItemTOFromJSON(HttpServletRequest req)
-      throws BadRequestException {
-    DefaultItemTO easyTO = new DefaultItemTO();
-    try {
-      JsonFactory factory = new JsonFactory();
-      ObjectMapper mapper = new ObjectMapper(factory);
-      JsonNode rootNode = mapper.readTree(req.getInputStream());
-      easyTO.setCollectionId(rootNode.path("collectionId").asText());
-
-      String metadataText = rootNode.path("metadata").toString();
-      rootNode = mapper.readTree(metadataText);
-      Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
-      while (fieldsIterator.hasNext()) {
-        Map.Entry<String, JsonNode> field = fieldsIterator.next();
-        rootNode = mapper.readTree(field.getValue().toString());
-        Iterator<Map.Entry<String, JsonNode>> fieldsIterator2 = rootNode.fields();
-        while (fieldsIterator2.hasNext()) {
-          Map.Entry<String, JsonNode> field2 = fieldsIterator2.next();
-        }
-      }
-
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage());
-    }
-    return easyTO;
-
   }
 
   public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type)
@@ -133,7 +102,7 @@ public class RestProcessUtils {
     try {
       return reader.readValue(req.getInputStream());
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 
@@ -144,7 +113,7 @@ public class RestProcessUtils {
     try {
       return reader.readValue(jsonSting);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json:", e);
     }
   }
 
@@ -153,7 +122,7 @@ public class RestProcessUtils {
     try {
       return ow.writeValueAsString(obj);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 
@@ -164,7 +133,7 @@ public class RestProcessUtils {
     try {
       return ow.writeValueAsString(obj);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 
@@ -303,7 +272,7 @@ public class RestProcessUtils {
       ObjectMapper mapper = new ObjectMapper();
       return mapper.readValue(str, Map.class);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 }

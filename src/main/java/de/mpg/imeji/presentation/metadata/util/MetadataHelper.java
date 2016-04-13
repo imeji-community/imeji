@@ -5,8 +5,8 @@ package de.mpg.imeji.presentation.metadata.util;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.util.MetadataAndProfileHelper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 

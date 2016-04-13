@@ -24,7 +24,6 @@ import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
@@ -33,6 +32,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.process.CommonUtils;
@@ -399,7 +399,7 @@ public class MetadataTransferHelper {
         try {
           easyCPTO = mapper.readValue(json.toString(), new TypeReference<DefaultConePersonTO>() {});
         } catch (Exception e) {
-          throw new UnprocessableError(label + e.getMessage());
+          throw new UnprocessableError("Error transfering " + label, e);
         }
         ConePersonTO newCone =
             metadata.getValue() != null ? (ConePersonTO) metadata.getValue() : new ConePersonTO();
@@ -423,7 +423,7 @@ public class MetadataTransferHelper {
           easyGeoTO =
               mapper.readValue(json.toString(), new TypeReference<DefaultGeolocationTO>() {});
         } catch (Exception e) {
-          throw new UnprocessableError(label + e.getMessage());
+          throw new UnprocessableError("Error Transferring" + label, e);
         }
         GeolocationTO newGT = new GeolocationTO();
         newGT.setName(easyGeoTO.getName());
@@ -436,7 +436,7 @@ public class MetadataTransferHelper {
         try {
           easyLTO = mapper.readValue(json.toString(), new TypeReference<DefaultLicenseTO>() {});
         } catch (Exception e) {
-          throw new UnprocessableError(label + e.getMessage());
+          throw new UnprocessableError("Error Transferring" + label, e);
         }
         LicenseTO newLicense = new LicenseTO();
         newLicense.setLicense(easyLTO.getLicense());
@@ -448,7 +448,7 @@ public class MetadataTransferHelper {
         try {
           easyLinkTO = mapper.readValue(json.toString(), new TypeReference<DefaultLinkTO>() {});
         } catch (Exception e) {
-          throw new UnprocessableError(label + e.getMessage());
+          throw new UnprocessableError("Error Transferring" + label, e);
         }
         LinkTO newLink = new LinkTO();
         newLink.setLink(easyLinkTO.getLink());
@@ -460,7 +460,7 @@ public class MetadataTransferHelper {
         try {
           easyPTO = mapper.readValue(json.toString(), new TypeReference<DefaultPublicationTO>() {});
         } catch (Exception e) {
-          throw new UnprocessableError(label + ":  " + e.getMessage());
+          throw new UnprocessableError("Error Transferring" + label, e);
         }
         PublicationTO newPub = new PublicationTO();
         newPub.setCitation(easyPTO.getCitation());

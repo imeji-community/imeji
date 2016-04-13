@@ -11,8 +11,10 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
@@ -29,7 +31,6 @@ import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Facets for the item browsed within a collection
@@ -54,9 +55,10 @@ public class CollectionFacets extends FacetsAbstract {
    * 
    * @param col
    * @param searchQuery
+   * @throws ImejiException
    */
   public CollectionFacets(CollectionImeji col, SearchQuery searchQuery, SearchResult r, User user,
-      Locale locale) {
+      Locale locale) throws ImejiException {
     if (col == null) {
       return;
     }
@@ -64,7 +66,7 @@ public class CollectionFacets extends FacetsAbstract {
     this.colURI = col.getId();
     this.searchQuery = searchQuery;
     this.user = user;
-    this.profile = ObjectLoader.loadProfile(col.getProfile(), Imeji.adminUser);
+    this.profile = new ProfileController().retrieve(col.getProfile(), Imeji.adminUser);
     this.locale = locale;
   }
 

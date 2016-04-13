@@ -38,4 +38,8 @@ public class BadRequestException extends ImejiException {
     super(message);
   }
 
+  public BadRequestException(String message, Throwable e) {
+    super(message, e);
+  }
+
 }

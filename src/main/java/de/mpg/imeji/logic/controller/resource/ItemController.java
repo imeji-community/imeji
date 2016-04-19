@@ -52,8 +52,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -105,15 +105,20 @@ public class ItemController extends ImejiController {
    */
   public Item createWithFile(Item item, File f, String filename, CollectionImeji c, User user)
       throws ImejiException {
+    StorageController sc = new StorageController();
     if (!AuthUtil.staticAuth().createContent(user, c)) {
       throw new NotAllowedError(
           "User not Allowed to upload files in collection " + c.getIdString());
+    }
+    String guessedNotAllowedFormat = sc.guessNotAllowedFormat(f);
+    if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
+      throw new UnprocessableError("upload_format_not_allowed");
     }
     // To check the user Quota, it always has to be provided with the Admin User
     UserController uc = new UserController(user);
     uc.checkQuota(f, c);
 
-    StorageController sc = new StorageController();
+
     UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 
     if (item == null) {
@@ -124,12 +129,6 @@ public class ItemController extends ImejiController {
       throw new UnprocessableError("Filename must not be empty!");
     }
     validateChecksum(c.getId(), f, false);
-
-    String guessedNotAllowedFormat = sc.guessNotAllowedFormat(f);
-    if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
-      throw new UnprocessableError("upload_format_not_allowed");
-    }
-
     String mimeType = StorageUtils.getMimeType(guessedNotAllowedFormat);
 
     item = ImejiFactory.newItem(item, c, user, uploadResult.getId(), filename,

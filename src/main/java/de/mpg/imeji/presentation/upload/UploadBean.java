@@ -187,7 +187,7 @@ public class UploadBean implements Serializable {
    * @return
    * @throws Exception
    */
-  public String uploadFromLink() throws Exception {
+  public String uploadFromLink() {
     try {
       URL url = new URL(externalUrl);
       File tmp = createTmpFile(findFileName(url));
@@ -208,8 +208,12 @@ public class UploadBean implements Serializable {
       BeanHelper.error(e.getMessage());
     }
     HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(hs.getCurrentPage().getUrl() + "?done=1");
+    try {
+      FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(hs.getCurrentPage().getUrl() + "?done=1");
+    } catch (IOException e) {
+      LOGGER.error("Error redirecting agter upload");
+    }
     return "";
   }
 
@@ -313,14 +317,11 @@ public class UploadBean implements Serializable {
     try {
       String calculatedExtension = StorageUtils.guessExtension(fileUploaded);
       File file = fileUploaded;
-
       if (!fileUploaded.getName().endsWith(calculatedExtension)) {
         file = new File(file.getName() + calculatedExtension);
         FileUtils.moveFile(fileUploaded, file);
       }
-
       validateName(file, title);
-
       Item item = null;
       ItemController controller = new ItemController();
       if (isImportImageToFile()) {
@@ -333,7 +334,8 @@ public class UploadBean implements Serializable {
       getsFiles().add(item);
       return item;
     } catch (Exception e) {
-      getfFiles().add(" File " + title + " not uploaded: " + e.getMessage());
+      getfFiles().add(" File " + title + " not uploaded. " + e.getMessage() != null
+          ? Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), session.getLocale()) : "");
       LOGGER.error("Error uploading item: ", e);
       return null;
     }

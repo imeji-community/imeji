@@ -172,7 +172,6 @@ public final class StorageController implements Serializable {
    */
   public String guessNotAllowedFormat(File file) {
     boolean canBeUploaded = false;
-
     String guessedExtension = FilenameUtils.getExtension(file.getName());
     if (!"".equals(guessedExtension)) {
       canBeUploaded = isAllowedFormat(guessedExtension);

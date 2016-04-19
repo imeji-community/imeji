@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
@@ -39,7 +38,7 @@ import de.mpg.imeji.logic.storage.transform.impl.RawFileImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.SimpleAudioImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.SimpleImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.XuggleImageGenerator;
-import de.mpg.imeji.logic.storage.util.GifUtils;
+import de.mpg.imeji.logic.storage.util.ImageMagickUtils;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 
@@ -100,31 +99,12 @@ public final class ImageGeneratorManager {
    */
   public File generate(File file, String extension, FileResolution resolution) {
     if (StorageUtils.compareExtension("gif", extension)) {
-      try {
-        return generateGif(FileUtils.readFileToByteArray(file), extension, resolution);
-      } catch (IOException e) {
-        LOGGER.error("Error reading gif file to byte array", e);
+      File gifFile = ImageMagickUtils.resizeAnimatedGif(file, resolution);
+      if (gifFile != null) {
+        return gifFile;
       }
     }
     return generateJpeg(file, extension, resolution);
-  }
-
-  /**
-   * Generate an animated gif in the wished size. The file must be a gif, otherwise an exception is
-   * thrown
-   * 
-   * @param bytes
-   * @param extension
-   * @param resolution
-   * @return
-   */
-  private File generateGif(byte[] bytes, String extension, FileResolution resolution) {
-    try {
-      return StorageUtils.toFile(GifUtils.resizeAnimatedGif(bytes, resolution));
-    } catch (Exception e) {
-      LOGGER.error("Error generating gif", e);
-    }
-    return null;
   }
 
   /**

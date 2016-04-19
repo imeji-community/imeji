@@ -28,11 +28,9 @@ public class ImejiResourceBundle {
       try {
         return ResourceBundle.getBundle(getSelectedLabelBundle(locale)).getString(placeholder);
       } catch (MissingResourceException e) {
-        LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
         return ResourceBundle.getBundle(getDefaultLabelBundle()).getString(placeholder);
       }
     } catch (Exception e) {
-      LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
       return placeholder;
     }
   }
@@ -48,11 +46,9 @@ public class ImejiResourceBundle {
       try {
         return ResourceBundle.getBundle(getSelectedMessagesBundle(locale)).getString(placeholder);
       } catch (MissingResourceException e) {
-        LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
         return ResourceBundle.getBundle(getDefaultMessagesBundle()).getString(placeholder);
       }
     } catch (Exception e) {
-      LOGGER.error("Missing bundle " + placeholder + " for language " + locale.toString(), e);
       return placeholder;
     }
   }

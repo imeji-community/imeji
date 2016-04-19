@@ -13,8 +13,11 @@ import org.apache.log4j.Logger;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
+import org.im4java.core.IdentifyCmd;
 import org.im4java.core.Info;
+import org.im4java.core.InfoException;
 
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.TempFileUtil;
 
@@ -25,25 +28,26 @@ import de.mpg.imeji.logic.util.TempFileUtil;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class MediaUtils {
-  private static final Logger LOGGER = Logger.getLogger(MediaUtils.class);
+public class ImageMagickUtils {
+  private static final Logger LOGGER = Logger.getLogger(ImageMagickUtils.class);
+  public static final boolean imageMagickEnabled = verifyImageMagickInstallation();
 
   /**
-   * Return true if imagemagick is installed on the current system<br/>
-   * TODO Ye: Execute when upload page shows and show install ImageMagick tips
+   * Return true if imagemagick is installed on the current system
    * 
    * @return
    * @throws IOException
    * @throws URISyntaxException
    */
-  public static boolean verifyImageMagickInstallation() throws IOException, URISyntaxException {
-    String imPath = getImageMagickInstallationPath();
-    ConvertCmd cmd = new ConvertCmd(false);
-    cmd.setSearchPath(imPath);
-    IMOperation op = new IMOperation();
-    // get ImageMagick version
-    op.version();
+  public static boolean verifyImageMagickInstallation() {
     try {
+      String imPath = getImageMagickInstallationPath();
+      ConvertCmd cmd = new ConvertCmd(false);
+      IdentifyCmd.setGlobalSearchPath(imPath);
+      cmd.setSearchPath(imPath);
+      IMOperation op = new IMOperation();
+      // get ImageMagick version
+      op.version();
       cmd.run(op);
     } catch (Exception e) {
       LOGGER.error("imagemagick not installed", e);
@@ -71,8 +75,9 @@ public class MediaUtils {
     ConvertCmd cmd = getConvert();
     // create the operation, add images and operators/options
     IMOperation op = new IMOperation();
-    if (isImage(extension))
+    if (isImage(extension)) {
       op.colorspace(findColorSpace(tmp));
+    }
     op.strip();
     op.flatten();
     op.addImage(path);
@@ -95,6 +100,64 @@ public class MediaUtils {
   }
 
   /**
+   * Resize a gif. If animated, keep the animation
+   * 
+   * @param file
+   * @param resolution
+   * @return
+   */
+  public static File resizeAnimatedGif(File file, FileResolution resolution) {
+    try {
+      if (!imageMagickEnabled) {
+        return null;
+      }
+      String path = file.getAbsolutePath();
+      ConvertCmd cmd = ImageMagickUtils.getConvert();
+      // create the operation, add images and operators/options
+      IMOperation op = new IMOperation();
+      int size = getSize(file, resolution);
+      if (resolution == FileResolution.THUMBNAIL) {
+        op.thumbnail(size, size, "^");
+      } else {
+        op.thumbnail(size);
+      }
+      op.gravity("center");
+      op.extent(size);
+      op.addImage(path);
+      File gif = TempFileUtil.createTempFile("uploadMagick", ".gif");
+      try {
+        op.addImage(gif.getAbsolutePath());
+        cmd.run(op);
+        return gif;
+      } finally {
+      }
+    } catch (Exception e) {
+      LOGGER.error("Error transforming gif", e);
+    }
+    return null;
+  }
+
+  /**
+   * Get the Size if an image file
+   * 
+   * @param file
+   * @param resolution
+   * @return
+   * @throws Exception
+   */
+  private static int getSize(File file, FileResolution resolution) throws Exception {
+    int size = ImageUtils.getResolution(resolution);
+    Info info = ImageMagickUtils.getInfo(file);
+    if (info.getImageWidth() > size || info.getImageHeight() > size) {
+      return size;
+    } else {
+      return info.getImageWidth() > info.getImageHeight() ? info.getImageWidth()
+          : info.getImageHeight();
+    }
+  }
+
+
+  /**
    * True if the extension correspond to an image file
    * 
    * @param extension
@@ -102,10 +165,6 @@ public class MediaUtils {
    */
   private static boolean isImage(String extension) {
     return StorageUtils.getMimeType(extension).contains("image");
-  }
-
-  public static byte[] resize() {
-    return null;
   }
 
   /**
@@ -118,16 +177,28 @@ public class MediaUtils {
    * @throws IM4JavaException
    * @throws URISyntaxException
    */
-  private static String findColorSpace(File tmp) {
+  public static String findColorSpace(File tmp) {
     try {
       Info imageInfo = new Info(tmp.getAbsolutePath());
       String cs = imageInfo.getProperty("Colorspace");
-      if (cs != null)
+      if (cs != null) {
         return cs;
+      }
     } catch (Exception e) {
-      LOGGER.error("No color space found!", e);
+      LOGGER.error("No color space found for " + tmp.getAbsolutePath(), e);
     }
     return "RGB";
+  }
+
+  /**
+   * Return the info about the file as returned by imageMagick
+   * 
+   * @param f
+   * @return
+   * @throws InfoException
+   */
+  public static Info getInfo(File f) throws InfoException {
+    return new Info(f.getAbsolutePath(), true);
   }
 
   /**
@@ -141,7 +212,7 @@ public class MediaUtils {
    * @throws InterruptedException
    * @throws IM4JavaException
    */
-  private static int getNonBlankFrame(String path)
+  public static int getNonBlankFrame(String path)
       throws IOException, URISyntaxException, InterruptedException, IM4JavaException {
     ConvertCmd cmd = getConvert();
     int count = 0;
@@ -198,9 +269,8 @@ public class MediaUtils {
    * @throws IOException
    * @throws URISyntaxException
    */
-  private static ConvertCmd getConvert() throws IOException, URISyntaxException {
+  public static ConvertCmd getConvert() throws IOException, URISyntaxException {
     String magickPath = getImageMagickInstallationPath();
-    // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
     ConvertCmd cmd = new ConvertCmd(false);
     cmd.setSearchPath(magickPath);
     return cmd;

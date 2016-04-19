@@ -322,7 +322,7 @@ public final class ImageUtils {
    * @throws IOException
    * @throws URISyntaxException
    */
-  private static int getResolution(FileResolution resolution)
+  public static int getResolution(FileResolution resolution)
       throws IOException, URISyntaxException {
     switch (resolution) {
       case THUMBNAIL:

@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 import org.im4java.core.IM4JavaException;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
-import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.logic.storage.util.ImageMagickUtils;
 import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
@@ -67,7 +67,7 @@ public class MagickImageGenerator implements ImageGenerator {
       throws IOException, URISyntaxException, InterruptedException, IM4JavaException {
     if (enabled) {
       try {
-        return MediaUtils.convertToJPEG(file, extension);
+        return ImageMagickUtils.convertToJPEG(file, extension);
       } catch (Exception e) {
         LOGGER.warn("Error with imagemagick: ", e);
         return null;

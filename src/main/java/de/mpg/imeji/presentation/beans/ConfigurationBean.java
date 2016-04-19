@@ -36,6 +36,7 @@ import org.codehaus.jettison.json.JSONException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.config.ImejiConfiguration.HtmlSnippet;
 import de.mpg.imeji.logic.search.model.FileTypes;
+import de.mpg.imeji.logic.storage.util.ImageMagickUtils;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -77,7 +78,7 @@ public class ConfigurationBean {
   }
 
   public boolean isImageMagickInstalled() throws IOException, URISyntaxException {
-    return Imeji.CONFIG.isImageMagickInstalled();
+    return ImageMagickUtils.imageMagickEnabled;
   }
 
   /**

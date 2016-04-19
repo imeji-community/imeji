@@ -26,7 +26,6 @@ import org.codehaus.jettison.json.JSONException;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.search.model.FileTypes;
-import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.logic.util.PropertyReader;
 
 public class ImejiConfiguration {
@@ -216,10 +215,6 @@ public class ImejiConfiguration {
    */
   public String getSnippet() {
     return (String) config.get(CONFIGURATION.SNIPPET.name());
-  }
-
-  public boolean isImageMagickInstalled() throws IOException, URISyntaxException {
-    return MediaUtils.verifyImageMagickInstallation();
   }
 
   /**

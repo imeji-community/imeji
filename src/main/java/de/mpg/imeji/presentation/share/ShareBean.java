@@ -49,6 +49,7 @@ public class ShareBean implements Serializable {
   // the user whom the shared object belongs
   private URI owner;
   private String title;
+  private String backUrl;
   private String profileUri;
   private boolean isAdmin;
   private boolean sendEmail = false;
@@ -85,6 +86,9 @@ public class ShareBean implements Serializable {
       this.profileUri = collection.getProfile() != null ? collection.getProfile().toString() : null;
       this.title = collection.getMetadata().getTitle();
       this.owner = collection.getCreatedBy();
+      this.backUrl =
+          ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getCollectionUrl()
+              + collection.getIdString();
     }
     this.init();
   }
@@ -104,6 +108,8 @@ public class ShareBean implements Serializable {
       this.shareTo = album;
       this.title = album.getMetadata().getTitle();
       this.owner = album.getCreatedBy();
+      this.backUrl = ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl()
+          + album.getIdString();
     }
     this.init();
   }
@@ -120,11 +126,14 @@ public class ShareBean implements Serializable {
     this.shareTo = null;
     this.uri =
         HistoryUtil.extractURI(PrettyContext.getCurrentInstance().getRequestURL().toString());
+
     Item item = new ItemController().retrieveLazy(uri, sb.getUser());
     if (item != null) {
       this.shareTo = item;
       this.title = item.getFilename();
       this.owner = item.getCreatedBy();
+      this.backUrl = ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getItemUrl()
+          + item.getIdString();
     }
     this.init();
     return "";
@@ -486,5 +495,19 @@ public class ShareBean implements Serializable {
    */
   public void setShareList(ShareList shareList) {
     this.shareList = shareList;
+  }
+
+  /**
+   * @return the backurl
+   */
+  public String getBackUrl() {
+    return backUrl;
+  }
+
+  /**
+   * @param backurl the backurl to set
+   */
+  public void setBackUrl(String backurl) {
+    this.backUrl = backurl;
   }
 }

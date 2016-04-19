@@ -9,7 +9,7 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<ui:param name="rolesMenu" value="#{ShareBean.input.menu.	rolesMenu}"/>
+		<ui:param name="rolesMenu" value="#{ShareBean.input.menu.rolesMenu}"/>
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin(ShareBean.shareTo)}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
 			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>

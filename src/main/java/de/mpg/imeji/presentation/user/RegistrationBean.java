@@ -54,8 +54,6 @@ public class RegistrationBean extends SuperViewBean {
   private String redirect;
   private boolean isInvited = false;
 
-
-
   @PostConstruct
   public void init() {
     nb = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
@@ -63,7 +61,7 @@ public class RegistrationBean extends SuperViewBean {
     this.token = UrlHelper.getParameterValue("token");
     this.user.setEmail(UrlHelper.getParameterValue("login"));
     this.isInvited = checkInvitations();
-    if (getUser() == null) {
+    if (getSessionUser() == null) {
       if (!isNullOrEmptyTrim(token)) {
         // if user is not yet activated, activate it
         activate();
@@ -96,7 +94,6 @@ public class RegistrationBean extends SuperViewBean {
           .error(Imeji.RESOURCE_BUNDLE.getMessage("error_during_user_registration", getLocale()));
       LOGGER.error("error registering user", e);
     }
-
     if (registration_success) {
       BeanHelper.cleanMessages();
       BeanHelper.info("Sending registration email and new password.");

@@ -19,7 +19,6 @@ import de.mpg.imeji.logic.vo.util.MetadataFactory;
  * @version $Revision$ $LastChangedDate$
  */
 public class CollectionSessionBean {
-  private CollectionImeji active = null;
   private MetadataProfile profile = null;
   private String selectedMenu = "SORTING";
   private String filter = "all";
@@ -41,8 +40,7 @@ public class CollectionSessionBean {
    * 
    * @throws Exception
    */
-  public void init() throws Exception {
-    active = new CollectionImeji();
+  public void init() {
     profile = new MetadataProfile();
     metadataTypes = new ArrayList<Metadata>();
     for (Metadata.Types t : Metadata.Types.values()) {
@@ -50,19 +48,6 @@ public class CollectionSessionBean {
     }
   }
 
-  /**
-   * @return the active
-   */
-  public CollectionImeji getActive() {
-    return active;
-  }
-
-  /**
-   * @param active the active to set
-   */
-  public void setActive(CollectionImeji active) {
-    this.active = active;
-  }
 
   /**
    * @return the selectedMenu

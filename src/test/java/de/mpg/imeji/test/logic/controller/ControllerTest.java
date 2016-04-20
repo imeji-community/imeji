@@ -49,7 +49,6 @@ public class ControllerTest {
     collection = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
     return controller.create(collection, profile, JenaUtil.testUser,
         MetadataProfileCreationMethod.COPY, null);
-    return collection;
   }
 
   /**

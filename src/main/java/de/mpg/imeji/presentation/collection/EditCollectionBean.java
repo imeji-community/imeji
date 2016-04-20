@@ -33,7 +33,6 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerEditorSession;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -72,9 +71,6 @@ public class EditCollectionBean extends CollectionBean {
           persons.add(p);
         }
         getCollection().getMetadata().setPersons(persons);
-        // set the loaded collection in the session
-        ((CollectionSessionBean) BeanHelper.getSessionBean(CollectionSessionBean.class))
-            .setActive(getCollection());
       } catch (ImejiException e) {
         BeanHelper.error("Error initiatilzing page: " + e.getMessage());
         LOGGER.error("Error init edit collection page", e);
@@ -147,9 +143,8 @@ public class EditCollectionBean extends CollectionBean {
    * @return
    */
   public String getCancel() {
-    Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    return nav.getCollectionUrl() + ObjectHelper.getId(getCollection().getId()) + "/"
-        + nav.getInfosPath() + "?init=1";
+    return getNavigation().getCollectionUrl() + ObjectHelper.getId(getCollection().getId()) + "/"
+        + getNavigation().getInfosPath() + "?init=1";
   }
 
   @Override

@@ -141,8 +141,7 @@ public class CollectionController extends ImejiController {
    * @throws ImejiException
    */
   public CollectionImeji retrieve(URI uri, User user) throws ImejiException {
-    CollectionImeji c = (CollectionImeji) reader.read(uri.toString(), user, new CollectionImeji());
-    return c;
+    return (CollectionImeji) reader.read(uri.toString(), user, new CollectionImeji());
   }
 
   /**

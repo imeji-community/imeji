@@ -46,7 +46,6 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerEditorSession;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -88,8 +87,7 @@ public class CreateAlbumBean extends AlbumBean {
    */
   @Override
   public String getCancel() {
-    Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    return nav.getAlbumsUrl();
+    return getNavigation().getAlbumsUrl();
   }
 
   /**

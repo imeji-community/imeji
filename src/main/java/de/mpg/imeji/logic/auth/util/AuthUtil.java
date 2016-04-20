@@ -45,10 +45,10 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 
 /**
  * Utility class for the package auth
@@ -115,15 +115,12 @@ public class AuthUtil {
    * @return
    */
   private static boolean isAllowedToViewCollectionOfFile(String fileUrl, User user) {
-    String collectionId = STORAGE_CONTROLLER.getCollectionId(fileUrl);
     try {
+      String collectionId = STORAGE_CONTROLLER.getCollectionId(fileUrl);
       new CollectionController().retrieve(ObjectHelper.getURI(CollectionImeji.class, collectionId),
           user);
       return true;
     } catch (Exception e) {
-      LOGGER.warn(
-          "File " + fileUrl + " from collection " + collectionId + " not allowed for user " + user,
-          e);
       return false;
     }
   }
@@ -142,8 +139,6 @@ public class AuthUtil {
       new AlbumController().retrieve(ObjectHelper.getURI(Album.class, albumId), user);
       return true;
     } catch (Exception e) {
-      LOGGER.warn(
-          "File " + fileUrl + " from collection " + albumId + " not allowed for user " + user, e);
       return false;
     }
   }

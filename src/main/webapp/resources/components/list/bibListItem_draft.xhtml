@@ -103,7 +103,7 @@
 								</h:outputLink>
 							</li>
 							</ui:fragment>
-							<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.create(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
+							<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.createContent(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
 								<li>
 									<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
 										<h:outputText value="#{lbl.upload_images}"/>

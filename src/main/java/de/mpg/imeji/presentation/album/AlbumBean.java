@@ -32,7 +32,6 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -86,6 +85,7 @@ public class AlbumBean extends ContainerBean {
     this.album = album;
     if (album != null) {
       this.id = ObjectHelper.getId(album.getId());
+      activeAlbum = ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getActiveAlbum();
       if (activeAlbum != null && activeAlbum.getId().equals(album.getId())) {
         active = true;
       }
@@ -165,7 +165,7 @@ public class AlbumBean extends ContainerBean {
 
   @Override
   public String getPageUrl() {
-    return ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl() + id;
+    return getNavigation().getAlbumUrl() + id;
   }
 
   /**

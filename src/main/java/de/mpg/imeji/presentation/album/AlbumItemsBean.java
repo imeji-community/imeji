@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -227,11 +226,7 @@ public class AlbumItemsBean extends ItemsBean {
    */
   public String release() throws Exception {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    try {
-      ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).initView();
-    } catch (IOException e) {
-      LOGGER.error("Error during release album items", e);
-    }
+    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).release();
     return "pretty:";
   }
@@ -244,12 +239,7 @@ public class AlbumItemsBean extends ItemsBean {
    */
   public String delete() throws Exception {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    try {
-      ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).initView();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      LOGGER.error("Error during delete album items ", e);
-    }
+    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).delete();
     return sb.getPrettySpacePage("pretty:albums");
   }
@@ -260,12 +250,17 @@ public class AlbumItemsBean extends ItemsBean {
    * @return
    * @throws Exception
    */
-  public String withdraw() throws Exception {
+  public String withdraw() {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).initView();
+    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     String dc = album.getDiscardComment();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().setDiscardComment(dc);
-    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
+    try {
+      ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
+    } catch (ImejiException e) {
+      LOGGER.error("Error discard album", e);
+      BeanHelper.error("Error discarding album");
+    }
     return "pretty:";
   }
 

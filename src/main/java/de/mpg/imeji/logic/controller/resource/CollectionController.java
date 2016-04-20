@@ -81,7 +81,7 @@ public class CollectionController extends ImejiController {
    * @return
    * @throws ImejiException
    */
-  public URI create(CollectionImeji c, MetadataProfile p, User user,
+  public CollectionImeji create(CollectionImeji c, MetadataProfile p, User user,
       MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
     isLoggedInUser(user);
     // Validate before creating a profile, in case the collection isn't valid
@@ -128,7 +128,7 @@ public class CollectionController extends ImejiController {
       SpaceController sp = new SpaceController();
       sp.addCollection(spaceId, c.getId().toString(), user);
     }
-    return c.getId();
+    return c;
   }
 
   /**

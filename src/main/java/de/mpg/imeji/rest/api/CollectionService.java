@@ -13,10 +13,10 @@ import java.util.List;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.ProfileController;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -119,7 +119,7 @@ public class CollectionService implements API<CollectionTO> {
     transferCollection(to, vo, CREATE, u);
 
     URI collectionURI = null;
-    collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method), null);
+    collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method), null).getId();
     return read(CommonUtils.extractIDFromURI(collectionURI), u);
   }
 

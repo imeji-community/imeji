@@ -21,6 +21,41 @@ public class SuperViewBean {
   private User sessionUser;
   @ManagedProperty(value = "#{SessionBean.locale}")
   private Locale locale;
+  @ManagedProperty(value = "#{SessionBean.selectedSpaceString}")
+  private String space;
+  @ManagedProperty(value = "#{SessionBean.spaceId}")
+  private String spaceId;
+  @ManagedProperty(value = "#{Navigation}")
+  private Navigation navigation;
+
+
+  /**
+   * @return the navigation
+   */
+  public Navigation getNavigation() {
+    return navigation;
+  }
+
+  /**
+   * @param navigation the navigation to set
+   */
+  public void setNavigation(Navigation navigation) {
+    this.navigation = navigation;
+  }
+
+  /**
+   * @return the space
+   */
+  public String getSpace() {
+    return space;
+  }
+
+  /**
+   * @param space the space to set
+   */
+  public void setSpace(String space) {
+    this.space = space;
+  }
 
   /**
    * @return the sessionUser
@@ -48,5 +83,19 @@ public class SuperViewBean {
    */
   public void setLocale(Locale locale) {
     this.locale = locale;
+  }
+
+  /**
+   * @return the spaceId
+   */
+  public String getSpaceId() {
+    return spaceId;
+  }
+
+  /**
+   * @param spaceId the spaceId to set
+   */
+  public void setSpaceId(String spaceId) {
+    this.spaceId = spaceId;
   }
 }

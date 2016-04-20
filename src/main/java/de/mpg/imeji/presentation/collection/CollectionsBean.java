@@ -3,9 +3,6 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import static de.mpg.imeji.presentation.notification.CommonMessages.getSuccessCollectionDeleteMessage;
-
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +15,6 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -64,48 +60,15 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
 
   @Override
   public String selectAll() {
-    for (CollectionListItem bean : getCurrentPartList()) {
-      if (Status.PENDING.toString().equals(bean.getStatus())) {
-        bean.setSelected(true);
-        if (!(sb.getSelectedCollections().contains(bean.getUri()))) {
-          sb.getSelectedCollections().add(bean.getUri());
-        }
-      }
-    }
+    // Not implemented
     return "";
   }
 
   @Override
   public String selectNone() {
-    sb.getSelectedCollections().clear();
+    // Not implemented
     return "";
   }
-
-  /**
-   * Delete all selected {@link CollectionImeji}
-   * 
-   * @return
-   * @throws Exception
-   */
-  public String deleteAll() throws Exception {
-    int count = 0;
-    for (URI uri : sb.getSelectedCollections()) {
-      CollectionController collectionController = new CollectionController();
-      CollectionImeji collection = collectionController.retrieve(uri, sb.getUser());
-      collectionController.delete(collection, sb.getUser());
-      count++;
-
-      BeanHelper.info(
-          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb.getLocale()));
-    }
-    sb.getSelectedCollections().clear();
-    if (count == 0) {
-      BeanHelper.warn(
-          Imeji.RESOURCE_BUNDLE.getMessage("error_delete_no_collection_selected", sb.getLocale()));
-    }
-    return sb.getPrettySpacePage("pretty:collections");
-  }
-
 
   /**
    * getter

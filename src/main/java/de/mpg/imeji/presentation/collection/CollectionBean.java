@@ -6,6 +6,9 @@ package de.mpg.imeji.presentation.collection;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.presentation.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
+import java.net.URI;
+import java.util.List;
+
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
@@ -20,9 +23,7 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -43,9 +44,6 @@ public abstract class CollectionBean extends ContainerBean {
   private static final Logger LOGGER = Logger.getLogger(CollectionBean.class);
   private TabType tab = TabType.HOME;
 
-  protected SessionBean sessionBean;
-
-  protected Navigation navigation;
   private CollectionImeji collection;
   private MetadataProfile profile = null;
   private MetadataProfile profileTemplate;
@@ -63,8 +61,6 @@ public abstract class CollectionBean extends ContainerBean {
    */
   public CollectionBean() {
     collection = new CollectionImeji();
-    sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
   }
 
   /**
@@ -74,7 +70,7 @@ public abstract class CollectionBean extends ContainerBean {
    * @throws ImejiException
    */
   protected void initCollectionProfile() throws ImejiException {
-    this.profile = new ProfileController().retrieve(collection.getProfile(), sessionBean.getUser());
+    this.profile = new ProfileController().retrieve(collection.getProfile(), getSessionUser());
     this.profileId = profile != null ? profile.getIdString() : null;
   }
 
@@ -147,7 +143,7 @@ public abstract class CollectionBean extends ContainerBean {
    * @return the selected
    */
   public boolean getSelected() {
-    if (sessionBean.getSelectedCollections().contains(collection.getId())) {
+    if (getSelectedCollections().contains(collection.getId())) {
       selected = true;
     } else {
       selected = false;
@@ -160,14 +156,16 @@ public abstract class CollectionBean extends ContainerBean {
    */
   public void setSelected(boolean selected) {
     if (selected) {
-      if (!(sessionBean.getSelectedCollections().contains(collection.getId()))) {
-        sessionBean.getSelectedCollections().add(collection.getId());
+      if (!(getSelectedCollections().contains(collection.getId()))) {
+        getSelectedCollections().add(collection.getId());
       }
     } else {
-      sessionBean.getSelectedCollections().remove(collection.getId());
+      getSelectedCollections().remove(collection.getId());
     }
     this.selected = selected;
   }
+
+  protected abstract List<URI> getSelectedCollections();
 
   /**
    * release the {@link CollectionImeji}
@@ -177,12 +175,11 @@ public abstract class CollectionBean extends ContainerBean {
   public String release() {
     CollectionController cc = new CollectionController();
     try {
-      cc.release(collection, sessionBean.getUser());
-      BeanHelper.info(
-          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", sessionBean.getLocale()));
+      cc.release(collection, getSessionUser());
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", getLocale()));
     } catch (Exception e) {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE
-          .getMessage("error_collection_release: " + e.getMessage(), sessionBean.getLocale()));
+          .getMessage("error_collection_release: " + e.getMessage(), getLocale()));
       LOGGER.error("Error during collection release", e);
     }
     return "pretty:";
@@ -193,16 +190,14 @@ public abstract class CollectionBean extends ContainerBean {
       String doi = UrlHelper.getParameterValue("doi");
       DoiService doiService = new DoiService();
       if (doi != null) {
-        doiService.addDoiToCollection(doi, collection, sessionBean.getUser());
+        doiService.addDoiToCollection(doi, collection, getSessionUser());
       } else {
-        doiService.addDoiToCollection(collection, sessionBean.getUser());
+        doiService.addDoiToCollection(collection, getSessionUser());
       }
-      BeanHelper
-          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", sessionBean.getLocale()));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", getLocale()));
     } catch (ImejiException e) {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", sessionBean.getLocale())
-              + " " + e.getMessage());
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", getLocale()) + " "
+          + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";
@@ -216,15 +211,14 @@ public abstract class CollectionBean extends ContainerBean {
   public String delete() {
     CollectionController cc = new CollectionController();
     try {
-      cc.delete(collection, sessionBean.getUser());
-      BeanHelper.info(getSuccessCollectionDeleteMessage(this.collection.getMetadata().getTitle(),
-          sessionBean.getLocale()));
+      cc.delete(collection, getSessionUser());
+      BeanHelper.info(
+          getSuccessCollectionDeleteMessage(this.collection.getMetadata().getTitle(), getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(
-          Imeji.RESOURCE_BUNDLE.getMessage(e.getLocalizedMessage(), sessionBean.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(e.getLocalizedMessage(), getLocale()));
       LOGGER.error("Error delete collection", e);
     }
-    return sessionBean.getPrettySpacePage("pretty:collections");
+    return SessionBean.getPrettySpacePage("pretty:collections", getSpace());
   }
 
   /**
@@ -236,12 +230,10 @@ public abstract class CollectionBean extends ContainerBean {
   public String withdraw() throws Exception {
     CollectionController cc = new CollectionController();
     try {
-      cc.withdraw(collection, sessionBean.getUser());
-      BeanHelper.info(
-          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", sessionBean.getLocale()));
+      cc.withdraw(collection, getSessionUser());
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(
-          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", sessionBean.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error discarding collection:", e);
     }
@@ -293,7 +285,7 @@ public abstract class CollectionBean extends ContainerBean {
   }
 
   public String getPageUrl() {
-    return navigation.getCollectionUrl() + id;
+    return getNavigation().getCollectionUrl() + id;
   }
 
   /*
@@ -332,11 +324,10 @@ public abstract class CollectionBean extends ContainerBean {
     this.sendEmailNotification = sendEmailNotification;
     // check if id already set
     if (!isNullOrEmpty(id)) {
-      User user = sessionBean.getUser();
       if (sendEmailNotification) {
-        user.addObservedCollection(id);
+        getSessionUser().addObservedCollection(id);
       } else {
-        user.removeObservedCollection(id);
+        getSessionUser().removeObservedCollection(id);
       }
     }
   }
@@ -364,12 +355,12 @@ public abstract class CollectionBean extends ContainerBean {
       ProfileController pc = new ProfileController();
       MetadataProfile collectionProfile = null;
       try {
-        collectionProfile = pc.retrieve(collection.getProfile(), sessionBean.getUser());
+        collectionProfile = pc.retrieve(collection.getProfile(), getSessionUser());
       } catch (NotFoundException e) {
         return true;
       } catch (ImejiException e) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_retrieving_metadata_profile",
-            sessionBean.getLocale()));
+        BeanHelper.error(
+            Imeji.RESOURCE_BUNDLE.getMessage("error_retrieving_metadata_profile", getLocale()));
       }
       return collectionProfile.getStatements().isEmpty();
     }

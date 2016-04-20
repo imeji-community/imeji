@@ -56,14 +56,12 @@
 	</url-mapping>
 	<!-- Collection pages -->
 	<url-mapping id="collection">
-		<pattern value="/collection/#{ViewCollectionBean.id}" />
+		<pattern value="/collection/#{ id }" />
 		<view-id>/jsf/CollectionEntryPage.xhtml</view-id>
-		<action onPostback="true">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="collectionInfos">
-		<pattern value="/collection/#{ViewCollectionBean.id}/infos" />
+		<pattern value="/collection/#{ id }/infos" />
 		<view-id>/jsf/CollectionView.xhtml</view-id>
-		<action onPostback="true">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="collectionBrowse">
 		<pattern value="/collection/#{CollectionItemsBean.id}/browse" />
@@ -75,14 +73,12 @@
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="editCollection">
-		<pattern value="/collection/#{EditCollectionBean.id}/edit" />
+		<pattern value="/collection/#{ id }/edit" />
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
-		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="createCollection">
 		<pattern value="/createcollection" />
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
-		<!--  <action onPostback="false">#{CreateCollectionBean.init}</action>-->
 	</url-mapping>
 	<url-mapping id="shareCollection">
 		<pattern value="/collection/#{ShareBean.id}/share"></pattern>
@@ -106,25 +102,21 @@
 	<url-mapping id="createalbum">
 		<pattern value="/createalbum" />
 		<view-id>/jsf/AlbumCreate.xhtml</view-id>
-		<action onPostback="false">#{CreateAlbumBean.init}</action>
 	</url-mapping>
 
 	<url-mapping id="editAlbum">
-		<pattern value="/album/#{AlbumBean.id}/edit" />
+		<pattern value="/album/#{ id }/edit" />
 		<view-id>/jsf/AlbumEdit.xhtml</view-id>
-		<action onPostback="false">#{AlbumBean.initEdit}</action>
 	</url-mapping>
 
 	<url-mapping id="album">
-		<pattern value="/album/#{AlbumBean.id}" />
+		<pattern value="/album/#{ id }" />
 		<view-id>/jsf/AlbumEntryPage.xhtml</view-id>
-		<action>#{AlbumBean.initView}</action>
 	</url-mapping>
 
 	<url-mapping id="albumInfos">
-		<pattern value="/album/#{AlbumBean.id}/infos" />
+		<pattern value="/album/#{ id }/infos" />
 		<view-id>/jsf/AlbumView.xhtml</view-id>
-		<action>#{AlbumBean.initView}</action>
 	</url-mapping>
 
 	<url-mapping id="albumBrowse">
@@ -157,9 +149,7 @@
 		<pattern value="/user"></pattern>
 		<view-id>/jsf/User.xhtml</view-id>
 	</url-mapping>
-
-
-
+	
 	<url-mapping id="administration">
 		<pattern value="/admin"></pattern>
 		<view-id>/jsf/AdminOverview.xhtml</view-id>
@@ -287,14 +277,12 @@
 	</url-mapping>
 	<!-- Collection pages -->
 	<url-mapping id="space_collection">
-		<pattern value="/space/#{SessionBean.spaceId}/collection/#{ViewCollectionBean.id}" />
+		<pattern value="/space/#{SessionBean.spaceId}/collection/#{ id }" />
 		<view-id>/jsf/CollectionEntryPage.xhtml</view-id>
-		<action onPostback="true">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="space_collectionInfos">
-		<pattern value="/space/#{SessionBean.spaceId}/collection/#{ViewCollectionBean.id}/infos" />
+		<pattern value="/space/#{SessionBean.spaceId}/collection/#{ id }/infos" />
 		<view-id>/jsf/CollectionView.xhtml</view-id>
-		<action onPostback="true">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="space_collectionBrowse">
 		<pattern value="/space/#{SessionBean.spaceId}/collection/#{CollectionItemsBean.id}/browse" />
@@ -306,14 +294,12 @@
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="space_editCollection">
-		<pattern value="/space/#{SessionBean.spaceId}/collection/#{EditCollectionBean.id}/edit" />
+		<pattern value="/space/#{SessionBean.spaceId}/collection/#{ id }/edit" />
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
-		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="space_createCollection">
 		<pattern value="/space/#{SessionBean.spaceId}/createcollection" />
 		<view-id>/jsf/CollectionCreate.xhtml</view-id>
-		<!--  <action onPostback="false">#{CreateCollectionBean.init}</action>-->
 	</url-mapping>
 	<url-mapping id="space_shareCollection">
 		<pattern value="/space/#{SessionBean.spaceId}/collection/#{ShareBean.id}/share"></pattern>
@@ -333,25 +319,21 @@
 	<url-mapping id="space_createalbum">
 		<pattern value="/space/#{SessionBean.spaceId}/createalbum" />
 		<view-id>/jsf/AlbumCreate.xhtml</view-id>
-		<action onPostback="false">#{CreateAlbumBean.init}</action>
 	</url-mapping>
 
 	<url-mapping id="space_editAlbum">
-		<pattern value="/space/#{SessionBean.spaceId}/album/#{AlbumBean.id}/edit" />
+		<pattern value="/space/#{SessionBean.spaceId}/album/#{ id }/edit" />
 		<view-id>/jsf/AlbumEdit.xhtml</view-id>
-		<action onPostback="false">#{AlbumBean.initEdit}</action>
 	</url-mapping>
 
 	<url-mapping id="space_album">
-		<pattern value="/space/#{SessionBean.spaceId}/album/#{AlbumBean.id}" />
+		<pattern value="/space/#{SessionBean.spaceId}/album/#{ id }" />
 		<view-id>/jsf/AlbumEntryPage.xhtml</view-id>
-		<action>#{AlbumBean.initView}</action>
 	</url-mapping>
 
 	<url-mapping id="space_albumInfos">
-		<pattern value="/space/#{SessionBean.spaceId}/album/#{AlbumBean.id}/infos" />
+		<pattern value="/space/#{SessionBean.spaceId}/album/#{ id }/infos" />
 		<view-id>/jsf/AlbumView.xhtml</view-id>
-		<action>#{AlbumBean.initView}</action>
 	</url-mapping>
 
 	<url-mapping id="space_albumBrowse">

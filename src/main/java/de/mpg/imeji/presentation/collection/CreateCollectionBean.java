@@ -3,11 +3,15 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -20,11 +24,13 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
-import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.presentation.beans.ContainerEditorSession;
 import de.mpg.imeji.presentation.mdProfile.ProfileSelector;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
 
@@ -43,24 +49,27 @@ public class CreateCollectionBean extends CollectionBean {
   private final VocabularyHelper vocabularyHelper = new VocabularyHelper();;
   private ProfileSelector profileSelector;
   private boolean createProfile = false;
+  @ManagedProperty(value = "#{ContainerEditorSession}")
+  private ContainerEditorSession containerEditorSession;
 
   /**
-   * Bean Constructor
+   * Method called when paged is loaded
    */
-  public CreateCollectionBean() {
-    initialize();
-  }
-
-  /**
-   * Method called when paged is loaded (defined in pretty-config.xml)
-   */
-  public void initialize() {
+  @PostConstruct
+  public void init() {
+    profileSelector = new ProfileSelector(null, getSessionUser(), getSpace());
     setCollectionCreateMode(true);
     setCollection(ImejiFactory.newCollection());
     ((List<Person>) getCollection().getMetadata().getPersons()).set(0,
-        sessionBean.getUser().getPerson().clone());
-    profileSelector =
-        new ProfileSelector(null, sessionBean.getUser(), sessionBean.getSelectedSpaceString());
+        getSessionUser().getPerson().clone());
+    if (UrlHelper.getParameterBoolean("init")) {
+      containerEditorSession.setUploadedLogoPath(null);
+    }
+    if (UrlHelper.getParameterBoolean("start")) {
+      File f = upload();
+      containerEditorSession
+          .setUploadedLogoPath(f != null && f.exists() ? f.getAbsolutePath() : null);
+    }
   }
 
   /**
@@ -73,7 +82,7 @@ public class CreateCollectionBean extends CollectionBean {
     if (createCollection()) {
       try {
         FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(navigation.getCollectionUrl() + getCollection().getIdString());
+            .redirect(getNavigation().getCollectionUrl() + getCollection().getIdString());
       } catch (IOException e) {
         LOGGER.error("Error redirecting after saving collection", e);
       }
@@ -87,11 +96,15 @@ public class CreateCollectionBean extends CollectionBean {
    * @return
    * @throws Exception
    */
-  public String saveAndEditProfile() throws Exception {
+  public String saveAndEditProfile() {
     if (createCollection()) {
-      FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(navigation.getProfileUrl() + extractIDFromURI(getCollection().getProfile())
-              + "/edit?init=1&col=" + getCollection().getIdString());
+      try {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(
+            getNavigation().getProfileUrl() + extractIDFromURI(getCollection().getProfile())
+                + "/edit?init=1&col=" + getCollection().getIdString());
+      } catch (IOException e) {
+        LOGGER.error("Error redirect after create collection", e);
+      }
     }
     return "";
   }
@@ -119,24 +132,26 @@ public class CreateCollectionBean extends CollectionBean {
       if (!createProfile) {
         profileSelector.setProfile(null);
       }
-      URI id = collectionController.create(getCollection(), profileSelector.getProfile(),
-          sessionBean.getUser(), profileSelector.getSelectorMode(),
-          sessionBean.getSelectedSpaceString());
-      setCollection(collectionController.retrieve(id, sessionBean.getUser()));
-      setId(ObjectHelper.getId(id));
+
+      setCollection(collectionController.create(getCollection(), profileSelector.getProfile(),
+          getSessionUser(), profileSelector.getSelectorMode(), getSpace()));
+      if (containerEditorSession.getUploadedLogoPath() != null) {
+        collectionController.updateLogo(getCollection(),
+            new File(containerEditorSession.getUploadedLogoPath()), getSessionUser());
+      }
       setSendEmailNotification(isSendEmailNotification());
-      UserController uc = new UserController(sessionBean.getUser());
-      uc.update(sessionBean.getUser(), sessionBean.getUser());
-      BeanHelper.info(
-          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_create", sessionBean.getLocale()));
+      UserController uc = new UserController(getSessionUser());
+      uc.update(getSessionUser(), getSessionUser());
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_create", getLocale()));
       return true;
     } catch (UnprocessableError e) {
-      BeanHelper.error(e, sessionBean.getLocale());
+      BeanHelper.error(e, getLocale());
       LOGGER.error("Error create collection", e);
     } catch (ImejiException e) {
       BeanHelper.cleanMessages();
-      BeanHelper.error(
-          Imeji.RESOURCE_BUNDLE.getMessage(e.getLocalizedMessage(), sessionBean.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(e.getLocalizedMessage(), getLocale()));
+      LOGGER.error("Error create collection", e);
+    } catch (Exception e) {
       LOGGER.error("Error create collection", e);
     }
     return false;
@@ -152,17 +167,16 @@ public class CreateCollectionBean extends CollectionBean {
    * @return
    */
   public String getCancel() {
-    return navigation.getCollectionsUrl() + "?q=";
+    return getNavigation().getCollectionsUrl() + "?q=";
   }
 
   @Override
   protected String getNavigationString() {
-    return sessionBean.getPrettySpacePage("pretty:createCollection");
+    return SessionBean.getPrettySpacePage("pretty:createCollection", getSpace());
   }
 
   public String getVocabularyLabel(URI id) {
     for (SelectItem item : vocabularyHelper.getVocabularies()) {
-
       if (id.toString().equals(item.getValue().toString())) {
         return item.getLabel();
       }
@@ -184,6 +198,19 @@ public class CreateCollectionBean extends CollectionBean {
 
   public void setCreateProfile(boolean createProfile) {
     this.createProfile = createProfile;
+  }
+
+  public ContainerEditorSession getContainerEditorEditorSession() {
+    return containerEditorSession;
+  }
+
+  public void setContainerEditorSession(ContainerEditorSession collectionEditorSession) {
+    this.containerEditorSession = collectionEditorSession;
+  }
+
+  @Override
+  protected List<URI> getSelectedCollections() {
+    return new ArrayList<>();
   }
 
 }

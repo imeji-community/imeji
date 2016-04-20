@@ -66,8 +66,6 @@ public class SessionBean implements Serializable {
   private User user = null;
   private Page currentPage;
   private List<String> selected;
-  private List<URI> selectedCollections;
-  private List<URI> selectedAlbums;
   private Album activeAlbum;
   private Map<URI, MetadataProfile> profileCached;
   private Map<URI, CollectionImeji> collectionCached;
@@ -110,8 +108,6 @@ public class SessionBean implements Serializable {
    */
   public SessionBean() {
     selected = new ArrayList<String>();
-    selectedCollections = new ArrayList<URI>();
-    selectedAlbums = new ArrayList<URI>();
     profileCached = new HashMap<URI, MetadataProfile>();
     collectionCached = new HashMap<URI, CollectionImeji>();
     locale = InternationalizationBean.getUserLocale();
@@ -341,61 +337,6 @@ public class SessionBean implements Serializable {
    */
   public void addToSelected(String selection) {
     selected.add(selection);
-  }
-
-
-  /**
-   * getter
-   * 
-   * @return
-   */
-  public List<URI> getSelectedCollections() {
-    return selectedCollections;
-  }
-
-  /**
-   * setter
-   * 
-   * @param selectedCollections
-   */
-  public void setSelectedCollections(List<URI> selectedCollections) {
-    this.selectedCollections = selectedCollections;
-  }
-
-  /**
-   * Return the number of selected collections
-   * 
-   * @return
-   */
-  public int getSelectCollectionsSize() {
-    return this.selectedCollections.size();
-  }
-
-  /**
-   * getter
-   * 
-   * @return
-   */
-  public List<URI> getSelectedAlbums() {
-    return selectedAlbums;
-  }
-
-  /**
-   * setter
-   * 
-   * @param selectedAlbums
-   */
-  public void setSelectedAlbums(List<URI> selectedAlbums) {
-    this.selectedAlbums = selectedAlbums;
-  }
-
-  /**
-   * getter
-   * 
-   * @return
-   */
-  public int getSelectedAlbumsSize() {
-    return this.selectedAlbums.size();
   }
 
   /**
@@ -659,8 +600,9 @@ public class SessionBean implements Serializable {
   }
 
   public String getSelectedSpaceString() {
-    if (this.selectedSpace != null)
+    if (this.selectedSpace != null) {
       return this.selectedSpace.toString();
+    }
     return "";
   }
 
@@ -681,11 +623,14 @@ public class SessionBean implements Serializable {
   }
 
   public String getPrettySpacePage(String prettyPage) {
-    if (isNullOrEmpty(this.spaceId)) {
+    return getPrettySpacePage(prettyPage, spaceId);
+  }
+
+  public static String getPrettySpacePage(String prettyPage, String space) {
+    if (isNullOrEmpty(space)) {
       return prettyPage;
     }
     return prettyPage.replace("pretty:", "pretty:space_");
-
   }
 
   /**

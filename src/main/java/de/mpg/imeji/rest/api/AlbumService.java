@@ -11,9 +11,9 @@ import java.util.List;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -86,7 +86,7 @@ public class AlbumService implements API<AlbumTO> {
     Album vo = new Album();
     transferAlbum(to, vo, CREATE, u);
     URI albumURI;
-    albumURI = ac.create(vo, u);
+    albumURI = ac.create(vo, u).getId();
     return read(CommonUtils.extractIDFromURI(albumURI), u);
   }
 

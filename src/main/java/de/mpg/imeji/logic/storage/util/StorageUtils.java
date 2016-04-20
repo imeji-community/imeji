@@ -103,6 +103,23 @@ public class StorageUtils {
   }
 
   /**
+   * Write an inputStream into a File
+   * 
+   * @param bytes
+   * @return
+   */
+  public static File toFile(InputStream in) {
+    try {
+      File f = TempFileUtil.createTempFile("storageUtils_toFile", null);
+      writeInOut(in, new FileOutputStream(f), true);
+      return f;
+    } catch (IOException e) {
+      LOGGER.error("Error creating a temp File", e);
+    }
+    return null;
+  }
+
+  /**
    * Write an {@link InputStream} to an {@link OutputStream}
    * 
    * @param out

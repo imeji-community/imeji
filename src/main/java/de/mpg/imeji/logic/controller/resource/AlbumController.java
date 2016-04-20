@@ -36,8 +36,8 @@ import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -67,7 +67,7 @@ public class AlbumController extends ImejiController {
    * @param album
    * @param user
    */
-  public URI create(Album album, User user) throws ImejiException {
+  public Album create(Album album, User user) throws ImejiException {
     if (!Imeji.CONFIG.getAlbumsEnabled()) {
       throw new NotSupportedMethodException("Album functionalities are disabled");
     }
@@ -76,7 +76,7 @@ public class AlbumController extends ImejiController {
     ShareBusinessController shareController = new ShareBusinessController();
     shareController.shareToCreator(user, album.getId().toString());
     writer.create(WriterFacade.toList(album), null, user);
-    return album.getId();
+    return album;
   }
 
 
@@ -225,7 +225,7 @@ public class AlbumController extends ImejiController {
     // Add Items which are not already in the album
     Set<String> albumItemsSet = new HashSet<>(albumItems);
     // Retrieve the uris, to check that the items all exist
-    List<Item> items = (List<Item>) itemController.retrieveBatch(uris, -1, 0, user);
+    itemController.retrieveBatch(uris, -1, 0, user);
     for (String uri : uris) {
       albumItemsSet.add(uri);
     }
@@ -260,7 +260,7 @@ public class AlbumController extends ImejiController {
         itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0).getResults();
     int beforeSize = albumItems.size();
     // Retrieving Items to check if there will be some not existing item
-    List<Item> items = (List<Item>) itemController.retrieveBatch(toDelete, -1, 0, user);
+    itemController.retrieveBatch(toDelete, -1, 0, user);
     for (String uri : toDelete) {
       albumItems.remove(uri);
     }

@@ -73,7 +73,7 @@ public class ItemTestBase extends ImejiTestBase {
           ReverseTransferObjectFactory.TRANSFER_MODE.CREATE, JenaUtil.testUser);
 
       collectionId = ObjectHelper.getId(cc.create(ci, profile, JenaUtil.testUser,
-          CollectionController.MetadataProfileCreationMethod.REFERENCE, null));
+          CollectionController.MetadataProfileCreationMethod.REFERENCE, null).getId());
     } catch (Exception e) {
       LOGGER.error("Cannot init Collection", e);
     }

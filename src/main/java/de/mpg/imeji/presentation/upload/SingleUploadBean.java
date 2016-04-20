@@ -345,10 +345,8 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
     MetadataProfileBusinessController metadataProfileBC = new MetadataProfileBusinessController();
     newC.setProfile(metadataProfileBC.retrieveDefaultProfile().getId());
-    URI id = cc.create(newC, metadataProfileBC.retrieveDefaultProfile(), getSessionUser(),
+    return cc.create(newC, metadataProfileBC.retrieveDefaultProfile(), getSessionUser(),
         MetadataProfileCreationMethod.REFERENCE, selectedSpaceString);
-    newC.setId(id);
-    return newC;
   }
 
   public List<SelectItem> getCollectionItems() {

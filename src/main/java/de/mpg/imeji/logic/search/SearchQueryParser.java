@@ -45,16 +45,16 @@ public class SearchQueryParser {
    * Regex to match: statementid:field="value"
    */
   private static final String SEARCH_METADATA_REGEX =
-      "([a-zA-Z0-9-_]+):([a-z_]+)([=<>]{1,2})\"(.+)\"";
+      "([a-zA-Z0-9-_]+):([a-z_]+)([=<>@]{1,2})\"(.+)\"";
   /**
    * Regex to match: field="value"
    */
-  private static final String SEARCH_PAIR_REGEX = "([a-zA-Z_]+)([=<>]{1,2})\"(.+)\"";
+  private static final String SEARCH_PAIR_REGEX = "([a-zA-Z_]+)([=<>@]{1,2})\"(.+)\"";
   /**
    * Regex to match md:label="value"
    */
   private static final String SEARCH_METADATA_SIMPLE_REGEX =
-      "md:([a-zA-Z0-9-_]+)([=<>]{1,2})\"(.+)\"";
+      "md:([a-zA-Z0-9-_]+)([=<>@]{1,2})\"(.+)\"";
   /**
    * PAttern for SEARCH_METADATA_REGEX
    */
@@ -200,8 +200,10 @@ public class SearchQueryParser {
       return SearchOperators.GREATER;
     } else if ("<=".equals(str)) {
       return SearchOperators.LESSER;
+    } else if ("@".equals(str)) {
+      return SearchOperators.GEO;
     }
-    return null;
+    return SearchOperators.REGEX;
   }
 
   /**

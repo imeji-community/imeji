@@ -45,7 +45,6 @@ public class CollectionListItem {
   private String id = null;
   private URI uri = null;
   private String discardComment = "";
-  private boolean selected = false;
   // dates
   private String creationDate = null;
   private String lastModificationDate = null;
@@ -95,8 +94,6 @@ public class CollectionListItem {
       // initializations
       initThumbnail(collection, user);
       initSize(collection, user);
-      // initDiscardedSize(collection, user);
-      initSelected();
       if (user != null) {
         isOwner = collection.getCreatedBy().equals(user.getId());
       }
@@ -139,18 +136,6 @@ public class CollectionListItem {
     ItemController ic = new ItemController();
     size =
         ic.search(collection.getId(), null, null, Imeji.adminUser, null, 0, 0).getNumberOfRecords();
-  }
-
-
-  /**
-   * Chek if the {@link CollectionImeji} is selected in the {@link SessionBean}
-   */
-  private void initSelected() {
-    if (((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getSelectedCollections()
-        .contains(uri))
-      selected = true;
-    else
-      selected = false;
   }
 
   /**
@@ -327,20 +312,6 @@ public class CollectionListItem {
     this.versionDate = versionDate;
   }
 
-  public boolean isSelected() {
-    return selected;
-  }
-
-  public void setSelected(boolean selected) {
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    if (selected) {
-      if (!(sessionBean.getSelectedCollections().contains(uri))) {
-        sessionBean.getSelectedCollections().add(uri);
-      }
-    } else
-      sessionBean.getSelectedCollections().remove(uri);
-    this.selected = selected;
-  }
 
   public URI getUri() {
     return uri;

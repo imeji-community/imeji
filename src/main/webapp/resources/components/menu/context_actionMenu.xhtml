@@ -41,14 +41,14 @@
 						<ul class="imj_overlayMenuList">
 							<ui:fragment rendered="#{Auth.sessionUser.allowedToCreateCollection}">
 								<li>
-									<h:outputLink value="#{Navigation.createCollectionUrl}?reset=1" title="#{lbl.collection_create}">
+									<h:outputLink value="#{Navigation.createCollectionUrl}?init=1" title="#{lbl.collection_create}">
 										<h:outputText value="#{lbl.collection_create}"/>
 									</h:outputLink>
 								</li>
 							</ui:fragment>
 							<ui:fragment rendered="#{Configuration.albumsEnabled}">
 								<li>
-									<h:outputLink value="#{Navigation.createAlbumUrl}" title="#{lbl.album_create}">
+									<h:outputLink value="#{Navigation.createAlbumUrl}?init=1" title="#{lbl.album_create}">
 										<h:outputText value="#{lbl.album_create}"/>
 									</h:outputLink>
 								</li>

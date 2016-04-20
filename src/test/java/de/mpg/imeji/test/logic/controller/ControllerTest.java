@@ -1,16 +1,15 @@
 package de.mpg.imeji.test.logic.controller;
 
 import java.io.File;
-import java.net.URI;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.ProfileController;
-import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -48,9 +47,8 @@ public class ControllerTest {
   protected static CollectionImeji createCollection() throws ImejiException {
     CollectionController controller = new CollectionController();
     collection = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
-    URI uri = controller.create(collection, profile, JenaUtil.testUser,
+    return controller.create(collection, profile, JenaUtil.testUser,
         MetadataProfileCreationMethod.COPY, null);
-    collection = controller.retrieve(uri, JenaUtil.testUser);
     return collection;
   }
 

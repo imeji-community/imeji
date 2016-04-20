@@ -8,18 +8,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.TypeNotAllowedException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
@@ -51,36 +50,31 @@ import de.mpg.imeji.presentation.util.CommonUtils;
 @ViewScoped
 public class AlbumBean extends ContainerBean {
   private static final long serialVersionUID = -8161410292667767348L;
-  protected SessionBean sessionBean = null;
+  private static final Logger LOGGER = Logger.getLogger(AlbumBean.class);
   private Album album = null;
   private String id = null;
   private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
   private boolean active;
   private String tab;
-  /**
-   * True if the {@link AlbumBean} is used for the create page, else false
-   */
-  // protected boolean create;
-  private boolean selected;
-  private static final Logger LOGGER = Logger.getLogger(AlbumBean.class);
+  @ManagedProperty(value = "#{SessionBean.activeAlbum}")
+  private Album activeAlbum;
   /**
    * Maximum number of character displayed in the list for the description
    */
   private static final int DESCRIPTION_MAX_SIZE = 300;
-
   /**
    * Maximum number of items displayed on album start page
    */
   private static final int MAX_ITEM_NUM_VIEW = 13;
-  /**
-   * A small description when the description of the {@link Album} is too large for the list view
-   */
-  // private String smallDescription = null;
   private String description = "";
   private String descriptionFull = null;
   private ThumbnailBean thumbnail;
   // number of items which the current user is allowed to see
   private int allowedItemsSize;
+
+  public AlbumBean() {
+    // must be defined for class extending albumBean
+  }
 
   /**
    * Construct an {@link AlbumBean} from an {@link Album}
@@ -92,14 +86,12 @@ public class AlbumBean extends ContainerBean {
     this.album = album;
     if (album != null) {
       this.id = ObjectHelper.getId(album.getId());
-      sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-      if (sessionBean.getActiveAlbum() != null
-          && sessionBean.getActiveAlbum().getId().equals(album.getId())) {
+      if (activeAlbum != null && activeAlbum.getId().equals(album.getId())) {
         active = true;
       }
       if (album.getId() != null) {
-        findItems(sessionBean.getUser(), 1);
-        loadItems(sessionBean.getUser(), 1);
+        findItems(getSessionUser(), 1);
+        loadItems(getSessionUser(), 1);
         countItems();
         description = album.getMetadata().getDescription();
         descriptionFull = description;
@@ -121,52 +113,33 @@ public class AlbumBean extends ContainerBean {
   }
 
   /**
-   * Construct an emtpy {@link AlbumBean}
-   */
-  public AlbumBean() {
-    sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-  }
-
-  /**
-   * Initialize the bean
-   * 
-   * @throws ImejiException
-   */
-  private void init() throws ImejiException {
-    album =
-        new AlbumController().retrieve(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
-  }
-
-  /**
    * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and
    * initialize it.
    * 
    * @throws Exception
    */
-  public void initView() throws Exception {
+  @PostConstruct
+  public void init() {
+    setId(UrlHelper.getParameterValue("id"));
     try {
       if (id != null) {
-        init();
+        album =
+            new AlbumController().retrieve(ObjectHelper.getURI(Album.class, id), getSessionUser());
         if (album != null) {
-          findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
-          loadItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
+          findItems(getSessionUser(), MAX_ITEM_NUM_VIEW);
+          loadItems(getSessionUser(), MAX_ITEM_NUM_VIEW);
           countItems();
           countAllowedItems();
-          countDiscardedItems(sessionBean.getUser());
-          if (sessionBean.getActiveAlbum() != null
-              && sessionBean.getActiveAlbum().getId().equals(album.getId())) {
+          countDiscardedItems(getSessionUser());
+          if (activeAlbum != null && activeAlbum.getId().equals(album.getId())) {
             active = true;
-            // sessionBean.setActiveAlbum(album);
           }
-
           int myPrivateCount = getPrivateCount();
           if (myPrivateCount != 0) {
-            BeanHelper.info(
-                Imeji.RESOURCE_BUNDLE.getMessage("album_Private_Content", sessionBean.getLocale())
-                    .replace("XXX_COUNT_XXX", myPrivateCount + ""));
+            BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("album_Private_Content", getLocale())
+                .replace("XXX_COUNT_XXX", myPrivateCount + ""));
           }
         }
-
       }
     } catch (Exception e) {
       LOGGER.error("Error initializing album page", e);
@@ -175,33 +148,6 @@ public class AlbumBean extends ContainerBean {
       // Here simply do nothing
     }
   }
-
-  /**
-   * Initialize the album form to edit the metadata of the album
-   */
-  public void initEdit() {
-    try {
-      init();
-      sessionBean.setSpaceLogoIngestImage(null);
-      setIngestImage(null);
-    } catch (Exception e) {
-      BeanHelper.error(e.getMessage());
-      LOGGER.error("Error init album edit", e);
-    }
-    if (UrlHelper.getParameterBoolean("start")) {
-      try {
-        upload();
-      } catch (FileUploadException e) {
-        BeanHelper.error("Could not upload the image " + e.getMessage());
-        LOGGER.error("Error upload album logo", e);
-      } catch (TypeNotAllowedException e) {
-        BeanHelper.error("Could not upload the image " + e.getMessage());
-        LOGGER.error("Error upload album logo", e);
-      }
-    }
-  }
-
-
 
   /**
    * Return the link for the Cancel button
@@ -275,54 +221,6 @@ public class AlbumBean extends ContainerBean {
     this.profilesMenu = profilesMenu;
   }
 
-  /**
-   * Save (create or update) the {@link Album} in the database
-   * 
-   * @return
-   * @throws Exception
-   */
-  public void save() throws Exception {
-    if (update()) {
-      FacesContext.getCurrentInstance().getExternalContext().redirect(getPageUrl());
-    }
-  }
-
-  /**
-   * Update the {@link Album} in the dabatase with the values defined in this {@link AlbumBean}
-   * 
-   * @return
-   * @throws Exception
-   */
-  public boolean update() throws Exception {
-    AlbumController ac = new AlbumController();
-    try {
-
-      Album icPre = ac.retrieveLazy(album.getId(), sessionBean.getUser());
-      if (icPre.getLogoUrl() != null && album.getLogoUrl() == null) {
-        ac.updateLogo(icPre, null, sessionBean.getUser());
-      }
-      ac.update(getAlbum(), sessionBean.getUser());
-      // here separate update for the Logo only, as it will only be
-      // allowed by edited collection through the web application
-      // not yet for REST
-      // getIngestImage is inherited from Container!
-
-      if (sessionBean.getSpaceLogoIngestImage() != null) {
-        ac.updateLogo(getAlbum(), sessionBean.getSpaceLogoIngestImage().getFile(),
-            sessionBean.getUser());
-        setIngestImage(null);
-        sessionBean.setSpaceLogoIngestImage(null);
-      }
-      BeanHelper
-          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_update", sessionBean.getLocale()));
-      return true;
-    } catch (UnprocessableError e) {
-      BeanHelper.error(e, sessionBean.getLocale());
-      LOGGER.error("Error update album", e);
-      return false;
-    }
-
-  }
 
   /**
    * setter
@@ -385,7 +283,8 @@ public class AlbumBean extends ContainerBean {
    * @throws IOException
    */
   public String makeActive(boolean addSelected) throws ImejiException, IOException {
-    findItems(sessionBean.getUser(), getSize());
+    findItems(getSessionUser(), getSize());
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     sessionBean.setActiveAlbum(this.album);
     this.setActive(true);
     if (addSelected) {
@@ -402,6 +301,7 @@ public class AlbumBean extends ContainerBean {
    * @return
    */
   public String makeInactive() {
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     sessionBean.setActiveAlbum(null);
     this.setActive(false);
     return "";
@@ -415,13 +315,11 @@ public class AlbumBean extends ContainerBean {
   public String release() {
     AlbumController ac = new AlbumController();
     try {
-      ac.release(album, sessionBean.getUser());
+      ac.release(album, getSessionUser());
       makeInactive();
-      BeanHelper
-          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_release", sessionBean.getLocale()));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_release", getLocale()));
     } catch (Exception e) {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_release", sessionBean.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_release", getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Issue during release", e);
     }
@@ -437,17 +335,15 @@ public class AlbumBean extends ContainerBean {
     AlbumController c = new AlbumController();
     try {
       makeInactive();
-      c.delete(album, sessionBean.getUser());
-      BeanHelper
-          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_delete", sessionBean.getLocale())
-              .replace("XXX_albumName_XXX", this.album.getMetadata().getTitle()));
+      c.delete(album, getSessionUser());
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_delete", getLocale())
+          .replace("XXX_albumName_XXX", this.album.getMetadata().getTitle()));
     } catch (Exception e) {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_delete", sessionBean.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_delete", getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error during delete album", e);
     }
-    return sessionBean.getPrettySpacePage("pretty:albums");
+    return SessionBean.getPrettySpacePage("pretty:albums", getSpace());
   }
 
   /**
@@ -456,50 +352,17 @@ public class AlbumBean extends ContainerBean {
    * @return
    * @throws Exception
    */
-  public String withdraw() throws Exception {
+  public String withdraw() throws ImejiException {
     AlbumController c = new AlbumController();
     try {
-      c.withdraw(album, sessionBean.getUser());
-      BeanHelper.info(
-          Imeji.RESOURCE_BUNDLE.getMessage("success_album_withdraw", sessionBean.getLocale()));
+      c.withdraw(album, getSessionUser());
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_withdraw", getLocale()));
     } catch (Exception e) {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_withdraw", sessionBean.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_withdraw", getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error during withdraw album", e);
     }
     return "pretty:";
-  }
-
-  /**
-   * True if the {@link Album} is selected in the album list
-   * 
-   * @return
-   */
-  public boolean getSelected() {
-    if (sessionBean.getSelectedAlbums().contains(album.getId())) {
-      selected = true;
-    } else {
-      selected = false;
-    }
-    return selected;
-  }
-
-  /**
-   * setter: called when the user click on the select box to select the {@link Album}. Set the
-   * status "selected" in the session
-   * 
-   * @param selected
-   */
-  public void setSelected(boolean selected) {
-    if (selected) {
-      if (!(sessionBean.getSelectedAlbums().contains(album.getId()))) {
-        sessionBean.getSelectedAlbums().add(album.getId());
-      }
-    } else {
-      sessionBean.getSelectedAlbums().remove(album.getId());
-    }
-    this.selected = selected;
   }
 
   /**
@@ -547,14 +410,11 @@ public class AlbumBean extends ContainerBean {
     this.tab = tab.toUpperCase();
   }
 
-
-
   public User getAlbumCreator() throws Exception {
-    UserController uc = new UserController(sessionBean.getUser());
+    UserController uc = new UserController(getSessionUser());
     User user = uc.retrieve(album.getCreatedBy());
     return user;
   }
-
 
   /*
    * (non-Javadoc)
@@ -633,7 +493,22 @@ public class AlbumBean extends ContainerBean {
    */
   private void countAllowedItems() {
     ItemController ic = new ItemController();
-    this.allowedItemsSize = ic.search(getContainer().getId(), null, null, sessionBean.getUser(),
-        sessionBean.getSpaceId(), -1, 0).getNumberOfRecords();
+    allowedItemsSize =
+        ic.search(getContainer().getId(), null, null, getSessionUser(), getSpaceId(), -1, 0)
+            .getNumberOfRecords();
+  }
+
+  /**
+   * @return the activeAlbum
+   */
+  public Album getActiveAlbum() {
+    return activeAlbum;
+  }
+
+  /**
+   * @param activeAlbum the activeAlbum to set
+   */
+  public void setActiveAlbum(Album activeAlbum) {
+    this.activeAlbum = activeAlbum;
   }
 }

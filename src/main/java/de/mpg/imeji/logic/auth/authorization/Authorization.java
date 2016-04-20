@@ -38,15 +38,15 @@ import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Properties.Status;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one {@link User}
@@ -280,35 +280,40 @@ public class Authorization implements Serializable {
    */
   public String getRelevantURIForSecurity(Object obj, boolean hasItemGrant, boolean getContext,
       boolean isReadGrant) {
-    if (obj == null) {
+    try {
+      if (obj == null) {
+        return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
+      }
+      if (obj instanceof Item) {
+        return hasItemGrant ? ((Item) obj).getId().toString()
+            : ((Item) obj).getCollection().toString();
+      }
+      if (obj instanceof Container) {
+        return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+            : ((Container) obj).getId().toString();
+      }
+      if (obj instanceof MetadataProfile) {
+        return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+            : ((MetadataProfile) obj).getId().toString();
+      }
+      if (obj instanceof User) {
+        return ((User) obj).getId().toString();
+      }
+      if (obj instanceof URI) {
+        return getCollectionUri(obj.toString(), isReadGrant);
+      }
+      if (obj instanceof String) {
+        return getCollectionUri((String) obj, isReadGrant);
+      }
+      if (obj instanceof UserGroup) {
+        return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
+      }
+      LOGGER.fatal("Invalid Object type: " + obj.getClass());
+      return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
+    } catch (Exception e) {
+      LOGGER.error("Error get security URI", e);
       return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
     }
-    if (obj instanceof Item) {
-      return hasItemGrant ? ((Item) obj).getId().toString()
-          : ((Item) obj).getCollection().toString();
-    }
-    if (obj instanceof Container) {
-      return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
-          : ((Container) obj).getId().toString();
-    }
-    if (obj instanceof MetadataProfile) {
-      return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
-          : ((MetadataProfile) obj).getId().toString();
-    }
-    if (obj instanceof User) {
-      return ((User) obj).getId().toString();
-    }
-    if (obj instanceof URI) {
-      return getCollectionUri(obj.toString(), isReadGrant);
-    }
-    if (obj instanceof String) {
-      return getCollectionUri((String) obj, isReadGrant);
-    }
-    if (obj instanceof UserGroup) {
-      return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
-    }
-    LOGGER.fatal("Invalid Object type: " + obj.getClass());
-    return AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI;
   }
 
   /**

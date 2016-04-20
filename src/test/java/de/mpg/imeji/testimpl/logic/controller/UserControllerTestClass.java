@@ -16,9 +16,9 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.QuotaExceededException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.UserController;
-import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.resource.UserController.USER_TYPE;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -81,7 +81,7 @@ public class UserControllerTestClass extends ControllerTest {
     // try to exceed quota
     CollectionController cc = new CollectionController();
     CollectionImeji col = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
-    URI uri = cc.create(col, profile, user, MetadataProfileCreationMethod.COPY, null);
+    URI uri = cc.create(col, profile, user, MetadataProfileCreationMethod.COPY, null).getId();
     col = cc.retrieve(uri, user);
 
     item = ImejiFactory.newItem(col);

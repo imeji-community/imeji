@@ -257,8 +257,8 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case description:
-        // not indexed
-        break;
+        return fieldQuery(ElasticFields.DESCRIPTION, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case cont_md:
         // not indexed
         break;
@@ -275,8 +275,8 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case cont_person_org:
-        // not indexed
-        break;
+        return fieldQuery(ElasticFields.AUTHOR_ORGANIZATION_NAME, pair.getValue(),
+            pair.getOperator(), pair.isNot());
       case author_org_name:
         // not indexed
         break;
@@ -386,7 +386,8 @@ public class ElasticQueryFactory {
         if (status.contains("#")) {
           status = status.split("#")[1];
         }
-        return fieldQuery(ElasticFields.STATUS, status, pair.getOperator(), pair.isNot());
+        return fieldQuery(ElasticFields.STATUS, status.toUpperCase(), pair.getOperator(),
+            pair.isNot());
       case text:
         return fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), pair.getOperator(),
             pair.isNot());
@@ -410,7 +411,8 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case coordinates:
-        break;
+        return fieldQuery(ElasticFields.METADATA_LOCATION, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case pid:
         return fieldQuery(ElasticFields.PID, pair.getValue(), pair.getOperator(), pair.isNot());
       case info_label:

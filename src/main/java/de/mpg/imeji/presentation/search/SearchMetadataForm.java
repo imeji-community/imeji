@@ -295,7 +295,7 @@ public class SearchMetadataForm {
               if (!group.isEmpty()) {
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
               }
-              group.addPair(new SearchMetadata(SearchFields.coordinates, SearchOperators.EQUALS,
+              group.addPair(new SearchMetadata(SearchFields.coordinates, SearchOperators.GEO,
                   Double.parseDouble(latitude) + "," + Double.parseDouble(longitude) + ","
                       + distance,
                   ns, false));

@@ -105,10 +105,7 @@ public class EditCollectionBean extends CollectionBean {
     try {
       CollectionController collectionController = new CollectionController();
       User user = getSessionUser();
-      CollectionImeji icPre = collectionController.retrieve(getCollection().getId(), user);
-      if (icPre.getLogoUrl() != null && getCollection().getLogoUrl() == null) {
-        collectionController.updateLogo(icPre, null, user);
-      }
+      collectionController.update(getCollection(), user);
       UserController uc = new UserController(user);
       uc.update(user, user);
       if (containerEditorSession.getUploadedLogoPath() != null) {

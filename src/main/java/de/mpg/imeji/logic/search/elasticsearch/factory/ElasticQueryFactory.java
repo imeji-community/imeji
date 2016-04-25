@@ -300,7 +300,8 @@ public class ElasticQueryFactory {
       case filetype:
         BoolQueryBuilder q = QueryBuilders.boolQuery();
         for (String ext : SearchUtils.parseFileTypesAsExtensionList(pair.getValue())) {
-          q.should(fieldQuery(ElasticFields.FILENAME, "*." + ext, SearchOperators.REGEX, false));
+          q.should(
+              fieldQuery(ElasticFields.FILENAME, "\"." + ext + "\"", SearchOperators.REGEX, false));
         }
         return q;
       case grant:

@@ -5,6 +5,8 @@ package de.mpg.imeji.presentation.collection;
 
 import java.io.IOException;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -12,6 +14,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ItemBean;
 import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.image.SingleItemBrowse;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -21,10 +24,50 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
+@ManagedBean(name = "CollectionItemBean")
+@ViewScoped
 public class CollectionItemBean extends ItemBean {
   private String collectionId;
-  private Navigation navigation;
   private CollectionItemsBean collectionImagesBean;
+
+  public CollectionItemBean() {
+    super();
+    this.collectionId = UrlHelper.getParameterValue("collectionId");
+    this.prettyLink = SessionBean.getPrettySpacePage("pretty:EditImageOfCollection", getSpace());
+  }
+
+  @Override
+  public void initBrowsing() {
+    if (getImage() != null) {
+      ItemsBean itemsBean =
+          (CollectionItemsBean) BeanHelper.getSessionBean(CollectionItemsBean.class);
+      String tempId = (String) FacesContext.getCurrentInstance().getExternalContext()
+          .getSessionMap().get("CollectionItemsBean.id");
+      if (UrlHelper.getParameterBoolean("reload")) {
+        itemsBean.browseInit(); // search the items
+        itemsBean.update(); // Load the items
+      }
+      setBrowse(new SingleItemBrowse(itemsBean, getImage(), "collection", tempId));
+    }
+  }
+
+  @Override
+  public void redirectToBrowsePage() throws IOException {
+    FacesContext.getCurrentInstance().getExternalContext().redirect(
+        getNavigation().getCollectionUrl() + collectionId + "/" + getNavigation().getBrowsePath());
+  }
+
+
+  @Override
+  public String getPageUrl() {
+    return getNavigation().getCollectionUrl() + collectionId + "/" + Navigation.ITEM.getPath() + "/"
+        + getId();
+  }
+
+  @Override
+  public String getNavigationString() {
+    return SessionBean.getPrettySpacePage("pretty:CollectionItem", getSpace());
+  }
 
   public CollectionItemsBean getCollectionImagesBean() {
     return collectionImagesBean;
@@ -34,51 +77,7 @@ public class CollectionItemBean extends ItemBean {
     this.collectionImagesBean = collectionImagesBean;
   }
 
-  public CollectionItemBean() throws Exception {
-    super();
-    this.prettyLink = getSessionBean().getPrettySpacePage("pretty:EditImageOfCollection");
-    navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-  }
-
-  @Override
-  public void initBrowsing() {
-    if (getImage() != null) {
-      ItemsBean itemsBean =
-          (CollectionItemsBean) BeanHelper.getSessionBean(CollectionItemsBean.class);
-      String tempId =
-          (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-              .get("CollectionItemsBean.id");
-      if (UrlHelper.getParameterBoolean("reload")) {
-        itemsBean.browseInit(); // search the items
-        itemsBean.update(); // Load the items
-      }
-      setBrowse(new SingleItemBrowse(itemsBean, getImage(), "collection", tempId));
-    }
-
-  }
-
-  @Override
-  public void redirectToBrowsePage() throws IOException {
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());
-  }
-
   public String getCollectionId() {
     return collectionId;
-  }
-
-  public void setCollectionId(String collectionId) {
-    this.collectionId = collectionId;
-  }
-
-  @Override
-  public String getPageUrl() {
-    return navigation.getCollectionUrl() + collectionId + "/" + navigation.ITEM.getPath() + "/"
-        + getId();
-  }
-
-  @Override
-  public String getNavigationString() {
-    return getSessionBean().getPrettySpacePage("pretty:CollectionItem");
   }
 }

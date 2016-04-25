@@ -118,7 +118,6 @@
 									<h:outputText value="#{lbl.filename} "/>
 									<span class="imj_invisible">: </span>
 								</div>
-
 							<ui:fragment rendered="#{itemBean.edit.toggleState == 'displayMd'}">
 								<div class="imj_metadataValue">
 									<h:outputText id="txtUrl" value="#{itemBean.image.filename}"/>
@@ -195,7 +194,7 @@
 							<ui:fragment rendered="#{itemBean.edit.toggleState == 'editMd' and Auth.updateContent(itemBean.image) and !itemBean.locked}">
 								<ui:fragment rendered="#{itemBean.profile == null}">
 									<span class="fa fa-exclamation-triangle"/> #{msg.error_collection_profile_not_exist}
-									<a href="#{Navigation.applicationUrl}createprofile?col=#{itemBean.collectionId}&amp;redirect=back">#{lbl.add_profile}</a>
+									<a href="#{Navigation.applicationUrl}createprofile?col=#{itemBean.collection.idString}&amp;redirect=back">#{lbl.add_profile}</a>
 								 </ui:fragment>
 								<ui:fragment rendered="#{itemBean.profile != null}">
 									<ui:repeat id="editItem" var="item" value="#{itemBean.edit.editor.items}" rows="0" varStatus="indexMetadata">

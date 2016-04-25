@@ -38,11 +38,6 @@
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CollectionItemBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionItemBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
 
 	<!-- Search Bean -->
 	<managed-bean>
@@ -75,12 +70,6 @@
 
 	<!-- Item Beans -->
 	<managed-bean>
-		<managed-bean-name>ItemBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.image.ItemBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
 		<managed-bean-name>ItemsBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.image.ItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -97,12 +86,6 @@
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AlbumItemBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
 
 	<!-- Users bean -->
 	<managed-bean>

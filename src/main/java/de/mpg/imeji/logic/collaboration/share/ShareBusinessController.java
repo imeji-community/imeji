@@ -307,10 +307,10 @@ public class ShareBusinessController {
     toGroup.setGrants(notRemovedGrants);
     UserGroupController c = new UserGroupController();
     try {
-      c.update(toGroup, fromUser);
-      writer.delete(new ArrayList<Object>(removedGrants), fromUser);
+      c.update(toGroup, Imeji.adminUser);
+      writer.delete(new ArrayList<Object>(removedGrants), Imeji.adminUser);
     } catch (Exception e) {
-      LOGGER.error(e);
+      LOGGER.error("Error cleaning grants", e);
     }
   }
 

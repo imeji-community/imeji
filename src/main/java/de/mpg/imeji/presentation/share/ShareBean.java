@@ -240,6 +240,7 @@ public class ShareBean implements Serializable {
   public void shareWithGroup() {
     ShareListItem groupListItem =
         new ShareListItem(userGroup, type, uri.toString(), profileUri, null, sb.getUser());
+    groupListItem.setRoles(input.getMenu().getRoles());
     groupListItem.update();
     reloadPage();
   }

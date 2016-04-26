@@ -199,8 +199,12 @@ public class ElasticIndexer implements SearchIndexer {
   private static Item setAlbums(Item item) {
     AlbumController c = new AlbumController();
     SearchQuery q = new SearchQuery();
-    q.addPair(new SearchPair(SearchFields.member, SearchOperators.EQUALS, item.getId().toString(),
-        false));
+    try {
+      q.addPair(new SearchPair(SearchFields.member, SearchOperators.EQUALS, item.getId().toString(),
+          false));
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error searching for albums of item " + item.getIdString(), e);
+    }
     item.setAlbums(c.search(q, Imeji.adminUser, null, -1, 0, null).getResults());
     return item;
   }

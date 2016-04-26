@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
@@ -18,8 +19,8 @@ import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.Filter;
@@ -34,6 +35,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class TechnicalFacets extends FacetsAbstract {
+  private static final Logger LOGGER = Logger.getLogger(TechnicalFacets.class);
   private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
   private List<List<Facet>> facets = new ArrayList<List<Facet>>();
   private SearchQuery searchQuery;
@@ -135,8 +137,13 @@ public class TechnicalFacets extends FacetsAbstract {
   public int getCount(SearchQuery searchQuery, SearchPair pair) {
     ItemController ic = new ItemController();
     SearchQuery q = searchQuery.copy();
-    q.addLogicalRelation(LOGICAL_RELATIONS.AND);
-    q.addPair(pair);
+
+    try {
+      q.addLogicalRelation(LOGICAL_RELATIONS.AND);
+      q.addPair(pair);
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error creating query to get Facet count", e);
+    }
     return ic.search(null, q, null, user, space, -1, 0).getNumberOfRecords();
   }
 

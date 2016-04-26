@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -32,6 +34,7 @@ import de.mpg.imeji.presentation.beans.MetadataLabels;
  * @version $Revision$ $LastChangedDate$
  */
 public class SearchForm {
+  private static final Logger LOGGER = Logger.getLogger(SearchForm.class);
   private Map<String, MetadataProfile> profilesMap;
   private List<SearchGroupForm> groups;
   private SearchPair fileTypeSearch =
@@ -103,16 +106,21 @@ public class SearchForm {
    * @return
    */
   public SearchQuery getFormularAsSearchQuery() {
-    SearchQuery searchQuery = new SearchQuery();
-    for (SearchGroupForm g : groups) {
-      if (!searchQuery.isEmpty()) {
-        searchQuery.addLogicalRelation(LOGICAL_RELATIONS.OR);
+    try {
+      SearchQuery searchQuery = new SearchQuery();
+      for (SearchGroupForm g : groups) {
+        if (!searchQuery.isEmpty()) {
+          searchQuery.addLogicalRelation(LOGICAL_RELATIONS.OR);
+        }
+        searchQuery.addGroup(g.getAsSearchGroup());
       }
-      searchQuery.addGroup(g.getAsSearchGroup());
+      searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
+      searchQuery.addPair(fileTypeSearch);
+      return searchQuery;
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error transforming search form to searchquery", e);
+      return new SearchQuery();
     }
-    searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
-    searchQuery.addPair(fileTypeSearch);
-    return searchQuery;
   }
 
   /**

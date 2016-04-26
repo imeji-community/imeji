@@ -25,7 +25,6 @@ import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistoryPage;
 import de.mpg.imeji.presentation.history.HistorySession;
@@ -95,9 +94,7 @@ public class LoginBean {
   }
 
   public void doLogin() throws IOException {
-    String instanceName =
-        ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-            .getInstanceName();
+    String instanceName = Imeji.CONFIG.getInstanceName();
     if (StringHelper.isNullOrEmptyTrim(getLogin())) {
       return;
     }

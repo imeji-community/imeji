@@ -52,7 +52,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.SuperViewBean;
 import de.mpg.imeji.presentation.history.HistorySession;
@@ -627,7 +626,7 @@ public class ItemBean extends SuperViewBean {
    * @return
    */
   public boolean isViewInDataViewer() {
-    return ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
+    return Imeji.CONFIG
         .isDataViewerSupportedFormats(FilenameUtils.getExtension(item.getFilename()));
   }
 

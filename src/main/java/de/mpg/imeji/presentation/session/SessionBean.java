@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.config.ImejiConfiguration;
 import de.mpg.imeji.logic.config.ImejiConfiguration.BROWSE_VIEW;
@@ -39,11 +40,9 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.upload.IngestImage;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 
 /**
@@ -137,10 +136,8 @@ public class SessionBean implements Serializable {
    * Init the default browse view. If a cookie is set, use it, otherwise use config value
    */
   private void initBrowseViewWithCookieOrConfig() {
-    ConfigurationBean config =
-        (ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class);
     this.selectedBrowseListView =
-        CookieUtils.readNonNull(browseViewCookieName, config.getDefaultBrowseView());
+        CookieUtils.readNonNull(browseViewCookieName, Imeji.CONFIG.getDefaultBrowseView());
   }
 
   /**
@@ -205,8 +202,7 @@ public class SessionBean implements Serializable {
    */
   public String getInstanceName() {
     try {
-      return ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-          .getInstanceName();
+      return Imeji.CONFIG.getInstanceName();
     } catch (Exception e) {
       return "imeji";
     }

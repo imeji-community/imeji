@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
@@ -178,8 +179,12 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
     if (getContainer() != null) {
       ItemController ic = new ItemController();
       SearchQuery q = new SearchQuery();
-      q.addPair(new SearchPair(SearchFields.status, SearchOperators.EQUALS,
-          Status.WITHDRAWN.getUriString(), false));
+      try {
+        q.addPair(new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+            Status.WITHDRAWN.getUriString(), false));
+      } catch (UnprocessableError e) {
+        LOGGER.error("Error creating query to search for discarded items of a container", e);
+      }
       setSizeDiscarded(
           ic.search(getContainer().getId(), q, null, user, null, -1, 0).getNumberOfRecords());
     } else {

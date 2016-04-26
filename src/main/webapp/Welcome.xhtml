@@ -67,7 +67,7 @@
         
 	</ui:define>
 	
-	<ui:define name="mainContent">
+	<ui:define name="mainContent">#{StartPageBean.selectedSpaceResource.id}
 		<!-- in case of space, the welcome get only one text with the carousel on right hand side -->
 		<ui:fragment rendered="#{StartPageBean.selectedSpaceResource.id != '' and not empty StartPageBean.selectedSpaceResource.id and StartPageBean.selectedSpaceResource.description.trim() != ''}">
 			<!-- Main Content -->							

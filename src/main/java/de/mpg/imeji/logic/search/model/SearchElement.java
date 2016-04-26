@@ -2,6 +2,7 @@ package de.mpg.imeji.logic.search.model;
 
 import java.util.List;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 
 /**
@@ -24,15 +25,16 @@ public abstract class SearchElement {
    * Add a {@link LOGICAL_RELATIONS} after a {@link SearchElement}
    * 
    * @param lr
+   * @throws UnprocessableError
    */
-  public void addLogicalRelation(LOGICAL_RELATIONS lr) {
+  public void addLogicalRelation(LOGICAL_RELATIONS lr) throws UnprocessableError {
     if (!hasElements()) {
-      throw new RuntimeException("Operation not allowed for " + getType());
+      throw new UnprocessableError("Operation not allowed for " + getType());
     }
     if (!isEmpty() && !SEARCH_ELEMENTS.LOGICAL_RELATIONS.equals(getTypeOfLastElement())) {
       getElements().add(new SearchLogicalRelation(lr));
     } else if (SEARCH_ELEMENTS.LOGICAL_RELATIONS.equals(getTypeOfLastElement())) {
-      throw new RuntimeException(
+      throw new UnprocessableError(
           "Wrong search query: Logical relations can not be added after a logical relation");
     }
   }
@@ -41,15 +43,16 @@ public abstract class SearchElement {
    * Add a {@link SearchPair} after a {@link SearchElement}
    * 
    * @param pair
+   * @throws UnprocessableError
    */
-  public void addPair(SearchPair pair) {
+  public void addPair(SearchPair pair) throws UnprocessableError {
     if (!hasElements()) {
-      throw new RuntimeException("Operation not allowed for " + getType());
+      throw new UnprocessableError("Operation not allowed for " + getType());
     }
     if (isEmpty() || SEARCH_ELEMENTS.LOGICAL_RELATIONS.equals(getTypeOfLastElement())) {
       getElements().add(pair);
     } else {
-      throw new RuntimeException(
+      throw new UnprocessableError(
           "Wrong search query. A pair should be added after a logical relation or a the begining of the query!");
     }
   }
@@ -58,15 +61,16 @@ public abstract class SearchElement {
    * Add a {@link SearchGroup} after a {@link SearchElement}
    * 
    * @param group
+   * @throws UnprocessableError
    */
-  public void addGroup(SearchGroup group) {
+  public void addGroup(SearchGroup group) throws UnprocessableError {
     if (!hasElements()) {
-      throw new RuntimeException("Operation not allowed for " + getType());
+      throw new UnprocessableError("Operation not allowed for " + getType());
     }
     if (isEmpty() || SEARCH_ELEMENTS.LOGICAL_RELATIONS.equals(getTypeOfLastElement())) {
       getElements().add(group);
     } else {
-      throw new RuntimeException(
+      throw new UnprocessableError(
           "Wrong search query. A group should be added after a logical relation or a the begining of the query!");
     }
   }
@@ -76,8 +80,9 @@ public abstract class SearchElement {
    * {@link SearchGroup} or a {@link SearchQuery})
    * 
    * @return
+   * @throws UnprocessableError
    */
-  public SEARCH_ELEMENTS getTypeOfLastElement() {
+  public SEARCH_ELEMENTS getTypeOfLastElement() throws UnprocessableError {
     SearchElement se = getLastElement();
     if (se == null) {
       return null;
@@ -85,9 +90,9 @@ public abstract class SearchElement {
     return se.getType();
   }
 
-  private SearchElement getLastElement() {
+  private SearchElement getLastElement() throws UnprocessableError {
     if (!hasElements()) {
-      throw new RuntimeException("Operation not allowed for " + getType());
+      throw new UnprocessableError("Operation not allowed for " + getType());
     }
     if (!isEmpty()) {
       return getElements().get(getElements().size() - 1);
@@ -97,7 +102,7 @@ public abstract class SearchElement {
 
   public boolean isEmpty() {
     if (!hasElements()) {
-      throw new RuntimeException("Operation not allowed for " + getType());
+      return true;
     }
     return getElements().size() == 0;
   }

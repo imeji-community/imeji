@@ -7,10 +7,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
-import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 
 /**
@@ -21,6 +24,7 @@ import de.mpg.imeji.presentation.facet.Facet.FacetType;
  * @version $Revision$ $LastChangedDate$
  */
 public class FacetURIFactory {
+  private static final Logger LOGGER = Logger.getLogger(FacetURIFactory.class);
   private SearchQuery searchQuery = new SearchQuery();
 
   /**
@@ -46,8 +50,13 @@ public class FacetURIFactory {
   public URI createFacetURI(String baseURI, SearchPair pair, String facetName, FacetType type)
       throws UnsupportedEncodingException {
     SearchQuery sq = new SearchQuery(searchQuery.getElements());
-    sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
-    sq.addPair(pair);
+    try {
+      sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+      sq.addPair(pair);
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error creating facet URI", e);
+    }
+
     String uri = baseURI + getCommonURI(sq, facetName, type);
     return URI.create(uri);
   }
@@ -63,8 +72,7 @@ public class FacetURIFactory {
    */
   private String getCommonURI(SearchQuery sq, String facetName, FacetType type)
       throws UnsupportedEncodingException {
-    return SearchQueryParser.transform2UTF8URL(sq) + "&f="
-        + URLEncoder.encode(facetName, "UTF-8") + "&t="
-        + URLEncoder.encode(type.name().toLowerCase(), "UTF-8") + "&page=1";
+    return SearchQueryParser.transform2UTF8URL(sq) + "&f=" + URLEncoder.encode(facetName, "UTF-8")
+        + "&t=" + URLEncoder.encode(type.name().toLowerCase(), "UTF-8") + "&page=1";
   }
 }

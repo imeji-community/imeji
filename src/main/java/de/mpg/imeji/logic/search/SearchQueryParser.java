@@ -103,8 +103,9 @@ public class SearchQueryParser {
    * @param query
    * @return
    * @throws IOException
+   * @throws UnprocessableError
    */
-  public static SearchQuery parseStringQueryDecoded(String query) throws IOException {
+  public static SearchQuery parseStringQueryDecoded(String query) throws UnprocessableError {
     SearchQuery searchQuery = new SearchQuery();
     String subQuery = "";
     String scString = "";
@@ -121,62 +122,67 @@ public class SearchQueryParser {
     StringParser simpleMdParser = new StringParser(SEARCH_METADATA_SIMPLE_PATTERN);
     StringParser mdParser = new StringParser(SEARCH_METADATA_PATTERN);
     StringParser pairParser = new StringParser(SEARCH_PAIR_PATTERN);
-    while ((c = reader.read()) != -1) {
-      if (bracketsOpened - bracketsClosed != 0) {
-        subQuery += (char) c;
-      } else {
-        scString += (char) c;
-      }
-      if (c == '(') {
-        hasBracket = true;
-        bracketsOpened++;
-      }
-      if (c == ')') {
-        bracketsClosed++;
-        scString = "";
-      }
-      if (scString.trim().equals("AND") || scString.trim().equals("OR")) {
-        searchQuery.getElements()
-            .add(new SearchLogicalRelation(LOGICAL_RELATIONS.valueOf(scString.trim())));
-        scString = "";
-      }
-      if (scString.trim().equals("NOT")) {
-        not = true;
-        scString = "";
-      }
-      if (hasBracket && (bracketsOpened - bracketsClosed == 0)) {
-        SearchQuery subSearchQuery = parseStringQueryDecoded(subQuery);
-        if (!subSearchQuery.isEmpty()) {
-          SearchGroup searchGroup = new SearchGroup();
-          searchGroup.getGroup().addAll(parseStringQueryDecoded(subQuery).getElements());
-          searchQuery.getElements().add(searchGroup);
-          subQuery = "";
+    try {
+      while ((c = reader.read()) != -1) {
+        if (bracketsOpened - bracketsClosed != 0) {
+          subQuery += (char) c;
+        } else {
+          scString += (char) c;
+        }
+        if (c == '(') {
+          hasBracket = true;
+          bracketsOpened++;
+        }
+        if (c == ')') {
+          bracketsClosed++;
+          scString = "";
+        }
+        if (scString.toUpperCase().trim().equals("AND")
+            || scString.toUpperCase().trim().equals("OR")) {
+          searchQuery.getElements().add(
+              new SearchLogicalRelation(LOGICAL_RELATIONS.valueOf(scString.toUpperCase().trim())));
+          scString = "";
+        }
+        if (scString.toUpperCase().trim().equals("NOT")) {
+          not = true;
+          scString = "";
+        }
+        if (hasBracket && (bracketsOpened - bracketsClosed == 0)) {
+          SearchQuery subSearchQuery = parseStringQueryDecoded(subQuery);
+          if (!subSearchQuery.isEmpty()) {
+            SearchGroup searchGroup = new SearchGroup();
+            searchGroup.getGroup().addAll(parseStringQueryDecoded(subQuery).getElements());
+            searchQuery.getElements().add(searchGroup);
+            subQuery = "";
+          }
+        }
+        if (simpleMdParser.find(scString)) {
+          searchQuery.addPair(new SearchSimpleMetadata(simpleMdParser.getGroup(1),
+              stringOperator2SearchOperator(simpleMdParser.getGroup(2)), simpleMdParser.getGroup(3),
+              not));
+          not = false;
+          scString = "";
+        } else if (mdParser.find(scString)) {
+          SearchOperators operator = stringOperator2SearchOperator(mdParser.getGroup(3));
+          String value = mdParser.getGroup(4);
+          value = value.startsWith("\"") ? value + "\"" : value;
+          SearchFields field = SearchFields.valueOf(mdParser.getGroup(2));
+          URI statementId = ObjectHelper.getURI(Statement.class, mdParser.getGroup(1));
+          searchQuery.addPair(new SearchMetadata(field, operator, value, statementId, not));
+          not = false;
+          scString = "";
+        } else if (pairParser.find(scString)) {
+          SearchOperators operator = stringOperator2SearchOperator(pairParser.getGroup(2));
+          SearchFields field = SearchFields.valueOf(pairParser.getGroup(1));
+          String value = pairParser.getGroup(3);
+          value = value.startsWith("\"") ? value + "\"" : value;
+          searchQuery.addPair(new SearchPair(field, operator, value, not));
+          scString = "";
+          not = false;
         }
       }
-      if (simpleMdParser.find(scString)) {
-        searchQuery.addPair(new SearchSimpleMetadata(simpleMdParser.getGroup(1),
-            stringOperator2SearchOperator(simpleMdParser.getGroup(2)), simpleMdParser.getGroup(3),
-            not));
-        not = false;
-        scString = "";
-      } else if (mdParser.find(scString)) {
-        SearchOperators operator = stringOperator2SearchOperator(mdParser.getGroup(3));
-        String value = mdParser.getGroup(4);
-        value = value.startsWith("\"") ? value + "\"" : value;
-        SearchFields field = SearchFields.valueOf(mdParser.getGroup(2));
-        URI statementId = ObjectHelper.getURI(Statement.class, mdParser.getGroup(1));
-        searchQuery.addPair(new SearchMetadata(field, operator, value, statementId, not));
-        not = false;
-        scString = "";
-      } else if (pairParser.find(scString)) {
-        SearchOperators operator = stringOperator2SearchOperator(pairParser.getGroup(2));
-        SearchFields field = SearchFields.valueOf(pairParser.getGroup(1));
-        String value = pairParser.getGroup(3);
-        value = value.startsWith("\"") ? value + "\"" : value;
-        searchQuery.addPair(new SearchPair(field, operator, value, not));
-        scString = "";
-        not = false;
-      }
+    } catch (IOException e) {
+      throw new UnprocessableError(e);
     }
     if (!"".equals(query) && searchQuery.isEmpty()) {
       searchQuery

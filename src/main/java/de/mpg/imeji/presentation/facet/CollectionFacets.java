@@ -12,6 +12,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.ProfileController;
@@ -141,8 +142,13 @@ public class CollectionFacets extends FacetsAbstract {
     ItemController ic = new ItemController();
     SearchQuery sq = new SearchQuery();
     if (pair != null) {
-      sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
-      sq.addPair(pair);
+      try {
+        sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        sq.addPair(pair);
+      } catch (UnprocessableError e) {
+        LOGGER.error("Error creating query to count facet size", e);
+      }
+
     }
     SearchResult res = ic.search(colURI, sq, null, user, null, -1, 0);
     for (String record : res.getResults()) {

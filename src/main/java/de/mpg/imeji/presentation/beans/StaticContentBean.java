@@ -11,7 +11,6 @@ import java.net.URL;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.util.PropertyReader;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * JavaBean to read static content externally stored and to display it in imeji
@@ -58,9 +57,7 @@ public class StaticContentBean {
     String html = "";
     try {
       String helpProp = Imeji.CONFIG.getHelpUrl();
-      String supportEmail =
-          ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-              .getContactEmail();
+      String supportEmail = Imeji.CONFIG.getContactEmail();
       html = getContent(new URL(helpProp));
       html = html.replaceAll("XXX_SUPPORT_EMAIL_XXX", supportEmail);
     } catch (Exception e) {

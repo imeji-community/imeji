@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
@@ -39,6 +41,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class SearchGroupForm {
+  private static final Logger LOGGER = Logger.getLogger(SearchGroupForm.class);
   private List<SearchMetadataForm> elements;
   private String profileId;
   private String collectionId;
@@ -101,20 +104,26 @@ public class SearchGroupForm {
    * @return
    */
   public SearchGroup getAsSearchGroup() {
-    SearchGroup groupWithAllMetadata = new SearchGroup();
-    for (SearchMetadataForm e : elements) {
-      groupWithAllMetadata.addGroup(e.getAsSearchGroup());
-      groupWithAllMetadata.addLogicalRelation(e.getLogicalRelation());
+    try {
+      SearchGroup groupWithAllMetadata = new SearchGroup();
+      for (SearchMetadataForm e : elements) {
+        groupWithAllMetadata.addGroup(e.getAsSearchGroup());
+        groupWithAllMetadata.addLogicalRelation(e.getLogicalRelation());
+      }
+      if (collectionId != null && !"".equals(collectionId)) {
+        SearchGroup searchGroup = new SearchGroup();
+        searchGroup.addPair(new SearchPair(SearchFields.col, SearchOperators.EQUALS,
+            collectionId.toString(), false));
+        searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        searchGroup.addGroup(groupWithAllMetadata);
+        return searchGroup;
+      }
+      return groupWithAllMetadata;
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error transforming search group form to searchgroup", e);
+      return new SearchGroup();
     }
-    if (collectionId != null && !"".equals(collectionId)) {
-      SearchGroup searchGroup = new SearchGroup();
-      searchGroup.addPair(
-          new SearchPair(SearchFields.col, SearchOperators.EQUALS, collectionId.toString(), false));
-      searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
-      searchGroup.addGroup(groupWithAllMetadata);
-      return searchGroup;
-    }
-    return groupWithAllMetadata;
+
   }
 
   /**

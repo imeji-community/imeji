@@ -165,7 +165,7 @@
 				<!-- Only for share item page: list of users-group -->
 				<ui:fragment rendered="#{ShareBean.shareListCollection != null}">
 					<br/><br/><br/>
-					<h2 class="imj_shareRightsOverview imj_sectionHeadline">#{lbl.share_via_collection} </h2>
+					<h2 class="imj_shareRightsOverview imj_sectionHeadline">#{lbl.share_via_collection} <span style="font-style: italic;">#{ShareBean.collectionName}</span></h2>
 					<ui:fragment rendered="#{ShareBean.shareListCollection.items.size() > 0}">
 						<share:grantList id="collectionShareList" rolesMenu="#{ShareBean.shareListCollection.items[0].rolesMenu}" list="#{ShareBean.shareListCollection.items}" title="#{lbl.shared_with}" readOnly="true"/>
 					</ui:fragment>

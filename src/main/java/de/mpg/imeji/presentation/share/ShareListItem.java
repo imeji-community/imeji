@@ -145,31 +145,27 @@ public class ShareListItem implements Serializable {
               ShareRoles.EDIT_ITEM.toString(), ShareRoles.DELETE_ITEM.toString(),
               ShareRoles.EDIT.toString(), ShareRoles.EDIT_PROFILE.toString(),
               ShareRoles.ADMIN.toString());
-        } else {
-          if (!roles.contains("READ"))
-            roles.add(ShareRoles.READ.toString());
         }
         break;
       case ALBUM:
         if (roles.contains("ADMIN")) {
           roles = Arrays.asList(ShareRoles.READ.toString(), ShareRoles.CREATE.toString(),
               ShareRoles.EDIT.toString(), ShareRoles.ADMIN.toString());
-        } else {
-          if (!roles.contains("READ"))
-            roles.add(ShareRoles.READ.toString());
         }
         break;
       case ITEM:
         roles = Arrays.asList(ShareRoles.READ.toString());
         break;
     }
+    if (!roles.isEmpty() && !roles.contains("READ")) {
+      addReadRole();
+    }
     // transform abstract list to real list, to allow modifications
     roles = new ArrayList<>(roles);
   }
 
-  public void revokeGrants() {
-    roles.clear();
-    update();
+  public void addReadRole() {
+    roles.add(ShareRoles.READ.toString());
   }
 
   /**

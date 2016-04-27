@@ -30,17 +30,21 @@
 		                    <span class="fa fa-users fa-size-3">&#160;</span>
 						</div>
 						<div class="imj_menuBody">
-							<span class="imj_menuText" style="display: block;">#{lbl.shared_with}... </span>
 							<ul class="imj_overlayMenuList">
 								<ui:fragment rendered="#{StatusBean.owner != null}">
-									<li>#{StatusBean.owner} (<span style="font-style:italic;">#{lbl.role_owner}</span>)</li>
+									<span style="font-style:italic">#{lbl.role_owner}:</span>
+									<li>#{StatusBean.owner}</li>
 								</ui:fragment>
+								<span style="font-style:italic">#{lbl.shared_with}:</span>
 								<ui:repeat var="sharedWith" value="#{StatusBean.users}">
 									<li>#{sharedWith}</li>
 								</ui:repeat>
 								<ui:repeat var="sharedWith" value="#{StatusBean.groups}">
 									<li>#{sharedWith} <span style="font-style:italic;">(#{lbl.group})</span></li>
 								</ui:repeat>
+								<ui:fragment rendered="#{StatusBean.hasMoreCollaborator}">
+									<li>...</li>
+								</ui:fragment>
 								<ui:fragment rendered="#{StatusBean.showManage}">
 									<li class="imj_listDottedSeparator">
 										<a href="#{StatusBean.linkToSharePage}">

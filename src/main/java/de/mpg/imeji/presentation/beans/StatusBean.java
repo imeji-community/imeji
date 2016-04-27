@@ -39,6 +39,9 @@ public class StatusBean extends SuperViewBean implements Serializable {
   private List<String> users = new ArrayList<>();
   private List<String> groups = new ArrayList<>();
   private String linkToSharePage;
+  private static final int COLLABORATOR_LIST_MAX_SIZE = 5;
+  private int collaboratorListSize = 0;
+  private boolean hasMoreCollaborator = false;
 
   /**
    * Method called from the JSF compomnent
@@ -98,9 +101,14 @@ public class StatusBean extends SuperViewBean implements Serializable {
       if (!l.contains(user.getPerson().getCompleteName())) {
         if (!p.getCreatedBy().toString().equals(user.getId().toString())) {
           l.add(user.getPerson().getCompleteName());
+          collaboratorListSize++;
         } else {
           owner = user.getPerson().getCompleteName();
         }
+      }
+      if (collaboratorListSize >= COLLABORATOR_LIST_MAX_SIZE) {
+        hasMoreCollaborator = true;
+        break;
       }
     }
     return l;
@@ -119,7 +127,13 @@ public class StatusBean extends SuperViewBean implements Serializable {
     for (UserGroup group : findAllGroupsWithReadGrant(properties)) {
       if (!l.contains(group.getName())) {
         l.add(group.getName());
+        collaboratorListSize++;
       }
+      if (collaboratorListSize >= COLLABORATOR_LIST_MAX_SIZE) {
+        hasMoreCollaborator = true;
+        return l;
+      }
+
     }
     return l;
   }
@@ -211,5 +225,9 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   public boolean isShow() {
     return show;
+  }
+
+  public boolean isHasMoreCollaborator() {
+    return hasMoreCollaborator;
   }
 }

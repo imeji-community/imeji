@@ -54,6 +54,7 @@ public class ShareInput implements Serializable {
     this.locale = locale;
     this.instanceName = instanceName;
     this.menu = new ShareListItem(type, objectUri, profileUri, user, locale);
+    menu.addReadRole();
   }
 
   /**

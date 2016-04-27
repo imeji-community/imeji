@@ -50,7 +50,9 @@
 									</h:commandButton>
 								</td>
 								<td class="imj_rightsAction">
-									<h:commandLink title="#{lbl.remove}" action="#{ShareBean.unshare(sh)}" styleClass="imj_clearInput fa fa-times" rendered="#{!cc.attrs.readOnly}"/>
+									<h:commandLink title="#{lbl.remove}" action="#{ShareBean.unshare(sh)}" styleClass="imj_clearInput fa fa-times" rendered="#{!cc.attrs.readOnly}">
+										<f:ajax render="@form"/>
+									</h:commandLink>
 								</td>
 							</tr>
 						</ui:repeat>

@@ -153,9 +153,6 @@ public class ShareListItem implements Serializable {
               ShareRoles.EDIT.toString(), ShareRoles.ADMIN.toString());
         }
         break;
-      case ITEM:
-        roles = Arrays.asList(ShareRoles.READ.toString());
-        break;
     }
     if (!roles.isEmpty() && !roles.contains("READ")) {
       addReadRole();
@@ -207,9 +204,13 @@ public class ShareListItem implements Serializable {
   public void updateInvitation() throws ImejiException {
     if (invitation != null) {
       InvitationBusinessController invitationBC = new InvitationBusinessController();
-      Invitation newInvitation =
-          new Invitation(invitation.getInviteeEmail(), invitation.getObjectUri(), roles);
-      invitationBC.invite(newInvitation);
+      if (roles.isEmpty()) {
+        invitationBC.cancel(invitation.getId());
+      } else {
+        Invitation newInvitation =
+            new Invitation(invitation.getInviteeEmail(), invitation.getObjectUri(), roles);
+        invitationBC.invite(newInvitation);
+      }
     }
   }
 

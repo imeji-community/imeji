@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import javax.faces.model.SelectItem;
 
@@ -36,6 +37,7 @@ public class ShareListItem implements Serializable {
   private List<String> roles = new ArrayList<String>();
   private String title;
   private String profileUri;
+  private Locale locale;
 
   /**
    * Constructor without User of Group (To be used as menu)
@@ -47,11 +49,11 @@ public class ShareListItem implements Serializable {
    * @param roles
    */
   public ShareListItem(SharedObjectType type, String containerUri, String profileUri,
-      User currentUser) {
+      User currentUser, Locale locale) {
     this.type = type;
     this.shareToUri = containerUri;
     this.currentUser = currentUser;
-    init(new ArrayList<>(), containerUri, profileUri);
+    init(new ArrayList<>(), containerUri, profileUri, locale);
   }
 
   /**
@@ -64,13 +66,13 @@ public class ShareListItem implements Serializable {
    * @param roles
    */
   public ShareListItem(Invitation invitation, SharedObjectType type, String containerUri,
-      String profileUri, User currentUser) {
+      String profileUri, User currentUser, Locale locale) {
     this.invitation = invitation;
     this.type = type;
     this.shareToUri = containerUri;
     this.currentUser = currentUser;
     init(ShareBusinessController.transformRolesToGrants(invitation.getRoles(), containerUri),
-        containerUri, profileUri);
+        containerUri, profileUri, locale);
   }
 
   /**
@@ -83,13 +85,13 @@ public class ShareListItem implements Serializable {
    * @param roles
    */
   public ShareListItem(User user, SharedObjectType type, String containerUri, String profileUri,
-      String title, User currentUser) {
+      String title, User currentUser, Locale locale) {
     this.user = user;
     this.type = type;
     this.shareToUri = containerUri;
     this.title = title;
     this.currentUser = currentUser;
-    init((List<Grant>) user.getGrants(), containerUri, profileUri);
+    init((List<Grant>) user.getGrants(), containerUri, profileUri, locale);
   }
 
   /**
@@ -102,13 +104,13 @@ public class ShareListItem implements Serializable {
    * @param roles
    */
   public ShareListItem(UserGroup group, SharedObjectType type, String containerUri,
-      String profileUri, String title, User currentUser) {
+      String profileUri, String title, User currentUser, Locale locale) {
     this.setGroup(group);
     this.type = type;
     this.shareToUri = containerUri;
     this.title = title;
     this.currentUser = currentUser;
-    init((List<Grant>) group.getGrants(), containerUri, profileUri);
+    init((List<Grant>) group.getGrants(), containerUri, profileUri, locale);
   }
 
   /**
@@ -118,9 +120,10 @@ public class ShareListItem implements Serializable {
    * @param uri
    * @param profileUri
    */
-  private void init(List<Grant> grants, String uri, String profileUri) {
+  private void init(List<Grant> grants, String uri, String profileUri, Locale locale) {
     roles = ShareBusinessController.transformGrantsToRoles((List<Grant>) grants, uri);
     this.profileUri = profileUri;
+    this.locale = locale;
     if (profileUri != null) {
       List<String> profileRoles =
           ShareBusinessController.transformGrantsToRoles((List<Grant>) grants, profileUri);
@@ -239,12 +242,12 @@ public class ShareListItem implements Serializable {
 
   public List<SelectItem> getRolesMenu() {
     if (type == SharedObjectType.COLLECTION) {
-      return ShareUtil.getCollectionRoleMenu(profileUri);
+      return ShareUtil.getCollectionRoleMenu(profileUri, currentUser, locale);
     }
     if (type == SharedObjectType.ALBUM) {
-      return ShareUtil.getAlbumRoleMenu();
+      return ShareUtil.getAlbumRoleMenu(locale);
     }
-    return ShareUtil.getItemRoleMenu();
+    return ShareUtil.getItemRoleMenu(locale);
   }
 
   /**

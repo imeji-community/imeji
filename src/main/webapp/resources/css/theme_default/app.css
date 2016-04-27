@@ -471,10 +471,13 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_uploadMessageArea .imj_fileErrorMessageArea { background-color: #757575; }
 .imj_uploadMessageArea .imj_fileSuccessMessageArea { background-color: #292929; }
 
+.imj_borderBackGround { border-color: #292929 !important; }
+
 .imj_shareForm { width: 91.25%; padding: 1% 4%; margin-top: 20px; }
 .imj_shareForm .imj_shareRightsOverview { margin-top: 2em; padding-top: 1em; border-top: 0.1em dashed #6CAE2F; }
 .imj_shareForm .imj_rightsTable { width: 100%; }
-.imj_shareForm .imj_rightsTable th, .imj_shareForm .imj_rightsTable td { width: 6em; padding: 0.272727em 0.545454em; }
+.imj_shareForm .imj_rightsTable th, .imj_shareForm .imj_rightsTable td { min-width: 5em; padding: 0.272727em 0.545454em; }
+.imj_shareForm .imj_rightsTable th.imj_rightsTableUser, .imj_shareForm .imj_rightsTable td.imj_rightsTableUser { min-width: 18em; max-width: 18em; word-break: break-all; }
 .imj_shareForm .imj_rightsTable th.imj_rightsAction, .imj_shareForm .imj_rightsTable td.imj_rightsAction { padding: 0; text-align: right; }
 .imj_shareForm .imj_rightsTable th.imj_rightsAction input, .imj_shareForm .imj_rightsTable td.imj_rightsAction input { margin: 0; }
 .imj_shareForm .imj_rightsTable th { font-weight: bold; }

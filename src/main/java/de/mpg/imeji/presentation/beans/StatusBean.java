@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 import de.mpg.imeji.logic.Imeji;
@@ -22,7 +21,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
-import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Abstract Bean for Status informations (Status + Shared)
@@ -32,7 +30,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
  */
 @ManagedBean(name = "StatusBean")
 @RequestScoped
-public class StatusBean implements Serializable {
+public class StatusBean extends SuperViewBean implements Serializable {
   private static final long serialVersionUID = 3560140124183947655L;
   private Status status;
   private String owner;
@@ -41,10 +39,6 @@ public class StatusBean implements Serializable {
   private List<String> users = new ArrayList<>();
   private List<String> groups = new ArrayList<>();
   private String linkToSharePage;
-  @ManagedProperty(value = "#{Navigation}")
-  private Navigation navigation;
-  @ManagedProperty(value = "#{SessionBean}")
-  private SessionBean session;
 
   /**
    * Method called from the JSF compomnent
@@ -68,10 +62,10 @@ public class StatusBean implements Serializable {
     reset();
     if (properties != null) {
       status = properties.getStatus();
-      if (AuthUtil.staticAuth().hasReadGrant(session.getUser(), properties)) {
+      if (AuthUtil.staticAuth().hasReadGrant(getSessionUser(), properties)) {
         users = getUserSharedWith(properties);
         groups = getGroupSharedWith(properties);
-        showManage = AuthUtil.staticAuth().administrate(session.getUser(), properties)
+        showManage = AuthUtil.staticAuth().administrate(getSessionUser(), properties)
             && !(properties instanceof MetadataProfile);
       }
       linkToSharePage = initLinkToSharePage(properties.getId());
@@ -101,10 +95,12 @@ public class StatusBean implements Serializable {
   private List<String> getUserSharedWith(Properties p) {
     List<String> l = new ArrayList<>();
     for (User user : findAllUsersWithReadGrant(p)) {
-      if (!p.getCreatedBy().toString().equals(user.getId().toString())) {
-        l.add(user.getPerson().getCompleteName());
-      } else {
-        owner = user.getPerson().getCompleteName();
+      if (!l.contains(user.getPerson().getCompleteName())) {
+        if (!p.getCreatedBy().toString().equals(user.getId().toString())) {
+          l.add(user.getPerson().getCompleteName());
+        } else {
+          owner = user.getPerson().getCompleteName();
+        }
       }
     }
     return l;
@@ -121,7 +117,9 @@ public class StatusBean implements Serializable {
   private List<String> getGroupSharedWith(Properties properties) {
     List<String> l = new ArrayList<>();
     for (UserGroup group : findAllGroupsWithReadGrant(properties)) {
-      l.add(group.getName());
+      if (!l.contains(group.getName())) {
+        l.add(group.getName());
+      }
     }
     return l;
   }
@@ -165,8 +163,9 @@ public class StatusBean implements Serializable {
    * @return
    */
   private String initLinkToSharePage(URI uri) {
-    return navigation.getApplicationUrl() + ObjectHelper.getObjectType(uri).name().toLowerCase()
-        + "/" + ObjectHelper.getId(uri) + "/" + Navigation.SHARE.getPath();
+    return getNavigation().getApplicationUrl()
+        + ObjectHelper.getObjectType(uri).name().toLowerCase() + "/" + ObjectHelper.getId(uri) + "/"
+        + Navigation.SHARE.getPath();
   }
 
   /**
@@ -176,11 +175,11 @@ public class StatusBean implements Serializable {
    */
   public String getStatusLabel() {
     if (status == Status.RELEASED) {
-      return Imeji.RESOURCE_BUNDLE.getLabel("published", session.getLocale());
+      return Imeji.RESOURCE_BUNDLE.getLabel("published", getLocale());
     } else if (status == Status.WITHDRAWN) {
-      return Imeji.RESOURCE_BUNDLE.getLabel("withdrawn", session.getLocale());
+      return Imeji.RESOURCE_BUNDLE.getLabel("withdrawn", getLocale());
     }
-    return Imeji.RESOURCE_BUNDLE.getLabel("private", session.getLocale());
+    return Imeji.RESOURCE_BUNDLE.getLabel("private", getLocale());
   }
 
   /**
@@ -204,14 +203,6 @@ public class StatusBean implements Serializable {
 
   public String getLinkToSharePage() {
     return linkToSharePage;
-  }
-
-  public void setNavigation(Navigation navigation) {
-    this.navigation = navigation;
-  }
-
-  public void setSession(SessionBean session) {
-    this.session = session;
   }
 
   public boolean isShowManage() {

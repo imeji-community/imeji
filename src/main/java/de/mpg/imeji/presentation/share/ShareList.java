@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
@@ -37,10 +38,10 @@ public final class ShareList {
    * @throws ImejiException
    */
   public ShareList(URI ownerUri, String sharedObjectUri, String profileUri, SharedObjectType type,
-      User currentUser) throws ImejiException {
-    retrieveUsers(ownerUri, sharedObjectUri, profileUri, type, currentUser);
-    retrieveGroups(ownerUri, sharedObjectUri, profileUri, type, currentUser);
-    retrieveInvitations(sharedObjectUri, profileUri, type, currentUser);
+      User currentUser, Locale locale) throws ImejiException {
+    retrieveUsers(ownerUri, sharedObjectUri, profileUri, type, currentUser, locale);
+    retrieveGroups(ownerUri, sharedObjectUri, profileUri, type, currentUser, locale);
+    retrieveInvitations(sharedObjectUri, profileUri, type, currentUser, locale);
   }
 
   /**
@@ -53,11 +54,12 @@ public final class ShareList {
    * @param currentUser
    */
   private void retrieveGroups(URI ownerUri, String sharedObjectUri, String profileUri,
-      SharedObjectType type, User currentUser) {
+      SharedObjectType type, User currentUser, Locale locale) {
     UserGroupController ugc = new UserGroupController();
     Collection<UserGroup> groups = ugc.searchByGrantFor(sharedObjectUri, Imeji.adminUser);
     for (UserGroup group : groups) {
-      items.add(new ShareListItem(group, type, sharedObjectUri, profileUri, null, currentUser));
+      items.add(
+          new ShareListItem(group, type, sharedObjectUri, profileUri, null, currentUser, locale));
     }
   }
 
@@ -71,13 +73,14 @@ public final class ShareList {
    * @param currentUser
    */
   private void retrieveUsers(URI ownerUri, String sharedObjectUri, String profileUri,
-      SharedObjectType type, User currentUser) {
+      SharedObjectType type, User currentUser, Locale locale) {
     UserController uc = new UserController(Imeji.adminUser);
     Collection<User> allUser = uc.searchByGrantFor(sharedObjectUri);
     for (User u : allUser) {
       // Do not display the creator of this collection here
       if (!u.getId().toString().equals(ownerUri.toString())) {
-        items.add(new ShareListItem(u, type, sharedObjectUri, profileUri, null, currentUser));
+        items.add(
+            new ShareListItem(u, type, sharedObjectUri, profileUri, null, currentUser, locale));
       }
     }
   }
@@ -92,11 +95,11 @@ public final class ShareList {
    * @throws ImejiException
    */
   private void retrieveInvitations(String sharedObjectUri, String profileUri, SharedObjectType type,
-      User currentUser) throws ImejiException {
+      User currentUser, Locale locale) throws ImejiException {
     InvitationBusinessController invitationBC = new InvitationBusinessController();
     for (Invitation invitation : invitationBC.retrieveInvitationsOfObject(sharedObjectUri)) {
-      invitations
-          .add(new ShareListItem(invitation, type, sharedObjectUri, profileUri, currentUser));
+      invitations.add(
+          new ShareListItem(invitation, type, sharedObjectUri, profileUri, currentUser, locale));
     }
   }
 

@@ -32,14 +32,14 @@ import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.SuperViewBean;
 import de.mpg.imeji.presentation.history.HistoryUtil;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.UserGroupsBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 @ManagedBean(name = "ShareBean")
 @ViewScoped
-public class ShareBean implements Serializable {
+public class ShareBean extends SuperViewBean implements Serializable {
   private static final long serialVersionUID = 8106762709528360926L;
   private static final Logger LOGGER = Logger.getLogger(ShareBean.class);
   private String id;
@@ -59,10 +59,12 @@ public class ShareBean implements Serializable {
   private String pageUrl;
   @ManagedProperty("#{UserGroups}")
   private UserGroupsBean userGroupsBean;
-  @ManagedProperty("#{SessionBean}")
-  private SessionBean sb;
+  @ManagedProperty("#{SessionBean.instanceName}")
+  private String instanceName;
   private ShareInput input;
   private ShareList shareList;
+  private ShareList shareListCollection;
+  private String collectionShareUrl;
 
   public enum SharedObjectType {
     COLLECTION, ALBUM, ITEM
@@ -80,7 +82,7 @@ public class ShareBean implements Serializable {
     this.profileUri = null;
     this.type = SharedObjectType.COLLECTION;
     this.uri = ObjectHelper.getURI(CollectionImeji.class, getId());
-    CollectionImeji collection = new CollectionController().retrieveLazy(uri, sb.getUser());
+    CollectionImeji collection = new CollectionController().retrieveLazy(uri, getSessionUser());
     if (collection != null) {
       this.shareTo = collection;
       this.profileUri = collection.getProfile() != null ? collection.getProfile().toString() : null;
@@ -103,7 +105,7 @@ public class ShareBean implements Serializable {
     this.shareTo = null;
     this.profileUri = null;
     this.uri = ObjectHelper.getURI(Album.class, getId());
-    Album album = new AlbumController().retrieveLazy(uri, sb.getUser());
+    Album album = new AlbumController().retrieveLazy(uri, getSessionUser());
     if (album != null) {
       this.shareTo = album;
       this.title = album.getMetadata().getTitle();
@@ -126,14 +128,17 @@ public class ShareBean implements Serializable {
     this.shareTo = null;
     this.uri =
         HistoryUtil.extractURI(PrettyContext.getCurrentInstance().getRequestURL().toString());
-
-    Item item = new ItemController().retrieveLazy(uri, sb.getUser());
+    Item item = new ItemController().retrieveLazy(uri, getSessionUser());
     if (item != null) {
       this.shareTo = item;
       this.title = item.getFilename();
       this.owner = item.getCreatedBy();
       this.backUrl = ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getItemUrl()
           + item.getIdString();
+      this.shareListCollection = new ShareList(owner, item.getCollection().toString(), profileUri,
+          SharedObjectType.COLLECTION, getSessionUser(), getLocale());
+      this.collectionShareUrl = getNavigation().getCollectionUrl()
+          + ObjectHelper.getId(item.getCollection()) + "/" + Navigation.SHARE.getPath();
     }
     this.init();
     return "";
@@ -145,9 +150,11 @@ public class ShareBean implements Serializable {
    * @throws ImejiException
    */
   public void init() throws ImejiException {
-    input = new ShareInput(uri.toString(), type, profileUri, title, sb);
-    shareList = new ShareList(owner, uri.toString(), profileUri, type, sb.getUser());
-    isAdmin = AuthUtil.staticAuth().administrate(sb.getUser(), shareTo);
+    input = new ShareInput(uri.toString(), type, profileUri, getSessionUser(), getLocale(),
+        instanceName);
+    shareList =
+        new ShareList(owner, uri.toString(), profileUri, type, getSessionUser(), getLocale());
+    isAdmin = AuthUtil.staticAuth().administrate(getSessionUser(), shareTo);
     pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString()
         + PrettyContext.getCurrentInstance().getRequestQueryString();
     pageUrl = pageUrl.split("[&\\?]group=")[0];
@@ -238,8 +245,8 @@ public class ShareBean implements Serializable {
    * Called when user share with a group
    */
   public void shareWithGroup() {
-    ShareListItem groupListItem =
-        new ShareListItem(userGroup, type, uri.toString(), profileUri, null, sb.getUser());
+    ShareListItem groupListItem = new ShareListItem(userGroup, type, uri.toString(), profileUri,
+        null, getSessionUser(), getLocale());
     groupListItem.setRoles(input.getMenu().getRoles());
     groupListItem.update();
     reloadPage();
@@ -261,13 +268,12 @@ public class ShareBean implements Serializable {
    */
   public void reloadPage() {
     try {
-      sb.reloadUser();
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-      if (AuthUtil.staticAuth().administrate(sb.getUser(), uri.toString())) {
+      if (AuthUtil.staticAuth().administrate(getSessionUser(), uri.toString())) {
         // user has still rights to read the collection
         FacesContext.getCurrentInstance().getExternalContext()
             .redirect(navigation.getApplicationUri() + pageUrl);
-      } else if (AuthUtil.staticAuth().read(sb.getUser(), uri.toString())) {
+      } else if (AuthUtil.staticAuth().read(getSessionUser(), uri.toString())) {
         FacesContext.getCurrentInstance().getExternalContext()
             .redirect(navigation.getApplicationUri() + pageUrl.replace("share", ""));
       } else {
@@ -302,7 +308,7 @@ public class ShareBean implements Serializable {
   private void sendEmail(String email, String subject, String body) {
     try {
       new EmailService().sendMail(email, null,
-          subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), body);
+          subject.replaceAll("XXX_INSTANCE_NAME_XXX", instanceName), body);
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
       BeanHelper.error("Error: Email not sent");
@@ -318,9 +324,10 @@ public class ShareBean implements Serializable {
    */
   private void sendEmailForShare(ShareListItem item, String subject) {
     for (User user : item.getUsers()) {
-      ShareEmailMessage emailMessage = new ShareEmailMessage(user.getPerson().getCompleteName(),
-          title, getLinkToSharedObject(), getShareToUri(), profileUri, item.getRoles(), type, sb);
-      sendEmail(user.getEmail(), subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()),
+      ShareEmailMessage emailMessage =
+          new ShareEmailMessage(user.getPerson().getCompleteName(), title, getLinkToSharedObject(),
+              getShareToUri(), profileUri, item.getRoles(), type, getSessionUser(), getLocale());
+      sendEmail(user.getEmail(), subject.replaceAll("XXX_INSTANCE_NAME_XXX", instanceName),
           emailMessage.getBody());
     }
   }
@@ -334,10 +341,10 @@ public class ShareBean implements Serializable {
    * @param grants
    */
   private void sendEmailUnshare(ShareListItem item, String subject) {
-    subject = subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName());
+    subject = subject.replaceAll("XXX_INSTANCE_NAME_XXX", instanceName);
     for (User user : item.getUsers()) {
-      String body = EmailMessages.getUnshareMessage(sb.getUser().getPerson().getCompleteName(),
-          user.getPerson().getCompleteName(), title, getLinkToSharedObject(), sb.getLocale());
+      String body = EmailMessages.getUnshareMessage(getSessionUser().getPerson().getCompleteName(),
+          user.getPerson().getCompleteName(), title, getLinkToSharedObject(), getLocale());
       sendEmail(user.getEmail(), subject, body);
     }
   }
@@ -454,14 +461,6 @@ public class ShareBean implements Serializable {
     this.type = type;
   }
 
-  public SessionBean getSb() {
-    return sb;
-  }
-
-  public void setSb(SessionBean sb) {
-    this.sb = sb;
-  }
-
   public UserGroupsBean getUserGroupsBean() {
     return userGroupsBean;
   }
@@ -510,5 +509,37 @@ public class ShareBean implements Serializable {
    */
   public void setBackUrl(String backurl) {
     this.backUrl = backurl;
+  }
+
+  /**
+   * @return the shareListCollection
+   */
+  public ShareList getShareListCollection() {
+    return shareListCollection;
+  }
+
+  /**
+   * @param shareListCollection the shareListCollection to set
+   */
+  public void setShareListCollection(ShareList shareListCollection) {
+    this.shareListCollection = shareListCollection;
+  }
+
+  public String getCollectionShareUrl() {
+    return collectionShareUrl;
+  }
+
+  /**
+   * @return the instanceName
+   */
+  public String getInstanceName() {
+    return instanceName;
+  }
+
+  /**
+   * @param instanceName the instanceName to set
+   */
+  public void setInstanceName(String instanceName) {
+    this.instanceName = instanceName;
   }
 }

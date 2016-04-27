@@ -82,7 +82,7 @@ public class UserGroupBean extends SuperViewBean implements Serializable {
       try {
         this.userGroup = c.read(groupId, sessionUser);
         this.users = loadUsers(userGroup);
-        this.roles = ShareUtil.getAllRoles(userGroup, sessionUser);
+        this.roles = ShareUtil.getAllRoles(userGroup, sessionUser, getLocale());
       } catch (Exception e) {
         BeanHelper.error("Error reading user group " + groupId);
         LOGGER.error(e);

@@ -2,7 +2,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:share="http://java.sun.com/jsf/composite/components/share">
 	
 	<composite:interface>
 		<composite:attribute name="type"/>
@@ -136,101 +137,20 @@
 							</div>
 						</h:form>
 					</ul>
-				</h:panelGroup>			
+				</h:panelGroup>	
+						
+				<h2 class="imj_shareRightsOverview imj_sectionHeadline"> </h2>
 				
 				<!-- user table which shows all user with existing rights -->
 				<ui:fragment rendered="#{ShareBean.shareList.items.size() > 0}">
-					<div class="imj_shareRightsOverview">
-						<h2 class="imj_sectionHeadline">
-							<h:outputText value="#{lbl.shared_with}"/>
-						</h2>
-						<h:form prependId="false">
-							<table id="history" class="imj_rightsTable">
-								<thead>
-									<tr>
-										<th>
-											<h:outputText value="#{lbl.admin_info_users}"/>
-										</th>
-										<ui:repeat var="tableHead" value="#{rolesMenu}">
-											<th>
-												<h:outputText value="#{tableHead.label}"/>
-											</th>
-										</ui:repeat>
-										<th>
-											<h:outputText value="&#160;"/>
-										</th>
-									</tr>
-								</thead>
-								
-								<tbody>
-									<ui:repeat id="users" var="sh" value="#{ShareBean.shareList.items}" rows="0" varStatus="pos">
-										<tr>
-											<td>
-												<h:outputText value="#{sh.user.person.completeName}" rendered="#{sh.user != null}"/>
-												<h:outputText value="#{sh.group.name}" rendered="#{sh.group != null}"/>
-											</td>
-											<td colspan="#{rolesMenu.size()}">
-												<h:selectManyCheckbox id="role" value="#{sh.roles}" enabledClass="imj_noDisplay" immediate="true" layout="lineDirection" onclick="document.getElementById('share:users:#{pos.index}:checkGrants').click();">
-													<f:selectItems value="#{rolesMenu}"/>
-												</h:selectManyCheckbox>
-												<h:commandButton id="checkGrants" value="Check Grants" action="#{sh.checkRoles}" styleClass="imj_noDisplay">
-													<f:ajax execute="@form" render="@form"/>
-												</h:commandButton>
-											</td>
-											<td class="imj_rightsAction">
-												<h:commandButton value="#{lbl.remove}" action="#{ShareBean.unshare(sh)}" styleClass="imj_cancelButton"/>
-											</td>
-										</tr>
-									</ui:repeat>
-								</tbody>
-							</table>
-						</h:form>
-					</div>
+					<share:grantList id="shareList" rolesMenu="#{rolesMenu}" list="#{ShareBean.shareList.items}" title="#{lbl.shared_with}"/>
 				</ui:fragment>
+				
+				<!-- Invitation list -->
 				<ui:fragment rendered="#{ShareBean.shareList.invitations.size() > 0}">
-					<div class="imj_shareRightsOverview">
-						<h2 class="imj_sectionHeadline">
-							<h:outputText value="#{lbl.pending_invitations}"/>
-						</h2>
-						<h:form prependId="false">
-							<table id="invitation" class="imj_rightsTable">
-								<thead>
-									<tr>
-										<th>
-											<h:outputText value="#{lbl.email}"/>
-										</th>
-										<ui:repeat var="tableHead" value="#{rolesMenu}">
-											<th>
-												<h:outputText value="#{tableHead.label}"/>
-											</th>
-										</ui:repeat>
-									</tr>
-								</thead>
-								
-								<tbody>
-									<ui:repeat id="invitations" var="sh" value="#{ShareBean.shareList.invitations}" rows="0" varStatus="pos">
-										<tr>
-											<td>
-												<h:outputText value="#{sh.invitation.inviteeEmail}"/>
-											</td>
-											<td colspan="#{rolesMenu.size()}">
-												<h:selectManyCheckbox id="role" value="#{sh.roles}" enabledClass="imj_noDisplay" immediate="true" layout="lineDirection" onclick="document.getElementById('share:invitations:#{pos.index}:checkGrants').click();">
-													<f:selectItems value="#{rolesMenu}"/>
-												</h:selectManyCheckbox>
-												<h:commandButton id="checkGrants" value="Check Grants" action="#{sh.checkRoles}" styleClass="imj_noDisplay">
-													<f:ajax execute="@form" render="@form"/>
-												</h:commandButton>
-											</td>
-											<td class="imj_rightsAction">
-												<h:commandButton value="#{lbl.revoke}" action="#{ShareBean.cancelInvitation(sh)}" styleClass="imj_cancelButton"/>
-											</td>
-										</tr>
-									</ui:repeat>
-								</tbody>
-							</table>
-						</h:form>
-					</div>
+					<share:grantList id="invitationList" rolesMenu="#{rolesMenu}" list="#{ShareBean.shareList.invitations}" title="#{lbl.pending_invitations}"/>
 				</ui:fragment>
+							
 				<ui:fragment rendered="#{ShareBean.shareList.invitations.size() > 0 or ShareBean.shareList.items.size() > 0}">		
 					<div class="imj_submitPanel">
 						<h:form>
@@ -240,7 +160,23 @@
 							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton" rendered="#{cc.attrs.type != 'item'}"/>
 						</h:form>
 					</div>				
-				</ui:fragment>					
+				</ui:fragment>	
+				
+				<!-- Only for share item page: list of users-group -->
+				<ui:fragment rendered="#{ShareBean.shareListCollection != null}">
+					<br/><br/><br/>
+					<h2 class="imj_shareRightsOverview imj_sectionHeadline">#{lbl.share_via_collection} </h2>
+					<ui:fragment rendered="#{ShareBean.shareListCollection.items.size() > 0}">
+						<share:grantList id="collectionShareList" rolesMenu="#{ShareBean.shareListCollection.items[0].rolesMenu}" list="#{ShareBean.shareListCollection.items}" title="#{lbl.shared_with}" readOnly="true"/>
+					</ui:fragment>
+					<ui:fragment rendered="#{ShareBean.shareListCollection.invitations.size() > 0}">
+						<share:grantList id="collectioninvitationList" rolesMenu="#{ShareBean.shareListCollection.invitations[0].rolesMenu}" list="#{ShareBean.shareListCollection.invitations}" title="#{lbl.pending_invitations}" readOnly="true"/>
+					</ui:fragment>
+					<div class="imj_submitPanel">
+							<a href="#{ShareBean.collectionShareUrl}" class="imj_submitButton">#{lbl.edit}</a>
+					</div>
+				</ui:fragment>
+								
 			</div>
 		</ui:fragment>
 

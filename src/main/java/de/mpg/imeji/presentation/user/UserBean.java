@@ -71,7 +71,7 @@ public class UserBean extends QuotaSuperBean {
       repeatedPassword = null;
       retrieveUser();
       if (user != null) {
-        this.roles = ShareUtil.getAllRoles(user, session.getUser());
+        this.roles = ShareUtil.getAllRoles(user, session.getUser(), session.getLocale());
         this.setEdit(false);
       }
     } catch (Exception e) {
@@ -266,7 +266,7 @@ public class UserBean extends QuotaSuperBean {
 
   public List<ShareListItem> getGroupRoles(UserGroup userGroup) throws Exception {
     if (userGroup != null) {
-      return ShareUtil.getAllRoles(userGroup, session.getUser());
+      return ShareUtil.getAllRoles(userGroup, session.getUser(), session.getLocale());
     } else {
       return null;
     }

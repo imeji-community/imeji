@@ -3,6 +3,7 @@ package de.mpg.imeji.presentation.share;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
@@ -14,7 +15,6 @@ import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -36,22 +36,24 @@ public class ShareInput implements Serializable {
   private final String objectUri;
   private final String profileUri;
   private final SharedObjectType type;
-  private final SessionBean sb;
-  private final String title;
+  private Locale locale;
+  private User user;
+  private String instanceName;
 
   /**
    * Constructor
    * 
    * @param objectUri
    */
-  public ShareInput(String objectUri, SharedObjectType type, String profileUri, String title,
-      SessionBean sb) {
+  public ShareInput(String objectUri, SharedObjectType type, String profileUri, User user,
+      Locale locale, String instanceName) {
     this.objectUri = objectUri;
     this.type = type;
     this.profileUri = profileUri;
-    this.title = title;
-    this.sb = sb;
-    this.menu = new ShareListItem(type, objectUri, profileUri, sb.getUser());
+    this.user = user;
+    this.locale = locale;
+    this.instanceName = instanceName;
+    this.menu = new ShareListItem(type, objectUri, profileUri, user, locale);
   }
 
   /**
@@ -79,7 +81,7 @@ public class ShareInput implements Serializable {
         emailService.sendMail(invitee, null, getInvitationEmailSubject(),
             getInvitationEmailBody(invitee));
       } catch (ImejiException e) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_send_invitation", sb.getLocale()));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_send_invitation", locale));
         LOGGER.error("Error sending invitation:", e);
       }
     }
@@ -90,18 +92,18 @@ public class ShareInput implements Serializable {
    */
   private String getInvitationEmailBody(String email) {
     Navigation nav = new Navigation();
-    return Imeji.RESOURCE_BUNDLE.getMessage("email_invitation_body", sb.getLocale())
-        .replace("XXX_SENDER_NAME_XXX", sb.getUser().getPerson().getCompleteName())
-        .replace("XXX_INSTANCE_NAME_XXX", sb.getInstanceName())
+    return Imeji.RESOURCE_BUNDLE.getMessage("email_invitation_body", locale)
+        .replace("XXX_SENDER_NAME_XXX", user.getPerson().getCompleteName())
+        .replace("XXX_INSTANCE_NAME_XXX", instanceName)
         .replace("XXX_REGISTRATION_LINK_XXX", nav.getRegistrationUrl() + "?login=" + email)
-        .replace("XXX_SENDER_EMAIL", sb.getUser().getEmail());
+        .replace("XXX_SENDER_EMAIL", user.getEmail());
 
   }
 
   private String getInvitationEmailSubject() {
-    return Imeji.RESOURCE_BUNDLE.getMessage("email_invitation_subject", sb.getLocale())
-        .replace("XXX_SENDER_NAME_XXX", sb.getUser().getPerson().getCompleteName())
-        .replace("XXX_INSTANCE_NAME_XXX", sb.getInstanceName());
+    return Imeji.RESOURCE_BUNDLE.getMessage("email_invitation_subject", locale)
+        .replace("XXX_SENDER_NAME_XXX", user.getPerson().getCompleteName())
+        .replace("XXX_INSTANCE_NAME_XXX", instanceName);
   }
 
   /**
@@ -143,7 +145,7 @@ public class ShareInput implements Serializable {
     List<ShareListItem> listItems = new ArrayList<ShareListItem>();
     for (String email : emails) {
       ShareListItem item =
-          new ShareListItem(retrieveUser(email), type, objectUri, profileUri, null, sb.getUser());
+          new ShareListItem(retrieveUser(email), type, objectUri, profileUri, null, user, locale);
       item.setRoles(menu.getRoles());
       listItems.add(item);
     }
@@ -162,7 +164,7 @@ public class ShareInput implements Serializable {
     unknownEmails.clear();
     invalidEntries.clear();
     for (String value : input.split("\\s*[|,;\\n]\\s*")) {
-      if (EmailService.isValidEmail(value) && !value.equalsIgnoreCase(sb.getUser().getEmail())) {
+      if (EmailService.isValidEmail(value) && !value.equalsIgnoreCase(user.getEmail())) {
         boolean exists = retrieveUser(value) != null;
         if (exists) {
           validEmails.add(value);
@@ -170,9 +172,8 @@ public class ShareInput implements Serializable {
           unknownEmails.add(value);
         }
       } else {
-        invalidEntries
-            .add(Imeji.RESOURCE_BUNDLE.getMessage("error_share_invalid_email", sb.getLocale())
-                .replace("XXX_VALUE_XXX", value));
+        invalidEntries.add(Imeji.RESOURCE_BUNDLE.getMessage("error_share_invalid_email", locale)
+            .replace("XXX_VALUE_XXX", value));
       }
     }
   }

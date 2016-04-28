@@ -89,9 +89,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
       this.profileUri = collection.getProfile() != null ? collection.getProfile().toString() : null;
       this.title = collection.getMetadata().getTitle();
       this.owner = collection.getCreatedBy();
-      this.backUrl =
-          ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getCollectionUrl()
-              + collection.getIdString();
+      this.backUrl = getNavigation().getCollectionUrl() + collection.getIdString();
     }
     this.init();
   }
@@ -111,8 +109,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
       this.shareTo = album;
       this.title = album.getMetadata().getTitle();
       this.owner = album.getCreatedBy();
-      this.backUrl = ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl()
-          + album.getIdString();
+      this.backUrl = getNavigation().getAlbumUrl() + album.getIdString();
     }
     this.init();
   }
@@ -134,8 +131,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
       this.shareTo = item;
       this.title = item.getFilename();
       this.owner = item.getCreatedBy();
-      this.backUrl = ((Navigation) BeanHelper.getApplicationBean(Navigation.class)).getItemUrl()
-          + item.getIdString();
+      this.backUrl = getNavigation().getItemUrl() + item.getIdString();
       this.shareListCollection = new ShareList(owner, item.getCollection().toString(), profileUri,
           SharedObjectType.COLLECTION, getSessionUser(), getLocale());
       this.collectionShareUrl = getNavigation().getCollectionUrl()
@@ -246,7 +242,9 @@ public class ShareBean extends SuperViewBean implements Serializable {
     ShareListItem groupListItem = new ShareListItem(userGroup, type, uri.toString(), profileUri,
         null, getSessionUser(), getLocale());
     groupListItem.setRoles(input.getMenu().getRoles());
-    groupListItem.update();
+    if (groupListItem.update() && sendEmail) {
+      sendEmailForShare(groupListItem, title);
+    }
     reloadPage();
   }
 
@@ -266,33 +264,32 @@ public class ShareBean extends SuperViewBean implements Serializable {
    */
   public void reloadPage() {
     try {
-      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
       if (AuthUtil.staticAuth().administrate(getSessionUser(), uri.toString())) {
         // user has still rights to read the collection
         FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(navigation.getApplicationUri() + pageUrl);
+            .redirect(getNavigation().getApplicationUri() + pageUrl);
       } else if (AuthUtil.staticAuth().read(getSessionUser(), uri.toString())) {
         FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(navigation.getApplicationUri() + pageUrl.replace("share", ""));
+            .redirect(getNavigation().getApplicationUri() + pageUrl.replace("share", ""));
       } else {
         // user has not right anymore to read the collection
         switch (type) {
           case COLLECTION:
             FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getCollectionsUrl());
+                .redirect(getNavigation().getCollectionsUrl());
             break;
           case ALBUM:
             FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getAlbumsUrl());
+                .redirect(getNavigation().getAlbumsUrl());
             break;
           case ITEM:
             FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getBrowseUrl());
+                .redirect(getNavigation().getBrowseUrl());
             break;
         }
       }
     } catch (Exception e) {
-      throw new RuntimeException("Error reloading page " + pageUrl);
+      LOGGER.error("Error reloading page " + pageUrl, e);
     }
   }
 
@@ -387,14 +384,13 @@ public class ShareBean extends SuperViewBean implements Serializable {
   }
 
   private String getLinkToSharedObject() {
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     switch (type) {
       case COLLECTION:
-        return navigation.getCollectionUrl() + ((Properties) shareTo).getIdString();
+        return getNavigation().getCollectionUrl() + ((Properties) shareTo).getIdString();
       case ALBUM:
-        return navigation.getAlbumUrl() + ((Properties) shareTo).getIdString();
+        return getNavigation().getAlbumUrl() + ((Properties) shareTo).getIdString();
       case ITEM:
-        return navigation.getItemUrl() + ((Properties) shareTo).getIdString();
+        return getNavigation().getItemUrl() + ((Properties) shareTo).getIdString();
     }
     return null;
   }

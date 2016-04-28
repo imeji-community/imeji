@@ -27,7 +27,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 public class ShareInput implements Serializable {
   private static final long serialVersionUID = 3979846119253696328L;
   private static final Logger LOGGER = Logger.getLogger(ShareInput.class);
-
   private String input = "";
   private ShareListItem menu;
   private List<String> validEmails = new ArrayList<>();

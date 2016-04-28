@@ -145,8 +145,8 @@ public class MetadataWrapperTree implements Serializable {
   }
 
   /**
-   * Remove a {@link MetadataWrapper} from the {@link MetadataWrapperTree}. The childs of the metadata
-   * are removed as well
+   * Remove a {@link MetadataWrapper} from the {@link MetadataWrapperTree}. The childs of the
+   * metadata are removed as well
    * 
    * @param smd
    */
@@ -178,10 +178,13 @@ public class MetadataWrapperTree implements Serializable {
     if (map.containsKey(insert)) {
       moveToNextPosition(map.get(insert));
     }
+    System.out.println("insert " + insert);
     map.put(insert, smd);
     String childIndex = addIndex(smd.getTreeIndex(), "0");
     for (MetadataWrapper child : smd.getChilds()) {
       child.setTreeIndex(childIndex);
+      System.out
+          .println("insert child " + childIndex + " " + child.getMetadata().getTypeNamespace());
       insert(child);
       childIndex = incrementIndex(childIndex);
     }
@@ -193,7 +196,7 @@ public class MetadataWrapperTree implements Serializable {
    * @param smd
    */
   private void moveToNextPosition(MetadataWrapper smd) {
-    smd.setChilds(getChilds(smd.getTreeIndex()));
+    smd.setChilds(getDirectChilds(smd.getTreeIndex()));
     remove(smd);
     smd.setTreeIndex(incrementIndex(smd.getTreeIndex()));
     insert(smd);
@@ -207,9 +210,25 @@ public class MetadataWrapperTree implements Serializable {
    */
   public List<MetadataWrapper> getChilds(String parentIndex) {
     List<MetadataWrapper> childs = new ArrayList<MetadataWrapper>();
-    // for (MetadataWrapper smb : getList())
     for (MetadataWrapper smb : map.values()) {
       if (isParent(parentIndex, smb.getTreeIndex())) {
+        childs.add(smb);
+      }
+    }
+    return childs;
+  }
+
+
+  /**
+   * Get the direct child of tree element
+   * 
+   * @param parentIndex
+   * @return
+   */
+  public List<MetadataWrapper> getDirectChilds(String parentIndex) {
+    List<MetadataWrapper> childs = new ArrayList<MetadataWrapper>();
+    for (MetadataWrapper smb : map.values()) {
+      if (isDirectParent(parentIndex, smb.getTreeIndex())) {
         childs.add(smb);
       }
     }
@@ -226,6 +245,18 @@ public class MetadataWrapperTree implements Serializable {
    */
   private boolean isParent(String index1, String index2) {
     return index2.startsWith(index1 + ",") && index1.length() < index2.length();
+  }
+
+  /**
+   * True if the index1 is a direct parent of the index2<br/>
+   * - 1 is parent of all index 1,0 and 1,1 but not 1,0,1
+   * 
+   * @param index1
+   * @param index2
+   * @return
+   */
+  private boolean isDirectParent(String index1, String index2) {
+    return index2.startsWith(index1 + ",") && index1.length() + 2 == index2.length();
   }
 
   /**

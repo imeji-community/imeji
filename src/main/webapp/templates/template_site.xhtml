@@ -44,34 +44,32 @@
                		<ui:insert name="actionsMenu"/>  
                 </div>
                 <!-- Message area -->
-                <div id="imj_pageMessageArea">
-                    <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages}">
+                   <h:panelGroup id="imj_pageMessageArea" layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages}">
 
-                        <ui:fragment rendered="#{MessagesBean.hasMessages}">
-                            <ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
-                                <h:messages styleClass="imj_messageList"
-                                            errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
-                                            layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
-                            </ui:fragment>
+                       <ui:fragment rendered="#{MessagesBean.hasMessages}">
+                           <ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
+                               <h:messages styleClass="imj_messageList"
+                                           errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+                                           layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+                           </ui:fragment>
 
-                            <ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
-                                <ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
-                                    <div class="imj_messageTitleWarn"><h:outputText value="#{lbl.warning_lblMessageHeader}"/></div>
-                                    <h:messages styleClass="imj_messageList"
-                                                errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
-                                                layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
-                                </ui:fragment>
+                           <ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
+                               <ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
+                                   <div class="imj_messageTitleWarn"><h:outputText value="#{lbl.warning_lblMessageHeader}"/></div>
+                                   <h:messages styleClass="imj_messageList"
+                                               errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+                                               layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+                               </ui:fragment>
 
-                                <ui:fragment rendered="#{!MessagesBean.hasErrorMessages}">
-                                    <div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>
-                                    <h:messages styleClass="imj_messageList"
-                                                errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
-                                                layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
-                                </ui:fragment>
-                            </ui:fragment>
-                        </ui:fragment>
-                    </h:panelGroup>
-                </div>
+                               <ui:fragment rendered="#{!MessagesBean.hasErrorMessages}">
+                                   <div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>
+                                   <h:messages styleClass="imj_messageList"
+                                               errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+                                               layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+                               </ui:fragment>
+                           </ui:fragment>
+                       </ui:fragment>
+                   </h:panelGroup>
                 <!-- content wrapper -->
                 <div class="imj_mainContentWrapper">
                     <ui:insert name="mainContent"/>

@@ -210,7 +210,7 @@
 														<!-- MetaDataInput -->
 														<list:batchEditList_singleStatement id="editMd" itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{itemBean.metadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
 														<!-- imj_multipleButtons (-) (+) command buttons -->
-														<h:panelGroup class="imj_metadataEditButtonArea" rendered="#{metadata.statement.maxOccurs != '1'}">
+														<h:panelGroup class="imj_metadataEditButtonArea" rendered="#{metadata.statement.maxOccurs != '1'}">#{item}
 															<h:commandLink type="submit" styleClass="fa fa-plus-square-o" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="" title="#{lbl.add} #{itemBean.metadataLabels.internationalizedLabels[metadata.statement.id]}">
 																<f:ajax execute="@form" render="@form"/>
 		                                                    </h:commandLink>
@@ -236,7 +236,9 @@
 										<h:commandLink styleClass="imj_cancelButton" action="#{itemBean.edit.cancel}">
 											<h:outputText value="#{lbl.cancel}"/>
 										</h:commandLink>
-										<h:commandLink type="submit" styleClass="imj_submitButton"  action="#{itemBean.saveEditor}" value="#{lbl.save}"/>
+										<h:commandLink type="submit" styleClass="imj_submitButton" action="#{itemBean.saveEditor}" value="#{lbl.save}">
+											<f:ajax render="@form :imj_pageMessageArea"/>
+										</h:commandLink>
 									</div>
 								</ui:fragment>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->

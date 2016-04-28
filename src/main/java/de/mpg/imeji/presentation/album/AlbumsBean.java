@@ -51,7 +51,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
     search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
     albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), -1, offset);
-    return ListUtils.albumListToAlbumBeanList(albums);
+    return ListUtils.albumListToAlbumBeanList(albums, sb.getUser());
   }
 
   @Override

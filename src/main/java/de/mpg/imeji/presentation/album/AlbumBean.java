@@ -81,7 +81,7 @@ public class AlbumBean extends ContainerBean {
    * @param album
    * @throws Exception
    */
-  public AlbumBean(Album album) throws Exception {
+  public AlbumBean(Album album, User user) throws Exception {
     this.album = album;
     if (album != null) {
       this.id = ObjectHelper.getId(album.getId());
@@ -90,8 +90,8 @@ public class AlbumBean extends ContainerBean {
         active = true;
       }
       if (album.getId() != null) {
-        findItems(getSessionUser(), 1);
-        loadItems(getSessionUser(), 1);
+        findItems(user, 1);
+        loadItems(user, 1);
         countItems();
         description = album.getMetadata().getDescription();
         descriptionFull = description;

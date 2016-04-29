@@ -54,7 +54,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.SuperViewBean;
-import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
 import de.mpg.imeji.presentation.metadata.SingleEditorWrapper;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
@@ -140,8 +139,7 @@ public class ItemBean extends SuperViewBean {
         FacesContext.getCurrentInstance().getExternalContext().responseSendError(404,
             "404_NOT_FOUND");
       } catch (IOException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+        LOGGER.error("Error sending error", e1);;
       }
     } catch (Exception e) {
       LOGGER.error("Error initialitzing item page", e);
@@ -357,11 +355,10 @@ public class ItemBean extends SuperViewBean {
   }
 
   public void saveEditor() throws IOException {
-    HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
     try {
       edit.getEditor().save();
       BeanHelper.addMessage(Imeji.RESOURCE_BUNDLE.getMessage("success_editor_image", getLocale()));
-      FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getCurrentPage().getUrl());
+      redirect(getHistory().getCurrentPage().getUrl());
       return;
     } catch (UnprocessableError e) {
       BeanHelper.error(e, getLocale());
@@ -370,8 +367,6 @@ public class ItemBean extends SuperViewBean {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", getLocale()));
       LOGGER.error("Error saving item metadata", e);
     }
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(hs.getCurrentPage().getCompleteUrl());
   }
 
   /**
@@ -480,7 +475,7 @@ public class ItemBean extends SuperViewBean {
    * @throws IOException
    */
   public void redirectToBrowsePage() throws IOException {
-    FacesContext.getCurrentInstance().getExternalContext().redirect(getNavigation().getBrowseUrl());
+    redirect(getNavigation().getBrowseUrl());
   }
 
   /**

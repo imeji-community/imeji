@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -19,9 +16,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.util.MetadataFactory;
 import de.mpg.imeji.presentation.metadata.ItemWrapper;
-import de.mpg.imeji.presentation.metadata.MetadataWrapper;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Abstract call for the {@link Metadata} editors
@@ -31,14 +25,12 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public abstract class AbstractMetadataEditor {
-  private static final Logger LOGGER = Logger.getLogger(AbstractMetadataEditor.class);
   protected List<ItemWrapper> items;
   protected Statement statement;
   protected MetadataProfile profile;
   protected User sessionUser;
   protected Locale locale;
 
-  // protected Validator validator;
   /**
    * Editor: Edit a list of images for one statement.
    * 
@@ -46,16 +38,15 @@ public abstract class AbstractMetadataEditor {
    * @param statement
    */
   public AbstractMetadataEditor(List<Item> itemList, MetadataProfile profile, Statement statement,
-      boolean addEmtpyValue, User sessionUser, Locale locale) {
+      User sessionUser, Locale locale) {
     this.statement = statement;
     this.profile = profile;
     this.locale = locale;
     this.sessionUser = sessionUser;
     items = new ArrayList<ItemWrapper>();
     for (Item item : itemList) {
-      items.add(new ItemWrapper(item, profile, addEmtpyValue));
+      items.add(new ItemWrapper(item, profile, true));
     }
-    initialize();
   }
 
   /**
@@ -97,39 +88,6 @@ public abstract class AbstractMetadataEditor {
     ItemController ic = new ItemController();
     List<Item> itemList = validateAndFormatItemsForSaving();
     ic.updateBatch(itemList, sessionUser);
-    // String str =
-    // items.size() + " " + Imeji.RESOURCE_BUNDLE.getMessage("success_editor_images", locale);
-    // if (items.size() == 1) {
-    // str = Imeji.RESOURCE_BUNDLE.getMessage("success_editor_image", locale);
-    // }
-    // BeanHelper.info(str);
-    // try {
-    // List<Item> itemList = validateAndFormatItemsForSaving();
-    // ic.updateBatch(itemList, sessionUser);
-    // String str =
-    // items.size() + " " + Imeji.RESOURCE_BUNDLE.getMessage("success_editor_images", locale);
-    // if (items.size() == 1) {
-    // str = Imeji.RESOURCE_BUNDLE.getMessage("success_editor_image", locale);
-    // }
-    // BeanHelper.info(str);
-    // return true;
-    //
-    // } catch (UnprocessableError e) {
-    // for (ItemWrapper eib : this.items) {
-    // eib.getMds().setTree(eib.getMds().getUncutTree());
-    // }
-    // BeanHelper.cleanMessages();
-    // BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", locale));
-    // List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
-    // for (String errorM : listOfErrors) {
-    // BeanHelper.error(errorM);
-    // }
-    // return false;
-    // } catch (ImejiException e) {
-    // BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", locale));
-    // LOGGER.error("Error saving editor", e);
-    // return false;
-    // }
   }
 
   /**
@@ -139,42 +97,11 @@ public abstract class AbstractMetadataEditor {
    */
   public List<Item> validateAndFormatItemsForSaving() {
     List<Item> itemList = new ArrayList<Item>();
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-
-    if (prepareUpdate()) {
-      try {
-        addPositionToMetadata();
-        for (ItemWrapper eib : items) {
-          itemList.add(eib.asItem());
-        }
-      } catch (Exception e) {
-        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit", sb.getLocale())
-            + ": " + e.getLocalizedMessage());
-      }
-    } else {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_metadata_edit_no_images", sb.getLocale()));
+    for (ItemWrapper eib : items) {
+      itemList.add(eib.asItem());
     }
     return itemList;
-
   }
-
-  /**
-   * enable ordering for metadata values
-   */
-  protected void addPositionToMetadata() {
-    for (ItemWrapper eib : items) {
-      int pos = 0;
-      for (MetadataWrapper smb : eib.getMds().getTree().getList()) {
-        smb.setPos(pos);
-        pos++;
-      }
-    }
-  }
-
-  public abstract void initialize();
-
-  public abstract boolean prepareUpdate();
 
   /**
    * Create a new Metadata according to current Editor configuration.
@@ -243,6 +170,4 @@ public abstract class AbstractMetadataEditor {
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
-
-
 }

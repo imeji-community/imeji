@@ -80,7 +80,6 @@ public class Number extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    // Nothing to do
   }
 }

@@ -37,8 +37,12 @@ public class ItemWrapper {
    */
   public Item asItem() {
     item.getMetadataSet().getMetadata().clear();
+    int pos = 0;
     for (MetadataWrapper smdb : mds.getTree().getList()) {
-      item.getMetadataSet().getMetadata().add(smdb.asMetadata());
+      Metadata md = smdb.asMetadata();
+      md.setPos(pos);
+      item.getMetadataSet().getMetadata().add(md);
+      pos++;
     }
     return item;
   }

@@ -93,7 +93,6 @@ public class Date extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    // nothing to do
   }
 }

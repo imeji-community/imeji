@@ -100,7 +100,6 @@ public class Publication extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    citation = citation != null ? citation.trim() : null;
   }
 }

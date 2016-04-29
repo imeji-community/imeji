@@ -89,7 +89,6 @@ public class Link extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    label = label != null ? label.trim() : null;
   }
 }

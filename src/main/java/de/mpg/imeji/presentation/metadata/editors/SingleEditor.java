@@ -10,7 +10,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.metadata.ItemWrapper;
 
 /**
  * Editor for one item (by the item detail page)
@@ -28,23 +27,8 @@ public class SingleEditor extends AbstractMetadataEditor {
    * @param profile
    * @param statement
    */
-  public SingleEditor(Item item, MetadataProfile profile, Statement statement,
-      User sessionUser, Locale locale) {
-    super(Arrays.asList(item), profile, statement, true, sessionUser, locale);
+  public SingleEditor(Item item, MetadataProfile profile, Statement statement, User sessionUser,
+      Locale locale) {
+    super(Arrays.asList(item), profile, statement, sessionUser, locale);
   }
-
-  @Override
-  public void initialize() {}
-
-  @Override
-  public boolean prepareUpdate() {
-    for (ItemWrapper eib : items) {
-      eib.getMds().trim();
-    }
-    if (items.size() == 0) {
-      return false;
-    }
-    return true;
-  }
-
 }

@@ -783,6 +783,7 @@ public class ItemController extends ImejiController {
       for (Metadata md : item.getMetadataSet().getMetadata()) {
         md.clean();
       }
+      item.getMetadataSet().trim();
     }
   }
 

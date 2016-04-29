@@ -109,7 +109,6 @@ public class License extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    license = license != null ? license.trim() : null;
   }
 }

@@ -10,7 +10,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.metadata.ItemWrapper;
 
 /**
  * Editor for multiple edit (edit selected items or edit all item of a collection)
@@ -36,24 +35,6 @@ public class MultipleEditor extends AbstractMetadataEditor {
    */
   public MultipleEditor(List<Item> items, MetadataProfile profile, Statement statement,
       User sessionUser, Locale locale) {
-    super(items, profile, statement, false, sessionUser, locale);
-  }
-
-  @Override
-  public void initialize() {
-    for (ItemWrapper eib : items) {
-      eib.getMds().addEmtpyValues();
-    }
-  }
-
-  @Override
-  public boolean prepareUpdate() {
-    for (ItemWrapper eib : items) {
-      eib.getMds().trim();
-    }
-    if (items.size() == 0) {
-      return false;
-    }
-    return true;
+    super(items, profile, statement, sessionUser, locale);
   }
 }

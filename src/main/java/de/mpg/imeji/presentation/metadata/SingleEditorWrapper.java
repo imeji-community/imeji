@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
@@ -18,7 +20,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.metadata.editors.SingleEditor;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -37,6 +38,7 @@ public class SingleEditorWrapper {
   private List<MetadataWrapper> metadataList;
   private User sessionUser;
   private Locale locale;
+  private static final Logger LOGGER = Logger.getLogger(SingleEditorWrapper.class);
 
   /**
    * Constructor
@@ -59,7 +61,6 @@ public class SingleEditorWrapper {
    * @return
    */
   public String getCheckToggleState() {
-    toggleState = "displayMd";
     if (UrlHelper.getParameterBoolean("edit")) {
       showEditor();
     }
@@ -85,8 +86,7 @@ public class SingleEditorWrapper {
    */
   public String cancel() throws Exception {
     this.toggleState = "displayMd";
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    Locks.unLock(new Lock(item.getId().toString(), sb.getUser().getEmail()));
+    Locks.unLock(new Lock(item.getId().toString(), sessionUser.getEmail()));
     reloadImage();
     editor = new SingleEditor(item, profile, null, sessionUser, locale);
     return "";
@@ -96,12 +96,12 @@ public class SingleEditorWrapper {
    * Reload the current image
    */
   private void reloadImage() {
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     ItemController itemController = new ItemController();
     try {
-      item = itemController.retrieve(item.getId(), sessionBean.getUser());
+      item = itemController.retrieve(item.getId(), sessionUser);
     } catch (Exception e) {
       BeanHelper.error("Error reload item" + e.getMessage());
+      LOGGER.error("Error loading item", e);
     }
   }
 
@@ -111,18 +111,16 @@ public class SingleEditorWrapper {
    * @return
    */
   public String showEditor() {
-    SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    if (AuthUtil.staticAuth().updateContent(sb.getUser(), item)) {
+    if (AuthUtil.staticAuth().updateContent(sessionUser, item)) {
       this.toggleState = "editMd";
       try {
-        Locks.lock(new Lock(item.getId().toString(), sb.getUser().getEmail()));
+        Locks.lock(new Lock(item.getId().toString(), sessionUser.getEmail()));
       } catch (Exception e) {
-        BeanHelper
-            .error(Imeji.RESOURCE_BUNDLE.getMessage("error_editor_image_locked", sb.getLocale()));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_editor_image_locked", locale));
+        LOGGER.error("Error locking item", e);
       }
     } else {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_editor_not_allowed", sb.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_editor_not_allowed", locale));
     }
     return "";
   }

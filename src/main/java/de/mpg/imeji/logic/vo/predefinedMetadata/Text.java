@@ -76,6 +76,6 @@ public class Text extends Metadata {
 
   @Override
   public void clean() {
-    text = text.trim();
+    text = text != null ? text.trim() : null;;
   }
 }

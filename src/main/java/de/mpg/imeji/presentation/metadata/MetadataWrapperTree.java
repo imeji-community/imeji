@@ -178,13 +178,10 @@ public class MetadataWrapperTree implements Serializable {
     if (map.containsKey(insert)) {
       moveToNextPosition(map.get(insert));
     }
-    System.out.println("insert " + insert);
     map.put(insert, smd);
     String childIndex = addIndex(smd.getTreeIndex(), "0");
     for (MetadataWrapper child : smd.getChilds()) {
       child.setTreeIndex(childIndex);
-      System.out
-          .println("insert child " + childIndex + " " + child.getMetadata().getTypeNamespace());
       insert(child);
       childIndex = incrementIndex(childIndex);
     }

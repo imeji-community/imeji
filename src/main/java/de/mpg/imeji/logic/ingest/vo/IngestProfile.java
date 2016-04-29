@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.mpg.imeji.logic.ingest.vo;
 
@@ -15,10 +15,10 @@ public class IngestProfile {
   private Items items;
 
   /**
-	 * 
-	 */
+   * 
+   */
   public IngestProfile() {
-    
+
   }
 
   /**

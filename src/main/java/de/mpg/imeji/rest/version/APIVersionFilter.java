@@ -1,7 +1,6 @@
 package de.mpg.imeji.rest.version;
 
-import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
-import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 import java.io.IOException;
 
@@ -15,13 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
+import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
 
 /**
  * Filter which check if the version of the request to the API is the latest one. <br/>
  * - If yes, redirect to the API without version number (latest) <br/>
  * - If no, send an not supported version exception back
- * 
+ *
  * @author saquet
  *
  */
@@ -41,14 +41,14 @@ public class APIVersionFilter implements Filter {
       if (versionManager.isCurrentVersion() && versionManager.hasVersion()) {
         // redirect to non latest api (i.e. without version in the url)
         String q = ((HttpServletRequest) request).getQueryString();
-        ((HttpServletResponse) response).sendRedirect(versionManager.getPathToLatestVersion()
-                + (isNullOrEmptyTrim(q) ? "" : "?" + q));
+        ((HttpServletResponse) response).sendRedirect(
+            versionManager.getPathToLatestVersion() + (isNullOrEmptyTrim(q) ? "" : "?" + q));
       }
     } catch (DeprecatedAPIVersionException e) {
       ((HttpServletResponse) response).sendError(Status.GONE.getStatusCode(), e.getMessage());
     } catch (UnknowAPIVersionException e) {
-      ((HttpServletResponse) response)
-          .sendError(Status.BAD_REQUEST.getStatusCode(), e.getMessage());
+      ((HttpServletResponse) response).sendError(Status.BAD_REQUEST.getStatusCode(),
+          e.getMessage());
     } finally {
       chain.doFilter(request, response);
     }

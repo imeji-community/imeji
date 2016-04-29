@@ -10,8 +10,9 @@ import de.mpg.j2j.misc.LocalizedString;
 public class LabelHelper {
   public static String getDefaultLabel(Iterator<LocalizedString> labels) {
     String l = "";
-    if (labels.hasNext())
+    if (labels.hasNext()) {
       l = labels.next().toString();
+    }
     while (labels.hasNext()) {
       LocalizedString ls = labels.next();
       if (ls.getLang().equals("eng")) {

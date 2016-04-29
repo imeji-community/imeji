@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Resource Bundle for imeji
- * 
+ *
  * @author bastiens
  *
  */
@@ -19,7 +19,7 @@ public class ImejiResourceBundle {
 
   /**
    * Returns the label according to the current user locale.
-   * 
+   *
    * @param placeholder A string containing the name of a label.
    * @return The label.
    */
@@ -37,7 +37,7 @@ public class ImejiResourceBundle {
 
   /**
    * Returns the message according to the current user locale.
-   * 
+   *
    * @param placeholder A string containing the name of a message.
    * @return The label.
    */
@@ -55,7 +55,7 @@ public class ImejiResourceBundle {
 
   /**
    * Get the bundle for the labels
-   * 
+   *
    * @return
    */
   private String getSelectedLabelBundle(Locale locale) {
@@ -73,7 +73,7 @@ public class ImejiResourceBundle {
 
   /**
    * Get the bundle for the messages
-   * 
+   *
    * @return
    */
   private String getSelectedMessagesBundle(Locale locale) {

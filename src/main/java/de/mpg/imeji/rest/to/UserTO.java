@@ -7,7 +7,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * TO for {@link User}
- * 
+ *
  * @author bastiens
  *
  */

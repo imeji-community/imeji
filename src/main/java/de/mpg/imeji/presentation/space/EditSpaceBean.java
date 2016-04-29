@@ -13,6 +13,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.SpaceController;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 @ManagedBean(name = "EditSpaceBean")
@@ -33,7 +34,7 @@ public class EditSpaceBean extends SpaceBean {
         FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
       } else {
         FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(navigation.getApplicationUrl() + navigation.spacesAllSlug);
+            .redirect(navigation.getApplicationUrl() + Navigation.spacesAllSlug);
       }
     }
 

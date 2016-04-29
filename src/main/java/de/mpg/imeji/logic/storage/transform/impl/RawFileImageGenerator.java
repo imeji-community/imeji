@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -45,7 +45,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
  * {@link ImageGenerator} for all unknown/unsupported format. It creates a default image
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -65,7 +65,7 @@ public class RawFileImageGenerator implements ImageGenerator {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
   @Override
@@ -79,7 +79,7 @@ public class RawFileImageGenerator implements ImageGenerator {
 
   /**
    * Write the extension on the {@link BufferedImage}
-   * 
+   *
    * @param old
    * @param extension
    * @return
@@ -110,13 +110,14 @@ public class RawFileImageGenerator implements ImageGenerator {
 
   /**
    * Format the extension to avoid to broke the design of the created icon
-   * 
+   *
    * @param extension
    * @return
    */
   private String formatExtension(String extension) {
-    if (extension.length() > 3)
+    if (extension.length() > 3) {
       extension = extension.substring(0, 3);
+    }
     return extension.toUpperCase();
   }
 }

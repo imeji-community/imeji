@@ -25,7 +25,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Helper for imeji {@link Object}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -48,7 +48,7 @@ public class ObjectHelper {
   /**
    * Ensure that the {@link URI} uses the correct base uri (see property
    * imeji.jena.resource.base_uri)
-   * 
+   *
    * @param c
    * @param uri
    * @return
@@ -59,7 +59,7 @@ public class ObjectHelper {
 
   /**
    * Get the {@link URI} of {@link Object} according to its {@link Class} and the id (not uri)
-   * 
+   *
    * @param o
    * @return
    */
@@ -82,7 +82,7 @@ public class ObjectHelper {
 
   /**
    * Extract the id number from the object uri
-   * 
+   *
    * @param uri
    * @return
    */
@@ -98,7 +98,7 @@ public class ObjectHelper {
 
   /**
    * Parse an object URI to get its {@link ObjectType}
-   * 
+   *
    * @param uri
    * @return
    */
@@ -117,7 +117,7 @@ public class ObjectHelper {
 
   /**
    * Return Fields of this class (excluding superclass fields)
-   * 
+   *
    * @param cl
    * @return
    */
@@ -131,21 +131,22 @@ public class ObjectHelper {
 
   /**
    * Returns all Field of a class, including those of superclass.
-   * 
+   *
    * @param cl
    * @return
    */
   public static List<Field> getAllObjectFields(Class<?> cl) {
     List<Field> fields = getObjectFields(cl);
-    if (cl.getSuperclass() != null)
+    if (cl.getSuperclass() != null) {
       fields.addAll(getAllObjectFields(cl.getSuperclass()));
+    }
     return fields;
   }
 
   /**
    * Copy {@link Field} from obj1 to obj2. Only Fields with same name and same type are copied.
    * Fields from superclass are not copied.
-   * 
+   *
    * @param obj1
    * @param obj2
    */
@@ -168,7 +169,7 @@ public class ObjectHelper {
   /**
    * Copy {@link Field} from obj1 to obj2. Only Fields with same name and same type are copied.
    * Fields from superclass are copied.
-   * 
+   *
    * @param obj1
    * @param obj2
    */
@@ -196,11 +197,12 @@ public class ObjectHelper {
    *
    * @param obj1
    * @param obj2
-   * 
+   *
    */
   public static void transferField(String getter, Object obj1, String setter, Object obj2) {
-    if (obj1 == null || obj2 == null || isNullOrEmpty(getter) || isNullOrEmpty(setter))
+    if (obj1 == null || obj2 == null || isNullOrEmpty(getter) || isNullOrEmpty(setter)) {
       return;
+    }
     Class fromClass = obj1.getClass();
     Class toClass = obj2.getClass();
     try {

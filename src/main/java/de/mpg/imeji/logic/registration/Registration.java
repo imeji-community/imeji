@@ -8,7 +8,7 @@ import de.mpg.j2j.helper.DateHelper;
 
 /**
  * A Registration to imeji
- * 
+ *
  * @author bastiens
  *
  */

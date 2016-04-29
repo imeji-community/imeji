@@ -26,7 +26,7 @@ import de.mpg.imeji.presentation.util.VocabularyHelper;
 
 /**
  * Java Bean for the edit metadata Profile page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -88,7 +88,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * @throws ImejiException
-   * 
+   *
    */
   public void changeProfile() {
     setProfile(null);
@@ -96,7 +96,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * Start a new emtpy profile
-   * 
+   *
    * @throws ImejiException
    */
   public void startNewProfile() throws ImejiException {
@@ -113,16 +113,16 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * Method when cancel button is clicked
-   * 
+   *
    * @return
    * @throws IOException
    */
   public String cancel() throws IOException {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    if (colId != null)
+    if (colId != null) {
       FacesContext.getCurrentInstance().getExternalContext().redirect(
           navigation.getCollectionUrl() + colId + "/" + navigation.getInfosPath() + "?init=1");
-    else {
+    } else {
       HistorySession history = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(history.getPreviousPage().getCompleteUrlWithHistory());
@@ -132,7 +132,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * Method when save button is clicked
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -164,7 +164,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * Listener for the title input
-   * 
+   *
    * @param event
    */
   public void titleListener(ValueChangeEvent event) {
@@ -175,7 +175,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * Listener for the description input
-   * 
+   *
    * @param event
    */
   public void descriptionListener(ValueChangeEvent event) {
@@ -191,7 +191,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getColId() {
@@ -200,7 +200,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param colId
    */
   public void setColId(String colId) {

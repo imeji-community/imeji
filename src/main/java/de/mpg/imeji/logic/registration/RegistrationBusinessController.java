@@ -23,7 +23,7 @@ import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Business Controller for user registration
- * 
+ *
  * @author bastiens
  *
  */
@@ -34,7 +34,7 @@ public class RegistrationBusinessController {
 
   /**
    * Retrieve a registration by its token
-   * 
+   *
    * @param token
    * @return
    * @throws ImejiException
@@ -51,7 +51,7 @@ public class RegistrationBusinessController {
 
   /**
    * Retrieve the registration by email
-   * 
+   *
    * @param email
    * @return
    * @throws ImejiException
@@ -68,7 +68,7 @@ public class RegistrationBusinessController {
 
   /**
    * Register a user to imeji: A registration is created
-   * 
+   *
    * @param user
    * @return
    * @throws Exception
@@ -90,7 +90,7 @@ public class RegistrationBusinessController {
 
   /**
    * Delete the Registration
-   * 
+   *
    * @param token
    * @throws ImejiException
    */
@@ -100,7 +100,7 @@ public class RegistrationBusinessController {
 
   /**
    * Remove all expired Registration
-   * 
+   *
    * @throws ImejiException
    */
   public void deleteExpiredRegistration() throws ImejiException {
@@ -113,7 +113,7 @@ public class RegistrationBusinessController {
 
   /**
    * Retrieve all pending registrations
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -128,7 +128,7 @@ public class RegistrationBusinessController {
 
   /**
    * Search for users which are registered but still not activated
-   * 
+   *
    * @param q
    * @return
    * @throws ImejiException
@@ -136,8 +136,9 @@ public class RegistrationBusinessController {
   public List<User> searchInactiveUsers(String q) {
     List<User> users = new ArrayList<>();
     for (Registration r : retrieveAll()) {
-      if (matchUser(r.getUser(), q))
+      if (matchUser(r.getUser(), q)) {
         users.add(r.getUser());
+      }
     }
     return users;
   }
@@ -146,7 +147,7 @@ public class RegistrationBusinessController {
 
   /**
    * Remove all pending registrations
-   * 
+   *
    * @throws ImejiException
    */
   public void removeAll() throws ImejiException {
@@ -157,7 +158,7 @@ public class RegistrationBusinessController {
 
   /**
    * True if the registration is expired
-   * 
+   *
    * @param registration
    * @return
    */
@@ -170,7 +171,7 @@ public class RegistrationBusinessController {
 
   /**
    * Activate a user: Get the registration, create the user
-   * 
+   *
    * @param token
    * @return
    * @throws ImejiException
@@ -265,7 +266,7 @@ public class RegistrationBusinessController {
 
   /**
    * True if the email is allowed according to the Registration white list
-   * 
+   *
    * @param email
    * @return
    */
@@ -284,7 +285,7 @@ public class RegistrationBusinessController {
 
   /**
    * True if the query matches the user
-   * 
+   *
    * @param user
    * @param q
    * @return
@@ -296,7 +297,7 @@ public class RegistrationBusinessController {
 
   /**
    * True if there is a pending registration for this email
-   * 
+   *
    * @param email
    * @return
    * @throws ImejiException
@@ -312,7 +313,7 @@ public class RegistrationBusinessController {
 
   /**
    * True if the email is already used by a user in imeji
-   * 
+   *
    * @param email
    * @return
    * @throws ImejiException

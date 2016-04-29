@@ -9,7 +9,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Validator for UserGroup
- * 
+ *
  * @author bastiens
  *
  */
@@ -32,14 +32,15 @@ public class UserGroupValidator extends ObjectValidator implements Validator<Use
 
   /**
    * True if {@link UserGroup} name already used by another {@link UserGroup}
-   * 
+   *
    * @param group
    * @return
    */
   public boolean groupNameAlreadyExists(UserGroup g) {
     for (String id : ImejiSPARQL.exec(JenaCustomQueries.selectUserGroupAll(g.getName()), null)) {
-      if (!id.equals(g.getId().toString()))
+      if (!id.equals(g.getId().toString())) {
         return true;
+      }
     }
     return false;
   }

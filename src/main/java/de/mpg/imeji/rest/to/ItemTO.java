@@ -165,7 +165,7 @@ public class ItemTO extends PropertiesTO implements Serializable {
 
   /**
    * Remove all {@link MetadataSetTO} which are defined with this statement
-   * 
+   *
    * @param statement
    * @return
    */

@@ -32,7 +32,7 @@ import de.mpg.imeji.presentation.util.CommonUtils;
 
 /**
  * Item of the collections page.
- * 
+ *
  * @author saquet
  */
 public class CollectionListItem {
@@ -62,7 +62,7 @@ public class CollectionListItem {
 
   /**
    * Construct a new {@link CollectionListItem} with a {@link CollectionImeji}
-   * 
+   *
    * @param collection
    * @param user
    */
@@ -104,7 +104,7 @@ public class CollectionListItem {
 
   /**
    * Find the Logo of the collection. If no logo defined, use the first file of the collection
-   * 
+   *
    * @param collection
    * @param user
    * @throws ImejiException
@@ -129,7 +129,7 @@ public class CollectionListItem {
 
   /**
    * Count the size of the collection
-   * 
+   *
    * @param user
    */
   private void initSize(CollectionImeji collection, User user) {
@@ -140,7 +140,7 @@ public class CollectionListItem {
 
   /**
    * Release the {@link Collection} in the list
-   * 
+   *
    * @return
    */
   public String release() {
@@ -162,7 +162,7 @@ public class CollectionListItem {
 
   /**
    * Delete the {@link CollectionImeji} in the list
-   * 
+   *
    * @return
    */
   public String delete() {
@@ -208,7 +208,7 @@ public class CollectionListItem {
 
   /**
    * Withdraw the {@link CollectionImeji} of the list
-   * 
+   *
    * @return
    */
   public String withdraw() {
@@ -231,7 +231,7 @@ public class CollectionListItem {
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   public void discardCommentListener(ValueChangeEvent event) {

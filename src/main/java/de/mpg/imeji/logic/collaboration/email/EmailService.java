@@ -48,7 +48,7 @@ public class EmailService {
 
   /**
    * Send an email according to the properties define in imeji.properties
-   * 
+   *
    * @throws ImejiException
    */
   public void sendMail(String to, String from, Email email)
@@ -58,7 +58,7 @@ public class EmailService {
 
   /**
    * Send an email according to the properties define in imeji.properties
-   * 
+   *
    * @throws ImejiException
    */
   public void sendMail(String to, String from, String subject, String message)
@@ -72,7 +72,7 @@ public class EmailService {
 
   /**
    * Send an email according to the properties define in imeji.properties
-   * 
+   *
    * @throws ImejiException
    */
   private void sendMail(String to, String from, String[] replyTo, String subject, String message)
@@ -104,7 +104,7 @@ public class EmailService {
 
   /**
    * Send an email
-   * 
+   *
    * @throws ImejiException
    */
   public String sendMail(String smtpHost, String port, String withAuth, String usr, String pwd,
@@ -136,21 +136,23 @@ public class EmailService {
         }
       }
       // add CC recipients
-      if (recipientsCCAddresses != null)
+      if (recipientsCCAddresses != null) {
         for (String racc : recipientsCCAddresses) {
           if (racc != null && !racc.trim().equals("")) {
             message.addRecipient(Message.RecipientType.CC, new InternetAddress(racc));
             LOGGER.debug(">>> recipientCC  " + racc);
           }
         }
+      }
       // add BCC recipients
-      if (recipientsBCCAddresses != null)
+      if (recipientsBCCAddresses != null) {
         for (String rabcc : recipientsBCCAddresses) {
           if (rabcc != null && !rabcc.trim().equals("")) {
             message.addRecipient(Message.RecipientType.BCC, new InternetAddress(rabcc));
             LOGGER.debug(">>> recipientBCC  " + rabcc);
           }
         }
+      }
       // add replyTo
       if (replytoAddresses != null) {
         InternetAddress[] adresses = new InternetAddress[recipientsAddresses.length];
@@ -162,8 +164,9 @@ public class EmailService {
             LOGGER.debug(">>> replyToaddress  " + a);
           }
         }
-        if (i > 0)
+        if (i > 0) {
           message.setReplyTo(adresses);
+        }
       }
       message.setSubject(subject);
       Date date = new Date();

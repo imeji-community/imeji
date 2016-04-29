@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Utility Classs for IP operations
- * 
+ *
  * @author saquet
  *
  */
@@ -27,7 +27,7 @@ public class IPUtils {
    * 130.183.248.12-13 <br/>
    * 85.183.114.142 <br/>
    * 141.61.*.* <br/>
-   * 
+   *
    * @param ipRange
    * @param ip
    * @return
@@ -46,7 +46,7 @@ public class IPUtils {
 
   /**
    * Return the minimal IP of an IP range
-   * 
+   *
    * @param ipRangeString
    * @return
    * @throws UnknownHostException
@@ -75,7 +75,7 @@ public class IPUtils {
 
   /**
    * Return the maximal IP of an IP range
-   * 
+   *
    * @param ipRangeString
    * @return
    * @throws UnknownHostException
@@ -104,7 +104,7 @@ public class IPUtils {
 
   /**
    * Convert an ip to a long with can be then compared to another
-   * 
+   *
    * @param ip
    * @return
    */

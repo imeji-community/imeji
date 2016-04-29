@@ -2,7 +2,7 @@ package de.mpg.imeji.logic.collaboration.email;
 
 /**
  * An Email...
- * 
+ *
  * @author bastiens
  *
  */

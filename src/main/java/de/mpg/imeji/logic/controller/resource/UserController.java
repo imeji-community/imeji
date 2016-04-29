@@ -46,7 +46,7 @@ import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Controller for {@link User}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -59,9 +59,9 @@ public class UserController {
 
   /**
    * User type (restricted: can not create collection)
-   * 
+   *
    * @author saquet
-   * 
+   *
    */
   public enum USER_TYPE {
     DEFAULT, ADMIN, RESTRICTED, COPY, INACTIVE;
@@ -69,7 +69,7 @@ public class UserController {
 
   /**
    * Constructor
-   * 
+   *
    * @param user
    */
   public UserController(User user) {
@@ -78,7 +78,7 @@ public class UserController {
 
   /**
    * Create a new user in the database with predefined roles (ADMIN, DEFAULT or RESTRICTED)
-   * 
+   *
    * @param u
    * @param type
    * @return
@@ -124,7 +124,7 @@ public class UserController {
 
   /**
    * Delete a {@link User}
-   * 
+   *
    * @param user
    * @throws ImejiException
    */
@@ -140,7 +140,7 @@ public class UserController {
 
   /**
    * Retrieve a {@link User} according to its email
-   * 
+   *
    * @param email
    * @return
    * @throws ImejiException
@@ -161,7 +161,7 @@ public class UserController {
 
   /**
    * Retrieve a {@link User} according to its uri (id)
-   * 
+   *
    * @param uri
    * @return
    * @throws ImejiException
@@ -174,7 +174,7 @@ public class UserController {
 
   /**
    * Retrieve a {@link User} according to its uri (id)
-   * 
+   *
    * @param uri
    * @return
    * @throws ImejiException
@@ -191,7 +191,7 @@ public class UserController {
 
   /**
    * Retrieve a {@link User} according to its email
-   * 
+   *
    * @param email
    * @return
    * @throws ImejiException
@@ -223,7 +223,7 @@ public class UserController {
 
   /**
    * Update a {@link User}
-   * 
+   *
    * @param updatedUser : The user who is updated in the database
    * @param currentUser
    * @throws ImejiException
@@ -239,7 +239,7 @@ public class UserController {
    * True if a user has been Modified, i.e the last modification of the user in the database is
    * older than the last modification of the user in the session. (For instance when an object has
    * been shared with the user)
-   * 
+   *
    * @param u
    * @return
    */
@@ -254,7 +254,7 @@ public class UserController {
 
   /**
    * Check user disk space quota. Quota is calculated for user of target collection.
-   * 
+   *
    * @param file
    * @param col
    * @throws ImejiException
@@ -294,7 +294,7 @@ public class UserController {
   /**
    * Retrieve all {@link User} in imeji<br/>
    * Only allowed for System administrator
-   * 
+   *
    * @return
    */
   public Collection<User> searchUserByName(String name) {
@@ -305,7 +305,7 @@ public class UserController {
 
   /**
    * Search for all users having the grant for an object
-   * 
+   *
    * @param grantFor
    * @return
    */
@@ -319,7 +319,7 @@ public class UserController {
   /**
    * Search for all {@link Person} by their names. The search looks within the {@link User} and the
    * {@link Collection} what {@link Person} are already existing.
-   * 
+   *
    * @param name
    * @return
    */
@@ -329,7 +329,7 @@ public class UserController {
 
   /**
    * Load a {@link User} by its uri
-   * 
+   *
    * @param id
    * @return
    */
@@ -347,7 +347,7 @@ public class UserController {
 
   /**
    * Retrieve a User by its API Key
-   * 
+   *
    * @param key
    * @return
    * @throws ImejiException
@@ -364,7 +364,7 @@ public class UserController {
 
   /**
    * Load an {@link Organization} by its uri
-   * 
+   *
    * @param id
    * @return
    */
@@ -383,7 +383,7 @@ public class UserController {
   /**
    * Search for all {@link Organization} in imeji, i.e. t The search looks within the {@link User}
    * and the {@link Collection} what {@link Organization are already existing.
-   * 
+   *
    * @param name
    * @return
    */
@@ -399,7 +399,7 @@ public class UserController {
 
   /**
    * Search all {@link Person} which are defined in a {@link User}
-   * 
+   *
    * @param name
    * @return
    */
@@ -413,7 +413,7 @@ public class UserController {
 
   /**
    * Search all {@link Organization} which are defined in a {@link User}
-   * 
+   *
    * @param name
    * @return
    */
@@ -427,7 +427,7 @@ public class UserController {
 
   /**
    * Load all {@link User}
-   * 
+   *
    * @param uris
    * @return
    * @throws ImejiException
@@ -444,6 +444,7 @@ public class UserController {
 
     // Always sort Users by complete name
     Comparator<User> comparator = new Comparator<User>() {
+      @Override
       public int compare(User c1, User c2) {
         return c1.getPerson().getCompleteName().toLowerCase()
             .compareTo(c2.getPerson().getCompleteName().toLowerCase()); // use your logic
@@ -455,7 +456,7 @@ public class UserController {
 
   /**
    * Load Organizations
-   * 
+   *
    * @param uris
    * @param model
    * @return
@@ -475,7 +476,7 @@ public class UserController {
 
   /**
    * Load Organizations
-   * 
+   *
    * @param uris
    * @param model
    * @return
@@ -495,7 +496,7 @@ public class UserController {
 
   /**
    * This method checks if a admin user exists for this instance
-   * 
+   *
    * @return true of no admin user exists, false otherwise
    */
   public static boolean adminUserExist() {
@@ -511,7 +512,7 @@ public class UserController {
 
   /**
    * Retrieve all admin users
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -532,7 +533,7 @@ public class UserController {
 
   /**
    * Search for users to be notified by item download of the collection
-   * 
+   *
    * @param user
    * @param c
    * @return

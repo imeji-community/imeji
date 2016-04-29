@@ -64,9 +64,9 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 
 /**
  * Utility class for transfer of {@link MetadataTO} to or from {@link Metadata}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class MetadataTransferHelper {
 
@@ -173,7 +173,7 @@ public class MetadataTransferHelper {
     }
 
     for (Iterator<JsonNode> iterator = tempNode.elements(); iterator.hasNext();) {
-      JsonNode node = (JsonNode) iterator.next();
+      JsonNode node = iterator.next();
 
       if (!isParent) {
         l.add(parseMetadataTO(node, statement));
@@ -239,7 +239,7 @@ public class MetadataTransferHelper {
 
   /*
    * ORIGINAL EASY METADATA
-   * 
+   *
    * public static List<MetadataSetTO> parseMetadata(JsonNode json, StatementTO statement) throws
    * BadRequestException { List<MetadataSetTO> l = new ArrayList<MetadataSetTO>(); String label =
    * statement.getLabels().get(0).getValue(); if (json.getNodeType() == JsonNodeType.ARRAY) { if
@@ -247,13 +247,13 @@ public class MetadataTransferHelper {
    * label + "\" can only have one value"); } for (Iterator<JsonNode> iterator = json.elements();
    * iterator.hasNext();) { JsonNode node = (JsonNode) iterator.next(); l.add(parseMetadataTO(node,
    * statement)); } } else { l.add(parseMetadataTO(json, statement)); } return l; }
-   * 
-   * 
+   *
+   *
    */
   /**
    * Serialize a list of {@link Metadata} to one {@link JsonNode} by using
    * {@link SuperMetadataTreeTO}
-   * 
+   *
    * @param metadataSet
    * @param profile
    * @return
@@ -269,7 +269,7 @@ public class MetadataTransferHelper {
   /**
    * Generates template values for {@link Metadata} of a given {@link MetadataProfile} by using
    * {@link SuperMetadataTreeTO}
-   * 
+   *
    * @param metadataSet
    * @param profile
    * @return
@@ -282,7 +282,7 @@ public class MetadataTransferHelper {
 
   /*
    * ORIGINAL EASY METADATA
-   * 
+   *
    * public static Map<String, JsonNode> serializeMetadataSet(Collection<Metadata> metadataSet,
    * MetadataProfile profile) { Map<String, JsonNode> json = new HashMap<String, JsonNode>(); for
    * (Statement statement : profile.getStatements()) { List<Metadata> l =
@@ -291,10 +291,10 @@ public class MetadataTransferHelper {
    * 1) { List<JsonNode> nodes = new ArrayList<JsonNode>(); for (Metadata md : l) {
    * nodes.add(serializeMetadata(md, statement)); } json.put(statement.getLabel(),
    * RestProcessUtils.buildJsonNode(nodes)); } } return json; }
-   * 
-   * 
-   * 
-   * 
+   *
+   *
+   *
+   *
    */
 
 
@@ -303,14 +303,14 @@ public class MetadataTransferHelper {
    * Serialize a single {@link Metadata} value as a simple {@link JsonNode} (value or object node).
    * It is used in {@link SuperMetadataTreeTO} and {@link SuperMetadataBeanTO}} for generation of
    * JSON
-   * 
+   *
    * @param metadata
    * @param statement
    * @return
    */
   /*
    * ORIGINAL EASY METADATA method is "private" i.e.
-   * 
+   *
    * private static JsonNode serializeMetadata(Metadata metadata, Statement statement) {
    */
   public static JsonNode serializeMetadata(Metadata metadata, Statement statement) {
@@ -361,7 +361,7 @@ public class MetadataTransferHelper {
 
   /**
    * Parse simple {@link JsonNode} (i.e. a value or object node) into a {@link MetadataSetTO}.
-   * 
+   *
    * @param json
    * @param statement
    * @return

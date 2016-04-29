@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 /**
  * Utility class for dates in inemi
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -25,7 +25,7 @@ public class DateFormatter {
 
   /**
    * Return the time of the {@link Date}, if the format is recognized. This method use parseDate()
-   * 
+   *
    * @param str
    * @return
    */
@@ -44,7 +44,7 @@ public class DateFormatter {
    * * 2016 -> 01.01.2016 - 00:00 <br/>
    * * 2016-04 -> 01.04.2016 - 00:00 <br/>
    * * 2016-04-14 -> 14.04.2016 - 00:00
-   * 
+   *
    * @param str
    * @return
    */
@@ -68,7 +68,7 @@ public class DateFormatter {
    * * 2016 -> 31.12.2016 - 23:59:59 <br/>
    * * 2016-04 -> 31.04.2016 - 23:59:59 <br/>
    * * 2016-04-14 -> 14.04.2016 - 23:59:59
-   * 
+   *
    * @param str
    * @return
    */
@@ -110,7 +110,7 @@ public class DateFormatter {
 
   /**
    * Parse a {@link Date} as {@link String} according to a {@link Pattern}
-   * 
+   *
    * @param str
    * @param pattern
    * @return
@@ -126,7 +126,7 @@ public class DateFormatter {
 
   /**
    * Format a {@link String} as a {@link Date}
-   * 
+   *
    * @param str
    * @return
    */
@@ -148,7 +148,7 @@ public class DateFormatter {
 
   /**
    * Return a date in a conform format for SPARQL Queries (for instance: 2014-04-02T15:17:22.833Z)
-   * 
+   *
    * @param str
    * @return
    */
@@ -169,7 +169,7 @@ public class DateFormatter {
 
   /**
    * Return a date in a conform format for SPARQL Queries (for instance: 2014-04-02T15:17:22.833Z)
-   * 
+   *
    * @param str
    * @return
    */

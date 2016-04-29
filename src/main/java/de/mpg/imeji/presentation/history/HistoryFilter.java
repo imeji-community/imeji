@@ -46,7 +46,7 @@ import de.mpg.imeji.presentation.util.ServletUtil;
 
 /**
  * {@link Filter} for the imeji history
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -99,7 +99,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Redicrect the request to the login page
-   * 
+   *
    * @param serv
    * @param resp
    * @throws IOException
@@ -120,7 +120,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Implement the History filter
-   * 
+   *
    * @param request
    * @param resp
    * @throws Exception
@@ -195,7 +195,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Return the {@link SessionBean}
-   * 
+   *
    * @param req
    * @return
    */
@@ -206,7 +206,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Get the {@link HistorySession} from the {@link FacesContext}
-   * 
+   *
    * @param request
    * @param resp
    * @return
@@ -235,7 +235,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Used to initialized FacesContext
-   * 
+   *
    * @author bastiens
    *
    */
@@ -247,7 +247,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Get {@link FacesContext} from Filter
-   * 
+   *
    * @param request
    * @param response
    * @return

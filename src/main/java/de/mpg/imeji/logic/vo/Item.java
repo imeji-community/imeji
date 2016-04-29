@@ -26,7 +26,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * imeji item. Can be an image, a video, a sound, etc.
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -163,7 +163,7 @@ public class Item extends Properties implements Serializable {
 
   /**
    * Return the same Ite but empty (same id and same collection). Used for patch update
-   * 
+   *
    * @return
    */
   public Item copyEmpty() {
@@ -176,7 +176,7 @@ public class Item extends Properties implements Serializable {
   /**
    * Copy all {@link Fields} of an {@link Item} (including {@link Metadata}) to the current
    * {@link Item}
-   * 
+   *
    * @param copyFrom
    */
   protected void copyInFields(Item copyFrom) {
@@ -246,7 +246,7 @@ public class Item extends Properties implements Serializable {
   }
 
   /**
-   * 
+   *
    * @return
    */
   public long getFileSize() {
@@ -254,7 +254,7 @@ public class Item extends Properties implements Serializable {
   }
 
   /**
-   * 
+   *
    * @return human readable file size
    */
   public String getFileSizeHumanReadable() {
@@ -262,7 +262,7 @@ public class Item extends Properties implements Serializable {
   }
 
   /**
-   * 
+   *
    * @param fileSize
    */
   public void setFileSize(long fileSize) {

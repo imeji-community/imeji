@@ -2,7 +2,7 @@ package de.mpg.imeji.exceptions;
 
 /**
  * Exception when ann non valid workflow operation is done (for instance: release, discard)
- * 
+ *
  * @author bastiens
  *
  */

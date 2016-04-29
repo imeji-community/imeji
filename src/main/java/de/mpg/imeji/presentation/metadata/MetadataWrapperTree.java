@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * metadataTree.remove(smb);metadataTree.remove(smb); * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -36,7 +36,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Implements Hierarchy for a {@link List} of {@link MetadataWrapper}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -63,7 +63,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Create the {@link Map} from the {@link List}
-   * 
+   *
    * @param list
    * @param parent
    * @param index
@@ -85,7 +85,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * True if the {@link MetadataWrapper} is a root metadata
-   * 
+   *
    * @param smb
    * @return
    */
@@ -95,7 +95,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * True if the {@link MetadataWrapper} smb is child of parent
-   * 
+   *
    * @param smb
    * @param parent
    * @return
@@ -111,7 +111,7 @@ public class MetadataWrapperTree implements Serializable {
   /**
    * Remove the {@link MetadataWrapper} smb from the {@link List}. A new list is returned, which
    * allows to use this method within the for loop on the list elements
-   * 
+   *
    * @param list
    * @param smb
    * @return
@@ -124,7 +124,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Get the {@link MetadataWrapperTree} as a {@link List}
-   * 
+   *
    * @return
    */
   public List<MetadataWrapper> getList() {
@@ -135,7 +135,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Add a {@link MetadataWrapper} to the {@link MetadataWrapperTree} at the next position
-   * 
+   *
    * @param smd
    */
   public void add(MetadataWrapper smd) {
@@ -147,7 +147,7 @@ public class MetadataWrapperTree implements Serializable {
   /**
    * Remove a {@link MetadataWrapper} from the {@link MetadataWrapperTree}. The childs of the
    * metadata are removed as well
-   * 
+   *
    * @param smd
    */
   public void remove(MetadataWrapper smd) {
@@ -159,7 +159,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Remove this metadata but don't remove its childs.
-   * 
+   *
    * @param smd
    */
   public void removeButKeepChilds(MetadataWrapper smd) {
@@ -170,7 +170,7 @@ public class MetadataWrapperTree implements Serializable {
    * Insert a {@link MetadataWrapper} and all its childs in the {@link MetadataWrapperTree} at the
    * position defined in the getIndexTree() method. If the position is alreay used by a
    * {@link MetadataWrapper}, move it to next position
-   * 
+   *
    * @param smd
    */
   private void insert(MetadataWrapper smd) {
@@ -189,7 +189,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Move a {@link MetadataWrapper} and all its childs to the next position in the tree
-   * 
+   *
    * @param smd
    */
   private void moveToNextPosition(MetadataWrapper smd) {
@@ -201,7 +201,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Get the childs of tree element
-   * 
+   *
    * @param parentIndex
    * @return
    */
@@ -218,7 +218,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Get the direct child of tree element
-   * 
+   *
    * @param parentIndex
    * @return
    */
@@ -235,7 +235,7 @@ public class MetadataWrapperTree implements Serializable {
   /**
    * True if the index1 is a parent of the index2 (not necessary the direct parent):<br/>
    * - 1 is parent of all index 1,....
-   * 
+   *
    * @param index1
    * @param index2
    * @return
@@ -247,7 +247,7 @@ public class MetadataWrapperTree implements Serializable {
   /**
    * True if the index1 is a direct parent of the index2<br/>
    * - 1 is parent of all index 1,0 and 1,1 but not 1,0,1
-   * 
+   *
    * @param index1
    * @param index2
    * @return
@@ -258,7 +258,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Increment the index to one position (1,1 -> 1,2 or 2,3,0,3 -> 2,3,0,4)
-   * 
+   *
    * @param index
    * @return
    */
@@ -274,7 +274,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * Add 2 indexes (1,2 + 1 = 1,2,1)
-   * 
+   *
    * @param index1
    * @param index2
    * @return
@@ -297,7 +297,7 @@ public class MetadataWrapperTree implements Serializable {
 
   /**
    * {@link Comparator} to sort the {@link MetadataWrapper} in the {@link MetadataWrapperTree}
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -305,7 +305,7 @@ public class MetadataWrapperTree implements Serializable {
   private class TreeComparator implements Comparator<MetadataWrapper> {
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
@@ -334,7 +334,7 @@ public class MetadataWrapperTree implements Serializable {
   /**
    * Set the Parent {@link MetadataWrapper} to all element of the list. This is made according to
    * the current order of the list (see findBestParent() method)
-   * 
+   *
    * @param flat
    * @return
    */
@@ -349,15 +349,16 @@ public class MetadataWrapperTree implements Serializable {
    * Find the parent of a {@link Metadata} from the list, and return it as {@link MetadataWrapper} .
    * This is Dependent to the statement (if it has a parent statement), and the position of the
    * child in the list
-   * 
+   *
    * @param md
    * @param list
    * @return
    */
   private MetadataWrapper findBestParent(MetadataWrapper child, List<MetadataWrapper> list) {
     // If the statement has no parent, the metadata doens't as well
-    if (child.getStatement().getParent() == null)
+    if (child.getStatement().getParent() == null) {
       return null;
+    }
     // The possible parents
     List<MetadataWrapper> candidates = new ArrayList<MetadataWrapper>();
     // Find all candidates

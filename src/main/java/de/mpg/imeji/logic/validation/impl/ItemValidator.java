@@ -12,7 +12,7 @@ import de.mpg.imeji.logic.vo.util.MetadataAndProfileHelper;
 
 /**
  * {@link Validator} for an {@link Item}. Only working when {@link MetadataProfile} is passed
- * 
+ *
  * @author saquet
  *
  */
@@ -103,7 +103,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
    * @param s {@link Statement}
    * @param p {@link MetadataProfile}
    * @return boolean
-   * 
+   *
    *         method is pretty dummy, it only finds out if the metadata statement can be multiple at
    *         any place in general, method should find out if the metadata statement can be multiple
    *         in context with its parent however now it makes no troubles during saving of data as

@@ -18,7 +18,7 @@ import de.mpg.imeji.presentation.facet.Facet.FacetType;
 
 /**
  * Factory for URI used in Facets and Filters
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -29,7 +29,7 @@ public class FacetURIFactory {
 
   /**
    * Constructor for one {@link SearchQuery}
-   * 
+   *
    * @param searchQuery
    */
   public FacetURIFactory(SearchQuery searchQuery) {
@@ -39,7 +39,7 @@ public class FacetURIFactory {
   /**
    * Create an {@link URI} attached to a {@link Facet} (for the link on which the user click to see
    * the facet)
-   * 
+   *
    * @param baseURI
    * @param pair
    * @param facetName
@@ -63,7 +63,7 @@ public class FacetURIFactory {
 
   /**
    * Return parameters part of {@link URI} for this {@link Facet}
-   * 
+   *
    * @param sq
    * @param facetName
    * @param type

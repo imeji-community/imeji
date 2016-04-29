@@ -55,7 +55,7 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SuperViewBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
 import de.mpg.imeji.presentation.metadata.MetadataWrapper;
 import de.mpg.imeji.presentation.metadata.SingleEditorWrapper;
@@ -66,7 +66,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 @ManagedBean(name = "SingleUploadBean")
 @ViewScoped
-public class SingleUploadBean extends SuperViewBean implements Serializable {
+public class SingleUploadBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = -2731118794797476328L;
   private static final Logger LOGGER = Logger.getLogger(SingleUploadBean.class);
   private List<SelectItem> collectionItems = new ArrayList<SelectItem>();
@@ -132,7 +132,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
   /**
    * Reload the page with the current user
-   * 
+   *
    * @throws IOException
    */
   private void reloadItemPage(String itemIdString, String collectionIdString) {
@@ -151,7 +151,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
   /**
    * After the file has been uploaded
-   * 
+   *
    * @throws Exception
    */
   private void prepareEditor() throws Exception {
@@ -173,7 +173,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
   /**
    * Upload the file and read the technical Metadata
-   * 
+   *
    * @throws FileUploadException
    * @throws TypeNotAllowedException
    */
@@ -190,7 +190,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
   /**
    * Upload the file
-   * 
+   *
    * @param request
    * @return
    * @throws FileUploadException
@@ -274,7 +274,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
   /**
    * Load the collections where the user can upload the file
-   * 
+   *
    * @throws ImejiException
    */
   private void loadCollections() throws ImejiException {
@@ -302,7 +302,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
   /**
    * Retrieve all the collections which the current user can read
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -319,7 +319,7 @@ public class SingleUploadBean extends SuperViewBean implements Serializable {
 
   /**
    * Create a default collection where the user can upload his files
-   * 
+   *
    * @throws ImejiException
    */
   private CollectionImeji createDefaultCollection() throws ImejiException {

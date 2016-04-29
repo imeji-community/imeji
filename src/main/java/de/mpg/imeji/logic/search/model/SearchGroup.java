@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * SearchElement grouping {@link SearchElement}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

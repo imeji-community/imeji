@@ -6,7 +6,7 @@ import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
  * Similar to {@link SearchMetadata} but simpler to use. Simply user the label of the Metadata to
  * search (statement is not used). Beware, if 2 metadata are defined with the same label, there is
  * now way to differentiate them
- * 
+ *
  * @author bastiens
  *
  */

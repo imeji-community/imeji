@@ -44,7 +44,7 @@ import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * The bean for all list of images
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -95,11 +95,11 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Init the page when it is called
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
+   * @throws ImejiException
    */
-  public String getInitPage() throws Exception {
+  public String getInitPage() throws ImejiException {
     browseContext = getNavigationString();
     browseInit();
     isSimpleSearch = SearchQueryParser.isSimpleSearch(searchQuery);
@@ -162,7 +162,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Perform the {@link Search}
-   * 
+   *
    * @param searchQuery
    * @param sortCriterion
    * @return
@@ -176,7 +176,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * load all items (defined by their uri)
-   * 
+   *
    * @param uris
    * @return
    * @throws ImejiException
@@ -210,7 +210,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Parse the search query in the url, as defined by the parameter q
-   * 
+   *
    * @return
    */
   private void parseSearchQuery() {
@@ -234,7 +234,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * return the current {@link SearchQuery} in a user friendly style.
-   * 
+   *
    * @return
    */
   public String getSimpleQuery() {
@@ -261,9 +261,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Methods called at the end of the page loading, which initialize the facets
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public void initFacets() {
     try {
@@ -289,11 +288,11 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   /**
    * Add all select {@link Item} to the active {@link Album}, and unselect all {@link Item} from
    * session
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
+   * @throws ImejiException
    */
-  public String addSelectedToActiveAlbum() throws Exception {
+  public String addSelectedToActiveAlbum() throws ImejiException {
     addToActiveAlbum(session.getSelected());
     session.getSelected().clear();
     return "pretty:";
@@ -301,31 +300,29 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Add all {@link Item} of the current {@link ItemsBean} (i.e. browse page) to the active album
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
+   * @throws ImejiException
    */
-  public String addAllToActiveAlbum() throws Exception {
+  public String addAllToActiveAlbum() throws ImejiException {
     addToActiveAlbum(search(searchQuery, null, 0, -1).getResults());
     return "pretty:";
   }
 
   /**
    * Delete selected {@link Item}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public String deleteSelected() throws Exception {
+  public String deleteSelected() {
     delete(session.getSelected());
     return "pretty:";
   }
 
   /**
    * Delete all {@link Item} currently browsed
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public String deleteAll() {
     delete(search(searchQuery, null, 0, -1).getResults());
@@ -334,33 +331,33 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Withdraw all {@link Item} currently browsed
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
+   * @throws ImejiException
    */
-  public String withdrawAll() throws Exception {
+  public String withdrawAll() throws ImejiException {
     withdraw(search(searchQuery, null, 0, -1).getResults());
     return "pretty:";
   }
 
   /**
    * Withdraw all selected {@link Item}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
+   * @throws ImejiException
    */
-  public String withdrawSelected() throws Exception {
+  public String withdrawSelected() throws ImejiException {
     withdraw(session.getSelected());
     return "pretty:";
   }
 
   /**
    * withdraw a list of {@link Item} (defined by their uri)
-   * 
+   *
    * @param uris
-   * @throws Exception
+   * @throws ImejiException @
    */
-  private void withdraw(List<String> uris) throws Exception {
+  private void withdraw(List<String> uris) throws ImejiException {
     Collection<Item> items = loadImages(uris);
     int count = items.size();
     if ("".equals(discardComment.trim())) {
@@ -378,9 +375,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Delete a {@link List} of {@link Item} (defined by their uris).
-   * 
-   * @param uris
-   * @throws Exception
+   *
+   * @param uris @
    */
   private void delete(List<String> uris) {
     try {
@@ -402,7 +398,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Unselect a list of {@link Item}
-   * 
+   *
    * @param uris
    */
   private void unselect(List<String> l) {
@@ -416,11 +412,11 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   /**
    * Add a {@link List} of uris to the active album, and write an info message in the
    * {@link FacesMessage}
-   * 
-   * @param uris
-   * @throws Exception
+   *
+   * @param uris @
+   * @throws ImejiException
    */
-  private void addToActiveAlbum(List<String> uris) throws Exception {
+  private void addToActiveAlbum(List<String> uris) throws ImejiException {
     int sizeToAdd = uris.size();
     int sizeBefore = session.getActiveAlbumSize();
     SessionObjectsController soc = new SessionObjectsController();
@@ -438,10 +434,12 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       error += " " + notAdded + " "
           + Imeji.RESOURCE_BUNDLE.getMessage("already_in_active_album", session.getLocale());
     }
-    if (!"".equals(message))
+    if (!"".equals(message)) {
       BeanHelper.info(message);
-    if (!"".equals(error))
+    }
+    if (!"".equals(error)) {
       BeanHelper.error(error);
+    }
   }
 
   public String getInitComment() {
@@ -465,7 +463,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * The based url used to link to the detail page
-   * 
+   *
    * @return
    */
   public String getImageBaseUrl() {
@@ -510,7 +508,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Method called when user toggle the sort order
-   * 
+   *
    * @return
    */
   public String toggleSortOrder() {
@@ -548,7 +546,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
   /**
    * Select all item on the current page
-   * 
+   *
    * @return
    */
   public String selectAll() {
@@ -585,7 +583,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
     this.discardComment = discardComment;
   }
 
-  public void discardCommentListener(ValueChangeEvent event) throws Exception {
+  public void discardCommentListener(ValueChangeEvent event) {
     discardComment = event.getNewValue().toString();
   }
 

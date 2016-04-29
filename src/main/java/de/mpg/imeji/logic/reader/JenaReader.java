@@ -25,7 +25,7 @@ import de.mpg.j2j.transaction.Transaction;
  * - Implements lazy loading ({@link List} contained in objects are then no loaded), for faster load
  * <br/>
  * - For WRITE operations, uses {@link JenaWriter}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -36,7 +36,7 @@ public class JenaReader implements Reader {
 
   /**
    * imeji object loader for one {@link Model}
-   * 
+   *
    * @param modelURI
    */
   public JenaReader(String modelURI) {
@@ -46,7 +46,7 @@ public class JenaReader implements Reader {
   /**
    * Load lazy one {@link Object} according to its uri <br/>
    * Faster than load method, but contained {@link List} are skipped for loading
-   * 
+   *
    * @param uri
    * @param user
    * @param o
@@ -60,7 +60,7 @@ public class JenaReader implements Reader {
 
   /**
    * Load a object from {@link Jena} within one {@link CRUDTransaction}
-   * 
+   *
    * @param uri
    * @param user
    * @param o
@@ -74,7 +74,7 @@ public class JenaReader implements Reader {
 
   /**
    * Load a list of objects within one {@link CRUDTransaction}
-   * 
+   *
    * @param objects
    * @param user
    * @return
@@ -88,7 +88,7 @@ public class JenaReader implements Reader {
   /**
    * Load a {@link List} of {@link Object} within one {@link CRUDTransaction} <br/>
    * Faster than load method, but contained {@link List} are skipped for loading
-   * 
+   *
    * @param objects
    * @param user
    * @return
@@ -104,8 +104,9 @@ public class JenaReader implements Reader {
     List<Object> objects = new ArrayList<Object>();
     objects.add(o);
     List<Object> l = read(objects, user, lazy);
-    if (l.size() > 0)
+    if (l.size() > 0) {
       return l.get(0);
+    }
     return null;
   }
 

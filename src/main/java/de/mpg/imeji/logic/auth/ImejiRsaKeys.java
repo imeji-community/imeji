@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 
 /**
  * RSA Keys for imeji
- * 
+ *
  * @author bastiens
  *
  */
@@ -28,7 +28,7 @@ public class ImejiRsaKeys {
 
   /**
    * Initialize the RSA Key
-   * 
+   *
    * @param publicKeyJson
    * @throws JoseException
    * @throws InvalidKeySpecException
@@ -47,7 +47,7 @@ public class ImejiRsaKeys {
 
   /**
    * Generate a new Private Key out of th private key String
-   * 
+   *
    * @param rsaJsonWebKey
    * @param privateKeyString
    * @return
@@ -75,7 +75,7 @@ public class ImejiRsaKeys {
 
   /**
    * Get the RSA Keys
-   * 
+   *
    * @return
    * @throws JoseException
    */

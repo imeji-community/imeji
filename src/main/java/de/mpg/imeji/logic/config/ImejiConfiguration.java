@@ -32,7 +32,7 @@ public class ImejiConfiguration {
 
   /**
    * Enumeration of available configuration
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -71,7 +71,7 @@ public class ImejiConfiguration {
 
   /**
    * Constructor, create the file if not existing
-   * 
+   *
    * @throws URISyntaxException
    * @throws IOException
    * @throws ImejiException
@@ -84,7 +84,7 @@ public class ImejiConfiguration {
   /**
    * IGet the Configuration File from the filesystem. If not existing, create a new one with default
    * values
-   * 
+   *
    * @throws IOException
    * @throws URISyntaxException
    */
@@ -110,7 +110,7 @@ public class ImejiConfiguration {
 
   /**
    * Load the imeji configuration from a {@link File}
-   * 
+   *
    * @param f
    * @throws IOException
    * @throws ImejiException
@@ -146,7 +146,7 @@ public class ImejiConfiguration {
 
   /**
    * Init a property with its default value if null or empty
-   * 
+   *
    * @param c
    * @param defaultValue
    */
@@ -180,7 +180,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the value of a configuration property, and save it on disk
-   * 
+   *
    * @param name
    * @param value
    */
@@ -190,7 +190,7 @@ public class ImejiConfiguration {
 
   /**
    * Return a property as a non null String to avoid null pointer exception
-   * 
+   *
    * @param name
    * @return
    */
@@ -201,7 +201,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the Snippet in the configuration
-   * 
+   *
    * @param str
    */
   public void setSnippet(String str) {
@@ -210,7 +210,7 @@ public class ImejiConfiguration {
 
   /**
    * Read the snippet from the configuration
-   * 
+   *
    * @return
    */
   public String getSnippet() {
@@ -219,7 +219,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the url of the default CSS
-   * 
+   *
    * @param url
    */
   public void setDefaultCss(String url) {
@@ -228,7 +228,7 @@ public class ImejiConfiguration {
 
   /**
    * Return the url of the default CSS
-   * 
+   *
    * @return
    */
   public String getDefaultCss() {
@@ -237,7 +237,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the url of the default CSS
-   * 
+   *
    * @param url
    */
   public void setAlternativeCss(String url) {
@@ -246,7 +246,7 @@ public class ImejiConfiguration {
 
   /**
    * Return the url of the default CSS
-   * 
+   *
    * @return
    */
   public String getAlternativeCss() {
@@ -255,7 +255,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the url of the default CSS
-   * 
+   *
    * @param md_url
    */
   public void setUploadMaxFileSize(String size) {
@@ -269,7 +269,7 @@ public class ImejiConfiguration {
 
   /**
    * Return the url of the default CSS
-   * 
+   *
    * @return
    */
   public String getUploadMaxFileSize() {
@@ -282,7 +282,7 @@ public class ImejiConfiguration {
 
   /**
    * Get the type of Files
-   * 
+   *
    * @return
    */
   public FileTypes getFileTypes() {
@@ -291,7 +291,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the type of Files
-   * 
+   *
    * @param types
    */
   public void setFileTypes(FileTypes types) {
@@ -300,7 +300,7 @@ public class ImejiConfiguration {
 
   /**
    * Get the html snippet for a specified lang
-   * 
+   *
    * @param lang
    * @return
    */
@@ -311,7 +311,7 @@ public class ImejiConfiguration {
 
   /**
    * Get the html snippet for the footer of the startpage
-   * 
+   *
    * @return
    */
   public String getStartPageFooterLogos() {
@@ -320,7 +320,7 @@ public class ImejiConfiguration {
   }
 
   /**
-   * 
+   *
    * @param html
    */
   public void setStartPageFooterLogos(String html) {
@@ -329,9 +329,9 @@ public class ImejiConfiguration {
 
   /**
    * Utility class to parse the html snippets
-   * 
+   *
    * @author saquet
-   * 
+   *
    */
   public class HtmlSnippet {
     private String html;
@@ -366,7 +366,7 @@ public class ImejiConfiguration {
 
   /**
    * Read all the html snippets in the config and retunr it as a {@link List} {@link HtmlSnippet}
-   * 
+   *
    * @return
    */
   public List<HtmlSnippet> getSnippets(List<SelectItem> languages) {
@@ -402,7 +402,7 @@ public class ImejiConfiguration {
 
   /**
    * @param str
-   * 
+   *
    */
   public void setDataViewerFormatListString(String str) {
     config.setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
@@ -411,7 +411,7 @@ public class ImejiConfiguration {
 
   /**
    * true if the format is supported by the data viewer service
-   * 
+   *
    * @param format
    * @return
    */
@@ -432,7 +432,7 @@ public class ImejiConfiguration {
 
   /**
    * @param str
-   * 
+   *
    */
   public void setDataViewerUrl(String str) {
     dataViewerUrl = str;
@@ -491,7 +491,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the meta description
-   * 
+   *
    * @param md_url
    */
   public void setMetaDescription(String s) {
@@ -500,7 +500,7 @@ public class ImejiConfiguration {
 
   /**
    * Return the meta description
-   * 
+   *
    * @return
    */
   public String getMetaDescription() {
@@ -509,7 +509,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the name of the instance
-   * 
+   *
    * @param md_url
    */
   public void setInstanceName(String s) {
@@ -518,7 +518,7 @@ public class ImejiConfiguration {
 
   /**
    * Return the name of the instance
-   * 
+   *
    * @return
    */
   public String getInstanceName() {
@@ -527,7 +527,7 @@ public class ImejiConfiguration {
 
   /**
    * Set the contact email
-   * 
+   *
    * @param md_url
    */
   public void setContactEmail(String s) {
@@ -536,12 +536,13 @@ public class ImejiConfiguration {
 
   /**
    * Return contact email
-   * 
+   *
    * @return
    */
   public String getContactEmail() {
-    if ((String) config.get(CONFIGURATION.CONTACT_EMAIL.name()) != null)
+    if ((String) config.get(CONFIGURATION.CONTACT_EMAIL.name()) != null) {
       return (String) config.get(CONFIGURATION.CONTACT_EMAIL.name());
+    }
     return "";
   }
 
@@ -718,7 +719,7 @@ public class ImejiConfiguration {
 
   /**
    * Return the url of the favicon
-   * 
+   *
    * @return
    */
   public String getFaviconUrl(String applicationUrl) {
@@ -736,7 +737,7 @@ public class ImejiConfiguration {
 
   /**
    * Return the url of the favicon
-   * 
+   *
    * @return
    */
   public String getLogoUrl() {

@@ -10,7 +10,7 @@ import de.mpg.imeji.presentation.facet.Facet.FacetType;
 
 /**
  * Session where the {@link Filter} are stored
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -22,7 +22,7 @@ public class FiltersSession {
 
   /**
    * Check if the name correspond to an existing filter name
-   * 
+   *
    * @param name
    * @return
    */
@@ -40,7 +40,7 @@ public class FiltersSession {
 
   /**
    * Check if the filter has no results
-   * 
+   *
    * @param name
    * @return
    */

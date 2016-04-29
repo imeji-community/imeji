@@ -41,7 +41,7 @@ public class ShareListItem implements Serializable {
 
   /**
    * Constructor without User of Group (To be used as menu)
-   * 
+   *
    * @param user
    * @param isCollection
    * @param containerUri
@@ -58,7 +58,7 @@ public class ShareListItem implements Serializable {
 
   /**
    * Constructor with a {@link Invitation}
-   * 
+   *
    * @param user
    * @param isCollection
    * @param containerUri
@@ -77,7 +77,7 @@ public class ShareListItem implements Serializable {
 
   /**
    * Constructor with a {@link User}
-   * 
+   *
    * @param user
    * @param isCollection
    * @param containerUri
@@ -96,7 +96,7 @@ public class ShareListItem implements Serializable {
 
   /**
    * Constructor with a {@link UserGroup}
-   * 
+   *
    * @param group
    * @param isCollection
    * @param containerUri
@@ -115,18 +115,18 @@ public class ShareListItem implements Serializable {
 
   /**
    * Initialize the menu
-   * 
+   *
    * @param grants
    * @param uri
    * @param profileUri
    */
   private void init(List<Grant> grants, String uri, String profileUri, Locale locale) {
-    roles = ShareBusinessController.transformGrantsToRoles((List<Grant>) grants, uri);
+    roles = ShareBusinessController.transformGrantsToRoles(grants, uri);
     this.profileUri = profileUri;
     this.locale = locale;
     if (profileUri != null) {
       List<String> profileRoles =
-          ShareBusinessController.transformGrantsToRoles((List<Grant>) grants, profileUri);
+          ShareBusinessController.transformGrantsToRoles(grants, profileUri);
       if (profileRoles.contains(ShareRoles.EDIT.toString())) {
         roles.add(ShareRoles.EDIT_PROFILE.toString());
       }
@@ -168,7 +168,7 @@ public class ShareListItem implements Serializable {
   /**
    * Update {@link Grants} the {@link ShareListItem} according to the new roles. Return true if the
    * user grant have been modified
-   * 
+   *
    * @return
    */
   public boolean update() {
@@ -198,7 +198,7 @@ public class ShareListItem implements Serializable {
 
   /**
    * Update the invitation
-   * 
+   *
    * @throws ImejiException
    */
   public void updateInvitation() throws ImejiException {
@@ -216,7 +216,7 @@ public class ShareListItem implements Serializable {
 
   /**
    * Return all users in this items. This might be many user if the item contains a group
-   * 
+   *
    * @return
    */
   public List<User> getUsers() {

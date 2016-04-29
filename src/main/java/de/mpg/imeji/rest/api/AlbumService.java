@@ -31,7 +31,7 @@ import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 
 /**
  * Service for {@link AlbumTO}
- * 
+ *
  * @author bastiens
  *
  */
@@ -53,7 +53,7 @@ public class AlbumService implements API<AlbumTO> {
   /**
    * Read all the items of an album according to search query. Response is done with the default
    * format
-   * 
+   *
    * @param id
    * @param u
    * @param q

@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Thread checking periodically if some {@link Lock} needs to be unlocked
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

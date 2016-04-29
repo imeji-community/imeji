@@ -24,7 +24,7 @@ import de.mpg.imeji.presentation.util.ServletUtil;
 
 /**
  * Filter for imeji Modus
- * 
+ *
  * @author bastiens
  *
  */
@@ -62,7 +62,7 @@ public class ModusFilter implements Filter {
 
   /**
    * True if a redirect parameter is defined in the url
-   * 
+   *
    * @param request
    * @return
    */
@@ -74,7 +74,7 @@ public class ModusFilter implements Filter {
   /**
    * True if the current requested URL is private (i.e., imeji is in private modus, page is not the
    * start page and user is not logged in)
-   * 
+   *
    * @param request
    * @return
    */
@@ -84,7 +84,7 @@ public class ModusFilter implements Filter {
 
   /**
    * True if the page which is public even in private mode. For instance the Help Page
-   * 
+   *
    * @param request
    * @return
    */
@@ -96,7 +96,7 @@ public class ModusFilter implements Filter {
 
   /**
    * True if the current user is logged in
-   * 
+   *
    * @param request
    * @return
    */
@@ -108,7 +108,7 @@ public class ModusFilter implements Filter {
 
   /**
    * True if the current imeji instance is in private modus
-   * 
+   *
    * @param request
    * @return
    */
@@ -118,7 +118,7 @@ public class ModusFilter implements Filter {
 
   /**
    * Redirect to the start Page
-   * 
+   *
    * @param serv
    * @param resp
    * @throws UnsupportedEncodingException
@@ -137,7 +137,7 @@ public class ModusFilter implements Filter {
 
   /**
    * Redirect to the page defined by the parameter
-   * 
+   *
    * @param serv
    * @param resp
    * @throws IOException

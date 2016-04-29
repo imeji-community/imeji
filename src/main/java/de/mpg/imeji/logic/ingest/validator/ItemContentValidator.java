@@ -22,9 +22,9 @@ public class ItemContentValidator {
    * the current {@link CollectionImeji} <br/>
    * * The value of the {@link Metadata} is not following the literals constraints (if define for
    * this {@link Statement}
-   * 
+   *
    * @throws ImejiException
-   * 
+   *
    * @param item
    */
   public static void validate(Item item) throws ImejiException {
@@ -32,17 +32,19 @@ public class ItemContentValidator {
         new ProfileController().retrieve(item.getMetadataSet().getProfile(), Imeji.adminUser);
     for (Metadata md : item.getMetadataSet().getMetadata()) {
       Statement st = MetadataProfileUtil.getStatement(md.getStatement(), profile);
-      if (st == null)
+      if (st == null) {
         throw new RuntimeException("Error Ingest: Statement " + md.getStatement()
             + " is not allowed in collection  " + item.getCollection());
-      else {
+      } else {
         if (!st.getLiteralConstraints().isEmpty()) {
           boolean constraintsFound = false;
-          for (String s : st.getLiteralConstraints())
+          for (String s : st.getLiteralConstraints()) {
             constraintsFound = md.asFulltext().contains(s) || constraintsFound;
-          if (!constraintsFound)
+          }
+          if (!constraintsFound) {
             throw new RuntimeException("Error Ingest: Found not allowed value in  metadata "
                 + md.getId() + " Check restricted values in profile");
+          }
         }
       }
     }

@@ -14,7 +14,7 @@ import de.mpg.j2j.persistence.Jena2Java;
 /**
  * Controller for {@link RDFResource} Attention: Non transactional!!!! Don't use directly, use
  * JenaWriter of JenaReader instead
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -26,7 +26,7 @@ public class ResourceController {
 
   /**
    * Use for transaction. The model must have been created/retrieved within the transaction
-   * 
+   *
    * @param model
    * @param lazy
    */
@@ -41,7 +41,7 @@ public class ResourceController {
 
   /**
    * Create into Jena
-   * 
+   *
    * @throws AlreadyExistsException
    * @throws InterruptedException
    */
@@ -55,7 +55,7 @@ public class ResourceController {
 
   /**
    * Read the uri and write it into the {@link RDFResource}
-   * 
+   *
    * @param uri
    * @param javaObject
    * @return
@@ -68,7 +68,7 @@ public class ResourceController {
 
   /**
    * read a {@link Object} if it has an id defined by a {@link j2jId}
-   * 
+   *
    * @param o
    * @return
    * @throws NotFoundException
@@ -83,7 +83,7 @@ public class ResourceController {
 
   /**
    * Update (remove and create) the complete {@link RDFResource}
-   * 
+   *
    * @param o
    * @throws NotFoundException
    */
@@ -97,7 +97,7 @@ public class ResourceController {
 
   /**
    * Delete a {@link RDFResource}
-   * 
+   *
    * @param o
    * @throws NotFoundException
    */
@@ -111,7 +111,7 @@ public class ResourceController {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Model getModel() {
@@ -120,7 +120,7 @@ public class ResourceController {
 
   /**
    * setter
-   * 
+   *
    * @param model
    */
   public void setModel(Model model) {

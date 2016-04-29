@@ -13,7 +13,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Editor for one item (by the item detail page)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -22,7 +22,7 @@ public class SingleEditor extends AbstractMetadataEditor {
 
   /**
    * Convenient constructor for one {@link Item}
-   * 
+   *
    * @param item
    * @param profile
    * @param statement

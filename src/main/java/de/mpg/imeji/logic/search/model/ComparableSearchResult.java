@@ -7,7 +7,7 @@ import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 
 /**
  * Search result (as {@link String} entry of a {@link List} of uris) which can be sorted
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

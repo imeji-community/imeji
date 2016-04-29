@@ -7,7 +7,7 @@ import javax.faces.bean.SessionScoped;
 
 /**
  * Session Bean for the container editor (create and edit collection/album)
- * 
+ *
  * @author bastiens
  *
  */

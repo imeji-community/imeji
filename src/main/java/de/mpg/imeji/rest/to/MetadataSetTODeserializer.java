@@ -64,8 +64,8 @@ public class MetadataSetTODeserializer extends JsonDeserializer<MetadataSetTO> {
         mdSet.setValue(mdTO);
 
       } catch (IllegalAccessException | InstantiationException e) {
-        Logger.getLogger(MetadataSetTODeserializer.class).info(
-            "Exception, will return new Metadata Set TO", e);
+        Logger.getLogger(MetadataSetTODeserializer.class)
+            .info("Exception, will return new Metadata Set TO", e);
         return new MetadataSetTO();
       }
 

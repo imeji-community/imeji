@@ -13,13 +13,13 @@ import de.mpg.imeji.presentation.history.HistorySession;
 
 /**
  * This bean is a utility Bean. It can be extended to get some basic session information
- * 
+ *
  * @author bastiens
  *
  */
-@ManagedBean(name = "SuperViewBean")
+@ManagedBean(name = "SuperBean")
 @ViewScoped
-public class SuperViewBean {
+public class SuperBean {
   @ManagedProperty(value = "#{SessionBean.user}")
   private User sessionUser;
   @ManagedProperty(value = "#{SessionBean.locale}")
@@ -35,7 +35,7 @@ public class SuperViewBean {
 
   /**
    * Redirect to the passed url
-   * 
+   *
    * @param url
    * @throws IOException
    */

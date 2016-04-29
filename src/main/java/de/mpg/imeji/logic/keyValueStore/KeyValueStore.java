@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Interface for Key/Value Store
- * 
+ *
  * @author bastiens
  *
  */
@@ -13,14 +13,14 @@ public interface KeyValueStore {
 
   /**
    * The name of the store
-   * 
+   *
    * @return
    */
   public String getName();
 
   /**
    * Get the value for the specified key
-   * 
+   *
    * @param b
    * @return
    */
@@ -28,7 +28,7 @@ public interface KeyValueStore {
 
   /**
    * Put a key/value to the store
-   * 
+   *
    * @param key
    * @param value
    * @return
@@ -37,14 +37,14 @@ public interface KeyValueStore {
 
   /**
    * Delete an entry from the store
-   * 
+   *
    * @param key
    */
   public void delete(String key);
 
   /**
    * Return a list of value which the key matches the pattern
-   * 
+   *
    * @param keyPattern
    * @param clazz
    * @return
@@ -53,21 +53,21 @@ public interface KeyValueStore {
 
   /**
    * Start the Key/Value Store
-   * 
+   *
    * @throws IOException
    */
   public void start();
 
   /**
    * Close the Key/value Store
-   * 
+   *
    * @throws IOException
    */
   public void stop();
 
   /**
    * True if the Stored has been already started
-   * 
+   *
    * @return
    */
   public boolean isStarted();

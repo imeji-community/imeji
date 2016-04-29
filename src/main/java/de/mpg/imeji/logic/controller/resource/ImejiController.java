@@ -28,7 +28,7 @@ import de.mpg.imeji.logic.workflow.WorkflowManager;
 /**
  * Abstract class for the controller in imeji dealing with imeji VO: {@link Item}
  * {@link CollectionImeji} {@link Album} {@link User} {@link MetadataProfile}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -40,7 +40,7 @@ public abstract class ImejiController {
 
   /**
    * If a user is not logged in, throw a Exception
-   * 
+   *
    * @param user
    * @throws AuthenticationError
    */
@@ -52,7 +52,7 @@ public abstract class ImejiController {
 
   /**
    * Add the {@link Properties} to an imeji object when it is created
-   * 
+   *
    * @param properties
    * @param user
    * @throws WorkflowException
@@ -63,7 +63,7 @@ public abstract class ImejiController {
 
   /**
    * Add the {@link Properties} to an imeji object when it is updated
-   * 
+   *
    * @param properties
    * @param user
    */
@@ -73,7 +73,7 @@ public abstract class ImejiController {
 
   /**
    * Add the {@link Properties} to an imeji object when it is released
-   * 
+   *
    * @param properties
    * @param user
    * @throws WorkflowException
@@ -84,7 +84,7 @@ public abstract class ImejiController {
 
   /**
    * Add the {@link Properties} to an imeji object when it is withdrawn
-   * 
+   *
    * @param properties
    * @param comment
    * @throws WorkflowException
@@ -101,7 +101,7 @@ public abstract class ImejiController {
 
   /**
    * True if at least one {@link Item} is locked by another {@link User}
-   * 
+   *
    * @param uris
    * @param user
    * @return
@@ -117,7 +117,7 @@ public abstract class ImejiController {
 
   /**
    * Update logo of {@link Container}
-   * 
+   *
    * @param Container
    * @param f
    * @param user

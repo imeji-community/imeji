@@ -16,7 +16,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 /**
  * If an object is already in a session, return it. <br/>
  * Increase performance compared to {@link ObjectLoader}
- * 
+ *
  * @author saquet
  */
 public class ObjectCachedLoader {
@@ -27,7 +27,7 @@ public class ObjectCachedLoader {
 
   /**
    * Load a {@link MetadataProfile} from the session if possible, otherwise from jena
-   * 
+   *
    * @param uri
    * @return
    */
@@ -36,15 +36,16 @@ public class ObjectCachedLoader {
     MetadataProfile profile = sessionBean.getProfileCached().get(uri);
     if (profile == null) {
       profile = ObjectLoader.loadProfile(uri, sessionBean.getUser());
-      if (profile != null)
+      if (profile != null) {
         sessionBean.getProfileCached().put(profile.getId(), profile);
+      }
     }
     return profile;
   }
 
   /**
    * Load a {@link MetadataProfile} from the session if possible, otherwise from jena
-   * 
+   *
    * @param uri
    * @return
    * @throws ImejiException
@@ -64,7 +65,7 @@ public class ObjectCachedLoader {
 
   /**
    * Load a {@link CollectionImeji} from the session if possible
-   * 
+   *
    * @param uri
    * @return
    * @throws Exception

@@ -31,7 +31,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Container for a {@link List} of {@link Metadata} defined for one {@link Profile}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

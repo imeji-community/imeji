@@ -25,7 +25,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Bean for the pages "CollectionEntryPage" and "ViewCollection"
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -44,9 +44,9 @@ public class ViewCollectionBean extends CollectionBean {
 
   /**
    * Initialize all elements of the page.
-   * 
+   *
    * @throws NotFoundException
-   * 
+   *
    * @throws Exception
    */
   @PostConstruct

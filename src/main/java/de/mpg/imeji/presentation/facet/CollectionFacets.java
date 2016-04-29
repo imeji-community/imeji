@@ -35,7 +35,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Facets for the item browsed within a collection
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -53,7 +53,7 @@ public class CollectionFacets extends FacetsAbstract {
 
   /**
    * Constructor for the {@link Facet}s of one {@link CollectionImeji} with one {@link SearchQuery}
-   * 
+   *
    * @param col
    * @param searchQuery
    * @throws ImejiException
@@ -73,7 +73,7 @@ public class CollectionFacets extends FacetsAbstract {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.facet.Facets#init()
    */
   @Override
@@ -121,7 +121,7 @@ public class CollectionFacets extends FacetsAbstract {
 
   /**
    * Get
-   * 
+   *
    * @param uri
    * @return
    */
@@ -131,7 +131,7 @@ public class CollectionFacets extends FacetsAbstract {
 
   /**
    * Count {@link Item} for one facet
-   * 
+   *
    * @param searchQuery
    * @param pair
    * @param collectionImages
@@ -161,7 +161,7 @@ public class CollectionFacets extends FacetsAbstract {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.facet.Facets#getFacets()
    */
   @Override

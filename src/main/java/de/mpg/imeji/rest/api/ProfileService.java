@@ -25,7 +25,7 @@ import de.mpg.imeji.rest.to.SearchResultTO;
 
 /**
  * API Service for {@link MetadataProfileTO}
- * 
+ *
  * @author bastiens
  *
  */

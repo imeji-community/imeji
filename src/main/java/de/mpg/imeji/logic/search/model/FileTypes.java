@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 
 /**
  * A File Type (image, video, audio...)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 public class FileTypes {
   /**
    * A Single File Type (video, image, sound, etc.)
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -62,7 +62,7 @@ public class FileTypes {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override
@@ -72,14 +72,15 @@ public class FileTypes {
 
     /**
      * Give a regex to search for this file type
-     * 
+     *
      * @return
      */
     public String getAsRegexQuery() {
       String regex = "";
       for (String extension : extensions.split(",")) {
-        if (!regex.equals(""))
+        if (!regex.equals("")) {
           regex += "|";
+        }
         regex += "." + extension + "$";
       }
       return regex;
@@ -91,7 +92,7 @@ public class FileTypes {
 
     /**
      * True if the type has the following (in whatever language)
-     * 
+     *
      * @param name
      * @return
      */
@@ -101,14 +102,15 @@ public class FileTypes {
 
     /**
      * Return a name for a defined language
-     * 
+     *
      * @param lang
      * @return
      */
     public String getName(String lang) {
       String name = namesMap.get(lang);
-      if (name != null)
+      if (name != null) {
         return name;
+      }
       return namesMap.get("en");
     }
 
@@ -143,7 +145,7 @@ public class FileTypes {
 
     /**
      * Parse the names (Image@en,Bilder@de,Image@fr) into a Map ()
-     * 
+     *
      * @param names
      * @return
      */
@@ -153,8 +155,9 @@ public class FileTypes {
         String[] nl = nameWithLang.split("@");
         String name = nl[0];
         String lang = "en";
-        if (nl.length > 1)
+        if (nl.length > 1) {
           lang = nl[1];
+        }
         map.put(lang, name);
       }
       return map;
@@ -174,7 +177,7 @@ public class FileTypes {
   /**
    * Parse a String for the following format: <br/>
    * [image=jpg,png,tiff][video=avi,mp4]
-   * 
+   *
    * @param s
    */
   private void parse(String s) {
@@ -190,7 +193,7 @@ public class FileTypes {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override
@@ -204,20 +207,22 @@ public class FileTypes {
 
   /**
    * Return the type according to its name. If not found, return null.
-   * 
+   *
    * @param name
    * @return
    */
   public Type getType(String name) {
-    for (Type type : types)
-      if (type.hasName(name))
+    for (Type type : types) {
+      if (type.hasName(name)) {
         return type;
+      }
+    }
     return null;
   }
 
   /**
    * Add an emtpy type
-   * 
+   *
    * @param pos
    */
   public void addType(int pos) {
@@ -226,7 +231,7 @@ public class FileTypes {
 
   /**
    * Remove a type
-   * 
+   *
    * @param pos
    */
   public void removeType(int pos) {

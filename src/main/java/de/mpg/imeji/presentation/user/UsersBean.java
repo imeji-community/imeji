@@ -36,7 +36,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java Bean for the view users page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -105,7 +105,7 @@ public class UsersBean implements Serializable {
 
   /**
    * Method called when a new password is sent
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -130,7 +130,7 @@ public class UsersBean implements Serializable {
 
   /**
    * Send an Email to a {@link User} for its new password
-   * 
+   *
    * @param email
    * @param password
    * @param username
@@ -151,7 +151,7 @@ public class UsersBean implements Serializable {
 
   /**
    * Delete a {@link User}
-   * 
+   *
    * @return
    */
   public String deleteUser() {
@@ -186,7 +186,7 @@ public class UsersBean implements Serializable {
 
   /**
    * Activat4e a {@link User}
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -218,7 +218,7 @@ public class UsersBean implements Serializable {
 
   /**
    * Add a {@link User} to a {@link UserGroup} and then redirect to the {@link UserGroup} page
-   * 
+   *
    * @param hasgrant
    */
   public String addToGroup() {
@@ -241,7 +241,7 @@ public class UsersBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<User> getUsers() {
@@ -250,7 +250,7 @@ public class UsersBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param users
    */
   public void setUsers(List<User> users) {

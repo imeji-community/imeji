@@ -32,7 +32,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * An element in the advanced search form
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -66,7 +66,7 @@ public class SearchMetadataForm {
 
   /**
    * Create a new {@link SearchMetadataForm} from a {@link SearchGroup}
-   * 
+   *
    * @param searchGroup
    * @param profile
    */
@@ -131,7 +131,7 @@ public class SearchMetadataForm {
 
   /**
    * Validate the search entry
-   * 
+   *
    * @throws UnprocessableError
    */
   public void validate() throws UnprocessableError {
@@ -271,7 +271,7 @@ public class SearchMetadataForm {
 
   /**
    * Return the {@link SearchMetadataForm} as a {@link SearchGroup}
-   * 
+   *
    * @return
    */
   public SearchGroup getAsSearchGroup() {
@@ -310,8 +310,9 @@ public class SearchMetadataForm {
                     new SearchMetadata(SearchFields.license, operator, searchValue, ns, not));
               }
               if (!isEmtpyValue(uri)) {
-                if (!group.isEmpty())
+                if (!group.isEmpty()) {
                   group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
                 group.addPair(new SearchMetadata(SearchFields.url, operator, uri, ns, not));
               }
             }
@@ -394,7 +395,7 @@ public class SearchMetadataForm {
 
   /**
    * True if the value is emtpy for the search
-   * 
+   *
    * @param value
    * @return
    */
@@ -404,7 +405,7 @@ public class SearchMetadataForm {
 
   /**
    * Return the type of the current statement (text, number, etc.)
-   * 
+   *
    * @return
    */
   public String getType() {

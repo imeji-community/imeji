@@ -20,7 +20,7 @@ import de.mpg.j2j.annotations.j2jId;
 
 /**
  * Clean empty {@link MetadataProfile}, which are not referenced by any collection
- * 
+ *
  * @author saquet
  *
  */
@@ -45,7 +45,7 @@ public class CleanStatementsJob implements Callable<Integer> {
 
   /**
    * Remove Exception a {@link List} of {@link Resource}
-   * 
+   *
    * @param uris
    * @param modelName
    * @throws IllegalAccessException
@@ -59,7 +59,7 @@ public class CleanStatementsJob implements Callable<Integer> {
 
   /**
    * Remove an {@link Object}, it must have a {@link j2jId}
-   * 
+   *
    * @param l
    * @param modelName
    * @throws Exception
@@ -71,7 +71,7 @@ public class CleanStatementsJob implements Callable<Integer> {
 
   /**
    * Load the {@link Resource} as {@link Object}
-   * 
+   *
    * @param uris
    * @param modelName
    * @param obj

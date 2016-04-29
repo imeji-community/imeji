@@ -20,7 +20,7 @@ import de.mpg.imeji.rest.to.UserTO;
 
 /**
  * API Service for {@link UserTO}
- * 
+ *
  * @author bastiens
  *
  */
@@ -85,41 +85,41 @@ public class UserService implements API<UserTO> {
       throws ImejiException {
     return null;
   }
-  
+
   /**
    * Update the key of a user in the database
-   * 
+   *
    * @param user
    * @param key
    * @throws ImejiException
-   * @throws JoseException 
+   * @throws JoseException
    */
   public User updateUserKey(User userVO, boolean login) throws ImejiException, JoseException {
-    //This method must be called with proper user authentication
-        if (userVO == null ){
-            throw new AuthenticationError("Authentication is required to call this method!");
-        }
-        
-        if ((login && (userVO.getApiKey() == null || "".equals(userVO.getApiKey())) ) || !login) {
-          //If it is login, then update the key only if it is null
-            userVO.setApiKey(generateNewKey(userVO));
-            new UserController(userVO).update(userVO, userVO);
-        }
-        
-        return userVO;
+    // This method must be called with proper user authentication
+    if (userVO == null) {
+      throw new AuthenticationError("Authentication is required to call this method!");
+    }
+
+    if ((login && (userVO.getApiKey() == null || "".equals(userVO.getApiKey()))) || !login) {
+      // If it is login, then update the key only if it is null
+      userVO.setApiKey(generateNewKey(userVO));
+      new UserController(userVO).update(userVO, userVO);
+    }
+
+    return userVO;
   }
-  
-  
+
+
   /**
    * Generate a new Key for the {@link User}. Key is saved in the database
-   * 
+   *
    * @param user
    * @return
    * @throws JoseException
    * @throws ImejiException
    */
   private String generateNewKey(User user) throws JoseException, ImejiException {
-      return APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE);
+    return APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE);
   }
 
 }

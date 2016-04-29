@@ -26,7 +26,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java Bean for the ingest
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -50,7 +50,7 @@ public class IngestBean {
 
   /**
    * Method reading url to trigger event
-   * 
+   *
    * @throws Exception
    */
   public void status() throws Exception {
@@ -132,8 +132,9 @@ public class IngestBean {
     if (error) {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("ingestFail", session.getLocale()));
       BeanHelper.error(msg);
-    } else if (success)
+    } else if (success) {
       BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("ingestSuccess", session.getLocale()));
+    }
   }
 
   public boolean isSuccess() {
@@ -146,7 +147,7 @@ public class IngestBean {
 
   /**
    * Upload the files for the ingest
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -176,7 +177,7 @@ public class IngestBean {
 
   /**
    * Load the {@link CollectionImeji} for the ingest
-   * 
+   *
    * @throws Exception
    */
   private void loadCollection() throws Exception {
@@ -194,7 +195,7 @@ public class IngestBean {
 
   /**
    * Write an {@link InputStream} to temp file
-   * 
+   *
    * @param fileName
    * @param is
    * @return
@@ -220,7 +221,7 @@ public class IngestBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public CollectionImeji getCollection() {
@@ -229,7 +230,7 @@ public class IngestBean {
 
   /**
    * setter
-   * 
+   *
    * @param collection
    */
   public void setCollection(CollectionImeji collection) {
@@ -238,7 +239,7 @@ public class IngestBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getCollectionId() {
@@ -247,7 +248,7 @@ public class IngestBean {
 
   /**
    * setter
-   * 
+   *
    * @param collectionId
    */
   public void setCollectionId(String collectionId) {
@@ -256,7 +257,7 @@ public class IngestBean {
 
   /**
    * Return the size of the current {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public int getCollectionSize() {

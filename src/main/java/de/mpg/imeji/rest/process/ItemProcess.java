@@ -30,7 +30,7 @@ import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemWithFileTO;
 
 /**
  * Process the REST requests for Items
- * 
+ *
  * @author bastiens
  *
  */
@@ -40,7 +40,7 @@ public class ItemProcess {
 
   /**
    * Create an Item with its file
-   * 
+   *
    * @param req
    * @param file
    * @param json
@@ -54,8 +54,7 @@ public class ItemProcess {
       DefaultItemWithFileTO defaultItemWithFileTO = (DefaultItemWithFileTO) RestProcessUtils
           .buildTOFromJSON(json, DefaultItemWithFileTO.class);
       defaultItemWithFileTO = uploadAndValidateFile(file, defaultItemWithFileTO, origName);
-      DefaultItemTO defaultItemTO =
-          new DefaultItemService().create((DefaultItemTO) defaultItemWithFileTO, u);
+      DefaultItemTO defaultItemTO = new DefaultItemService().create(defaultItemWithFileTO, u);
       return RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), defaultItemTO);
     } catch (Exception e) {
       LOGGER.error("Error creating item", e);
@@ -65,7 +64,7 @@ public class ItemProcess {
 
   /**
    * Read an Item according to its Id
-   * 
+   *
    * @param req
    * @param id
    * @return
@@ -82,7 +81,7 @@ public class ItemProcess {
 
   /**
    * Delete an Item according to its id
-   * 
+   *
    * @param req
    * @param id
    * @return
@@ -100,7 +99,7 @@ public class ItemProcess {
 
   /**
    * Read Items according to the query
-   * 
+   *
    * @param req
    * @param q
    * @return
@@ -119,7 +118,7 @@ public class ItemProcess {
 
   /**
    * Update an Item, update file if provided
-   * 
+   *
    * @param req
    * @param id
    * @param fileInputStream
@@ -140,7 +139,7 @@ public class ItemProcess {
           || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0);
       User u = BasicAuthentication.auth(req);
       if (fileUpdate) {
-        to = uploadAndValidateFile(fileInputStream, (DefaultItemWithFileTO) to, filename);
+        to = uploadAndValidateFile(fileInputStream, to, filename);
       }
       return RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.update(to, u));
     } catch (Exception e) {
@@ -158,7 +157,7 @@ public class ItemProcess {
 
   /**
    * Upload the File to imeji, and return a valid {@link DefaultItemWithFileTO}
-   * 
+   *
    * @param file
    * @param to
    * @param origName

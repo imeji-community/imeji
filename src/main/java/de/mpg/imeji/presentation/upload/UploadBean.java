@@ -50,8 +50,7 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.history.HistoryUtil;
@@ -60,14 +59,14 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Bean for the upload page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 @ManagedBean(name = "UploadBean")
 @ViewScoped
-public class UploadBean implements Serializable {
+public class UploadBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = -2731118794797476328L;
   private static final Logger LOGGER = Logger.getLogger(UploadBean.class);
   private CollectionImeji collection = new CollectionImeji();
@@ -75,18 +74,18 @@ public class UploadBean implements Serializable {
   private String id;
   private String localDirectory = null;
   private String externalUrl;
-  @ManagedProperty(value = "#{SessionBean.user}")
-  private User user;
   private boolean recursive;
-  private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  @ManagedProperty(value = "#{SessionBean.selected}")
+  private List<String> selected;
+
 
 
   /**
    * Method checking the url parameters and triggering then the {@link UploadBean} methods
-   * 
+   *
    * @throws UnprocessableError
-   * 
-   * @throws Exception
+   *
+   * @
    */
   @PostConstruct
   public void status() {
@@ -95,7 +94,7 @@ public class UploadBean implements Serializable {
       loadCollection();
       if (UrlHelper.getParameterBoolean("init")) {
         ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).reset();
-        session.getSelected().clear();
+        getSelected().clear();
         externalUrl = null;
         localDirectory = null;
       } else if (UrlHelper.getParameterBoolean("start")) {
@@ -125,8 +124,8 @@ public class UploadBean implements Serializable {
 
   /**
    * Start the Upload of the items
-   * 
-   * @throws Exception
+   *
+   * @
    */
   public void upload() {
     HttpServletRequest req =
@@ -160,11 +159,10 @@ public class UploadBean implements Serializable {
 
   /**
    * Upload all Files from a directory
-   * 
-   * @param path
-   * @throws Exception
+   *
+   * @param path @
    */
-  public String uploadFromLocalDirectory() throws Exception {
+  public String uploadFromLocalDirectory() {
     try {
       File dir = new File(localDirectory);
       int i = 0;
@@ -183,9 +181,8 @@ public class UploadBean implements Serializable {
 
   /**
    * Upload a file from the web
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public String uploadFromLink() {
     try {
@@ -219,7 +216,7 @@ public class UploadBean implements Serializable {
 
   /**
    * Find in the url the filename
-   * 
+   *
    * @param url
    * @return
    */
@@ -237,7 +234,7 @@ public class UploadBean implements Serializable {
 
   /**
    * true if the filename is well formed, i.e. has an extension
-   * 
+   *
    * @param filename
    * @return
    */
@@ -249,7 +246,7 @@ public class UploadBean implements Serializable {
 
   /**
    * Create a tmp file with the uploaded file
-   * 
+   *
    * @param fio
    * @return
    */
@@ -263,7 +260,7 @@ public class UploadBean implements Serializable {
 
   /**
    * Write an {@link InputStream} in a {@link File}
-   * 
+   *
    * @param tmp
    * @param fis
    * @return
@@ -309,9 +306,8 @@ public class UploadBean implements Serializable {
 
   /**
    * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
-   * 
-   * @param bytes
-   * @throws Exception
+   *
+   * @param bytes @
    */
   private Item uploadFile(File fileUploaded, String title) {
     try {
@@ -325,17 +321,17 @@ public class UploadBean implements Serializable {
       Item item = null;
       ItemController controller = new ItemController();
       if (isImportImageToFile()) {
-        item = controller.updateThumbnail(findItemByFileName(title), file, user);
+        item = controller.updateThumbnail(findItemByFileName(title), file, getSessionUser());
       } else if (isUploadFileToItem()) {
-        item = controller.updateFile(findItemByFileName(title), file, title, user);
+        item = controller.updateFile(findItemByFileName(title), file, title, getSessionUser());
       } else {
-        item = controller.createWithFile(null, file, title, collection, user);
+        item = controller.createWithFile(null, file, title, collection, getSessionUser());
       }
       getsFiles().add(item);
       return item;
     } catch (Exception e) {
       getfFiles().add(" File " + title + " not uploaded. " + e.getMessage() != null
-          ? Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), session.getLocale()) : "");
+          ? Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), getLocale()) : "");
       LOGGER.error("Error uploading item: ", e);
       return null;
     }
@@ -344,12 +340,12 @@ public class UploadBean implements Serializable {
   /**
    * Search for an item in the current collection with the same filename. The filename must be
    * unique!
-   * 
+   *
    * @param filename
-   * @return
-   * @throws Exception
+   * @return @
+   * @throws ImejiException
    */
-  private Item findItemByFileName(String filename) throws Exception {
+  private Item findItemByFileName(String filename) throws ImejiException {
     Search s = SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.JENA);
     List<String> sr =
         s.searchString(JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
@@ -363,12 +359,12 @@ public class UploadBean implements Serializable {
 
           + sr.size() + " found).");
     }
-    return new ItemController().retrieveLazy(URI.create(sr.get(0)), user);
+    return new ItemController().retrieveLazy(URI.create(sr.get(0)), getSessionUser());
   }
 
   /**
    * True if the filename is already used by an {@link Item} in this {@link CollectionImeji}
-   * 
+   *
    * @param filename
    * @return
    */
@@ -381,14 +377,16 @@ public class UploadBean implements Serializable {
   /**
    * Load the collection
    * 
-   * @throws Exception
-   * 
-   * @throws Exception
+   * @throws ImejiException
+   *
+   * @
+   *
+   * @
    */
-  public void loadCollection() throws Exception {
+  public void loadCollection() throws ImejiException {
     if (id != null) {
       collection = new CollectionController()
-          .retrieveLazy(ObjectHelper.getURI(CollectionImeji.class, id), user);
+          .retrieveLazy(ObjectHelper.getURI(CollectionImeji.class, id), getSessionUser());
       isDiscaded();
       if (collection != null && getCollection().getId() != null) {
         ItemController ic = new ItemController();
@@ -396,21 +394,20 @@ public class UploadBean implements Serializable {
             .getNumberOfRecords();
       }
     } else {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + "No ID in URL");
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", getLocale()) + "No ID in URL");
       throw new RuntimeException();
     }
   }
 
   /**
    * True if the {@link CollectionImeji} is discaded
-   * 
+   *
    * @throws UnprocessableError
    */
   private void isDiscaded() throws UnprocessableError {
     if (collection.getStatus().equals(Status.WITHDRAWN)) {
-      throw new UnprocessableError(Imeji.RESOURCE_BUNDLE
-          .getMessage("error_collection_discarded_upload", session.getLocale()));
+      throw new UnprocessableError(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_discarded_upload", getLocale()));
     }
   }
 
@@ -419,15 +416,14 @@ public class UploadBean implements Serializable {
       String doi = UrlHelper.getParameterValue("doi");
       DoiService doiService = new DoiService();
       if (doi != null) {
-        doiService.addDoiToCollection(doi, collection, session.getUser());
+        doiService.addDoiToCollection(doi, collection, getSessionUser());
       } else {
-        doiService.addDoiToCollection(collection, session.getUser());
+        doiService.addDoiToCollection(collection, getSessionUser());
       }
-      BeanHelper
-          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", session.getLocale()));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", getLocale()));
     } catch (ImejiException e) {
-      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", session.getLocale())
-          + " " + e.getMessage());
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", getLocale()) + " "
+          + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "";
@@ -436,24 +432,22 @@ public class UploadBean implements Serializable {
 
   /**
    * release the {@link CollectionImeji}
-   * 
+   *
    * @return
    * @throws IOException
    */
   public String release() throws IOException {
     CollectionController cc = new CollectionController();
     try {
-      cc.release(collection, user);
-      BeanHelper.info(
-          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", session.getLocale()));
-    } catch (Exception e) {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_release", session.getLocale()));
+      cc.release(collection, getSessionUser());
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", getLocale()));
+    } catch (ImejiException e) {
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_release", getLocale()));
       BeanHelper.error(e.getMessage());
+      LOGGER.error("Error releasing collection", e);
     }
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getCollectionUrl()
-        + ObjectHelper.getId(collection.getId()) + "/" + navigation.getUploadPath() + "?init=1");
+    redirect(getNavigation().getCollectionUrl() + ObjectHelper.getId(collection.getId()) + "/"
+        + getNavigation().getUploadPath() + "?init=1");
 
     return "";
 
@@ -461,45 +455,39 @@ public class UploadBean implements Serializable {
 
   /**
    * Delete the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String delete() {
     CollectionController cc = new CollectionController();
     try {
-      cc.delete(collection, session.getUser());
-      BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(),
-          session.getLocale()));
+      cc.delete(collection, getSessionUser());
+      BeanHelper.info(
+          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), getLocale()));
     } catch (Exception e) {
-      BeanHelper
-          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_delete", session.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_delete", getLocale()));
       LOGGER.error("Error delete collection", e);
     }
-    return session.getPrettySpacePage("pretty:collections");
+    return SessionBean.getPrettySpacePage("pretty:collections", getSpace());
   }
 
   /**
    * Discard the {@link CollectionImeji} of this {@link CollectionBean}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
+   * @throws IOException
    */
-  public String withdraw() throws Exception {
+  public String withdraw() throws IOException {
     CollectionController cc = new CollectionController();
     try {
-      cc.withdraw(collection, session.getUser());
-      BeanHelper.info(
-          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", session.getLocale()));
+      cc.withdraw(collection, getSessionUser());
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(
-          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", session.getLocale()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error discarding collection:", e);
     }
-
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(navigation.getCollectionUrl() + ObjectHelper.getId(collection.getId()));
+    redirect(getNavigation().getCollectionUrl() + ObjectHelper.getId(collection.getId()));
 
     return "";
 
@@ -519,14 +507,6 @@ public class UploadBean implements Serializable {
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
   }
 
   public int getCollectionSize() {
@@ -616,7 +596,7 @@ public class UploadBean implements Serializable {
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   public void discardCommentListener(ValueChangeEvent event) {
@@ -626,20 +606,28 @@ public class UploadBean implements Serializable {
   }
 
 
-  public void prepareBatchEdit() throws Exception {
-    session.getSelected().clear();
+  public void prepareBatchEdit() throws IOException {
+    getSelected().clear();
     for (Item item : getItemsToEdit()) {
-      session.addToSelected(item.getId().toString());
+      getSelected().add(item.getId().toString());
     }
-
     resetItemsToEdit();
-
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(navigation.getApplicationSpaceUrl() + navigation.getEditPath()
-            + "?type=selected&c=" + getCollection().getId().toString() + "&q=");
+    redirect(getNavigation().getApplicationSpaceUrl() + getNavigation().getEditPath()
+        + "?type=selected&c=" + getCollection().getId().toString() + "&q=");
   }
 
+  /**
+   * @return the selected
+   */
+  public List<String> getSelected() {
+    return selected;
+  }
+
+  /**
+   * @param selected the selected to set
+   */
+  public void setSelected(List<String> selected) {
+    this.selected = selected;
+  }
 
 }

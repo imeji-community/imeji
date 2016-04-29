@@ -40,7 +40,7 @@ import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * imeji Search, using sparql query
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -53,7 +53,7 @@ public class JenaSearch implements Search {
 
   /**
    * Initialize the search
-   * 
+   *
    * @param type
    * @param containerURI
    */
@@ -71,11 +71,11 @@ public class JenaSearch implements Search {
 
   /**
    * Search for {@link SearchQuery} according to {@link User} permissions
-   * 
+   *
    * @param sortCri
    * @param user
    * @param sq
-   * 
+   *
    * @return
    */
   @Override
@@ -88,12 +88,12 @@ public class JenaSearch implements Search {
   /**
    * Search for {@link SearchQuery} according to {@link User} permissions, within a set of possible
    * results
-   * 
+   *
    * @param sq
    * @param sortCri
    * @param user
    * @param uris
-   * 
+   *
    * @return
    */
   @Override
@@ -104,7 +104,7 @@ public class JenaSearch implements Search {
 
   /**
    * Search for with query following sparql syntax
-   * 
+   *
    * @param sparqlQuery
    * @return
    */
@@ -116,7 +116,7 @@ public class JenaSearch implements Search {
 
   /**
    * Search for complex queries over the complete imeji data
-   * 
+   *
    * @param sq
    * @param sortCri
    * @param user
@@ -130,7 +130,7 @@ public class JenaSearch implements Search {
    * Search for complex queries over a set of data (defined by the previousResults parameter as a
    * {@link List} of {@link Object} uris):<br/>
    * - do a list of simple search and perform logical relations over the results
-   * 
+   *
    * @param previousResults
    * @param sq
    * @param sortCri
@@ -141,15 +141,18 @@ public class JenaSearch implements Search {
       User user, String spaceId) {
     // indexes = SearchIndexInitializer.init();
     // Set null parameters
-    if (sq == null)
+    if (sq == null) {
       sq = new SearchQuery();
-    if (sortCri == null)
+    }
+    if (sortCri == null) {
       sortCri = new SortCriterion();
+    }
     List<String> results = null;
-    if (previousResults == null)
+    if (previousResults == null) {
       results = new ArrayList<String>();
-    else
+    } else {
       results = new ArrayList<String>(previousResults);
+    }
     // second case is useless so far, since all query within a container are
     // container specific.
     if (sq.isEmpty() || (containerURI != null && results.isEmpty() && false)) {
@@ -200,7 +203,7 @@ public class JenaSearch implements Search {
 
   /**
    * Simple search for search with one {@link SearchPair}
-   * 
+   *
    * @param pair
    * @param sortCri
    * @param user
@@ -214,7 +217,7 @@ public class JenaSearch implements Search {
 
   /**
    * Perform {@link LOGICAL_RELATIONS} between 2 {@link List} of {@link String}
-   * 
+   *
    * @param l1
    * @param logic
    * @param l2
@@ -236,7 +239,7 @@ public class JenaSearch implements Search {
 
   /**
    * REturn a sparql query {@link String} to be added to search query in some specific cases
-   * 
+   *
    * @return
    */
   private String getSpecificQuery(User user) {
@@ -266,7 +269,7 @@ public class JenaSearch implements Search {
   /**
    * Return the name of the {@link Model} as a {@link String} according to the current
    * {@link SearchObjectTypes}
-   * 
+   *
    * @param type
    * @return
    */
@@ -289,7 +292,7 @@ public class JenaSearch implements Search {
 
   /**
    * Return the {@link RDF}.type of object searched according to the {@link SearchObjectTypes}
-   * 
+   *
    * @param type
    * @return
    */
@@ -308,7 +311,7 @@ public class JenaSearch implements Search {
 
   /**
    * Get {@link SearchIndex} from its {@link String} name
-   * 
+   *
    * @param indexName
    * @return
    * @throws BadRequestException
@@ -328,7 +331,7 @@ public class JenaSearch implements Search {
 
   /**
    * Get {@link SearchIndex} from its {@link SearchFields}
-   * 
+   *
    * @param indexname
    * @return
    * @throws BadRequestException

@@ -6,7 +6,7 @@ import de.mpg.imeji.logic.config.ImejiConfiguration;
 
 /**
  * Utility Class for imeji Quota
- * 
+ *
  * @author bastiens
  *
  */
@@ -20,7 +20,7 @@ public class QuotaUtil {
 
   /**
    * Return a Quota defined in GB
-   * 
+   *
    * @param gigaByte
    * @return
    */

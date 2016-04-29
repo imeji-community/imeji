@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Java representation for rdf label with a lang property
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -25,7 +25,7 @@ public class LocalizedString implements Serializable {
 
   /**
    * New {@link LocalizedString} with a {@link String} in one language
-   * 
+   *
    * @param value
    * @param lang
    */
@@ -36,7 +36,7 @@ public class LocalizedString implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   @XmlAttribute(name = "value")
@@ -46,7 +46,7 @@ public class LocalizedString implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param value
    */
   public void setValue(String value) {
@@ -55,7 +55,7 @@ public class LocalizedString implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   @XmlAttribute(name = "lang")
@@ -69,7 +69,7 @@ public class LocalizedString implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param lang
    */
   public void setLang(String lang) {

@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -59,7 +59,7 @@ import digilib.servlet.Scaler;
 /**
  * Add Authentification and Authorization from imeji to {@link Scaler}. This avoid to make all files
  * unprototected through digilib
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -77,7 +77,7 @@ public class DigilibServlet extends Scaler {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see digilib.servlet.Scaler#init(javax.servlet.ServletConfig)
    */
   @Override
@@ -110,7 +110,7 @@ public class DigilibServlet extends Scaler {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see digilib.servlet.Scaler#doGet(javax.servlet.http.HttpServletRequest,
    * javax.servlet.http.HttpServletResponse)
    */
@@ -143,7 +143,7 @@ public class DigilibServlet extends Scaler {
 
   /**
    * Return the location of the digilib-config.xml
-   * 
+   *
    * @return
    */
   private String getDigilibConfigPath() {
@@ -156,7 +156,7 @@ public class DigilibServlet extends Scaler {
 
   /**
    * Copy a file from a location to another on the fileSystem
-   * 
+   *
    * @param from
    * @param to
    */
@@ -182,7 +182,7 @@ public class DigilibServlet extends Scaler {
 
   /**
    * Read the user in the session
-   * 
+   *
    * @param req
    * @return
    */
@@ -195,7 +195,7 @@ public class DigilibServlet extends Scaler {
 
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
-   * 
+   *
    * @param req
    * @return
    */
@@ -206,7 +206,7 @@ public class DigilibServlet extends Scaler {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.servlet.GenericServlet#destroy()
    */
   @Override

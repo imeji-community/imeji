@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -46,7 +46,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * {@link Filter} for imeji authentification
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -58,7 +58,7 @@ public class AuthenticationFilter implements Filter {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.servlet.Filter#destroy()
    */
   @Override
@@ -68,7 +68,7 @@ public class AuthenticationFilter implements Filter {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
    * javax.servlet.FilterChain)
    */
@@ -98,7 +98,7 @@ public class AuthenticationFilter implements Filter {
   /**
    * True if it is necessary to reload the User. This method tried to reduce as much as possible
    * reload of the user, to avoid too much database queries.
-   * 
+   *
    * @param req
    * @return
    */
@@ -109,7 +109,7 @@ public class AuthenticationFilter implements Filter {
   /**
    * True if the {@link User} has been modified in the database (for instance, a user has share
    * something with him)
-   * 
+   *
    * @param user
    * @return
    */
@@ -119,7 +119,7 @@ public class AuthenticationFilter implements Filter {
 
   /**
    * True if the request is done from an xhtml page
-   * 
+   *
    * @param req
    * @return
    */
@@ -130,7 +130,7 @@ public class AuthenticationFilter implements Filter {
 
   /**
    * True of the request is an Ajax Request
-   * 
+   *
    * @param req
    * @return
    */
@@ -141,7 +141,7 @@ public class AuthenticationFilter implements Filter {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
    */
   @Override
@@ -159,7 +159,7 @@ public class AuthenticationFilter implements Filter {
 
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
-   * 
+   *
    * @param req
    * @return
    */

@@ -8,9 +8,9 @@ import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
 /**
  * This job calls all Jobs which should be run every night, and is called by the
  * {@link NightlyExecutor} every night
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class NightlyJob implements Runnable {
   private static final Logger LOGGER = Logger.getLogger(NightlyJob.class);

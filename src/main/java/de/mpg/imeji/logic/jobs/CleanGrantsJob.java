@@ -10,7 +10,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * Clean empty {@link MetadataProfile}, which are not referenced by any collection
- * 
+ *
  * @author saquet
  *
  */

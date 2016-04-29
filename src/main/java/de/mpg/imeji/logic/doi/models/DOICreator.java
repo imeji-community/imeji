@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class DOICreator {
-  
+
   private String creatorName;
 
   public String getCreatorName() {
@@ -14,5 +14,5 @@ public class DOICreator {
   public void setCreatorName(String creatorName) {
     this.creatorName = creatorName;
   }
-  
+
 }

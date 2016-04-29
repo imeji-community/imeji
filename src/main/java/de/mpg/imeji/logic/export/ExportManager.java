@@ -28,7 +28,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Manage {@link Export}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -42,7 +42,7 @@ public class ExportManager {
   /**
    * Create a new {@link ExportManager} with url parameters, and perform the {@link Export} in the
    * specified {@link OutputStream}
-   * 
+   *
    * @param out
    * @param user
    * @param params
@@ -59,9 +59,9 @@ public class ExportManager {
 
   /**
    * Write in {@link OutputStream} the export
-   * 
+   *
    * @param sr
-   * 
+   *
    */
   public void export(SearchResult sr, User user) {
     if (export != null) {
@@ -77,7 +77,7 @@ public class ExportManager {
 
   /**
    * Search the element to export
-   * 
+   *
    * @param searchQuery
    * @return
    * @throws IOException
@@ -139,7 +139,7 @@ public class ExportManager {
 
   /**
    * Return the content type of the {@link HttpResponse}
-   * 
+   *
    * @return
    */
   public String getContentType() {

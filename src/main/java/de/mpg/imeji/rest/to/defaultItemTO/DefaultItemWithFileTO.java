@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * A {@link DefaultItemTO} with file
- * 
+ *
  * @author bastiens
  *
  */

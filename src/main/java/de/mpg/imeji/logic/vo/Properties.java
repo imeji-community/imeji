@@ -25,7 +25,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Common properties to all imeji objects
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -58,9 +58,9 @@ public class Properties implements Serializable {
 
   @XmlEnum(String.class)
   public enum Status {
-    PENDING(new String(ImejiNamespaces.STATUS + "#PENDING")), RELEASED(new String(
-        ImejiNamespaces.STATUS + "#RELEASED")), WITHDRAWN(new String(ImejiNamespaces.STATUS
-        + "#WITHDRAWN"));
+    PENDING(new String(ImejiNamespaces.STATUS + "#PENDING")), RELEASED(
+        new String(ImejiNamespaces.STATUS + "#RELEASED")), WITHDRAWN(
+            new String(ImejiNamespaces.STATUS + "#WITHDRAWN"));
     private String uri;
 
     private Status(String uri) {
@@ -77,7 +77,7 @@ public class Properties implements Serializable {
   }
 
   public Properties() {
-    
+
   }
 
   public void setCreatedBy(URI createdBy) {
@@ -163,7 +163,7 @@ public class Properties implements Serializable {
 
   /**
    * return the id of this object defined in the last number in its {@link URI}.
-   * 
+   *
    * @return
    */
   public String getIdString() {
@@ -175,7 +175,7 @@ public class Properties implements Serializable {
 
   /**
    * TODO : check this method
-   * 
+   *
    * @param methodName
    * @return
    */

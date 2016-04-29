@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -38,7 +38,7 @@ import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Facade for using {@link Reader}. Check {@link Authorization} to readen objects
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -55,7 +55,7 @@ public class ReaderFacade implements Reader {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.reader.Reader#read(java.lang.String, de.mpg.imeji.logic.vo.User,
    * java.lang.Object)
    */
@@ -68,7 +68,7 @@ public class ReaderFacade implements Reader {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.reader.Reader#readLazy(java.lang.String, de.mpg.imeji.logic.vo.User,
    * java.lang.Object)
    */
@@ -84,7 +84,7 @@ public class ReaderFacade implements Reader {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.reader.Reader#read(java.util.List, de.mpg.imeji.logic.vo.User)
    */
   @Override
@@ -96,7 +96,7 @@ public class ReaderFacade implements Reader {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.reader.Reader#readLazy(java.util.List, de.mpg.imeji.logic.vo.User)
    */
   @Override

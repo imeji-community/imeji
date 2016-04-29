@@ -10,7 +10,7 @@ import com.sun.faces.application.view.ViewScopeManager;
  * https://java.net/jira/browse/JAVASERVERFACES-4015 <br/>
  * Should be removed (the class and the definition in web.xml) when fixed (probably with mojarra
  * 2.3)
- * 
+ *
  * @author bastiens
  *
  */

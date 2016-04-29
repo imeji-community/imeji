@@ -20,7 +20,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export of data
- * 
+ *
  * @author saquet
  */
 public abstract class Export {
@@ -37,16 +37,16 @@ public abstract class Export {
 
   /**
    * Export a {@link SearchResult} in an {@link OutputStream}
-   * 
+   *
    * @param out
    * @param sr
-   * 
+   *
    */
   public abstract void export(OutputStream out, SearchResult sr, User user);
 
   /**
    * Return the Mime-type of the http response
-   * 
+   *
    * @return
    */
   public abstract String getContentType();
@@ -58,7 +58,7 @@ public abstract class Export {
 
   /**
    * Factory to create an {@link Export} from url paramters
-   * 
+   *
    * @param params
    * @return
    * @throws HttpResponseException
@@ -91,7 +91,7 @@ public abstract class Export {
 
   /**
    * REturn the value of a paramter as it has been used for this export
-   * 
+   *
    * @param s
    * @return
    */
@@ -101,7 +101,7 @@ public abstract class Export {
 
   /**
    * REturn the value of a Param as defined in a string array
-   * 
+   *
    * @param params
    * @param s
    * @return

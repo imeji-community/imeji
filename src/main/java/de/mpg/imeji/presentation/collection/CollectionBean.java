@@ -29,7 +29,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Abstract bean for all collection beans
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -65,7 +65,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * Read the profile of the current collection
-   * 
+   *
    * @param user
    * @throws ImejiException
    */
@@ -81,7 +81,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   public void discardCommentListener(ValueChangeEvent event) {
@@ -92,7 +92,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return the tab
    */
   public TabType getTab() {
@@ -104,7 +104,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * setter
-   * 
+   *
    * @param the tab to set
    */
   public void setTab(TabType tab) {
@@ -169,7 +169,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * release the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String release() {
@@ -205,7 +205,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * Delete the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String delete() {
@@ -223,7 +223,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * Discard the {@link CollectionImeji} of this {@link CollectionBean}
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -242,7 +242,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public MetadataProfile getProfile() {
@@ -251,7 +251,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * setter
-   * 
+   *
    * @param profile
    */
   public void setProfile(MetadataProfile profile) {
@@ -268,7 +268,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getProfileId() {
@@ -277,20 +277,21 @@ public abstract class CollectionBean extends ContainerBean {
 
   /**
    * setter
-   * 
+   *
    * @param profileId
    */
   public void setProfileId(String profileId) {
     this.profileId = profileId;
   }
 
+  @Override
   public String getPageUrl() {
     return getNavigation().getCollectionUrl() + id;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.ContainerBean#getType()
    */
   @Override
@@ -300,7 +301,7 @@ public abstract class CollectionBean extends ContainerBean {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
    */
   @Override

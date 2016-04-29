@@ -19,7 +19,7 @@ import de.mpg.imeji.presentation.metadata.ItemWrapper;
 
 /**
  * Abstract call for the {@link Metadata} editors
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -33,7 +33,7 @@ public abstract class AbstractMetadataEditor {
 
   /**
    * Editor: Edit a list of images for one statement.
-   * 
+   *
    * @param items
    * @param statement
    */
@@ -81,7 +81,7 @@ public abstract class AbstractMetadataEditor {
 
   /**
    * Save the {@link Item} and {@link Metadata} defined in the editor
-   * 
+   *
    * @throws ImejiException
    */
   public void save() throws ImejiException {
@@ -92,7 +92,7 @@ public abstract class AbstractMetadataEditor {
 
   /**
    * Validate and prepare the Items of the editor, so they can be saved
-   * 
+   *
    * @return
    */
   public List<Item> validateAndFormatItemsForSaving() {
@@ -105,7 +105,7 @@ public abstract class AbstractMetadataEditor {
 
   /**
    * Create a new Metadata according to current Editor configuration.
-   * 
+   *
    * @return
    */
   protected Metadata newMetadata() {

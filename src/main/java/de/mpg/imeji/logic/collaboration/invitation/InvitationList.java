@@ -10,7 +10,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 
 /**
  * A list of {@link Invitation} for one email: Many invitations might be sent to one Email address
- * 
+ *
  * @author bastiens
  *
  */
@@ -26,7 +26,7 @@ public class InvitationList implements Serializable {
 
   /**
    * Add the invitation to the list
-   * 
+   *
    * @param invitation
    * @throws ImejiException
    */
@@ -36,7 +36,7 @@ public class InvitationList implements Serializable {
 
   /**
    * Remove the Invitation from the list
-   * 
+   *
    * @param invitation
    */
   public void remove(Invitation invitation) {
@@ -45,7 +45,7 @@ public class InvitationList implements Serializable {
 
   /**
    * Return a List of all invitations of the list
-   * 
+   *
    * @return
    */
   public List<String> getAllInvitationsId() {

@@ -19,7 +19,7 @@ import de.mpg.imeji.presentation.util.CommonUtils;
  * JSF Bean for the the auto suggest feature <br/>
  * - Important: now the auto suggest for External vocabulary is done with jQuery and the Servlet
  * "autocompleter"
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -32,7 +32,7 @@ public class SuggestBean {
 
   /**
    * Initialize the bean for one profile
-   * 
+   *
    * @param profile
    */
   public void init(MetadataProfile profile) {
@@ -46,7 +46,7 @@ public class SuggestBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Map<URI, Suggest> getSuggests() {
@@ -55,7 +55,7 @@ public class SuggestBean {
 
   /**
    * setter
-   * 
+   *
    * @param suggests
    */
   public void setSuggests(Map<URI, Suggest> suggests) {
@@ -64,7 +64,7 @@ public class SuggestBean {
 
   /**
    * Contains suggestions
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -77,7 +77,7 @@ public class SuggestBean {
 
     /**
      * Constructor
-     * 
+     *
      * @param s
      */
     public Suggest(Statement s) {
@@ -86,7 +86,7 @@ public class SuggestBean {
 
     /**
      * Return the list of restricted values as a menu
-     * 
+     *
      * @return
      */
     public List<SelectItem> getRestrictedValues() {
@@ -104,7 +104,7 @@ public class SuggestBean {
 
     /**
      * Return true if the current {@link Statement} has restricted values
-     * 
+     *
      * @return
      */
     public boolean getHasRestrictedValues() {

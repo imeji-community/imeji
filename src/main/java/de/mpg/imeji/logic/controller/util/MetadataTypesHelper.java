@@ -8,7 +8,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
 
 /**
  * Helper to work with {@link Metadata} {@link Types}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -16,7 +16,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
 public class MetadataTypesHelper {
   /**
    * Return the {@link Types} for one namespace
-   * 
+   *
    * @param namespace
    * @return
    */

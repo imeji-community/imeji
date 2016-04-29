@@ -111,7 +111,7 @@ public class NotificationUtils {
 
   /**
    * Reconstructs Query Url on hand of request parameters saved in export instance
-   * 
+   *
    * @param export
    * @param session
    * @return

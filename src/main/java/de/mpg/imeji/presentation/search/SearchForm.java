@@ -28,7 +28,7 @@ import de.mpg.imeji.presentation.beans.MetadataLabels;
 
 /**
  * The form for the Advanced search. Is composed of {@link SearchGroupForm}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -51,7 +51,7 @@ public class SearchForm {
 
   /**
    * Constructor for a {@link SearchQuery}: initialize the form from a query
-   * 
+   *
    * @param searchQuery
    * @param collectionsMap
    * @param profilesMap
@@ -65,9 +65,10 @@ public class SearchForm {
       if (se.getType().equals(SEARCH_ELEMENTS.GROUP)) {
         String profileId =
             SearchFormularHelper.getProfileIdFromStatement((SearchGroup) se, profilesMap.values());
-        if (profileId != null)
+        if (profileId != null) {
           groups.add(
               new SearchGroupForm((SearchGroup) se, profilesMap.get(profileId), metadataLabels));
+        }
       }
       if (se.getType().equals(SEARCH_ELEMENTS.PAIR)) {
         if (((SearchPair) se).getField() == SearchFields.filetype) {
@@ -80,7 +81,7 @@ public class SearchForm {
 
   /**
    * Validate the Search form according the user input
-   * 
+   *
    * @throws UnprocessableError
    */
   public void validate() throws UnprocessableError {
@@ -102,7 +103,7 @@ public class SearchForm {
 
   /**
    * Transform the {@link SearchForm} in a {@link SearchQuery}
-   * 
+   *
    * @return
    */
   public SearchQuery getFormularAsSearchQuery() {
@@ -125,7 +126,7 @@ public class SearchForm {
 
   /**
    * Add a {@link SearchGroup} to the form
-   * 
+   *
    * @param pos
    */
   public void addSearchGroup(int pos) {
@@ -139,7 +140,7 @@ public class SearchForm {
 
   /**
    * Method called when the selected collection is changed in the select menu
-   * 
+   *
    * @param pos
    * @throws ImejiException
    */
@@ -156,7 +157,7 @@ public class SearchForm {
 
   /**
    * Method called when the buttom remove group is called
-   * 
+   *
    * @param pos
    */
   public void removeSearchGroup(int pos) {
@@ -165,7 +166,7 @@ public class SearchForm {
 
   /**
    * Method called when the button add element is called
-   * 
+   *
    * @param groupPos
    * @param elPos
    */
@@ -187,7 +188,7 @@ public class SearchForm {
 
   /**
    * Change the statement type of the element
-   * 
+   *
    * @param groupPos
    * @param elPos
    */

@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -55,7 +55,7 @@ import de.mpg.imeji.logic.vo.Item;
 
 /**
  * Manage internal storage in file system
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -95,7 +95,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Create {@link InternalStorageItem} for one {@link File}
-   * 
+   *
    * @param file
    * @param filename
    * @return
@@ -129,17 +129,18 @@ public class InternalStorageManager implements Serializable {
     if (url.contains(FileResolution.ORIGINAL.name().toLowerCase())) {
       url = replaceExtension(url, origExtension);
       copy(file, transformUrlToPath(url));
-    } else if (url.contains(FileResolution.WEB.name().toLowerCase()))
+    } else if (url.contains(FileResolution.WEB.name().toLowerCase())) {
       write(generatorManager.generateWebResolution(file, guessedExtension),
           transformUrlToPath(url));
-    else if (url.contains(FileResolution.THUMBNAIL.name().toLowerCase()))
+    } else if (url.contains(FileResolution.THUMBNAIL.name().toLowerCase())) {
       write(generatorManager.generateThumbnail(file, guessedExtension), transformUrlToPath(url));
+    }
   }
 
   /**
    * Remove a {@link InternalStorageItem} from the internal storage (i.e. removes all resolutuion of
    * the {@link Item})
-   * 
+   *
    * @param item
    */
   public void removeItem(InternalStorageItem item) {
@@ -150,7 +151,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Rmove a single {@link File}
-   * 
+   *
    * @param url
    */
   public void removeFile(String url) {
@@ -166,7 +167,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Transform and url to a file system path
-   * 
+   *
    * @param url
    * @return
    */
@@ -177,7 +178,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Get the Storage Id according to the url
-   * 
+   *
    * @param url
    * @return
    */
@@ -192,7 +193,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Transform the path of the item into a path
-   * 
+   *
    * @param path
    * @return
    */
@@ -204,7 +205,7 @@ public class InternalStorageManager implements Serializable {
   /**
    * Extract the filename out of a path (then use StringHelper.fileSeparator as separator), or of an
    * url(then use StringHelper.urlSeparator as separator)
-   * 
+   *
    * @param pathOrUrl
    * @param separator
    * @return
@@ -225,7 +226,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Get the storage path
-   * 
+   *
    * @return
    */
   public String getStoragePath() {
@@ -241,7 +242,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Create an {@link InternalStorageItem} for this file. Set the correct version.
-   * 
+   *
    * @param fileName
    * @return
    * @throws UnsupportedEncodingException
@@ -263,7 +264,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Generate the id of a file with the correct version, i.e.
-   * 
+   *
    * @param collectionId
    * @return
    */
@@ -279,7 +280,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Generate the id of a file. This id is used to store the file in the filesystem
-   * 
+   *
    * @param collectionId
    * @return
    */
@@ -296,7 +297,7 @@ public class InternalStorageManager implements Serializable {
   /**
    * Create the URL of the file from its filename, its id, and its resolution. Important: the
    * filename is decoded, to avoid problems by reading this url
-   * 
+   *
    * @param id
    * @param filename
    * @param resolution
@@ -315,7 +316,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Write a new file for the 3 resolution of one file
-   * 
+   *
    * @param item
    * @throws IOException
    * @throws Exception
@@ -343,7 +344,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Copy the file in the file system
-   * 
+   *
    * @param toCopy
    * @param path
    * @return
@@ -365,7 +366,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Write the bytes in the filesystem
-   * 
+   *
    * @param bytes
    * @param path
    * @return
@@ -385,7 +386,7 @@ public class InternalStorageManager implements Serializable {
 
   /**
    * Return true if an id (i.e. a file) already exists, otherwise false
-   * 
+   *
    * @param id
    * @return
    */

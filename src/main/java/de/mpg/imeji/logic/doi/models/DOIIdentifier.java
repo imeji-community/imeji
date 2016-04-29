@@ -7,17 +7,16 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType
 public class DOIIdentifier {
 
-  
-  private String identifierType ="DOI";
-  
+
+  private String identifierType = "DOI";
+
   @XmlValue
   private String identifier = "1";
-  
-  
-  public DOIIdentifier(){
-  }
-  
-  
+
+
+  public DOIIdentifier() {}
+
+
   @XmlAttribute
   public String getIdentifierType() {
     return identifierType;
@@ -28,6 +27,5 @@ public class DOIIdentifier {
   }
 
 
-  
-  
+
 }

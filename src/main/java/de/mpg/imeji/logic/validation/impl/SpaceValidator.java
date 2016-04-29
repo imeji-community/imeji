@@ -16,7 +16,7 @@ import de.mpg.imeji.logic.vo.Space;
 
 /**
  * {@link Validator} for a {@link Space}
- * 
+ *
  * @author saquet
  *
  */

@@ -17,7 +17,7 @@ import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * Helper to work with vocabularies
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -51,7 +51,7 @@ public class VocabularyHelper {
 
   /**
    * Load the properties form the file vocabularies.properties
-   * 
+   *
    * @throws IOException
    */
   public void loadProperties() throws IOException {
@@ -78,7 +78,7 @@ public class VocabularyHelper {
 
   /**
    * Return the name of a vocabulary as defined in the properties
-   * 
+   *
    * @param uri
    * @return
    */

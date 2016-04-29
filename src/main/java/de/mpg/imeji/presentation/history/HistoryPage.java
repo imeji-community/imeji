@@ -20,7 +20,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * An imeji web page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -34,7 +34,7 @@ public class HistoryPage {
 
   /**
    * Constructor a an {@link HistoryPage}
-   * 
+   *
    * @param url
    * @param params
    * @param user
@@ -49,7 +49,7 @@ public class HistoryPage {
 
   /**
    * Load the title the object of the current page according to its id
-   * 
+   *
    * @param uri
    * @return
    * @throws Exception
@@ -85,7 +85,7 @@ public class HistoryPage {
 
   /**
    * Compares 2 {@link HistoryPage}
-   * 
+   *
    * @param page
    * @return
    */

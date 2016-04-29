@@ -34,7 +34,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * SErvlet to call Data viewer service
- * 
+ *
  * @author saquet
  *
  */

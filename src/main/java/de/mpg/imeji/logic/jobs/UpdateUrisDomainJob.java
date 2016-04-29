@@ -4,7 +4,7 @@ import java.util.concurrent.Callable;
 
 /**
  * Update all uris with the new Domain. This method should be used when the domain
- * 
+ *
  * @author bastiens
  *
  */

@@ -24,13 +24,13 @@ import de.mpg.imeji.presentation.collection.CollectionListItem;
 
 /**
  * Abstract Bean for Status informations (Status + Shared)
- * 
+ *
  * @author bastiens
  *
  */
 @ManagedBean(name = "StatusBean")
 @RequestScoped
-public class StatusBean extends SuperViewBean implements Serializable {
+public class StatusBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = 3560140124183947655L;
   private Status status;
   private String owner;
@@ -45,7 +45,7 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   /**
    * Method called from the JSF compomnent
-   * 
+   *
    * @param o
    */
   public void init(Object o) {
@@ -91,7 +91,7 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   /**
    * Find all users the object is shared with
-   * 
+   *
    * @param p
    * @return
    */
@@ -118,7 +118,7 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   /**
    * Find all groups the object is shared with
-   * 
+   *
    * @param properties
    * @return
    */
@@ -140,7 +140,7 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   /**
    * Find all Users the object is shared with
-   * 
+   *
    * @param p
    * @return
    */
@@ -155,7 +155,7 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   /**
    * Find all Groups the object is shared with
-   * 
+   *
    * @param p
    * @return
    */
@@ -172,7 +172,7 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   /**
    * Initialize the link to the share page
-   * 
+   *
    * @param uri
    * @return
    */
@@ -184,7 +184,7 @@ public class StatusBean extends SuperViewBean implements Serializable {
 
   /**
    * Return a label for the status
-   * 
+   *
    * @return
    */
   public String getStatusLabel() {

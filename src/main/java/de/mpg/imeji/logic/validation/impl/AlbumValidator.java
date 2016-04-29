@@ -14,7 +14,7 @@ import de.mpg.imeji.logic.vo.Person;
 
 /**
  * {@link Validator} for {@link Album}
- * 
+ *
  * @author saquet
  *
  */

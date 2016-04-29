@@ -25,7 +25,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Export} in rdf
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -38,7 +38,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Factory for {@link RDFExport}
-   * 
+   *
    * @param type
    * @return
    * @throws HttpResponseException
@@ -75,7 +75,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Write the {@link SearchResult} in an {@link OutputStream}
-   * 
+   *
    * @param sr
    * @param out
    */
@@ -112,7 +112,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Write a {@link Resource} in rdf
-   * 
+   *
    * @param r
    * @return
    */
@@ -147,8 +147,9 @@ public abstract class RDFExport extends Export {
             writer.append(openTag(st, null));
             String literal = st.getLiteral().getString();
             // Enclose embedded html
-            if (literal.contains("<html>"))
+            if (literal.contains("<html>")) {
               literal = "<![CDATA[" + literal + "]]>";
+            }
             writer.append(literal);
             writer.append(closeTag(st));
           }
@@ -164,7 +165,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * TRansform an uri (used as id in rdf) to a real url
-   * 
+   *
    * @param uri
    * @return
    */
@@ -174,7 +175,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Open an html tag for an rdf resource
-   * 
+   *
    * @param uri
    * @return
    */
@@ -182,14 +183,14 @@ public abstract class RDFExport extends Export {
 
   /**
    * Close an html tag for an rdf resource
-   * 
+   *
    * @return
    */
   protected abstract String closeTagResource();
 
   /**
    * Open an html tag for statement
-   * 
+   *
    * @param st
    * @param resourceURI
    * @return
@@ -206,7 +207,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Open and close tag for statement
-   * 
+   *
    * @param st
    * @param resourceURI
    * @return
@@ -227,7 +228,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Open an html tag for statement
-   * 
+   *
    * @param st
    * @param resourceURI
    * @return
@@ -257,7 +258,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Close an html tag for statement
-   * 
+   *
    * @param st
    * @return
    */
@@ -268,7 +269,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * return the namespace
-   * 
+   *
    * @param ns
    * @return
    */
@@ -282,7 +283,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Add a new line separator
-   * 
+   *
    * @param writer
    */
   protected void newLine(StringWriter writer) {
@@ -292,7 +293,7 @@ public abstract class RDFExport extends Export {
   /**
    * If the {@link Statement} is filtered (namespace has been defined as to be filtered), then
    * return false
-   * 
+   *
    * @param st
    * @return
    */
@@ -309,7 +310,7 @@ public abstract class RDFExport extends Export {
   /**
    * If the {@link Resource} is filtered (for instance a metadata which should not be displayed,
    * because restricted to current user), return true
-   * 
+   *
    * @param r
    * @return
    */
@@ -324,7 +325,7 @@ public abstract class RDFExport extends Export {
 
   /**
    * Check which {@link Resource} should be filtered
-   * 
+   *
    * @param sr
    * @param user
    */

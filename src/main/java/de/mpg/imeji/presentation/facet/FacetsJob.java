@@ -19,7 +19,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Callable to exectute Facets objects
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -32,7 +32,7 @@ public class FacetsJob implements Callable<Boolean> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.util.concurrent.Callable#call()
    */
   @Override
@@ -51,7 +51,7 @@ public class FacetsJob implements Callable<Boolean> {
 
   /**
    * Initialize the {@link FacetsJob} for one {@link SearchQuery} from the item browse page
-   * 
+   *
    * @param searchQuery
    */
   public FacetsJob(SearchQuery searchQuery, User user, Locale locale, String space) {
@@ -65,7 +65,7 @@ public class FacetsJob implements Callable<Boolean> {
 
   /**
    * Initialize the {@link FacetsJob} for one {@link SearchQuery} from the collection browse page
-   * 
+   *
    * @param col
    * @param searchQuery
    */
@@ -81,7 +81,7 @@ public class FacetsJob implements Callable<Boolean> {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<List<Facet>> getFacets() {
@@ -90,7 +90,7 @@ public class FacetsJob implements Callable<Boolean> {
 
   /**
    * setter
-   * 
+   *
    * @param facets
    */
   public void setFacets(List<List<Facet>> facets) {

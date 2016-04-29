@@ -21,9 +21,9 @@ import de.mpg.imeji.logic.vo.Space;
 
 /**
  * REindex data from the database into elastic search
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticReIndexJob implements Callable<Integer> {
 
@@ -48,7 +48,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
 
   /**
    * Add the Mapping first, to avoid conflicts in mappings
-   * 
+   *
    * @param index
    */
   private void addAllMappings(String index) {
@@ -59,7 +59,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
 
   /**
    * Reindex all the {@link CollectionImeji} stored in the database
-   * 
+   *
    * @throws ImejiException
    */
   private void reindexFolders(String index) throws ImejiException {
@@ -75,7 +75,7 @@ public class ElasticReIndexJob implements Callable<Integer> {
 
   /**
    * Reindex all the {@link Album} stored in the database
-   * 
+   *
    * @throws ImejiException
    */
   private void reindexAlbums(String index) throws ImejiException {
@@ -91,9 +91,9 @@ public class ElasticReIndexJob implements Callable<Integer> {
 
   /**
    * Reindex all {@link Item} stored in the database
-   * 
+   *
    * @throws ImejiException
-   * 
+   *
    */
   private void reindexItems(String index) throws ImejiException {
     LOGGER.info("Indexing Items...");
@@ -108,16 +108,16 @@ public class ElasticReIndexJob implements Callable<Integer> {
 
   /**
    * Reindex all {@link Item} stored in the database
-   * 
+   *
    * @throws ImejiException
-   * 
+   *
    */
   private void reindexSpaces(String index) throws ImejiException {
     LOGGER.info("Indexing Spaces...");
     ElasticIndexer indexer =
         new ElasticIndexer(index, ElasticTypes.spaces, ElasticService.ANALYSER);
     SpaceController controller = new SpaceController();
-    List<Space> items = (List<Space>) controller.retrieveAll();
+    List<Space> items = controller.retrieveAll();
     LOGGER.info("+++ " + items.size() + " items to index +++");
     indexer.indexBatch(items);
     indexer.commit();

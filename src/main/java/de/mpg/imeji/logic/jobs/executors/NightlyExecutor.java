@@ -11,9 +11,9 @@ import de.mpg.imeji.logic.jobs.NightlyJob;
 
 /**
  * {@link Executor} which schedule Jobs at a specified time every day
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class NightlyExecutor {
 
@@ -57,7 +57,7 @@ public class NightlyExecutor {
 
   /**
    * Return the next Date when the Job should be run
-   * 
+   *
    * @return
    */
   private static Calendar scheduleNextDate() {
@@ -73,7 +73,7 @@ public class NightlyExecutor {
 
   /**
    * Calculate the Delay until the next Job execution in milliseconds
-   * 
+   *
    * @return
    */
   private static long getDelay() {

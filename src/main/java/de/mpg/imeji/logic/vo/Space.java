@@ -20,7 +20,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * imeji space
- * 
+ *
  * @author vmakarenko (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -86,15 +86,16 @@ public class Space extends Properties implements Serializable {
 
   /**
    * Getters and Setters below are only VO getters and setters, not written in JENA
-   * 
+   *
    */
   public Collection<String> getSpaceCollections() {
     return spaceCollections;
   }
 
   public String addSpaceCollection(String id) {
-    if (!this.spaceCollections.contains(id))
+    if (!this.spaceCollections.contains(id)) {
       this.spaceCollections.add(id);
+    }
     return id;
   }
 

@@ -6,7 +6,7 @@ import de.mpg.imeji.logic.util.MaxPlanckInstitutUtils;
 
 /**
  * Read the IP Mapping for the Max Planck Planck Institutes
- * 
+ *
  * @author bastiens
  *
  */

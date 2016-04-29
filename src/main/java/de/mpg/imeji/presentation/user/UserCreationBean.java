@@ -29,7 +29,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java Bean for the Create new user page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -53,7 +53,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * Method called when user create a new user
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -77,7 +77,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * Create a new {@link User}
-   * 
+   *
    * @throws Exception
    */
   private String createNewUser() throws Exception {
@@ -94,7 +94,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * True if the {@link User} exists
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -112,7 +112,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * Send an email to the current {@link User}
-   * 
+   *
    * @param password
    */
   public void sendNewAccountEmail(String password) {
@@ -130,7 +130,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * Add a new empty organization
-   * 
+   *
    * @param index
    */
   public void addOrganization(int index) {
@@ -140,7 +140,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * Remove an nth organization
-   * 
+   *
    * @param index
    */
   public void removeOrganization(int index) {
@@ -152,7 +152,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * setter
-   * 
+   *
    * @param user
    */
   public void setUser(User user) {
@@ -161,7 +161,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public User getUser() {
@@ -170,7 +170,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * getter - True if the selectbox "send email to user" has been selected
-   * 
+   *
    * @return
    */
   public boolean isSendEmail() {
@@ -179,7 +179,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * setter
-   * 
+   *
    * @param sendEmail
    */
   public void setSendEmail(boolean sendEmail) {

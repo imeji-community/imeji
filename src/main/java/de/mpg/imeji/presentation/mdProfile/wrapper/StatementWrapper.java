@@ -22,7 +22,7 @@ import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Wrapper for {@link Statement}, used in java bean {@link MdProfileBean}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -42,7 +42,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Create a new {@link StatementWrapper}
-   * 
+   *
    * @param st
    * @param profile
    */
@@ -62,7 +62,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Initialize the {@link StatementWrapper} fields with {@link Statement} fields
-   * 
+   *
    * @param st
    */
   public void init(Statement st) {
@@ -74,9 +74,11 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
             + ImejiNamespaces.METADATA + "> ?md . ?md <http://imeji.org/terms/statement> <"
             + statement.getId() + ">} LIMIT 1 ", null)
         .size() > 0;
-    for (LocalizedString s : statement.getLabels())
-      if (s.getLang() == null)
+    for (LocalizedString s : statement.getLabels()) {
+      if (s.getLang() == null) {
         s.setLang("en");
+      }
+    }
   }
 
   /**
@@ -109,7 +111,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Return the {@link StatementWrapper} as a {@link Statement}
-   * 
+   *
    * @return
    */
   public Statement getAsStatement() {
@@ -123,7 +125,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Return the id of the {@link Statement} (i.e. the last part of the {@link URI})
-   * 
+   *
    * @return
    */
   public String getStatementId() {
@@ -132,7 +134,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Return the id of the parent of the current {@link Statement}
-   * 
+   *
    * @return
    */
   public String getParentId() {
@@ -144,7 +146,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Return count of defined labels
-   * 
+   *
    * @return
    */
   public int getLabelsCount() {
@@ -153,7 +155,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Listener for metadata type menu
-   * 
+   *
    * @param event
    */
   public void typeListener() {
@@ -170,7 +172,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Listener for the preview select box
-   * 
+   *
    * @param event
    */
   public void previewListener(ValueChangeEvent event) {
@@ -181,7 +183,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Listener for the multiple select box
-   * 
+   *
    * @param event
    */
   public void multipleListener(ValueChangeEvent event) {
@@ -196,7 +198,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Listener for the description select box
-   * 
+   *
    * @param event
    */
   public void descriptionListener(ValueChangeEvent event) {
@@ -207,7 +209,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Listener for the constraints fields
-   * 
+   *
    * @param event
    */
   public void constraintListener(ValueChangeEvent event) {
@@ -219,7 +221,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Statement getStatement() {
@@ -228,7 +230,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * setter
-   * 
+   *
    * @param statement
    */
   public void setStatement(Statement statement) {
@@ -237,7 +239,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * Return the count of the constraints
-   * 
+   *
    * @return
    */
   public int getConstraintsSize() {
@@ -246,7 +248,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public boolean isMultiple() {
@@ -255,7 +257,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * setter
-   * 
+   *
    * @param statement
    */
   public void setMultiple(boolean multiple) {
@@ -264,7 +266,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getVocabularyString() {
@@ -273,7 +275,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * setter
-   * 
+   *
    * @param statement
    */
   public void setVocabularyString(String vocabularyString) {
@@ -282,7 +284,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public VocabularyHelper getVocabularyHelper() {
@@ -291,7 +293,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * setter
-   * 
+   *
    * @param statement
    */
   public void setVocabularyHelper(VocabularyHelper vocabularyHelper) {
@@ -300,7 +302,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * setter
-   * 
+   *
    * @param statement
    */
   public void setShowRemoveWarning(boolean showRemoveWarning) {
@@ -309,7 +311,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public boolean isShowRemoveWarning() {
@@ -318,7 +320,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * setter
-   * 
+   *
    * @param level the level to set
    */
   public void setLevel(int level) {
@@ -327,7 +329,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * getter
-   * 
+   *
    * @return the level
    */
   public int getLevel() {
@@ -336,7 +338,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * getter
-   * 
+   *
    * @return the used
    */
   public boolean isUsed() {
@@ -345,7 +347,7 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /**
    * setter
-   * 
+   *
    * @param used the used to set
    */
   public void setUsed(boolean used) {
@@ -354,15 +356,16 @@ public class StatementWrapper implements Comparable<StatementWrapper>, Serializa
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   @Override
   public int compareTo(StatementWrapper o) {
-    if (getStatement().getPos() > o.getStatement().getPos())
+    if (getStatement().getPos() > o.getStatement().getPos()) {
       return 1;
-    else if (getStatement().getPos() < o.getStatement().getPos())
+    } else if (getStatement().getPos() < o.getStatement().getPos()) {
       return -1;
+    }
     return 0;
   }
 }

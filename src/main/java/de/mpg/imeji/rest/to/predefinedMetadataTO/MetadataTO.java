@@ -14,9 +14,9 @@ public abstract class MetadataTO implements Serializable {
   private static final long serialVersionUID = -6164935834371913175L;
 
   public static enum Types {
-    TEXT(TextTO.class), NUMBER(NumberTO.class), CONE_PERSON(ConePersonTO.class), DATE(DateTO.class), GEOLOCATION(
-        GeolocationTO.class), LICENSE(LicenseTO.class), LINK(LinkTO.class), PUBLICATION(
-        PublicationTO.class);
+    TEXT(TextTO.class), NUMBER(NumberTO.class), CONE_PERSON(ConePersonTO.class), DATE(
+        DateTO.class), GEOLOCATION(GeolocationTO.class), LICENSE(LicenseTO.class), LINK(
+            LinkTO.class), PUBLICATION(PublicationTO.class);
     private Class<? extends MetadataTO> clazz = null;
 
     private Types(Class<? extends MetadataTO> clazz) {
@@ -28,10 +28,11 @@ public abstract class MetadataTO implements Serializable {
     }
 
 
-    public static Class<MetadataTO> getClassOfType(URI typeUri) throws IllegalAccessException,
-        InstantiationException {
-      if (typeUri == null)
+    public static Class<MetadataTO> getClassOfType(URI typeUri)
+        throws IllegalAccessException, InstantiationException {
+      if (typeUri == null) {
         return null;
+      }
       String type = typeUri.toString();
       for (Types typezz : Types.values()) {
         Class clazz = typezz.getClazz();

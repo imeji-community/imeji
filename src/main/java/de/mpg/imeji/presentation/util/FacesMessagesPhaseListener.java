@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 /**
  * With this listener, it can be avoided that Faces Messages are lost when doing an redirect instead
  * of applying a navigation rule
- * 
+ *
  * @author Markus Haarlaender (initial creation)
  * @author $Author: mfranke $ (last modification)
  * @version $Revision: 1891 $ $LastChangedDate: 2008-12-23 11:13:59 +0100 (Di, 23 Dez 2008) $
@@ -60,7 +60,7 @@ public class FacesMessagesPhaseListener implements PhaseListener {
 
   /**
    * Clears the whole cache
-   * 
+   *
    * @param context
    */
   private void removeFromCache(FacesContext context) {
@@ -70,7 +70,7 @@ public class FacesMessagesPhaseListener implements PhaseListener {
 
   /**
    * Caches messages from current faces context to a session object
-   * 
+   *
    * @param context
    * @return
    */
@@ -99,7 +99,7 @@ public class FacesMessagesPhaseListener implements PhaseListener {
 
   /**
    * Restores messages from session to faces context
-   * 
+   *
    * @param context
    */
   private void restoreMessages(FacesContext context) {

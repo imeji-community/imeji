@@ -20,13 +20,14 @@ import de.mpg.imeji.logic.vo.User;
 /**
  * Job to import files from escidoc to the internal storage. This is used when you want to switch
  * the storage from escidoc to internal
- * 
+ *
  * @author saquet
  *
  */
 public class ImportFileFromEscidocToInternalStorageJob implements Callable<Integer> {
 
-  private static final Logger LOGGER = Logger.getLogger(ImportFileFromEscidocToInternalStorageJob.class);
+  private static final Logger LOGGER =
+      Logger.getLogger(ImportFileFromEscidocToInternalStorageJob.class);
   private User user;
 
   public ImportFileFromEscidocToInternalStorageJob(User user) {
@@ -49,9 +50,8 @@ public class ImportFileFromEscidocToInternalStorageJob implements Callable<Integ
         escidoc.read(escidocUrl.toString(), out, true);
         // Upload the file in the internal storage
         if (out.toByteArray() != null) {
-          tmp =
-              TempFileUtil.createTempFile("ImportFileFromEscidocToInternalStorageJob",
-                  FilenameUtils.getExtension(item.getFilename()));
+          tmp = TempFileUtil.createTempFile("ImportFileFromEscidocToInternalStorageJob",
+              FilenameUtils.getExtension(item.getFilename()));
           FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
           UploadResult result =
               internal.upload(item.getFilename(), tmp, ObjectHelper.getId(item.getCollection()));

@@ -10,7 +10,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Element of a {@link SearchPair}, defines the index of the searched elements
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 public class SearchIndex {
   /**
    * All indexes names, searchable in imeji
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -36,7 +36,7 @@ public class SearchIndex {
 
   /**
    * Simple {@link SearchIndex} without namespace.
-   * 
+   *
    * @param name
    * @param namespace
    */
@@ -47,7 +47,7 @@ public class SearchIndex {
 
   /**
    * Construct a new {@link SearchIndex} with a name and a namespace
-   * 
+   *
    * @param name
    * @param namespace
    */
@@ -59,7 +59,7 @@ public class SearchIndex {
 
   /**
    * Construct a new {@link SearchIndex} with a name and a namespace and parent {@link SearchIndex}
-   * 
+   *
    * @param name
    * @param namespace
    * @param parent
@@ -75,7 +75,7 @@ public class SearchIndex {
   /**
    * Return all the necessary {@link SearchIndex} to search for a {@link Metadata} defined with a
    * {@link Statement}
-   * 
+   *
    * @param st
    * @return
    */

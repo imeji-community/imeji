@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java Bean for the view spaces page
- * 
+ *
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */

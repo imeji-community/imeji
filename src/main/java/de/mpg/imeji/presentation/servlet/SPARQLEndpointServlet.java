@@ -25,7 +25,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Servlet implementing a sparql end point
- * 
+ *
  * @author saquet
  *
  */
@@ -34,7 +34,7 @@ public class SPARQLEndpointServlet extends HttpServlet {
   private static final Logger LOGGER = Logger.getLogger(SPARQLEndpointServlet.class);
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 2718460776590689258L;
 

@@ -31,7 +31,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * imeji user
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -80,7 +80,7 @@ public class User implements Serializable {
   private static final Logger LOGGER = Logger.getLogger(User.class);
 
   /**
-     * 
+     *
      */
   public User() {
     this.person = ImejiFactory.newPerson();
@@ -88,7 +88,7 @@ public class User implements Serializable {
 
   /**
    * Return a clone of this user, with a new email
-   * 
+   *
    * @param email
    * @return
    */
@@ -100,10 +100,11 @@ public class User implements Serializable {
     clone.grants = new ArrayList<Grant>();
     for (Grant g : grants) {
       if (g.asGrantType() != null && g.getGrantFor() != null) {
-        if (g.getGrantFor().toString().equals(this.getId().toString()))
+        if (g.getGrantFor().toString().equals(this.getId().toString())) {
           clone.grants.add(new Grant(g.asGrantType(), clone.getId()));
-        else
+        } else {
           clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
+        }
       }
     }
     // Updates group references
@@ -179,7 +180,7 @@ public class User implements Serializable {
 
   /**
    * True if the current user is the system administrator
-   * 
+   *
    * @return
    */
   public boolean isAdmin() {

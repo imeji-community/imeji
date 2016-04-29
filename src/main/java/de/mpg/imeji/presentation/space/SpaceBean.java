@@ -47,7 +47,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Abstract bean for all collection beans
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -96,7 +96,7 @@ public abstract class SpaceBean implements Serializable {
 
   /**
    * Delete the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String delete() {
@@ -174,8 +174,9 @@ public abstract class SpaceBean implements Serializable {
 
   public List<SelectItem> getCollectionItems() {
     List<SelectItem> itemList = new ArrayList<SelectItem>();
-    for (CollectionImeji ci : collections)
+    for (CollectionImeji ci : collections) {
       itemList.add(new SelectItem(ci.getId().toString(), ci.getMetadata().getTitle()));
+    }
     return itemList;
   }
 
@@ -258,8 +259,9 @@ public abstract class SpaceBean implements Serializable {
                 .getMessage("Logo_single_upload_invalid_content_format", sessionBean.getLocale()));
           }
           FileOutputStream fos = new FileOutputStream(tmp);
-          if (fis.getName() != null)
+          if (fis.getName() != null) {
             ii.setName(fis.getName());
+          }
           if (!fis.isFormField()) {
             try {
               IOUtils.copy(in, fos);

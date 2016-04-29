@@ -32,7 +32,7 @@ import de.mpg.imeji.logic.util.TempFileUtil;
 
 /**
  * Mehtods to help wotk with images
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -50,7 +50,7 @@ public final class ImageUtils {
 
   /**
    * Resize an image (only for jpeg) to the given {@link FileResolution}
-   * 
+   *
    * @param bytes
    * @param resolution
    * @return
@@ -70,7 +70,7 @@ public final class ImageUtils {
   /**
    * Transform an image in jpeg. Useful to reduce size of thumbnail and web resolution images. If
    * the format of the image is not supported, return null
-   * 
+   *
    * @param bytes
    * @param mimeType
    * @return
@@ -110,7 +110,7 @@ public final class ImageUtils {
    * Scale a {@link BufferedImage} to new size. Is faster than the basic {@link ImageUtils}
    * .scaleImage method, has the same quality. If it is a thumbnail, cut the images to fit into the
    * raster
-   * 
+   *
    * @param image original image
    * @param size the size to be resized to
    * @param resolution the type of the image. Might be thumb or web
@@ -164,7 +164,7 @@ public final class ImageUtils {
 
   /**
    * Convenience method that returns a scaled instance of the provided {@link BufferedImage}.
-   * 
+   *
    * @param img the original image to be scaled
    * @param targetWidth the desired width of the scaled instance, in pixels
    * @param targetHeight the desired height of the scaled instance, in pixels
@@ -223,7 +223,7 @@ public final class ImageUtils {
   /**
    * Transform a image to a jpeg image. The input image must have a format supported by
    * {@link ImageIO}
-   * 
+   *
    * @param bytes
    * @return
    * @throws IOException
@@ -240,7 +240,7 @@ public final class ImageUtils {
   /**
    * Transform a image to a jpeg image. The input image must have a format supported by
    * {@link ImageIO}
-   * 
+   *
    * @param File
    * @return
    * @throws IOException
@@ -252,7 +252,7 @@ public final class ImageUtils {
 
   /**
    * Return the format of an image (jpg, tif), according to its mime-type
-   * 
+   *
    * @param mimeType
    * @return
    */
@@ -265,7 +265,7 @@ public final class ImageUtils {
 
   /**
    * TRansform a {@link BufferedImage} to a {@link Byte} array
-   * 
+   *
    * @param image
    * @param mimeType
    * @return
@@ -279,7 +279,7 @@ public final class ImageUtils {
 
   /**
    * Wrinte a {@link BufferedImage} into a File
-   * 
+   *
    * @param image
    * @param mimeType
    * @return
@@ -294,7 +294,7 @@ public final class ImageUtils {
 
   /**
    * cale the image if too big for the size
-   * 
+   *
    * @param image
    * @param resolution
    * @return
@@ -316,7 +316,7 @@ public final class ImageUtils {
   /**
    * Return the maximum size of an image according to its {@link FileResolution}. The values are
    * defined in the properties
-   * 
+   *
    * @param FileResolution
    * @return
    * @throws IOException
@@ -336,7 +336,7 @@ public final class ImageUtils {
 
   /**
    * Return the property xsd.metadata.content-category.thumbnail
-   * 
+   *
    * @return
    * @throws IOException
    * @throws URISyntaxException
@@ -347,7 +347,7 @@ public final class ImageUtils {
 
   /**
    * Return the property xsd.metadata.content-category.web-resolution
-   * 
+   *
    * @return
    * @throws IOException
    * @throws URISyntaxException
@@ -358,7 +358,7 @@ public final class ImageUtils {
 
   /**
    * Return the property xsd.metadata.content-category.original-resolution
-   * 
+   *
    * @return
    * @throws IOException
    * @throws URISyntaxException

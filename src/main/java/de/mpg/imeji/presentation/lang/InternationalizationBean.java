@@ -24,7 +24,7 @@ import de.mpg.imeji.presentation.util.CookieUtils;
 
 /**
  * Java Bean managing language features
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -68,7 +68,7 @@ public class InternationalizationBean {
 
   /**
    * Menu with first, the supported languages out of the properties, second all the iso languages
-   * 
+   *
    * @param SUPPORTED_LANGUAGES
    */
   public void initLanguagesMenu() {
@@ -89,7 +89,7 @@ public class InternationalizationBean {
   /**
    * If the user already set a lang cookie, return its value, else check the lang in the request
    * (browser dependant)
-   * 
+   *
    * @return
    */
   public static Locale getUserLocale() {
@@ -100,7 +100,7 @@ public class InternationalizationBean {
   /**
    * Get the Locale according the user request and to the supported languages in the Configuration.
    * If no valid local could be found, return English
-   * 
+   *
    * @return
    */
   public static Locale getRequestedLocale() {
@@ -125,7 +125,7 @@ public class InternationalizationBean {
 
   /**
    * True if a language (defined in iso639_1) is supported in imeji (according to the properties)
-   * 
+   *
    * @param langString
    * @return
    */
@@ -144,7 +144,7 @@ public class InternationalizationBean {
    * - the supported languages (i.e languages with a translation for labels and messages) if the
    * parameter is set to true <br/>
    * - the non supported languages if the parameter is set to false
-   * 
+   *
    * @param supported
    * @return
    */
@@ -161,7 +161,7 @@ public class InternationalizationBean {
 
   /**
    * Return the label of the language
-   * 
+   *
    * @param lang
    * @return
    */
@@ -176,7 +176,7 @@ public class InternationalizationBean {
 
   /**
    * Change the language of imeji
-   * 
+   *
    * @param languageString
    */
   private void changeLanguage(String languageString) {
@@ -192,7 +192,7 @@ public class InternationalizationBean {
 
   /**
    * Listener when the language for imeji is changed
-   * 
+   *
    * @param event
    */
   public void currentlanguageListener(ValueChangeEvent event) {
@@ -205,7 +205,7 @@ public class InternationalizationBean {
   /**
    * Method called when the user changed the language. The new language is setted via the listener.
    * The method reload the current page
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -218,7 +218,7 @@ public class InternationalizationBean {
 
   /**
    * setter
-   * 
+   *
    * @param currentLanguage
    */
   public void setCurrentLanguage(String currentLanguage) {
@@ -227,7 +227,7 @@ public class InternationalizationBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getCurrentLanguage() {
@@ -236,7 +236,7 @@ public class InternationalizationBean {
 
   /**
    * setter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getLanguages() {
@@ -245,7 +245,7 @@ public class InternationalizationBean {
 
   /**
    * setter
-   * 
+   *
    * @param languages
    */
   public void setLanguages(List<SelectItem> languages) {
@@ -254,7 +254,7 @@ public class InternationalizationBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getInternationalizedLanguages() {
@@ -263,7 +263,7 @@ public class InternationalizationBean {
 
   /**
    * setter
-   * 
+   *
    * @param internationalizedLanguages
    */
   public void setInternationalizedLanguages(List<SelectItem> internationalizedLanguages) {

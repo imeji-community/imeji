@@ -27,7 +27,7 @@ import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all
  * metadata types.
- * 
+ *
  * @author saquet
  */
 public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Serializable {
@@ -84,7 +84,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
   /**
    * Bean for all Metadata types. This bean should have all variable that have been defined in all
    * metadata types.
-   * 
+   *
    * @param metadata
    */
   public SuperMetadataBeanTO(Metadata metadata, Statement statement) {
@@ -105,7 +105,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
    * Return the {@link Metadata} which has been used to initialize this {@link SuperMetadataBeanTO}
    * Not to use to save the {@link SuperMetadataBeanTO} as a {@link Metadata} in the database. In
    * this case use the asMetadata() method
-   * 
+   *
    * @return
    */
   @JsonIgnore
@@ -116,7 +116,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
   /**
    * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI
    * representation
-   * 
+   *
    * @return
    */
   @JsonIgnore
@@ -127,7 +127,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getLabel() {
@@ -136,7 +136,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * setter
-   * 
+   *
    * @param label
    */
   public void setLabel(String label) {
@@ -146,7 +146,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getPos() {
@@ -155,7 +155,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * setter
-   * 
+   *
    * @param pos
    */
   public void setPos(int pos) {
@@ -164,7 +164,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * setter
-   * 
+   *
    * @param parent the parent to set
    */
   public void setParent(SuperMetadataBeanTO parent) {
@@ -173,7 +173,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * getter
-   * 
+   *
    * @return the parent
    */
   public SuperMetadataBeanTO getParent() {
@@ -182,7 +182,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * getter
-   * 
+   *
    * @return the hierarchyLevel
    */
 
@@ -194,7 +194,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * getter
-   * 
+   *
    * @return the statement
    */
   public Statement getStatement() {
@@ -203,7 +203,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * setter
-   * 
+   *
    * @param statement the statement to set
    */
   public void setStatement(Statement statement) {
@@ -217,7 +217,7 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   /**
    * Return the higher parent
-   * 
+   *
    * @return
    */
   public SuperMetadataBeanTO lastParent() {
@@ -295,14 +295,16 @@ public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Ser
 
   @Override
   public int compareTo(SuperMetadataBeanTO o) {
-    if (statement.getPos() > o.getStatement().getPos())
+    if (statement.getPos() > o.getStatement().getPos()) {
       return 1;
-    else if (statement.getPos() < o.getStatement().getPos())
+    } else if (statement.getPos() < o.getStatement().getPos()) {
       return -1;
-    if (getPos() > o.getPos())
+    }
+    if (getPos() > o.getPos()) {
       return 1;
-    else if (getPos() < o.getPos())
+    } else if (getPos() < o.getPos()) {
       return -1;
+    }
     return 0;
   }
 

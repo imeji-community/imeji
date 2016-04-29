@@ -36,7 +36,7 @@ import de.mpg.imeji.presentation.util.VocabularyHelper;
 
 /**
  * Java Bean for the create Collection Page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -74,7 +74,7 @@ public class CreateCollectionBean extends CollectionBean {
 
   /**
    * Method for save button. Create the {@link CollectionImeji} according to the form
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -92,7 +92,7 @@ public class CreateCollectionBean extends CollectionBean {
 
   /**
    * Method for save&editProfile button. Create the {@link CollectionImeji} according to the form
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -111,7 +111,7 @@ public class CreateCollectionBean extends CollectionBean {
 
   /**
    * Create the collection and its profile
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -163,7 +163,7 @@ public class CreateCollectionBean extends CollectionBean {
 
   /**
    * Return the link for the Cancel button
-   * 
+   *
    * @return
    */
   public String getCancel() {

@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link MetadataProfile}
- * 
+ *
  * @author saquet
  */
 public class RDFProfileExport extends RDFExport {

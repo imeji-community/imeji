@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
 
 /**
  * Business Controller for {@link MetadataProfile}
- * 
+ *
  * @author bastiens
  *
  */
@@ -31,7 +31,7 @@ public class MetadataProfileBusinessController {
 
   /***
    * Create default profile.
-   * 
+   *
    * @return default metadata profile
    * @throws ImejiException
    **/
@@ -69,7 +69,7 @@ public class MetadataProfileBusinessController {
 
   /**
    * Find default profile.
-   * 
+   *
    * @return default metadata profile
    * @throws ImejiException
    */

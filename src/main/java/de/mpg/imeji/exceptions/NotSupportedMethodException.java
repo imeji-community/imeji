@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.mpg.imeji.exceptions;
 
@@ -7,8 +7,8 @@ public class NotSupportedMethodException extends ImejiException {
 
 
   /**
-	 * 
-	 */
+   * 
+   */
   private static final long serialVersionUID = -474498315581861322L;
 
   public NotSupportedMethodException() {

@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Validator} for {@link CollectionImeji}
- * 
+ *
  * @author saquet
  *
  */
@@ -53,7 +53,7 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
 
   /**
    * True if the {@link User} exists
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -65,7 +65,7 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
 
   /**
    * Is true if the Email is valid
-   * 
+   *
    * @return
    */
   public static boolean isValidEmail(String email) {

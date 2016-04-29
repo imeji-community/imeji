@@ -56,7 +56,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Method called from the html page
-   * 
+   *
    * @return
    */
   public String getInit() {
@@ -81,7 +81,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Retrieve the current user
-   * 
+   *
    * @throws Exception
    */
   public void retrieveUser() throws Exception {
@@ -95,7 +95,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Change the password of the user
-   * 
+   *
    * @throws Exception
    */
   public void changePassword() throws Exception {
@@ -120,7 +120,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Generate a new API Key, and update the user
-   * 
+   *
    * @throws ImejiException
    * @throws NoSuchAlgorithmException
    * @throws UnsupportedEncodingException
@@ -136,7 +136,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Add a new empty organization
-   * 
+   *
    * @param index
    */
   public void addOrganization(int index) {
@@ -146,7 +146,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Remove an nth organization
-   * 
+   *
    * @param index
    */
   public void removeOrganization(int index) {
@@ -158,7 +158,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Toggle the Admin Role of the {@link User}
-   * 
+   *
    * @throws Exception
    */
   public void toggleAdmin() throws Exception {
@@ -178,7 +178,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Toggle the create collction role of the {@link User}
-   * 
+   *
    * @throws Exception
    */
   public void toggleCreateCollection() throws Exception {
@@ -196,7 +196,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Update the user in jena
-   * 
+   *
    * @throws ImejiException
    * @throws IOException
    */
@@ -216,7 +216,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Reload the page with the current user
-   * 
+   *
    * @throws IOException
    */
   private void reloadPage() throws IOException {
@@ -225,7 +225,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * return the URL of the current user
-   * 
+   *
    * @return
    */
   public String getUserPageUrl() {

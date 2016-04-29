@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 
 /**
  * Result {@link Object} for {@link JenaSearch}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -30,7 +30,7 @@ public class SearchResult {
    * Create a new {@link SearchResult} from a {@link List} of String, and sort it if a
    * {@link SortCriterion} has been defined <br/>
    * Sorting not made on {@link Jena} level, for performance purpose
-   * 
+   *
    * @param unsortedResults
    * @param sort
    */

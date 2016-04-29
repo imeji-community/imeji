@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 
 /**
  * {@link Validator} for a {@link Metadata}. Only working with profile
- * 
+ *
  * @author saquet
  *
  */
@@ -44,7 +44,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Validate the {@link Metadata} for the differents types
-   * 
+   *
    * @param md
    * @param s
    * @return
@@ -129,7 +129,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * True if the String is valid Date
-   * 
+   *
    * @param dateString
    * @return
    */
@@ -150,7 +150,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Check if the value is allowed according the literal constraints
-   * 
+   *
    * @param value
    * @param s
    * @return
@@ -167,7 +167,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Check if the value is allowed according the literal constraints
-   * 
+   *
    * @param value
    * @param s
    * @return
@@ -181,7 +181,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Check if the value is allowed according the literal constraints
-   * 
+   *
    * @param value
    * @param s
    * @return
@@ -195,7 +195,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Test if the {@link Collection} contains the {@link String}
-   * 
+   *
    * @param l
    * @param value
    * @return
@@ -211,7 +211,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Test if the {@link Collection} contains the {@link Double}
-   * 
+   *
    * @param l
    * @param value
    * @return
@@ -227,7 +227,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Test if the {@link Collection} contains the {@link URI}
-   * 
+   *
    * @param l
    * @param value
    * @return

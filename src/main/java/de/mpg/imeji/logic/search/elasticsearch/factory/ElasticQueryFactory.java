@@ -37,16 +37,16 @@ import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Factory to create an ElasticSearch query from the {@link SearchQuery}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticQueryFactory {
   private static final Logger LOGGER = Logger.getLogger(ElasticQueryFactory.class);
 
   /**
    * Build a {@link QueryBuilder} from a {@link SearchQuery}
-   * 
+   *
    * @param query
    * @return
    * @return
@@ -59,7 +59,7 @@ public class ElasticQueryFactory {
 
   /**
    * The {@link QueryBuilder} with the search query
-   * 
+   *
    * @param query
    * @return
    */
@@ -72,7 +72,7 @@ public class ElasticQueryFactory {
 
   /**
    * Build a query for the status
-   * 
+   *
    * @param query
    * @param user
    * @return
@@ -95,7 +95,7 @@ public class ElasticQueryFactory {
 
   /**
    * Check if at least on {@link SearchPair} is related to the status. If yes, return true
-   * 
+   *
    * @param elements
    * @return
    */
@@ -113,7 +113,7 @@ public class ElasticQueryFactory {
 
   /**
    * Return the query for space
-   * 
+   *
    * @param spaceId
    * @return
    */
@@ -127,7 +127,7 @@ public class ElasticQueryFactory {
 
   /**
    * Build a {@link QueryBuilder} from a list of {@link SearchElement}
-   * 
+   *
    * @param elements
    * @return
    */
@@ -157,7 +157,7 @@ public class ElasticQueryFactory {
 
   /**
    * Build the security Query according to the user.
-   * 
+   *
    * @param user
    * @return
    */
@@ -177,7 +177,7 @@ public class ElasticQueryFactory {
   /**
    * Build a Filter for a container (album or folder): if the containerUri is not null, search
    * result will be filter to this only container
-   * 
+   *
    * @param containerUri
    * @return
    */
@@ -195,7 +195,7 @@ public class ElasticQueryFactory {
 
   /**
    * Build the query with all Read grants
-   * 
+   *
    * @param grants
    * @return
    */
@@ -225,7 +225,7 @@ public class ElasticQueryFactory {
   /**
    * Create a QueryBuilder with a term filter (see
    * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-filter.html)
-   * 
+   *
    * @param pair
    * @return
    */
@@ -433,7 +433,7 @@ public class ElasticQueryFactory {
 
   /**
    * TODO Index Labels of metadata to search for metadata by label
-   * 
+   *
    * @param md
    * @return
    */
@@ -444,7 +444,7 @@ public class ElasticQueryFactory {
 
   /**
    * Create a {@link QueryBuilder} for a {@link SearchMetadata}
-   * 
+   *
    * @param md
    * @return
    */
@@ -492,7 +492,7 @@ public class ElasticQueryFactory {
 
   /**
    * Create a {@link QueryBuilder}
-   * 
+   *
    * @param index
    * @param value
    * @param operator
@@ -531,7 +531,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for a date saved as a time (i.e) in ElasticSearch
-   * 
+   *
    * @param field
    * @param dateString
    * @param operator
@@ -564,7 +564,7 @@ public class ElasticQueryFactory {
 
   /**
    * Create a {@link QueryBuilder} - used to sarch for metadata which are defined with a statement
-   * 
+   *
    * @param index
    * @param value
    * @param operator
@@ -580,7 +580,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for the exact value of a field
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -591,7 +591,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for a match (not the exact value)
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -605,7 +605,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for value greater than the searched value
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -619,7 +619,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for value smaller than searched value
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -645,7 +645,7 @@ public class ElasticQueryFactory {
 
   /**
    * Add NOT filter to the {@link Filter} if not is true
-   * 
+   *
    * @param f
    * @param not
    * @return
@@ -656,7 +656,7 @@ public class ElasticQueryFactory {
 
   /**
    * Return a query which find nothing
-   * 
+   *
    * @return
    */
   private static QueryBuilder matchNothing() {
@@ -665,7 +665,7 @@ public class ElasticQueryFactory {
 
   /**
    * True if the uri is an uri folder
-   * 
+   *
    * @param uri
    * @return
    */
@@ -675,7 +675,7 @@ public class ElasticQueryFactory {
 
   /**
    * Return all Grants (included user group grants) of the user
-   * 
+   *
    * @param user
    * @return
    */

@@ -22,9 +22,9 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Search} implemtation for ElasticSearch
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticSearch implements Search {
 
@@ -33,7 +33,7 @@ public class ElasticSearch implements Search {
 
   /**
    * Construct an Elastic Search Query for on data type. If type is null, search for all types
-   * 
+   *
    * @param type
    * @throws ImejiException
    */
@@ -97,7 +97,7 @@ public class ElasticSearch implements Search {
 
   /**
    * Get the datatype to search for
-   * 
+   *
    * @return
    */
   private String[] getTypes() {
@@ -109,7 +109,7 @@ public class ElasticSearch implements Search {
 
   /**
    * Transform a {@link SearchResponse} to a {@link SearchResult}
-   * 
+   *
    * @param resp
    * @return
    */

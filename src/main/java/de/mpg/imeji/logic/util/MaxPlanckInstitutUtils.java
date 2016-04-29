@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Utility Class for specific method for the Max Planck Institute
- * 
+ *
  * @author saquet
  *
  */
@@ -40,7 +40,7 @@ public class MaxPlanckInstitutUtils {
 
   /**
    * Return the name of the Max Planck Institute according to the IP. If not found, return null
-   * 
+   *
    * @param ip
    * @return
    */
@@ -61,7 +61,7 @@ public class MaxPlanckInstitutUtils {
 
   /**
    * Return the Id of the
-   * 
+   *
    * @param userIP
    * @return
    */
@@ -82,7 +82,7 @@ public class MaxPlanckInstitutUtils {
 
   /**
    * Get the file with the the mpis and their IPs, and return it as a {@link Map}
-   * 
+   *
    * @return
    */
   public static void initMPINameMap() {
@@ -96,7 +96,7 @@ public class MaxPlanckInstitutUtils {
 
   /**
    * Get the file with the the mpis and their IPs, and return it as a {@link Map}
-   * 
+   *
    * @return
    */
   public static void initIdMap() {
@@ -112,7 +112,7 @@ public class MaxPlanckInstitutUtils {
    * Return a map from the file MAX_PLANCK_INSTITUTES_IP_URL with the chosen key/value. <br/>
    * The format of the file is following: <br/>
    * line;ip_range;institute_id;institute_city;institute_name
-   * 
+   *
    * @return
    */
   private static Map<String, String> readMPIMap(int keyPosition, int valuePosition) {

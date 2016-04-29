@@ -7,7 +7,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * The {@link RDF}.type of an object.
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

@@ -12,7 +12,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Uitlity class to {@link Metadata}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -22,7 +22,7 @@ public class MetadataHelper {
   /**
    * Return true if the {@link Metadata} has an empty value (which shouldn't be store in the
    * database)
-   * 
+   *
    * @param md
    * @return
    */
@@ -32,7 +32,7 @@ public class MetadataHelper {
 
   /**
    * Set the CoNE id of a {@link ConePerson}
-   * 
+   *
    * @param md
    * @return
    */

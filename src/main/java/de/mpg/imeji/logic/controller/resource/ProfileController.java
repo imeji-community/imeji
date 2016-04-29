@@ -37,9 +37,9 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.DateHelper;
@@ -47,7 +47,7 @@ import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Controller for {@link MetadataProfile}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -66,7 +66,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Create a new Profile.
-   * 
+   *
    * @param p
    * @param user
    * @return
@@ -83,7 +83,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Retrieve a {@link User} by its id
-   * 
+   *
    * @param id
    * @param user
    * @return
@@ -95,7 +95,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Retrieve a {@link User} by its {@link URI}
-   * 
+   *
    * @param uri
    * @param user
    * @return
@@ -114,7 +114,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Retrieve a {@link User} by its {@link URI}
-   * 
+   *
    * @param collectionId
    * @param user
    * @return
@@ -138,7 +138,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Retrieve the {@link MetadataProfile} of an {@link Item} TODO: Use Search for better performance
-   * 
+   *
    * @param itemId
    * @param user
    * @return
@@ -157,7 +157,7 @@ public class ProfileController extends ImejiController {
   /**
    * Updates a collection -Logged in users: --User is collection owner --OR user is collection
    * editor
-   * 
+   *
    * @param mdp
    * @param user
    * @throws ImejiException
@@ -171,7 +171,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Release a {@link MetadataProfile}
-   * 
+   *
    * @param mdp
    * @param user
    * @throws ImejiException
@@ -183,7 +183,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Release a {@link MetadataProfile}
-   * 
+   *
    * @param id
    * @param user
    * @throws ImejiException
@@ -194,7 +194,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Delete a {@link MetadataProfile} from within a collection
-   * 
+   *
    * @param mdp
    * @param user
    * @throws ImejiException
@@ -215,7 +215,7 @@ public class ProfileController extends ImejiController {
   /**
    * Delete a {@link MetadataProfile} , checks if there are any references in other collections
    * before deletion
-   * 
+   *
    * @param mdp
    * @param user
    * @throws ImejiException
@@ -226,7 +226,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Withdraw a {@link MetadataProfile}
-   * 
+   *
    * @param mdp
    * @param user
    * @throws ImejiException
@@ -242,7 +242,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Search for a profile
-   * 
+   *
    * @param query
    * @param user
    * @return
@@ -259,7 +259,7 @@ public class ProfileController extends ImejiController {
   /**
    * Search all profile allowed for the current user. Sorted by profile name, query parameter
    * possible.
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -276,7 +276,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Search all profile allowed for the current user, Sorted by profile name, no query parameter
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -319,18 +319,18 @@ public class ProfileController extends ImejiController {
   }
 
   /*
-   * 
+   *
    * /** Load {@link MetadataProfile} defined in a {@link List} of uris. Don't load the {@link Item}
    * contained in the {@link MetadataProfile}
-   * 
+   *
    * @param uris
-   * 
+   *
    * @param limit
-   * 
+   *
    * @param offset
-   * 
+   *
    * @return
-   * 
+   *
    * @throws ImejiException
    */
   public Collection<MetadataProfile> retrieveLazy(List<String> uris, int limit, int offset,

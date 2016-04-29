@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Utility class to read property files in Tomcat and JBoss application
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -39,7 +39,7 @@ public class PropertyReader {
    * system properties. If the requested property could not be obtained from the system properties
    * the escidoc property file is accessed. (For details on access to the properties file see class
    * description.)
-   * 
+   *
    * @param key The key of the property.
    * @return The value of the property.
    * @throws IOException
@@ -72,7 +72,7 @@ public class PropertyReader {
    * Load the properties from the location defined by the system property
    * <code>pubman.properties.file</code>. If this property is not set the default file path
    * <code>pubman.properties</code> is used.
-   * 
+   *
    * @throws IOException If the properties file could not be found neither in the file system nor in
    *         the classpath.
    * @throws URISyntaxException
@@ -109,7 +109,7 @@ public class PropertyReader {
   /**
    * Retrieves the Inputstream of the given file path. First the resource is searched in the file
    * system, if this fails it is searched using the classpath.
-   * 
+   *
    * @param filepath The path of the file to open.
    * @return The inputstream of the given file path.
    * @throws IOException If the file could not be found neither in the file system nor in the
@@ -150,7 +150,7 @@ public class PropertyReader {
 
   /**
    * Clean up properties
-   * 
+   *
    * @param props
    * @return
    */

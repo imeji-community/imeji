@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export data as they are in stored in Jena
- * 
+ *
  * @author saquet
  */
 public class JenaExport extends Export {
@@ -46,7 +46,7 @@ public class JenaExport extends Export {
 
   /**
    * Create a model with all Search results
-   * 
+   *
    * @param sr
    * @return
    */
@@ -71,7 +71,7 @@ public class JenaExport extends Export {
 
   /**
    * Write all properties of a resource in the model
-   * 
+   *
    * @param r
    * @param m
    * @return

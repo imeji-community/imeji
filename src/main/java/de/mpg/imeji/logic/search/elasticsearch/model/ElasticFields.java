@@ -2,9 +2,9 @@ package de.mpg.imeji.logic.search.elasticsearch.model;
 
 /**
  * Indexes for elasticSearch
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public enum ElasticFields {
   ALL, ID, NAME, DESCRIPTION, SPACE, COLLECTIONSINSPACE, STATUS, LASTEDITOR, CREATOR, CREATED, MODIFIED, MEMBER, PID, FILETYPE, SIZE, FOLDER, PROFILE, ALBUM, CHECKSUM, FILENAME, METADATA, METADATA_TEXT(
@@ -42,7 +42,7 @@ public enum ElasticFields {
 
   /**
    * Give a specific index value
-   * 
+   *
    * @param index
    */
   private ElasticFields(String index) {
@@ -52,7 +52,7 @@ public enum ElasticFields {
 
   /**
    * Give a specific index value and add an exact field
-   * 
+   *
    * @param index
    */
   private ElasticFields(String index, boolean exact) {
@@ -62,7 +62,7 @@ public enum ElasticFields {
 
   /**
    * Get the Elastic Saerch index
-   * 
+   *
    * @return
    */
   public String field() {
@@ -71,7 +71,7 @@ public enum ElasticFields {
 
   /**
    * Return the field to search for the exact value
-   * 
+   *
    * @return
    */
   public String fieldExact() {

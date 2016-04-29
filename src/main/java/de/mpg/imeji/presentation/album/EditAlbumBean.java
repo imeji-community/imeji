@@ -23,7 +23,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Bean for the edit album page
- * 
+ *
  * @author bastiens
  *
  */
@@ -37,6 +37,7 @@ public class EditAlbumBean extends AlbumBean implements Serializable {
 
 
 
+  @Override
   @PostConstruct
   public void init() {
     try {
@@ -58,7 +59,7 @@ public class EditAlbumBean extends AlbumBean implements Serializable {
 
   /**
    * Save (create or update) the {@link Album} in the database
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -70,7 +71,7 @@ public class EditAlbumBean extends AlbumBean implements Serializable {
 
   /**
    * Update the {@link Album} in the dabatase with the values defined in this {@link AlbumBean}
-   * 
+   *
    * @return
    * @throws Exception
    */

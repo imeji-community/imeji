@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * TO for ContainerAdditionalInfo
- * 
+ *
  * @author bastiens
  *
  */

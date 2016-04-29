@@ -47,7 +47,7 @@ import de.mpg.imeji.presentation.util.CookieUtils;
 
 /**
  * The session Bean for imeji.
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -159,7 +159,7 @@ public class SessionBean implements Serializable {
    * 2- Reading the Cookie<br/>
    * If the cookie is not null, this value is used, otherwise, a new cookie is created with the
    * value from the property file
-   * 
+   *
    * @param value
    * @param cookieName
    * @param propertyName
@@ -186,7 +186,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Return the version of the software
-   * 
+   *
    * @return
    */
   public String getVersion() {
@@ -195,7 +195,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Return the name of the current application (defined in the property)
-   * 
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
@@ -225,7 +225,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public Locale getLocale() {
@@ -234,7 +234,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Setter
-   * 
+   *
    * @param userLocale
    */
   public void setLocale(final Locale userLocale) {
@@ -243,7 +243,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Get the context of the images (item, collection, album)
-   * 
+   *
    * @return
    */
   public String getSelectedImagesContext() {
@@ -252,7 +252,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param selectedImagesContext
    */
   public void setSelectedImagesContext(String selectedImagesContext) {
@@ -283,7 +283,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Page getCurrentPage() {
@@ -292,7 +292,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param currentPage
    */
   public void setCurrentPage(Page currentPage) {
@@ -301,7 +301,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<String> getSelected() {
@@ -310,7 +310,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param selected
    */
   public void setSelected(List<String> selected) {
@@ -319,25 +319,17 @@ public class SessionBean implements Serializable {
 
   /**
    * Return the number of item selected
-   * 
+   *
    * @return
    */
   public int getSelectedSize() {
     return selected.size();
   }
 
-  /**
-   * Add item to selected
-   * 
-   * @return
-   */
-  public void addToSelected(String selection) {
-    selected.add(selection);
-  }
 
   /**
    * setter
-   * 
+   *
    * @param activeAlbum
    */
   public void setActiveAlbum(Album activeAlbum) {
@@ -346,7 +338,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Album getActiveAlbum() {
@@ -359,7 +351,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @return
    */
   public String getActiveAlbumId() {
@@ -368,7 +360,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getActiveAlbumSize() {
@@ -377,7 +369,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public Map<URI, MetadataProfile> getProfileCached() {
@@ -386,7 +378,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Setter
-   * 
+   *
    * @param profileCached
    */
   public void setProfileCached(Map<URI, MetadataProfile> profileCached) {
@@ -410,7 +402,7 @@ public class SessionBean implements Serializable {
   /**
    * Check if the selected CSS is correct according to the configuration value. If errors are found,
    * then change the selected CSS
-   * 
+   *
    * @param defaultCss - the value of the default css in the config
    * @param alternativeCss - the value of the alternative css in the config
    */
@@ -431,7 +423,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Get the the selected {@link Style}
-   * 
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
@@ -442,7 +434,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Toggle the selected css
-   * 
+   *
    * @return
    */
   public void toggleCss() {
@@ -491,7 +483,7 @@ public class SessionBean implements Serializable {
   /**
    * Return the Institute of the current {@link User} according to his IP. IMPORTANT: works only for
    * Max Planck Institutes IPs.
-   * 
+   *
    * @return
    */
   public String getInstituteNameByIP() {
@@ -504,7 +496,7 @@ public class SessionBean implements Serializable {
   /**
    * Return the Institute of the current {@link User} according to his IP. IMPORTANT: works only for
    * Max Planck Institutes IPs.
-   * 
+   *
    * @return
    */
   public String getInstituteIdByIP() {
@@ -516,7 +508,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Return the suffix of the email of the user
-   * 
+   *
    * @return
    */
   public String getInstituteByUser() {
@@ -548,7 +540,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Read the IP of the current User
-   * 
+   *
    * @return
    */
   private String readUserIp() {
@@ -631,7 +623,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Logout and redirect to the home page
-   * 
+   *
    * @throws IOException
    */
   private void logoutFromSpot() {
@@ -659,7 +651,7 @@ public class SessionBean implements Serializable {
   /**
    * True if the current user has either right to create a collection or to upload items in at least
    * one collection
-   * 
+   *
    * @return
    */
   public boolean isHasUploadRights() {

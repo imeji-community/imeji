@@ -48,7 +48,7 @@ import de.mpg.j2j.helper.J2JHelper;
 /**
  * CRUD controller for {@link CollectionImeji}, plus search mehtods related to
  * {@link CollectionImeji}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -73,7 +73,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Creates a new collection. - Add a unique id - Write user properties
-   * 
+   *
    * @param c
    * @param p
    * @param user
@@ -134,7 +134,7 @@ public class CollectionController extends ImejiController {
   /**
    * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}: slow for huge
    * {@link CollectionImeji})
-   * 
+   *
    * @param uri
    * @param user
    * @return
@@ -146,7 +146,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Retrieve the {@link CollectionImeji} without its {@link Item}
-   * 
+   *
    * @param uri
    * @param user
    * @return
@@ -159,7 +159,7 @@ public class CollectionController extends ImejiController {
   /**
    * Load {@link CollectionImeji} defined in a {@link List} of uris. Don't load the {@link Item}
    * contained in the {@link CollectionImeji}
-   * 
+   *
    * @param uris
    * @param limit
    * @param offset
@@ -176,7 +176,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Prepare the list of {@link Collection} which is going to be retrieved
-   * 
+   *
    * @param uris
    * @param limit
    * @param offset
@@ -194,7 +194,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Retrieve all {@link CollectionImeji} (all status, all users) in imeji
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -207,7 +207,7 @@ public class CollectionController extends ImejiController {
   /**
    * Update a {@link CollectionImeji} (inclusive its {@link Item}: slow for huge
    * {@link CollectionImeji})
-   * 
+   *
    * @param ic
    * @param user
    * @throws ImejiException
@@ -221,7 +221,7 @@ public class CollectionController extends ImejiController {
   /**
    * Update a {@link CollectionImeji} (inclusive its {@link Item}: slow for huge
    * {@link CollectionImeji}) TODO remove if possible
-   * 
+   *
    * @param ic
    * @param user
    * @throws ImejiException
@@ -235,7 +235,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Update a {@link CollectionImeji} (with its Logo)
-   * 
+   *
    * @param ic
    * @param hasgrant
    * @throws ImejiException
@@ -249,7 +249,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Update the {@link CollectionImeji} but not iths {@link Item}
-   * 
+   *
    * @param ic
    * @param user
    * @throws ImejiException
@@ -296,7 +296,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Update the {@link CollectionImeji} but not iths {@link Item} TODO : remove if possible
-   * 
+   *
    * @param ic
    * @param user
    * @throws ImejiException
@@ -311,7 +311,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Delete a {@link CollectionImeji} and all its {@link Item}
-   * 
+   *
    * @param collection
    * @param user
    * @throws ImejiException
@@ -365,7 +365,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Release a {@link CollectionImeji} and all its {@link Item}
-   * 
+   *
    * @param collection
    * @param user
    * @throws ImejiException
@@ -406,7 +406,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Withdraw a {@link CollectionImeji} and all its {@link Item}
-   * 
+   *
    * @param coll
    * @throws ImejiException
    */
@@ -434,15 +434,17 @@ public class CollectionController extends ImejiController {
           && AuthUtil.staticAuth().administrate(user, coll.getProfile().toString())) {
         // Withdraw profile
         ProfileController pc = new ProfileController();
-        if (!pc.isReferencedByOtherResources(coll.getProfile().toString(), coll.getId().toString()))
+        if (!pc.isReferencedByOtherResources(coll.getProfile().toString(),
+            coll.getId().toString())) {
           pc.withdraw(pc.retrieve(coll.getProfile(), user), user);
+        }
       }
     }
   }
 
   /**
    * Search for {@link Collection}
-   * 
+   *
    * @param searchQuery
    * @param sortCri
    * @param limit
@@ -456,7 +458,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Search and Retrieve Collections
-   * 
+   *
    * @param searchQuery
    * @param sortCri
    * @param limit

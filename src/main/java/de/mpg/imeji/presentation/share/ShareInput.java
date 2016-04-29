@@ -20,7 +20,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * The Input for Share Page
- * 
+ *
  * @author bastiens
  *
  */
@@ -41,7 +41,7 @@ public class ShareInput implements Serializable {
 
   /**
    * Constructor
-   * 
+   *
    * @param objectUri
    */
   public ShareInput(String objectUri, SharedObjectType type, String profileUri, User user,
@@ -108,7 +108,7 @@ public class ShareInput implements Serializable {
 
   /**
    * Return the existing users as list of {@link ShareListItem}
-   * 
+   *
    * @return
    */
   public List<ShareListItem> getExistingUsersAsShareListItems() {
@@ -117,7 +117,7 @@ public class ShareInput implements Serializable {
 
   /**
    * Remove an unknow Email from the list (no invitation will be sent to him)
-   * 
+   *
    * @param pos
    */
   public String removeUnknownEmail(int pos) {
@@ -137,7 +137,7 @@ public class ShareInput implements Serializable {
 
   /**
    * Create a ShareListItem for an Email according to the current selected roles
-   * 
+   *
    * @param emails
    * @return
    */
@@ -156,7 +156,7 @@ public class ShareInput implements Serializable {
   /**
    * Parse the Input to a list of Emails. Add Unknown emails to externaluser list and invalid Emails
    * to invalideEntries
-   * 
+   *
    * @return
    */
   private void parseInput() {
@@ -180,7 +180,7 @@ public class ShareInput implements Serializable {
 
   /**
    * Retrieve the user. If not existing, return null
-   * 
+   *
    * @param email
    * @return
    */

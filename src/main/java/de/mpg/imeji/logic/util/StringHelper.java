@@ -11,7 +11,7 @@ import org.jsoup.safety.Whitelist;
 
 /**
  * Static functions to manipulate {@link String}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -38,7 +38,7 @@ public class StringHelper {
 
   /**
    * Encode a {@link String} to MD5
-   * 
+   *
    * @param pass
    * @return
    * @throws Exception
@@ -56,7 +56,7 @@ public class StringHelper {
 
   /**
    * Format a uri (URL): add a / if the uri doesn't end with it
-   * 
+   *
    * @return
    */
   public static String normalizeURI(String uri) {
@@ -68,7 +68,7 @@ public class StringHelper {
 
   /**
    * Format a system path
-   * 
+   *
    * @param path
    * @return
    */
@@ -82,7 +82,7 @@ public class StringHelper {
   /**
    * Transform a filename to a correct filename, which can be used by the internal storage to store
    * a file
-   * 
+   *
    * @param filename
    * @return
    * @throws UnsupportedEncodingException
@@ -99,7 +99,7 @@ public class StringHelper {
 
   /**
    * Parse the file extension from its name
-   * 
+   *
    * @param filename
    * @return
    */
@@ -122,7 +122,7 @@ public class StringHelper {
   }
 
   /**
-   * 
+   *
    * @param s
    * @return
    */

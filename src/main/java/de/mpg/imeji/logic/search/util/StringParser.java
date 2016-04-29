@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * Utility class to parse Strings
- * 
+ *
  * @author bastiens
  *
  */

@@ -17,7 +17,7 @@ import de.mpg.imeji.logic.util.UrlHelper;
 
 /**
  * Java bean for the simple search
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -31,7 +31,7 @@ public class QuickSearchBean implements Serializable {
 
   /**
    * Method when search is submitted
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -50,7 +50,7 @@ public class QuickSearchBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param searchString
    */
   public void setSearchString(String searchString) {
@@ -59,7 +59,7 @@ public class QuickSearchBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getSearchString() {

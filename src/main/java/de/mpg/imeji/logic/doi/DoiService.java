@@ -10,12 +10,12 @@ import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.doi.models.DOICollection;
 import de.mpg.imeji.logic.doi.util.DOIUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Service for using MPDL DOI Service
- * 
+ *
  * @author bastiens
  *
  */
@@ -27,7 +27,7 @@ public final class DoiService {
 
   /**
    * Add a DOI to a {@link CollectionImeji}
-   * 
+   *
    * @param coll
    * @param user
    * @throws ImejiException
@@ -43,7 +43,7 @@ public final class DoiService {
   }
 
   /**
-   * 
+   *
    * @param doi
    * @param collection
    * @param user
@@ -58,7 +58,7 @@ public final class DoiService {
 
   /**
    * Get a DOI for a {@link CollectionImeji}
-   * 
+   *
    * @param col
    * @throws Exception
    */
@@ -73,7 +73,7 @@ public final class DoiService {
 
   /**
    * Valid if the user is allowed to add a DOI to this Collection
-   * 
+   *
    * @param coll
    * @param user
    * @throws ImejiException

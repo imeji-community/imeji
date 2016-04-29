@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * An invitation sent by a user to another user for a Object with some roles. Invitation ids follow
  * the pattern: invitation:{inviteeEmail}:{objectUri}
- * 
+ *
  * @author bastiens
  *
  */
@@ -19,7 +19,7 @@ public final class Invitation implements Serializable {
 
   /**
    * Create a new Invitation
-   * 
+   *
    * @param invitor
    * @param invitee
    * @param objectUri

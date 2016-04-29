@@ -73,7 +73,7 @@ public class ExportServlet extends HttpServlet {
 
   /**
    * Get the {@link SessionBean} from the {@link HttpSession}
-   * 
+   *
    * @param req
    * @param resp
    * @return
@@ -95,7 +95,7 @@ public class ExportServlet extends HttpServlet {
 
   /**
    * Get Faces Context from Filter
-   * 
+   *
    * @param request
    * @param response
    * @return

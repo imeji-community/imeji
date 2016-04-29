@@ -16,9 +16,9 @@ import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * {@link Validator} for {@link MetadataProfile}
- * 
+ *
  * @author saquet
- * 
+ *
  */
 public class ProfileValidator extends ObjectValidator implements Validator<MetadataProfile> {
 
@@ -73,7 +73,7 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
 
   /**
    * Validate the constraints according to the type of the metadata
-   * 
+   *
    * @param s
    * @throws UnprocessableError
    */

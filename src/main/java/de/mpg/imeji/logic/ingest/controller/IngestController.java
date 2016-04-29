@@ -9,7 +9,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Controller for ingest
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -31,7 +31,7 @@ public class IngestController {
 
   /**
    * Ingest items and profile. Items schema is validated against the profile
-   * 
+   *
    * @param itemListXml
    * @param profileXml
    * @throws Exception

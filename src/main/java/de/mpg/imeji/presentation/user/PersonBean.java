@@ -30,9 +30,9 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * The JSF Composite for a {@link Person}
- * 
+ *
  * @author saquet
- * 
+ *
  */
 @ManagedBean(name = "PersonBean")
 @ViewScoped
@@ -50,7 +50,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Change the person
-   * 
+   *
    * @return
    */
   public String changePerson(Object bean, int position) {
@@ -71,7 +71,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Change the {@link Organization}
-   * 
+   *
    * @param bean
    * @param positionUser
    * @param positionOrga
@@ -106,7 +106,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Load the {@link Person} with the passed uri
-   * 
+   *
    * @param uri
    * @return
    */
@@ -127,7 +127,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Parse a json from cone for a person
-   * 
+   *
    * @param jsonString
    * @return
    */
@@ -151,7 +151,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Parse a json from cone for an organization
-   * 
+   *
    * @param jsonString
    * @return
    */
@@ -187,7 +187,7 @@ public class PersonBean implements Serializable {
   /**
    * Read a JSON Object as a String, whether it is an {@link JSONArray}, a {@link String} or a
    * {@link JSONObject}
-   * 
+   *
    * @param jsonObj
    * @param jsonName
    * @return
@@ -223,7 +223,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Add an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @param authorPosition
    * @param organizationPosition
    * @return
@@ -238,22 +238,23 @@ public class PersonBean implements Serializable {
 
   /**
    * Remove an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String removeOrganization(int organizationPosition) {
     List<Organization> orgs = (List<Organization>) getPersonFromParentBean().getOrganizations();
-    if (orgs.size() > 1)
+    if (orgs.size() > 1) {
       orgs.remove(organizationPosition);
-    else
+    } else {
       BeanHelper.error(
           Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization", sb.getLocale()));
+    }
     return "";
   }
 
   /**
    * Listener
-   * 
+   *
    * @param event
    */
   public void orgaListener(ValueChangeEvent event) {
@@ -262,7 +263,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Listener
-   * 
+   *
    * @param event
    */
   public void personListener(ValueChangeEvent event) {
@@ -271,7 +272,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public String getPersonURI() {
@@ -280,7 +281,7 @@ public class PersonBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param personURI
    */
   public void setPersonURI(String personURI) {

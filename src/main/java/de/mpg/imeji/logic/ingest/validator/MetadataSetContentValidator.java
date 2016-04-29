@@ -23,19 +23,20 @@ public class MetadataSetContentValidator {
    * @throws IntrospectionException
    */
   @SuppressWarnings("unchecked")
-  public static void validate(MetadataSet metadataSet, Item item) throws Exception,
-      IntrospectionException {
-    if (metadataSet == null)
+  public static void validate(MetadataSet metadataSet, Item item)
+      throws Exception, IntrospectionException {
+    if (metadataSet == null) {
       throw new Exception(new Throwable("MetadataSet is null"));
+    }
     for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(MetadataSet.class)
         .getPropertyDescriptors()) {
-      if (propertyDescriptor.getWriteMethod() == null)
+      if (propertyDescriptor.getWriteMethod() == null) {
         continue;
+      }
       if (!notRequiredList.contains(propertyDescriptor.getName())) {
         if (metadataSet.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
-          throw new Exception(new Throwable("MetadataSet object of Item ("
-              + item.getId().toString() + ") has invalid setting for element: "
-              + propertyDescriptor.getName()));
+          throw new Exception(new Throwable("MetadataSet object of Item (" + item.getId().toString()
+              + ") has invalid setting for element: " + propertyDescriptor.getName()));
         } else {
           if (propertyDescriptor.getPropertyType() == Collection.class) {
             MetadataContentValidator.validate((Collection<Metadata>) metadataSet

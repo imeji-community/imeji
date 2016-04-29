@@ -98,7 +98,7 @@ public class EditCollectionBean extends CollectionBean {
 
   /**
    * Save Collection
-   * 
+   *
    * @return
    */
   public boolean saveEditedCollection() {
@@ -136,7 +136,7 @@ public class EditCollectionBean extends CollectionBean {
 
   /**
    * Return the link for the Cancel button
-   * 
+   *
    * @return
    */
   public String getCancel() {
@@ -151,7 +151,7 @@ public class EditCollectionBean extends CollectionBean {
 
   /**
    * Method called on the html page to trigger the initialization of the bean
-   * 
+   *
    * @return
    */
   public String getProfileSelect() {
@@ -165,7 +165,7 @@ public class EditCollectionBean extends CollectionBean {
 
   /**
    * Method for save&editProfile button. Create the {@link MetadataProfile} according to the form
-   * 
+   *
    * @return
    * @throws Exception
    */

@@ -66,7 +66,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a {@link DefaultItemTO} into an {@link ItemTO} according to {@link MetadataProfileTO}
-   * 
+   *
    * @param profileTO
    * @param easyTO
    * @param itemTO
@@ -77,7 +77,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a {@link MetadataProfile} into a {@link MetadataProfileTO}
-   * 
+   *
    * @param vo
    * @param to
    */
@@ -91,7 +91,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a list Statement in to MetadataProfileTO
-   * 
+   *
    * @param stats
    * @param to
    */
@@ -110,8 +110,9 @@ public class TransferObjectFactory {
       }
       sto.setMinOccurs(t.getMinOccurs());
       sto.setMaxOccurs(t.getMaxOccurs());
-      if (t.getParent() != null)
+      if (t.getParent() != null) {
         sto.setParentStatementId(CommonUtils.extractIDFromURI(t.getParent()));
+      }
       sto.setUseInPreview(t.isPreview());
       to.getStatements().add(sto);
     }
@@ -120,7 +121,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer an CollectionImeji to a CollectionTO
-   * 
+   *
    * @param vo
    * @param to
    */
@@ -135,7 +136,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer an Album to an AlbumTO
-   * 
+   *
    * @param vo
    * @param to
    */
@@ -145,7 +146,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a container to a containerTO
-   * 
+   *
    * @param vo
    * @param to
    */
@@ -163,7 +164,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a list of ContainerAdditionalInfo to a list of ContainerAdditionalInformationTO
-   * 
+   *
    * @param vos
    * @return
    */
@@ -179,7 +180,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a {@link User} to a {@link UserTO}
-   * 
+   *
    * @param vo
    * @param to
    */
@@ -192,7 +193,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a {@link Person} into a {@link PersonTO}
-   * 
+   *
    * @param p
    * @param pto
    */
@@ -215,7 +216,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer a {@link Person} into a {@link DefaultConePersonTO}
-   * 
+   *
    * @param p
    * @param pTO
    */
@@ -231,7 +232,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer an {@link Organization} into a {@link DefaultOrganizationTO}
-   * 
+   *
    * @param o
    * @param oTO
    */
@@ -283,7 +284,7 @@ public class TransferObjectFactory {
 
   /**
    * Transfer an {@link Item} into a {@link ItemTO}
-   * 
+   *
    * @param vo
    * @param to
    */
@@ -327,9 +328,11 @@ public class TransferObjectFactory {
       return 0;
     } else {
       int i = 0;
-      for (Map.Entry<Integer, String> entry : positions.entrySet())
-        if (statement.equals(entry.getValue()))
+      for (Map.Entry<Integer, String> entry : positions.entrySet()) {
+        if (statement.equals(entry.getValue())) {
           i++;
+        }
+      }
       positions.put(i, statement);
       return i;
     }
@@ -338,7 +341,7 @@ public class TransferObjectFactory {
   /**
    * Transfer a {@link List} of {@link Metadata} into default Metadata json and set it to the
    * {@link DefaultItemTO}
-   * 
+   *
    * @param profile
    * @param voMds
    * @param to

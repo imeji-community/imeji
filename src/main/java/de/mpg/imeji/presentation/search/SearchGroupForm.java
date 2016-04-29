@@ -35,7 +35,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * A {@link SearchGroupForm} is a group of {@link SearchMetadataForm}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -65,7 +65,7 @@ public class SearchGroupForm {
 
   /**
    * Constructor for a {@link SearchGroup} and {@link MetadataProfile}
-   * 
+   *
    * @param searchGroup
    * @param profile
    * @param collectionId
@@ -100,7 +100,7 @@ public class SearchGroupForm {
 
   /**
    * Return the {@link SearchGroupForm} as a {@link SearchGroup}
-   * 
+   *
    * @return
    */
   public SearchGroup getAsSearchGroup() {
@@ -128,7 +128,7 @@ public class SearchGroupForm {
 
   /**
    * Validate the Search Group according to the user entries
-   * 
+   *
    * @throws UnprocessableError
    */
   public void validate() throws UnprocessableError {
@@ -147,7 +147,7 @@ public class SearchGroupForm {
 
   /**
    * Initialize the {@link Statement} for the select menu in the form
-   * 
+   *
    * @param p
    * @throws ImejiException
    */
@@ -170,7 +170,7 @@ public class SearchGroupForm {
   /**
    * Load all the {@link CollectionImeji} using a {@link MetadataProfile} and return it as menu for
    * the searchgroup
-   * 
+   *
    * @param p
    * @return
    * @throws ImejiException

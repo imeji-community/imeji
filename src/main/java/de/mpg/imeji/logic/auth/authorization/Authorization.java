@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -50,7 +50,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one {@link User}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -61,7 +61,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the {@link User} can create the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -81,7 +81,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the {@link User} can read the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -96,7 +96,7 @@ public class Authorization implements Serializable {
 
   /**
    * True if a the {@link User} has read gratn for this object
-   * 
+   *
    * @param user
    * @param obj
    * @return
@@ -114,7 +114,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the {@link User} can update the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -135,7 +135,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the {@link User} can delete the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -156,7 +156,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the {@link User} can administrate the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -174,7 +174,7 @@ public class Authorization implements Serializable {
   /**
    * Return true if the user can create content in the object. For instance, upload an item in a
    * collection, or add/remove an item to an album
-   * 
+   *
    * @param user
    * @param obj
    * @return
@@ -190,7 +190,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the user can update the content of the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -205,7 +205,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the user can delete the content of the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -223,7 +223,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return true if the user can administrate the content of the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -239,7 +239,7 @@ public class Authorization implements Serializable {
   /**
    * True if the {@link User} has the given {@link Grant} or if the {@link User} is system
    * Administrator
-   * 
+   *
    * @param user
    * @param g
    * @return
@@ -257,7 +257,7 @@ public class Authorization implements Serializable {
 
   /**
    * Create a {@link Grant} out of the {@link GrantType} and the given uri
-   * 
+   *
    * @param uri
    * @param type
    * @return
@@ -271,7 +271,7 @@ public class Authorization implements Serializable {
 
   /**
    * Return the uri which is relevant for the {@link Authorization}
-   * 
+   *
    * @param obj
    * @param hasItemGrant
    * @param getContext
@@ -319,7 +319,7 @@ public class Authorization implements Serializable {
   /**
    * Return the collection of an Item. Useful for Non Read Operation, since it is not possible to
    * give a non read grant to an item. Thus, if the authorization is called with an Item Id
-   * 
+   *
    * @param itemUri
    * @return
    */
@@ -336,14 +336,15 @@ public class Authorization implements Serializable {
   /**
    * If the Object is an {@link Item} then the {@link GrantType} must be changed to fit the
    * authorization on container level
-   * 
+   *
    * @param obj
    * @param type
    * @return
    */
   private GrantType getGrantTypeAccordingToObjectType(Object obj, GrantType type) {
-    if (obj == null)
+    if (obj == null) {
       return type;
+    }
     if (obj instanceof Item || isItemUri(obj.toString())) {
       switch (type) {
         case UPDATE:
@@ -361,7 +362,7 @@ public class Authorization implements Serializable {
 
   /**
    * True if the uri is the uri of an {@link Item}
-   * 
+   *
    * @param uri
    * @return
    */
@@ -371,7 +372,7 @@ public class Authorization implements Serializable {
 
   /**
    * True if the {@link Object} is public (i.e. has been released)
-   * 
+   *
    * @param obj
    * @return
    */
@@ -396,7 +397,7 @@ public class Authorization implements Serializable {
 
   /**
    * True if an object is discarded
-   * 
+   *
    * @param obj
    * @return
    */
@@ -420,7 +421,7 @@ public class Authorization implements Serializable {
   /**
    * True if the {@link Status} is a public status(i.e. not need to have special grants to read the
    * object)
-   * 
+   *
    * @param status
    * @return
    */
@@ -430,7 +431,7 @@ public class Authorization implements Serializable {
 
   /**
    * True if the {@link Status} is discarded status
-   * 
+   *
    * @param status
    * @return
    */

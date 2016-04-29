@@ -20,7 +20,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * An organization
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -106,12 +106,13 @@ public class Organization implements Cloneable, Serializable {
   }
 
   public int compareTo(Organization o) {
-    if (o.getPos() > this.pos)
+    if (o.getPos() > this.pos) {
       return -1;
-    else if (o.getPos() == this.pos)
+    } else if (o.getPos() == this.pos) {
       return 0;
-    else
+    } else {
       return 1;
+    }
   }
 
   public void setId(URI id) {
@@ -129,8 +130,9 @@ public class Organization implements Cloneable, Serializable {
     clone.city = this.city;
     clone.country = this.country;
     clone.description = this.description;
-    if (identifier != null && !"".equals(identifier))
+    if (identifier != null && !"".equals(identifier)) {
       clone.identifier = this.identifier;
+    }
     clone.name = this.name;
     clone.pos = this.pos;
     return clone;

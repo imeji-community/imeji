@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Factory for {@link Validator}
- * 
+ *
  * @author saquet
  *
  */
@@ -33,9 +33,9 @@ public class ValidatorFactory {
 
   /**
    * Return a new {@link Validator} according to the object class
-   * 
+   *
    * @param <T>
-   * 
+   *
    * @param t
    * @return
    */

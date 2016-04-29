@@ -27,7 +27,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java Bean for the {@link Filter}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -48,7 +48,7 @@ public class FiltersBean {
 
   /**
    * Constructor with one string query and one count (total number of elements on the current page)
-   * 
+   *
    * @param query
    * @param count
    */
@@ -82,7 +82,7 @@ public class FiltersBean {
 
   /**
    * Reset elements in the filters session
-   * 
+   *
    * @param q
    * @param filters
    */
@@ -96,7 +96,7 @@ public class FiltersBean {
 
   /**
    * Parse the query and set the Filters
-   * 
+   *
    * @param q
    * @param n
    * @param t
@@ -118,7 +118,7 @@ public class FiltersBean {
   /**
    * Define the query as new filter. If the query has been already parsed and cleaned from previous
    * filters, then the created filter is equals to the filter clicked by the user.
-   * 
+   *
    * @param q
    * @param n
    * @param t
@@ -136,7 +136,7 @@ public class FiltersBean {
 
   /**
    * Find the filters which were already defined (in previous queries)
-   * 
+   *
    * @param q
    * @param n
    * @param t
@@ -155,7 +155,7 @@ public class FiltersBean {
   /**
    * Reset the queries to remove the filters (since the complete query has been change with the new
    * filter)
-   * 
+   *
    * @param q
    * @param filters
    * @return
@@ -171,7 +171,7 @@ public class FiltersBean {
 
   /**
    * Remove the filters from a query
-   * 
+   *
    * @param q
    * @param filters
    * @return
@@ -185,7 +185,7 @@ public class FiltersBean {
 
   /**
    * Remove one filter from a query
-   * 
+   *
    * @param q
    * @param filter
    * @return
@@ -199,7 +199,7 @@ public class FiltersBean {
 
   /**
    * If q is the complete query, create a query with all information to remove the filter
-   * 
+   *
    * @param f
    * @param q
    * @return

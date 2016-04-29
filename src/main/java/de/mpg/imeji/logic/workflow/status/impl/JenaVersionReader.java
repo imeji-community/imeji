@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.workflow.status.VersionReader;
 
 /**
  * {@link VersionReader} implementation for Jena Backend
- * 
+ *
  * @author bastiens
  *
  */

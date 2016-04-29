@@ -19,9 +19,9 @@ import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * elasticsearch service for spot
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticService {
   private static Node node;
@@ -41,9 +41,9 @@ public class ElasticService {
 
   /**
    * The Types in Elasticsearch
-   * 
+   *
    * @author bastiens
-   * 
+   *
    */
   public enum ElasticTypes {
     items, folders, albums, spaces;
@@ -80,7 +80,7 @@ public class ElasticService {
   /**
    * Initialize the index. If index exists, don't create one, if not create one. Index is created
    * with DATA_ALIAS as alias
-   * 
+   *
    * @return
    */
   public synchronized static String initializeIndex() {
@@ -98,7 +98,7 @@ public class ElasticService {
   /**
    * Get the First Index pointed by the Alias. This method should be used, when there is only one
    * Index pointed by the alias (on startup for instance)
-   * 
+   *
    * @param aliasName
    * @return
    */
@@ -119,7 +119,7 @@ public class ElasticService {
 
   /**
    * Create an Index point an alias to it
-   * 
+   *
    * @return
    */
   public static String createIndexWithAlias() {
@@ -137,7 +137,7 @@ public class ElasticService {
 
   /**
    * Create a new Index (without alias)
-   * 
+   *
    * @return
    */
   public static String createIndex() {
@@ -159,7 +159,7 @@ public class ElasticService {
 
   /**
    * Atomically move the alias from the old to the new index
-   * 
+   *
    * @param oldIndex
    * @param newIndex
    */

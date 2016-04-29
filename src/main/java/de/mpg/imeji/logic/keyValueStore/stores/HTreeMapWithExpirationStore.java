@@ -12,7 +12,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 
 /**
  * Extends the HTreeMapStore to add expiration capability
- * 
+ *
  * @author bastiens
  *
  */

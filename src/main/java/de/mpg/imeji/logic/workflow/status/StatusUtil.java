@@ -4,7 +4,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 
 /**
  * Utility class for {@link Status}
- * 
+ *
  * @author bastiens
  *
  */
@@ -16,7 +16,7 @@ public class StatusUtil {
 
   /**
    * Parse a status String (for isntance http://imeji.org/terms/status#PENDING)
-   * 
+   *
    * @param s
    * @return
    */

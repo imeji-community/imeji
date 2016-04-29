@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -37,7 +37,6 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.UserGroupController;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -48,7 +47,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * JSF Bean to browse {@link UserGroup}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -70,10 +69,11 @@ public class UserGroupsBean implements Serializable {
     String back = UrlHelper.getParameterValue("back");
     backContainerUrl = back == null || "".equals(back) ? null : back;
     if (backContainerUrl != null) {
-      if (URI.create(back).getQuery() != null)
+      if (URI.create(back).getQuery() != null) {
         backContainerUrl += "&";
-      else
+      } else {
         backContainerUrl += "?";
+      }
     }
     query = q == null ? "" : q;
     doSearch();
@@ -86,15 +86,16 @@ public class UserGroupsBean implements Serializable {
     Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     try {
 
-      String redirectTo =
-          nav.getApplicationSpaceUrl() + "usergroups?q=" + query
-              + (backContainerUrl != null ? "&back=" + backContainerUrl : "");
+      String redirectTo = nav.getApplicationSpaceUrl() + "usergroups?q=" + query
+          + (backContainerUrl != null ? "&back=" + backContainerUrl : "");
 
-      if (redirectTo.endsWith("?"))
+      if (redirectTo.endsWith("?")) {
         redirectTo = redirectTo.substring(0, redirectTo.lastIndexOf("?"));
+      }
 
-      if (redirectTo.endsWith("&"))
+      if (redirectTo.endsWith("&")) {
         redirectTo = redirectTo.substring(0, redirectTo.lastIndexOf("?"));
+      }
 
       FacesContext.getCurrentInstance().getExternalContext().redirect(redirectTo);
     } catch (IOException e) {
@@ -113,21 +114,22 @@ public class UserGroupsBean implements Serializable {
 
   /**
    * Remove a {@link UserGroup}
-   * 
+   *
    * @param group
    * @return
    */
   public String remove() {
-    String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("group");
+    String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get("group");
     UserGroupController c = new UserGroupController();
     UserGroup group;
     try {
       group = c.read(id, sessionUser);
       if (group != null) {
         UserGroupController controller = new UserGroupController();
-          controller.delete(group, sessionUser);
+        controller.delete(group, sessionUser);
       }
-    }catch(Exception e){
+    } catch (Exception e) {
       BeanHelper.error("Error removing group");
       LOGGER.error(e);
     }

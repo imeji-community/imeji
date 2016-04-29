@@ -14,7 +14,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link Collection}
- * 
+ *
  * @author Friederike Kleinfercher
  */
 public class RDFCollectionExport extends RDFExport {

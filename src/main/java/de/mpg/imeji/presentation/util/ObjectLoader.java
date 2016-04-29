@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.vo.User;
  * imeji objects (item, collection, album, profile) loader. This loader should be used to loads
  * objects from a Java bean, since it include error message. Doesn't use caching (unlike
  * {@link ObjectCachedLoader})
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -35,7 +35,7 @@ public class ObjectLoader {
 
   /**
    * Load a {@link MetadataProfile}
-   * 
+   *
    * @param id
    * @param user
    * @return
@@ -53,7 +53,7 @@ public class ObjectLoader {
 
   /**
    * Write {@link NotFoundException} in JSF messages and in logs
-   * 
+   *
    * @param objectType
    * @param id
    */
@@ -64,7 +64,7 @@ public class ObjectLoader {
 
   /**
    * Write {@link Exception} in jsf messages and in logs
-   * 
+   *
    * @param e
    * @param id
    * @throws Exception

@@ -38,7 +38,7 @@ import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 
 /**
  * API Service for {@link CollectionTO}
- * 
+ *
  * @author bastiens
  *
  */
@@ -62,7 +62,7 @@ public class CollectionService implements API<CollectionTO> {
   /**
    * Read all the items of a collection according to search query. Response is done with the default
    * format
-   * 
+   *
    * @param id
    * @param u
    * @param q

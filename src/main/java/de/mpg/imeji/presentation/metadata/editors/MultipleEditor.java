@@ -13,7 +13,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Editor for multiple edit (edit selected items or edit all item of a collection)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -28,7 +28,7 @@ public class MultipleEditor extends AbstractMetadataEditor {
 
   /**
    * Editor for multiple edit (edit selected items or edit all items of a collection)
-   * 
+   *
    * @param items
    * @param profile
    * @param statement

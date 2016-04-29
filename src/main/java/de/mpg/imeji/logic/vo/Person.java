@@ -24,7 +24,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * a foaf person
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -79,10 +79,10 @@ public class Person implements Cloneable, Serializable {
   }
 
   protected void setCompleteName(String familyName, String givenName) {
-    this.completeName =
-        givenName
-            + ((givenName == null || givenName.isEmpty() || familyName == null || familyName
-                .isEmpty()) ? "" : ", ") + familyName;
+    this.completeName = givenName
+        + ((givenName == null || givenName.isEmpty() || familyName == null || familyName.isEmpty())
+            ? "" : ", ")
+        + familyName;
     this.completeName = completeName.trim();
   }
 
@@ -114,7 +114,7 @@ public class Person implements Cloneable, Serializable {
   }
 
   @XmlElements(value = @XmlElement(name = "organizationalunit",
-      namespace = "http://purl.org/escidoc/metadata/profiles/0.1/"))
+      namespace = "http://purl.org/escidoc/metadata/profiles/0.1/") )
   public Collection<Organization> getOrganizations() {
     return organizations;
   }
@@ -153,8 +153,9 @@ public class Person implements Cloneable, Serializable {
   public String getOrganizationString() {
     String s = "";
     for (Organization o : organizations) {
-      if (!"".equals(s))
+      if (!"".equals(s)) {
         s += " ,";
+      }
       s += o.getName();
     }
     return s;
@@ -162,7 +163,7 @@ public class Person implements Cloneable, Serializable {
 
   /**
    * The full text to search for this person
-   * 
+   *
    * @return
    */
   public String AsFullText() {
@@ -180,8 +181,9 @@ public class Person implements Cloneable, Serializable {
     clone.completeName = this.completeName;
     clone.familyName = this.familyName;
     clone.givenName = this.givenName;
-    if (identifier != null && !"".equals(identifier))
+    if (identifier != null && !"".equals(identifier)) {
       clone.identifier = this.identifier;
+    }
     for (Organization org : this.organizations) {
       clone.organizations.add(org.clone());
     }

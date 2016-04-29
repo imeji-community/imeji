@@ -71,7 +71,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer an {@link CollectionTO} to a {@link CollectionImeji}
-   * 
+   *
    * @param to
    * @param vo
    * @param mode
@@ -84,7 +84,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer an {@link AlbumTO} to an {@link Album}
-   * 
+   *
    * @param to
    * @param vo
    * @param mode
@@ -96,7 +96,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer the ContainerTO into a ContainerMedatata
-   * 
+   *
    * @param to
    * @param mode
    * @param u
@@ -115,7 +115,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer the list of ContainerAdditionalInformationTO to List of ContainerAdditionalInfo
-   * 
+   *
    * @param infosTO
    * @return
    */
@@ -132,7 +132,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer a {@link DefaultItemTO} to an {@link Item}
-   * 
+   *
    * @param to
    * @param vo
    * @param u
@@ -158,7 +158,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer Metadata of an {@link ItemTO} to an {@link Item}
-   * 
+   *
    * @param to
    * @param vo
    * @param mp
@@ -244,8 +244,9 @@ public class ReverseTransferObjectFactory {
             mdVO.setStatement(mds.getStatementUri());
             // set license to uri if empty
             mdVO.setLicense(isNullOrEmpty(lic) ? url : lic);
-            if (!isNullOrEmpty(url))
+            if (!isNullOrEmpty(url)) {
               mdVO.setExternalUri(URI.create(url));
+            }
             mdVO.setPos(i);
             i++;
             voMDs.add(mdVO);
@@ -282,7 +283,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer a {@link MetadataProfileTO} into a {@link MetadataProfile}
-   * 
+   *
    * @param to
    * @param vo
    * @param mode
@@ -315,7 +316,7 @@ public class ReverseTransferObjectFactory {
   /**
    * Check all item metadata statement/types: they should be presented in the MetadataProfile
    * statements
-   * 
+   *
    * @param to
    * @param mp
    * @throws de.mpg.imeji.exceptions.BadRequestException
@@ -333,7 +334,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Check that a statement exists
-   * 
+   *
    * @param statements
    * @param type
    * @param statementUri
@@ -353,7 +354,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer a {@link PersonTO} into a {@link Person}
-   * 
+   *
    * @param pto
    * @param p
    * @param mode
@@ -444,7 +445,7 @@ public class ReverseTransferObjectFactory {
 
   /**
    * Transfer a {@link DefaultItemTO} to an Item TODO Check Performance and refactor
-   * 
+   *
    * @param defaultTO
    * @param item
    * @param profileTO
@@ -458,8 +459,9 @@ public class ReverseTransferObjectFactory {
   public static void transferDefaultMetadata(DefaultItemTO defaultTO, Item item,
       MetadataProfile profile, User u, TRANSFER_MODE mode) throws ImejiException {
 
-    if (profile == null)
+    if (profile == null) {
       return;
+    }
     ItemTO itemTO = new ItemTO();
     MetadataProfileTO profileTO = new MetadataProfileTO();
     TransferObjectFactory.transferMetadataProfile(profile, profileTO);

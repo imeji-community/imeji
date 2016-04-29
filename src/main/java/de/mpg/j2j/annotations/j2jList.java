@@ -8,7 +8,7 @@ import com.hp.hpl.jena.Jena;
 
 /**
  * For persistence of {@link List} in {@link Jena}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

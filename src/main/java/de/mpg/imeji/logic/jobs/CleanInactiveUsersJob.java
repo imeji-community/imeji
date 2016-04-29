@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.vo.Item;
 /**
  * Job which read all Items, read for each {@link Item} the size of the original File, and write the
  * items in Jena back with the file size;
- * 
+ *
  * @author saquet
  *
  */

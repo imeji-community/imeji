@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 
 /**
  * Configuration done from the server (in imeji.properties)
- * 
+ *
  * @author bastiens
  *
  */
@@ -58,7 +58,7 @@ public class ImejiProperties {
 
   /**
    * Function reads each property from imeji.properties file
-   * 
+   *
    * @param key - property name
    * @return String - trimmed value of key
    */
@@ -114,7 +114,7 @@ public class ImejiProperties {
 
   /**
    * Static getter
-   * 
+   *
    * @return
    */
   public static String baseURI() {

@@ -8,7 +8,7 @@ import de.mpg.imeji.logic.vo.Person;
 
 /**
  * Validator for person
- * 
+ *
  * @author bastiens
  *
  */
@@ -44,7 +44,7 @@ public class PersonValidator extends ObjectValidator implements Validator<Person
 
   /**
    * True if the person has at least one valid org
-   * 
+   *
    * @param p
    * @return
    */
@@ -59,7 +59,7 @@ public class PersonValidator extends ObjectValidator implements Validator<Person
 
   /**
    * True if the organization has a name
-   * 
+   *
    * @param o
    * @return
    */

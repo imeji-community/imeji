@@ -4,7 +4,7 @@ import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 
 /**
  * Elastic Object for {@link ContainerAdditionalInfo}
- * 
+ *
  * @author bastiens
  *
  */

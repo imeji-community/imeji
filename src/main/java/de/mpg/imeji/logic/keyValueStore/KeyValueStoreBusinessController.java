@@ -16,7 +16,7 @@ import de.mpg.imeji.exceptions.NotFoundException;
 /**
  * Business Controller to persisted messages. This can be used to store Notifications, Invitations,
  * etc. Messages are stored in a Key/Value store
- * 
+ *
  * @author bastiens
  *
  */
@@ -43,7 +43,7 @@ public class KeyValueStoreBusinessController {
 
   /**
    * Stop all started key/values stores
-   * 
+   *
    * @throws IOException
    */
   public synchronized static void stopAllStores() {
@@ -54,7 +54,7 @@ public class KeyValueStoreBusinessController {
 
   /**
    * Get an Object from the Key/Value Store
-   * 
+   *
    * @param id
    * @return
    * @throws ImejiException
@@ -70,7 +70,7 @@ public class KeyValueStoreBusinessController {
 
   /**
    * Return all elements with a Key matching the Key pattern (according to REGEX Rules)
-   * 
+   *
    * @param keyPattern
    * @return
    * @throws ImejiException
@@ -92,7 +92,7 @@ public class KeyValueStoreBusinessController {
 
   /**
    * Put an object to the Key/Value Store
-   * 
+   *
    * @param id
    * @param o
    * @throws ImejiException
@@ -107,7 +107,7 @@ public class KeyValueStoreBusinessController {
 
   /**
    * Delete the key/value by its key
-   * 
+   *
    * @param key
    * @throws ImejiException
    */
@@ -121,7 +121,7 @@ public class KeyValueStoreBusinessController {
 
   /**
    * Create the Object from its serialized byte representation
-   * 
+   *
    * @param bytes
    * @return
    * @throws IOException
@@ -135,7 +135,7 @@ public class KeyValueStoreBusinessController {
 
   /**
    * Serialize an Object to a byte array
-   * 
+   *
    * @param obj
    * @return
    * @throws IOException

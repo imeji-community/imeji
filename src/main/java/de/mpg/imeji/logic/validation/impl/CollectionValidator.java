@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.vo.Person;
 
 /**
  * {@link Validator} for {@link CollectionImeji}
- * 
+ *
  * @author saquet
  *
  */
@@ -44,7 +44,7 @@ public class CollectionValidator extends ContainerValidator implements Validator
 
   /**
    * Validate the Persons of a {@link CollectionImeji}
-   * 
+   *
    * @param c
    */
   private void validateCollectionPersons(CollectionImeji c) {
@@ -61,7 +61,7 @@ public class CollectionValidator extends ContainerValidator implements Validator
 
   /**
    * Validate a Person
-   * 
+   *
    * @param p
    * @return
    */
@@ -81,7 +81,7 @@ public class CollectionValidator extends ContainerValidator implements Validator
 
   /**
    * If at least 1 organization doesn't have a name, add an exception
-   * 
+   *
    * @param organizations
    * @return the valid organizations
    */
@@ -95,7 +95,7 @@ public class CollectionValidator extends ContainerValidator implements Validator
 
   /**
    * Valid a DOI according to predefined pattern. If not valid, add a message to the exception
-   * 
+   *
    * @param doi
    */
   private void validateDOI(String doi) {

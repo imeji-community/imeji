@@ -17,7 +17,7 @@ import de.mpg.imeji.exceptions.ImejiException;
  * Run a {@link Transaction} in a new {@link Thread}. A new {@link Dataset} is created for this
  * thread <br/>
  * Necessary to follow the {@link Jena} per {@link Thread} Readers–writer lock
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -33,7 +33,7 @@ public class ThreadedTransaction implements Callable<Integer> {
 
   /**
    * Construct a new {@link ThreadedTransaction} for one {@link Transaction}
-   * 
+   *
    * @param transaction
    */
   public ThreadedTransaction(Transaction transaction, String tdbPath) {
@@ -43,7 +43,7 @@ public class ThreadedTransaction implements Callable<Integer> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.util.concurrent.Callable#call()
    */
   @Override
@@ -59,7 +59,7 @@ public class ThreadedTransaction implements Callable<Integer> {
 
   /**
    * If the run Method caught an Exception, throw this exception
-   * 
+   *
    * @throws Exception
    */
   public void throwException() throws ImejiException {
@@ -68,7 +68,7 @@ public class ThreadedTransaction implements Callable<Integer> {
 
   /**
    * Run a {@link ThreadedTransaction} with the {@link ExecutorService} of imeji
-   * 
+   *
    * @param t
    * @throws Exception
    */

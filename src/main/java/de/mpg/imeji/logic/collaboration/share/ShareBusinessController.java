@@ -24,7 +24,7 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 
 /**
  * Controller for {@link Grant}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -36,9 +36,9 @@ public class ShareBusinessController {
 
   /**
    * The Roles which can be shared to every object
-   * 
+   *
    * @author saquet
-   * 
+   *
    */
   public enum ShareRoles {
     READ, CREATE, EDIT_ITEM, DELETE_ITEM, EDIT, ADMIN, EDIT_PROFILE;
@@ -46,7 +46,7 @@ public class ShareBusinessController {
 
   /**
    * Share an object (Item, Collection, Album) to a {@link User}
-   * 
+   *
    * @param fromUser - The User sharing the object
    * @param toUser - The user the object is shared to
    * @param sharedObjectUri - The uri of the shared object
@@ -65,7 +65,7 @@ public class ShareBusinessController {
 
   /**
    * Share an object (Item, Collection, Album) to a {@link UserGroup}
-   * 
+   *
    * @param fromUser - The User sharing the object
    * @param toGroup - The group the object is shared to
    * @param sharedObjectUri - The uri of the shared object
@@ -84,7 +84,7 @@ public class ShareBusinessController {
   /**
    * Share an Object with its creator. Should be called when a user creates an object, to give him
    * all the grants on the created object.
-   * 
+   *
    * @param creator
    * @param sharedObjectUri
    * @param profileUri
@@ -97,7 +97,7 @@ public class ShareBusinessController {
 
   /**
    * Share an object (Item, Collection, Album) to a {@link User}
-   * 
+   *
    * @param fromUser - The User sharing the object
    * @param toUser - The user the object is shared to
    * @param sharedObjectUri - The uri of the shared object
@@ -116,7 +116,7 @@ public class ShareBusinessController {
 
   /**
    * Share an object (Item, Collection, Album) to a {@link UserGroup}
-   * 
+   *
    * @param fromUser - The User sharing the object
    * @param toGroup - The group the object is shared to
    * @param sharedObjectUri - The uri of the shared object
@@ -134,7 +134,7 @@ public class ShareBusinessController {
 
   /**
    * Transform a list of {@link ShareRoles} into a list of {@link Grant}
-   * 
+   *
    * @param roles
    * @param uri
    * @param profileUri
@@ -181,7 +181,7 @@ public class ShareBusinessController {
 
   /**
    * TRansform a list of Roles into a {@link List} of {@link String}
-   * 
+   *
    * @param roles
    * @return
    */
@@ -195,7 +195,7 @@ public class ShareBusinessController {
 
   /**
    * Transform a list of {@link Grant} into a list of {@link ShareRoles}
-   * 
+   *
    * @param grants
    * @param uri
    * @param profileUri
@@ -227,7 +227,7 @@ public class ShareBusinessController {
 
   /**
    * Add to the {@link User} the {@link List} of {@link Grant} and update the user in the database
-   * 
+   *
    * @param toUser
    * @param g
    * @throws ImejiException
@@ -244,11 +244,11 @@ public class ShareBusinessController {
   /**
    * Add to the {@link UserGroup} the {@link List} of {@link Grant} and update the user in the
    * database
-   * 
+   *
    * @param toUser
    * @param toGroup
    * @param grants
-   * 
+   *
    * @throws ImejiException
    */
   private void addGrants(User toUser, UserGroup toGroup, List<Grant> grants) throws ImejiException {
@@ -260,7 +260,7 @@ public class ShareBusinessController {
 
   /**
    * Clean all {@link Grant} for an object
-   * 
+   *
    * @param hasgrant
    * @param uri
    * @param currentUser
@@ -288,7 +288,7 @@ public class ShareBusinessController {
 
   /**
    * Clean all {@link Grant} for an object
-   * 
+   *
    * @param hasgrant
    * @param uri
    * @param currentUser
@@ -316,7 +316,7 @@ public class ShareBusinessController {
 
   /**
    * Get all Objects uri which are in this list of {@link Grant}
-   * 
+   *
    * @param grants
    * @return
    */
@@ -333,7 +333,7 @@ public class ShareBusinessController {
 
   /**
    * Return the {@link Grant} which are new for the {@link User}
-   * 
+   *
    * @param current
    * @param toAdd
    * @return
@@ -353,7 +353,7 @@ public class ShareBusinessController {
 
   /**
    * True if the {@link User} is allowed to share the {@link Grant} to another {@link User}
-   * 
+   *
    * @param user
    * @param g
    * @return
@@ -364,8 +364,9 @@ public class ShareBusinessController {
       // the user can administrate it
       List<String> c = ImejiSPARQL
           .exec(JenaCustomQueries.selectCollectionIdOfItem(g.getGrantFor().toString()), null);
-      if (!c.isEmpty())
+      if (!c.isEmpty()) {
         return AuthUtil.staticAuth().administrate(user, c.get(0));
+      }
 
     }
     return AuthUtil.staticAuth().administrate(user, g.getGrantFor());
@@ -403,7 +404,7 @@ public class ShareBusinessController {
 
   /**
    * True if ???
-   * 
+   *
    * @param userGrants
    * @param grantList
    * @return
@@ -420,7 +421,7 @@ public class ShareBusinessController {
 
   /**
    * Find the profile of a collection
-   * 
+   *
    * @param collectionUri
    * @return
    */

@@ -20,7 +20,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * {@link Metadata} for license value
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -51,8 +51,9 @@ public class License extends Metadata {
   }
 
   public String getDateString() {
-    if (date == null || date.isLenient())
+    if (date == null || date.isLenient()) {
       return "";
+    }
     return date.format(date);
   }
 

@@ -19,7 +19,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * {@link Metadata} for geolocation data
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

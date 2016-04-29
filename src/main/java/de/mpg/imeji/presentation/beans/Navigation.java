@@ -18,7 +18,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 /**
  * Defines the page names and Path for imeji. All changes here must be synchronized with
  * WEB-INF/pretty-config.xml The Pages are used by the History
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -61,7 +61,7 @@ public class Navigation implements Serializable {
 
   /**
    * Application bean managing navigation
-   * 
+   *
    * @throws Exception
    */
   public Navigation() {
@@ -236,7 +236,7 @@ public class Navigation implements Serializable {
 
   /**
    * Get the context for the context sensitive search.
-   * 
+   *
    * @return
    */
   public String getContext() {
@@ -283,7 +283,7 @@ public class Navigation implements Serializable {
 
   /**
    * An html page
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$

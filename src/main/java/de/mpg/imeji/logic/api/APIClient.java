@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * A Client to use the imeji REST API
- * 
+ *
  * @author bastiens
  *
  */
@@ -35,7 +35,7 @@ public class APIClient {
 
   /**
    * Post to imeji API
-   * 
+   *
    * @param path
    * @param json
    * @param user
@@ -48,7 +48,7 @@ public class APIClient {
 
   /**
    * The Authorization Header with API Key
-   * 
+   *
    * @param user
    * @return
    */
@@ -58,7 +58,7 @@ public class APIClient {
 
   /**
    * Retrieve the API Key of the user, create a new if necessary
-   * 
+   *
    * @param user
    * @return
    */

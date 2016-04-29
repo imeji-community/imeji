@@ -33,7 +33,7 @@ import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemWithFileTO;
 
 /**
  * API Service for {@link DefaultItemTO}
- * 
+ *
  * @author bastiens
  *
  */
@@ -137,7 +137,7 @@ public class DefaultItemService implements API<DefaultItemTO> {
 
   /**
    * Get the {@link MetadataProfileTO} of the {@link DefaultItemTO}
-   * 
+   *
    * @param to
    * @param u
    * @return
@@ -155,7 +155,7 @@ public class DefaultItemService implements API<DefaultItemTO> {
 
   /**
    * Find the correct filename if there
-   * 
+   *
    * @param to
    * @return
    **/
@@ -167,7 +167,7 @@ public class DefaultItemService implements API<DefaultItemTO> {
 
   /**
    * Return the external Url
-   * 
+   *
    * @param to
    * @return
    */

@@ -7,7 +7,7 @@ import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 
 /**
  * Element of a {@link SearchQuery}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -23,7 +23,7 @@ public abstract class SearchElement {
 
   /**
    * Add a {@link LOGICAL_RELATIONS} after a {@link SearchElement}
-   * 
+   *
    * @param lr
    * @throws UnprocessableError
    */
@@ -41,7 +41,7 @@ public abstract class SearchElement {
 
   /**
    * Add a {@link SearchPair} after a {@link SearchElement}
-   * 
+   *
    * @param pair
    * @throws UnprocessableError
    */
@@ -59,7 +59,7 @@ public abstract class SearchElement {
 
   /**
    * Add a {@link SearchGroup} after a {@link SearchElement}
-   * 
+   *
    * @param group
    * @throws UnprocessableError
    */
@@ -78,7 +78,7 @@ public abstract class SearchElement {
   /**
    * Get the {@link SEARCH_ELEMENTS} of the last element of a {@link SearchElement} (if it is a
    * {@link SearchGroup} or a {@link SearchQuery})
-   * 
+   *
    * @return
    * @throws UnprocessableError
    */

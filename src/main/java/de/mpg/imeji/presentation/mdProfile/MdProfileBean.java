@@ -30,7 +30,7 @@ import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Bean for {@link MetadataProfile} view pages
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -74,7 +74,7 @@ public class MdProfileBean {
 
   /**
    * Method called on the html page to trigger the initialization of the bean
-   * 
+   *
    * @return
    * @throws ImejiException
    * @throws Exception
@@ -115,7 +115,7 @@ public class MdProfileBean {
 
   /**
    * Return the label of a {@link Types}
-   * 
+   *
    * @param uri
    * @return
    */
@@ -140,7 +140,7 @@ public class MdProfileBean {
 
   /**
    * Initialize the {@link StatementWrapper} {@link List}
-   * 
+   *
    * @param mdp
    */
   protected void initStatementWrappers(MetadataProfile mdp) {
@@ -162,7 +162,7 @@ public class MdProfileBean {
 
   /**
    * Return the id of the profile encoded in utf-8
-   * 
+   *
    * @return
    * @throws UnsupportedEncodingException
    */
@@ -180,7 +180,7 @@ public class MdProfileBean {
 
   /**
    * Return the size of the list of statement
-   * 
+   *
    * @return
    */
   public int getSize() {
@@ -230,7 +230,7 @@ public class MdProfileBean {
   /**
    * Insert a {@link StatementWrapper} into the {@link List} at the position passed in the
    * parameter. The childs of the wrapper are inserted after it.
-   * 
+   *
    * @param w - The wrapper to insert
    * @param to - The position to insert in the list
    * @return
@@ -262,7 +262,7 @@ public class MdProfileBean {
 
   /**
    * True if the Metadata at this position in the list has a child
-   * 
+   *
    * @param position
    * @return
    */
@@ -276,14 +276,15 @@ public class MdProfileBean {
 
   /**
    * Increment all position after a position
-   * 
+   *
    * @param position - The position after to position are incremented
    * @param toIncrement - The value to increment
    */
   private void incrementPosition(int position, int toIncrement) {
     for (StatementWrapper w : wrappers) {
-      if (w.getStatement().getPos() >= position)
+      if (w.getStatement().getPos() >= position) {
         w.getStatement().setPos(w.getStatement().getPos() + toIncrement);
+      }
     }
   }
 
@@ -310,7 +311,7 @@ public class MdProfileBean {
   /**
    * The the parent {@link StatementWrapper} of the dropped {@link StatementWrapper}. This might
    * change if its parent is the one being dragged
-   * 
+   *
    * @param dragged
    * @param dropped
    * @return
@@ -318,8 +319,9 @@ public class MdProfileBean {
   private StatementWrapper setParentOfDropped(StatementWrapper dragged, StatementWrapper dropped) {
     if (isAParent(dragged, dropped)) {
       StatementWrapper firstChild = findFirstChild(dragged);
-      if (firstChild != null)
+      if (firstChild != null) {
         firstChild.getStatement().setParent(dragged.getStatement().getParent());
+      }
     }
     return dropped;
   }
@@ -327,7 +329,7 @@ public class MdProfileBean {
   /**
    * True if the {@link StatementWrapper} parent is one of the parent of the
    * {@link StatementWrapper} child
-   * 
+   *
    * @param parent
    * @param child
    * @return
@@ -346,7 +348,7 @@ public class MdProfileBean {
 
   /**
    * Find the first Child of a {@link StatementWrapper} in the list
-   * 
+   *
    * @param parent
    * @return
    */
@@ -357,7 +359,7 @@ public class MdProfileBean {
 
   /**
    * REturn all Childs of {@link StatementWrapper}
-   * 
+   *
    * @param parent
    * @param firstOnly if true, return only the direct childs
    * @return
@@ -413,7 +415,7 @@ public class MdProfileBean {
 
   /**
    * Get the level (how many parents does it have) of a {@link Statement}
-   * 
+   *
    * @param st
    */
   protected int getLevel(Statement st) {
@@ -430,7 +432,7 @@ public class MdProfileBean {
   /**
    * Find the next {@link Statement} in the {@link Statement} list which have the same level, which
    * means, the first {@link Statement} which is not a child
-   * 
+   *
    * @param st
    * @return
    */
@@ -564,7 +566,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getConstraintPosition() {
@@ -573,7 +575,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param constraintPosition
    */
   public void setConstraintPosition(int constraintPosition) {
@@ -582,7 +584,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public MetadataProfile getProfile() {
@@ -591,7 +593,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param profile
    */
   public void setProfile(MetadataProfile profile) {
@@ -600,7 +602,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public TabType getTab() {
@@ -609,7 +611,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param tab
    */
   public void setTab(TabType tab) {
@@ -632,7 +634,7 @@ public class MdProfileBean {
 
   /**
    * return the {@link List} of {@link StatementWrapper} as a {@link List} of {@link Statement}
-   * 
+   *
    * @return
    */
   public List<Statement> getUnwrappedStatements() {
@@ -645,7 +647,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<StatementWrapper> getWrappers() {
@@ -654,7 +656,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param statements
    */
   public void setWrappers(List<StatementWrapper> wrappers) {
@@ -663,7 +665,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getMdTypesMenu() {
@@ -672,7 +674,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param mdTypesMenu
    */
   public void setMdTypesMenu(List<SelectItem> mdTypesMenu) {
@@ -681,7 +683,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getId() {
@@ -690,7 +692,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param id
    */
   public void setId(String id) {
@@ -699,7 +701,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getProfilesMenu() {
@@ -708,7 +710,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param profilesMenu
    */
   public void setProfilesMenu(List<SelectItem> profilesMenu) {
@@ -717,7 +719,7 @@ public class MdProfileBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getLabelPosition() {
@@ -726,7 +728,7 @@ public class MdProfileBean {
 
   /**
    * setter
-   * 
+   *
    * @param labelPosition
    */
   public void setLabelPosition(int labelPosition) {

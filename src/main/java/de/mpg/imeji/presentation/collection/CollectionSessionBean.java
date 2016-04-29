@@ -13,7 +13,7 @@ import de.mpg.imeji.logic.vo.util.MetadataFactory;
 
 /**
  * Session with objects related to {@link CollectionImeji}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -37,7 +37,7 @@ public class CollectionSessionBean {
 
   /**
    * Initialize the session objects
-   * 
+   *
    * @throws Exception
    */
   public void init() {
@@ -65,7 +65,7 @@ public class CollectionSessionBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getFilter() {
@@ -74,7 +74,7 @@ public class CollectionSessionBean {
 
   /**
    * setter
-   * 
+   *
    * @param filter
    */
   public void setFilter(String filter) {
@@ -83,7 +83,7 @@ public class CollectionSessionBean {
 
   /**
    * setter
-   * 
+   *
    * @param metadataTypes
    */
   public void setMetadataTypes(List<Metadata> metadataTypes) {
@@ -92,7 +92,7 @@ public class CollectionSessionBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<Metadata> getMetadataTypes() {
@@ -101,7 +101,7 @@ public class CollectionSessionBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public MetadataProfile getProfile() {
@@ -110,7 +110,7 @@ public class CollectionSessionBean {
 
   /**
    * setter
-   * 
+   *
    * @param profile
    */
   public void setProfile(MetadataProfile profile) {

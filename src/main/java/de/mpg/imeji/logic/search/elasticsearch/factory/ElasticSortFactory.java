@@ -10,9 +10,9 @@ import de.mpg.imeji.logic.search.model.SortCriterion;
 
 /**
  * Factory for {@link SortBuilder}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticSortFactory {
   /**
@@ -29,7 +29,7 @@ public class ElasticSortFactory {
 
   /**
    * Build a {@link SortBuilder} from a {@link SortCriterion}
-   * 
+   *
    * @param sort
    * @return
    */
@@ -64,7 +64,7 @@ public class ElasticSortFactory {
 
   /**
    * Construct a Sortbuilder
-   * 
+   *
    * @param field
    * @param sortCriterion
    * @return
@@ -75,7 +75,7 @@ public class ElasticSortFactory {
 
   /**
    * Return the {@link SortOrder} of the current sort criterion
-   * 
+   *
    * @param sort
    * @return
    */

@@ -35,7 +35,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * {@link ItemsBean} to browse {@link Item} of a {@link CollectionImeji}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -60,12 +60,12 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Initialize the elements of the page
-   * 
+   *
    * @return
-   * @throws Exception
+   * @throws ImejiException
    */
   @Override
-  public String getInitPage() throws Exception {
+  public String getInitPage() throws ImejiException {
     uri = ObjectHelper.getURI(CollectionImeji.class, id);
     collection = new CollectionController().retrieveLazy(uri, sb.getUser());
     profile = new ProfileController().retrieve(collection.getProfile(), sb.getUser());
@@ -146,7 +146,7 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Release the current {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String release() {
@@ -184,7 +184,7 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Delete the current {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String delete() {
@@ -204,7 +204,7 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Withdraw the current {@link CollectionImeji}
-   * 
+   *
    * @return
    * @throws Exception
    */

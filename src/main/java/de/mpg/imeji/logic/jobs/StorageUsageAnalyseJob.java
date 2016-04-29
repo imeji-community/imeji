@@ -19,7 +19,7 @@ import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * Analyze the File system of the {@link Storage} and save the results in a property file
- * 
+ *
  * @author saquet
  *
  */
@@ -35,15 +35,16 @@ public class StorageUsageAnalyseJob implements Callable<Integer> {
 
   /**
    * Constructor
-   * 
+   *
    * @throws IOException
    * @throws URISyntaxException
    */
   public StorageUsageAnalyseJob() throws IOException, URISyntaxException {
     STORAGE_USAGE_STATS_FILE_NAME =
         new File(PropertyReader.getProperty("imeji.tdb.path") + "/storageStats.xml");
-    if (!STORAGE_USAGE_STATS_FILE_NAME.exists())
+    if (!STORAGE_USAGE_STATS_FILE_NAME.exists()) {
       STORAGE_USAGE_STATS_FILE_NAME.createNewFile();
+    }
     try {
       storageProperties.loadFromXML(new FileInputStream(STORAGE_USAGE_STATS_FILE_NAME));
     } catch (Exception e) {
@@ -62,15 +63,15 @@ public class StorageUsageAnalyseJob implements Callable<Integer> {
     storageProperties.setProperty(StorageUsage.FREE_SPACE.name(),
         Long.toString(sc.getAdministrator().getFreeSpace()));
     storageProperties.setProperty(StorageUsage.LAST_UPDATE_DATE.name(), getCurrentDate());
-    storageProperties
-        .storeToXML(new FileOutputStream(STORAGE_USAGE_STATS_FILE_NAME), null, "UTF-8");
+    storageProperties.storeToXML(new FileOutputStream(STORAGE_USAGE_STATS_FILE_NAME), null,
+        "UTF-8");
     LOGGER.info("...done");
     return 1;
   }
 
   /**
    * REturn the Current Date as String
-   * 
+   *
    * @return
    */
   private String getCurrentDate() {
@@ -80,26 +81,30 @@ public class StorageUsageAnalyseJob implements Callable<Integer> {
   }
 
   public int getNumberOfFiles() {
-    if (storageProperties.get(StorageUsage.NUMBER_OF_FILES.name()) == null)
+    if (storageProperties.get(StorageUsage.NUMBER_OF_FILES.name()) == null) {
       return 0;
+    }
     return Integer.parseInt((String) storageProperties.get(StorageUsage.NUMBER_OF_FILES.name()));
   }
 
   public long getStorageUsed() {
-    if (storageProperties.get(StorageUsage.STORAGE_USED.name()) == null)
+    if (storageProperties.get(StorageUsage.STORAGE_USED.name()) == null) {
       return 0;
+    }
     return Long.parseLong((String) storageProperties.get(StorageUsage.STORAGE_USED.name()));
   }
 
   public long getFreeSpace() {
-    if (storageProperties.get(StorageUsage.FREE_SPACE.name()) == null)
+    if (storageProperties.get(StorageUsage.FREE_SPACE.name()) == null) {
       return 0;
+    }
     return Long.parseLong((String) storageProperties.get(StorageUsage.FREE_SPACE.name()));
   }
 
   public String getLastUpdate() {
-    if (storageProperties.get(StorageUsage.LAST_UPDATE_DATE.name()) == null)
+    if (storageProperties.get(StorageUsage.LAST_UPDATE_DATE.name()) == null) {
       return "-";
+    }
     return (String) storageProperties.get(StorageUsage.LAST_UPDATE_DATE.name());
   }
 }

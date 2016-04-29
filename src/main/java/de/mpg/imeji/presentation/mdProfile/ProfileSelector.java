@@ -13,19 +13,19 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
-import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
- * 
+ *
  * Bean for the ProfileSelector component
- * 
+ *
  * @author bastiens
  */
 public class ProfileSelector implements Serializable {
@@ -43,7 +43,7 @@ public class ProfileSelector implements Serializable {
 
   /**
    * Constructor
-   * 
+   *
    * @param profile
    * @param user
    * @param space
@@ -69,7 +69,7 @@ public class ProfileSelector implements Serializable {
 
   /**
    * Initialize the select profile menu
-   * 
+   *
    * @throws ImejiException
    */
   private void initSelectProfileMenu() throws ImejiException {
@@ -102,7 +102,7 @@ public class ProfileSelector implements Serializable {
 
   /**
    * Listener for the select profile menu
-   * 
+   *
    * @param event
    * @throws ImejiException
    */

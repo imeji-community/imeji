@@ -12,7 +12,7 @@ import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 
 /**
  * Email Message when sharing an object
- * 
+ *
  * @author bastiens
  *
  */
@@ -24,7 +24,7 @@ public class ShareEmailMessage {
 
   /**
    * Constructor
-   * 
+   *
    * @param shareToUri
    * @param profileUri
    * @param grants

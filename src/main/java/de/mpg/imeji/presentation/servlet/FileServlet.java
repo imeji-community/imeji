@@ -39,7 +39,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * The Servlet to Read files from imeji {@link Storage}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -136,7 +136,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Read a File and write it back in the response
-   * 
+   *
    * @param url
    * @param resp
    * @param isExternalStorage
@@ -154,7 +154,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Read a File from the current storage
-   * 
+   *
    * @param url
    * @param resp
    * @throws ImejiException
@@ -168,7 +168,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Exeption if the user is not allowed to read the file
-   * 
+   *
    * @param url
    * @param user
    * @return
@@ -183,7 +183,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Read an external (i.e not in the current storage) file
-   * 
+   *
    * @param url
    * @param resp
    * @throws ImejiException
@@ -197,7 +197,7 @@ public class FileServlet extends HttpServlet {
   /**
    * Return the {@link User} of the request. Check first is a user is send with the request. If not,
    * check in the the session.
-   * 
+   *
    * @param req
    * @return
    * @throws AuthenticationError
@@ -215,7 +215,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Find the {@link Item} which is owner of the file
-   * 
+   *
    * @param url
    * @return
    * @throws Exception
@@ -234,7 +234,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
-   * 
+   *
    * @param req
    * @return
    */

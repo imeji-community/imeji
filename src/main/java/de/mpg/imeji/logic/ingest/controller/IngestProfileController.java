@@ -16,7 +16,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Controller to ingest a {@link MetadataProfile}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -26,7 +26,7 @@ public class IngestProfileController {
 
   /**
    * Constructor
-   * 
+   *
    * @param user
    */
   public IngestProfileController(User user) {
@@ -35,7 +35,7 @@ public class IngestProfileController {
 
   /**
    * Ingest a {@link MetadataProfile} as defined in an xml {@link File}
-   * 
+   *
    * @param profileXmlFile
    * @throws Exception
    */
@@ -45,33 +45,28 @@ public class IngestProfileController {
     MetadataProfile mdp = pp.parse(profileXmlFile);
     MetadataProfile original;
     ProfileController pc = new ProfileController();
-    if (profile != null ){
-        if (isCopyOfOther(mdp, profile)) {
-          changeStatementURI(mdp);
-        }
-        original = pc.retrieve(profile, user);
-    }
-    else 
-    {
+    if (profile != null) {
+      if (isCopyOfOther(mdp, profile)) {
+        changeStatementURI(mdp);
+      }
+      original = pc.retrieve(profile, user);
+    } else {
       original = new MetadataProfile();
     }
-    
+
     original.setStatements(mdp.getStatements());
     // ingested profile can never be default profile
     original.setDefault(false);
     try {
-      if (profile != null ) {
-          pc.update(original, user);
-          pc.removeMetadataWithoutStatement(original);
-      }
-      else
-      {
-        if (mdp.getTitle()!= null && mdp.getTitle() != ""  ) {
+      if (profile != null) {
+        pc.update(original, user);
+        pc.removeMetadataWithoutStatement(original);
+      } else {
+        if (mdp.getTitle() != null && mdp.getTitle() != "") {
           original.setTitle(mdp.getTitle());
-        }
-        else
-        {
-          original.setTitle("Metadata profile for "+collection.getMetadata().getTitle()+" (ingested at:  "+new Date(System.currentTimeMillis())+" )");
+        } else {
+          original.setTitle("Metadata profile for " + collection.getMetadata().getTitle()
+              + " (ingested at:  " + new Date(System.currentTimeMillis()) + " )");
         }
         original.setDescription(mdp.getDescription());
         mdp = pc.create(original, user);
@@ -82,13 +77,13 @@ public class IngestProfileController {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-    
+
   }
 
   /**
    * Change the {@link URI} of all {@link Statement}, to avoid to overwrite the orginal
    * {@link Statement}
-   * 
+   *
    * @param mdp
    * @return
    */
@@ -104,7 +99,7 @@ public class IngestProfileController {
 
   /**
    * Change the {@link URI} of the parent {@link Statement} with the newly created ids
-   * 
+   *
    * @param mdp
    * @param idMap
    * @return
@@ -112,8 +107,9 @@ public class IngestProfileController {
   private MetadataProfile changeParentId(MetadataProfile mdp, HashMap<URI, URI> idMap) {
     for (Statement st : mdp.getStatements()) {
       if (st.getParent() != null) {
-        if (idMap.get(st.getParent()) == null)
+        if (idMap.get(st.getParent()) == null) {
           throw new RuntimeException("Unknown parent " + st.getParent() + " in current profile");
+        }
         st.setParent(idMap.get(st.getParent()));
       }
     }
@@ -123,19 +119,17 @@ public class IngestProfileController {
   /**
    * True if the {@link URI} is different to the {@link URI} of the {@link MetadataProfile}. In that
    * case, the ingested file is a copy of anther existing profile
-   * 
+   *
    * @param mdp
    * @param uri
    * @return
    */
   private boolean isCopyOfOther(MetadataProfile mdp, URI uri) {
-    if ( mdp == null || uri ==null) {
+    if (mdp == null || uri == null) {
       return false;
-    }
-    else
-    {
+    } else {
       return uri.compareTo(mdp.getId()) != 0;
     }
-    
+
   }
 }

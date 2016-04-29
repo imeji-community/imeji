@@ -28,7 +28,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Abstract class for metadata of an {@link Item}.
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -94,7 +94,7 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 
   /**
    * Compare metadata
-   * 
+   *
    * @param imd
    * @return
    */

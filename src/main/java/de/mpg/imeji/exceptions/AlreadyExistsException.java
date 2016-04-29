@@ -6,7 +6,7 @@ public class AlreadyExistsException extends ImejiException {
 
   /**
    * Constructor for a new {@link AlreadyExistsException}
-   * 
+   *
    * @param message
    */
   public AlreadyExistsException(String message) {

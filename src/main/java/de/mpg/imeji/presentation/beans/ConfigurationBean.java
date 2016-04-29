@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -43,7 +43,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 /**
  * JavaBean managing the imeji configuration which is made directly by the administrator from the
  * web (i.e. not in the property file)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -61,7 +61,7 @@ public class ConfigurationBean {
 
   /**
    * Set the Snippet in the configuration
-   * 
+   *
    * @param str
    */
   public void setSnippet(String str) {
@@ -70,7 +70,7 @@ public class ConfigurationBean {
 
   /**
    * Read the snippet from the configuration
-   * 
+   *
    * @return
    */
   public String getSnippet() {
@@ -83,7 +83,7 @@ public class ConfigurationBean {
 
   /**
    * Set the url of the default CSS
-   * 
+   *
    * @param url
    */
   public void setDefaultCss(String url) {
@@ -92,7 +92,7 @@ public class ConfigurationBean {
 
   /**
    * Return the url of the default CSS
-   * 
+   *
    * @return
    */
   public String getDefaultCss() {
@@ -101,7 +101,7 @@ public class ConfigurationBean {
 
   /**
    * Set the url of the default CSS
-   * 
+   *
    * @param url
    */
   public void setAlternativeCss(String url) {
@@ -110,7 +110,7 @@ public class ConfigurationBean {
 
   /**
    * Return the url of the default CSS
-   * 
+   *
    * @return
    */
   public String getAlternativeCss() {
@@ -119,7 +119,7 @@ public class ConfigurationBean {
 
   /**
    * Set the url of the default CSS
-   * 
+   *
    * @param md_url
    */
   public void setUploadMaxFileSize(String size) {
@@ -128,7 +128,7 @@ public class ConfigurationBean {
 
   /**
    * Return the url of the default CSS
-   * 
+   *
    * @return
    */
   public String getUploadMaxFileSize() {
@@ -137,7 +137,7 @@ public class ConfigurationBean {
 
   /**
    * Get the type of Files
-   * 
+   *
    * @return
    */
   public FileTypes getFileTypes() {
@@ -146,7 +146,7 @@ public class ConfigurationBean {
 
   /**
    * Set the type of Files
-   * 
+   *
    * @param types
    */
   public void setFileTypes(FileTypes types) {
@@ -163,7 +163,7 @@ public class ConfigurationBean {
 
   /**
    * Get the html snippet for a specified lang
-   * 
+   *
    * @param lang
    * @return
    */
@@ -173,7 +173,7 @@ public class ConfigurationBean {
 
   /**
    * Get the html snippet for the footer of the startpage
-   * 
+   *
    * @return
    */
   public String getStartPageFooterLogos() {
@@ -181,7 +181,7 @@ public class ConfigurationBean {
   }
 
   /**
-   * 
+   *
    * @param html
    */
   public void setStartPageFooterLogos(String html) {
@@ -190,7 +190,7 @@ public class ConfigurationBean {
 
   /**
    * Read all the html snippets in the config and retunr it as a {@link List} {@link HtmlSnippet}
-   * 
+   *
    * @return
    */
   public List<HtmlSnippet> getSnippets() {
@@ -222,7 +222,7 @@ public class ConfigurationBean {
 
   /**
    * @param str
-   * 
+   *
    */
   public void setDataViewerFormatListString(String str) {
     Imeji.CONFIG.setDataViewerFormatListString(str);
@@ -230,7 +230,7 @@ public class ConfigurationBean {
 
   /**
    * true if the format is supported by the data viewer service
-   * 
+   *
    * @param format
    * @return
    */
@@ -247,7 +247,7 @@ public class ConfigurationBean {
 
   /**
    * @param str
-   * 
+   *
    */
   public void setDataViewerUrl(String str) {
     Imeji.CONFIG.setDataViewerUrl(str);
@@ -276,7 +276,7 @@ public class ConfigurationBean {
 
   /**
    * Set the meta description
-   * 
+   *
    * @param md_url
    */
   public void setMetaDescription(String s) {
@@ -285,7 +285,7 @@ public class ConfigurationBean {
 
   /**
    * Return the meta description
-   * 
+   *
    * @return
    */
   public String getMetaDescription() {
@@ -294,7 +294,7 @@ public class ConfigurationBean {
 
   /**
    * Set the name of the instance
-   * 
+   *
    * @param md_url
    */
   public void setInstanceName(String s) {
@@ -303,7 +303,7 @@ public class ConfigurationBean {
 
   /**
    * Return the name of the instance
-   * 
+   *
    * @return
    */
   public String getInstanceName() {
@@ -312,7 +312,7 @@ public class ConfigurationBean {
 
   /**
    * Set the contact email
-   * 
+   *
    * @param md_url
    */
   public void setContactEmail(String s) {
@@ -321,7 +321,7 @@ public class ConfigurationBean {
 
   /**
    * Return contact email
-   * 
+   *
    * @return
    */
   public String getContactEmail() {

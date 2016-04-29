@@ -104,7 +104,7 @@ public class MetadataAndProfileHelper {
   /**
    * Return true if the {@link Metadata} has an empty value (which shouldn't be store in the
    * database)
-   * 
+   *
    * @param md
    * @return
    */
@@ -150,7 +150,7 @@ public class MetadataAndProfileHelper {
 
   /**
    * Checks if the Metadata statement with prvided URI is a parent at all
-   * 
+   *
    * @param profile - {@link MetadataProfile} object}
    * @param statement - the statement URI
    * @return true if the statement provided is parent in defined metadata profile

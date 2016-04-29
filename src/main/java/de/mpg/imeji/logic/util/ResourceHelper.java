@@ -16,7 +16,7 @@ public class ResourceHelper {
 
   /**
    * Read a file defined by its path, and return the content as String
-   * 
+   *
    * @param path
    * @return
    * @throws IOException

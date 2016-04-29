@@ -19,7 +19,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Helper to work with jsf beans
- * 
+ *
  * @author bastiens
  *
  */
@@ -35,7 +35,7 @@ public class BeanHelper {
 
   /**
    * Return any bean stored in request scope under the specified name.
-   * 
+   *
    * @param cls The bean class.
    * @return the actual or new bean instance
    */
@@ -53,7 +53,7 @@ public class BeanHelper {
 
   /**
    * Add a class to the request map
-   * 
+   *
    * @param cls
    * @param name
    * @return
@@ -61,8 +61,9 @@ public class BeanHelper {
   private static synchronized Object addRequestBean(final Class<?> cls, String name) {
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(name);
-    if (result != null)
+    if (result != null) {
       return result;
+    }
     try {
       LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
@@ -75,7 +76,7 @@ public class BeanHelper {
 
   /**
    * Return any bean stored in session scope under the specified name.
-   * 
+   *
    * @param cls The bean class.
    * @return the actual or new bean instance
    */
@@ -93,7 +94,7 @@ public class BeanHelper {
 
   /**
    * Add a class to the session map
-   * 
+   *
    * @param cls
    * @param name
    * @return
@@ -101,8 +102,9 @@ public class BeanHelper {
   private static synchronized Object addSessionBean(final Class<?> cls, String name) {
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(name);
-    if (result != null)
+    if (result != null) {
       return result;
+    }
     try {
       LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
@@ -115,7 +117,7 @@ public class BeanHelper {
 
   /**
    * Return any bean stored in application scope under the specified name.
-   * 
+   *
    * @param cls The bean class.
    * @return the actual or new bean instance
    */
@@ -133,7 +135,7 @@ public class BeanHelper {
 
   /**
    * Add a class to the application map
-   * 
+   *
    * @param cls
    * @param name
    * @return
@@ -141,8 +143,9 @@ public class BeanHelper {
   private static synchronized Object addApplicationBean(final Class<?> cls, String name) {
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
-    if (result != null)
+    if (result != null) {
       return result;
+    }
     try {
       LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
@@ -155,15 +158,16 @@ public class BeanHelper {
 
   /**
    * Remove a Bean from the application map. Can be used to force a bean to be reinitialized
-   * 
+   *
    * @param cls
    */
   public static synchronized void removeBeanFromMap(final Class<?> cls) {
     String name = cls.getSimpleName();
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
-    if (result != null)
+    if (result != null) {
       FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove(name);
+    }
   }
 
   /**
@@ -233,7 +237,7 @@ public class BeanHelper {
 
   /**
    * Add all messages of the unprocessable error
-   * 
+   *
    * @param e
    */
   public static void error(UnprocessableError e, Locale locale) {
@@ -327,7 +331,7 @@ public class BeanHelper {
 
   /**
    * Return the Current Locale from the SessionBean
-   * 
+   *
    * @return
    */
   public static Locale getLocale() {

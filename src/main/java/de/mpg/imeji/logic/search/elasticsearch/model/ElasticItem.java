@@ -10,9 +10,9 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
  * The object which is indexed in Elastic search <br/>
  * !!! IMPORTANT !!!<br/>
  * This File must be synchronized with resources/elasticsearch/ElasticItemsMapping.json
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public final class ElasticItem extends ElasticProperties {
   private final String folder;
@@ -29,7 +29,7 @@ public final class ElasticItem extends ElasticProperties {
 
   /**
    * Constructor with an {@link Item}
-   * 
+   *
    * @param item
    */
   public ElasticItem(Item item, String space) {

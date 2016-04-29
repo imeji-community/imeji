@@ -9,7 +9,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Helper the manage the authentication in the API
- * 
+ *
  * @author bastiens
  *
  */

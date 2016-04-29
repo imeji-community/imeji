@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 /**
  * Some Method to read URLs
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -34,7 +34,7 @@ public class UrlHelper {
 
   /**
    * Return the value of a parameter in an url
-   * 
+   *
    * @param parameterName
    * @return
    */
@@ -45,7 +45,7 @@ public class UrlHelper {
 
   /**
    * Return a value as boolean of a parameter in a url: true if value is1, false if value is -1
-   * 
+   *
    * @param parameterName
    * @return
    */
@@ -60,7 +60,7 @@ public class UrlHelper {
 
   /**
    * Check if the URL is valid, i.e. well formed
-   * 
+   *
    * @param uri
    * @return
    */
@@ -71,7 +71,7 @@ public class UrlHelper {
 
   /**
    * Add to the url the parameter
-   * 
+   *
    * @param url
    * @param param
    * @param value
@@ -79,14 +79,15 @@ public class UrlHelper {
    */
   public static String addParameter(String url, String param, String value) {
     String[] params = url.split("\\?", 2);
-    if (params.length > 1 && !"".equals(params[1]))
+    if (params.length > 1 && !"".equals(params[1])) {
       return url + "&" + param + "=" + value;
+    }
     return url + "?" + param + "=" + value;
   }
 
   /**
    * Decode a value from with UTF-8
-   * 
+   *
    * @param s
    * @return
    */
@@ -100,7 +101,7 @@ public class UrlHelper {
 
   /**
    * Encode a value with UTF-8
-   * 
+   *
    * @param s
    * @return
    */
@@ -131,7 +132,7 @@ public class UrlHelper {
 
   /**
    * Return true or false about the existence of parameter in the Url
-   * 
+   *
    * @param parameterName
    * @return
    */

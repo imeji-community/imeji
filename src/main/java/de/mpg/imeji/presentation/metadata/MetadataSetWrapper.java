@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -42,7 +42,7 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
  * The Java Bean for a {@link MetadataSet}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -57,7 +57,7 @@ public class MetadataSetWrapper implements Serializable {
 
   /**
    * Constructor for a {@link MetadataSet}
-   * 
+   *
    * @param mds
    * @param addEmtpyValue if true, add an emtpy metadata for all {@link Statement} which don't have
    *        any value
@@ -73,7 +73,7 @@ public class MetadataSetWrapper implements Serializable {
 
   /**
    * Initialize the {@link MetadataSetWrapper} with a flat {@link List} of {@link MetadataWrapper}
-   * 
+   *
    * @param flat
    */
   public void initTreeFromList(List<MetadataWrapper> list) {
@@ -109,7 +109,7 @@ public class MetadataSetWrapper implements Serializable {
 
   /**
    * Add a new emtpy {@link Metadata} for the passed statement
-   * 
+   *
    * @param st
    */
   public void appendEmtpyMetadata(Statement st) {
@@ -118,7 +118,7 @@ public class MetadataSetWrapper implements Serializable {
 
   /**
    * Create a {@link List} of {@link MetadataWrapper} from a list of {@link Metadata}
-   * 
+   *
    * @return
    */
   private List<MetadataWrapper> toSuperList(List<Metadata> l) {
@@ -268,8 +268,9 @@ public class MetadataSetWrapper implements Serializable {
   public int countStatementOccurrence(List<MetadataWrapper> l, String statementID) {
     int count = 0;
     for (MetadataWrapper md : l) {
-      if (md.getStatement().getId().toString().equals(statementID))
+      if (md.getStatement().getId().toString().equals(statementID)) {
         count++;
+      }
     }
     return count;
   }
@@ -285,14 +286,15 @@ public class MetadataSetWrapper implements Serializable {
 
   /**
    * True if the {@link MetadataSetWrapper} has one {@link Metadata} with this {@link Statement}
-   * 
+   *
    * @param st
    * @return
    */
   public boolean exists(Statement st) {
     for (MetadataWrapper md : metadataTree.getList()) {
-      if (md.getStatement().getId().compareTo(st.getId()) == 0)
+      if (md.getStatement().getId().compareTo(st.getId()) == 0) {
         return true;
+      }
     }
     return false;
   }
@@ -300,23 +302,25 @@ public class MetadataSetWrapper implements Serializable {
   /**
    * True if the {@link MetadataSetWrapper} has one {@link Metadata} with this {@link Statement}
    * which is not emtpy
-   * 
+   *
    * @param st
    * @return
    */
   public boolean existsNotEmtpy(Statement st) {
     for (MetadataWrapper md : metadataTree.getList()) {
-      if (!MetadataHelper.isEmpty(md.getMetadata()))
+      if (!MetadataHelper.isEmpty(md.getMetadata())) {
         if (md.getStatement().getId().compareTo(st.getId()) == 0
-            || MetadataProfileUtil.isParent(st, md.getStatement(), profile))
+            || MetadataProfileUtil.isParent(st, md.getStatement(), profile)) {
           return true;
+        }
+      }
     }
     return false;
   }
 
   /**
    * getter
-   * 
+   *
    * @return the profile
    */
   public MetadataProfile getProfile() {
@@ -325,7 +329,7 @@ public class MetadataSetWrapper implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param profile the profile to set
    */
   public void setProfile(MetadataProfile profile) {

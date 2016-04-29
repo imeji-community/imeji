@@ -12,15 +12,15 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
 import de.mpg.j2j.annotations.j2jDataType;
 
 /**
  * Factory for {@link Metadata}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -34,7 +34,7 @@ public class MetadataFactory {
 
   /**
    * Create a new {@link Metadata} according to its namespace
-   * 
+   *
    * @param typeNamespace
    * @return
    */
@@ -66,7 +66,7 @@ public class MetadataFactory {
 
   /**
    * Create a {@link Metadata} according to its {@link Types}
-   * 
+   *
    * @param type
    * @return
    */
@@ -76,7 +76,7 @@ public class MetadataFactory {
 
   /**
    * Create a new {@link Metadata} from its {@link Statement}
-   * 
+   *
    * @param s
    * @return
    */
@@ -89,7 +89,7 @@ public class MetadataFactory {
   /**
    * Copy a {@link Metadata} to a new {@link Metadata}, and perform some transformation (add search
    * values, format dates, etc.)
-   * 
+   *
    * @param metadata
    * @return
    */

@@ -11,7 +11,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * SEt of methods to control objects that are stored in the {@link SessionBean}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -28,7 +28,7 @@ public class SessionObjectsController {
 
   /**
    * Add the item to the {@link List} of selected {@link Item} stored in the {@link SessionBean}.
-   * 
+   *
    * @param itemURI
    */
   public void selectItem(String itemURI) {
@@ -40,7 +40,7 @@ public class SessionObjectsController {
   /**
    * Remove the item from the {@link List} of selected {@link Item} stored in the
    * {@link SessionBean}
-   * 
+   *
    * @param itemURI
    */
   public void unselectItem(String itemURI) {
@@ -51,11 +51,12 @@ public class SessionObjectsController {
 
   /**
    * Add a list of uri to the active {@link Album} in the session
-   * 
+   *
    * @param uris
+   * @throws ImejiException
    * @throws Exception
    */
-  public void addToActiveAlbum(List<String> uris) throws Exception {
+  public void addToActiveAlbum(List<String> uris) throws ImejiException {
     AlbumController ac = new AlbumController();
     ac.addToAlbum(session.getActiveAlbum(), uris, session.getUser());
     reloadActiveAlbum();
@@ -63,7 +64,7 @@ public class SessionObjectsController {
 
   /**
    * Remove the list of uri from the active {@link Album} in the session
-   * 
+   *
    * @param uris
    * @throws Exception
    */

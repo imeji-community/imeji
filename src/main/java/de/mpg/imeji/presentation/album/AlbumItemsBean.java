@@ -29,7 +29,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * {@link ItemsBean} within an {@link Album}: Used to browse {@link Item} of an {@link Album}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -53,7 +53,7 @@ public class AlbumItemsBean extends ItemsBean {
   }
 
   @Override
-  public String getInitPage() throws Exception {
+  public String getInitPage() throws ImejiException {
     uri = ObjectHelper.getURI(Album.class, id);
     loadAlbum();
     browseContext = getNavigationString() + id;
@@ -82,9 +82,11 @@ public class AlbumItemsBean extends ItemsBean {
   /**
    * Load the current album
    * 
-   * @throws Exception
+   * @throws ImejiException
+   *
+   * @
    */
-  public void loadAlbum() throws Exception {
+  public void loadAlbum() throws ImejiException {
     album = new AlbumController().retrieveLazy(uri, sb.getUser());
   }
 
@@ -95,9 +97,8 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove the selected {@link Item} from the current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public String removeFromAlbum() {
     removeFromAlbum(sb.getSelected());
@@ -107,11 +108,11 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove selected {@link Item} from active {@link Album}
-   * 
+   *
    * @return
-   * @throws Exception
+   * @throws ImejiException @
    */
-  public String removeFromActiveAlbum() throws Exception {
+  public String removeFromActiveAlbum() throws ImejiException {
     removeFromActive(sb.getSelected());
     sb.getSelected().clear();
     return "pretty:";
@@ -119,9 +120,8 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove all current {@link Item} from {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public String removeAllFromAlbum() {
     try {
@@ -134,20 +134,19 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove all current {@link Item} from active {@link Album}
-   * 
+   *
    * @return
-   * @throws Exception
+   * @throws ImejiException @
    */
-  public String removeAllFromActiveAlbum() throws Exception {
+  public String removeAllFromActiveAlbum() throws ImejiException {
     removeAllFromAlbum(sb.getActiveAlbum());
     return "pretty:";
   }
 
   /**
    * Remove all {@link Item} from an {@link Album}
-   * 
-   * @param album
-   * @throws Exception
+   *
+   * @param album @
    */
   private void removeAllFromAlbum(Album album) throws ImejiException {
     if (sb.getActiveAlbum() != null
@@ -169,9 +168,8 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove a list of {@link Item} from the current {@link Album}
-   * 
-   * @param uris
-   * @throws Exception
+   *
+   * @param uris @
    */
   private void removeFromAlbum(List<String> uris) {
     try {
@@ -194,9 +192,8 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove a list of {@link Item} from the active {@link Album}
-   * 
-   * @param uris
-   * @throws Exception
+   *
+   * @param uris @
    */
   private void removeFromActive(List<String> uris) throws ImejiException {
     SessionObjectsController soc = new SessionObjectsController();
@@ -208,8 +205,9 @@ public class AlbumItemsBean extends ItemsBean {
 
   @Override
   public String getImageBaseUrl() {
-    if (album == null || album.getId() == null)
+    if (album == null || album.getId() == null) {
       return "";
+    }
     return navigation.getApplicationSpaceUrl() + "album/" + this.id + "/";
   }
 
@@ -220,11 +218,10 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Release current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public String release() throws Exception {
+  public String release() {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).release();
@@ -233,11 +230,10 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Delete current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public String delete() throws Exception {
+  public String delete() {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).delete();
@@ -246,9 +242,8 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Withdraw current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public String withdraw() {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
@@ -266,7 +261,7 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   @Override

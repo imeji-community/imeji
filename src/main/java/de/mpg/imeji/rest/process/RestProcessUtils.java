@@ -46,7 +46,7 @@ public class RestProcessUtils {
 
   /**
    * Parse a json file and construct a new Object of type T
-   * 
+   *
    * @param json
    * @param type
    * @return
@@ -62,18 +62,18 @@ public class RestProcessUtils {
 
   /**
    * Parse a JSON to a parameterized type object. Usage:
-   * 
+   *
    * <pre>
    * buildTOFromJSON(json,new TypeReference{@literal<T>}(){})
    * </pre>
-   * 
+   *
    * For instance, to parse a {@link SearchResultTO} of {@link DefaultItemTO}, do:
-   * 
+   *
    * <pre>
    * buildTOFromJSON(json,new TypeReference{@literal<SearchResultTO<DefaultItemTO>>}(){})
    * </pre>
    *
-   * 
+   *
    * @param json
    * @param type
    * @return
@@ -176,7 +176,7 @@ public class RestProcessUtils {
   /**
    * This method builds exception response. Based on the error Code, local title and message (which
    * can be localized through the Language Bundles) are built
-   * 
+   *
    * @param errorCode
    * @param e
    * @return
@@ -192,7 +192,7 @@ public class RestProcessUtils {
    * This method builds the response for successfully created, updated, deleted, released etc.
    * object. It is a convenience method to save 3 lines of code every time the HTTP Response needs
    * to be built after success
-   * 
+   *
    * @param statusCode
    * @param responseObject
    * @return
@@ -207,8 +207,8 @@ public class RestProcessUtils {
   /**
    * This method checks the exception type and returns appropriate JSON Response with properly
    * set-up HTTP Code.
-   * 
-   * 
+   *
+   *
    * @param eX
    * @param message
    * @return

@@ -7,7 +7,7 @@ import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 
 /**
  * A sort criterion for a {@link JenaSearch}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

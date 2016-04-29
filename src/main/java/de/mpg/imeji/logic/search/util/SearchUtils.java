@@ -10,15 +10,15 @@ import de.mpg.imeji.logic.search.model.FileTypes.Type;
 
 /**
  * Utility class for the {@link Search}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class SearchUtils {
 
   /**
    * Parse the query for File types and return a {@link List} of extension
-   * 
+   *
    * @param fileTypes
    * @return
    */

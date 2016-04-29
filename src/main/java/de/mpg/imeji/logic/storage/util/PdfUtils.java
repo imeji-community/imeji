@@ -19,7 +19,7 @@ public final class PdfUtils {
 
   /**
    * Read a pdf File, et the first page, and return it as an image
-   * 
+   *
    * @param file
    * @return
    * @throws FileNotFoundException

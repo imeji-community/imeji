@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * Parse the {@link MetadataProfile} xml
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -19,7 +19,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 public class ProfileParser {
   /**
    * Parse a profile Xml
-   * 
+   *
    * @param profileXml
    * @return
    * @throws SAXException

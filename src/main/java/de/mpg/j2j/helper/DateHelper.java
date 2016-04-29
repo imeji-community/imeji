@@ -8,7 +8,7 @@ import java.util.Locale;
 
 /**
  * Methods related to {@link Date}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -31,7 +31,7 @@ public class DateHelper {
 
   /**
    * Return the current {@link Calendar} from the system
-   * 
+   *
    * @return
    */
   public static Calendar getCurrentDate() {
@@ -41,7 +41,7 @@ public class DateHelper {
 
   /**
    * Parse a {@link String} to a {@link Calendar}
-   * 
+   *
    * @param dateString
    * @return
    */
@@ -61,7 +61,7 @@ public class DateHelper {
 
   /**
    * Print a Date into a String
-   * 
+   *
    * @param c
    * @return
    */

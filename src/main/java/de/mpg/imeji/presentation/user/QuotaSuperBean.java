@@ -15,7 +15,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * Super class to implements quota methods, which can be reused by JSF Bean displaying quota menu
  * <br/>
  * NOTE: This is NOT a JSF Bean
- * 
+ *
  * @author bastiens
  *
  */
@@ -42,7 +42,7 @@ public class QuotaSuperBean {
 
 
   /**
-   * 
+   *
    * @return the quota
    */
   public String getQuota() {

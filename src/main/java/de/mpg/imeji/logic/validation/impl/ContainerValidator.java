@@ -9,7 +9,7 @@ import de.mpg.imeji.logic.vo.ContainerAdditionalInfo;
 
 /**
  * Abstract call for common container methods
- * 
+ *
  * @author bastiens
  *
  */

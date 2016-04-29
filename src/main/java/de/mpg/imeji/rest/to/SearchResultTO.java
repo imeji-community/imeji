@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 /**
  * A TO to wrap Search results
- * 
+ *
  * @author bastiens
  *
  */
@@ -30,7 +30,7 @@ public class SearchResultTO<T> implements Serializable {
 
   /**
    * Builder for {@link SearchResultTO}
-   * 
+   *
    * @author bastiens
    *
    */

@@ -14,7 +14,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link Item}
- * 
+ *
  * @author saquet
  */
 public class RDFImageExport extends RDFExport {
@@ -61,7 +61,7 @@ public class RDFImageExport extends RDFExport {
   /*
    * Not implemented : needs of specification about restricted metadata (how to make it really
    * private...)
-   * 
+   *
    * @see de.mpg.imeji.logic.export.format.RDFExport#filterResources(de.mpg.imeji
    * .logic.search.SearchResult, de.mpg.imeji.logic.vo.User)
    */

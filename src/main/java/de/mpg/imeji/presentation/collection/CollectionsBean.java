@@ -22,7 +22,7 @@ import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * Bean for the collections page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -72,7 +72,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getDiscardComment() {
@@ -81,7 +81,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
 
   /**
    * setter
-   * 
+   *
    * @param discardComment
    */
   public void setDiscardComment(String discardComment) {
@@ -95,14 +95,14 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.
    * SearchQuery , de.mpg.imeji.logic.search.vo.SortCriterion)
-   * 
+   *
    * @param searchQuery
-   * 
+   *
    * @param sortCriterion
-   * 
+   *
    * @return
    */
   @Override

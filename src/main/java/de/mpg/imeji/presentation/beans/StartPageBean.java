@@ -38,14 +38,14 @@ import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * the Java Bean for the Start Page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 @ManagedBean(name = "StartPageBean")
 @ViewScoped
-public class StartPageBean extends SuperViewBean implements Serializable {
+public class StartPageBean extends SuperBean implements Serializable {
   private static Logger LOGGER = Logger.getLogger(StartPageBean.class);
   private static final long serialVersionUID = 5267521759370584976L;
   private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
@@ -73,7 +73,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * Read the search query defined in the imeji.properties
-   * 
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
@@ -88,7 +88,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * Read the order defined in the imeji.properties
-   * 
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
@@ -96,9 +96,10 @@ public class StartPageBean extends SuperViewBean implements Serializable {
   private SortCriterion readSortCriterionInProperty() throws IOException, URISyntaxException {
     try {
       String[] prop = Imeji.CONFIG.getStartPageCarouselQueryOrder().split("-");
-      if ("".equals(prop[0]) && "".equals(prop[1]))
+      if ("".equals(prop[0]) && "".equals(prop[1])) {
         return new SortCriterion(JenaSearch.getIndex(prop[0]),
             SortOrder.valueOf(prop[1].toUpperCase()));
+      }
     } catch (Exception e) {
       // no sort order defined
     }
@@ -107,7 +108,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * Search the item for the caroussel
-   * 
+   *
    * @param sq
    * @param sc
    * @return
@@ -130,7 +131,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * Read the current space
-   * 
+   *
    * @return
    */
   private Space readSpace() {
@@ -150,7 +151,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * Return the time of the nth day before the current time
-   * 
+   *
    * @param day
    * @return
    */
@@ -163,7 +164,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
   /**
    * Load the item the {@link SearchResult} in the caroussel. If random true, will load some random
    * items
-   * 
+   *
    * @param sr
    * @param random
    * @throws ImejiException
@@ -178,10 +179,12 @@ public class StartPageBean extends SuperViewBean implements Serializable {
       uris = getRandomResults(sr);
     } else {
       int sublistSize = CAROUSSEL_SIZE;
-      if (sr.getResults().size() < CAROUSSEL_SIZE)
+      if (sr.getResults().size() < CAROUSSEL_SIZE) {
         sublistSize = sr.getResults().size();
-      if (sublistSize > 0)
+      }
+      if (sublistSize > 0) {
         uris = sr.getResults().subList(0, sublistSize);
+      }
     }
     List<Item> items = (List<Item>) ic.retrieveBatchLazy(uris, -1, 0, getSessionUser());
     carousselImages = ListUtils.itemListToThumbList(items);
@@ -189,7 +192,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * Takes a number ({@link StartPageBean}.CAROUSSEL_SIZE) of results from a {@link SearchResult}
-   * 
+   *
    * @param sr
    * @return
    */
@@ -209,7 +212,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param carousselImages
    */
   public void setCarousselImages(List<ThumbnailBean> carousselImages) {
@@ -218,7 +221,7 @@ public class StartPageBean extends SuperViewBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<ThumbnailBean> getCarousselImages() {

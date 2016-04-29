@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 
 /**
  * A Key Value store based on the MapsDB HTreeMapStore
- * 
+ *
  * @author bastiens
  *
  */
@@ -27,7 +27,7 @@ public class HTreeMapStore implements KeyValueStore {
 
   /**
    * Basic HTreeMapStore without expiration date
-   * 
+   *
    * @param storeName
    */
   public HTreeMapStore(String name) {

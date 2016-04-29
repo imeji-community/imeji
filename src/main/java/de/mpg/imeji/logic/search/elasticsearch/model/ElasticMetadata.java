@@ -14,9 +14,9 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
  * The indexed {@link Metadata}<br/>
  * !!! IMPORTANT !!!<br/>
  * This File must be synchronized with resources/elasticsearch/ElasticItemsMapping.json
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public final class ElasticMetadata extends ElasticPerson {
   private final String statement;
@@ -38,7 +38,7 @@ public final class ElasticMetadata extends ElasticPerson {
 
   /**
    * Constructor with a {@link Metadata}
-   * 
+   *
    * @param md
    */
   public ElasticMetadata(Metadata md) {

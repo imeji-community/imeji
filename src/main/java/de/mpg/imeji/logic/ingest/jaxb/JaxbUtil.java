@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.mpg.imeji.logic.ingest.jaxb;
 
@@ -54,8 +54,8 @@ public class JaxbUtil {
     unmarshaller.setSchema(schema);
     return clss.cast(unmarshaller.unmarshal(xmlFile));
   }
-  
-  //be "http://www.w3.org/2000/xmlns/".
+
+  // be "http://www.w3.org/2000/xmlns/".
 
   public static void marshal(String xsdFilename, String xmlFilename, Object jaxbElement)
       throws JAXBException, SAXException, FileNotFoundException {

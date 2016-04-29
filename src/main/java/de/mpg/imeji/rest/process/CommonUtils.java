@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 
+ *
  * @author bastiens
  *
  */
@@ -13,7 +13,7 @@ public class CommonUtils {
 
   /**
    * Format a Date in a user friendly way
-   * 
+   *
    * @param d
    * @return
    */

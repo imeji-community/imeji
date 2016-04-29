@@ -27,7 +27,7 @@ public class ProxyHelper {
 
   /**
    * check if proxy has to get used for given url. If yes, set ProxyHost in httpClient
-   * 
+   *
    * @param url url
    * @throws Exception
    */
@@ -45,7 +45,7 @@ public class ProxyHelper {
 
   /**
    * Returns <code>java.net.Proxy</code> class for <code>java.net.URL.openConnection</code> creation
-   * 
+   *
    * @param url url
    * @throws Exception
    */
@@ -63,7 +63,7 @@ public class ProxyHelper {
 
   /**
    * Wrapper for executeMethod with Proxy
-   * 
+   *
    * @param client, methopd
    * @throws IOException
    * @throws HttpException
@@ -76,7 +76,7 @@ public class ProxyHelper {
 
   /**
    * Returns <code>java.net.URLConnection</code> with the Proxy settings creation
-   * 
+   *
    * @param url url
    * @throws IOException
    * @throws Exception
@@ -90,8 +90,9 @@ public class ProxyHelper {
    * Read proxy properties, set nonProxyPattern
    */
   private static void getProxyProperties() {
-    if (flag)
+    if (flag) {
       return;
+    }
     try {
       proxyHost = PropertyReader.getProperty("http.proxyHost");
       proxyPort = PropertyReader.getProperty("http.proxyPort");
@@ -109,7 +110,7 @@ public class ProxyHelper {
 
   /**
    * Find <code>url</code> in the list of the nonProxyHosts
-   * 
+   *
    * @param url
    * @return <code>true</code> if <code>url</code> is found, <code>false</code> otherwise
    */

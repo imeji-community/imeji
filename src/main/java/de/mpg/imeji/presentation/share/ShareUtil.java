@@ -25,7 +25,7 @@ import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 
 /**
  * Utility class for Share implementation
- * 
+ *
  * @author bastiens
  *
  */
@@ -37,7 +37,7 @@ public class ShareUtil {
 
   /**
    * Menu for sharing collection
-   * 
+   *
    * @return
    */
   public static List<SelectItem> getCollectionRoleMenu(String profileUri, User user,
@@ -64,7 +64,7 @@ public class ShareUtil {
 
   /**
    * Menu for sharing items
-   * 
+   *
    * @return
    */
   public static List<SelectItem> getItemRoleMenu(Locale locale) {
@@ -74,7 +74,7 @@ public class ShareUtil {
 
   /**
    * Menu for sharing Album
-   * 
+   *
    * @return
    */
   public static List<SelectItem> getAlbumRoleMenu(Locale locale) {
@@ -92,7 +92,7 @@ public class ShareUtil {
 
   /**
    * Read the role of the {@link User}
-   * 
+   *
    * @return
    * @throws ImejiException
    * @throws Exception
@@ -137,7 +137,7 @@ public class ShareUtil {
 
   /**
    * Read the role of the {@link UserGroup}
-   * 
+   *
    * @return
    * @throws Exception
    */

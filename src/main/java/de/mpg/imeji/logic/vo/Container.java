@@ -15,7 +15,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Super class for all imeji containers ({@link CollectionImeji} and {@link Album})
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

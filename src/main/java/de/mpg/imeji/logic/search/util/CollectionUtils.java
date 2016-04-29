@@ -15,7 +15,7 @@ import java.util.Set;
  * Based on {@link org.apache.commons.collections.CollectionUtils} <br/>
  * Introduced order to {@link org.apache.commons.collections.CollectionUtils}<br/>
  * Much faster than other classes
- * 
+ *
  * @author saquet
  */
 public class CollectionUtils {
@@ -23,7 +23,7 @@ public class CollectionUtils {
 
   /**
    * Make UNION operation between 2 {@link Collection}
-   * 
+   *
    * @param a
    * @param b
    * @return
@@ -47,7 +47,7 @@ public class CollectionUtils {
 
   /**
    * Make INTERSECTION operation between 2 {@link Collection}
-   * 
+   *
    * @param a
    * @param b
    * @return

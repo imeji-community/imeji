@@ -6,7 +6,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 
 /**
  * Validator for geolocation
- * 
+ *
  * @author bastiens
  *
  */

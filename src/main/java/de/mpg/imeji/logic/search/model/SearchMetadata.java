@@ -9,7 +9,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Specific {@link SearchPair} for {@link Metadata} search
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

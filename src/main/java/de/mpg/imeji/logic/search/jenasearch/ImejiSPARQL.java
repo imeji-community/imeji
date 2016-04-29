@@ -16,7 +16,7 @@ import de.mpg.j2j.transaction.ThreadedTransaction;
 
 /**
  * Manage search (sparql) transaction
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -29,7 +29,7 @@ public class ImejiSPARQL {
 
   /**
    * Execute a sparql query and return {@link List} of uri
-   * 
+   *
    * @param query
    * @param c
    * @return
@@ -48,7 +48,7 @@ public class ImejiSPARQL {
 
   /**
    * Example: SELECT ?s count(DISTINCT ?s) WHERE { ?s a <http://imeji.org/terms/item>}
-   * 
+   *
    * @param query
    * @param modelURI
    * @return
@@ -71,7 +71,7 @@ public class ImejiSPARQL {
 
   /**
    * execute a sparql update
-   * 
+   *
    * @param query
    */
   public static void execUpdate(String query) {

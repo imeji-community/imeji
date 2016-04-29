@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Clean the {@link Metadata} which have a {@link Statement} which doesn't exist anymore
- * 
+ *
  * @author saquet
  *
  */

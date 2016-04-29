@@ -24,7 +24,7 @@ import de.mpg.imeji.logic.vo.Item;
 
 /**
  * Extract technical metadata with {@link ImageIO}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -32,7 +32,7 @@ import de.mpg.imeji.logic.vo.Item;
 public class BasicExtractor {
   /**
    * Extract Metadata from one {@link Item} with {@link ImageIO}
-   * 
+   *
    * @param item
    * @return
    * @throws Exception
@@ -65,7 +65,7 @@ public class BasicExtractor {
 
   /**
    * Format the metadata in a convenient xml format for user
-   * 
+   *
    * @param techMd
    * @param root
    */
@@ -81,7 +81,7 @@ public class BasicExtractor {
 
   /**
    * Indent the the technical metadata which are diplayed in xml
-   * 
+   *
    * @param techMd
    * @param node
    * @param level

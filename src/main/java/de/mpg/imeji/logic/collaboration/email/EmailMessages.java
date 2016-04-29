@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * List of text (messages) sent from imeji to users via email
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -28,7 +28,7 @@ public class EmailMessages {
 
   /**
    * Email content when a new Account is sent
-   * 
+   *
    * @param password
    * @param email
    * @param username
@@ -47,7 +47,7 @@ public class EmailMessages {
 
   /**
    * Email content when a new password is sent
-   * 
+   *
    * @param password
    * @param email
    * @param username
@@ -68,7 +68,7 @@ public class EmailMessages {
 
   /**
    * Email content when a collection has been shared with the addressee by the sender
-   * 
+   *
    * @param sender
    * @param dest
    * @param collectionName
@@ -85,7 +85,7 @@ public class EmailMessages {
 
   /**
    * Email content when an item has been shared with the addressee by the sender
-   * 
+   *
    * @param sender
    * @param dest
    * @param itemName
@@ -102,7 +102,7 @@ public class EmailMessages {
 
   /**
    * Email content when an album has been shared with the addressee by the sender
-   * 
+   *
    * @param sender
    * @param dest
    * @param collectionName
@@ -119,7 +119,7 @@ public class EmailMessages {
 
   /**
    * Read the message bundle (for example: messages_en.properties)
-   * 
+   *
    * @param messageBundle
    * @return
    */
@@ -129,7 +129,7 @@ public class EmailMessages {
 
   /**
    * Create the content of an email according to the parameters
-   * 
+   *
    * @param password
    * @param email
    * @param username
@@ -153,7 +153,7 @@ public class EmailMessages {
 
   /**
    * Create the subject of the email being send, for either new account or new password
-   * 
+   *
    * @param newAccount
    * @return
    */
@@ -180,7 +180,7 @@ public class EmailMessages {
 
   /**
    * Create the body of the registration request email
-   * 
+   *
    * @param to
    * @param password
    * @param contactEmail
@@ -248,7 +248,7 @@ public class EmailMessages {
 
   /**
    * Generate email subject for "Send notification email by item download" feature
-   * 
+   *
    * @param item
    * @param session
    * @return
@@ -285,7 +285,7 @@ public class EmailMessages {
 
   /**
    * Generate email subject for "Send notification email by item download" feature
-   * 
+   *
    * @param session
    * @return
    */
@@ -295,7 +295,7 @@ public class EmailMessages {
 
   /**
    * Email content when a collection has been shared with the addressee by the sender
-   * 
+   *
    * @param sender
    * @param dest
    * @param collectionName

@@ -35,7 +35,7 @@ import de.mpg.imeji.logic.vo.Statement;
 
 /**
  * Static methods to manipulate imeji url search queries
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -78,7 +78,7 @@ public class SearchQueryParser {
 
   /**
    * Parse a url search query into a {@link SearchQuery}. Decode the query with UTF-8
-   * 
+   *
    * @param query
    * @return
    * @throws UnprocessableError
@@ -99,7 +99,7 @@ public class SearchQueryParser {
 
   /**
    * Parse a url search query into a {@link SearchQuery}. The query should be already decoded
-   * 
+   *
    * @param query
    * @return
    * @throws IOException
@@ -193,7 +193,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link String} to a {@link SearchOperators}
-   * 
+   *
    * @param str
    * @return
    */
@@ -214,7 +214,7 @@ public class SearchQueryParser {
 
   /**
    * True is a {@link SearchQuery} is a simple search (i.e. triggered from the simple search form)
-   * 
+   *
    * @param searchQuery
    * @return
    */
@@ -230,7 +230,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchQuery} into a url search query encorded in UTF-8
-   * 
+   *
    * @param searchQuery
    * @return
    */
@@ -244,7 +244,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchQuery} into a url search query
-   * 
+   *
    * @param searchQuery
    * @return
    */
@@ -266,8 +266,9 @@ public class SearchQueryParser {
           logical = " " + ((SearchLogicalRelation) se).getLogicalRelation().name() + " ";
           break;
         case PAIR:
-          if ("".equals(((SearchPair) se).getValue()))
+          if ("".equals(((SearchPair) se).getValue())) {
             break;
+          }
           if (((SearchPair) se).isNot()) {
             query += " NOT";
           }
@@ -293,7 +294,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link Statement} to an index
-   * 
+   *
    * @param statement
    * @param index
    * @return
@@ -304,7 +305,7 @@ public class SearchQueryParser {
 
   /**
    * REturn the search value of the {@link SearchMetadata} as string for an url
-   * 
+   *
    * @param md
    * @return
    */
@@ -314,7 +315,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchOperators} to a {@link String} value used in url query
-   * 
+   *
    * @param op
    * @return
    */
@@ -335,7 +336,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchQuery} into a user friendly query
-   * 
+   *
    * @param sq
    * @return
    */
@@ -349,7 +350,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchPair} into a user friendly query
-   * 
+   *
    * @param pair
    * @return
    */
@@ -369,7 +370,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchGroup} into a user friendly query
-   * 
+   *
    * @param group
    * @return
    */
@@ -405,7 +406,7 @@ public class SearchQueryParser {
    * Check if the search group is an group with pair about the same metadata. For instance, when
    * searching for person, the search group will be conposed of many pairs (family-name, givennane,
    * etc) which sould be displayed as a pretty query of only one metadata (person = value)
-   * 
+   *
    * @param group
    * @return
    */
@@ -425,7 +426,7 @@ public class SearchQueryParser {
 
   /**
    * transform a {@link SearchLogicalRelation} into a user friendly query
-   * 
+   *
    * @param rel
    * @return
    */
@@ -441,7 +442,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchElement} into a user friendly query
-   * 
+   *
    * @param els
    * @return
    */
@@ -471,7 +472,7 @@ public class SearchQueryParser {
 
   /**
    * Remove a logical operation if is not followed by a non empty search element
-   * 
+   *
    * @param q
    * @return
    */
@@ -502,7 +503,7 @@ public class SearchQueryParser {
 
   /**
    * transform a namespace of a {@link SearchIndex} into a user friendly value
-   * 
+   *
    * @param namespace
    * @return
    */
@@ -516,7 +517,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchOperators} into a user friendly label
-   * 
+   *
    * @param op
    * @return
    */
@@ -535,7 +536,7 @@ public class SearchQueryParser {
 
   /**
    * Display a negation in a user friendly way
-   * 
+   *
    * @param isNot
    * @return
    */
@@ -548,7 +549,7 @@ public class SearchQueryParser {
 
   /**
    * Special case to display a search for a metadata in a
-   * 
+   *
    * @param group
    * @return
    */

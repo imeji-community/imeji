@@ -46,7 +46,7 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 
 /**
  * CRUD methods for {@link Space}
- * 
+ *
  * @author vmakarenko (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -84,7 +84,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Creates a new space. - Add a unique id - Write user properties
-   * 
+   *
    * @param space
    * @param user
    */
@@ -132,8 +132,9 @@ public class SpaceController extends ImejiController {
     List<String> toRemoveCollections = new ArrayList<String>();
 
     for (String previousColId : alreadyAssignedCollections) {
-      if (!(newSpaceCollections.contains(previousColId)))
+      if (!(newSpaceCollections.contains(previousColId))) {
         toRemoveCollections.add(previousColId);
+      }
     }
 
     if (newSpaceCollections != null && !newSpaceCollections.isEmpty()) {
@@ -159,7 +160,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Updates a space -Logged in users: --User is space owner --OR user is space editor
-   * 
+   *
    * @param space
    * @param user
    * @throws ImejiException
@@ -172,7 +173,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Update logo of {@link Space}
-   * 
+   *
    * @param space
    * @param f
    * @param user
@@ -187,7 +188,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Copy the file in the file system
-   * 
+   *
    * @param toCopy
    * @param path
    * @return
@@ -209,7 +210,7 @@ public class SpaceController extends ImejiController {
   /**
    * Create the URL of the file from its filename, its id, and its resolution. Important: the
    * filename is decoded, to avoid problems by reading this url
-   * 
+   *
    * @param id
    * @param filename
    * @return
@@ -222,7 +223,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Transform an url to a file system path
-   * 
+   *
    * @param url
    * @return
    */
@@ -233,7 +234,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Transform the path of the item into a path
-   * 
+   *
    * @param path
    * @return
    */
@@ -244,24 +245,27 @@ public class SpaceController extends ImejiController {
 
   /**
    * Remove space file storage
-   * 
+   *
    * @param space
    * @throws IOException
    */
   public void removeFile(Space space) throws IOException {
-    if (space == null || space.getLogoUrl() == null)
+    if (space == null || space.getLogoUrl() == null) {
       return;
+    }
     String url = space.getLogoUrl().toURL().toString();
-    if (isNullOrEmptyTrim(url))
+    if (isNullOrEmptyTrim(url)) {
       return;
+    }
     File f = new File(transformUrlToPath(url)).getParentFile();
-    if (f.exists())
+    if (f.exists()) {
       FileUtils.deleteDirectory(f);
+    }
   }
 
   /**
    * Updates an space -Logged in users: --User is space owner --OR user is space editor
-   * 
+   *
    * @param space
    * @param user
    * @throws ImejiException
@@ -273,7 +277,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve {@link Space}
-   * 
+   *
    * @param spaceId
    * @param user
    * @return
@@ -287,7 +291,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve {@link Space}
-   * 
+   *
    * @param space
    * @param user
    * @return
@@ -299,7 +303,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve all imeji {@link Album}
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -320,7 +324,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve all {@link CollectionImeji}s of {@link Space}
-   * 
+   *
    * @param space
    * @return
    * @throws ImejiException
@@ -344,7 +348,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Add {@link CollectionImeji} to {@link Space}
-   * 
+   *
    * @param space
    * @param collId
    * @param user
@@ -360,7 +364,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Add {@link CollectionImeji} to {@link Space}
-   * 
+   *
    * @param space
    * @param toAdd
    * @param user
@@ -384,7 +388,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Add {@link CollectionImeji} to {@link Space}
-   * 
+   *
    * @param spaceId
    * @param collId
    * @param user
@@ -396,9 +400,9 @@ public class SpaceController extends ImejiController {
   }
 
   /**
-   * 
+   *
    * Remove {@link CollectionImeji} from the {@link Space}
-   * 
+   *
    * @param space
    * @param collId
    * @param user
@@ -411,9 +415,9 @@ public class SpaceController extends ImejiController {
   }
 
   /**
-   * 
+   *
    * Remove {@link CollectionImeji} from the {@link Space}
-   * 
+   *
    * @param space
    * @param collsToRemove
    * @param user
@@ -450,7 +454,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve an {@link Space} without its {@link Item}
-   * 
+   *
    * @param uri
    * @param user
    * @return
@@ -462,7 +466,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Search for {@link Space}
-   * 
+   *
    * @param searchQuery
    * @param sortCri
    * @param limit
@@ -488,7 +492,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Delete the {@link Space}
-   * 
+   *
    * @param space
    * @param user
    * @throws ImejiException

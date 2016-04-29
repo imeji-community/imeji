@@ -9,7 +9,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Bean for item element in the metadata editors
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -21,7 +21,7 @@ public class ItemWrapper {
 
   /**
    * Bean for item element in the metadata editors
-   * 
+   *
    * @param item
    */
   public ItemWrapper(Item item, MetadataProfile profile, boolean addEmtpyValue) {
@@ -32,7 +32,7 @@ public class ItemWrapper {
 
   /**
    * Get {@link ItemWrapper} as {@link Item}
-   * 
+   *
    * @return
    */
   public Item asItem() {
@@ -70,15 +70,16 @@ public class ItemWrapper {
   /**
    * Clear the {@link Metadata} for one {@link Statement}: remove all {@link Metadata} and its
    * Childs and add an empty one
-   * 
+   *
    * @param st
    */
   public void clear(Statement st) {
     for (MetadataWrapper smd : mds.getTree().getList()) {
       if (st.getId().compareTo(smd.getStatement().getId()) == 0) {
         // Clear the childs
-        for (MetadataWrapper child : mds.getTree().getChilds(smd.getTreeIndex()))
+        for (MetadataWrapper child : mds.getTree().getChilds(smd.getTreeIndex())) {
           child.clear();
+        }
         // clear the metadata
         smd.clear();
       }
@@ -90,22 +91,23 @@ public class ItemWrapper {
   /**
    * Return the position of the last {@link MetadataWrapper} in the editor for this
    * {@link Statement}
-   * 
+   *
    * @param st
    * @return
    */
   public int getLastPosition(Statement st) {
     int p = 0;
     for (MetadataWrapper smd : mds.getTree().getList()) {
-      if (st.getId().compareTo(smd.getStatement().getId()) == 0 && smd.getPos() > p)
+      if (st.getId().compareTo(smd.getStatement().getId()) == 0 && smd.getPos() > p) {
         p = smd.getPos();
+      }
     }
     return p;
   }
 
   /**
    * get the thumbnail of the {@link Item}
-   * 
+   *
    * @return
    */
   public URI getThumbnail() {
@@ -114,7 +116,7 @@ public class ItemWrapper {
 
   /**
    * get the filename of the {@link Item}
-   * 
+   *
    * @return
    */
   public String getFilename() {
@@ -123,7 +125,7 @@ public class ItemWrapper {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public URI getProfile() {

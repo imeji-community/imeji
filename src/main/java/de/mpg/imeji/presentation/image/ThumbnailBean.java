@@ -32,7 +32,7 @@ import de.mpg.j2j.helper.DateHelper;
 /**
  * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
  * {@link ThumbnailBean}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -63,7 +63,7 @@ public class ThumbnailBean implements Serializable {
   /**
    * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
    * {@link ThumbnailBean}
-   * 
+   *
    * @param item
    * @param initMetadata if true, will read the metadata
    * @throws Exception
@@ -93,7 +93,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * Initialize the {@link MetadataSetWrapper} which is used in the Popup
-   * 
+   *
    * @throws ImejiException
    */
   public void initPopup() throws ImejiException {
@@ -107,7 +107,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * Find the link (url) to the Thumbnail
-   * 
+   *
    * @param item
    * @return
    */
@@ -122,7 +122,7 @@ public class ThumbnailBean implements Serializable {
   /**
    * Find the caption for this {@link ThumbnailBean} as defined in the {@link MetadataProfile}. If
    * none defined in the {@link MetadataProfile} return the filename
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -155,7 +155,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * Listener for the select box of this {@link ThumbnailBean}
-   * 
+   *
    * @param event
    */
   public void selectedChanged(ValueChangeEvent event) {
@@ -171,7 +171,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getLink() {
@@ -180,7 +180,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param link
    */
   public void setLink(String link) {
@@ -189,7 +189,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getFilename() {
@@ -198,7 +198,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param filename
    */
   public void setFilename(String filename) {
@@ -207,7 +207,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getCaption() {
@@ -216,7 +216,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param caption
    */
   public void setCaption(String caption) {
@@ -225,7 +225,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public URI getUri() {
@@ -234,7 +234,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param id
    */
   public void setUri(URI id) {
@@ -243,7 +243,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public boolean isSelected() {
@@ -252,7 +252,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param selected
    */
   public void setSelected(boolean selected) {
@@ -261,7 +261,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public boolean isInActiveAlbum() {
@@ -270,7 +270,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param isInActiveAlbum
    */
   public void setInActiveAlbum(boolean isInActiveAlbum) {
@@ -279,7 +279,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getId() {
@@ -295,7 +295,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return the mds
    */
   public MetadataSetWrapper getMds() {
@@ -304,7 +304,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param mds the mds to set
    */
   public void setMds(MetadataSetWrapper mds) {

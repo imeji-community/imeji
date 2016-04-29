@@ -43,7 +43,7 @@ import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Implements CRUD and Search methods for {@link Album}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -63,7 +63,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Creates a new album. - Add a unique id - Write user properties
-   * 
+   *
    * @param album
    * @param user
    */
@@ -82,7 +82,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Load {@link Album} and {@link Item}: can lead to performance issues
-   * 
+   *
    * @param selectedAlbumId
    * @param user
    * @return
@@ -94,7 +94,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Retrieve an {@link Album} without its {@link Item}
-   * 
+   *
    * @param uri
    * @param user
    * @return
@@ -106,7 +106,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Batch retrieve for {@link Album}. Album are lazy retrieved (i.e without {@link Item} list)
-   * 
+   *
    * @param uris
    * @param limit
    * @param offset
@@ -122,7 +122,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Batch retrieve for {@link Album}. Album are fully retrieved (i.e with {@link Item} list)
-   * 
+   *
    * @param uris
    * @param user
    * @param limit
@@ -132,7 +132,7 @@ public class AlbumController extends ImejiController {
    */
   public List<Album> retrieveBatch(List<String> uris, User user, int limit, int offset)
       throws ImejiException {
-    List<Album> albums = (List<Album>) retrieveBatchLazy(uris, user, limit, offset);
+    List<Album> albums = retrieveBatchLazy(uris, user, limit, offset);
     ItemController itemController = new ItemController();
     for (Album album : albums) {
       itemController.searchAndSetContainerItems(album, user, -1, 0);
@@ -143,7 +143,7 @@ public class AlbumController extends ImejiController {
   /**
    * Updates an album -Logged in users: --User is album owner --OR user is album editor, always
    * checking the security
-   * 
+   *
    * @param ic
    * @param user
    * @throws ImejiException
@@ -157,7 +157,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Delete the {@link Album}
-   * 
+   *
    * @param album
    * @param user
    * @throws ImejiException
@@ -169,7 +169,7 @@ public class AlbumController extends ImejiController {
   /**
    * Release and {@link Album}. If one {@link Item} of the {@link Album} is not released, then
    * abort.
-   * 
+   *
    * @param album
    * @throws ImejiException
    */
@@ -186,7 +186,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Withdraw an {@link Album}: Set the {@link Status} as withdraw and remove all {@link Item}
-   * 
+   *
    * @param album
    * @throws ImejiException
    */
@@ -203,7 +203,7 @@ public class AlbumController extends ImejiController {
   /**
    * Add a list of {@link Item} (as a {@link List} of {@link URI}) to an {@link Album}. Return
    * {@link List} of {@link URI} {@link Item} of the album.
-   * 
+   *
    * @param album
    * @param uris
    * @param user
@@ -246,7 +246,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Remove a list of {@link Item} (as a {@link List} of {@link URI}) to an {@link Album}
-   * 
+   *
    * @param album
    * @param toDelete
    * @param user
@@ -288,7 +288,7 @@ public class AlbumController extends ImejiController {
    * --Collection is released --OR Collection is pending AND user is owner --OR Collection is
    * withdrawn AND user is owner --OR Collection is pending AND user has grant "Container Editor"
    * for it.
-   * 
+   *
    * @param user
    * @param scList
    * @return
@@ -300,7 +300,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Retrieve albums filtered by query
-   * 
+   *
    * @param user
    * @param q
    * @return
@@ -312,7 +312,7 @@ public class AlbumController extends ImejiController {
       List<String> results =
           search(!isNullOrEmptyTrim(q) ? SearchQueryParser.parseStringQuery(q) : null, user, null,
               size, offset, spaceId).getResults();
-      return (List<Album>) retrieveBatchLazy(results, user, -1, 0);
+      return retrieveBatchLazy(results, user, -1, 0);
     } catch (Exception e) {
       throw new UnprocessableError("Cannot retrieve albums:", e);
     }
@@ -321,7 +321,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Prepare the list of {@link Album} which is going to be retrieved
-   * 
+   *
    * @param uris
    * @param limit
    * @param offset
@@ -339,7 +339,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Retrieve all {@link Album}. Albums a fully loaded. Might last long
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -352,7 +352,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Update a {@link Album} (with its Logo)
-   * 
+   *
    * @param ic
    * @param hasgrant
    * @throws ImejiException
@@ -366,7 +366,7 @@ public class AlbumController extends ImejiController {
 
   /**
    * Remove a all items from an Album
-   * 
+   *
    * @param album
    * @param toDelete
    * @param user

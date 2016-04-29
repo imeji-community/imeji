@@ -16,7 +16,7 @@ import de.mpg.imeji.presentation.image.ThumbnailBean;
 
 /**
  * Utility class for List
- * 
+ *
  * @author bastiens
  *
  */
@@ -29,7 +29,7 @@ public class ListUtils {
 
   /**
    * Compare 2 arrays ignoring order, i.e. both arrays are compared in their natural order
-   * 
+   *
    * @param l1
    * @param l2
    */
@@ -41,7 +41,7 @@ public class ListUtils {
 
   /**
    * Transform a {@link List} of {@link Item} to a {@link List} of {@link ThumbnailBean}
-   * 
+   *
    * @param itemList
    * @return
    */
@@ -59,7 +59,7 @@ public class ListUtils {
 
   /**
    * Transform a {@link List} of {@link Album} to a {@link List} of {@link AlbumBean}
-   * 
+   *
    * @param albumList
    * @return
    * @throws Exception
@@ -76,7 +76,7 @@ public class ListUtils {
   /**
    * Transform a {@link List} of {@link CollectionImeji} to a {@link List} of
    * {@link CollectionListItem}
-   * 
+   *
    * @param collList
    * @param user
    * @return

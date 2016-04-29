@@ -23,7 +23,7 @@ import de.mpg.imeji.logic.registration.RegistrationBusinessController;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SuperViewBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -36,7 +36,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 @ManagedBean(name = "RegistrationBean")
 @ViewScoped
-public class RegistrationBean extends SuperViewBean {
+public class RegistrationBean extends SuperBean {
   private static final Logger LOGGER = Logger.getLogger(RegistrationBean.class);
   private final RegistrationBusinessController registrationBC =
       new RegistrationBusinessController();
@@ -66,7 +66,7 @@ public class RegistrationBean extends SuperViewBean {
         // if user is not yet activated, activate it
         activate();
       }
-    } else
+    } else {
       // if is logged in, redirect to home page
       try {
         FacesContext.getCurrentInstance().getExternalContext().redirect(nb.getHomeUrl());
@@ -74,6 +74,7 @@ public class RegistrationBean extends SuperViewBean {
         BeanHelper.error(e.getLocalizedMessage());
         LOGGER.error("Error redirect", e);
       }
+    }
   }
 
   public void register() {
@@ -126,7 +127,7 @@ public class RegistrationBean extends SuperViewBean {
 
   /**
    * True if the user registering has been invited
-   * 
+   *
    * @return
    * @throws ImejiException
    */

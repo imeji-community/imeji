@@ -29,7 +29,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Bean for the detail {@link Item} page within an {@link Album}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -73,7 +73,7 @@ public class AlbumItemBean extends ItemBean {
 
   /**
    * Remove the current {@link Item} from the current {@link Album}
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -124,9 +124,12 @@ public class AlbumItemBean extends ItemBean {
   }
 
   @Override
-  public void redirectToBrowsePage() throws IOException {
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(getNavigation().getAlbumUrl() + albumId + "/" + getNavigation().getBrowsePath());
+  public void redirectToBrowsePage() {
+    try {
+      redirect(getNavigation().getAlbumUrl() + albumId + "/" + getNavigation().getBrowsePath());
+    } catch (IOException e) {
+      LOGGER.error("Error redirecting to browse page", e);
+    }
   }
 
   public Album getAlbum() {

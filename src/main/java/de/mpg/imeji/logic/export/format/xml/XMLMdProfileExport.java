@@ -19,7 +19,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export the information for the ingest issue
- * 
+ *
  * @author hnguyen
  */
 public class XMLMdProfileExport extends XMLExport {

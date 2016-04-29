@@ -9,7 +9,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Additional Information for container metadata
- * 
+ *
  * @author bastiens
  *
  */

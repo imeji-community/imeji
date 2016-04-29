@@ -44,9 +44,9 @@ import de.mpg.imeji.logic.vo.Space;
 
 /**
  * Indexer for ElasticSearch
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticIndexer implements SearchIndexer {
   private static final Logger LOGGER = Logger.getLogger(ElasticIndexer.class);
@@ -124,7 +124,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Transform an object to a json
-   * 
+   *
    * @param obj
    * @return
    * @throws UnprocessableError
@@ -139,7 +139,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Index in Elasticsearch the passed json with the given id
-   * 
+   *
    * @param id
    * @param json
    */
@@ -169,7 +169,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Transform a model Entity into an Elasticsearch Entity
-   * 
+   *
    * @param obj
    * @return
    */
@@ -192,7 +192,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Set the albums of an item
-   * 
+   *
    * @param item
    * @return
    */
@@ -211,7 +211,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Get the Id of an Object
-   * 
+   *
    * @param obj
    * @return
    */
@@ -242,7 +242,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Retrieve the space of the Item depending of its folder
-   * 
+   *
    * @param item
    * @return
    */
@@ -253,7 +253,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * True if a the space of a collection is different than the space in index
-   * 
+   *
    * @param ef
    * @param dataType
    * @param index
@@ -271,7 +271,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Reindex all Items of these Folders
-   * 
+   *
    * @param collectionsToReindex
    * @throws URISyntaxException
    * @throws IOException
@@ -291,11 +291,11 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Reindex all {@link Item} stored in the database
-   * 
+   *
    * @throws ImejiException
    * @throws URISyntaxException
    * @throws IOException
-   * 
+   *
    */
   private void reindexItemsInContainer(String containerUri) {
     ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items, analyser);
@@ -312,11 +312,11 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Reindex all {@link Item} stored in the database
-   * 
+   *
    * @throws ImejiException
    * @throws URISyntaxException
    * @throws IOException
-   * 
+   *
    */
   private void reindexItemsFromList(List<String> itemUris) {
     if (itemUris.size() > 0) {
@@ -334,7 +334,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Find Folders which need to be updated, because they have been added/removed toa space
-   * 
+   *
    * @param collectionsToReindex
    * @param obj
    */
@@ -351,7 +351,7 @@ public class ElasticIndexer implements SearchIndexer {
   /**
    * Find Items which need to be reindexed as Album members, because they have been added/removed
    * to/from album
-   * 
+   *
    * @param collectionsToReindex
    * @param obj
    * @throws URISyntaxException

@@ -35,7 +35,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java bean for the advanced search page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -59,7 +59,7 @@ public class AdvancedSearchBean {
 
   /**
    * Constructor for the {@link AdvancedSearchBean}
-   * 
+   *
    * @throws ImejiException
    */
   public AdvancedSearchBean() throws ImejiException {
@@ -71,7 +71,7 @@ public class AdvancedSearchBean {
   /**
    * Called when the page is called per get request. Read the query in the url and initialize the
    * form with it
-   * 
+   *
    * @return
    */
   public String getNewSearch() {
@@ -107,7 +107,7 @@ public class AdvancedSearchBean {
 
   /**
    * Initialized the search form with the {@link SearchQuery}
-   * 
+   *
    * @param searchQuery
    * @throws Exception
    */
@@ -138,7 +138,7 @@ public class AdvancedSearchBean {
 
   /**
    * Reset the Search form with empty values
-   * 
+   *
    * @throws Exception
    */
   public String reset() throws Exception {
@@ -148,7 +148,7 @@ public class AdvancedSearchBean {
 
   /**
    * Load all available profiles
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -170,7 +170,7 @@ public class AdvancedSearchBean {
 
   /**
    * Method called when form is submitted
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -184,7 +184,7 @@ public class AdvancedSearchBean {
 
   /**
    * Redirect to the search result page
-   * 
+   *
    * @throws IOException
    */
   public void goToResultPage() throws IOException {
@@ -209,7 +209,7 @@ public class AdvancedSearchBean {
 
   /**
    * REturn the file types Selected as a query
-   * 
+   *
    * @return
    */
   private String getFileTypesQuery() {
@@ -226,7 +226,7 @@ public class AdvancedSearchBean {
 
   /**
    * Change the {@link SearchGroup}
-   * 
+   *
    * @throws ImejiException
    */
   public void changeGroup() throws ImejiException {
@@ -306,7 +306,7 @@ public class AdvancedSearchBean {
 
   /**
    * Return the current {@link SearchQuery} in the form as a user friendly query
-   * 
+   *
    * @return
    */
   public String getSimpleQuery() {
@@ -316,7 +316,7 @@ public class AdvancedSearchBean {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getProfilesMenu() {
@@ -325,7 +325,7 @@ public class AdvancedSearchBean {
 
   /**
    * Setter
-   * 
+   *
    * @param collectionsMenu
    */
   public void setProfilesMenu(List<SelectItem> profilesMenu) {
@@ -334,7 +334,7 @@ public class AdvancedSearchBean {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public SearchForm getFormular() {
@@ -343,7 +343,7 @@ public class AdvancedSearchBean {
 
   /**
    * stter
-   * 
+   *
    * @param formular
    */
   public void setFormular(SearchForm formular) {
@@ -352,7 +352,7 @@ public class AdvancedSearchBean {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getOperatorsMenu() {
@@ -361,7 +361,7 @@ public class AdvancedSearchBean {
 
   /**
    * Setter
-   * 
+   *
    * @param operatorsMenu
    */
   public void setOperatorsMenu(List<SelectItem> operatorsMenu) {

@@ -26,7 +26,7 @@ import de.mpg.imeji.logic.vo.util.MetadataAndProfileHelper;
 
 /**
  * Controller to ingest {@link Item}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -37,7 +37,7 @@ public class IngestItemController {
 
   /**
    * Constructor
-   * 
+   *
    * @param user
    * @param profile
    */
@@ -48,15 +48,15 @@ public class IngestItemController {
 
   /**
    * Ingest a {@link Item} from its xml {@link File} representation
-   * 
+   *
    * @param itemListXmlFile
    * @throws SAXException
    * @throws JAXBException
    * @throws NotFoundException
    * @throws Exception
    */
-  public void ingest(File itemListXmlFile) throws JAXBException, SAXException, ClassCastException,
-      NotFoundException {
+  public void ingest(File itemListXmlFile)
+      throws JAXBException, SAXException, ClassCastException, NotFoundException {
     ItemParser ip = new ItemParser();
     List<Item> itemList = ip.parseItemList(itemListXmlFile);
     itemList = copyIngestedMetadataToCurrentItem(itemList);
@@ -75,7 +75,7 @@ public class IngestItemController {
    * Copy the {@link MetadataSet} of the ingested {@link Item} into the already existing
    * {@link Item}. This way, we avoid to ingest (i.e overwrite) technical data like creator,
    * checksum, etc.
-   * 
+   *
    * @param originalList
    * @param ingestedList
    * @return
@@ -94,10 +94,8 @@ public class IngestItemController {
         original.setMetadataSets(mdsList);
         originalList.add(original);
       } catch (Exception e) {
-        throw new NotFoundException(
-            "Item with identifier: "
-                + ingested.getId()
-                + " could not be found in the system. Please make sure you have the right identifiers and try again.");
+        throw new NotFoundException("Item with identifier: " + ingested.getId()
+            + " could not be found in the system. Please make sure you have the right identifiers and try again.");
       }
     }
     return originalList;
@@ -108,7 +106,7 @@ public class IngestItemController {
    * - the {@link Metadata} is not emtpy <br/>
    * - the {@link Metadata} doens't exist in mds2 <br/>
    * - the {@link Metadata} exists and has the same {@link Statement} in mds2
-   * 
+   *
    * @param mds1
    * @param mds2
    * @return
@@ -133,22 +131,23 @@ public class IngestItemController {
 
   /**
    * Find the {@link Metadata} wit the given {@link URI} into the given {@link MetadataSet}
-   * 
+   *
    * @param uri
    * @param mds
    * @return
    */
   private Metadata findMetadata(URI uri, MetadataSet mds) {
     for (Metadata md : mds.getMetadata()) {
-      if (md.getId().compareTo(uri) == 0)
+      if (md.getId().compareTo(uri) == 0) {
         return md;
+      }
     }
     return null;
   }
 
   /**
    * Retrieve the {@link Item} from the database
-   * 
+   *
    * @param item
    * @return
    * @throws Exception
@@ -160,7 +159,7 @@ public class IngestItemController {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public MetadataProfile getProfile() {
@@ -169,7 +168,7 @@ public class IngestItemController {
 
   /**
    * setter
-   * 
+   *
    * @param profile
    */
   public void setProfile(MetadataProfile profile) {

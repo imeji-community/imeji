@@ -53,7 +53,7 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
-import de.mpg.imeji.presentation.beans.SuperViewBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
 import de.mpg.imeji.presentation.metadata.SingleEditorWrapper;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
@@ -63,14 +63,14 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Bean for a Single image
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 @ManagedBean(name = "ItemBean")
 @ViewScoped
-public class ItemBean extends SuperViewBean {
+public class ItemBean extends SuperBean {
   private String tab;
   private Item item;
   private String id;
@@ -97,8 +97,8 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Construct a default {@link ItemBean}
-   * 
-   * @throws Exception
+   *
+   * @
    */
   public ItemBean() {
     prettyLink = SessionBean.getPrettySpacePage("pretty:editImage", getSpace());
@@ -106,10 +106,9 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Initialize the {@link ItemBean}
-   * 
+   *
    * @return
-   * @throws IOException
-   * @throws Exception
+   * @throws IOException @
    */
   @PostConstruct
   public void init() {
@@ -150,16 +149,16 @@ public class ItemBean extends SuperViewBean {
   /**
    * Initialize the util tab
    * 
-   * @throws Exception
+   * @throws ImejiException @
    */
-  private void initUtilTab() throws Exception {
+  private void initUtilTab() throws ImejiException {
     relatedAlbums = new ArrayList<Album>();
     AlbumController ac = new AlbumController();
     SearchQuery q = new SearchQuery();
     q.addPair(new SearchPair(SearchIndex.SearchFields.member, SearchOperators.EQUALS,
         getImage().getId().toString(), false));
     // TODO NB: check if related albums should be space restricted?
-    relatedAlbums = (List<Album>) ac.retrieveBatchLazy(
+    relatedAlbums = ac.retrieveBatchLazy(
         ac.search(q, getSessionUser(), null, -1, 0, null).getResults(), getSessionUser(), -1, 0);
     initImageUploader();
   }
@@ -182,9 +181,11 @@ public class ItemBean extends SuperViewBean {
   /**
    * Initialize the metadata information when the "view metadata" tab is called.
    * 
-   * @throws Exception
+   * @throws ImejiException
+   *
+   * @
    */
-  public void initViewMetadataTab() throws Exception {
+  public void initViewMetadataTab() throws ImejiException {
     if (item != null) {
       this.discardComment = null;
       User user = getSessionUser();
@@ -203,10 +204,10 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Initialize the technical metadata when the "technical metadata" tab is called
-   * 
-   * @throws Exception
+   *
+   * @
    */
-  public void initViewTechnicalMetadata() throws Exception {
+  public void initViewTechnicalMetadata() {
     try {
       techMd = new ArrayList<String>();
       techMd = TikaExtractor.extract(item);
@@ -219,10 +220,10 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Initiliaue the {@link SingleItemBrowse} for this {@link ItemBean}
-   * 
-   * @throws Exception
+   *
+   * @
    */
-  public void initBrowsing() throws Exception {
+  public void initBrowsing() {
     if (item != null) {
       ItemsBean itemsBean = (ItemsBean) BeanHelper.getSessionBean(ItemsBean.class);
       if (UrlHelper.getParameterBoolean("reload")) {
@@ -236,9 +237,11 @@ public class ItemBean extends SuperViewBean {
   /**
    * Load the item according to the idntifier defined in the URL
    * 
-   * @throws Exception
+   * @throws ImejiException
+   *
+   * @
    */
-  public void loadImage() throws Exception {
+  public void loadImage() throws ImejiException {
     item = new ItemController().retrieve(ObjectHelper.getURI(Item.class, id), getSessionUser());
     if (item == null) {
       throw new NotFoundException("LoadImage: empty");
@@ -260,7 +263,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Load the {@link MetadataProfile} of the {@link Item}
-   * 
+   *
    * @throws ImejiException
    */
   public void loadProfile(User user) throws ImejiException {
@@ -269,7 +272,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Return and URL encoded version of the filename
-   * 
+   *
    * @return
    * @throws UnsupportedEncodingException
    */
@@ -277,7 +280,7 @@ public class ItemBean extends SuperViewBean {
     return URLEncoder.encode(item.getFilename(), "UTF-8");
   }
 
-  public List<String> getTechMd() throws Exception {
+  public List<String> getTechMd() {
     return techMd;
   }
 
@@ -317,8 +320,9 @@ public class ItemBean extends SuperViewBean {
   }
 
   public String getThumbnailImageUrlAsString() {
-    if (item.getThumbnailImageUrl() == null)
+    if (item.getThumbnailImageUrl() == null) {
       return "/no_thumb";
+    }
     return item.getThumbnailImageUrl().toString();
   }
 
@@ -371,11 +375,11 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Add the current {@link Item} to the active {@link Album}
-   * 
+   *
    * @return
-   * @throws Exception
+   * @throws ImejiException @
    */
-  public String addToActiveAlbum() throws Exception {
+  public String addToActiveAlbum() throws ImejiException {
     SessionObjectsController soc = new SessionObjectsController();
     List<String> l = new ArrayList<String>();
     l.add(item.getId().toString());
@@ -399,9 +403,11 @@ public class ItemBean extends SuperViewBean {
    * Remove the {@link Item} from the database. If the item was in the current {@link Album}, remove
    * the {@link Item} from it
    * 
-   * @throws Exception
+   * @throws ImejiException
+   *
+   * @
    */
-  public void delete() throws Exception {
+  public void delete() throws ImejiException {
     if (getIsInActiveAlbum()) {
       removeFromActiveAlbum();
     }
@@ -414,7 +420,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Discard the Item
-   * 
+   *
    * @throws ImejiException
    * @throws IOException
    */
@@ -428,7 +434,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   public void discardCommentListener(ValueChangeEvent event) {
@@ -437,11 +443,11 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Remove the {@link Item} from the active {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
+   * @throws ImejiException
    */
-  public String removeFromActiveAlbum() throws Exception {
+  public String removeFromActiveAlbum() throws ImejiException {
     new SessionObjectsController().removeFromActiveAlbum(Arrays.asList(item.getId().toString()));
     BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("image", getLocale()) + " " + item.getFilename()
         + " " + Imeji.RESOURCE_BUNDLE.getMessage("success_album_remove_from", getLocale()));
@@ -450,7 +456,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Return true if the {@link Item} is in the active {@link Album}
-   * 
+   *
    * @return
    */
   public boolean getIsInActiveAlbum() {
@@ -462,7 +468,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the current item page is part of the current album
-   * 
+   *
    * @return
    */
   public boolean getIsActiveAlbum() {
@@ -471,16 +477,20 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Redirect to the browse page
-   * 
+   *
    * @throws IOException
    */
-  public void redirectToBrowsePage() throws IOException {
-    redirect(getNavigation().getBrowseUrl());
+  public void redirectToBrowsePage() {
+    try {
+      redirect(getNavigation().getBrowseUrl());
+    } catch (IOException e) {
+      LOGGER.error("Error redirect to browse page", e);
+    }
   }
 
   /**
    * Listener of the value of the select box
-   * 
+   *
    * @param event
    */
   public void selectedChanged(ValueChangeEvent event) {
@@ -548,7 +558,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Function to return the content of the item
-   * 
+   *
    * @return String
    */
   public String getStringContent() throws ImejiException {
@@ -559,27 +569,25 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * Returns a list of all albums this image is added to.
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public List<Album> getRelatedAlbums() throws Exception {
+  public List<Album> getRelatedAlbums() {
     return relatedAlbums;
   }
 
   /**
    * Return the {@link User} having uploaded the file for this item
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public String getImageUploader() throws Exception {
+  public String getImageUploader() {
     return imageUploader;
   }
 
   /**
    * setter
-   * 
+   *
    * @param mds the mds to set
    */
   public void setMds(MetadataSetWrapper mds) {
@@ -588,7 +596,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * getter
-   * 
+   *
    * @return the mds
    */
   public MetadataSetWrapper getMds() {
@@ -597,7 +605,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getItemStorageIdFilename() {
@@ -606,7 +614,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the current file is an image
-   * 
+   *
    * @return
    */
   public boolean isImageFile() {
@@ -617,7 +625,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the data can be viewed in the data viewer (defined in the configuration)
-   * 
+   *
    * @return
    */
   public boolean isViewInDataViewer() {
@@ -627,7 +635,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * View the File in Digilib (if Digilib is enabled)
-   * 
+   *
    * @return
    */
   public boolean isViewInDigilib() {
@@ -636,7 +644,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the file is an svg
-   * 
+   *
    * @return
    */
   public boolean isSVGFile() {
@@ -645,7 +653,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the current file is a video
-   * 
+   *
    * @return
    */
   public boolean isVideoFile() {
@@ -655,7 +663,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the File is a RAW file (a file which can not be viewed in any online tool)
-   * 
+   *
    * @return
    */
   public boolean isRawFile() {
@@ -664,7 +672,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the current file is a pdf
-   * 
+   *
    * @return
    */
   public boolean isPdfFile() {
@@ -681,7 +689,7 @@ public class ItemBean extends SuperViewBean {
 
   /**
    * True if the current file is an audio
-   * 
+   *
    * @return
    */
   public boolean isAudioFile() {
@@ -709,8 +717,9 @@ public class ItemBean extends SuperViewBean {
   }
 
   public void setNewFilename(String newFilename) {
-    if (!"".equals(newFilename))
+    if (!"".equals(newFilename)) {
       getImage().setFilename(newFilename);
+    }
   }
 
   /**

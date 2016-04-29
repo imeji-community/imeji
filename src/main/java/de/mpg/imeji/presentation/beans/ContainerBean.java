@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -70,12 +70,12 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Super Java Bean for containers bean {@link AlbumBean} and {@link CollectionBean}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class ContainerBean extends SuperViewBean implements Serializable {
+public abstract class ContainerBean extends SuperBean implements Serializable {
   private static final Logger LOGGER = Logger.getLogger(ContainerBean.class);
   private static final long serialVersionUID = 3377874537531738442L;
   private int authorPosition;
@@ -87,7 +87,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Types of containers
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -98,42 +98,42 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * return the {@link CONTAINER_TYPE} of the current bean
-   * 
+   *
    * @return
    */
   public abstract String getType();
 
   /**
    * Return the container
-   * 
+   *
    * @return
    */
   public abstract Container getContainer();
 
   /**
    * Return the String used for redirection
-   * 
+   *
    * @return
    */
   protected abstract String getNavigationString();
 
   /**
    * Return the bundle of the message when not orga is set
-   * 
+   *
    * @return
    */
   protected abstract String getErrorMessageNoAuthor();
 
   /**
    * The url of the current page
-   * 
+   *
    * @return
    */
   protected abstract String getPageUrl();
 
   /**
    * Find the first {@link Item} of the current {@link Container} (fast method)
-   * 
+   *
    * @param user
    * @param size
    */
@@ -144,7 +144,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Count the size the {@link Container}
-   * 
+   *
    * @param hasgrant
    * @return
    */
@@ -156,7 +156,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Load the {@link Item} of the {@link Container}
-   * 
+   *
    * @throws ImejiException
    */
   protected void loadItems(User user, int size) throws ImejiException {
@@ -194,7 +194,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Get Person String
-   * 
+   *
    * @return
    */
   public String getPersonString() {
@@ -233,7 +233,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * The Url to view the DOI
-   * 
+   *
    * @return
    */
   public String getDoiUrl() {
@@ -243,7 +243,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Add an addtionial Info at the passed position
-   * 
+   *
    * @param pos
    */
   public void addAdditionalInfo(int pos) {
@@ -253,7 +253,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Remove the nth additional Info
-   * 
+   *
    * @param pos
    */
   public void removeAdditionalInfo(int pos) {
@@ -262,7 +262,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Add a new author to the {@link CollectionImeji}
-   * 
+   *
    * @param authorPosition
    * @return
    */
@@ -276,7 +276,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Remove an author of the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String removeAuthor(int authorPosition) {
@@ -291,7 +291,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Add an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @param authorPosition
    * @param organizationPosition
    * @return
@@ -307,7 +307,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Remove an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String removeOrganization(int authorPosition, int organizationPosition) {
@@ -324,7 +324,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getAuthorPosition() {
@@ -333,7 +333,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param pos
    */
   public void setAuthorPosition(int pos) {
@@ -409,7 +409,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * True if the current {@link User} is the creator of the {@link Container}
-   * 
+   *
    * @return
    */
   public boolean isOwner() {
@@ -474,7 +474,7 @@ public abstract class ContainerBean extends SuperViewBean implements Serializabl
 
   /**
    * Remove an author of the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String removeContainerLogo() {

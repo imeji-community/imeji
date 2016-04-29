@@ -5,17 +5,17 @@ import java.util.Calendar;
 import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Item.Visibility;
+import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Prepare Objects for Workflow operations.<br/>
  * NOTE: Objects are not written in the database. This must be done by the controllers
- * 
+ *
  * @author bastiens
  *
  */
@@ -25,7 +25,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the creation of an object: Set all Workflow properties
-   * 
+   *
    * @param p
    * @param user
    * @throws WorkflowException
@@ -45,7 +45,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the Update of an object
-   * 
+   *
    * @param p
    * @param user
    */
@@ -57,7 +57,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the release of an object
-   * 
+   *
    * @param p
    * @throws WorkflowException
    */
@@ -73,7 +73,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the withdraw of an object
-   * 
+   *
    * @param p
    * @throws WorkflowException
    */

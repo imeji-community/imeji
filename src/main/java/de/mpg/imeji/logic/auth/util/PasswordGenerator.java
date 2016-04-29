@@ -7,7 +7,7 @@ import java.util.Random;
 
 /**
  * Utility class to generate a random password
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -29,7 +29,7 @@ public class PasswordGenerator {
 
   /**
    * Generate a random Password of leng
-   * 
+   *
    * @return
    */
   public String generatePassword() {

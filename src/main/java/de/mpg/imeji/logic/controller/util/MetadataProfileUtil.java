@@ -19,7 +19,7 @@ import de.mpg.imeji.logic.vo.util.MetadataAndProfileHelper;
 
 /**
  * Helper methods related to {@link MetadataProfile}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -34,7 +34,7 @@ public class MetadataProfileUtil {
 
   /**
    * Load the all th {@link MetadataProfile} found in a {@link List} of {@link Item}
-   * 
+   *
    * @param imgs
    * @return
    * @throws ImejiException
@@ -57,7 +57,7 @@ public class MetadataProfileUtil {
   /**
    * Return a {@link Statement} according to its {@link URI} if defined within the provided
    * {@link MetadataProfile}
-   * 
+   *
    * @param uri
    * @param profile
    * @return
@@ -69,7 +69,7 @@ public class MetadataProfileUtil {
   /**
    * Get the all {@link Statement} that are childs of the passed statement. If onlyFirst ist true,
    * then give back only childs that are direct child of this {@link Statement}
-   * 
+   *
    * @param statement
    * @param profile
    * @param onlyFirst
@@ -84,8 +84,9 @@ public class MetadataProfileUtil {
         Statement st = ((List<Statement>) profile.getStatements()).get(i);
         if (st.getParent() != null && st.getParent().compareTo(statement.getId()) == 0) {
           childs.add(st);
-          if (!onlyFirst)
+          if (!onlyFirst) {
             childs.addAll(getChilds(st, profile, false));
+          }
         }
       }
     }
@@ -94,7 +95,7 @@ public class MetadataProfileUtil {
 
   /**
    * Return the {@link URI} of the last parent {@link Statement}. Null if no parent
-   * 
+   *
    * @param st
    * @param profile
    * @return
@@ -105,8 +106,9 @@ public class MetadataProfileUtil {
     while (parent != null) {
       lastParent = parent;
       Statement parentStatement = getStatement(parent, profile);
-      if (parentStatement == null)
+      if (parentStatement == null) {
         break;
+      }
       parent = parentStatement.getParent();
     }
     return lastParent;
@@ -114,7 +116,7 @@ public class MetadataProfileUtil {
 
   /**
    * True if {@link Statement} st1 is a parent of {@link Statement} st2
-   * 
+   *
    * @param st1
    * @param st2
    * @param profile

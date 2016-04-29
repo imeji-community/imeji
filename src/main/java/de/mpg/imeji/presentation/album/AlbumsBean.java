@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * Bean for the Albums page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -73,13 +73,13 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
   /*
    * Perform the {@link SPARQLSearch}
-   * 
+   *
    * @param searchQuery
-   * 
+   *
    * @param sortCriterion
-   * 
+   *
    * @return
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.
    * SearchQuery , de.mpg.imeji.logic.search.vo.SortCriterion)
    */

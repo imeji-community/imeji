@@ -19,7 +19,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 
 /**
  * {@link Transaction} for search operation
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -33,7 +33,7 @@ public class SearchTransaction extends Transaction {
 
   /**
    * Construct a new {@link SearchTransaction}
-   * 
+   *
    * @param modelName
    * @param searchQuery
    * @param results
@@ -66,7 +66,7 @@ public class SearchTransaction extends Transaction {
 
   /**
    * Initialize a new a {@link QueryExecution} for a SPARQL query
-   * 
+   *
    * @param ds
    * @param q
    * @return
@@ -80,7 +80,7 @@ public class SearchTransaction extends Transaction {
 
   /**
    * Set the results according to the search type
-   * 
+   *
    * @param rs
    */
   private void setResults(ResultSet rs) {
@@ -93,7 +93,7 @@ public class SearchTransaction extends Transaction {
 
   /**
    * set results results for count results
-   * 
+   *
    * @param rs
    */
   private void setCountResults(ResultSet rs) {
@@ -107,7 +107,7 @@ public class SearchTransaction extends Transaction {
 
   /**
    * Set results for exec search
-   * 
+   *
    * @param rs
    */
   private void setExecResults(ResultSet rs) {
@@ -118,7 +118,7 @@ public class SearchTransaction extends Transaction {
 
   /**
    * Parse the {@link ResultSet}
-   * 
+   *
    * @param results
    * @return
    */
@@ -138,7 +138,7 @@ public class SearchTransaction extends Transaction {
 
     /*
      * Was causing internal Server error when node was Null (i.e. there were no results),
-     * 
+     *
      * see https://github.com/imeji-community/imeji/issues/1010
      */
     if (node != null) {
@@ -156,7 +156,7 @@ public class SearchTransaction extends Transaction {
 
   /**
    * A a sort value to a {@link String}
-   * 
+   *
    * @param s
    * @param sortValue
    * @return

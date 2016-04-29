@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -43,7 +43,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * <code>#{Auth.readUri(uri)}</code> (equivalent as before) or <br/>
  * <code>#{Auth.read(item)}</code> (equivalent as before) or <br/>
  * <code>#{Auth.isAdmin()}</code>
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -56,8 +56,8 @@ public class ImejiAuthBean implements Serializable {
   private User sessionUser;
 
   /**
-     * 
-     * 
+     *
+     *
      */
   public ImejiAuthBean() {
     this.sessionUser = ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getUser();
@@ -65,7 +65,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can read the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -76,7 +76,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can create the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -87,7 +87,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can update the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -98,7 +98,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can delete the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -109,7 +109,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can administrate the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -121,7 +121,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * Return true if the user can create content in the object. For instance, upload an item in a
    * collection, or add/remove an item to an album
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -132,7 +132,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can update the content of the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -143,7 +143,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can delete the content of the object
-   * 
+   *
    * @param user
    * @param url
    * @return
@@ -154,7 +154,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the current {@link User} in the session can read the object
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -165,7 +165,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the current {@link User} in the session can create the object
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -176,7 +176,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can update the object
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -187,7 +187,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the current {@link User} in the session can delete the object
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -198,7 +198,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the current {@link User} in the session can administrate the object
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -210,7 +210,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * Return true if the user can create content in the object. For instance, upload an item in a
    * collection, or add/remove an item to an album
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -221,7 +221,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can update the content of the object
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -232,7 +232,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if the {@link User} can delete the content of the object
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -244,7 +244,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the current {@link User} in the session can administrate imeji (i.e. is system
    * administrator)
-   * 
+   *
    * @param hasgrant
    * @param url
    * @return
@@ -255,7 +255,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * True if a user is currently logged in
-   * 
+   *
    * @return
    */
   public boolean isLoggedIn() {
@@ -278,7 +278,7 @@ public class ImejiAuthBean implements Serializable {
 
   /**
    * Extract the VO out of the object, to be abble to use {@link Authorization}
-   * 
+   *
    * @param obj
    * @return
    */

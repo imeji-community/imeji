@@ -11,7 +11,7 @@ import de.mpg.j2j.controler.ResourceController;
 
 /**
  * {@link Transaction} for CRUD methods
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -27,7 +27,7 @@ public class CRUDTransaction extends Transaction {
 
   /**
    * Constructor for a {@link CRUDTransaction} with a {@link List} of {@link Object}
-   * 
+   *
    * @param objects
    * @param type
    * @param modelURI
@@ -51,7 +51,7 @@ public class CRUDTransaction extends Transaction {
 
   /**
    * Make the CRUD operation for one {@link Object} thanks to the {@link ResourceController}
-   * 
+   *
    * @param rc
    * @param o
    * @throws ImejiException

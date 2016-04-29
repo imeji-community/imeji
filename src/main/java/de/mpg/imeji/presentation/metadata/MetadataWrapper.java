@@ -28,7 +28,7 @@ import de.mpg.imeji.presentation.util.SearchAndExportHelper;
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all
  * metadata types.
- * 
+ *
  * @author saquet
  */
 public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializable {
@@ -85,7 +85,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
   /**
    * Bean for all Metadata types. This bean should have all variable that have been defined in all
    * metadata types.
-   * 
+   *
    * @param metadata
    */
   public MetadataWrapper(Metadata metadata, Statement statement) {
@@ -103,7 +103,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Get {@link MetadataWrapper} as {@link Metadata}
-   * 
+   *
    * @return
    */
   public Metadata asMetadata() {
@@ -119,7 +119,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
    * Return the {@link Metadata} which has been used to initialize this {@link MetadataWrapper} Not
    * to use to save the {@link MetadataWrapper} as a {@link Metadata} in the database. In this case
    * use the asMetadata() method
-   * 
+   *
    * @return
    */
   public Metadata getMetadata() {
@@ -129,7 +129,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
   /**
    * Change the Id of the {@link Metadata} which will force the create a new {@link Metadata}
    * resource in the database
-   * 
+   *
    * @return a new {@link MetadataWrapper} with the same values
    */
   public MetadataWrapper copy() {
@@ -143,7 +143,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Copy this {@link MetadataWrapper} without the values
-   * 
+   *
    * @return a new {@link MetadataWrapper} with the same values
    */
   public MetadataWrapper copyEmpty() {
@@ -164,7 +164,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Listener that check when a select menu has been set to null
-   * 
+   *
    * @param vce
    */
   public void predefinedValueListener(ValueChangeEvent vce) {
@@ -172,14 +172,15 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
     if (newValue == null) {
       clear();
       toNull = true;
-    } else if (newValue instanceof String)
+    } else if (newValue instanceof String) {
       patternParser((String) newValue);
+    }
   }
 
   /**
    * Parse the input for a pattern like: uri:http://url.com, and set the value (in this case the uri
    * value)
-   * 
+   *
    * @param s
    */
   private void patternParser(String s) {
@@ -213,7 +214,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
   /**
    * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI
    * representation
-   * 
+   *
    * @return
    */
   public String getStatementId() {
@@ -230,7 +231,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Reset the citation of a publication
-   * 
+   *
    * @param smb
    */
   public void resetCitation() {
@@ -239,7 +240,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter for the namespace defining the type of the {@link Metadata}
-   * 
+   *
    * @return
    */
   public String getTypeNamespace() {
@@ -248,7 +249,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getText() {
@@ -257,7 +258,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param text
    */
   public void setText(String text) {
@@ -268,7 +269,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Person getPerson() {
@@ -277,7 +278,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param person
    */
   public void setPerson(Person person) {
@@ -286,7 +287,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public URI getConeId() {
@@ -295,7 +296,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param coneId
    */
   public void setConeId(URI coneId) {
@@ -304,7 +305,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public URI getUri() {
@@ -313,7 +314,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param uri
    */
   public void setUri(URI uri) {
@@ -324,7 +325,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getLabel() {
@@ -333,7 +334,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param label
    */
   public void setLabel(String label) {
@@ -342,7 +343,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getDate() {
@@ -351,7 +352,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param date
    */
   public void setDate(String date) {
@@ -366,7 +367,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public double getLongitude() {
@@ -375,7 +376,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param longitude
    */
   public void setLongitude(double longitude) {
@@ -384,7 +385,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public double getLatitude() {
@@ -393,7 +394,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param latitude
    */
   public void setLatitude(double latitude) {
@@ -402,7 +403,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getName() {
@@ -411,7 +412,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param name
    */
   public void setName(String name) {
@@ -422,7 +423,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getExportFormat() {
@@ -431,7 +432,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param exportFormat
    */
   public void setExportFormat(String exportFormat) {
@@ -440,7 +441,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getCitation() {
@@ -449,7 +450,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param citation
    */
   public void setCitation(String citation) {
@@ -458,7 +459,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public double getNumber() {
@@ -467,7 +468,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param number
    */
   public void setNumber(double number) {
@@ -478,7 +479,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getLicense() {
@@ -487,7 +488,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param license
    */
   public void setLicense(String license) {
@@ -519,7 +520,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getPos() {
@@ -528,7 +529,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param pos
    */
   public void setPos(int pos) {
@@ -537,7 +538,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param parent the parent to set
    */
   public void setParent(MetadataWrapper parent) {
@@ -546,7 +547,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return the parent
    */
   public MetadataWrapper getParent() {
@@ -555,7 +556,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return the hierarchyLevel
    */
   public int getHierarchyLevel() {
@@ -564,7 +565,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return the empty
    */
   public boolean isEmpty() {
@@ -573,7 +574,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return the preview
    */
   public boolean isPreview() {
@@ -582,7 +583,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param preview the preview to set
    */
   public void setPreview(boolean preview) {
@@ -591,7 +592,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * getter
-   * 
+   *
    * @return the statement
    */
   public Statement getStatement() {
@@ -600,7 +601,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * setter
-   * 
+   *
    * @param statement the statement to set
    */
   public void setStatement(Statement statement) {
@@ -613,7 +614,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   @Override
@@ -641,7 +642,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Return the higher parent
-   * 
+   *
    * @return
    */
   public MetadataWrapper lastParent() {
@@ -668,7 +669,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Add emtpy childs according to the {@link MetadataProfile}
-   * 
+   *
    * @param p
    */
   public void addEmtpyChilds(MetadataProfile p) {
@@ -713,7 +714,7 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Add an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @param authorPosition
    * @param organizationPosition
    * @return
@@ -728,16 +729,17 @@ public class MetadataWrapper implements Comparable<MetadataWrapper>, Serializabl
 
   /**
    * Remove an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String removeOrganization(int organizationPosition) {
     List<Organization> orgs = (List<Organization>) this.person.getOrganizations();
-    if (orgs.size() > 1)
+    if (orgs.size() > 1) {
       orgs.remove(organizationPosition);
-    else
+    } else {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization",
           BeanHelper.getLocale()));
+    }
     return "";
   }
 }

@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -52,7 +52,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Utility class for the package auth
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -65,7 +65,7 @@ public class AuthUtil {
 
   /**
    * Return the {@link Authorization} as static
-   * 
+   *
    * @return
    */
   public static Authorization staticAuth() {
@@ -74,7 +74,7 @@ public class AuthUtil {
 
   /**
    * True if the user is allowed to view this file
-   * 
+   *
    * @param fileUrl
    * @param user
    * @return
@@ -91,7 +91,7 @@ public class AuthUtil {
 
   /**
    * True if the fileUrl is associated to a {@link Item} which can be read by the user
-   * 
+   *
    * @param fileUrl
    * @param user
    * @return
@@ -109,7 +109,7 @@ public class AuthUtil {
   /**
    * True if the fileurl is associated to {@link CollectionImeji} which can be read by the user
    * (usefull for collection logos)
-   * 
+   *
    * @param fileUrl
    * @param user
    * @return
@@ -128,7 +128,7 @@ public class AuthUtil {
   /**
    * True if the filerurl is associated an {@link Album} which can be read by the user (usefull for
    * album logos)
-   * 
+   *
    * @param fileUrl
    * @param user
    * @return
@@ -145,7 +145,7 @@ public class AuthUtil {
 
   /**
    * True if the file is the logo of a space
-   * 
+   *
    * @param url
    * @return
    */
@@ -156,7 +156,7 @@ public class AuthUtil {
 
   /**
    * True if the user is Administrator of Imeji
-   * 
+   *
    * @param user
    * @return
    */
@@ -166,7 +166,7 @@ public class AuthUtil {
 
   /**
    * True if a {@link User} can create an collection
-   * 
+   *
    * @param user
    * @return
    */
@@ -177,7 +177,7 @@ public class AuthUtil {
   /**
    * True if the {@link User} has read Grant for a single {@link Item} but not to its
    * {@link CollectionImeji}
-   * 
+   *
    * @param user
    * @param item
    * @return
@@ -190,7 +190,7 @@ public class AuthUtil {
   /**
    * Return the {@link List} of uri of all {@link CollectionImeji}, the {@link User} is allowed to
    * see
-   * 
+   *
    * @param user
    * @return
    */
@@ -209,7 +209,7 @@ public class AuthUtil {
   /**
    * Return the {@link List} of uri of all {@link de.mpg.imeji.logic.vo.MetadataProfile}, the
    * {@link User} is allowed to see
-   * 
+   *
    * @param user
    * @return
    */
@@ -228,7 +228,7 @@ public class AuthUtil {
   /**
    * Return the {@link List} of uri of all {@link Item}, , the {@link User} has got an extra read
    * {@link Grant} for.
-   * 
+   *
    * @param user
    * @return
    */
@@ -245,7 +245,7 @@ public class AuthUtil {
 
   /**
    * Return the {@link List} of uri of all {@link Album}, the {@link User} is allowed to see
-   * 
+   *
    * @param user
    * @return
    */
@@ -263,7 +263,7 @@ public class AuthUtil {
   /**
    * Return all {@link Grant} of {@link User} including those from the {@link UserGroup} he is
    * member of.
-   * 
+   *
    * @param u
    * @return
    */
@@ -280,7 +280,7 @@ public class AuthUtil {
 
   /**
    * Return all {@link Grant} which have the passed grant for
-   * 
+   *
    * @param hasgrant
    * @param grantForUri
    * @return
@@ -298,7 +298,7 @@ public class AuthUtil {
   /**
    * {@link ReturnaddressType} the Grant which is exactly define by the pass parameter. If not found
    * return null;
-   * 
+   *
    * @param grants
    * @param grantForUri
    * @param profileUri
@@ -316,7 +316,7 @@ public class AuthUtil {
 
   /**
    * Remove the grants which are not valid to avoid error in further methods
-   * 
+   *
    * @param hasgrant
    * @return
    */
@@ -332,7 +332,7 @@ public class AuthUtil {
 
   /**
    * Transform a {@link GrantType} into an {@link URI}
-   * 
+   *
    * @param type
    * @return
    */

@@ -26,7 +26,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 
 /**
  * Initialize application on server start
- * 
+ *
  * @author saquet
  */
 public class InitializerServlet extends HttpServlet {
@@ -47,7 +47,7 @@ public class InitializerServlet extends HttpServlet {
 
   /**
    * Initialize the imeji jena tdb
-   * 
+   *
    * @throws URISyntaxException
    * @throws IOException
    * @throws ImejiException
@@ -60,7 +60,7 @@ public class InitializerServlet extends HttpServlet {
 
   /**
    * look to the migration File (migration.txt)
-   * 
+   *
    * @throws IOException
    */
   private void runMigration() throws IOException {
@@ -85,7 +85,7 @@ public class InitializerServlet extends HttpServlet {
 
   /**
    * Replace XXX_NEW_ID_XXX by a new ID in Migration File
-   * 
+   *
    * @param migrationRequests
    * @return
    */

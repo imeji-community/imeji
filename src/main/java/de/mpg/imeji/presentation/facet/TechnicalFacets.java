@@ -29,7 +29,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Initiliaze all technical {@link Facet}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -47,7 +47,7 @@ public class TechnicalFacets extends FacetsAbstract {
 
   /**
    * Constructor
-   * 
+   *
    * @param searchQuery
    */
   public TechnicalFacets(SearchQuery searchQuery, User user, Locale locale, String space) {
@@ -60,7 +60,7 @@ public class TechnicalFacets extends FacetsAbstract {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.facet.Facets#init()
    */
   @Override
@@ -128,7 +128,7 @@ public class TechnicalFacets extends FacetsAbstract {
 
   /**
    * Count the number of item for a facet with one {@link SearchPair}
-   * 
+   *
    * @param searchQuery
    * @param pair
    * @param allImages
@@ -149,7 +149,7 @@ public class TechnicalFacets extends FacetsAbstract {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.facet.Facets#getFacets()
    */
   @Override

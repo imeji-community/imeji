@@ -32,14 +32,14 @@ import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SuperViewBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.user.UserGroupsBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 @ManagedBean(name = "ShareBean")
 @ViewScoped
-public class ShareBean extends SuperViewBean implements Serializable {
+public class ShareBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = 8106762709528360926L;
   private static final Logger LOGGER = Logger.getLogger(ShareBean.class);
   private String id;
@@ -73,9 +73,9 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Init {@link ShareBean} for {@link CollectionImeji}
-   * 
+   *
    * @throws ImejiException
-   * 
+   *
    * @throws Exception
    */
   public void initShareCollection() throws ImejiException {
@@ -96,7 +96,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Init {@link ShareBean} for {@link Album}
-   * 
+   *
    * @throws Exception
    */
   public void initShareAlbum() throws ImejiException {
@@ -116,7 +116,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Loaded when the shre component is called from the item page
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -145,7 +145,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Init method for {@link ShareBean}
-   * 
+   *
    * @throws ImejiException
    */
   public void init() throws ImejiException {
@@ -176,7 +176,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Update the page accodring to new changes
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -217,7 +217,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Cancel Invitation
-   * 
+   *
    * @throws ImejiException
    */
   public void cancelInvitation(ShareListItem item) throws ImejiException {
@@ -228,7 +228,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
   /**
    * Unshare theContainer for one {@link User} (i.e, remove all {@link Grant} of this {@link User}
    * related to theContainer)
-   * 
+   *
    * @param sh
    */
   public void unshare(ShareListItem item) {
@@ -251,7 +251,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Remove an unknow Email from the list (no invitation will be sent to him)
-   * 
+   *
    * @param pos
    */
   public void removeUnknowEmail(int pos) {
@@ -295,7 +295,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Send an Email...
-   * 
+   *
    * @param email
    * @param subject
    * @param body
@@ -313,7 +313,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
   /**
    * Send Email for each ShareListItem (User of Group) that object has been shared and with which
    * Grants
-   * 
+   *
    * @param item
    * @param subject
    */
@@ -330,7 +330,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Send email to the user(s) for which the object has been unshared
-   * 
+   *
    * @param dest
    * @param subject
    * @param grants
@@ -347,7 +347,7 @@ public class ShareBean extends SuperViewBean implements Serializable {
 
   /**
    * Search a {@link UserGroup} by name
-   * 
+   *
    * @param uri
    * @return
    */

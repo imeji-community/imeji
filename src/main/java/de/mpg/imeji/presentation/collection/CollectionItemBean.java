@@ -9,6 +9,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ItemBean;
@@ -19,7 +21,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Bean for the detail item page when viewed within a collection
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -29,6 +31,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 public class CollectionItemBean extends ItemBean {
   private String collectionId;
   private CollectionItemsBean collectionImagesBean;
+  private static Logger LOGGER = Logger.getLogger(CollectionItemBean.class);
 
   public CollectionItemBean() {
     super();
@@ -52,9 +55,13 @@ public class CollectionItemBean extends ItemBean {
   }
 
   @Override
-  public void redirectToBrowsePage() throws IOException {
-    FacesContext.getCurrentInstance().getExternalContext().redirect(
-        getNavigation().getCollectionUrl() + collectionId + "/" + getNavigation().getBrowsePath());
+  public void redirectToBrowsePage() {
+    try {
+      redirect(getNavigation().getCollectionUrl() + collectionId + "/"
+          + getNavigation().getBrowsePath());
+    } catch (IOException e) {
+      LOGGER.error("Error redirect to browse page", e);
+    }
   }
 
 

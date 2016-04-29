@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * - Example: {@link List} of Item in a Collection are defined as {@link LazyList}. When loading a
  * collection, j2j doesn't load the complete Collection {@link Resource}, the Item {@link List} is
  * not loaded. To get the item, a search is made (much faster that loading)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

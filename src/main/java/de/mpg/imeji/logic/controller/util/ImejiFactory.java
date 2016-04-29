@@ -11,21 +11,21 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Create objects ready to be displayed in JSF
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -87,7 +87,7 @@ public class ImejiFactory {
 
   /**
    * Crate a new emtpy {@link Statement}
-   * 
+   *
    * @return
    */
   public static Statement newStatement() {
@@ -98,7 +98,7 @@ public class ImejiFactory {
 
   /**
    * Crate a new emtpy {@link Statement}
-   * 
+   *
    * @return
    */
   public static Statement newStatement(String label, String lang, Types type) {
@@ -110,7 +110,7 @@ public class ImejiFactory {
 
   /**
    * Create an emtpy {@link Statement} as a child of another {@link Statement}
-   * 
+   *
    * @param parent
    * @return
    */
@@ -158,7 +158,7 @@ public class ImejiFactory {
 
   /**
    * Create a new emtpy {@link Item}
-   * 
+   *
    * @param collection
    * @return
    */
@@ -174,7 +174,7 @@ public class ImejiFactory {
 
   /**
    * Factory Method used during the upload
-   * 
+   *
    * @param collection
    * @param user
    * @param storageId
@@ -193,7 +193,7 @@ public class ImejiFactory {
 
   /**
    * Copy the params into the item
-   * 
+   *
    * @param item
    * @param collection
    * @param user

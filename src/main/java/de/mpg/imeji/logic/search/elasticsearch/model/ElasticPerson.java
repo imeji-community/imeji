@@ -8,9 +8,9 @@ import de.mpg.imeji.logic.vo.Person;
 
 /**
  * The Elastic representation of a {@link Person}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticPerson {
   private final String familyname;
@@ -28,7 +28,7 @@ public class ElasticPerson {
 
   /**
    * Constructor for a {@link Person}
-   * 
+   *
    * @param p
    */
   public ElasticPerson(Person p) {

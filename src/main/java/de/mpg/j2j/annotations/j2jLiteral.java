@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
 
 /**
  * j2j {@link Literal}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

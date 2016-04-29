@@ -19,7 +19,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * {@link Metadata} for links (URL)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -82,8 +82,9 @@ public class Link extends Metadata {
 
   @Override
   public String asFulltext() {
-    if (uri != null)
+    if (uri != null) {
       return label + " " + uri.toString();
+    }
     return label;
   }
 

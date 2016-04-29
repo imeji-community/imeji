@@ -34,7 +34,7 @@ import de.mpg.imeji.presentation.util.CookieUtils;
 
 /**
  * Java Bean for {@link Container} browse pages (collections and albums)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -77,7 +77,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean# setCookieElementPerPage()
    */
   @Override
@@ -88,7 +88,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * Initialize the page
-   * 
+   *
    * @return
    */
   public String getInit() {
@@ -151,7 +151,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * Return the current {@link Filter} for the {@link List} of {@link Container}
-   * 
+   *
    * @return
    */
   public SearchPair getFilter() {
@@ -174,7 +174,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * setter
-   * 
+   *
    * @param selectedMenu
    */
   public void setSelectedMenu(String selectedMenu) {
@@ -183,7 +183,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * getter: Return the current tab name in the actions div on the xhtml page
-   * 
+   *
    * @return
    */
   public String getSelectedMenu() {
@@ -192,7 +192,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * select all {@link Container} on the page
-   * 
+   *
    * @return
    */
   public String selectAll() {
@@ -201,7 +201,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * Unselect all {@link Container} on the page
-   * 
+   *
    * @return
    */
   public String selectNone() {
@@ -210,7 +210,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * setter
-   * 
+   *
    * @param sortMenu
    */
   public void setSortMenu(List<SelectItem> sortMenu) {
@@ -219,7 +219,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getSortMenu() {
@@ -232,7 +232,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getSelectedSortOrder() {
@@ -241,7 +241,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * setter
-   * 
+   *
    * @param selectedSortCriterion
    */
   public void setSelectedSortCriterion(String selectedSortCriterion) {
@@ -250,7 +250,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getSelectedSortCriterion() {
@@ -259,7 +259,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * Change the sort sort order
-   * 
+   *
    * @return
    */
   public String toggleSortOrder() {
@@ -273,7 +273,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * return the {@link Filter} name defined in the url as a {@link String}
-   * 
+   *
    * @return
    */
   public String getSelectedFilter() {
@@ -282,7 +282,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * setter
-   * 
+   *
    * @param selectedFilter
    */
   public void setSelectedFilter(String selectedFilter) {
@@ -291,7 +291,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getFilterMenu() {
@@ -300,7 +300,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * setter
-   * 
+   *
    * @param filterMenu
    */
   public void setFilterMenu(List<SelectItem> filterMenu) {
@@ -309,7 +309,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * return the internationalized labels of the {@link Filter}
-   * 
+   *
    * @return
    */
   public String getFilterLabel() {
@@ -323,7 +323,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * setter
-   * 
+   *
    * @param query
    */
   public void setQuery(String query) {
@@ -332,7 +332,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getQuery() {
@@ -378,18 +378,20 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
   /**
    * Checks if filters between two different searches have been changed in order to trigger new
    * query execution
-   * 
+   *
    * @param p1
    * @param p2
    * @return
    */
   protected boolean changedFilters(SearchPair p1, SearchPair p2) {
-    if ((p1 == null && p2 != null) || (p1 != null && p2 == null))
+    if ((p1 == null && p2 != null) || (p1 != null && p2 == null)) {
       return true;
+    }
 
     if (p1 != null && p2 != null) {
-      if (!p1.getValue().equals(p2.getValue()))
+      if (!p1.getValue().equals(p2.getValue())) {
         return true;
+      }
     }
 
     return false;
@@ -397,7 +399,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * Search for containers, according to the current queries
-   * 
+   *
    * @param offset
    * @param limit
    * @return
@@ -441,7 +443,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * Search for the container
-   * 
+   *
    * @param searchQuery
    * @param sortCriterion
    * @return
@@ -451,7 +453,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean#getTotalNumberOfRecords()
    */
   @Override
@@ -471,7 +473,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * needed for searchQueryDisplayArea.xhtml component
-   * 
+   *
    * @return
    */
   public String getSimpleQuery() {
@@ -483,7 +485,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
   /**
    * search is always a simple search (needed for searchQueryDisplayArea.xhtml component)
-   * 
+   *
    * @return
    */
   public boolean isSimpleSearch() {

@@ -4,7 +4,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 
 /**
  * Exception when a request is done to the API with an unknown API version
- * 
+ *
  * @author saquet
  *
  */

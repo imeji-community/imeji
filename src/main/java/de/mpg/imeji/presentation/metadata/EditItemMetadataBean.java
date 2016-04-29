@@ -37,7 +37,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.util.MetadataFactory;
 import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.SuperViewBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.metadata.editors.AbstractMetadataEditor;
 import de.mpg.imeji.presentation.metadata.editors.MultipleEditor;
@@ -48,12 +48,12 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Bean for batch and multiple metadata editor
- * 
+ *
  * @author saquet
  */
 @ManagedBean(name = "EditItemMetadataBean")
 @ViewScoped
-public class EditItemMetadataBean extends SuperViewBean {
+public class EditItemMetadataBean extends SuperBean {
   private static final Logger LOGGER = Logger.getLogger(EditItemMetadataBean.class);
   // objects
   private List<Item> allItems;
@@ -96,7 +96,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Initialize all elements of the bean
-   * 
+   *
    * @throws IOException
    */
   public void init() throws IOException {
@@ -145,7 +145,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Go back to the previous page
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -156,7 +156,7 @@ public class EditItemMetadataBean extends SuperViewBean {
   /**
    * Read the url paramameters when the page is first called. This method is called directly from
    * the xhtml page
-   * 
+   *
    * @return
    */
   public String getUrlParameters() {
@@ -168,7 +168,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Find the uri of the {@link Item} which are edited
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -183,7 +183,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Load the profile of the images, and set the statement to be edited.
-   * 
+   *
    * @param items
    * @throws ImejiException
    */
@@ -198,7 +198,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Init the {@link AbstractMetadataEditor}
-   * 
+   *
    * @param items
    */
   private void initEditor(List<Item> items) {
@@ -264,7 +264,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Change the statement to edit
-   * 
+   *
    * @return
    */
   public String changeStatement() {
@@ -279,7 +279,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Set to the original state
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -290,7 +290,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Load the list of items
-   * 
+   *
    * @param uris
    * @return
    * @throws ImejiException
@@ -302,7 +302,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Search for item according to the query
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -316,7 +316,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * For batch edit: Add the same values to all images and save.
-   * 
+   *
    * @return
    * @throws IOException
    * @throws ImejiException
@@ -332,7 +332,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * For batch edit: Add the same values to all images and save.
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -346,7 +346,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * For the Multiple Edit: Save the current values
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -367,7 +367,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * For the Multiple Edit: Save the current values
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -379,7 +379,7 @@ public class EditItemMetadataBean extends SuperViewBean {
   /**
    * Lock the {@link Item} which are currently in the editor. This prevent other users to make
    * concurrent modification.
-   * 
+   *
    * @param items
    */
   private void lockImages(List<String> uris) {
@@ -407,7 +407,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Called method when "add to all" button is clicked
-   * 
+   *
    * @return
    */
   public void addToAll() {
@@ -434,7 +434,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * redirect to previous page
-   * 
+   *
    * @throws IOException
    */
   public void redirectToView() throws IOException {
@@ -455,7 +455,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * redirect to previous page
-   * 
+   *
    * @throws IOException
    */
   public void reload() throws IOException {
@@ -466,7 +466,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Remove all metadata
-   * 
+   *
    * @return
    */
   public String clearAll() {
@@ -479,7 +479,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * fill all emtpy Metadata of passed {@link ItemWrapper} with the values of the current one
-   * 
+   *
    * @param im
    * @return
    */
@@ -493,7 +493,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Fill l1 emtpy metadata with non emtpy metadata from l2
-   * 
+   *
    * @param l1
    * @param l2
    */
@@ -505,10 +505,11 @@ public class EditItemMetadataBean extends SuperViewBean {
       for (MetadataWrapper md2 : l2) {
         boolean emtpy2 = MetadataHelper.isEmpty(md2.asMetadata());
         if (md1.getStatementId().equals(md2.getStatementId())) {
-          if (emtpy1 && !emtpy2)
+          if (emtpy1 && !emtpy2) {
             filled.add(md2.copy());
-          else
+          } else {
             filled.add(md1);
+          }
         }
       }
     }
@@ -519,19 +520,20 @@ public class EditItemMetadataBean extends SuperViewBean {
    * Add an emtpy {@link Metadata} accroding to the current {@link Statement} to the
    * {@link ItemWrapper}. If the {@link ItemWrapper} has already an emtpy {@link Metadata} for this
    * {@link Statement}, then don't had it.
-   * 
+   *
    * @param eib
    */
   private void appendEmtpyMetadata(ItemWrapper eib) {
     List<MetadataWrapper> l = eib.getMds().getTree().getList();
-    for (Statement st : profile.getStatements())
+    for (Statement st : profile.getStatements()) {
       l.add(new MetadataWrapper(MetadataFactory.createMetadata(st), st));
+    }
     eib.getMds().initTreeFromList(MetadataWrapperTree.resetPosition(l));
   }
 
   /**
    * Return the {@link Statement} which is currently edited
-   * 
+   *
    * @return
    */
   public Statement getSelectedStatement() {
@@ -547,7 +549,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * Return the first {@link Statement} of the current {@link MetadataProfile}
-   * 
+   *
    * @return
    */
   public Statement getDefaultStatement() {
@@ -559,7 +561,7 @@ public class EditItemMetadataBean extends SuperViewBean {
 
   /**
    * True if the {@link Statement} can be edited
-   * 
+   *
    * @param st
    * @return
    */

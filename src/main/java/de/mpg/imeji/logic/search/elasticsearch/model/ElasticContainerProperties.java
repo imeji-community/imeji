@@ -12,9 +12,9 @@ import de.mpg.imeji.logic.vo.Person;
 
 /**
  * Common Properties to {@link CollectionImeji} and {@link Album}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticContainerProperties extends ElasticProperties {
   private final String name;
@@ -26,7 +26,7 @@ public class ElasticContainerProperties extends ElasticProperties {
 
   /**
    * Default Constructor
-   * 
+   *
    * @param c
    */
   public ElasticContainerProperties(Container c) {

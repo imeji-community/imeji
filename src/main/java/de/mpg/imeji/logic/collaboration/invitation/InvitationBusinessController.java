@@ -17,7 +17,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Business Controller for invitation of Users.
- * 
+ *
  * @author bastiens
  *
  */
@@ -30,7 +30,7 @@ public class InvitationBusinessController {
 
   /**
    * Invite a user to collaborate for an object
-   * 
+   *
    * @param invitation
    * @throws ImejiException
    */
@@ -46,7 +46,7 @@ public class InvitationBusinessController {
   /**
    * Check for pending invitations of this User, add grants to this users according to the
    * invitation, remove the invitations
-   * 
+   *
    * @param user
    * @return
    * @throws ImejiException
@@ -62,7 +62,7 @@ public class InvitationBusinessController {
 
   /**
    * Cancel an Invitation. (if invitation has not been already consumed)
-   * 
+   *
    * @param invitation
    * @throws ImejiException
    */
@@ -73,7 +73,7 @@ public class InvitationBusinessController {
 
   /**
    * Retrieve an Invitation
-   * 
+   *
    * @param id
    * @return
    * @throws ImejiException
@@ -88,7 +88,7 @@ public class InvitationBusinessController {
 
   /**
    * Retrieve all the invitation for this object id
-   * 
+   *
    * @param objectUri
    * @return
    * @throws ImejiException
@@ -101,7 +101,7 @@ public class InvitationBusinessController {
 
   /**
    * Return all Invitationd for this user (according to his Email)
-   * 
+   *
    * @param email
    * @return
    * @throws ImejiException
@@ -112,7 +112,7 @@ public class InvitationBusinessController {
 
   /**
    * Get all pending invitations
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -122,7 +122,7 @@ public class InvitationBusinessController {
 
   /**
    * remove all pending invitations
-   * 
+   *
    * @throws ImejiException
    */
   public void clear() throws ImejiException {
@@ -133,7 +133,7 @@ public class InvitationBusinessController {
 
   /**
    * Add an Invitation to the store with relations (email->Invitation and object->invitation)
-   * 
+   *
    * @param invitation
    * @throws ImejiException
    */
@@ -143,7 +143,7 @@ public class InvitationBusinessController {
 
   /**
    * Remove an Invitation and its relation
-   * 
+   *
    * @param invitation
    * @throws ImejiException
    */
@@ -152,7 +152,7 @@ public class InvitationBusinessController {
   }
 
   /**
-   * 
+   *
    * @param user
    * @return
    */

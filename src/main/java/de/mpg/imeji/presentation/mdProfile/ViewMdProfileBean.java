@@ -13,7 +13,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java Bean for profile view page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -32,7 +32,7 @@ public class ViewMdProfileBean extends MdProfileBean {
 
   /**
    * Initialize the page
-   * 
+   *
    * @throws ImejiException
    * @throws Exception
    */
@@ -59,7 +59,7 @@ public class ViewMdProfileBean extends MdProfileBean {
   /**
    * Method for save button. Save the profile according to the form values TODO check if such a
    * method is used on view profile page...
-   * 
+   *
    * @return
    */
   public String save() {

@@ -15,7 +15,7 @@ import de.mpg.imeji.presentation.facet.Facet;
 
 /**
  * {@link Facet} with extended
- * 
+ *
  * @author saquet
  */
 public class Filter extends Facet {
@@ -26,7 +26,7 @@ public class Filter extends Facet {
 
   /**
    * Constructor
-   * 
+   *
    * @param label
    * @param query
    * @param count
@@ -55,7 +55,7 @@ public class Filter extends Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public URI getCollectionID() {
@@ -64,7 +64,7 @@ public class Filter extends Facet {
 
   /**
    * Setter
-   * 
+   *
    * @param collectionID
    */
   public void setCollectionID(URI collectionID) {
@@ -83,7 +83,7 @@ public class Filter extends Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public String getQuery() {
@@ -92,7 +92,7 @@ public class Filter extends Facet {
 
   /**
    * setter
-   * 
+   *
    * @param query
    */
   public void setQuery(String query) {
@@ -101,7 +101,7 @@ public class Filter extends Facet {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getRemoveQuery() {
@@ -110,7 +110,7 @@ public class Filter extends Facet {
 
   /**
    * setter
-   * 
+   *
    * @param removeQuery
    */
   public void setRemoveQuery(String removeQuery) {
@@ -119,7 +119,7 @@ public class Filter extends Facet {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public SearchQuery getSearchQuery() {
@@ -128,7 +128,7 @@ public class Filter extends Facet {
 
   /**
    * setter
-   * 
+   *
    * @param searchQuery
    */
   public void setSearchQuery(SearchQuery searchQuery) {

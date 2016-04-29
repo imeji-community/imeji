@@ -10,7 +10,7 @@ import de.mpg.imeji.rest.api.UserService;
 
 /**
  * Class to be used as cache to read the usernames from the database
- * 
+ *
  * @author bastiens
  *
  */

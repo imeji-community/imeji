@@ -9,7 +9,7 @@ import javax.faces.convert.Converter;
 
 /**
  * Converter for Double: Display NaN as empty string, and transform empty String as NaN
- * 
+ *
  * @author saquet
  */
 public class DoubleConverter implements Converter {

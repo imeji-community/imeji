@@ -24,7 +24,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Metadata Editor for the detail item page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -42,7 +42,7 @@ public class SingleEditorWrapper {
 
   /**
    * Constructor
-   * 
+   *
    * @param im
    * @param profile
    * @param pageUrl
@@ -57,7 +57,7 @@ public class SingleEditorWrapper {
 
   /**
    * Check in the url if the editor should be automatically shown
-   * 
+   *
    * @return
    */
   public String getCheckToggleState() {
@@ -80,7 +80,7 @@ public class SingleEditorWrapper {
 
   /**
    * Cancel the editing, and reset original values
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -107,7 +107,7 @@ public class SingleEditorWrapper {
 
   /**
    * Show the metadata editor
-   * 
+   *
    * @return
    */
   public String showEditor() {

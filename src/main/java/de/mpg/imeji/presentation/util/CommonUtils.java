@@ -9,7 +9,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Common utility class
- * 
+ *
  * @author bastiens
  *
  */
@@ -25,7 +25,7 @@ public class CommonUtils {
 
   /**
    * Remove html tags from a {@link String}
-   * 
+   *
    * @param string
    * @return
    */
@@ -39,7 +39,7 @@ public class CommonUtils {
 
   /**
    * Return a the value of a {@link Metadata} as a {@link String} with all the fields
-   * 
+   *
    * @param md
    * @return
    */
@@ -47,18 +47,23 @@ public class CommonUtils {
     if (md != null) {
       String s = "";
       if (md instanceof License) {
-        if (((License) md).getLicense() != null)
+        if (((License) md).getLicense() != null) {
           s += " name:" + ((License) md).getLicense();
-        if (((License) md).getExternalUri() != null)
+        }
+        if (((License) md).getExternalUri() != null) {
           s += " uri:" + ((License) md).getExternalUri();
+        }
       }
       if (md instanceof Geolocation) {
-        if (((Geolocation) md).getName() != null)
+        if (((Geolocation) md).getName() != null) {
           s += " name:" + ((Geolocation) md).getName();
-        if (!Double.isNaN(((Geolocation) md).getLatitude()))
+        }
+        if (!Double.isNaN(((Geolocation) md).getLatitude())) {
           s += " lat:" + ((Geolocation) md).getLatitude();
-        if (!Double.isNaN(((Geolocation) md).getLongitude()))
+        }
+        if (!Double.isNaN(((Geolocation) md).getLongitude())) {
           s += " long:" + ((Geolocation) md).getLongitude();
+        }
       }
       return s.trim().replace("  ", " ");
     }
@@ -67,7 +72,7 @@ public class CommonUtils {
 
   /**
    * From a {@link String} extract the value of a field, when define in the String by field:value
-   * 
+   *
    * @param pattern
    * @param s
    * @return
@@ -87,7 +92,7 @@ public class CommonUtils {
 
   /**
    * Execute a {@link Pattern} and return the first result
-   * 
+   *
    * @param p
    * @param s
    * @return

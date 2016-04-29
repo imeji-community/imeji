@@ -25,7 +25,7 @@ import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Utility class for the labels of the {@link Metadata}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -55,7 +55,7 @@ public class MetadataLabels implements Serializable {
 
   /**
    * Initialize the labels for a {@link List} of {@link Item}
-   * 
+   *
    * @param items
    * @throws Exception
    */
@@ -72,7 +72,7 @@ public class MetadataLabels implements Serializable {
 
   /**
    * initialize the labels for a {@link List} of {@link MetadataProfile}
-   * 
+   *
    * @param profiles
    * @throws Exception
    */
@@ -89,7 +89,7 @@ public class MetadataLabels implements Serializable {
 
   /**
    * Initialize the labels for one {@link MetadataProfile}
-   * 
+   *
    * @param profile
    * @throws Exception
    */
@@ -124,7 +124,7 @@ public class MetadataLabels implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Map<URI, String> getLabels() {
@@ -133,7 +133,7 @@ public class MetadataLabels implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param labels
    */
   public void setLabels(Map<URI, String> labels) {
@@ -146,7 +146,7 @@ public class MetadataLabels implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Map<URI, String> getInternationalizedLabels() {
@@ -155,7 +155,7 @@ public class MetadataLabels implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param internationalizedLabels
    */
   public void setInternationalizedLabels(Map<URI, String> internationalizedLabels) {

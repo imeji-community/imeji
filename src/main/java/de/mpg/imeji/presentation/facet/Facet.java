@@ -12,7 +12,7 @@ import de.mpg.imeji.presentation.beans.MetadataLabels;
 
 /**
  * The Facet used by the Faceted search in the browse item page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -28,7 +28,7 @@ public class Facet {
 
   /**
    * The type of the {@link Facet}. Depends on which page is displayed the {@link Facet}
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -40,7 +40,7 @@ public class Facet {
 
   /**
    * Constructor for a {@link Facet}
-   * 
+   *
    * @param uri
    * @param label
    * @param count
@@ -78,7 +78,7 @@ public class Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public URI getUri() {
@@ -87,7 +87,7 @@ public class Facet {
 
   /**
    * Setter
-   * 
+   *
    * @param uri
    */
   public void setUri(URI uri) {
@@ -96,7 +96,7 @@ public class Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public String getinternationalizedLabel() {
@@ -105,7 +105,7 @@ public class Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public String getLabel() {
@@ -114,7 +114,7 @@ public class Facet {
 
   /**
    * Setter
-   * 
+   *
    * @param label
    */
   public void setLabel(String label) {
@@ -123,7 +123,7 @@ public class Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public int getCount() {
@@ -132,7 +132,7 @@ public class Facet {
 
   /**
    * Setter
-   * 
+   *
    * @param count
    */
   public void setCount(int count) {
@@ -141,7 +141,7 @@ public class Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public FacetType getType() {
@@ -150,7 +150,7 @@ public class Facet {
 
   /**
    * Setter
-   * 
+   *
    * @param type
    */
   public void setType(FacetType type) {
@@ -159,7 +159,7 @@ public class Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public URI getMetadataURI() {
@@ -168,7 +168,7 @@ public class Facet {
 
   /**
    * Setter
-   * 
+   *
    * @param metadataURI
    */
   public void setMetadataURI(URI metadataURI) {
@@ -177,7 +177,7 @@ public class Facet {
 
   /**
    * True if the current {@link Facet} is a negation facet
-   * 
+   *
    * @return
    */
   public boolean isNotDefine() {

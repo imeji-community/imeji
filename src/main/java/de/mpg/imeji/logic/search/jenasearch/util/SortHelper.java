@@ -11,7 +11,7 @@ import de.mpg.j2j.transaction.SearchTransaction;
 
 /**
  * Helper for sort parameters in SPARQL queries
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -22,7 +22,7 @@ public class SortHelper {
 
   /**
    * If a list has a sortValue parameter, sort it, otherwise remove the sortValue pattern
-   * 
+   *
    * @param l
    * @return
    */
@@ -38,7 +38,7 @@ public class SortHelper {
   /**
    * Extract the value used by the sortering for this {@link String}. If no Sort value, return an
    * emtpy {@link String}
-   * 
+   *
    * @param s
    * @return
    */
@@ -52,7 +52,7 @@ public class SortHelper {
 
   /**
    * Remove the Sort value in the given String.
-   * 
+   *
    * @param s
    * @return
    */
@@ -63,7 +63,7 @@ public class SortHelper {
   /**
    * True if the {@link List} of String is sortable (i.e. that the String are defined with a sort
    * value)
-   * 
+   *
    * @param l
    * @return
    */
@@ -76,7 +76,7 @@ public class SortHelper {
 
   /**
    * Remove the sort value to all element of the {@link List}
-   * 
+   *
    * @param l
    * @return
    */
@@ -94,7 +94,7 @@ public class SortHelper {
   /**
    * Transform a {@link List} of {@link ComparableSearchResult} into a {@link List} of
    * {@link String}
-   * 
+   *
    * @param unsortedResults
    * @return
    */
@@ -109,7 +109,7 @@ public class SortHelper {
   /**
    * Transform a {@link List} of {@link String} into a {@link List} of
    * {@link ComparableSearchResult} for the give {@link SortOrder}
-   * 
+   *
    * @param l
    * @param order
    * @return

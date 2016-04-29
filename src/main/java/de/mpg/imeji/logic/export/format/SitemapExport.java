@@ -17,7 +17,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Export} into SiteMap Format
- * 
+ *
  * @author saquet
  */
 public class SitemapExport extends Export {

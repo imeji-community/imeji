@@ -40,7 +40,7 @@ import de.mpg.imeji.presentation.util.CommonUtils;
 
 /**
  * The javabean for the {@link Album}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -77,7 +77,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Construct an {@link AlbumBean} from an {@link Album}
-   * 
+   *
    * @param album
    * @throws Exception
    */
@@ -115,7 +115,7 @@ public class AlbumBean extends ContainerBean {
   /**
    * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and
    * initialize it.
-   * 
+   *
    * @throws Exception
    */
   @PostConstruct
@@ -151,7 +151,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Return the link for the Cancel button
-   * 
+   *
    * @return
    */
   public String getCancel() {
@@ -170,7 +170,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   public void discardCommentListener(ValueChangeEvent event) {
@@ -181,7 +181,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   @Override
@@ -205,7 +205,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getProfilesMenu() {
@@ -214,7 +214,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * setter
-   * 
+   *
    * @param profilesMenu
    */
   public void setProfilesMenu(List<SelectItem> profilesMenu) {
@@ -224,7 +224,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * setter
-   * 
+   *
    * @param album
    */
   public void setAlbum(Album album) {
@@ -233,7 +233,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Album getAlbum() {
@@ -242,7 +242,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Return the all author of this album as a single {@link String}
-   * 
+   *
    * @return
    */
   @Override
@@ -259,7 +259,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * setter
-   * 
+   *
    * @param active
    */
   public void setActive(boolean active) {
@@ -268,7 +268,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public boolean getActive() {
@@ -277,7 +277,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Make the current {@link Album} active
-   * 
+   *
    * @return
    * @throws ImejiException
    * @throws IOException
@@ -297,7 +297,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Make the current {@link Album} inactive
-   * 
+   *
    * @return
    */
   public String makeInactive() {
@@ -309,7 +309,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Release the current {@link Album}
-   * 
+   *
    * @return
    */
   public String release() {
@@ -328,7 +328,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * delete an {@link Album}
-   * 
+   *
    * @return
    */
   public String delete() {
@@ -348,7 +348,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Discard the {@link AlbumImeji} of this {@link Album}
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -367,7 +367,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * getter
-   * 
+   *
    * @return the thumbnail
    */
   public ThumbnailBean getThumbnail() {
@@ -376,7 +376,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * setter
-   * 
+   *
    * @param thumbnail the thumbnail to set
    */
   public void setThumbnail(ThumbnailBean thumbnail) {
@@ -418,7 +418,7 @@ public class AlbumBean extends ContainerBean {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.ContainerBean#getType()
    */
   @Override
@@ -428,7 +428,7 @@ public class AlbumBean extends ContainerBean {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
    */
   @Override
@@ -477,7 +477,7 @@ public class AlbumBean extends ContainerBean {
 
   /**
    * Compute the amount of private items within an album
-   * 
+   *
    * @return
    */
   public int getPrivateCount() {

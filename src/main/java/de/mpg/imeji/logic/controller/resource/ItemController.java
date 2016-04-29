@@ -59,7 +59,7 @@ import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -81,7 +81,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Create an {@link Item} in a {@link CollectionImeji}
-   * 
+   *
    * @param item
    * @param coll
    * @param user
@@ -95,7 +95,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Create an {@link Item} for a {@link File}.
-   * 
+   *
    * @param f
    * @param filename (optional)
    * @param c - the collection in which the file is uploaded
@@ -145,7 +145,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Create an {@link Item} with an external {@link File} according to its URL
-   * 
+   *
    * @param item
    * @param c
    * @param externalFileUrl
@@ -158,10 +158,11 @@ public class ItemController extends ImejiController {
   public Item createWithExternalFile(Item item, CollectionImeji c, String externalFileUrl,
       String filename, boolean download, User user) throws ImejiException {
     String origName = FilenameUtils.getName(externalFileUrl);
-    if ("".equals(filename) || filename == null)
+    if ("".equals(filename) || filename == null) {
       filename = origName;
-    else
+    } else {
       filename = filename + "." + FilenameUtils.getExtension(origName);
+    }
 
     if (filename == null || filename.equals("")) {
       throw new BadRequestException(
@@ -192,7 +193,7 @@ public class ItemController extends ImejiController {
   /**
    * Create a {@link List} of {@link Item} in a {@link CollectionImeji}. This method is faster than
    * using create(Item item, URI coll) when creating many items
-   * 
+   *
    * @param items
    * @param coll
    * @throws ImejiException
@@ -223,7 +224,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Create an {@link Item}
-   * 
+   *
    * @param item
    * @param uploadedFile
    * @param filename
@@ -270,7 +271,7 @@ public class ItemController extends ImejiController {
 
   /**
    * User ObjectLoader to load image
-   * 
+   *
    * @param imgUri
    * @return
    * @throws ImejiException
@@ -285,7 +286,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Lazy Retrieve the Item containing the file with the passed storageid
-   * 
+   *
    * @param storageId
    * @param user
    * @return
@@ -305,7 +306,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Retrieve the items lazy (without the metadata)
-   * 
+   *
    * @param uris
    * @param limit
    * @param offset
@@ -321,7 +322,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Retrieve the items fully (with all metadata)
-   * 
+   *
    * @param uris
    * @param limit
    * @param offset
@@ -338,7 +339,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Transform a list of uris into a list of Item
-   * 
+   *
    * @param uris
    * @param limit
    * @param offset
@@ -362,7 +363,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Retrieve all {@link Item} (all status, all users) in imeji
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -373,7 +374,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Update an {@link Item} in the database
-   * 
+   *
    * @param item
    * @param user
    * @throws ImejiException
@@ -385,7 +386,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Update a {@link Collection} of {@link Item}
-   * 
+   *
    * @param items
    * @param user
    * @throws ImejiException
@@ -424,7 +425,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Update the File of an {@link Item}
-   * 
+   *
    * @param item
    * @param f
    * @param user
@@ -467,7 +468,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Update the {@link Item} with External link to File.
-   * 
+   *
    * @param item
    * @param externalFileUrl
    * @param filename
@@ -501,9 +502,9 @@ public class ItemController extends ImejiController {
   }
 
   /**
-   * 
+   *
    * Update only the thumbnail and the Web Resolution (doesn't change the original file)
-   * 
+   *
    * @param item
    * @param f
    * @param user
@@ -519,7 +520,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Delete a {@link List} of {@link Item} inclusive all files stored in the {@link Storage}
-   * 
+   *
    * @param items
    * @param user
    * @return
@@ -534,7 +535,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Delete a {@link List} of {@link Item} inclusive all files stored in the {@link Storage}
-   * 
+   *
    * @param itemId
    * @param u
    * @return
@@ -547,7 +548,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Search {@link Item}
-   * 
+   *
    * @param containerUri - if the search is done within a {@link Container}
    * @param searchQuery - the {@link SearchQuery}
    * @param sortCri - the {@link SortCriterion}
@@ -565,7 +566,7 @@ public class ItemController extends ImejiController {
   /**
    * load items of a container. Perform a search to load all items: is faster than to read the
    * complete container
-   * 
+   *
    * @param c
    * @param user
    */
@@ -580,7 +581,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Retrieve all items filtered by query
-   * 
+   *
    * @param user
    * @param q
    * @return
@@ -601,7 +602,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Set the status of a {@link List} of {@link Item} to released
-   * 
+   *
    * @param l
    * @param user
    * @throws ImejiException
@@ -616,7 +617,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Make the Items private
-   * 
+   *
    * @param l
    * @param user
    * @throws ImejiException
@@ -632,7 +633,7 @@ public class ItemController extends ImejiController {
   /**
    * Set the status of a {@link List} of {@link Item} to withdraw and delete its files from the
    * {@link Storage}
-   * 
+   *
    * @param l
    * @param comment
    * @throws ImejiException
@@ -650,7 +651,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Return a new filtered List of only item with the requested {@link Status}
-   * 
+   *
    * @param items
    * @param status
    * @return
@@ -666,7 +667,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Remove a file from the current {@link Storage}
-   * 
+   *
    * @param id
    */
   private void removeFileFromStorage(String id) {
@@ -680,7 +681,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Initialize the fulltext search value for all {@link Metadata} of an {@link Item}
-   * 
+   *
    * @param item
    * @return
    */
@@ -695,7 +696,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Return the external Url of the File
-   * 
+   *
    * @param fetchUrl
    * @param referenceUrl
    * @return
@@ -718,7 +719,7 @@ public class ItemController extends ImejiController {
 
   /**
    * True if the file must be download in imeji (i.e fetchurl is defined)
-   * 
+   *
    * @param fetchUrl
    * @return
    */
@@ -728,7 +729,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Set the status of a {@link List} of {@link Item} to released
-   * 
+   *
    * @param l
    * @param user
    * @throws ImejiException
@@ -745,7 +746,7 @@ public class ItemController extends ImejiController {
   /**
    * Throws an {@link Exception} if the file cannot be uploaded. The validation will only occur when
    * the file has been stored locally)
-   * 
+   *
    * @throws ImejiException
    * @throws UnprocessableError
    */
@@ -762,7 +763,7 @@ public class ItemController extends ImejiController {
 
   /**
    * True if the checksum already exists within another {@link Item} in this {@link CollectionImeji}
-   * 
+   *
    * @param filename
    * @return
    */
@@ -775,7 +776,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Clean the values of all {@link Metadata} of an {@link Item}
-   * 
+   *
    * @param l
    */
   private void cleanMetadata(Collection<Item> l) {
@@ -789,7 +790,7 @@ public class ItemController extends ImejiController {
 
   /**
    * Read a file from its url
-   * 
+   *
    * @param tmp
    * @param url
    * @return

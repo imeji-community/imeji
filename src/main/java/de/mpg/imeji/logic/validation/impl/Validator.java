@@ -5,7 +5,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * Inteface for validators
- * 
+ *
  * @author saquet
  *
  * @param <T>
@@ -14,7 +14,7 @@ public interface Validator<T> {
 
   /**
    * Validate an object according the business rules
-   * 
+   *
    * @param t
    * @throws UnprocessableError
    */
@@ -23,7 +23,7 @@ public interface Validator<T> {
 
   /**
    * Validate an object according to its {@link MetadataProfile}
-   * 
+   *
    * @param t
    * @param p
    * @throws UnprocessableError

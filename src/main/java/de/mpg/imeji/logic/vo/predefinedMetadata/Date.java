@@ -20,7 +20,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * The Date {@link Metadata}. Should be used for {@link Metadata} related to a date
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

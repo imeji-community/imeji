@@ -62,7 +62,7 @@ import de.mpg.j2j.annotations.j2jModel;
 
 /**
  * {@link Jena} interface for imeji
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -113,11 +113,11 @@ public class Imeji {
   /**
    * Initialize the {@link Jena} database according to imeji.properties<br/>
    * Called when the server (Tomcat of JBoss) is started
-   * 
+   *
    * @throws URISyntaxException
    * @throws IOException
    * @throws ImejiException
-   * 
+   *
    */
   public static void init() throws IOException, URISyntaxException, ImejiException {
     tdbPath = PropertyReader.getProperty("imeji.tdb.path");
@@ -128,7 +128,7 @@ public class Imeji {
 
   /**
    * Run the migration instruction (SPARQL Update queries defines in the migration.xml file)
-   * 
+   *
    * @throws IOException
    */
   public static void runMigration() throws IOException {
@@ -150,7 +150,7 @@ public class Imeji {
 
   /**
    * Initialize a {@link Jena} database according at one path location in filesystem
-   * 
+   *
    * @param path
    * @throws ImejiException
    * @throws URISyntaxException
@@ -200,7 +200,7 @@ public class Imeji {
 
   /**
    * Initialize (Create when not existing) a {@link Model} with a given name
-   * 
+   *
    * @param name
    */
   private static void initModel(String name) {
@@ -330,7 +330,7 @@ public class Imeji {
 
   /**
    * Return the name of the model if defined in a {@link Class} with {@link j2jModel} annotation
-   * 
+   *
    * @param voClass
    * @return
    */
@@ -343,7 +343,7 @@ public class Imeji {
    * Returns true if checksum of uploaded files will be checked for duplicates within a single
    * collection according to settings in properties. If properties do not exist, checksum duplicate
    * checking will be set as default
-   * 
+   *
    */
 
   public static boolean isValidateChecksumInCollection() {

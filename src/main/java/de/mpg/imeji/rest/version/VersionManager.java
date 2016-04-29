@@ -12,7 +12,7 @@ import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
 
 /**
  * Implements the version management of the api
- * 
+ *
  * @author saquet
  *
  */
@@ -30,7 +30,7 @@ public class VersionManager {
 
   /**
    * Check if the version is correct, else return the appropriate error
-   * 
+   *
    * @param path
    * @throws UnknowAPIVersionException
    * @throws DeprecatedAPIVersionException
@@ -64,7 +64,7 @@ public class VersionManager {
   /**
    * Transform the requested path (with version in the url) into a path to latest version (without
    * version in the url)
-   * 
+   *
    * @return
    */
   public String getPathToLatestVersion() {
@@ -73,7 +73,7 @@ public class VersionManager {
 
   /**
    * Parse the version from the path /rest/v1/... -> is version 1
-   * 
+   *
    * @param path
    * @return
    */
@@ -89,7 +89,7 @@ public class VersionManager {
 
   /**
    * Check if the requested version is an older version
-   * 
+   *
    * @return
    */
   private boolean isOldVersion() {
@@ -98,7 +98,7 @@ public class VersionManager {
 
   /**
    * Check if the requested version exists (older or current)
-   * 
+   *
    * @return
    */
   private boolean isAnExistingVersion() {
@@ -107,7 +107,7 @@ public class VersionManager {
 
   /**
    * True if the requested version is the same as the current version
-   * 
+   *
    * @return
    */
   public boolean isCurrentVersion() {

@@ -18,7 +18,7 @@ import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 
 /**
  * List of all entities with grant for one resource
- * 
+ *
  * @author bastiens
  *
  */
@@ -29,7 +29,7 @@ public final class ShareList {
 
   /**
    * Create a list of all entities with grant for one resource
-   * 
+   *
    * @param ownerUri
    * @param sharedObjectUri
    * @param profileUri
@@ -46,7 +46,7 @@ public final class ShareList {
 
   /**
    * Retrieve the user groups having grant for the this resource
-   * 
+   *
    * @param ownerUri
    * @param sharedObjectUri
    * @param profileUri
@@ -65,7 +65,7 @@ public final class ShareList {
 
   /**
    * Retrieve all Users having grants for this resource
-   * 
+   *
    * @param ownerUri
    * @param sharedObjectUri
    * @param profileUri
@@ -87,7 +87,7 @@ public final class ShareList {
 
   /**
    * Retrieve all Pending invitations for this resource
-   * 
+   *
    * @param sharedObjectUri
    * @param profileUri
    * @param type

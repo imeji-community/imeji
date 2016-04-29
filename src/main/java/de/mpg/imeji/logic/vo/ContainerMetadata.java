@@ -17,7 +17,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Metadata of a {@link Container} TODO Description
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

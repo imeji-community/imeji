@@ -22,34 +22,28 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.transform.impl;
+package de.mpg.imeji.logic.storage.transform.generator;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import de.mpg.imeji.logic.storage.transform.ImageGenerator;
-import de.mpg.imeji.logic.storage.util.PdfUtils;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.exceptions.ImejiException;
 
 /**
- * {@link ImageGenerator} to generate image out of pdf
+ * Interface for all Class used to generate Thumbnails and web resolution images out of the files
  *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class PdfImageGenerator implements ImageGenerator {
-  /*
-   * (non-Javadoc)
+public interface ImageGenerator {
+  /**
+   * Generate a jpg image in the wished format from the passed bytes according to the filename
+   * extension(jpg, png, fit, etc.)<br/>
+   * If the {@link ImageGenerator} can not generate the file, return null
    *
-   * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
+   * @param file
+   * @param extension
+   * @return
    */
-  @Override
-  public File generateJPG(File file, String extension) throws FileNotFoundException, IOException {
-    if (StorageUtils.getMimeType(extension).equals("application/pdf")) {
-      return PdfUtils.pdfToImage(file);
-    }
-    return null;
-  }
+  public File generateJPG(File file, String extension) throws ImejiException;
 }

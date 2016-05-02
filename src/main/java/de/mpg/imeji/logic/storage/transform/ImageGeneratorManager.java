@@ -31,13 +31,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
-import de.mpg.imeji.logic.storage.transform.impl.MagickImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.PdfImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.RawFileImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.SimpleAudioImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.SimpleImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.XuggleImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.ImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.MagickImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.PdfImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.RawFileImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.SimpleAudioImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.SimpleImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.XuggleImageGenerator;
 import de.mpg.imeji.logic.storage.util.ImageMagickUtils;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -132,9 +134,10 @@ public final class ImageGeneratorManager {
    * @param bytes
    * @param extension
    * @return
+   * @throws ImejiException
    * @throws IOException
    */
-  private File toJpeg(File file, String extension) throws IOException {
+  private File toJpeg(File file, String extension) throws ImejiException {
     if (StorageUtils.compareExtension(extension, "jpg")) {
       return file;
     }
@@ -148,6 +151,6 @@ public final class ImageGeneratorManager {
         LOGGER.warn("Error generating image (generator: " + imageGenerator.getClass().getName(), e);
       }
     }
-    throw new RuntimeException("Unsupported file format (requested was " + extension + ")");
+    throw new ImejiException("Unsupported file format (requested was " + extension + ")");
   }
 }

@@ -11,8 +11,8 @@ import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;

@@ -73,7 +73,7 @@ public final class VideoUtils {
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] videoToImageBytes(URL url) throws FileNotFoundException, IOException {
+  public static byte[] videoToImageBytes(URL url) throws IOException {
     return VideoUtils.videoFileToByteAray(url, VideoUtils.getGoodImageDetectionThreshold(),
         VideoUtils.IMAGE_FILE_EXTENTION);
   }
@@ -86,7 +86,7 @@ public final class VideoUtils {
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] videoToImageBytes(File file) throws FileNotFoundException, IOException {
+  public static byte[] videoToImageBytes(File file) throws IOException {
     return VideoUtils.videoFileToByteAray(file, VideoUtils.getGoodImageDetectionThreshold(),
         VideoUtils.IMAGE_FILE_EXTENTION);
   }
@@ -99,7 +99,7 @@ public final class VideoUtils {
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] videoToImageBytes(byte[] bytes) throws FileNotFoundException, IOException {
+  public static byte[] videoToImageBytes(byte[] bytes) throws IOException {
     return VideoUtils.videoFileToByteAray(bytes, VideoUtils.getGoodImageDetectionThreshold(),
         VideoUtils.IMAGE_FILE_EXTENTION);
   }

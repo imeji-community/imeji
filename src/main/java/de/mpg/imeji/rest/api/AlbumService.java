@@ -1,8 +1,8 @@
 package de.mpg.imeji.rest.api;
 
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferAlbum;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
+import static de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.transferAlbum;
+import static de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+import static de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,20 +14,20 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
-import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.helper.CommonUtils;
 import de.mpg.imeji.rest.helper.ProfileCache;
-import de.mpg.imeji.rest.process.CommonUtils;
-import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
+import de.mpg.imeji.rest.transfer.TransferObjectFactory;
 
 /**
  * Service for {@link AlbumTO}

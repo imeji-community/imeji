@@ -6,30 +6,25 @@ package de.mpg.imeji.logic.search.jenasearch;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchIndexer;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.jenasearch.util.CollectionUtils;
 import de.mpg.imeji.logic.search.jenasearch.util.SortHelper;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchGroup;
-import de.mpg.imeji.logic.search.model.SearchIndex;
-import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
-import de.mpg.imeji.logic.search.util.CollectionUtils;
-import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -49,7 +44,6 @@ public class JenaSearch implements Search {
   private String containerURI;
   private SearchObjectTypes type = SearchObjectTypes.ITEM;
   private static final Logger LOGGER = Logger.getLogger(JenaSearch.class);
-  public static final Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
   /**
    * Initialize the search
@@ -66,7 +60,7 @@ public class JenaSearch implements Search {
 
   @Override
   public SearchIndexer getIndexer() {
-    return new JenaIndexer();
+    return null;
   }
 
   /**
@@ -308,37 +302,4 @@ public class JenaSearch implements Search {
         return J2JHelper.getResourceNamespace(new Item());
     }
   }
-
-  /**
-   * Get {@link SearchIndex} from its {@link String} name
-   *
-   * @param indexName
-   * @return
-   * @throws BadRequestException
-   */
-  public static SearchIndex getIndex(String indexName) {
-    try {
-      SearchIndex index = indexes.get(indexName);
-      if (index == null) {
-        index = new SearchIndex(SearchFields.valueOf(indexName));
-      }
-      return index;
-    } catch (Exception e) {
-      LOGGER.error("Unknown index: " + indexName);
-      throw new RuntimeException("Unknown index: " + indexName);
-    }
-  }
-
-  /**
-   * Get {@link SearchIndex} from its {@link SearchFields}
-   *
-   * @param indexname
-   * @return
-   * @throws BadRequestException
-   */
-  public static SearchIndex getIndex(SearchIndex.SearchFields indexname) {
-    return getIndex(indexname.name());
-  }
-
-
 }

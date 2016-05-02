@@ -12,11 +12,11 @@ import org.elasticsearch.search.SearchHit;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchIndexer;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
 import de.mpg.imeji.logic.search.elasticsearch.factory.ElasticQueryFactory;
 import de.mpg.imeji.logic.search.elasticsearch.factory.ElasticSortFactory;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.User;
 

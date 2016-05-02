@@ -22,45 +22,52 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.storage.transform.generator;
 
-import org.apache.http.client.HttpResponseException;
+import java.io.File;
 
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.export.format.xml.XMLItemsExport;
-import de.mpg.imeji.logic.export.format.xml.XMLMdProfileExport;
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.storage.util.ImageMagickUtils;
+import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
- * {@link Export} in xml
+ * {@link ImageGenerator} implemented with imagemagick
  *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class XMLExport extends Export {
+public class MagickImageGenerator implements ImageGenerator {
+  private boolean enabled = false;
+  private static final Logger LOGGER = Logger.getLogger(MagickImageGenerator.class);
+
   /**
-   * Factory for {@link XMLExport}
-   *
-   * @param type
-   * @return
-   * @throws HttpResponseException
+   * Default constructor
    */
-  public static XMLExport factory(String type) throws HttpResponseException {
-    if ("image".equals(type)) {
-      return new XMLItemsExport();
-    } else if ("profile".equals(type)) {
-      return new XMLMdProfileExport();
+  public MagickImageGenerator() {
+    try {
+      enabled = Boolean.parseBoolean(PropertyReader.getProperty("imeji.imagemagick.enable"));
+    } catch (Exception e) {
+      throw new RuntimeException("Error reading property imeji.imagemagick.enable", e);
     }
-    throw new HttpResponseException(400, "Type " + type + " is not supported.");
   }
 
   /*
    * (non-Javadoc)
    *
-   * @see de.mpg.imeji.logic.export.Export#getContentType()
+   * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
   @Override
-  public String getContentType() {
-    return "application/xml";
+  public File generateJPG(File file, String extension) {
+    if (enabled) {
+      try {
+        return ImageMagickUtils.convertToJPEG(file, extension);
+      } catch (Exception e) {
+        LOGGER.warn("Error with imagemagick: ", e);
+        return null;
+      }
+    }
+    return null;
   }
 }

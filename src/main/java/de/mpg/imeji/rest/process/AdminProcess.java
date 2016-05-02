@@ -21,13 +21,9 @@ public class AdminProcess {
   public static JSONResponse login(String authorizationHeader) {
     try {
       // Authenticate user and update the key if successfull authentication
-
       User userVO = BasicAuthentication.auth(authorizationHeader);
       UserService service = new UserService();
-      service.updateUserKey(userVO, true);
-      // Return user object in the response
-      UserTO userTO = new UserTO();
-      TransferObjectFactory.transferUser(userVO, userTO);
+      UserTO userTO = service.updateUserKey(userVO, true);
       return RestProcessUtils.buildResponse(Status.OK.getStatusCode(), userTO);
     } catch (ImejiException | JoseException e) {
       return RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());

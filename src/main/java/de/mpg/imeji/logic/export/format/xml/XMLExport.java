@@ -22,34 +22,43 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.transform.impl;
+package de.mpg.imeji.logic.export.format.xml;
 
-import java.io.File;
-import java.io.IOException;
+import org.apache.http.client.HttpResponseException;
 
-import de.mpg.imeji.logic.storage.transform.ImageGenerator;
-import de.mpg.imeji.logic.storage.util.ImageUtils;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.export.format.Export;
 
 /**
- * {@link ImageGenerator} for basics format. Doesn't need any dependency
+ * {@link Export} in xml
  *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SimpleImageGenerator implements ImageGenerator {
+public abstract class XMLExport extends Export {
+  /**
+   * Factory for {@link XMLExport}
+   *
+   * @param type
+   * @return
+   * @throws HttpResponseException
+   */
+  public static XMLExport factory(String type) throws HttpResponseException {
+    if ("image".equals(type)) {
+      return new XMLItemsExport();
+    } else if ("profile".equals(type)) {
+      return new XMLMdProfileExport();
+    }
+    throw new HttpResponseException(400, "Type " + type + " is not supported.");
+  }
+
   /*
    * (non-Javadoc)
    *
-   * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generate(byte[], java.lang.String,
-   * int, int)
+   * @see de.mpg.imeji.logic.export.Export#getContentType()
    */
   @Override
-  public File generateJPG(File file, String extension) throws IOException {
-    if (StorageUtils.getMimeType(extension).contains("image")) {
-      return ImageUtils.toJpeg(file, StorageUtils.getMimeType(extension));
-    }
-    return null;
+  public String getContentType() {
+    return "application/xml";
   }
 }

@@ -22,13 +22,11 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.export.format.explain;
 
 import org.apache.http.client.HttpResponseException;
 
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.export.format.explain.MetadataExplainExport;
-import de.mpg.imeji.logic.export.format.explain.SearchExplainExport;
+import de.mpg.imeji.logic.export.format.Export;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 
 /**

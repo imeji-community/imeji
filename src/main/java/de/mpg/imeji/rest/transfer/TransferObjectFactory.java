@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.process;
+package de.mpg.imeji.rest.transfer;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.rest.helper.CommonUtils;
 import de.mpg.imeji.rest.helper.UserNameCache;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
@@ -184,11 +184,13 @@ public class TransferObjectFactory {
    * @param vo
    * @param to
    */
-  public static void transferUser(User vo, UserTO to) {
+  public static UserTO transferUser(User vo) {
+    UserTO to = new UserTO();
     transferPerson(vo.getPerson(), to.getPerson());
     to.setApiKey(vo.getApiKey());
     to.setEmail(vo.getEmail());
     to.setQuota(vo.getQuota());
+    return to;
   }
 
   /**

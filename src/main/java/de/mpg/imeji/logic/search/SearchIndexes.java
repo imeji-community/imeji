@@ -1,12 +1,16 @@
-package de.mpg.imeji.logic.search.util;
+package de.mpg.imeji.logic.search;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
@@ -16,7 +20,41 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SearchIndexInitializer {
+public class SearchIndexes {
+  private static final Logger LOGGER = Logger.getLogger(SearchIndexes.class);
+  public static final Map<String, SearchIndex> indexes = SearchIndexes.init();
+
+  /**
+   * Get {@link SearchIndex} from its {@link String} name
+   *
+   * @param indexName
+   * @return
+   * @throws BadRequestException
+   */
+  public static SearchIndex getIndex(String indexName) {
+    try {
+      SearchIndex index = indexes.get(indexName);
+      if (index == null) {
+        index = new SearchIndex(SearchFields.valueOf(indexName));
+      }
+      return index;
+    } catch (Exception e) {
+      LOGGER.error("Unknown index: " + indexName, e);
+    }
+    return null;
+  }
+
+  /**
+   * Get {@link SearchIndex} from its {@link SearchFields}
+   *
+   * @param indexname
+   * @return
+   * @throws BadRequestException
+   */
+  public static SearchIndex getIndex(SearchIndex.SearchFields indexname) {
+    return getIndex(indexname.name());
+  }
+
   /**
    * Initialize all {@link SearchIndex} in imeji
    *

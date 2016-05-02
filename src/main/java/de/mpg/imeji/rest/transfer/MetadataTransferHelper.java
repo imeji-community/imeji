@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.helper;
+package de.mpg.imeji.rest.transfer;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -35,9 +35,8 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.process.CommonUtils;
+import de.mpg.imeji.rest.helper.CommonUtils;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.OrganizationTO;

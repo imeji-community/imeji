@@ -12,9 +12,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.resource.ProfileController;
-import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 
 /**

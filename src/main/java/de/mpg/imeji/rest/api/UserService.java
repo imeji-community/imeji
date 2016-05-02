@@ -12,11 +12,12 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.UserTO;
+import de.mpg.imeji.rest.transfer.TransferObjectFactory;
 
 /**
  * API Service for {@link UserTO}
@@ -94,19 +95,17 @@ public class UserService implements API<UserTO> {
    * @throws ImejiException
    * @throws JoseException
    */
-  public User updateUserKey(User userVO, boolean login) throws ImejiException, JoseException {
+  public UserTO updateUserKey(User userVO, boolean login) throws ImejiException, JoseException {
     // This method must be called with proper user authentication
     if (userVO == null) {
       throw new AuthenticationError("Authentication is required to call this method!");
     }
-
     if ((login && (userVO.getApiKey() == null || "".equals(userVO.getApiKey()))) || !login) {
       // If it is login, then update the key only if it is null
       userVO.setApiKey(generateNewKey(userVO));
       new UserController(userVO).update(userVO, userVO);
     }
-
-    return userVO;
+    return TransferObjectFactory.transferUser(userVO);
   }
 
 

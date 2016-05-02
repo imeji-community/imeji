@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.util.MetadataTypesHelper;
-import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
@@ -83,31 +83,31 @@ public class SearchIndex {
     List<SearchIndex> list = new ArrayList<SearchIndex>();
     switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString())) {
       case DATE:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.time.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.time));
         break;
       case GEOLOCATION:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.location.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.location));
         break;
       case LICENSE:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.license.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.license));
         break;
       case NUMBER:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.number.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.number));
         break;
       case CONE_PERSON:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_family.name()));
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_given.name()));
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_org_name.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.person_family));
+        list.add(SearchIndexes.getIndex(SearchFields.person_given));
+        list.add(SearchIndexes.getIndex(SearchFields.person_org_name));
         break;
       case PUBLICATION:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.citation.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.citation));
         break;
       case TEXT:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.text.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.text));
         break;
       case LINK:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.url.name()));
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.label.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.url));
+        list.add(SearchIndexes.getIndex(SearchFields.label));
         break;
     }
     return list;

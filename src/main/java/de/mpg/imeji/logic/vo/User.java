@@ -15,13 +15,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.resource.UserGroupController;
-import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -46,7 +43,7 @@ public class User implements Serializable {
   @j2jLiteral("http://xmlns.com/foaf/0.1/password")
   private String encryptedPassword;
   @j2jLiteral("http://xmlns.com/foaf/0.1/person")
-  private Person person;
+  private Person person = new Person();
   @j2jList("http://imeji.org/terms/grant")
   private Collection<Grant> grants = new ArrayList<Grant>();
   @j2jLiteral("http://imeji.org/terms/quota")
@@ -76,51 +73,6 @@ public class User implements Serializable {
   @j2jList("http://imeji.org/terms/observedCollections")
   private Collection<String> observedCollections = new ArrayList<String>();
 
-
-  private static final Logger LOGGER = Logger.getLogger(User.class);
-
-  /**
-     *
-     */
-  public User() {
-    this.person = ImejiFactory.newPerson();
-  }
-
-  /**
-   * Return a clone of this user, with a new email
-   *
-   * @param email
-   * @return
-   */
-  public User clone(String email) {
-    User clone = new User();
-    clone.setEmail(email);
-    clone.encryptedPassword = encryptedPassword;
-    clone.setQuota(quota);
-    clone.grants = new ArrayList<Grant>();
-    for (Grant g : grants) {
-      if (g.asGrantType() != null && g.getGrantFor() != null) {
-        if (g.getGrantFor().toString().equals(this.getId().toString())) {
-          clone.grants.add(new Grant(g.asGrantType(), clone.getId()));
-        } else {
-          clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
-        }
-      }
-    }
-    // Updates group references
-    for (UserGroup group : groups) {
-      UserGroupController c = new UserGroupController();
-      group.getUsers().remove(this.getId());
-      group.getUsers().add(clone.getId());
-      try {
-        c.update(group, Imeji.adminUser);
-      } catch (Exception e) {
-        LOGGER.error("Could not update the user group i think", e);
-      }
-    }
-    clone.person = person.clone();
-    return clone;
-  }
 
   public String getEmail() {
     return email;

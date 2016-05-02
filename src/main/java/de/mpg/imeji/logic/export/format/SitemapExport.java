@@ -11,8 +11,7 @@ import java.net.URI;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 
 /**

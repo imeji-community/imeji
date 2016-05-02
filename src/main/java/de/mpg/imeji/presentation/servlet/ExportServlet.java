@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.logic.export.ExportManager;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;

@@ -20,13 +20,13 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.SpaceController;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.DateFormatter;
@@ -97,7 +97,7 @@ public class StartPageBean extends SuperBean implements Serializable {
     try {
       String[] prop = Imeji.CONFIG.getStartPageCarouselQueryOrder().split("-");
       if ("".equals(prop[0]) && "".equals(prop[1])) {
-        return new SortCriterion(JenaSearch.getIndex(prop[0]),
+        return new SortCriterion(SearchIndexes.getIndex(prop[0]),
             SortOrder.valueOf(prop[1].toUpperCase()));
       }
     } catch (Exception e) {

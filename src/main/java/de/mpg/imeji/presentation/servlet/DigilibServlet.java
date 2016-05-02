@@ -45,7 +45,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;

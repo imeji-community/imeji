@@ -15,8 +15,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 
 /**

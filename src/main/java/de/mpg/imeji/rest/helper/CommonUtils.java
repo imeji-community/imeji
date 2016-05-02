@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.process;
+package de.mpg.imeji.rest.helper;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;

@@ -22,9 +22,10 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.search;
+package de.mpg.imeji.logic.search.factory;
 
 
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticSearch;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;

@@ -19,11 +19,11 @@ import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.PropertyReader;
@@ -228,7 +228,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
 
   public SortCriterion getSortCriterion() {
-    return new SortCriterion(JenaSearch.getIndex(getSelectedSortCriterion()),
+    return new SortCriterion(SearchIndexes.getIndex(getSelectedSortCriterion()),
         SortOrder.valueOf(getSelectedSortOrder()));
   }
 

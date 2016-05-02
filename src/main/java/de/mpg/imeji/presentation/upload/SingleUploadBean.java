@@ -36,10 +36,10 @@ import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfi
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;

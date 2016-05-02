@@ -22,7 +22,7 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.transform.impl;
+package de.mpg.imeji.logic.storage.transform.generator;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -30,7 +30,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -38,8 +37,8 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageInputStream;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 
@@ -51,16 +50,17 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
  * @version $Revision$ $LastChangedDate$
  */
 public class RawFileImageGenerator implements ImageGenerator {
-  private static String PATH_TO_DEFAULT_IMAGE = "images/file-icon.jpg";
+  private static final Logger LOGGER = Logger.getLogger(RawFileImageGenerator.class);
+  private static final String PATH_TO_DEFAULT_IMAGE = "images/file-icon.jpg";
   /**
    * Coordinates where the text is written on the image
    */
-  private static int TEXT_POSITION_X = 630;
-  private static int TEXT_POSITION_Y = 700;
+  private static final int TEXT_POSITION_X = 630;
+  private static final int TEXT_POSITION_Y = 700;
   /**
    * The Font size of the text
    */
-  private static int TEXT_FONT_SIZE = 150;
+  private static final int TEXT_FONT_SIZE = 150;
   private static final Font FONT = new Font("Serif", Font.BOLD, TEXT_FONT_SIZE);
 
   /*
@@ -69,12 +69,17 @@ public class RawFileImageGenerator implements ImageGenerator {
    * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
   @Override
-  public File generateJPG(File file, String extension)
-      throws FileNotFoundException, IOException, URISyntaxException {
-    BufferedImage icon = ImageIO.read(new FileImageInputStream(new File(
-        RawFileImageGenerator.class.getClassLoader().getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
-    icon = writeTextOnImage(icon, extension, file.getName());
-    return ImageUtils.toFile(icon, StorageUtils.getMimeType("jpg"));
+  public File generateJPG(File file, String extension) {
+    BufferedImage icon;
+    try {
+      icon = ImageIO.read(new FileImageInputStream(new File(RawFileImageGenerator.class
+          .getClassLoader().getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
+      icon = writeTextOnImage(icon, extension, file.getName());
+      return ImageUtils.toFile(icon, StorageUtils.getMimeType("jpg"));
+    } catch (IOException | URISyntaxException e) {
+      LOGGER.error("Error creating icon", e);
+    }
+    return null;
   }
 
   /**

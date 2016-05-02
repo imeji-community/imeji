@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.process;
+package de.mpg.imeji.rest.transfer;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
@@ -37,8 +37,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.helper.MetadataTransferHelper;
-import de.mpg.imeji.rest.helper.ProfileTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ContainerAdditionalInformationTO;

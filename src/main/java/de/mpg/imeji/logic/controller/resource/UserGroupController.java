@@ -34,7 +34,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;

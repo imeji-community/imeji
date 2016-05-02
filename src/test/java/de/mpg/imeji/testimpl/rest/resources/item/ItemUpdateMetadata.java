@@ -53,10 +53,10 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.DefaultItemService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemWithFileTO;
+import de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.test.rest.resources.test.integration.ItemTestBase;
 import util.JenaUtil;
 

@@ -38,8 +38,7 @@ public class UserControllerTestClass extends ControllerTest {
     try {
       UserController c = new UserController(Imeji.adminUser);
       // Create a new user with a new id but with the same email
-      User user = JenaUtil.testUser.clone(JenaUtil.TEST_USER_EMAIL);
-      c.create(user, USER_TYPE.DEFAULT);
+      c.create(JenaUtil.testUser, USER_TYPE.DEFAULT);
       Assert.fail("User should not be created, since User exists already");
     } catch (Exception e1) {
       // OK

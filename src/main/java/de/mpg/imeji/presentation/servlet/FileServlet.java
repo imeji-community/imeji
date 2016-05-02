@@ -23,7 +23,7 @@ import de.mpg.imeji.logic.auth.authentication.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;

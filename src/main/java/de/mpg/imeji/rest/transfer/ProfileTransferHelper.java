@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.helper;
+package de.mpg.imeji.rest.transfer;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.UnprocessableError;

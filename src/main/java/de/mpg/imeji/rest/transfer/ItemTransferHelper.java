@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.helper;
+package de.mpg.imeji.rest.transfer;
 
 import java.io.Serializable;
 import java.util.Map.Entry;

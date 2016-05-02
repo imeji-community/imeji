@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.j2j.annotations.j2jId;
@@ -234,10 +233,10 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
    */
   @Override
   public Statement clone() {
-    Statement clone = ImejiFactory.newStatement();
+    Statement clone = new Statement();
     clone.isDescription = isDescription;
     clone.isPreview = isPreview;
-    clone.labels = labels;
+    clone.labels = new ArrayList<>(labels);
     clone.literalConstraints = literalConstraints;
     clone.maxOccurs = maxOccurs;
     clone.minOccurs = minOccurs;

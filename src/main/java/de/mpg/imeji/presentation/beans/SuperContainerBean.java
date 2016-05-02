@@ -11,15 +11,15 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.PropertyReader;
@@ -424,7 +424,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     }
 
     SortCriterion sortCriterion = new SortCriterion();
-    sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
+    sortCriterion.setIndex(SearchIndexes.getIndex(getSelectedSortCriterion()));
     sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 
     searchResult = search(searchQuery, sortCriterion, myOffset, limit);

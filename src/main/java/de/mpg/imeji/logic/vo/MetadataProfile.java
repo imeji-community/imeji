@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -89,7 +88,7 @@ public class MetadataProfile extends Properties implements Cloneable {
    */
   @Override
   public MetadataProfile clone() {
-    MetadataProfile clone = ImejiFactory.newProfile();
+    MetadataProfile clone = new MetadataProfile();
     clone.setTitle(this.title);
     clone.setDescription(this.description);
     // the mapping between the new uris (created by cloning) and the old uris

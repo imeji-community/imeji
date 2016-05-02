@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.export.format;
+package de.mpg.imeji.logic.export.format.rdf;
 
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -15,12 +15,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.export.format.rdf.RDFAlbumExport;
-import de.mpg.imeji.logic.export.format.rdf.RDFCollectionExport;
-import de.mpg.imeji.logic.export.format.rdf.RDFImageExport;
-import de.mpg.imeji.logic.export.format.rdf.RDFProfileExport;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.export.format.Export;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 
 /**

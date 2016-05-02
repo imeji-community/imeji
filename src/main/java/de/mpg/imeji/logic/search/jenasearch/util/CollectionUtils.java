@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.search.util;
+package de.mpg.imeji.logic.search.jenasearch.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Based on {@link org.apache.commons.collections.CollectionUtils} <br/>
- * Introduced order to {@link org.apache.commons.collections.CollectionUtils}<br/>
+ * Based on {@link de.mpg.imeji.logic.search.jenasearch.util.CollectionUtils} <br/>
+ * Introduced order to {@link de.mpg.imeji.logic.search.jenasearch.util.CollectionUtils}<br/>
  * Much faster than other classes
  *
  * @author saquet

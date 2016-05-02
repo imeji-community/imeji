@@ -22,26 +22,41 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.transform;
+package de.mpg.imeji.logic.storage.transform.generator;
 
 import java.io.File;
+import java.net.URISyntaxException;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
- * Interface for all Class used to generate Thumbnails and web resolution images out of the files
+ * Generate a simple icon for an audio file
  *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public interface ImageGenerator {
-  /**
-   * Generate a jpg image in the wished format from the passed bytes according to the filename
-   * extension(jpg, png, fit, etc.)<br/>
-   * If the {@link ImageGenerator} can not generate the file, return null
+public class SimpleAudioImageGenerator implements ImageGenerator {
+  private static final Logger LOGGER = Logger.getLogger(SimpleAudioImageGenerator.class);
+  private static final String PATH_TO_AUDIO_ICON = "images/audio_file_icon.jpg";
+
+  /*
+   * (non-Javadoc)
    *
-   * @param file
-   * @param extension
-   * @return
+   * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
-  public File generateJPG(File file, String extension) throws Exception;
+  @Override
+  public File generateJPG(File file, String extension) {
+    if (StorageUtils.getMimeType(extension).contains("audio")) {
+      try {
+        return new File(SimpleAudioImageGenerator.class.getClassLoader()
+            .getResource(PATH_TO_AUDIO_ICON).toURI());
+      } catch (URISyntaxException e) {
+        LOGGER.error("Error creating thunmbnail", e);
+      }
+    }
+    return null;
+  }
 }

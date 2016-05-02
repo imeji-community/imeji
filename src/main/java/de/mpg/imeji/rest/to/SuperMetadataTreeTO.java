@@ -46,7 +46,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.util.MetadataAndProfileHelper;
-import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.rest.transfer.MetadataTransferHelper;
 
 @JsonInclude(Include.NON_NULL)
 /**

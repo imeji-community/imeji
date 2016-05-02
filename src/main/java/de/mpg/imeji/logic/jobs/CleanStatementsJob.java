@@ -11,7 +11,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;

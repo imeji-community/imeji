@@ -11,16 +11,16 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.helper.MetadataTransferHelper;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
-import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
+import de.mpg.imeji.rest.transfer.MetadataTransferHelper;
+import de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.transfer.TransferObjectFactory;
+import de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.TRANSFER_MODE;
 
 
 /**

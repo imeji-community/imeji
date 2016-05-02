@@ -17,7 +17,7 @@ import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.UserController;
-import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.export.format.Export;
 import de.mpg.imeji.logic.export.format.ZIPExport;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;

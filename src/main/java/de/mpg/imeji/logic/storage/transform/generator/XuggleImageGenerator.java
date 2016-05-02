@@ -22,24 +22,25 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.storage.transform.impl;
+package de.mpg.imeji.logic.storage.transform.generator;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
-import de.mpg.imeji.logic.storage.transform.ImageGenerator;
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.storage.util.VideoUtils;
 
 /**
- * Generate a simple icon for an audio file
+ * {@link ImageGenerator} implemted with xuggle (video, audios)
  *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SimpleAudioImageGenerator implements ImageGenerator {
-  private static String PATH_TO_AUDIO_ICON = "images/audio_file_icon.jpg";
+public class XuggleImageGenerator implements ImageGenerator {
+  private static final Logger LOGGER = Logger.getLogger(XuggleImageGenerator.class);
 
   /*
    * (non-Javadoc)
@@ -47,10 +48,13 @@ public class SimpleAudioImageGenerator implements ImageGenerator {
    * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
   @Override
-  public File generateJPG(File file, String extension) throws IOException, URISyntaxException {
-    if (StorageUtils.getMimeType(extension).contains("audio")) {
-      return new File(
-          SimpleAudioImageGenerator.class.getClassLoader().getResource(PATH_TO_AUDIO_ICON).toURI());
+  public File generateJPG(File file, String extension) {
+    if (StorageUtils.getMimeType(extension).contains("video")) {
+      try {
+        return StorageUtils.toFile(VideoUtils.videoToImageBytes(file));
+      } catch (IOException e) {
+        LOGGER.error("Error generating jpg", e);
+      }
     }
     return null;
   }

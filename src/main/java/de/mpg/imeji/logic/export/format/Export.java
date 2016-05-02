@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.export;
+package de.mpg.imeji.logic.export.format;
 
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -9,13 +9,10 @@ import java.util.Map;
 
 import org.apache.http.client.HttpResponseException;
 
-import de.mpg.imeji.logic.export.format.ExplainExport;
-import de.mpg.imeji.logic.export.format.JenaExport;
-import de.mpg.imeji.logic.export.format.RDFExport;
-import de.mpg.imeji.logic.export.format.SitemapExport;
-import de.mpg.imeji.logic.export.format.XMLExport;
-import de.mpg.imeji.logic.export.format.ZIPExport;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.export.format.explain.ExplainExport;
+import de.mpg.imeji.logic.export.format.rdf.RDFExport;
+import de.mpg.imeji.logic.export.format.xml.XMLExport;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 
 /**

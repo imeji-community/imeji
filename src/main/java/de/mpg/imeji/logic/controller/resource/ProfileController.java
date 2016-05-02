@@ -21,16 +21,17 @@ import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
-import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
-import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -250,8 +251,8 @@ public class ProfileController extends ImejiController {
   public SearchResult search(SearchQuery query, User user, String spaceId) {
     Search search = SearchFactory.create(SearchObjectTypes.PROFILE, SEARCH_IMPLEMENTATIONS.JENA);
     // Automatically sort by profile title
-    SortCriterion sortCri = new SortCriterion(
-        JenaSearch.getIndex(SearchIndex.SearchFields.prof.name()), SortOrder.ASCENDING);
+    SortCriterion sortCri =
+        new SortCriterion(SearchIndexes.getIndex(SearchFields.prof), SortOrder.ASCENDING);
     SearchResult result = search.search(query, sortCri, user, null, spaceId, 0, -1);
     return result;
   }

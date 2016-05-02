@@ -7,10 +7,9 @@ import java.io.OutputStream;
 import java.util.Collection;
 
 import de.mpg.imeji.logic.controller.resource.ItemController;
-import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
 import de.mpg.imeji.logic.ingest.vo.Items;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 

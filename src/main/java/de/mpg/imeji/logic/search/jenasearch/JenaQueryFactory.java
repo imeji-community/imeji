@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.search.model.FileTypes.Type;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchMetadata;
@@ -297,7 +298,8 @@ public class JenaQueryFactory {
         if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType)) {
           pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
           return "FILTER(" + getSimpleFilter(pair, "s", pair.isNot()) + ") . ?c <"
-              + JenaSearch.getIndex(SearchIndex.SearchFields.prof).getNamespace() + "> ?s .";
+              + SearchIndexes.getIndex(SearchIndex.SearchFields.prof).getNamespace()
+              + "> ?s .";
         } else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)) {
           searchQuery = "?s <http://imeji.org/terms/mdprofile> ?el";
         } else if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {

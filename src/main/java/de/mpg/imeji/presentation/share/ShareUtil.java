@@ -154,8 +154,9 @@ public class ShareUtil {
       if (sharedWith.contains("/collection/")) {
         CollectionImeji c =
             new CollectionController().retrieveLazy(URI.create(sharedWith), sessionUser);
-        roles.add(new ShareListItem(group, SharedObjectType.COLLECTION, sharedWith,
-            c.getProfile().toString(), c.getMetadata().getTitle(), sessionUser, locale));
+        String profileId = c.getProfile() != null ? c.getProfile().toString() : null;
+        roles.add(new ShareListItem(group, SharedObjectType.COLLECTION, sharedWith, profileId,
+            c.getMetadata().getTitle(), sessionUser, locale));
       } else if (sharedWith.contains("/album/")) {
         Album a = new AlbumController().retrieveLazy(URI.create(sharedWith), sessionUser);
         roles.add(new ShareListItem(group, SharedObjectType.ALBUM, sharedWith, null,

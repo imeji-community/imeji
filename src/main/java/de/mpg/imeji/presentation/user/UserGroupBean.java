@@ -33,9 +33,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
@@ -45,11 +43,11 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.controller.resource.UserGroupController;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.share.ShareListItem;
 import de.mpg.imeji.presentation.share.ShareUtil;
@@ -68,24 +66,21 @@ public class UserGroupBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = -6501626930686020874L;
   private UserGroup userGroup = new UserGroup();
   private Collection<User> users;
-  @ManagedProperty(value = "#{SessionBean.user}")
-  private User sessionUser;
   private static final Logger LOGGER = Logger.getLogger(UserGroupsBean.class);
   private List<ShareListItem> roles = new ArrayList<ShareListItem>();
 
   @PostConstruct
   public void init() {
-    String groupId =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
+    String groupId = UrlHelper.getParameterValue("id");
     if (groupId != null) {
       UserGroupController c = new UserGroupController();
       try {
-        this.userGroup = c.read(groupId, sessionUser);
+        this.userGroup = c.read(groupId, getSessionUser());
         this.users = loadUsers(userGroup);
-        this.roles = ShareUtil.getAllRoles(userGroup, sessionUser, getLocale());
-      } catch (Exception e) {
+        this.roles = ShareUtil.getAllRoles(userGroup, getSessionUser(), getLocale());
+      } catch (ImejiException e) {
         BeanHelper.error("Error reading user group " + groupId);
-        LOGGER.error(e);
+        LOGGER.error("Error initializing UserGroupBean", e);
       }
     }
   }
@@ -101,7 +96,7 @@ public class UserGroupBean extends SuperBean implements Serializable {
    */
   public Collection<User> loadUsers(UserGroup group) {
     Collection<User> users = new ArrayList<User>();
-    UserController c = new UserController(sessionUser);
+    UserController c = new UserController(getSessionUser());
     for (URI uri : userGroup.getUsers()) {
       try {
         users.add(c.retrieve(uri));
@@ -143,9 +138,7 @@ public class UserGroupBean extends SuperBean implements Serializable {
    * @throws IOException
    */
   private void reload() throws IOException {
-    Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(nav.getApplicationUrl() + "usergroup?id=" + userGroup.getId());
+    redirect(getNavigation().getApplicationUrl() + "usergroup?id=" + userGroup.getId());
   }
 
   /**
@@ -154,12 +147,14 @@ public class UserGroupBean extends SuperBean implements Serializable {
   public String create() {
     UserGroupController c = new UserGroupController();
     try {
-      c.create(userGroup, sessionUser);
+      c.create(userGroup, getSessionUser());
       reload();
     } catch (UnprocessableError e) {
       BeanHelper.error(e, getLocale());
+      LOGGER.error("Error creating user group", e);
     } catch (Exception e) {
       BeanHelper.error("Error creating user group");
+      LOGGER.error("Error creating user group", e);
     }
     return "";
   }
@@ -172,11 +167,13 @@ public class UserGroupBean extends SuperBean implements Serializable {
   public void save() throws IOException {
     UserGroupController c = new UserGroupController();
     try {
-      c.update(userGroup, sessionUser);
+      c.update(userGroup, getSessionUser());
     } catch (UnprocessableError e) {
       BeanHelper.error(e, getLocale());
+      LOGGER.error("Error updating user group", e);
     } catch (Exception e) {
       BeanHelper.error("Error updating user group");
+      LOGGER.error("Error updating user group", e);
     }
     reload();
   }
@@ -193,22 +190,6 @@ public class UserGroupBean extends SuperBean implements Serializable {
    */
   public void setUserGroup(UserGroup userGroup) {
     this.userGroup = userGroup;
-  }
-
-  /**
-   * @return the sessionUser
-   */
-  @Override
-  public User getSessionUser() {
-    return sessionUser;
-  }
-
-  /**
-   * @param sessionUser the sessionUser to set
-   */
-  @Override
-  public void setSessionUser(User sessionUser) {
-    this.sessionUser = sessionUser;
   }
 
   /**

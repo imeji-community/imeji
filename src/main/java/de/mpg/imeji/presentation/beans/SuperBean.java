@@ -1,6 +1,7 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Locale;
 
 import javax.faces.bean.ManagedBean;
@@ -19,7 +20,8 @@ import de.mpg.imeji.presentation.history.HistorySession;
  */
 @ManagedBean(name = "SuperBean")
 @ViewScoped
-public class SuperBean {
+public class SuperBean implements Serializable {
+  private static final long serialVersionUID = -5167729051940514378L;
   @ManagedProperty(value = "#{SessionBean.user}")
   private User sessionUser;
   @ManagedProperty(value = "#{SessionBean.locale}")

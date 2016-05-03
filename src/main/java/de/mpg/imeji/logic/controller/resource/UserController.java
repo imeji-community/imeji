@@ -56,6 +56,13 @@ public class UserController {
   private static final WriterFacade WRITER = new WriterFacade(Imeji.userModel);
   private User user;
   private static final Logger LOGGER = Logger.getLogger(UserController.class);
+  private static final Comparator<User> USER_COMPARATOR_BY_NAME = new Comparator<User>() {
+    @Override
+    public int compare(User c1, User c2) {
+      return c1.getPerson().getCompleteName().toLowerCase()
+          .compareTo(c2.getPerson().getCompleteName().toLowerCase());
+    }
+  };
 
   /**
    * User type (restricted: can not create collection)
@@ -310,13 +317,14 @@ public class UserController {
    * @param grantFor
    * @return
    */
-  public Collection<User> searchByGrantFor(String grantFor, int limit) {
+  public List<String> searchByGrantFor(String grantFor) {
     Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
-    return retrieveBatchLazy(
-        search.searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null, null, 0, -1)
-            .getResults(),
-        limit);
+    return search
+        .searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null, null, 0, -1)
+        .getResults();
   }
+
+
 
   /**
    * Search for all {@link Person} by their names. The search looks within the {@link User} and the
@@ -434,9 +442,9 @@ public class UserController {
    * @return
    * @throws ImejiException
    */
-  public Collection<User> retrieveBatchLazy(List<String> uris, int limit) {
-    List<User> users = new ArrayList<User>();
+  public List<User> retrieveBatchLazy(List<String> uris, int limit) {
     int max = limit < uris.size() && limit > 0 ? limit : uris.size();
+    List<User> users = new ArrayList<User>(max);
     for (int i = 0; i < max; i++) {
       try {
         users.add((User) READER.readLazy(uris.get(i), user, new User()));
@@ -444,16 +452,28 @@ public class UserController {
         LOGGER.error("Error reading user", e);
       }
     }
+    Collections.sort(users, USER_COMPARATOR_BY_NAME);
+    return users;
+  }
 
-    // Always sort Users by complete name
-    Comparator<User> comparator = new Comparator<User>() {
-      @Override
-      public int compare(User c1, User c2) {
-        return c1.getPerson().getCompleteName().toLowerCase()
-            .compareTo(c2.getPerson().getCompleteName().toLowerCase()); // use your logic
+  /**
+   * Load all {@link User}
+   *
+   * @param uris
+   * @return
+   * @throws ImejiException
+   */
+  public Collection<User> retrieveBatch(List<String> uris, int limit) {
+    int max = limit < uris.size() && limit > 0 ? limit : uris.size();
+    List<User> users = new ArrayList<User>(max);
+    for (int i = 0; i < max; i++) {
+      try {
+        users.add((User) READER.read(uris.get(i), user, new User()));
+      } catch (ImejiException e) {
+        LOGGER.error("Error reading user", e);
       }
-    };
-    Collections.sort(users, comparator);
+    }
+    Collections.sort(users, USER_COMPARATOR_BY_NAME);
     return users;
   }
 

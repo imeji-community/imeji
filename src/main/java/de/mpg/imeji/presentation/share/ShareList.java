@@ -75,7 +75,7 @@ public final class ShareList {
   private void retrieveUsers(URI ownerUri, String sharedObjectUri, String profileUri,
       SharedObjectType type, User currentUser, Locale locale) {
     UserController uc = new UserController(Imeji.adminUser);
-    Collection<User> allUser = uc.searchByGrantFor(sharedObjectUri, -1);
+    Collection<User> allUser = uc.retrieveBatch(uc.searchByGrantFor(sharedObjectUri), -1);
     for (User u : allUser) {
       // Do not display the creator of this collection here
       if (!u.getId().toString().equals(ownerUri.toString())) {

@@ -146,10 +146,10 @@ public class StatusBean extends SuperBean implements Serializable {
    */
   private List<User> findAllUsersWithReadGrant(Properties p) {
     UserController uc = new UserController(Imeji.adminUser);
-    List<User> l =
-        new ArrayList<>(uc.searchByGrantFor(p.getId().toString(), COLLABORATOR_LIST_MAX_SIZE + 1));
+    List<User> l = uc.retrieveBatchLazy(uc.searchByGrantFor(p.getId().toString()),
+        COLLABORATOR_LIST_MAX_SIZE + 1);
     if (p instanceof Item) {
-      l.addAll(uc.searchByGrantFor(((Item) p).getCollection().toString(),
+      l.addAll(uc.retrieveBatchLazy(uc.searchByGrantFor(((Item) p).getCollection().toString()),
           COLLABORATOR_LIST_MAX_SIZE + 1));
     }
     return l;

@@ -1,13 +1,14 @@
 package de.mpg.imeji.logic.util;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+
+import de.mpg.imeji.exceptions.ImejiException;
 
 /**
  * Static functions to manipulate {@link String}
@@ -34,24 +35,32 @@ public class StringHelper {
   /**
    * Private Constructor
    */
-  private StringHelper() {}
+  private StringHelper() {
+    // avoid constructor
+  }
 
   /**
    * Encode a {@link String} to MD5
    *
    * @param pass
    * @return
+   * @throws NoSuchAlgorithmException
+   * @throws UnsupportedEncodingException
    * @throws Exception
    */
-  public static String convertToMD5(String pass) throws Exception {
-    MessageDigest dig = MessageDigest.getInstance("MD5");
-    dig.update(pass.getBytes("UTF-8"));
-    byte[] messageDigest = dig.digest();
-    StringBuilder sBuilder = new StringBuilder();
-    for (int i = 0; i < messageDigest.length; i++) {
-      sBuilder.append(Integer.toHexString(0xFF & messageDigest[i]));
+  public static String convertToMD5(String pass) throws ImejiException {
+    try {
+      MessageDigest dig = MessageDigest.getInstance("MD5");
+      dig.update(pass.getBytes("UTF-8"));
+      byte[] messageDigest = dig.digest();
+      StringBuilder sBuilder = new StringBuilder();
+      for (int i = 0; i < messageDigest.length; i++) {
+        sBuilder.append(Integer.toHexString(0xFF & messageDigest[i]));
+      }
+      return sBuilder.toString();
+    } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+      throw new ImejiException("Error converting password to md5", e);
     }
-    return sBuilder.toString();
   }
 
   /**
@@ -127,7 +136,7 @@ public class StringHelper {
    * @return
    */
   public static boolean hasInvalidTags(String s) {
-    if (isNullOrEmpty(s)) {
+    if (StringHelper.isNullOrEmptyTrim(s)) {
       return false;
     }
     if (!Jsoup.isValid(s, Whitelist.relaxed())) {

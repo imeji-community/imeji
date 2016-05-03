@@ -299,8 +299,9 @@ public class UserController {
    */
   public Collection<User> searchUserByName(String name) {
     Search search = SearchFactory.create();
-    return loadUsers(
-        search.searchString(JenaCustomQueries.selectUserAll(name), null, null, 0, -1).getResults());
+    return retrieveBatchLazy(
+        search.searchString(JenaCustomQueries.selectUserAll(name), null, null, 0, -1).getResults(),
+        -1);
   }
 
   /**
@@ -309,11 +310,12 @@ public class UserController {
    * @param grantFor
    * @return
    */
-  public Collection<User> searchByGrantFor(String grantFor) {
+  public Collection<User> searchByGrantFor(String grantFor, int limit) {
     Search search = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA);
-    return loadUsers(
+    return retrieveBatchLazy(
         search.searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null, null, 0, -1)
-            .getResults());
+            .getResults(),
+        limit);
   }
 
   /**
@@ -432,13 +434,14 @@ public class UserController {
    * @return
    * @throws ImejiException
    */
-  public Collection<User> loadUsers(List<String> uris) {
+  public Collection<User> retrieveBatchLazy(List<String> uris, int limit) {
     List<User> users = new ArrayList<User>();
-    for (String uri : uris) {
+    int max = limit < uris.size() && limit > 0 ? limit : uris.size();
+    for (int i = 0; i < max; i++) {
       try {
-        users.add((User) READER.read(uri, user, new User()));
+        users.add((User) READER.readLazy(uris.get(i), user, new User()));
       } catch (ImejiException e) {
-        LOGGER.info("Could not find user with URI " + uri, e);
+        LOGGER.error("Error reading user", e);
       }
     }
 
@@ -543,7 +546,7 @@ public class UserController {
     List<String> uris =
         search.searchString(JenaCustomQueries.selectUsersToBeNotifiedByFileDownload(user, c), null,
             null, 0, -1).getResults();
-    return (List<User>) loadUsers(uris);
+    return (List<User>) retrieveBatchLazy(uris, -1);
   }
 
   /*

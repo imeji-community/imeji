@@ -77,6 +77,8 @@ public class UploadBean extends SuperBean implements Serializable {
   private boolean recursive;
   @ManagedProperty(value = "#{SessionBean.selected}")
   private List<String> selected;
+  @ManagedProperty(value = "#{UploadSession}")
+  private UploadSession uploadSession;
 
 
 
@@ -93,14 +95,14 @@ public class UploadBean extends SuperBean implements Serializable {
     try {
       loadCollection();
       if (UrlHelper.getParameterBoolean("init")) {
-        ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).reset();
+        uploadSession.reset();
         getSelected().clear();
         externalUrl = null;
         localDirectory = null;
       } else if (UrlHelper.getParameterBoolean("start")) {
         upload();
       } else if (UrlHelper.getParameterBoolean("done")) {
-        ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).resetProperties();
+        uploadSession.resetProperties();
       } else if ((UrlHelper.getParameterBoolean("edituploaded"))) {
         prepareBatchEdit();
       } else {
@@ -152,7 +154,7 @@ public class UploadBean extends SuperBean implements Serializable {
           }
         }
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        LOGGER.error("Error upload file", e);
       }
     }
   }
@@ -209,7 +211,7 @@ public class UploadBean extends SuperBean implements Serializable {
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(hs.getCurrentPage().getUrl() + "?done=1");
     } catch (IOException e) {
-      LOGGER.error("Error redirecting agter upload");
+      LOGGER.error("Error redirecting agter upload", e);
     }
     return "";
   }
@@ -254,8 +256,9 @@ public class UploadBean extends SuperBean implements Serializable {
     try {
       return TempFileUtil.createTempFile("upload", "." + FilenameUtils.getExtension(title));
     } catch (Exception e) {
-      throw new RuntimeException("Error creating a temp file", e);
+      LOGGER.error("Error creating a temp file", e);
     }
+    return null;
   }
 
   /**
@@ -272,7 +275,8 @@ public class UploadBean extends SuperBean implements Serializable {
       StorageUtils.writeInOut(fis, fos, true);
       return tmp;
     } catch (Exception e) {
-      throw new RuntimeException("Error writing uploaded File in temp file", e);
+      LOGGER.error("Error writing uploaded File in temp file", e);
+      return null;
     } finally {
       fos.close();
       fis.close();
@@ -395,7 +399,7 @@ public class UploadBean extends SuperBean implements Serializable {
       }
     } else {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", getLocale()) + "No ID in URL");
-      throw new RuntimeException();
+      LOGGER.error("error loading collection");
     }
   }
 
@@ -526,32 +530,32 @@ public class UploadBean extends SuperBean implements Serializable {
   }
 
   public List<String> getfFiles() {
-    return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).getfFiles();
+    return uploadSession.getfFiles();
   }
 
   public List<Item> getsFiles() {
-    return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).getsFiles();
+    return uploadSession.getsFiles();
   }
 
   public List<Item> getItemsToEdit() {
-    return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).getItemsToEdit();
+    return uploadSession.getItemsToEdit();
   }
 
   public void resetItemsToEdit() {
-    ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).getItemsToEdit().clear();
+    uploadSession.getItemsToEdit().clear();
   }
 
 
   private boolean isCheckNameUnique() {
-    return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).isCheckNameUnique();
+    return uploadSession.isCheckNameUnique();
   }
 
   private boolean isImportImageToFile() {
-    return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).isImportImageToFile();
+    return uploadSession.isImportImageToFile();
   }
 
   private boolean isUploadFileToItem() {
-    return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).isUploadFileToItem();
+    return uploadSession.isUploadFileToItem();
   }
 
   public String getDiscardComment() {
@@ -563,7 +567,7 @@ public class UploadBean extends SuperBean implements Serializable {
   }
 
   public boolean isSuccessUpload() {
-    return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).getsFiles().size() > 0;
+    return uploadSession.getsFiles().size() > 0;
   }
 
   /**
@@ -628,6 +632,14 @@ public class UploadBean extends SuperBean implements Serializable {
    */
   public void setSelected(List<String> selected) {
     this.selected = selected;
+  }
+
+  public UploadSession getUploadSession() {
+    return uploadSession;
+  }
+
+  public void setUploadSession(UploadSession uploadSession) {
+    this.uploadSession = uploadSession;
   }
 
 }

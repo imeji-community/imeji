@@ -1,45 +1,45 @@
 package de.mpg.imeji.presentation.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Super class to implements quota methods, which can be reused by JSF Bean displaying quota menu
  * <br/>
- * NOTE: This is NOT a JSF Bean
  *
  * @author bastiens
  *
  */
-public class QuotaSuperBean {
 
+public class QuotaUICompoment implements Serializable {
+  private static final long serialVersionUID = -8215734534906829819L;
   private String quota = Imeji.CONFIG.getDefaultQuota();
   private List<SelectItem> quotaMenu;
 
   /**
    * default Constructor
    */
-  public QuotaSuperBean() {
-    quotaMenu = new ArrayList<>();
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  public QuotaUICompoment(User user, Locale locale) {
+    this.quotaMenu = new ArrayList<>();
+    this.quota = user.getQuota() > 0
+        ? user.getQuotaHumanReadable(Locale.ENGLISH).replace("GB", "").trim() : quota;
     for (String limit : Imeji.CONFIG.getQuotaLimitsAsList()) {
       if (NumberUtils.isNumber(limit)) {
-        quotaMenu.add(new SelectItem(limit));
+        quotaMenu.add(new SelectItem(limit.trim()));
       } else {
-        quotaMenu
-            .add(new SelectItem(limit, Imeji.RESOURCE_BUNDLE.getLabel(limit, session.getLocale())));
+        quotaMenu.add(new SelectItem(limit.trim(), Imeji.RESOURCE_BUNDLE.getLabel(limit, locale)));
       }
     }
   }
-
 
   /**
    *

@@ -73,7 +73,7 @@ public class RegistrationBusinessController {
    * @return
    * @throws Exception
    */
-  public Registration register(User user) throws Exception {
+  public Registration register(User user) throws ImejiException {
     if (hasPendingRegistration(user.getEmail())) {
       throw new UnprocessableError("User has already a pending registration");
     }

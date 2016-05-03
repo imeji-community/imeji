@@ -44,7 +44,7 @@ public class StatusBean extends SuperBean implements Serializable {
   private boolean hasMoreCollaborator = false;
 
   /**
-   * Method called from the JSF compomnent
+   * Method called from the JSF component
    *
    * @param o
    */
@@ -146,9 +146,11 @@ public class StatusBean extends SuperBean implements Serializable {
    */
   private List<User> findAllUsersWithReadGrant(Properties p) {
     UserController uc = new UserController(Imeji.adminUser);
-    List<User> l = new ArrayList<>(uc.searchByGrantFor(p.getId().toString()));
+    List<User> l =
+        new ArrayList<>(uc.searchByGrantFor(p.getId().toString(), COLLABORATOR_LIST_MAX_SIZE + 1));
     if (p instanceof Item) {
-      l.addAll(uc.searchByGrantFor(((Item) p).getCollection().toString()));
+      l.addAll(uc.searchByGrantFor(((Item) p).getCollection().toString(),
+          COLLABORATOR_LIST_MAX_SIZE + 1));
     }
     return l;
   }

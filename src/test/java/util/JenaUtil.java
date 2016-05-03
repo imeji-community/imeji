@@ -14,6 +14,7 @@ import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.resource.UserController;
@@ -131,7 +132,7 @@ public class JenaUtil {
    * @param pwd
    * @throws Exception
    */
-  private static User getMockupUser(String email, String name, String pwd) throws Exception {
+  private static User getMockupUser(String email, String name, String pwd) throws ImejiException {
     User user = new User();
     user.setEmail(email);
     Person userPerson = user.getPerson();

@@ -5,9 +5,7 @@
 				xmlns:f="http://java.sun.com/jsf/core"
 				xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
 				xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
-				xmlns:imjc="http://java.sun.com/jsf/composite/components"
-		>
-	
+				xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	<ui:param name="headline" value="User Page"/>
 	<ui:param name="currentMainMenu" value="admin"/>
 	
@@ -15,7 +13,6 @@
 		<menu:context_actionMenu id="action" curMainMenu="#{currentMainMenu}" downloadEnabled="false" actionEnabled="false"/>
 	</ui:define>
 	<ui:define name="mainContent">
-		<h:outputText value="#{UserBean.init}"/>
 		<!-- If User has no right to view the page -->
 		<ui:fragment rendered="#{!Auth.admin(UserBean.user)}">
 			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
@@ -110,8 +107,8 @@
 													<h:outputText value="#{UserBean.user.getQuotaHumanReadable(SessionBean.locale)}"/>
 												</h:panelGroup>
 												<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit and SessionBean.user.admin}" >
-													<h:selectOneMenu value="#{UserBean.quota}" >
-														<f:selectItems value="#{UserBean.quotaMenu}"/>
+													<h:selectOneMenu value="#{UserBean.quota.quota}" >
+														<f:selectItems value="#{UserBean.quota.quotaMenu}"/>
 													</h:selectOneMenu>
 												</h:panelGroup>
 											</div>

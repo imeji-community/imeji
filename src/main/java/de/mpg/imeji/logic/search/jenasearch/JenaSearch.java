@@ -7,8 +7,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -43,7 +41,6 @@ import de.mpg.j2j.helper.J2JHelper;
 public class JenaSearch implements Search {
   private String containerURI;
   private SearchObjectTypes type = SearchObjectTypes.ITEM;
-  private static final Logger LOGGER = Logger.getLogger(JenaSearch.class);
 
   /**
    * Initialize the search
@@ -60,7 +57,7 @@ public class JenaSearch implements Search {
 
   @Override
   public SearchIndexer getIndexer() {
-    return null;
+    return new JenaIndexer();
   }
 
   /**

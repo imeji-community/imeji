@@ -52,8 +52,8 @@ import de.mpg.j2j.helper.DateHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class UserController {
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
+  private static final ReaderFacade READER = new ReaderFacade(Imeji.userModel);
+  private static final WriterFacade WRITER = new WriterFacade(Imeji.userModel);
   private User user;
   private static final Logger LOGGER = Logger.getLogger(UserController.class);
 
@@ -117,7 +117,7 @@ public class UserController {
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
     u.setModified(now);
-    writer.create(WriterFacade.toList(u), null, user);
+    WRITER.create(WriterFacade.toList(u), null, user);
     new InvitationBusinessController().consume(u);
     return u;
   }
@@ -133,9 +133,9 @@ public class UserController {
     UserGroupController ugc = new UserGroupController();
     ugc.removeUserFromAllGroups(user, this.user);
     // remove user grant
-    writer.delete(new ArrayList<Object>(user.getGrants()), this.user);
+    WRITER.delete(new ArrayList<Object>(user.getGrants()), this.user);
     // remove user
-    writer.delete(WriterFacade.toList(user), this.user);
+    WRITER.delete(WriterFacade.toList(user), this.user);
   }
 
   /**
@@ -180,7 +180,7 @@ public class UserController {
    * @throws ImejiException
    */
   public User retrieve(URI uri, User currentUser) throws ImejiException {
-    User u = (User) reader.read(uri.toString(), currentUser, new User());
+    User u = (User) READER.read(uri.toString(), currentUser, new User());
     if (u.isActive()) {
       UserGroupController ugc = new UserGroupController();
       u.setGroups((List<UserGroup>) ugc.searchByUser(u, currentUser));
@@ -231,7 +231,7 @@ public class UserController {
    */
   public User update(User updatedUser, User currentUser) throws ImejiException {
     updatedUser.setModified(DateHelper.getCurrentDate());
-    writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
+    WRITER.update(WriterFacade.toList(updatedUser), null, currentUser, true);
     return updatedUser;
   }
 
@@ -436,7 +436,7 @@ public class UserController {
     List<User> users = new ArrayList<User>();
     for (String uri : uris) {
       try {
-        users.add((User) reader.read(uri, user, new User()));
+        users.add((User) READER.read(uri, user, new User()));
       } catch (ImejiException e) {
         LOGGER.info("Could not find user with URI " + uri, e);
       }

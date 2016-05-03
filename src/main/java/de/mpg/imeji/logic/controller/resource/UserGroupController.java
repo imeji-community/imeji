@@ -49,8 +49,8 @@ import de.mpg.imeji.logic.writer.WriterFacade;
  * @version $Revision$ $LastChangedDate$
  */
 public class UserGroupController {
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
+  private static final ReaderFacade READER = new ReaderFacade(Imeji.userModel);
+  private static final WriterFacade WRITER = new WriterFacade(Imeji.userModel);
   static Logger LOGGER = Logger.getLogger(UserGroupController.class);
 
   /**
@@ -60,7 +60,7 @@ public class UserGroupController {
    * @throws ImejiException
    */
   public void create(UserGroup group, User user) throws ImejiException {
-    writer.create(WriterFacade.toList(group), null, user);
+    WRITER.create(WriterFacade.toList(group), null, user);
   }
 
   /**
@@ -71,7 +71,7 @@ public class UserGroupController {
    * @throws ImejiException
    */
   public UserGroup read(String uri, User user) throws ImejiException {
-    return (UserGroup) reader.read(uri, user, new UserGroup());
+    return (UserGroup) READER.read(uri, user, new UserGroup());
   }
 
   /**
@@ -93,7 +93,7 @@ public class UserGroupController {
    * @throws ImejiException
    */
   public void update(UserGroup group, User user) throws ImejiException {
-    writer.update(WriterFacade.toList(group), null, user, true);
+    WRITER.update(WriterFacade.toList(group), null, user, true);
   }
 
   /**
@@ -104,7 +104,7 @@ public class UserGroupController {
    * @throws ImejiException
    */
   public void delete(UserGroup group, User user) throws ImejiException {
-    writer.delete(WriterFacade.toList(group), user);
+    WRITER.delete(WriterFacade.toList(group), user);
   }
 
   /**
@@ -148,7 +148,7 @@ public class UserGroupController {
     Search search = SearchFactory.create();
     for (String uri : search.searchString(q, null, null, 0, -1).getResults()) {
       try {
-        userGroups.add((UserGroup) reader.read(uri, user, new UserGroup()));
+        userGroups.add((UserGroup) READER.read(uri, user, new UserGroup()));
       } catch (ImejiException e) {
         LOGGER.info("User group with uri " + uri + " not found.");
       }

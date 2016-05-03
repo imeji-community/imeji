@@ -26,9 +26,9 @@ import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.factory.SearchFactory.SEARCH_IMPLEMENTATIONS;
-import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.search.model.SearchQuery;
@@ -49,8 +49,8 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class AlbumController extends ImejiController {
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.albumModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.albumModel);
+  private static final ReaderFacade READER = new ReaderFacade(Imeji.albumModel);
+  private static final WriterFacade WRITER = new WriterFacade(Imeji.albumModel);
   private Search search =
       SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC);
 
@@ -75,7 +75,7 @@ public class AlbumController extends ImejiController {
     prepareCreate(album, user);
     ShareBusinessController shareController = new ShareBusinessController();
     shareController.shareToCreator(user, album.getId().toString());
-    writer.create(WriterFacade.toList(album), null, user);
+    WRITER.create(WriterFacade.toList(album), null, user);
     return album;
   }
 
@@ -116,7 +116,7 @@ public class AlbumController extends ImejiController {
   public List<Album> retrieveBatchLazy(List<String> uris, User user, int limit, int offset)
       throws ImejiException {
     List<Album> albums = prepareBatchRetrieve(uris, limit, offset);
-    reader.readLazy(J2JHelper.cast2ObjectList(albums), user);
+    READER.readLazy(J2JHelper.cast2ObjectList(albums), user);
     return albums;
   }
 
@@ -150,7 +150,7 @@ public class AlbumController extends ImejiController {
    */
   public Album update(Album album, User user) throws ImejiException {
     prepareUpdate(album, user);
-    writer.update(WriterFacade.toList(album), null, user, true);
+    WRITER.update(WriterFacade.toList(album), null, user, true);
     return retrieve(album.getId(), user);
   }
 
@@ -163,7 +163,7 @@ public class AlbumController extends ImejiController {
    * @throws ImejiException
    */
   public void delete(Album album, User user) throws ImejiException {
-    writer.delete(WriterFacade.toList(album), user);
+    WRITER.delete(WriterFacade.toList(album), user);
   }
 
   /**
@@ -346,7 +346,7 @@ public class AlbumController extends ImejiController {
   public List<Album> retrieveAll(User user) throws ImejiException {
     List<String> uris = ImejiSPARQL.exec(JenaCustomQueries.selectAlbumAll(), Imeji.albumModel);
     List<Album> albums = prepareBatchRetrieve(uris, -1, 0);
-    reader.read(J2JHelper.cast2ObjectList(albums), user);
+    READER.read(J2JHelper.cast2ObjectList(albums), user);
     return albums;
   }
 

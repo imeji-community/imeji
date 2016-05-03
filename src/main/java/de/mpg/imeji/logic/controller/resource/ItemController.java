@@ -66,8 +66,8 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public class ItemController extends ImejiController {
   private static final Logger LOGGER = Logger.getLogger(ItemController.class);
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.imageModel);
+  private static final ReaderFacade READER = new ReaderFacade(Imeji.imageModel);
+  private static final WriterFacade WRITER = new WriterFacade(Imeji.imageModel);
   public static final String NO_THUMBNAIL_URL = "NO_THUMBNAIL_URL";
   private final Search search =
       SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.ELASTIC);
@@ -216,7 +216,7 @@ public class ItemController extends ImejiController {
     }
     cleanMetadata(items);
     ProfileController pc = new ProfileController();
-    writer.create(J2JHelper.cast2ObjectList((List<?>) items),
+    WRITER.create(J2JHelper.cast2ObjectList((List<?>) items),
         pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user);
     // Update the collection
     cc.update(cc.retrieve(coll, user), Imeji.adminUser);
@@ -277,11 +277,11 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public Item retrieve(URI imgUri, User user) throws ImejiException {
-    return (Item) reader.read(imgUri.toString(), user, new Item());
+    return (Item) READER.read(imgUri.toString(), user, new Item());
   }
 
   public Item retrieveLazy(URI imgUri, User user) throws ImejiException {
-    return (Item) reader.readLazy(imgUri.toString(), user, new Item());
+    return (Item) READER.readLazy(imgUri.toString(), user, new Item());
   }
 
   /**
@@ -316,7 +316,7 @@ public class ItemController extends ImejiController {
   public Collection<Item> retrieveBatch(List<String> uris, int limit, int offset, User user)
       throws ImejiException {
     List<Item> items = uris2Items(uris, limit, offset);
-    reader.read(J2JHelper.cast2ObjectList(items), user);
+    READER.read(J2JHelper.cast2ObjectList(items), user);
     return items;
   }
 
@@ -333,7 +333,7 @@ public class ItemController extends ImejiController {
   public Collection<Item> retrieveBatchLazy(List<String> uris, int limit, int offset, User user)
       throws ImejiException {
     List<Item> items = uris2Items(uris, limit, offset);
-    reader.readLazy(J2JHelper.cast2ObjectList(items), user);
+    READER.readLazy(J2JHelper.cast2ObjectList(items), user);
     return items;
   }
 
@@ -418,7 +418,7 @@ public class ItemController extends ImejiController {
 
       cleanMetadata(items);
       ProfileController pc = new ProfileController();
-      writer.update(imBeans,
+      WRITER.update(imBeans,
           pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user, true);
     }
   }
@@ -527,7 +527,7 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public void delete(List<Item> items, User user) throws ImejiException {
-    writer.delete(new ArrayList<Object>(items), user);
+    WRITER.delete(new ArrayList<Object>(items), user);
     for (Item item : items) {
       removeFileFromStorage(item.getStorageId());
     }

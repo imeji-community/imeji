@@ -12,8 +12,6 @@
 	<ui:param name="logicBean" value="#{AlbumBean}"/>
 	<ui:param name="imejiResource" value="#{AlbumBean.album}"/>
 	
-	
-	
 	<ui:define name="actionsMenu">
 		<ui:fragment rendered="#{Auth.read(logicBean.album)}">
 			<menu:context_subNavigation contextId="#{logicBean.id}" 
@@ -27,7 +25,7 @@
 		
 			<menu:context_actionMenu id="action" 
 									curMainMenu="#{currentMainMenu}" 
-									vo="#{logicBean.album}"
+									vo="#{logicBean.container}"
 									downloadEnabled="#{logicBean.size > 0}"
 									contextDownloadParam="&amp;album=#{logicBean.id}"
 									hasContent="#{logicBean.size > 0}"/>

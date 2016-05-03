@@ -21,8 +21,8 @@ import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.factory.SearchFactory.SEARCH_IMPLEMENTATIONS;
@@ -54,8 +54,8 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class ProfileController extends ImejiController {
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.profileModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.profileModel);
+  private static final ReaderFacade READER = new ReaderFacade(Imeji.profileModel);
+  private static final WriterFacade WRITER = new WriterFacade(Imeji.profileModel);
   private static final Logger LOGGER = Logger.getLogger(ProfileController.class);
 
   /**
@@ -76,7 +76,7 @@ public class ProfileController extends ImejiController {
   public MetadataProfile create(MetadataProfile p, User user) throws ImejiException {
     prepareCreate(p, user);
     p.setStatus(Status.PENDING);
-    writer.create(WriterFacade.toList(p), null, user);
+    WRITER.create(WriterFacade.toList(p), null, user);
     ShareBusinessController shareController = new ShareBusinessController();
     shareController.shareToCreator(user, p.getId().toString());
     return p;
@@ -108,7 +108,7 @@ public class ProfileController extends ImejiController {
     if (uri == null) {
       return null;
     }
-    p = ((MetadataProfile) reader.read(uri.toString(), user, new MetadataProfile()));
+    p = ((MetadataProfile) READER.read(uri.toString(), user, new MetadataProfile()));
     Collections.sort((List<Statement>) p.getStatements());
     return p;
   }
@@ -166,7 +166,7 @@ public class ProfileController extends ImejiController {
   public void update(MetadataProfile mdp, User user) throws ImejiException {
     isLoggedInUser(user);
     prepareUpdate(mdp, user);
-    writer.update(WriterFacade.toList(mdp), null, user, true);
+    WRITER.update(WriterFacade.toList(mdp), null, user, true);
     Imeji.executor.submit(new CleanMetadataJob(mdp));
   }
 
@@ -209,7 +209,7 @@ public class ProfileController extends ImejiController {
     } else if (mdp.getDefault()) {
       throw new UnprocessableError("error_profile_is_default_cannot_be_deleted");
     }
-    writer.delete(WriterFacade.toList(mdp), user);
+    WRITER.delete(WriterFacade.toList(mdp), user);
     Imeji.executor.submit(new CleanMetadataJob(mdp));
   }
 
@@ -319,26 +319,19 @@ public class ProfileController extends ImejiController {
     return false;
   }
 
-  /*
-   *
-   * /** Load {@link MetadataProfile} defined in a {@link List} of uris. Don't load the {@link Item}
+  /**
+   * Load {@link MetadataProfile} defined in a {@link List} of uris. Don't load the {@link Item}
    * contained in the {@link MetadataProfile}
    *
-   * @param uris
-   *
+   * @param uri
    * @param limit
-   *
    * @param offset
-   *
    * @return
-   *
    * @throws ImejiException
    */
   public Collection<MetadataProfile> retrieveLazy(List<String> uris, int limit, int offset,
-      User user) throws ImejiException {
-
+      User user) {
     List<MetadataProfile> cols = new ArrayList<MetadataProfile>();
-
     List<String> retrieveUris;
     if (limit < 0) {
       retrieveUris = uris;
@@ -350,9 +343,8 @@ public class ProfileController extends ImejiController {
     for (String s : retrieveUris) {
       cols.add((MetadataProfile) J2JHelper.setId(new MetadataProfile(), URI.create(s)));
     }
-
     try {
-      reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
+      READER.readLazy(J2JHelper.cast2ObjectList(cols), user);
       return cols;
     } catch (ImejiException e) {
       LOGGER.error("Error loading metadataProfiles: " + e.getMessage(), e);
@@ -361,7 +353,7 @@ public class ProfileController extends ImejiController {
   }
 
   public MetadataProfile retrieveLazy(URI imgUri, User user) throws ImejiException {
-    return (MetadataProfile) reader.readLazy(imgUri.toString(), user, new MetadataProfile());
+    return (MetadataProfile) READER.readLazy(imgUri.toString(), user, new MetadataProfile());
 
   }
 }

@@ -54,8 +54,8 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class CollectionController extends ImejiController {
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.collectionModel);
+  private static final ReaderFacade READER = new ReaderFacade(Imeji.collectionModel);
+  private static final WriterFacade WRITER = new WriterFacade(Imeji.collectionModel);
   private static final Logger LOGGER = Logger.getLogger(CollectionController.class);
   private Search search =
       SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC);
@@ -118,7 +118,7 @@ public class CollectionController extends ImejiController {
       c.setProfile(p.getId());
     }
 
-    writer.create(WriterFacade.toList(c), p, user);
+    WRITER.create(WriterFacade.toList(c), p, user);
     // Prepare grants
     ShareBusinessController shareController = new ShareBusinessController();
     user = shareController.shareToCreator(user, c.getId().toString());
@@ -141,7 +141,7 @@ public class CollectionController extends ImejiController {
    * @throws ImejiException
    */
   public CollectionImeji retrieve(URI uri, User user) throws ImejiException {
-    return (CollectionImeji) reader.read(uri.toString(), user, new CollectionImeji());
+    return (CollectionImeji) READER.read(uri.toString(), user, new CollectionImeji());
   }
 
   /**
@@ -153,7 +153,7 @@ public class CollectionController extends ImejiController {
    * @throws ImejiException
    */
   public CollectionImeji retrieveLazy(URI uri, User user) throws ImejiException {
-    return (CollectionImeji) reader.readLazy(uri.toString(), user, new CollectionImeji());
+    return (CollectionImeji) READER.readLazy(uri.toString(), user, new CollectionImeji());
   }
 
   /**
@@ -169,7 +169,7 @@ public class CollectionController extends ImejiController {
   public Collection<CollectionImeji> retrieveBatchLazy(List<String> uris, int limit, int offset,
       User user) throws ImejiException {
     List<CollectionImeji> cols = prepareBatchRetrieve(uris, limit, offset);
-    reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
+    READER.readLazy(J2JHelper.cast2ObjectList(cols), user);
     return cols;
 
   }
@@ -214,7 +214,7 @@ public class CollectionController extends ImejiController {
    */
   public CollectionImeji update(CollectionImeji ic, User user) throws ImejiException {
     prepareUpdate(ic, user);
-    writer.update(WriterFacade.toList(ic), null, user, true);
+    WRITER.update(WriterFacade.toList(ic), null, user, true);
     return retrieve(ic.getId(), user);
   }
 
@@ -256,7 +256,7 @@ public class CollectionController extends ImejiController {
    */
   public CollectionImeji updateLazy(CollectionImeji ic, User user) throws ImejiException {
     prepareUpdate(ic, user);
-    writer.updateLazy(WriterFacade.toList(ic), null, user);
+    WRITER.updateLazy(WriterFacade.toList(ic), null, user);
     return retrieveLazy(ic.getId(), user);
   }
 
@@ -359,7 +359,7 @@ public class CollectionController extends ImejiController {
         }
       }
 
-      writer.delete(WriterFacade.toList(collection), user);
+      WRITER.delete(WriterFacade.toList(collection), user);
     }
   }
 

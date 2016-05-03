@@ -53,8 +53,8 @@ import de.mpg.imeji.logic.writer.WriterFacade;
  */
 public class SpaceController extends ImejiController {
   private static final Logger LOGGER = LoggerFactory.getLogger(SpaceController.class);
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.spaceModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.spaceModel);
+  private static final ReaderFacade READER = new ReaderFacade(Imeji.spaceModel);
+  private static final WriterFacade WRITER = new WriterFacade(Imeji.spaceModel);
   public static final String SPACES_STORAGE_SUBDIRECTORY = "/spaces";
 
   /**
@@ -97,7 +97,7 @@ public class SpaceController extends ImejiController {
      * AuthorizationPredefinedRoles.admin(space.getId() .toString(), null), user);
      */
 
-    writer.create(WriterFacade.toList(space), null, user);
+    WRITER.create(WriterFacade.toList(space), null, user);
 
     // add collections if exist
     Collection<String> spaceCollections = space.getSpaceCollections();
@@ -167,7 +167,7 @@ public class SpaceController extends ImejiController {
    */
   public Space update(Space space, User user) throws ImejiException {
     prepareUpdate(space, user);
-    writer.update(WriterFacade.toList(space), null, user, true);
+    WRITER.update(WriterFacade.toList(space), null, user, true);
     return retrieve(space.getId(), user);
   }
 
@@ -272,7 +272,7 @@ public class SpaceController extends ImejiController {
    */
   public void updateLazy(Space space, User user) throws ImejiException {
     prepareUpdate(space, user);
-    writer.updateLazy(WriterFacade.toList(space), null, user);
+    WRITER.updateLazy(WriterFacade.toList(space), null, user);
   }
 
   /**
@@ -284,7 +284,7 @@ public class SpaceController extends ImejiController {
    * @throws ImejiException
    */
   public Space retrieve(URI spaceId, User user) throws ImejiException {
-    Space space = (Space) reader.read(spaceId.toString(), user, new Space());
+    Space space = (Space) READER.read(spaceId.toString(), user, new Space());
     space.setSpaceCollections(retrieveCollections(space));
     return space;
   }
@@ -461,7 +461,7 @@ public class SpaceController extends ImejiController {
    * @throws ImejiException
    */
   public Space retrieveLazy(URI uri, User user) throws ImejiException {
-    return (Space) reader.readLazy(uri.toString(), user, new Space());
+    return (Space) READER.readLazy(uri.toString(), user, new Space());
   }
 
   /**
@@ -500,7 +500,7 @@ public class SpaceController extends ImejiController {
   public void delete(Space space, User user) throws ImejiException, IOException {
     removeFile(space);
     removeCollections(space, retrieveCollections(space, true), user);
-    writer.delete(WriterFacade.toList(space), user);
+    WRITER.delete(WriterFacade.toList(space), user);
   }
 
   public boolean isSpaceByLabel(String spaceId) {

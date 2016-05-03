@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:share="http://java.sun.com/jsf/composite/components/share">
+	xmlns:share="http://java.sun.com/jsf/composite/components/share"
+	xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">>
 	
 	<composite:interface>
 		<composite:attribute name="type"/>
@@ -95,7 +96,7 @@
 						<div class="imj_shareEmailInput">		
 							<div class="imj_metadataSet">
 								<h:outputLabel for="emailInput" styleClass="imj_metadataLabel" value="#{lbl.share_email}"/>
-								<h:inputTextarea id="emailInput" value="#{ShareBean.input.input}" styleClass="imj_metadataValue"/>	
+								<h:inputTextarea id="emailInput" value="#{ShareBean.input.input}" styleClass="imj_metadataValue" html5:placeholder="email@example.com;email2@example.com;..."/>	
 							</div>
 							<div class="imj_metadataSet">
 								<div class="imj_metadataLabel"></div>
@@ -121,7 +122,7 @@
 				<h:panelGroup  styleClass="imj_pageMessageArea" id="unknownEmails" rendered="#{!empty ShareBean.input.unknownEmails}">
 					<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>		
 					<ul class="imj_messageList">
-						<li class="imj_messageInfo"><h:outputText value="#{lbl.share_confirm_invitation}"/></li>
+						<li class="imj_messageInfo">#{ShareBean.labelConfirmInvitation}</li>
 						<h:form>
 							<ui:repeat var="email" value="#{ShareBean.input.unknownEmails}" varStatus="status">
 								<li>

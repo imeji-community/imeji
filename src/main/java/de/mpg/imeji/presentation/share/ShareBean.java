@@ -344,6 +344,10 @@ public class ShareBean extends SuperBean implements Serializable {
     }
   }
 
+  public String getLabelConfirmInvitation() {
+    return Imeji.RESOURCE_BUNDLE.getLabel("share_confirm_invitation", getLocale())
+        .replace("XXX_INSTANCE_NAME_XXX", getInstanceName());
+  }
 
   /**
    * Search a {@link UserGroup} by name

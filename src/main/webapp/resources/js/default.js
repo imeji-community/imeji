@@ -783,10 +783,3 @@ function decrementSelectedSearch() {
  * END - SIMPLE SEARCH
  * 
  ******************************************************************************/
-
-/***
- * Remove placeholder on focus
- */
-$('input,textarea').focus(function(){
-	   $(this).removeAttr('placeholder');
-	});

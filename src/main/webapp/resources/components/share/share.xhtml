@@ -96,7 +96,7 @@
 						<div class="imj_shareEmailInput">		
 							<div class="imj_metadataSet">
 								<h:outputLabel for="emailInput" styleClass="imj_metadataLabel" value="#{lbl.share_email}"/>
-								<h:inputTextarea id="emailInput" value="#{ShareBean.input.input}" styleClass="imj_metadataValue" html5:placeholder="email@example.com;email2@example.com;..."/>	
+								<h:inputTextarea id="emailInput" value="#{ShareBean.input.input}" styleClass="imj_metadataValue" html5:placeholder="email@example.com;..."/>	
 							</div>
 							<div class="imj_metadataSet">
 								<div class="imj_metadataLabel"></div>
@@ -164,7 +164,7 @@
 				</ui:fragment>	
 			
 				<!-- Only for share item page: list of users-group -->
-				<ui:fragment rendered="#{ShareBean.shareListCollection != null and !ShareBean.shareListCollection.sizeEmtpy}">
+				<ui:fragment rendered="#{ShareBean.shareListCollection != null and ShareBean.shareListCollection.sizeEmtpy}">
 					<br/><br/><br/>
 					<h2 class="imj_shareRightsOverview imj_sectionHeadline">#{lbl.share_via_collection} <span style="font-style: italic;">#{ShareBean.collectionName}</span></h2>
 					<ui:fragment rendered="#{ShareBean.shareListCollection.items.size() > 0}">

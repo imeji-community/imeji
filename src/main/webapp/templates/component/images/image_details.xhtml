@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components"	
+	xmlns:share="http://java.sun.com/jsf/composite/components/share"	
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}" id="topPanel">
@@ -399,7 +400,7 @@
 						</div>
 						<ui:fragment rendered="#{itemBean.image.status == 'PENDING'}">
 							<h:outputText value="#{ShareBean.initShareItem}" />
-							<imjc:share id="share" roles="#{ShareBean.shareItemGrantItems}" type="item"/>
+							<share:share id="share" roles="#{ShareBean.shareItemGrantItems}" type="item"/>
 						</ui:fragment>
 					</h:panelGroup>
 				</h:panelGroup>

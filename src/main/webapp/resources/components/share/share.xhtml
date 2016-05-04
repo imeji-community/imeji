@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
 	xmlns:share="http://java.sun.com/jsf/composite/components/share"
-	xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">>
+	xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
 	
 	<composite:interface>
 		<composite:attribute name="type"/>
@@ -120,16 +120,16 @@
 				</div>
 				
 				<h:panelGroup  styleClass="imj_pageMessageArea" id="unknownEmails" rendered="#{!empty ShareBean.input.unknownEmails}">
-					<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>		
+					<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.share_confirm_invitation_title}"/></div>		
 					<ul class="imj_messageList">
-						<li class="imj_messageInfo">#{ShareBean.labelConfirmInvitation}</li>
+						<li class="imj_messageInfo"><br/>#{ShareBean.labelConfirmInvitation}<br/></li>
 						<h:form>
 							<ui:repeat var="email" value="#{ShareBean.input.unknownEmails}" varStatus="status">
 								<li>
 									<h:outputText value="#{email} "/>
-									<h:commandButton action="#{ShareBean.input.removeUnknownEmail(status.index)}" styleClass="imj_cancelButton" value="#{lbl.remove}">
+									<h:commandLink action="#{ShareBean.input.removeUnknownEmail(status.index)}" style="padding:0 1em;" styleClass="imj_rightsAction fa fa-trash" >
 										<f:ajax render="@form"/>
-									</h:commandButton>
+									</h:commandLink>
 								</li>
 							</ui:repeat>
 							<div class="imj_submitPanel">
@@ -151,18 +151,18 @@
 				<ui:fragment rendered="#{ShareBean.shareList.invitations.size() > 0}">
 					<share:grantList id="invitationList" rolesMenu="#{rolesMenu}" list="#{ShareBean.shareList.invitations}" title="#{lbl.pending_invitations}"/>
 				</ui:fragment>
-							
+				
 				<ui:fragment rendered="#{ShareBean.shareList.invitations.size() > 0 or ShareBean.shareList.items.size() > 0}">		
 					<div class="imj_submitPanel">
 						<h:form>
 							<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmailUpdate"/>
 							<h:outputLabel for="selSendEmailUpdate" value="#{lbl.user_send_mail}"/>
-							<h:commandButton value="#{lbl.cancel}" action="#{ShareBean.reloadPage}" styleClass="imj_cancelButton"/>
+							<h:commandButton value="#{lbl.reset_changes}" action="#{ShareBean.reloadPage}" styleClass="imj_cancelButton"/>
 							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton" rendered="#{cc.attrs.type != 'item'}"/>
 						</h:form>
 					</div>				
 				</ui:fragment>	
-				
+			
 				<!-- Only for share item page: list of users-group -->
 				<ui:fragment rendered="#{ShareBean.shareListCollection != null}">
 					<br/><br/><br/>
@@ -174,7 +174,7 @@
 						<share:grantList id="collectioninvitationList" rolesMenu="#{ShareBean.shareListCollection.invitations[0].rolesMenu}" list="#{ShareBean.shareListCollection.invitations}" title="#{lbl.pending_invitations}" readOnly="true"/>
 					</ui:fragment>
 					<div class="imj_submitPanel">
-							<a href="#{ShareBean.collectionShareUrl}" class="imj_submitButton">#{lbl.edit}</a>
+						<a href="#{ShareBean.collectionShareUrl}" class="imj_submitButton">#{lbl.edit}</a>
 					</div>
 				</ui:fragment>
 								

@@ -3,8 +3,6 @@ package de.mpg.imeji.logic.collaboration.invitation;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -26,7 +24,6 @@ public class InvitationBusinessController {
   private final ShareBusinessController shareBC = new ShareBusinessController();
   private static final KeyValueStoreBusinessController KEY_VALUE_STORE_BC =
       new KeyValueStoreBusinessController(new HTreeMapStore("invitationStore"));
-  private static final Logger LOGGER = Logger.getLogger(InvitationBusinessController.class);
 
   /**
    * Invite a user to collaborate for an object

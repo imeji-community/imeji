@@ -142,6 +142,8 @@ a.imj_cancelButton:hover, input.imj_cancelButton:hover, button.imj_cancelButton:
 a.imj_cancelButton:active, input.imj_cancelButton:active, button.imj_cancelButton:active, .imj_cancelButton:active { color: #F0F0F0; background-color: #D80000; border: solid #D80000 0.1em; }
 a.imj_cancelButton:focus, input.imj_cancelButton:focus, button.imj_cancelButton:focus, .imj_cancelButton:focus { color: #F0F0F0; background-color: #D80000; border: solid #D80000 0.1em; }
 
+.imj_cancelLink { color: #990000; }
+
 a.imj_submitButton, input.imj_submitButton, button.imj_submitButton, .imj_submitButton { margin-left: 1em; color: #F0F0F0; background-color: #6CAE2F; border: solid transparent 0.1em; cursor: pointer; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 a.imj_submitButton:hover, input.imj_submitButton:hover, button.imj_submitButton:hover, .imj_submitButton:hover { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 a.imj_submitButton:active, input.imj_submitButton:active, button.imj_submitButton:active, .imj_submitButton:active { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }

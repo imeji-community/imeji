@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,6 +18,7 @@ import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.controller.resource.UserController.USER_TYPE;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
+import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.test.logic.controller.ControllerTest;
 
@@ -27,7 +29,7 @@ import de.mpg.imeji.test.logic.controller.ControllerTest;
  *
  */
 public class InvitationBusinessControllerTest extends ControllerTest {
-  private final InvitationBusinessController invitationBC = new InvitationBusinessController();
+  private InvitationBusinessController invitationBC = new InvitationBusinessController();
   private static final Logger LOGGER = Logger.getLogger(InvitationBusinessControllerTest.class);
   private static final String UNKNOWN_EMAIL = "unknown@imeji.org";
 
@@ -39,6 +41,11 @@ public class InvitationBusinessControllerTest extends ControllerTest {
     } catch (ImejiException e) {
       LOGGER.error("Error initializing collection or item", e);
     }
+  }
+
+  @Before
+  public void resetStore() {
+    KeyValueStoreBusinessController.resetAllStores();
   }
 
   /**
@@ -60,6 +67,29 @@ public class InvitationBusinessControllerTest extends ControllerTest {
     Assert.assertTrue(AuthUtil.staticAuth().createContent(user, collection));
     // Check the invitation has been deleted
     Assert.assertEquals(0, invitationBC.retrieveInvitationOfUser(UNKNOWN_EMAIL).size());
+  }
+
+  /**
+   * Check that the invitation is still there after a restart of a store
+   * 
+   * @throws ImejiException
+   */
+  @Test
+  public void inviteStopAndStartStore() throws ImejiException {
+    List<String> roles =
+        ShareBusinessController.rolesAsList(ShareRoles.READ, ShareRoles.EDIT, ShareRoles.CREATE);
+    Invitation invitation = new Invitation(UNKNOWN_EMAIL, collection.getId().toString(), roles);
+    System.out.println("Invite " + invitation.getId());
+    invitationBC.invite(invitation);
+    List<Invitation> invitationsBefore = invitationBC.retrieveInvitationOfUser(UNKNOWN_EMAIL);
+    System.out.println("Restart store");
+    KeyValueStoreBusinessController.stopAllStores();
+    KeyValueStoreBusinessController.startAllStores();
+    invitationBC = new InvitationBusinessController();
+    List<Invitation> invitations = invitationBC.retrieveInvitationOfUser(UNKNOWN_EMAIL);
+    // Check the invitation is here
+    Assert.assertEquals(invitationsBefore.size(), invitations.size());
+    Assert.assertTrue(invitations.size() > 0);
   }
 
   @Test

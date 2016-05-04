@@ -131,37 +131,46 @@ public class ShareListItem implements Serializable {
         roles.add(ShareRoles.EDIT_PROFILE.toString());
       }
     }
-    checkRoles();
+    checkRoles(true);
+  }
+
+  /**
+   * Used to trigger the checkrole process
+   */
+  public void checkRoles() {
+    // do nothing
   }
 
   /**
    * According to the selected roles, add necessary roles (called from page as well)
    */
-  public void checkRoles() {
-    switch (type) {
-      case COLLECTION:
-        if (roles.contains("ADMIN")) {
-          roles = Arrays.asList(ShareRoles.READ.toString(), ShareRoles.CREATE.toString(),
-              ShareRoles.EDIT_ITEM.toString(), ShareRoles.DELETE_ITEM.toString(),
-              ShareRoles.EDIT.toString(), ShareRoles.EDIT_PROFILE.toString(),
-              ShareRoles.ADMIN.toString());
-        }
-        break;
-      case ALBUM:
-        if (roles.contains("ADMIN")) {
+  public void checkRoles(boolean add) {
+    if (add) {
+      if (roles.contains(ShareRoles.ADMIN.toString())) {
+        if (type == SharedObjectType.COLLECTION) {
+          roles = Arrays.asList(ShareRoles.CREATE.toString(), ShareRoles.EDIT_ITEM.toString(),
+              ShareRoles.DELETE_ITEM.toString(), ShareRoles.EDIT.toString(),
+              ShareRoles.EDIT_PROFILE.toString(), ShareRoles.ADMIN.toString());
+        } else if (type == SharedObjectType.ALBUM) {
           roles = Arrays.asList(ShareRoles.READ.toString(), ShareRoles.CREATE.toString(),
               ShareRoles.EDIT.toString(), ShareRoles.ADMIN.toString());
         }
-        break;
-    }
-    if (!roles.isEmpty() && !roles.contains("READ")) {
-      addReadRole();
+      }
+      if (!roles.isEmpty() && !roles.contains(ShareRoles.READ.toString())) {
+        addReadRole();
+      }
+    } else {
+      roles.remove(ShareRoles.ADMIN.toString());
+      if (!roles.contains(ShareRoles.READ.toString())) {
+        roles.clear();
+      }
     }
     // transform abstract list to real list, to allow modifications
     roles = new ArrayList<>(roles);
   }
 
   public void addReadRole() {
+    roles = new ArrayList<>(roles);
     roles.add(ShareRoles.READ.toString());
   }
 
@@ -324,7 +333,8 @@ public class ShareListItem implements Serializable {
   }
 
   public void setRoles(List<String> roles) {
+    boolean add = roles.size() >= this.roles.size();
     this.roles = roles;
-    checkRoles();
+    checkRoles(add);
   }
 }

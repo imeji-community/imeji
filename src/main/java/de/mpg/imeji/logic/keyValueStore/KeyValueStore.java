@@ -72,4 +72,9 @@ public interface KeyValueStore {
    */
   public boolean isStarted();
 
+  /**
+   * Reset all data of store
+   */
+  public void reset();
+
 }

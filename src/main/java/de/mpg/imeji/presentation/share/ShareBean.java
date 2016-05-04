@@ -18,6 +18,7 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.ItemController;
@@ -26,7 +27,6 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
@@ -197,13 +197,27 @@ public class ShareBean extends SuperBean implements Serializable {
    * Check the input and add all correct entry to the list of elements to be saved
    */
   public void share() {
-    if (input.share()) {
-      if (sendEmail) {
-        for (ShareListItem item : input.getExistingUsersAsShareListItems()) {
-          sendEmailForShare(item, title);
-        }
-      }
+    boolean reload = input.share();
+    sendEmailForInput();
+    if (reload) {
       reloadPage();
+    }
+  }
+
+  /**
+   * Unshare...
+   * 
+   * @param item
+   * @throws ImejiException
+   */
+  public void unshare(ShareListItem item) throws ImejiException {
+    item.getRoles().clear();
+    if (item.getInvitation() != null) {
+      item.updateInvitation();
+      shareList.getInvitations().remove(item);
+    } else {
+      item.update();
+      shareList.getItems().remove(item);
     }
   }
 
@@ -211,8 +225,19 @@ public class ShareBean extends SuperBean implements Serializable {
    * Invite the new users
    */
   public void invite() {
-    input.shareAndSendInvitations();
+    input.sendInvitations();
     reloadPage();
+  }
+
+  /**
+   * When input is triggered, check if email should sent. If yes, proceed
+   */
+  private void sendEmailForInput() {
+    if (sendEmail) {
+      for (ShareListItem item : input.getExistingUsersAsShareListItems()) {
+        sendEmailForShare(item, title);
+      }
+    }
   }
 
   /**
@@ -226,13 +251,22 @@ public class ShareBean extends SuperBean implements Serializable {
   }
 
   /**
-   * Unshare theContainer for one {@link User} (i.e, remove all {@link Grant} of this {@link User}
-   * related to theContainer)
+   * Unselect all roles
    *
    * @param sh
    */
-  public void unshare(ShareListItem item) {
+  public void selectNone(ShareListItem item) {
     item.getRoles().clear();
+  }
+
+  /**
+   * Select all roles, i.e give admin role
+   * 
+   * @param item
+   */
+  public void selectAll(ShareListItem item) {
+    item.getRoles().add(ShareRoles.ADMIN.toString());
+    item.checkRoles(true);
   }
 
   /**

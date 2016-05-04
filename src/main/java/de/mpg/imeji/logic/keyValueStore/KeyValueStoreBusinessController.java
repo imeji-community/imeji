@@ -53,6 +53,17 @@ public class KeyValueStoreBusinessController {
   }
 
   /**
+   * Stop all started key/values stores
+   *
+   * @throws IOException
+   */
+  public synchronized static void resetAllStores() {
+    for (KeyValueStore kvs : stores.values()) {
+      kvs.reset();
+    }
+  }
+
+  /**
    * Get an Object from the Key/Value Store
    *
    * @param id

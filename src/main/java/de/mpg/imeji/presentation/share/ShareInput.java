@@ -57,22 +57,21 @@ public class ShareInput implements Serializable {
   }
 
   /**
-   * Share Button: If invalid
+   * Share to valid emails
    */
   public boolean share() {
     parseInput();
-    if (invalidEntries.isEmpty() && unknownEmails.isEmpty()) {
+    if (invalidEntries.isEmpty()) {
       shareWithValidEmails();
-      return true;
+      return unknownEmails.isEmpty();
     }
     return false;
   }
 
   /**
-   * Send Invitations to unknown Emails and share to everybody (valid Emails and unknown Emails)
+   * Send Invitations to unknown Emails
    */
-  public void shareAndSendInvitations() {
-    shareWithValidEmails();
+  public void sendInvitations() {
     InvitationBusinessController invitationBC = new InvitationBusinessController();
     EmailService emailService = new EmailService();
     for (String invitee : unknownEmails) {

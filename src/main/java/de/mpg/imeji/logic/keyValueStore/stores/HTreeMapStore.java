@@ -47,11 +47,13 @@ public class HTreeMapStore implements KeyValueStore {
   @Override
   public void put(String key, byte[] value) {
     map.put(key, value);
+    STORE.commit();
   }
 
   @Override
   public void delete(String key) {
     map.remove(key);
+    STORE.commit();
   }
 
   @Override
@@ -67,16 +69,15 @@ public class HTreeMapStore implements KeyValueStore {
 
   @Override
   public void start() {
-    STORE = DBMaker
-        .newFileDB(
-            new File(StringHelper.normalizePath(Imeji.tdbPath) + STORE_FILENAME_PREFIX + name))
-        .make();
+    File f = new File(StringHelper.normalizePath(Imeji.tdbPath) + STORE_FILENAME_PREFIX + name);
+    STORE = DBMaker.newFileDB(f).make();
     map = STORE.createHashMap(name).keySerializer(Serializer.STRING).makeOrGet();
   }
 
   @Override
   public synchronized void stop() {
     if (!STORE.isClosed()) {
+      STORE.commit();
       STORE.close();
     }
   }
@@ -84,5 +85,14 @@ public class HTreeMapStore implements KeyValueStore {
   @Override
   public boolean isStarted() {
     return STORE != null && map != null;
+  }
+
+  @Override
+  public void reset() {
+    if (isStarted()) {
+      stop();
+    }
+    new File(StringHelper.normalizePath(Imeji.tdbPath) + STORE_FILENAME_PREFIX + name).delete();
+    start();
   }
 }

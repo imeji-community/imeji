@@ -42,18 +42,19 @@
 									<h:outputText value="#{sh.group.name}" rendered="#{sh.group != null}"/>
 								</td>
 								<td colspan="#{cc.attrs.rolesMenu.size()}">
-									<h:selectManyCheckbox id="role" value="#{sh.roles}" styleClass="imj_rightsTable" enabledClass="imj_noDisplay" disabledClass="imj_noDisplay" immediate="true" layout="lineDirection" onclick="checkRoles(this.id);" disabled="#{cc.attrs.readOnly}">
+									<h:selectManyCheckbox id="role" value="#{sh.roles}" styleClass="imj_rightsTable" enabledClass="imj_noDisplay" disabledClass="imj_noDisplay" layout="lineDirection" onclick="checkRoles(this.id);" disabled="#{cc.attrs.readOnly}">
 										<f:selectItems value="#{cc.attrs.rolesMenu}"/>
 									</h:selectManyCheckbox>
 									<h:commandButton id="checkGrants" value="Check Grants" action="#{sh.checkRoles}" styleClass="imj_noDisplay">
 										<f:ajax execute="@form" render="@form"/>
 									</h:commandButton>
 								</td>
-								<td class="imj_rightsAction">
-									<h:commandLink title="#{lbl.remove}" action="#{ShareBean.unshare(sh)}" styleClass="imj_clearInput fa fa-times" rendered="#{!cc.attrs.readOnly}">
-										<f:ajax render="@form"/>
-									</h:commandLink>
-								</td>
+								<ui:fragment rendered="#{!cc.attrs.readOnly}">
+									<td class="imj_rightsAction ">
+										<h:commandLink title="#{lbl.remove}" action="#{ShareBean.unshare(sh)}" style="" styleClass=" fa fa-trash fa-size-2">
+										</h:commandLink>											
+									</td>
+								</ui:fragment>
 							</tr>
 						</ui:repeat>
 					</tbody>

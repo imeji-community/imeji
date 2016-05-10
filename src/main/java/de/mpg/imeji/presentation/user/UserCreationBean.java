@@ -55,7 +55,7 @@ public class UserCreationBean extends SuperBean {
 
   @PostConstruct
   public void init() {
-    quota = new QuotaUICompoment(null, getLocale());
+    quota = new QuotaUICompoment(user, getLocale());
   }
 
   /**
@@ -96,24 +96,6 @@ public class UserCreationBean extends SuperBean {
     uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT : USER_TYPE.RESTRICTED);
     return password;
   }
-
-  //
-  // /**
-  // * True if the {@link User} exists
-  // *
-  // * @return
-  // * @throws Exception
-  // */
-  // public static boolean userAlreadyExists(User user) throws Exception {
-  // try {
-  // UserController uc = new UserController(getS);
-  // uc.retrieve(user.getEmail());
-  // return true;
-  // } catch (NotFoundException e) {
-  // LOGGER.info("User not found: " + user.getEmail());
-  // return false;
-  // }
-  // }
 
   /**
    * Send an email to the current {@link User}

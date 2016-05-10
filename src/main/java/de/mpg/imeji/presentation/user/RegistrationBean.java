@@ -18,11 +18,11 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.collaboration.email.EmailMessages;
 import de.mpg.imeji.logic.collaboration.email.EmailService;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.registration.Registration;
 import de.mpg.imeji.logic.registration.RegistrationBusinessController;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -37,11 +37,11 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 @ManagedBean(name = "RegistrationBean")
 @ViewScoped
 public class RegistrationBean extends SuperBean {
+  private static final long serialVersionUID = -993770106648303808L;
   private static final Logger LOGGER = Logger.getLogger(RegistrationBean.class);
   private final RegistrationBusinessController registrationBC =
       new RegistrationBusinessController();
 
-  private Navigation nb;
   private User user = new User();
 
   private String token = null;
@@ -56,7 +56,7 @@ public class RegistrationBean extends SuperBean {
 
   @PostConstruct
   public void init() {
-    nb = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    this.user.setPerson(ImejiFactory.newPerson());;
     // get token etc
     this.token = UrlHelper.getParameterValue("token");
     this.user.setEmail(UrlHelper.getParameterValue("login"));
@@ -69,7 +69,7 @@ public class RegistrationBean extends SuperBean {
     } else {
       // if is logged in, redirect to home page
       try {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(nb.getHomeUrl());
+        redirect(getNavigation().getHomeUrl());
       } catch (IOException e) {
         BeanHelper.error(e.getLocalizedMessage());
         LOGGER.error("Error redirect", e);
@@ -117,7 +117,7 @@ public class RegistrationBean extends SuperBean {
       this.activation_message = Imeji.RESOURCE_BUNDLE.getMessage("activation_success", getLocale());
       LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
       loginBean.setLogin(user.getEmail());
-      this.redirect = nb.getHomeUrl();
+      this.redirect = getNavigation().getHomeUrl();
     } catch (ImejiException e) {
       this.activation_success = false;
       this.activation_message = e.getLocalizedMessage();
@@ -151,7 +151,7 @@ public class RegistrationBean extends SuperBean {
       emailClient.sendMail(getUser().getEmail(), Imeji.CONFIG.getEmailServerSender(),
           EmailMessages.getEmailOnRegistrationRequest_Subject(getLocale()),
           EmailMessages.getEmailOnRegistrationRequest_Body(getUser(), token, password,
-              Imeji.CONFIG.getContactEmail(), getLocale(), nb.getRegistrationUrl()));
+              Imeji.CONFIG.getContactEmail(), getLocale(), getNavigation().getRegistrationUrl()));
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
       BeanHelper.error("Error: Email not sent");

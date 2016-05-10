@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.metadata.MetadataWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -36,16 +37,12 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 @ManagedBean(name = "PersonBean")
 @ViewScoped
-public class PersonBean implements Serializable {
+public class PersonBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = 2066560191381597873L;
-
-  private SessionBean sb;
-
   private String personURI;
   private String orgaURI;
 
   public PersonBean() {
-    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
   }
 
   /**
@@ -115,7 +112,7 @@ public class PersonBean implements Serializable {
       try {
         URI.create(uri);
         // if not errors, then the person is intern to imeji
-        UserController uc = new UserController(sb.getUser());
+        UserController uc = new UserController(getSessionUser());
         return uc.retrievePersonById(personURI);
       } catch (Exception e) {
         // is a cone person
@@ -175,7 +172,7 @@ public class PersonBean implements Serializable {
   private Organization loadOrga(String uri) {
     if (uri != null) {
       try {
-        UserController uc = new UserController(sb.getUser());
+        UserController uc = new UserController(getSessionUser());
         return uc.retrieveOrganizationById(uri);
       } catch (Exception e) {
         BeanHelper.error(e.getMessage());
@@ -247,7 +244,7 @@ public class PersonBean implements Serializable {
       orgs.remove(organizationPosition);
     } else {
       BeanHelper.error(
-          Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization", sb.getLocale()));
+          Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization", getLocale()));
     }
     return "";
   }

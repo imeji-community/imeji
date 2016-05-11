@@ -103,7 +103,7 @@ public final class ShareList {
     }
   }
 
-  public boolean isSizeEmtpy() {
+  public boolean isSizeEmpty() {
     return items.isEmpty() && invitations.isEmpty();
   }
 

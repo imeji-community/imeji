@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.collaboration.invitation.Invitation;
 import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
 import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
@@ -148,12 +149,16 @@ public class ShareListItem implements Serializable {
     if (add) {
       if (roles.contains(ShareRoles.ADMIN.toString())) {
         if (type == SharedObjectType.COLLECTION) {
-          roles = Arrays.asList(ShareRoles.CREATE.toString(), ShareRoles.EDIT_ITEM.toString(),
-              ShareRoles.DELETE_ITEM.toString(), ShareRoles.EDIT.toString(),
-              ShareRoles.EDIT_PROFILE.toString(), ShareRoles.ADMIN.toString());
+          roles = new ArrayList<>(Arrays.asList(ShareRoles.CREATE.toString(),
+              ShareRoles.EDIT_ITEM.toString(), ShareRoles.DELETE_ITEM.toString(),
+              ShareRoles.EDIT.toString(), ShareRoles.ADMIN.toString()));
+          if (AuthUtil.staticAuth().administrate(user, profileUri)) {
+            roles.add(ShareRoles.EDIT_PROFILE.toString());
+          }
         } else if (type == SharedObjectType.ALBUM) {
-          roles = Arrays.asList(ShareRoles.READ.toString(), ShareRoles.CREATE.toString(),
-              ShareRoles.EDIT.toString(), ShareRoles.ADMIN.toString());
+          roles = new ArrayList<>(
+              Arrays.asList(ShareRoles.READ.toString(), ShareRoles.CREATE.toString(),
+                  ShareRoles.EDIT.toString(), ShareRoles.ADMIN.toString()));
         }
       }
       if (!roles.isEmpty() && !roles.contains(ShareRoles.READ.toString())) {
@@ -165,12 +170,9 @@ public class ShareListItem implements Serializable {
         roles.clear();
       }
     }
-    // transform abstract list to real list, to allow modifications
-    roles = new ArrayList<>(roles);
   }
 
   public void addReadRole() {
-    roles = new ArrayList<>(roles);
     roles.add(ShareRoles.READ.toString());
   }
 

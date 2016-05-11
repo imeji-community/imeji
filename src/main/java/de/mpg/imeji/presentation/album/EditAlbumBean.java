@@ -48,13 +48,7 @@ public class EditAlbumBean extends AlbumBean implements Serializable {
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error init album edit", e);
     }
-    if (UrlHelper.getParameterBoolean("init")) {
-      containerEditorSession.setUploadedLogoPath(null);
-    }
-    if (UrlHelper.getParameterBoolean("start")) {
-      File logo = upload();
-      containerEditorSession.setUploadedLogoPath(logo.getAbsolutePath());
-    }
+    containerEditorSession.setUploadedLogoPath(null);
   }
 
   /**

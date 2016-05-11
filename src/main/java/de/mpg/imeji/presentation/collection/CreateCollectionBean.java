@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -24,7 +23,6 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
-import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
@@ -62,14 +60,7 @@ public class CreateCollectionBean extends CollectionBean {
     setCollection(ImejiFactory.newCollection());
     ((List<Person>) getCollection().getMetadata().getPersons()).set(0,
         getSessionUser().getPerson().clone());
-    if (UrlHelper.getParameterBoolean("init")) {
-      containerEditorSession.setUploadedLogoPath(null);
-    }
-    if (UrlHelper.getParameterBoolean("start")) {
-      File f = upload();
-      containerEditorSession
-          .setUploadedLogoPath(f != null && f.exists() ? f.getAbsolutePath() : null);
-    }
+    containerEditorSession.setUploadedLogoPath(null);
   }
 
   /**
@@ -81,8 +72,7 @@ public class CreateCollectionBean extends CollectionBean {
   public String save() {
     if (createCollection()) {
       try {
-        FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(getNavigation().getCollectionUrl() + getCollection().getIdString());
+        redirect(getNavigation().getCollectionUrl() + getCollection().getIdString());
       } catch (IOException e) {
         LOGGER.error("Error redirecting after saving collection", e);
       }
@@ -99,9 +89,8 @@ public class CreateCollectionBean extends CollectionBean {
   public String saveAndEditProfile() {
     if (createCollection()) {
       try {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(
-            getNavigation().getProfileUrl() + extractIDFromURI(getCollection().getProfile())
-                + "/edit?init=1&col=" + getCollection().getIdString());
+        redirect(getNavigation().getProfileUrl() + extractIDFromURI(getCollection().getProfile())
+            + "/edit?init=1&col=" + getCollection().getIdString());
       } catch (IOException e) {
         LOGGER.error("Error redirect after create collection", e);
       }
@@ -132,7 +121,6 @@ public class CreateCollectionBean extends CollectionBean {
       if (!createProfile) {
         profileSelector.setProfile(null);
       }
-
       setCollection(collectionController.create(getCollection(), profileSelector.getProfile(),
           getSessionUser(), profileSelector.getSelectorMode(), getSpace()));
       if (containerEditorSession.getUploadedLogoPath() != null) {

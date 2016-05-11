@@ -24,25 +24,14 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.ItemController;
@@ -52,8 +41,6 @@ import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
-import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -428,48 +415,6 @@ public abstract class ContainerBean extends SuperBean implements Serializable {
 
   public boolean isAlbumType() {
     return getType().equals(CONTAINER_TYPE.ALBUM.toString());
-  }
-
-  public File upload() {
-    HttpServletRequest request =
-        (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-    HttpServletResponse response =
-        (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-    try {
-      return uploadLogo(request, response);
-    } catch (FileUploadException | TypeNotAllowedException e) {
-      LOGGER.error("Error upload logo", e);
-    }
-    return null;
-  }
-
-  private File uploadLogo(HttpServletRequest request, HttpServletResponse response)
-      throws FileUploadException, TypeNotAllowedException {
-    File tmp = null;
-    boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-    if (isMultipart) {
-      ServletFileUpload upload = new ServletFileUpload();
-      try {
-        FileItemIterator iter = upload.getItemIterator(request);
-        while (iter.hasNext()) {
-          FileItemStream fis = iter.next();
-          tmp = StorageUtils.toFile(fis.openStream());
-          if (StorageUtils.getMimeType(tmp).contains("image")) {
-            return tmp;
-          }
-        }
-      } catch (IOException | FileUploadException e) {
-        BeanHelper.error("Could not process uploaded Logo file");
-      }
-    }
-    return null;
-  }
-
-
-  public boolean extensionNotAllowed(File file) {
-    StorageController sc = new StorageController();
-    String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-    return StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat);
   }
 
   /**

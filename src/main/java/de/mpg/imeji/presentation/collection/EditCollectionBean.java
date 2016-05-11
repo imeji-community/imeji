@@ -78,14 +78,7 @@ public class EditCollectionBean extends CollectionBean {
     } else {
       BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("error", getLocale()) + " : no ID in URL");
     }
-    if (UrlHelper.getParameterBoolean("init")) {
-      containerEditorSession.setUploadedLogoPath(null);
-    }
-    if (UrlHelper.getParameterBoolean("start")) {
-      File f = upload();
-      containerEditorSession
-          .setUploadedLogoPath(f != null && f.exists() ? f.getAbsolutePath() : null);
-    }
+    containerEditorSession.setUploadedLogoPath(null);
   }
 
   public void save() throws Exception {

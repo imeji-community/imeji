@@ -164,7 +164,7 @@
                                                 runtimes: 'html5,flash,silverlight,html4',
                                                 browse_button: 'pickfiles', // you can pass in id...
                                                 container: document.getElementById('container'), // ... or DOM Element itself
-                                                url: location.pathname + "?start=1",
+                                                url: '#{Navigation.applicationUrl}uploadlogo',
                                                 max_file_size: '#{Configuration.uploadMaxFileSize}kb',
                                                 multi_selection: false,
                                                 init: {

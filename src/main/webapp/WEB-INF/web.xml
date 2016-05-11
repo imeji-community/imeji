@@ -58,6 +58,12 @@
         <servlet-class>de.mpg.imeji.presentation.servlet.SPARQLEndpointServlet</servlet-class>
         <load-on-startup>5</load-on-startup>
         <async-supported>true</async-supported>
+    </servlet>   
+     <servlet>
+        <servlet-name>Upload Logo Servlet</servlet-name>
+        <servlet-class>de.mpg.imeji.presentation.servlet.UploadLogoServlet</servlet-class>
+        <load-on-startup>5</load-on-startup>
+        <async-supported>true</async-supported>
     </servlet>
 
     <servlet>
@@ -170,6 +176,10 @@
     <servlet-mapping>
         <servlet-name>File Servlet</servlet-name>
         <url-pattern>/file/*</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>Upload Logo Servlet</servlet-name>
+        <url-pattern>/uploadlogo/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Export Servlet</servlet-name>

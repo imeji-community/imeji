@@ -42,7 +42,6 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.resource.AlbumController;
 import de.mpg.imeji.logic.controller.util.ImejiFactory;
-import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerEditorSession;
@@ -72,13 +71,7 @@ public class CreateAlbumBean extends AlbumBean {
     setAlbum(ImejiFactory.newAlbum());
     ((List<Person>) getAlbum().getMetadata().getPersons()).set(0,
         getSessionUser().getPerson().clone());
-    if (UrlHelper.getParameterBoolean("init")) {
-      containerEditorSession.setUploadedLogoPath(null);
-    }
-    if (UrlHelper.getParameterBoolean("start")) {
-      File logo = upload();
-      containerEditorSession.setUploadedLogoPath(logo.getAbsolutePath());
-    }
+    containerEditorSession.setUploadedLogoPath(null);
   }
 
   /*

@@ -11,7 +11,11 @@ import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.util.MetadataTypesHelper;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
@@ -23,18 +27,18 @@ import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * An element in the advanced search form
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 public class SearchMetadataForm {
+  private static final Logger LOGGER = Logger.getLogger(SearchMetadataForm.class);
   private String searchValue;
   private String familyName;
   private String givenName;
@@ -62,7 +66,7 @@ public class SearchMetadataForm {
 
   /**
    * Create a new {@link SearchMetadataForm} from a {@link SearchGroup}
-   * 
+   *
    * @param searchGroup
    * @param profile
    */
@@ -127,7 +131,7 @@ public class SearchMetadataForm {
 
   /**
    * Validate the search entry
-   * 
+   *
    * @throws UnprocessableError
    */
   public void validate() throws UnprocessableError {
@@ -137,7 +141,7 @@ public class SearchMetadataForm {
           try {
             DateFormatter.format(searchValue);
           } catch (Exception e) {
-            throw new UnprocessableError("error_date_format");
+            throw new UnprocessableError("error_date_format", e);
           }
           break;
         case GEOLOCATION:
@@ -147,7 +151,7 @@ public class SearchMetadataForm {
           }
           if (!isEmtpyValue(latitude + longitude)
               && (isEmtpyValue(latitude) || isEmtpyValue(longitude))) {
-            messages.add("error_search_long_latitude_must_be_both_not_null");
+            messages.add("error_long_latitude_must_be_both_not_null");
           }
           if (!isEmtpyValue(latitude + longitude) && isEmtpyValue(distance)) {
             messages.add("error_search_distance_null");
@@ -161,6 +165,7 @@ public class SearchMetadataForm {
             }
           } catch (Exception e) {
             messages.add("error_latitude_format");
+            LOGGER.error("Search: invalid latitude", e);
           }
           try {
             if (!isEmtpyValue(longitude)) {
@@ -171,6 +176,7 @@ public class SearchMetadataForm {
             }
           } catch (Exception e) {
             messages.add("error_longitude_format");
+            LOGGER.error("Search: invalid longitude", e);
           }
           if (!messages.isEmpty()) {
             throw new UnprocessableError(messages);
@@ -182,7 +188,7 @@ public class SearchMetadataForm {
           try {
             Long.parseLong(searchValue);
           } catch (Exception e) {
-            throw new UnprocessableError("error_number_format");
+            throw new UnprocessableError("error_number_format", e);
           }
           break;
         case CONE_PERSON:
@@ -226,7 +232,8 @@ public class SearchMetadataForm {
         break;
       default:
         operatorMenu.add(new SelectItem(SearchOperators.REGEX, "--"));
-        operatorMenu.add(new SelectItem(SearchOperators.EQUALS, sessionBean.getLabel("exactly")));
+        operatorMenu.add(new SelectItem(SearchOperators.EQUALS,
+            Imeji.RESOURCE_BUNDLE.getLabel("exactly", sessionBean.getLocale())));
     }
   }
 
@@ -264,124 +271,131 @@ public class SearchMetadataForm {
 
   /**
    * Return the {@link SearchMetadataForm} as a {@link SearchGroup}
-   * 
+   *
    * @return
    */
   public SearchGroup getAsSearchGroup() {
-    SearchGroup group = new SearchGroup();
-    if (namespace != null) {
-      URI ns = URI.create(namespace);
-      switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString())) {
-        case DATE:
-          if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SearchFields.time, operator,
-                DateFormatter.format(searchValue), ns, not));
-          }
-          break;
-        case GEOLOCATION:
-          if (!isEmtpyValue(searchValue + latitude + longitude)) {
-            group.setNot(not);
+    try {
+      SearchGroup group = new SearchGroup();
+      if (namespace != null) {
+        URI ns = URI.create(namespace);
+        switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString())) {
+          case DATE:
+            if (!isEmtpyValue(searchValue)) {
+              group.addPair(new SearchMetadata(SearchFields.time, operator, searchValue, ns, not));
+            }
+            break;
+          case GEOLOCATION:
+            if (!isEmtpyValue(searchValue + latitude + longitude)) {
+              group.setNot(not);
+              if (!isEmtpyValue(searchValue)) {
+                group.addPair(
+                    new SearchMetadata(SearchFields.location, operator, searchValue, ns, false));
+              }
+              if (!isEmtpyValue(latitude) && !isEmtpyValue(longitude)) {
+                if (!group.isEmpty()) {
+                  group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
+                group.addPair(new SearchMetadata(SearchFields.coordinates, SearchOperators.GEO,
+                    Double.parseDouble(latitude) + "," + Double.parseDouble(longitude) + ","
+                        + distance,
+                    ns, false));
+              }
+            }
+            break;
+          case LICENSE:
+            if (!isEmtpyValue(searchValue + uri)) {
+              if (!isEmtpyValue(searchValue)) {
+                group.addPair(
+                    new SearchMetadata(SearchFields.license, operator, searchValue, ns, not));
+              }
+              if (!isEmtpyValue(uri)) {
+                if (!group.isEmpty()) {
+                  group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
+                group.addPair(new SearchMetadata(SearchFields.url, operator, uri, ns, not));
+              }
+            }
+            break;
+          case NUMBER:
+            if (!isEmtpyValue(searchValue)) {
+              group
+                  .addPair(new SearchMetadata(SearchFields.number, operator, searchValue, ns, not));
+            }
+            break;
+          case CONE_PERSON:
+            if (!isEmtpyValue(searchValue + familyName + givenName + uri + orgName)) {
+              group.setNot(not);
+              if (!isEmtpyValue(searchValue)) {
+                group.addPair(new SearchMetadata(SearchFields.person_completename, operator,
+                    searchValue, ns, false));
+              }
+              if (!isEmtpyValue(familyName)) {
+                if (!group.isEmpty()) {
+                  group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
+                group.addPair(new SearchMetadata(SearchFields.person_family, operator, familyName,
+                    ns, false));
+              }
+              if (!isEmtpyValue(givenName)) {
+                if (!group.isEmpty()) {
+                  group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
+                group.addPair(
+                    new SearchMetadata(SearchFields.person_given, operator, givenName, ns, false));
+              }
+              if (!isEmtpyValue(uri)) {
+                if (!group.isEmpty()) {
+                  group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
+                group.addPair(new SearchMetadata(SearchFields.person_id, operator, uri, ns, false));
+              }
+              if (!isEmtpyValue(orgName)) {
+                if (!group.isEmpty()) {
+                  group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
+                group.addPair(
+                    new SearchMetadata(SearchFields.person_org_name, operator, orgName, ns, false));
+              }
+            }
+            break;
+          case PUBLICATION:
             if (!isEmtpyValue(searchValue)) {
               group.addPair(
-                  new SearchMetadata(SearchFields.location, operator, searchValue, ns, false));
+                  new SearchMetadata(SearchFields.citation, operator, searchValue, ns, not));
             }
-            if (!isEmtpyValue(latitude) && !isEmtpyValue(longitude)) {
-              if (!group.isEmpty()) {
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              }
-              group.addPair(new SearchMetadata(SearchFields.coordinates, SearchOperators.EQUALS,
-                  Double.parseDouble(latitude) + "," + Double.parseDouble(longitude) + ","
-                      + distance,
-                  ns, false));
-            }
-          }
-          break;
-        case LICENSE:
-          if (!isEmtpyValue(searchValue + uri)) {
+            break;
+          case TEXT:
             if (!isEmtpyValue(searchValue)) {
-              group.addPair(
-                  new SearchMetadata(SearchFields.license, operator, searchValue, ns, not));
+              group.addPair(new SearchMetadata(SearchFields.text, operator, searchValue, ns, not));
             }
-            if (!isEmtpyValue(uri)) {
-              if (!group.isEmpty())
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group.addPair(new SearchMetadata(SearchFields.url, operator, uri, ns, not));
-            }
-          }
-          break;
-        case NUMBER:
-          if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SearchFields.number, operator, searchValue, ns, not));
-          }
-          break;
-        case CONE_PERSON:
-          if (!isEmtpyValue(searchValue + familyName + givenName + uri + orgName)) {
-            group.setNot(not);
-            if (!isEmtpyValue(searchValue)) {
-              group.addPair(new SearchMetadata(SearchFields.person_completename, operator,
-                  searchValue, ns, false));
-            }
-            if (!isEmtpyValue(familyName)) {
-              if (!group.isEmpty()) {
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+            break;
+          case LINK:
+            if (!isEmtpyValue(searchValue + uri)) {
+              if (!isEmtpyValue(searchValue)) {
+                group.addPair(
+                    new SearchMetadata(SearchFields.label, operator, searchValue, ns, not));
               }
-              group.addPair(
-                  new SearchMetadata(SearchFields.person_family, operator, familyName, ns, false));
-            }
-            if (!isEmtpyValue(givenName)) {
-              if (!group.isEmpty()) {
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+              if (!isEmtpyValue(uri)) {
+                if (!group.isEmpty()) {
+                  group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                }
+                group.addPair(new SearchMetadata(SearchFields.url, operator, uri, ns, not));
               }
-              group.addPair(
-                  new SearchMetadata(SearchFields.person_given, operator, givenName, ns, false));
             }
-            if (!isEmtpyValue(uri)) {
-              if (!group.isEmpty()) {
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              }
-              group.addPair(new SearchMetadata(SearchFields.person_id, operator, uri, ns, false));
-            }
-            if (!isEmtpyValue(orgName)) {
-              if (!group.isEmpty()) {
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              }
-              group.addPair(
-                  new SearchMetadata(SearchFields.person_org_name, operator, orgName, ns, false));
-            }
-          }
-          break;
-        case PUBLICATION:
-          if (!isEmtpyValue(searchValue)) {
-            group
-                .addPair(new SearchMetadata(SearchFields.citation, operator, searchValue, ns, not));
-          }
-          break;
-        case TEXT:
-          if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SearchFields.text, operator, searchValue, ns, not));
-          }
-          break;
-        case LINK:
-          if (!isEmtpyValue(searchValue + uri)) {
-            if (!isEmtpyValue(searchValue)) {
-              group.addPair(new SearchMetadata(SearchFields.label, operator, searchValue, ns, not));
-            }
-            if (!isEmtpyValue(uri)) {
-              if (!group.isEmpty()) {
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              }
-              group.addPair(new SearchMetadata(SearchFields.url, operator, uri, ns, not));
-            }
-          }
-          break;
+            break;
+        }
       }
+      return group;
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error transforming search metadata form to search group", e);
+      return new SearchGroup();
     }
-    return group;
   }
 
   /**
    * True if the value is emtpy for the search
-   * 
+   *
    * @param value
    * @return
    */
@@ -391,7 +405,7 @@ public class SearchMetadataForm {
 
   /**
    * Return the type of the current statement (text, number, etc.)
-   * 
+   *
    * @return
    */
   public String getType() {

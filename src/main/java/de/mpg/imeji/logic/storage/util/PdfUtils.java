@@ -19,13 +19,13 @@ public final class PdfUtils {
 
   /**
    * Read a pdf File, et the first page, and return it as an image
-   * 
+   *
    * @param file
    * @return
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static File pdfToImage(File file) throws FileNotFoundException, IOException {
+  public static File pdfToImage(File file) throws IOException {
     PDDocument document = PDDocument.load(file);
     try {
       List<?> pages = document.getDocumentCatalog().getAllPages();

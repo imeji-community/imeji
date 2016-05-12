@@ -3,29 +3,26 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
-
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ListUtils;
 
 /**
  * Bean for the collections page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -56,58 +53,26 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
     Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
     search(offset, limit);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-    collections =
-        controller.retrieveBatchLazy(searchResult.getResults(), -1, offset, sb.getUser());
-    return ImejiFactory.collectionListToListItem(collections, sb.getUser());
+    collections = controller.retrieveBatchLazy(searchResult.getResults(), -1, offset, sb.getUser());
+    return ListUtils.collectionListToListItem(collections, sb.getUser());
   }
 
 
   @Override
   public String selectAll() {
-    for (CollectionListItem bean : getCurrentPartList()) {
-      if (Status.PENDING.toString().equals(bean.getStatus())) {
-        bean.setSelected(true);
-        if (!(sb.getSelectedCollections().contains(bean.getUri()))) {
-          sb.getSelectedCollections().add(bean.getUri());
-        }
-      }
-    }
+    // Not implemented
     return "";
   }
 
   @Override
   public String selectNone() {
-    sb.getSelectedCollections().clear();
+    // Not implemented
     return "";
   }
 
   /**
-   * Delete all selected {@link CollectionImeji}
-   * 
-   * @return
-   * @throws Exception
-   */
-  public String deleteAll() throws Exception {
-    int count = 0;
-    for (URI uri : sb.getSelectedCollections()) {
-      CollectionController collectionController = new CollectionController();
-      CollectionImeji collection = collectionController.retrieve(uri, sb.getUser());
-      collectionController.delete(collection, sb.getUser());
-      count++;
-
-      BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
-    }
-    sb.getSelectedCollections().clear();
-    if (count == 0) {
-      BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
-    }
-    return sb.getPrettySpacePage("pretty:collections");
-  }
-
-
-  /**
    * getter
-   * 
+   *
    * @return
    */
   public String getDiscardComment() {
@@ -116,7 +81,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
 
   /**
    * setter
-   * 
+   *
    * @param discardComment
    */
   public void setDiscardComment(String discardComment) {
@@ -130,14 +95,14 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.
    * SearchQuery , de.mpg.imeji.logic.search.vo.SortCriterion)
-   * 
+   *
    * @param searchQuery
-   * 
+   *
    * @param sortCriterion
-   * 
+   *
    * @return
    */
   @Override
@@ -149,7 +114,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
   }
 
   public String getTypeLabel() {
-    return sb.getLabel("type_" + getType().toLowerCase());
+    return Imeji.RESOURCE_BUNDLE.getLabel("type_" + getType().toLowerCase(), sb.getLocale());
   }
 
 

@@ -7,7 +7,7 @@ import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Helper to work with {@link LocalizedString}
- * 
+ *
  * @author bastiens
  *
  */

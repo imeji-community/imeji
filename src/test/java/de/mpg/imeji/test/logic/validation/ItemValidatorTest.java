@@ -11,14 +11,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.util.MetadataFactory;
-import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.validation.Validator.Method;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.validation.impl.ItemValidator;
+import de.mpg.imeji.logic.validation.impl.Validator;
+import de.mpg.imeji.logic.validation.impl.Validator.Method;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
@@ -28,9 +26,11 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata.Types;
+import de.mpg.imeji.logic.vo.util.MetadataFactory;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
@@ -277,9 +277,7 @@ public class ItemValidatorTest {
     ConePerson md5 = (ConePerson) MetadataFactory.createMetadata(PERSON_MULTIPLE);
     Person p = ImejiFactory.newPerson();
     p.setFamilyName("TEST");
-    Organization org = ImejiFactory.newOrganization();
-    org.setName("TEST");
-    p.getOrganizations().add(org);
+    ((List<Organization>) p.getOrganizations()).get(0).setName("TEST");
     md5.setPerson(p);
     validateMultipleValueAllowed(md5);
     // Geolocation

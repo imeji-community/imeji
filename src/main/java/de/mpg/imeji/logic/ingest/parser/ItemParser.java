@@ -15,20 +15,20 @@ import de.mpg.imeji.logic.vo.Item;
 public class ItemParser {
   /**
    * Parse a list of item
-   * 
+   *
    * @param itemListXml
    * @return
    * @throws SAXException
    * @throws JAXBException
    */
-  public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException,
-      ClassCastException {
+  public List<Item> parseItemList(File itemListXmlFile)
+      throws JAXBException, SAXException, ClassCastException {
     return new JaxbGenericObject<Items>(Items.class).unmarshal(itemListXmlFile).getItem();
   }
 
   /**
    * Parse a single item
-   * 
+   *
    * @param itemXml
    * @return
    * @throws SAXException

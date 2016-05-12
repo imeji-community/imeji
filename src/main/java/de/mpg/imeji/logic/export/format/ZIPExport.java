@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -41,18 +41,15 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * {@link Export} images in zip
- * 
+ *
  * @author kleinfercher (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -88,18 +85,17 @@ public class ZIPExport extends Export {
   public void init() {}
 
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     try {
-      exportAllImages(sr, out);
+      exportAllImages(sr, out, user);
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       LOGGER.info("Some problems with ZIP Export", e);
     }
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.export.Export#getContentType()
    */
   @Override
@@ -113,24 +109,23 @@ public class ZIPExport extends Export {
 
   /**
    * This method exports all images of the current browse page as a zip file
-   * 
+   *
    * @throws ImejiException
-   * 
+   *
    * @throws Exception
    * @throws URISyntaxException
    */
-  public void exportAllImages(SearchResult sr, OutputStream out) throws ImejiException {
+  public void exportAllImages(SearchResult sr, OutputStream out, User user) throws ImejiException {
     List<String> source = sr.getResults();
     ZipOutputStream zip = new ZipOutputStream(out);
     try {
       // Create the ZIP file
       for (int i = 0; i < source.size(); i++) {
-        SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
         ItemController ic = new ItemController();
         Item item = null;
         StorageController sc = null;
         try {
-          item = ic.retrieve(new URI(source.get(i)), session.getUser());
+          item = ic.retrieve(new URI(source.get(i)), user);
           updateMetrics(item);
           sc = new StorageController();
           zip.putNextEntry(new ZipEntry(item.getFilename()));
@@ -145,10 +140,11 @@ public class ZIPExport extends Export {
             // Complete the entry
             zip.closeEntry();
           }
+          LOGGER.error("Error zip export", ze);
         } catch (ImejiException e) {
-          LOGGER.info("Could not retrieve Item for export!");
+          LOGGER.info("Could not retrieve Item for export!", e);
         } catch (URISyntaxException eui) {
-          LOGGER.info("Could not create URI during retrieval and export! ");
+          LOGGER.info("Could not create URI during retrieval and export! ", eui);
         }
       }
     } catch (IOException e) {
@@ -159,7 +155,7 @@ public class ZIPExport extends Export {
       // Complete the ZIP file
       zip.close();
     } catch (IOException ioe) {
-      LOGGER.info("Could not close the ZIP File!");
+      LOGGER.info("Could not close the ZIP File!", ioe);
     }
   }
 

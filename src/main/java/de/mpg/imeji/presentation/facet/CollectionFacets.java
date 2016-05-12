@@ -4,67 +4,76 @@
 package de.mpg.imeji.presentation.facet;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.collection.CollectionItemsBean;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Facets for the item browsed within a collection
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class CollectionFacets extends Facets {
-  private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+public class CollectionFacets extends FacetsAbstract {
   private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
   private List<List<Facet>> facets = new ArrayList<List<Facet>>();
   private URI colURI = null;
   private SearchQuery searchQuery;
   private SearchResult allImages;
   private MetadataProfile profile;
+  private Locale locale;
+  private User user;
+  private static final Logger LOGGER = Logger.getLogger(CollectionFacets.class);
 
   /**
    * Constructor for the {@link Facet}s of one {@link CollectionImeji} with one {@link SearchQuery}
-   * 
+   *
    * @param col
    * @param searchQuery
+   * @throws ImejiException
    */
-  public CollectionFacets(CollectionImeji col, SearchQuery searchQuery, SearchResult r) {
-    if (col == null)
+  public CollectionFacets(CollectionImeji col, SearchQuery searchQuery, SearchResult r, User user,
+      Locale locale) throws ImejiException {
+    if (col == null) {
       return;
+    }
     allImages = r;
     this.colURI = col.getId();
     this.searchQuery = searchQuery;
-    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    this.profile = ObjectLoader.loadProfile(col.getProfile(), sb.getUser());
+    this.user = user;
+    this.profile = new ProfileController().retrieve(col.getProfile(), Imeji.adminUser);
+    this.locale = locale;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.facet.Facets#init()
    */
   @Override
@@ -74,44 +83,45 @@ public class CollectionFacets extends Facets {
     // + "/" + nav.getBrowsePath() + "?q=";
     String baseURI = "?q=";
     FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
-
-
     int count = 0;
     int sizeAllImages = allImages.getNumberOfRecords();
     HashSet<String> set = new HashSet<String>(allImages.getResults());
-    if(profile != null){
+    if (profile != null) {
+      MetadataLabels metadataLabels = new MetadataLabels(profile, locale);
       try {
         for (Statement st : profile.getStatements()) {
           List<Facet> group = new ArrayList<Facet>();
           if (st.isPreview() && !fs.isFilter(getName(st.getId()))) {
-            SearchPair pair =
-                new SearchPair(SearchFields.statement, SearchOperators.EQUALS, st.getId().toString(),
-                    false);
+            SearchPair pair = new SearchPair(SearchFields.statement, SearchOperators.EQUALS,
+                st.getId().toString(), false);
             count = getCount(searchQuery, pair, set);
 
-            group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
-                FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
+            group.add(new Facet(
+                uriFactory.createFacetURI(baseURI, pair, getName(st.getId()), FacetType.COLLECTION),
+                metadataLabels.getInternationalizedLabels().get(st.getId()), count,
+                FacetType.COLLECTION, st.getId(), locale, metadataLabels));
 
             // create this facet only if there are no
             if (count <= sizeAllImages) {
               pair.setNot(true);
-              group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No "
-                  + getName(st.getId()), FacetType.COLLECTION), "No " + getName(st.getId()),
-                  sizeAllImages - count, FacetType.COLLECTION, st.getId()));
+              group.add(new Facet(
+                  uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
+                      FacetType.COLLECTION),
+                  "No " + getName(st.getId()), sizeAllImages - count, FacetType.COLLECTION,
+                  st.getId(), locale, metadataLabels));
             }
           }
           facets.add(group);
         }
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        LOGGER.error("Error in collection facets", e);
       }
     }
-
   }
 
   /**
    * Get
-   * 
+   *
    * @param uri
    * @return
    */
@@ -121,7 +131,7 @@ public class CollectionFacets extends Facets {
 
   /**
    * Count {@link Item} for one facet
-   * 
+   *
    * @param searchQuery
    * @param pair
    * @param collectionImages
@@ -130,14 +140,19 @@ public class CollectionFacets extends Facets {
   public int getCount(SearchQuery searchQuery, SearchPair pair, HashSet<String> collectionImages) {
     int counter = 0;
     ItemController ic = new ItemController();
-    SearchQuery sq = new SearchQuery(); 
+    SearchQuery sq = new SearchQuery();
     if (pair != null) {
-      sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
-      sq.addPair(pair);
+      try {
+        sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        sq.addPair(pair);
+      } catch (UnprocessableError e) {
+        LOGGER.error("Error creating query to count facet size", e);
+      }
+
     }
-    SearchResult res = ic.search(colURI, sq, null, sb.getUser(), null, -1, 0);
-    for(String record : res.getResults()){
-      if(collectionImages.contains(record)){
+    SearchResult res = ic.search(colURI, sq, null, user, null, -1, 0);
+    for (String record : res.getResults()) {
+      if (collectionImages.contains(record)) {
         counter++;
       }
     }
@@ -146,7 +161,7 @@ public class CollectionFacets extends Facets {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.facet.Facets#getFacets()
    */
   @Override

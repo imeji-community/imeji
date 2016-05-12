@@ -4,40 +4,39 @@
 package de.mpg.imeji.presentation.filter;
 
 import java.net.URI;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.facet.Facet;
 
 /**
  * {@link Facet} with extended
- * 
+ *
  * @author saquet
  */
 public class Filter extends Facet {
   private String query = "";
   private URI collectionID;
-  private String label = "Search";
-  private int count = 0;
   private String removeQuery = "";
   private SearchQuery searchQuery;
 
   /**
    * Constructor
-   * 
+   *
    * @param label
    * @param query
    * @param count
    * @param type
    * @param metadataURI
    */
-  public Filter(String label, String query, int count, FacetType type, URI metadataURI) {
-    super(null, label, count, type, metadataURI);
-    this.label = label;
+  public Filter(String label, String query, int count, FacetType type, URI metadataURI,
+      Locale locale, MetadataLabels metadataLabels) {
+    super(null, label, count, type, metadataURI, locale, metadataLabels);
     this.query = query;
-    this.count = count;
     init();
   }
 
@@ -45,9 +44,6 @@ public class Filter extends Facet {
    * Initialize the {@link Filter}
    */
   public void init() {
-    if (label == null) {
-      label = "Search";
-    }
     try {
       if (FacetType.SEARCH == getType()) {
         searchQuery = SearchQueryParser.parseStringQuery(query);
@@ -57,19 +53,9 @@ public class Filter extends Facet {
     }
   }
 
-  @Override
-  public String getLabel() {
-    return label;
-  }
-
-  @Override
-  public void setLabel(String label) {
-    this.label = label;
-  }
-
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public URI getCollectionID() {
@@ -78,7 +64,7 @@ public class Filter extends Facet {
 
   /**
    * Setter
-   * 
+   *
    * @param collectionID
    */
   public void setCollectionID(URI collectionID) {
@@ -97,7 +83,7 @@ public class Filter extends Facet {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public String getQuery() {
@@ -106,7 +92,7 @@ public class Filter extends Facet {
 
   /**
    * setter
-   * 
+   *
    * @param query
    */
   public void setQuery(String query) {
@@ -115,7 +101,7 @@ public class Filter extends Facet {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getRemoveQuery() {
@@ -124,7 +110,7 @@ public class Filter extends Facet {
 
   /**
    * setter
-   * 
+   *
    * @param removeQuery
    */
   public void setRemoveQuery(String removeQuery) {
@@ -133,7 +119,7 @@ public class Filter extends Facet {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public SearchQuery getSearchQuery() {
@@ -142,7 +128,7 @@ public class Filter extends Facet {
 
   /**
    * setter
-   * 
+   *
    * @param searchQuery
    */
   public void setSearchQuery(SearchQuery searchQuery) {

@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -29,7 +29,7 @@ import de.mpg.j2j.misc.LocalizedString;
 /**
  * Define the properties of a {@link Metadata}. {@link Statement} are defined in a
  * {@link MetadataProfile}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -91,7 +91,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
 
   /**
    * Return the default label (english if exists, otherwise the 1st one)
-   * 
+   *
    * @return
    */
   public String getLabel() {
@@ -135,7 +135,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
 
   /**
    * If statement is multiple return "unbounded" else return "1"
-   * 
+   *
    * @return
    */
   @XmlElement(name = "maxOccurs", namespace = "http://imeji.org/terms/")
@@ -228,15 +228,15 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#clone()
    */
   @Override
   public Statement clone() {
-    Statement clone = ImejiFactory.newStatement();
+    Statement clone = new Statement();
     clone.isDescription = isDescription;
     clone.isPreview = isPreview;
-    clone.labels = labels;
+    clone.labels = new ArrayList<>(labels);
     clone.literalConstraints = literalConstraints;
     clone.maxOccurs = maxOccurs;
     clone.minOccurs = minOccurs;
@@ -250,7 +250,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
 
   /**
    * Comparator to sort String ignoring the case
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -258,13 +258,14 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
   public class SortIgnoreCase implements Comparator<Object> {
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
     public int compare(Object o1, Object o2) {
-      if ("".equals(o1))
+      if ("".equals(o1)) {
         return 1;
+      }
       return ((String) o1).compareToIgnoreCase((String) o2);
     }
   }

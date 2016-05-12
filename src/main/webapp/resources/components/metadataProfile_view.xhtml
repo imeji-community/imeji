@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+	xmlns:list="http://java.sun.com/jsf/composite/components/list"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<composite:interface>
 		<composite:attribute name="metadataBean" required="true"/>
@@ -35,9 +36,12 @@
 			</ui:fragment>
 			<ui:fragment rendered="#{cc.attrs.metadataProfile != null and cc.attrs.metadataProfile.statements.size() != 0}">
 				<div class="imj_listHeader">
+				
 					<h3 class="imj_headline">
 						<h:outputText value="#{cc.attrs.headline}: #{cc.attrs.metadataProfile.title}"/>
+						
 					</h3>
+					<imjc:iconStatus id="status" imejiResource="#{cc.attrs.metadataProfile}" rendered="#{currentMainMenu != 'profile'}"/>
 				</div>
 			
 				<div class="imj_listHeader">

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +27,19 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.controller.business.MetadataProfileBusinessController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;
@@ -51,56 +53,46 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.metadata.MetadataSetBean;
-import de.mpg.imeji.presentation.metadata.SingleEditBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
+import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
+import de.mpg.imeji.presentation.metadata.MetadataWrapper;
+import de.mpg.imeji.presentation.metadata.SingleEditorWrapper;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.UserBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 @ManagedBean(name = "SingleUploadBean")
 @ViewScoped
-public class SingleUploadBean implements Serializable {
+public class SingleUploadBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = -2731118794797476328L;
   private static final Logger LOGGER = Logger.getLogger(SingleUploadBean.class);
-
-  // private Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-
   private List<SelectItem> collectionItems = new ArrayList<SelectItem>();
   private String selectedCollectionItem;
-
+  private MetadataLabels metadataLabels;
   @ManagedProperty("#{SingleUploadSession}")
   private SingleUploadSession sus;
-
-  @ManagedProperty("#{SessionBean}")
-  private SessionBean sb;
-
-  @ManagedProperty(value = "#{SessionBean.user}")
-  private User user;
+  @ManagedProperty("#{SessionBean.hasUploadRights}")
+  private boolean hasUploadRights = false;
+  @ManagedProperty("#{SessionBean.selectedSpaceString}")
+  private String selectedSpaceString;
 
   private IngestImage ingestImage;
 
-  public SingleUploadBean() {}
+  public SingleUploadBean() {
+    // constructs...
+  }
 
   public void init() throws IOException {
-    if (user != null && user.isAllowedToCreateCollection()) {
+    if (getSessionUser() != null && hasUploadRights) {
       try {
         if (UrlHelper.getParameterBoolean("init")) {
           sus.reset();
-          isAllowedToUpload();
         } else if (UrlHelper.getParameterBoolean("start")) {
-          // loadCollections(false);
           upload();
-          // loadCollections(true);
         } else if (UrlHelper.getParameterBoolean("done") && !UrlHelper.hasParameter("h")) {
-          // loadCollections(false);
           loadCollections();
           prepareEditor();
         }
@@ -108,7 +100,7 @@ public class SingleUploadBean implements Serializable {
         BeanHelper.error(e.getLocalizedMessage());
       }
     } else {
-      if (user != null) {
+      if (getSessionUser() != null) {
         BeanHelper.cleanMessages();
         BeanHelper.info("You have no right to create collections, thus you can not upload items!");
         Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
@@ -121,8 +113,9 @@ public class SingleUploadBean implements Serializable {
   public String save() {
     try {
       Item item = ImejiFactory.newItem(getCollection());
-      SingleEditBean edit = new SingleEditBean(item, sus.getProfile());
-      MetadataSetBean newSet = getMdSetBean();
+      SingleEditorWrapper edit =
+          new SingleEditorWrapper(item, sus.getProfile(), getSessionUser(), getLocale());
+      MetadataSetWrapper newSet = getMdSetBean();
       edit.getEditor().getItems().get(0).setMds(newSet);
       edit.getEditor().validateAndFormatItemsForSaving();
       uploadFileToItem(item, getIngestImage().getFile(), getIngestImage().getName());
@@ -131,6 +124,7 @@ public class SingleUploadBean implements Serializable {
       reloadItemPage(item.getIdString(), ObjectHelper.getId(item.getCollection()));
     } catch (Exception e) {
       BeanHelper.error("There has been an error during saving of the item: " + e.getMessage());
+      LOGGER.error("Error single upload: ", e);
     }
     sus.reset();
     return "";
@@ -138,7 +132,7 @@ public class SingleUploadBean implements Serializable {
 
   /**
    * Reload the page with the current user
-   * 
+   *
    * @throws IOException
    */
   private void reloadItemPage(String itemIdString, String collectionIdString) {
@@ -157,29 +151,29 @@ public class SingleUploadBean implements Serializable {
 
   /**
    * After the file has been uploaded
-   * 
+   *
    * @throws Exception
    */
   private void prepareEditor() throws Exception {
     StorageController sc = new StorageController();
     if (sc.guessNotAllowedFormat(sus.getIngestImage().getFile()).equals(StorageUtils.BAD_FORMAT)) {
       sus.reset();
-      throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
+      throw new TypeNotAllowedException(
+          Imeji.RESOURCE_BUNDLE.getMessage("single_upload_invalid_content_format", getLocale()));
     }
     sus.copyToTemp();
   }
 
   private Item uploadFileToItem(Item item, File file, String title) throws ImejiException {
-
     ItemController controller = new ItemController();
-    item = controller.create(item, file, title, user, null, null);
+    item = controller.create(item, file, title, getSessionUser(), null, null);
     sus.setUploadedItem(item);
     return item;
   }
 
   /**
    * Upload the file and read the technical Metadata
-   * 
+   *
    * @throws FileUploadException
    * @throws TypeNotAllowedException
    */
@@ -196,7 +190,7 @@ public class SingleUploadBean implements Serializable {
 
   /**
    * Upload the file
-   * 
+   *
    * @param request
    * @return
    * @throws FileUploadException
@@ -244,33 +238,28 @@ public class SingleUploadBean implements Serializable {
   private void methodColChangeListener() throws ImejiException {
     if (!"".equals(selectedCollectionItem)) {
       sus.setSelectedCollectionItem(selectedCollectionItem);
-      try {
-        CollectionImeji collection =
-            ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
-        MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
-        ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 
-        MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId())
-            : ImejiFactory.newMetadataSet(null);
-        MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
-        MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
-        labels.init(profile);
-        sus.setCollection(collection);
-        sus.setProfile(profile);
-        sus.setMdSetBean(mdSetBean);
-      } catch (URISyntaxException e) {
-        LOGGER.info("Pure URI Syntax issue ", e);
-      }
-    } else {
+      CollectionImeji collection = new CollectionController()
+          .retrieveLazy(URI.create(selectedCollectionItem), getSessionUser());
+      MetadataProfile profile =
+          new ProfileController().retrieve(collection.getProfile(), getSessionUser());
+      ((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 
+      MetadataSet mdSet = profile != null ? ImejiFactory.newMetadataSet(profile.getId())
+          : ImejiFactory.newMetadataSet(null);
+      MetadataSetWrapper mdSetBean = new MetadataSetWrapper(mdSet, profile, true);
+      metadataLabels = new MetadataLabels(profile, getLocale());
+      sus.setCollection(collection);
+      sus.setProfile(profile);
+      sus.setMdSetBean(mdSetBean);
     }
   }
 
   /**
    * Add a Metadata of the same type as the passed metadata
    */
-  public void addMetadata(SuperMetadataBean smb) {
-    SuperMetadataBean newMd = smb.copyEmpty();
+  public void addMetadata(MetadataWrapper md) {
+    MetadataWrapper newMd = md.copyEmpty();
     newMd.addEmtpyChilds(sus.getProfile());
     sus.getMdSetBean().getTree().add(newMd);
   }
@@ -278,50 +267,32 @@ public class SingleUploadBean implements Serializable {
   /**
    * Remove the active metadata
    */
-  public void removeMetadata(SuperMetadataBean smb) {
+  public void removeMetadata(MetadataWrapper smb) {
     sus.getMdSetBean().getTree().remove(smb);
     sus.getMdSetBean().addEmtpyValues();
   }
 
   /**
-   * Check if the user has at right to upload in at least one collection. If not, check if the user
-   * can create a collection
-   * 
-   * @throws ImejiException
-   */
-  private void isAllowedToUpload() throws ImejiException {
-    for (CollectionImeji c : retrieveAllUserCollections()) {
-      if (AuthUtil.staticAuth().createContent(user, c)) {
-        collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
-      }
-    }
-    if (collectionItems.isEmpty() && !user.isAllowedToCreateCollection()) {
-      sus.setCanUpload(false);
-      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
-    }
-    sus.setCanUpload(true);
-  }
-
-  /**
    * Load the collections where the user can upload the file
-   * 
+   *
    * @throws ImejiException
    */
   private void loadCollections() throws ImejiException {
     for (CollectionImeji c : retrieveAllUserCollections()) {
-      if (AuthUtil.staticAuth().createContent(user, c)) {
+      if (AuthUtil.staticAuth().createContent(getSessionUser(), c)) {
         collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
       }
     }
     // If the user hasn't any collection but is allowed to create one, create a default collection
-    if (collectionItems.isEmpty() && user.isAllowedToCreateCollection()) {
+    if (collectionItems.isEmpty() && getSessionUser().isAllowedToCreateCollection()) {
       CollectionImeji defaultCollection = createDefaultCollection();
       collectionItems.add(
           new SelectItem(defaultCollection.getId(), defaultCollection.getMetadata().getTitle()));
     }
     // If there is no collection where the user can upload, send error
     if (collectionItems.isEmpty()) {
-      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
+      throw new BadRequestException(
+          Imeji.RESOURCE_BUNDLE.getMessage("cannot_create_collection", getLocale()));
     } else if (collectionItems.size() >= 1) {
       collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
     }
@@ -331,7 +302,7 @@ public class SingleUploadBean implements Serializable {
 
   /**
    * Retrieve all the collections which the current user can read
-   * 
+   *
    * @return
    * @throws ImejiException
    */
@@ -339,23 +310,25 @@ public class SingleUploadBean implements Serializable {
     CollectionController cc = new CollectionController();
     SearchQuery sq = new SearchQuery();
     SortCriterion sortCriterion =
-        new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.DESCENDING);
-    SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
-    return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
+        new SortCriterion(new SearchIndex(SearchFields.title), SortOrder.ASCENDING);
+    SearchResult results =
+        cc.search(sq, sortCriterion, -1, 0, getSessionUser(), selectedSpaceString);
+    return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0,
+        getSessionUser());
   }
 
   /**
    * Create a default collection where the user can upload his files
-   * 
+   *
    * @throws ImejiException
    */
   private CollectionImeji createDefaultCollection() throws ImejiException {
     CollectionController cc = new CollectionController();
     CollectionImeji newC = ImejiFactory.newCollection();
     newC.getMetadata()
-        .setTitle("Default first collection of " + user.getPerson().getCompleteName());
+        .setTitle("Default first collection of " + getSessionUser().getPerson().getCompleteName());
 
-    Person creatorUser = getUser().getPerson();
+    Person creatorUser = getSessionUser().getPerson();
 
     // If there are no organizations for Current User, add one
     if ("".equals(creatorUser.getOrganizationString())) {
@@ -370,12 +343,10 @@ public class SingleUploadBean implements Serializable {
     // Add current user as Author
     newC.getMetadata().getPersons().add(creatorUser);
 
-    ProfileController pc = new ProfileController();
-    newC.setProfile(pc.retrieveDefaultProfile().getId());
-    URI id = cc.create(newC, pc.retrieveDefaultProfile(), user,
-        MetadataProfileCreationMethod.REFERENCE, sb.getSelectedSpaceString());
-    newC.setId(id);
-    return newC;
+    MetadataProfileBusinessController metadataProfileBC = new MetadataProfileBusinessController();
+    newC.setProfile(metadataProfileBC.retrieveDefaultProfile().getId());
+    return cc.create(newC, metadataProfileBC.retrieveDefaultProfile(), getSessionUser(),
+        MetadataProfileCreationMethod.REFERENCE, selectedSpaceString);
   }
 
   public List<SelectItem> getCollectionItems() {
@@ -394,22 +365,6 @@ public class SingleUploadBean implements Serializable {
     this.selectedCollectionItem = selectedCollectionItem;
   }
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  // public Collection<CollectionImeji> getCollections() {
-  // return collections;
-  // }
-  //
-  // public void setCollections(Collection<CollectionImeji> collections) {
-  // this.collections = collections;
-  // }
-
   public void setSelectedCollectionItem(String selectedCollectionItem) {
     this.selectedCollectionItem = selectedCollectionItem;
   }
@@ -418,7 +373,7 @@ public class SingleUploadBean implements Serializable {
     return sus.getCollection();
   }
 
-  public MetadataSetBean getMdSetBean() {
+  public MetadataSetWrapper getMdSetBean() {
     return sus.getMdSetBean();
   }
 
@@ -450,14 +405,6 @@ public class SingleUploadBean implements Serializable {
     return sus.getUploadedItem();
   }
 
-  public SessionBean getSb() {
-    return sb;
-  }
-
-  public void setSb(SessionBean sb) {
-    this.sb = sb;
-  }
-
   public static String extractIDFromURI(URI uri) {
     return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
   }
@@ -466,4 +413,23 @@ public class SingleUploadBean implements Serializable {
     return sus.isUploadFileToTemp() && sus.getCollection() != null;
   }
 
+  public MetadataLabels getMetadataLabels() {
+    return metadataLabels;
+  }
+
+  public String getSelectedSpaceString() {
+    return selectedSpaceString;
+  }
+
+  public void setSelectedSpaceString(String selectedSpaceString) {
+    this.selectedSpaceString = selectedSpaceString;
+  }
+
+  public boolean isHasUploadRights() {
+    return hasUploadRights;
+  }
+
+  public void setHasUploadRights(boolean hasUploadRights) {
+    this.hasUploadRights = hasUploadRights;
+  }
 }

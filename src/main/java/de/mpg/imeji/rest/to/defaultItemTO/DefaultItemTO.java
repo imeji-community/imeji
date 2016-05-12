@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import de.mpg.imeji.rest.to.PropertiesTO;
 
 @XmlRootElement
-@XmlType(propOrder = { "visibility", "collectionId", "filename",
-    "mimetype", "fileSize", "checksumMd5", "webResolutionUrlUrl", "thumbnailUrl", "fileUrl", "metadata"})
+@XmlType(propOrder = {"visibility", "collectionId", "filename", "mimetype", "fileSize",
+    "checksumMd5", "webResolutionUrlUrl", "thumbnailUrl", "fileUrl", "metadata"})
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DefaultItemTO extends PropertiesTO implements Serializable {
@@ -48,8 +48,9 @@ public class DefaultItemTO extends PropertiesTO implements Serializable {
 
   private long fileSize;
 
-  /* ORIGINAL EASY METADATA
-   * 
+  /*
+   * ORIGINAL EASY METADATA
+   *
    * private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
    */
   private Map<String, JsonNode> metadata = new LinkedHashMap<String, JsonNode>();

@@ -7,11 +7,10 @@ import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.Imeji;
 
 /**
  * Transaction for Jena operations
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -24,7 +23,7 @@ public abstract class Transaction {
 
   /**
    * Construct a {@link Transaction} for one model defined by its uri
-   * 
+   *
    * @param modelURI
    */
   public Transaction(String modelURI) {
@@ -32,15 +31,8 @@ public abstract class Transaction {
   }
 
   /**
-   * Do the {@link Transaction} over the complete imeji {@link Dataset}
-   */
-  public void start() {
-    start(Imeji.dataset);
-  }
-
-  /**
    * Do the {@link Transaction} over a {@link Dataset}.
-   * 
+   *
    * @param dataset
    */
   public void start(Dataset dataset) {
@@ -52,7 +44,6 @@ public abstract class Transaction {
       dataset.abort();
       isException = true;
       exception = e;
-      LOGGER.warn("Exception in a transaction: has been aborted", e);
     } finally {
       dataset.end();
     }
@@ -61,7 +52,7 @@ public abstract class Transaction {
   /**
    * Execute the operation of the {@link Transaction} Is called after the {@link Transaction} has
    * been started
-   * 
+   *
    * @param ds
    * @throws Exception
    */
@@ -69,14 +60,14 @@ public abstract class Transaction {
 
   /**
    * Return the type of Jena lock ({@link ReadWrite}) uses for the {@link Transaction}
-   * 
+   *
    * @return
    */
   protected abstract ReadWrite getLockType();
 
   /**
    * Return the {@link Model} of the {@link Dataset} according to the uri defined in constructor
-   * 
+   *
    * @param dataset
    * @return
    */
@@ -89,7 +80,7 @@ public abstract class Transaction {
 
   /**
    * If the run Method caught an Exception, throw this exception
-   * 
+   *
    * @throws Exception
    */
   public void throwException() throws ImejiException {

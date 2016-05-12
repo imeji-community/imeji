@@ -7,9 +7,9 @@ import de.mpg.imeji.logic.jobs.CleanTempFilesJob;
 
 /**
  * Utility to work with temp files
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class TempFileUtil {
 
@@ -25,7 +25,7 @@ public class TempFileUtil {
   /**
    * Create a temp {@link File}. This method should be used to ensure that all temp files are
    * correctly removed by the {@link CleanTempFilesJob}
-   * 
+   *
    * @param name
    * @param extension
    * @return

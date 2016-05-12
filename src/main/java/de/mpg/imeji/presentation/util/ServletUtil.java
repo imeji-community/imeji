@@ -12,7 +12,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Utility class for {@link Servlet} and {@link Filter}
- * 
+ *
  * @author bastiens
  *
  */
@@ -24,7 +24,7 @@ public class ServletUtil {
 
   /**
    * True if the {@link ServletRequest} is an HTTP GET
-   * 
+   *
    * @param serv
    * @return
    */
@@ -40,7 +40,7 @@ public class ServletUtil {
 
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
-   * 
+   *
    * @param req
    * @return
    */
@@ -51,7 +51,7 @@ public class ServletUtil {
 
   /**
    * Return the {@link HistorySession}
-   * 
+   *
    * @param req
    * @return
    */
@@ -61,7 +61,7 @@ public class ServletUtil {
 
   /**
    * Return a Session Object
-   * 
+   *
    * @param req
    * @param classSimpleName
    * @return

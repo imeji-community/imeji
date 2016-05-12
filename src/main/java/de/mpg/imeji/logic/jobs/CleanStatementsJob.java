@@ -11,7 +11,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -20,7 +20,7 @@ import de.mpg.j2j.annotations.j2jId;
 
 /**
  * Clean empty {@link MetadataProfile}, which are not referenced by any collection
- * 
+ *
  * @author saquet
  *
  */
@@ -45,7 +45,7 @@ public class CleanStatementsJob implements Callable<Integer> {
 
   /**
    * Remove Exception a {@link List} of {@link Resource}
-   * 
+   *
    * @param uris
    * @param modelName
    * @throws IllegalAccessException
@@ -59,7 +59,7 @@ public class CleanStatementsJob implements Callable<Integer> {
 
   /**
    * Remove an {@link Object}, it must have a {@link j2jId}
-   * 
+   *
    * @param l
    * @param modelName
    * @throws Exception
@@ -71,7 +71,7 @@ public class CleanStatementsJob implements Callable<Integer> {
 
   /**
    * Load the {@link Resource} as {@link Object}
-   * 
+   *
    * @param uris
    * @param modelName
    * @param obj

@@ -22,9 +22,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.logic.export.ExportManager;
-import de.mpg.imeji.logic.notification.NotificationUtils;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 public class ExportServlet extends HttpServlet {
@@ -41,9 +41,8 @@ public class ExportServlet extends HttpServlet {
     User user = session.getUser();
 
     try {
-      ExportManager exportManager =
-          new ExportManager(resp.getOutputStream(), user, req.getParameterMap(),
-              session.getSelected());
+      ExportManager exportManager = new ExportManager(resp.getOutputStream(), user,
+          req.getParameterMap(), session.getSelected());
       String exportName = instanceName + "_";
       exportName += new Date().toString().replace(" ", "_").replace(":", "-");
       if (exportManager.getContentType().equalsIgnoreCase("application/xml")) {
@@ -57,7 +56,7 @@ public class ExportServlet extends HttpServlet {
       resp.setHeader("Content-disposition", "filename=" + exportName);
       resp.setStatus(HttpServletResponse.SC_OK);
       SearchResult result = exportManager.search();
-      exportManager.export(result);
+      exportManager.export(result, user);
 
       NotificationUtils.notifyByExport(user, exportManager.getExport(), session);
 
@@ -74,7 +73,7 @@ public class ExportServlet extends HttpServlet {
 
   /**
    * Get the {@link SessionBean} from the {@link HttpSession}
-   * 
+   *
    * @param req
    * @param resp
    * @return
@@ -96,7 +95,7 @@ public class ExportServlet extends HttpServlet {
 
   /**
    * Get Faces Context from Filter
-   * 
+   *
    * @param request
    * @param response
    * @return

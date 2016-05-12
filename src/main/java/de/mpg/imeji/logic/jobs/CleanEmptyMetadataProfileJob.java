@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
@@ -16,7 +16,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * Clean empty {@link MetadataProfile}, which are not referenced by any collection
- * 
+ *
  * @author saquet
  *
  */

@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * metadataTree.remove(smb);metadataTree.remove(smb); * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -42,16 +42,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import de.mpg.imeji.logic.util.MetadataAndProfileHelper;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
+import de.mpg.imeji.logic.vo.util.MetadataAndProfileHelper;
+import de.mpg.imeji.rest.transfer.MetadataTransferHelper;
 
 @JsonInclude(Include.NON_NULL)
 /**
  * Implements Hierarchy for a {@link List} of {@link SuperMetadataBeanTOTO}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -112,7 +112,7 @@ public class SuperMetadataTreeTO implements Serializable {
    * {@link MetadataProfile} For each profile statement, it will generate a default value, depending
    * on the metadata type It returns a generated "metadata record", which can be serialized as JSON
    * as any other metadata
-   * 
+   *
    * @param profile
    * @return
    */
@@ -136,7 +136,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
   /**
    * Create the {@link Map} from the {@link List}
-   * 
+   *
    * @param list
    * @param parent
    * @param index
@@ -160,7 +160,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
   /**
    * Create the {@link Map} from the {@link List}
-   * 
+   *
    * @param list
    * @param parent
    * @param index
@@ -264,7 +264,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
   /**
    * True if the {@link SuperMetadataBeanTO} is a root metadata
-   * 
+   *
    * @param smb
    * @return
    */
@@ -275,7 +275,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
   /**
    * True if the {@link SuperMetadataBeanTO} smb is child of parent
-   * 
+   *
    * @param smb
    * @param parent
    * @return
@@ -291,7 +291,7 @@ public class SuperMetadataTreeTO implements Serializable {
   /**
    * Remove the {@link SuperMetadataBeanTO} smb from the {@link List}. A new list is returned, which
    * allows to use this method within the for loop on the list elements
-   * 
+   *
    * @param list
    * @param smb
    * @return
@@ -306,7 +306,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
   /**
    * Get the childs of tree element
-   * 
+   *
    * @param parentIndex
    * @return
    */
@@ -323,7 +323,7 @@ public class SuperMetadataTreeTO implements Serializable {
   /**
    * True if the index1 is a parent of the index2 (not necessary the direct parent):<br/>
    * - 1 is parent of all index 1,....
-   * 
+   *
    * @param index1
    * @param index2
    * @return
@@ -335,7 +335,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
   /**
    * Increment the index to one position (1,1 -> 1,2 or 2,3,0,3 -> 2,3,0,4)
-   * 
+   *
    * @param index
    * @return
    */
@@ -351,7 +351,7 @@ public class SuperMetadataTreeTO implements Serializable {
 
   /**
    * Add 2 indexes (1,2 + 1 = 1,2,1)
-   * 
+   *
    * @param index1
    * @param index2
    * @return
@@ -364,7 +364,7 @@ public class SuperMetadataTreeTO implements Serializable {
   /**
    * Set the Parent {@link SuperMetadataBeanTO} to all element of the list. This is made according
    * to the current order of the list (see findBestParent() method)
-   * 
+   *
    * @param flat
    * @return
    */
@@ -379,7 +379,7 @@ public class SuperMetadataTreeTO implements Serializable {
    * Find the parent of a {@link Metadata} from the list, and return it as
    * {@link SuperMetadataBeanTO} . This is Dependent to the statement (if it has a parent
    * statement), and the position of the child in the list
-   * 
+   *
    * @param md
    * @param list
    * @return
@@ -387,14 +387,16 @@ public class SuperMetadataTreeTO implements Serializable {
   private SuperMetadataBeanTO findBestParent(SuperMetadataBeanTO child,
       List<SuperMetadataBeanTO> list) {
     // If the statement has no parent, the metadata doens't as well
-    if (child.getStatement().getParent() == null)
+    if (child.getStatement().getParent() == null) {
       return null;
+    }
     // The possible parents
     List<SuperMetadataBeanTO> candidates = new ArrayList<SuperMetadataBeanTO>();
     // Find all candidates
     for (SuperMetadataBeanTO md : list) {
-      if (child.getStatement().getParent().compareTo(md.getStatement().getId()) == 0)
+      if (child.getStatement().getParent().compareTo(md.getStatement().getId()) == 0) {
         candidates.add(md);
+      }
     }
     // Return the best candidate
     for (int i = candidates.size() - 1; i >= 0; i--) {

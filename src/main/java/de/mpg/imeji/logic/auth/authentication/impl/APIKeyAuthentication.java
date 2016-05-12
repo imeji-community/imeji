@@ -17,12 +17,12 @@ import de.mpg.imeji.exceptions.InactiveAuthenticationError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.ImejiRsaKeys;
 import de.mpg.imeji.logic.auth.authentication.Authentication;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Authentication} with API Key
- * 
+ *
  * @author bastiens
  *
  */
@@ -55,7 +55,7 @@ public class APIKeyAuthentication implements Authentication {
 
   /**
    * Generate a JSON Web Token, with Informations about the user and the expiration date
-   * 
+   *
    * @param userId
    * @param expirationTimeMinutesInTheFuture
    * @return
@@ -68,7 +68,7 @@ public class APIKeyAuthentication implements Authentication {
 
   /**
    * Use https://bitbucket.org/b_c/jose4j/wiki/Home to create JSON Web Token
-   * 
+   *
    * @param userId
    * @param expirationTimeMinutesInTheFuture
    * @return
@@ -106,7 +106,7 @@ public class APIKeyAuthentication implements Authentication {
 
   /**
    * Use https://bitbucket.org/b_c/jose4j/wiki/Home to consume Json Web token
-   * 
+   *
    * @param token
    * @return
    * @throws JoseException

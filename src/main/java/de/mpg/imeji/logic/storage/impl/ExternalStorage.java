@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -36,12 +36,12 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.presentation.util.ProxyHelper;
+import de.mpg.imeji.logic.util.ProxyHelper;
 
 /**
  * The {@link Storage} implementation for external Storages. Can only read files (if the files are
  * publicly available).
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -59,7 +59,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#getName()
    */
   @Override
@@ -69,7 +69,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
    */
   @Override
@@ -80,7 +80,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
    */
   @Override
@@ -109,7 +109,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#delete(java.lang.String)
    */
   @Override
@@ -119,7 +119,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#update(java.lang.String, byte[])
    */
   @Override
@@ -129,7 +129,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#getAdminstrator()
    */
   @Override
@@ -140,7 +140,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#getCollectionId(java.lang.String)
    */
   @Override
@@ -152,7 +152,7 @@ public class ExternalStorage implements Storage {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.Storage#readFileStringContent(java.lang.String)
    */
   @Override

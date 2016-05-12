@@ -15,7 +15,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.ImejiRsaKeys;
 import de.mpg.imeji.logic.auth.authentication.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.AdminProcess;
 import util.JenaUtil;

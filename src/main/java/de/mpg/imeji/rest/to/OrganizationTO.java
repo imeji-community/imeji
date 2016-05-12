@@ -15,7 +15,7 @@ import de.mpg.imeji.rest.to.defaultItemTO.DefaultOrganizationTO;
 
 @XmlRootElement
 @XmlType(propOrder = {
-// "position",
+    // "position",
     "id", "name", "description", "identifiers", "city", "country"})
 @JsonInclude(Include.NON_NULL)
 public class OrganizationTO implements Serializable {
@@ -45,7 +45,7 @@ public class OrganizationTO implements Serializable {
 
   /**
    * Constructor with a {@link DefaultOrganizationTO}
-   * 
+   *
    * @param dTO
    */
   public OrganizationTO(DefaultOrganizationTO dTO) {

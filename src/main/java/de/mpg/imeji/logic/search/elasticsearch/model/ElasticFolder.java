@@ -4,9 +4,9 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 
 /**
  * The elastic Version of a {@link CollectionImeji}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public final class ElasticFolder extends ElasticContainerProperties {
   private final String profile;

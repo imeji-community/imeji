@@ -6,53 +6,61 @@ package de.mpg.imeji.presentation.user;
 import java.io.IOException;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.PasswordGenerator;
+import de.mpg.imeji.logic.collaboration.email.EmailMessages;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.resource.UserController.USER_TYPE;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
-import de.mpg.imeji.presentation.user.util.PasswordGenerator;
+import de.mpg.imeji.presentation.beans.SuperBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Java Bean for the Create new user page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class UserCreationBean extends QuotaSuperBean {
+@ManagedBean(name = "UserCreationBean")
+@ViewScoped
+public class UserCreationBean extends SuperBean {
+  private static final long serialVersionUID = 7704653755005606808L;
   private User user;
-  private SessionBean sb;
   private boolean sendEmail = false;
   private static final Logger LOGGER = Logger.getLogger(UserCreationBean.class);
   private boolean allowedToCreateCollection = true;
-
+  private QuotaUICompoment quota;
 
   /**
    * Construct new bean
    */
   public UserCreationBean() {
     super();
-    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     this.setUser(new User());
+  }
+
+  @PostConstruct
+  public void init() {
+    quota = new QuotaUICompoment(user, getLocale());
   }
 
   /**
    * Method called when user create a new user
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -62,77 +70,54 @@ public class UserCreationBean extends QuotaSuperBean {
       if (sendEmail) {
         sendNewAccountEmail(password);
       }
-      BeanHelper.info(sb.getMessage("success_user_create"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_user_create", getLocale()));
       reloadUserPage();
     } catch (UnprocessableError e) {
-      BeanHelper.cleanMessages();
-      BeanHelper.error(sb.getMessage("error_during_user_create"));
-      for (String errorM : e.getMessages()) {
-        BeanHelper.error(sb.getMessage(errorM));
-      }
+      BeanHelper.error(e, getLocale());
+      LOGGER.error("Error creating user", e);
     } catch (Exception e) {
       LOGGER.error("Error creating user:", e);
-      BeanHelper.error(sb.getMessage(e.getMessage()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), getLocale()));
     }
     return "";
   }
 
   /**
    * Create a new {@link User}
-   * 
+   *
    * @throws Exception
    */
-  private String createNewUser() throws Exception {
-    UserController uc = new UserController(sb.getUser());
+  private String createNewUser() throws ImejiException {
+    UserController uc = new UserController(getSessionUser());
     PasswordGenerator generator = new PasswordGenerator();
     String password = generator.generatePassword();
     user.setEncryptedPassword(StringHelper.convertToMD5(password));
-    user.setQuota(QuotaUtil.getQuotaInBytes(getQuota()));
+    user.setQuota(QuotaUtil.getQuotaInBytes(quota.getQuota()));
     uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT : USER_TYPE.RESTRICTED);
     return password;
   }
 
-
-
-  /**
-   * True if the {@link User} exists
-   * 
-   * @return
-   * @throws Exception
-   */
-  public static boolean userAlreadyExists(User user) throws Exception {
-    try {
-      SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-      UserController uc = new UserController(session.getUser());
-      uc.retrieve(user.getEmail());
-      return true;
-    } catch (NotFoundException e) {
-      LOGGER.info("User not found: " + user.getEmail());
-      return false;
-    }
-  }
-
   /**
    * Send an email to the current {@link User}
-   * 
+   *
    * @param password
    */
   public void sendNewAccountEmail(String password) {
-    EmailClient emailClient = new EmailClient();
-    EmailMessages emailMessages = new EmailMessages();
+    EmailService emailClient = new EmailService();
     try {
       emailClient.sendMail(user.getEmail(), null,
-          emailMessages.getEmailOnAccountAction_Subject(true), emailMessages
-              .getNewAccountMessage(password, user.getEmail(), user.getPerson().getCompleteName()));
+          EmailMessages.getEmailOnAccountAction_Subject(true, getLocale()),
+          EmailMessages.getNewAccountMessage(password, user.getEmail(),
+              user.getPerson().getCompleteName(), getLocale()));
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+      BeanHelper.error("Error: Email not sent");
     }
   }
 
   /**
    * Add a new empty organization
-   * 
+   *
    * @param index
    */
   public void addOrganization(int index) {
@@ -142,7 +127,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * Remove an nth organization
-   * 
+   *
    * @param index
    */
   public void removeOrganization(int index) {
@@ -154,7 +139,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * setter
-   * 
+   *
    * @param user
    */
   public void setUser(User user) {
@@ -163,7 +148,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public User getUser() {
@@ -172,7 +157,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * getter - True if the selectbox "send email to user" has been selected
-   * 
+   *
    * @return
    */
   public boolean isSendEmail() {
@@ -181,7 +166,7 @@ public class UserCreationBean extends QuotaSuperBean {
 
   /**
    * setter
-   * 
+   *
    * @param sendEmail
    */
   public void setSendEmail(boolean sendEmail) {
@@ -201,18 +186,22 @@ public class UserCreationBean extends QuotaSuperBean {
   public void setAllowedToCreateCollection(boolean allowedToCreateCollection) {
     this.allowedToCreateCollection = allowedToCreateCollection;
   }
-  
-  
+
   private void reloadUserPage() {
     try {
-      Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-      FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+      redirect(getNavigation().getUserUrl() + "?id=" + user.getEmail());
     } catch (IOException e) {
       Logger.getLogger(UserBean.class).info("Some reloadPage exception", e);
     }
   }
- 
 
+  public QuotaUICompoment getQuota() {
+    return quota;
+  }
+
+  public void setQuota(QuotaUICompoment quota) {
+    this.quota = quota;
+  }
 }
 
 

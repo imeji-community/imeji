@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.SearchQueryParser;
@@ -22,15 +24,17 @@ import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 
 /**
  * The form for the Advanced search. Is composed of {@link SearchGroupForm}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 public class SearchForm {
+  private static final Logger LOGGER = Logger.getLogger(SearchForm.class);
   private Map<String, MetadataProfile> profilesMap;
   private List<SearchGroupForm> groups;
   private SearchPair fileTypeSearch =
@@ -47,22 +51,24 @@ public class SearchForm {
 
   /**
    * Constructor for a {@link SearchQuery}: initialize the form from a query
-   * 
+   *
    * @param searchQuery
    * @param collectionsMap
    * @param profilesMap
    * @throws ImejiException
    */
-  public SearchForm(SearchQuery searchQuery, Map<String, MetadataProfile> profilesMap)
-      throws ImejiException {
+  public SearchForm(SearchQuery searchQuery, Map<String, MetadataProfile> profilesMap,
+      MetadataLabels metadataLabels) throws ImejiException {
     this();
     this.profilesMap = profilesMap;
     for (SearchElement se : searchQuery.getElements()) {
       if (se.getType().equals(SEARCH_ELEMENTS.GROUP)) {
         String profileId =
             SearchFormularHelper.getProfileIdFromStatement((SearchGroup) se, profilesMap.values());
-        if (profileId != null)
-          groups.add(new SearchGroupForm((SearchGroup) se, profilesMap.get(profileId)));
+        if (profileId != null) {
+          groups.add(
+              new SearchGroupForm((SearchGroup) se, profilesMap.get(profileId), metadataLabels));
+        }
       }
       if (se.getType().equals(SEARCH_ELEMENTS.PAIR)) {
         if (((SearchPair) se).getField() == SearchFields.filetype) {
@@ -75,7 +81,7 @@ public class SearchForm {
 
   /**
    * Validate the Search form according the user input
-   * 
+   *
    * @throws UnprocessableError
    */
   public void validate() throws UnprocessableError {
@@ -97,25 +103,30 @@ public class SearchForm {
 
   /**
    * Transform the {@link SearchForm} in a {@link SearchQuery}
-   * 
+   *
    * @return
    */
   public SearchQuery getFormularAsSearchQuery() {
-    SearchQuery searchQuery = new SearchQuery();
-    for (SearchGroupForm g : groups) {
-      if (!searchQuery.isEmpty()) {
-        searchQuery.addLogicalRelation(LOGICAL_RELATIONS.OR);
+    try {
+      SearchQuery searchQuery = new SearchQuery();
+      for (SearchGroupForm g : groups) {
+        if (!searchQuery.isEmpty()) {
+          searchQuery.addLogicalRelation(LOGICAL_RELATIONS.OR);
+        }
+        searchQuery.addGroup(g.getAsSearchGroup());
       }
-      searchQuery.addGroup(g.getAsSearchGroup());
+      searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
+      searchQuery.addPair(fileTypeSearch);
+      return searchQuery;
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error transforming search form to searchquery", e);
+      return new SearchQuery();
     }
-    searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
-    searchQuery.addPair(fileTypeSearch);
-    return searchQuery;
   }
 
   /**
    * Add a {@link SearchGroup} to the form
-   * 
+   *
    * @param pos
    */
   public void addSearchGroup(int pos) {
@@ -129,24 +140,24 @@ public class SearchForm {
 
   /**
    * Method called when the selected collection is changed in the select menu
-   * 
+   *
    * @param pos
    * @throws ImejiException
    */
-  public void changeSearchGroup(int pos) throws ImejiException {
+  public void changeSearchGroup(int pos, MetadataLabels metadataLabels) throws ImejiException {
     SearchGroupForm group = groups.get(pos);
     group.getStatementMenu().clear();
     group.setSearchElementForms(new ArrayList<SearchMetadataForm>());
     if (group.getProfileId() != null) {
       MetadataProfile p = profilesMap.get(group.getProfileId());
-      group.initStatementsMenu(p);
+      group.initStatementsMenu(p, metadataLabels);
       addElement(pos, 0);
     }
   }
 
   /**
    * Method called when the buttom remove group is called
-   * 
+   *
    * @param pos
    */
   public void removeSearchGroup(int pos) {
@@ -155,7 +166,7 @@ public class SearchForm {
 
   /**
    * Method called when the button add element is called
-   * 
+   *
    * @param groupPos
    * @param elPos
    */
@@ -177,7 +188,7 @@ public class SearchForm {
 
   /**
    * Change the statement type of the element
-   * 
+   *
    * @param groupPos
    * @param elPos
    */

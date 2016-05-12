@@ -17,16 +17,16 @@ import de.mpg.imeji.rest.to.SearchResultTO;
  * {@link NotSupportedException} <br/>
  * <br/>
  * Authorization is always done via the {@link User} which is passed in every method
- * 
+ *
  * @author saquet
- * 
+ *
  * @param <V>
  */
 public interface API<V> {
 
   /**
    * Create an Object in imeji
-   * 
+   *
    * @param o
    * @param u
    * @return
@@ -35,7 +35,7 @@ public interface API<V> {
 
   /**
    * Read an object from imneji with its id
-   * 
+   *
    * @param id
    * @param u
    * @return
@@ -45,7 +45,7 @@ public interface API<V> {
 
   /**
    * Update an object in imeji
-   * 
+   *
    * @param o
    * @param u
    * @return
@@ -54,7 +54,7 @@ public interface API<V> {
 
   /**
    * Delete an object in imeji
-   * 
+   *
    * @param o
    * @param u
    * @return
@@ -63,7 +63,7 @@ public interface API<V> {
 
   /**
    * Release an object
-   * 
+   *
    * @param i
    * @param u
    */
@@ -71,7 +71,7 @@ public interface API<V> {
 
   /**
    * Withdraw an object
-   * 
+   *
    * @param i
    * @param u
    */
@@ -80,7 +80,7 @@ public interface API<V> {
   /**
    * Share an object defined by id to a user defined by userid. The roles to added are passed into a
    * List of String
-   * 
+   *
    * @param id
    * @param userId
    * @param roles
@@ -91,7 +91,7 @@ public interface API<V> {
   /**
    * Unshare an object defined by id from a user defined by userid. The roles to be removed are
    * passed into a List of String
-   * 
+   *
    * @param id
    * @param userId
    * @param roles
@@ -101,7 +101,7 @@ public interface API<V> {
 
   /**
    * Search for an object according to a query
-   * 
+   *
    * @param q
    * @param u
    * @return

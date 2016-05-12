@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.MetadataTO;
 import de.mpg.j2j.misc.LocalizedString;
 
 @XmlRootElement
@@ -26,12 +27,12 @@ public class MetadataSetTO implements Serializable {
   private static final long serialVersionUID = 5826924314949469841L;
 
   public MetadataSetTO() {
-    
+
   }
 
   /**
    * Construct a {@link MetadataSetTO} from a {@link StatementTO}
-   * 
+   *
    * @param statement
    */
   public MetadataSetTO(StatementTO statement) {
@@ -54,7 +55,7 @@ public class MetadataSetTO implements Serializable {
   private URI statementUri;
 
   private URI typeUri;
-  
+
   private String parentStatementUri;
 
   public int getPosition() {

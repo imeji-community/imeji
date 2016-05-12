@@ -23,7 +23,7 @@ import org.apache.http.impl.client.HttpClients;
 
 /**
  * Utility Class to work easily with {@link HttpPatch}
- * 
+ *
  * @author saquet
  *
  */
@@ -37,7 +37,7 @@ public class Patch {
 
   /**
    * Constructor for an {@link URI} with (Optional) authentication
-   * 
+   *
    * @param uri
    * @param username
    * @param password
@@ -60,7 +60,7 @@ public class Patch {
 
   /**
    * Execute a Patch Method with a json as input
-   * 
+   *
    * @param json
    * @return
    * @throws ClientProtocolException

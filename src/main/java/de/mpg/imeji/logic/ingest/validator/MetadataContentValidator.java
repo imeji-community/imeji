@@ -6,17 +6,17 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import de.mpg.imeji.logic.controller.util.MetadataTypesHelper;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
 
 /**
  * @author hnguyen
@@ -30,16 +30,18 @@ public class MetadataContentValidator {
    * @throws Exception
    * @throws IntrospectionException
    */
-  public static void validate(Metadata metadata, Metadata.Types types, Item item) throws Exception,
-      IntrospectionException {
-    if (metadata == null)
+  public static void validate(Metadata metadata, Metadata.Types types, Item item)
+      throws Exception, IntrospectionException {
+    if (metadata == null) {
       throw new Exception(new Throwable("metadata is null"));
+    }
     switch (types) {
       case TEXT:
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Text.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null
                 || metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName())
@@ -54,13 +56,14 @@ public class MetadataContentValidator {
         // TODO: need to implement validation for this type.
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(ConePerson.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
-              throw new Exception(new Throwable("Cone Person object of Item ("
-                  + item.getId().toString() + ") has invalid setting for element: "
-                  + propertyDescriptor.getName()));
+              throw new Exception(
+                  new Throwable("Cone Person object of Item (" + item.getId().toString()
+                      + ") has invalid setting for element: " + propertyDescriptor.getName()));
             }
           }
         }
@@ -69,8 +72,9 @@ public class MetadataContentValidator {
         // TODO: need to implement validation for this type.
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Date.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
               throw new Exception(new Throwable("Date object of Item (" + item.getId().toString()
@@ -83,13 +87,14 @@ public class MetadataContentValidator {
         // TODO: need to implement validation for this type.
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Geolocation.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
-              throw new Exception(new Throwable("Geolocation object of Item ("
-                  + item.getId().toString() + ") has invalid setting for element: "
-                  + propertyDescriptor.getName()));
+              throw new Exception(
+                  new Throwable("Geolocation object of Item (" + item.getId().toString()
+                      + ") has invalid setting for element: " + propertyDescriptor.getName()));
             }
           }
         }
@@ -98,13 +103,13 @@ public class MetadataContentValidator {
         // TODO: need to implement validation for this type.
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(License.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
-              throw new Exception(new Throwable("License object of Item ("
-                  + item.getId().toString() + ") has invalid setting for element: "
-                  + propertyDescriptor.getName()));
+              throw new Exception(new Throwable("License object of Item (" + item.getId().toString()
+                  + ") has invalid setting for element: " + propertyDescriptor.getName()));
             }
           }
         }
@@ -113,8 +118,9 @@ public class MetadataContentValidator {
         // TODO: need to implement validation for this type.
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Link.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
               throw new Exception(new Throwable("Link object of Item (" + item.getId().toString()
@@ -127,8 +133,9 @@ public class MetadataContentValidator {
         // TODO: need to implement validation for this type.
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Number.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
               throw new Exception(new Throwable("Number object of Item (" + item.getId().toString()
@@ -141,13 +148,14 @@ public class MetadataContentValidator {
         // TODO: need to implement validation for this type.
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(Publication.class)
             .getPropertyDescriptors()) {
-          if (propertyDescriptor.getWriteMethod() == null)
+          if (propertyDescriptor.getWriteMethod() == null) {
             continue;
+          }
           if (!notRequiredList.contains(propertyDescriptor.getName())) {
             if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null) {
-              throw new Exception(new Throwable("Publication object of Item ("
-                  + item.getId().toString() + ") has invalid setting for element: "
-                  + propertyDescriptor.getName()));
+              throw new Exception(
+                  new Throwable("Publication object of Item (" + item.getId().toString()
+                      + ") has invalid setting for element: " + propertyDescriptor.getName()));
             }
           }
         }

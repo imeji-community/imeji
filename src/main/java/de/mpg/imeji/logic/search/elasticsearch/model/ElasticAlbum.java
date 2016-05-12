@@ -7,9 +7,9 @@ import de.mpg.imeji.logic.vo.Album;
 
 /**
  * The Elastic version of an {@link Album}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public final class ElasticAlbum extends ElasticContainerProperties {
   private final List<URI> member;

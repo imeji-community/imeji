@@ -16,7 +16,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Helper related to j2j
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -32,7 +32,7 @@ public class J2JHelper {
 
   /**
    * Get the Id of an {@link Object} (a {@link j2jId} must be defined)
-   * 
+   *
    * @param o
    * @return
    */
@@ -56,7 +56,7 @@ public class J2JHelper {
 
   /**
    * Set the Id of an {@link Object} (a {@link j2jId} must be defined)
-   * 
+   *
    * @param o
    * @param id
    */
@@ -75,7 +75,7 @@ public class J2JHelper {
 
   /**
    * Cast a {@link List} of any type to a {@link List} of {@link Object}
-   * 
+   *
    * @param l
    * @return
    */
@@ -85,7 +85,7 @@ public class J2JHelper {
 
   /**
    * Read the {@link j2jDataType} value
-   * 
+   *
    * @param o
    * @return
    */
@@ -98,7 +98,7 @@ public class J2JHelper {
 
   /**
    * Read the {@link j2jModel} value
-   * 
+   *
    * @param o
    * @return
    */
@@ -109,7 +109,7 @@ public class J2JHelper {
   /**
    * Read the namespace of an imeji {@link Object}<br/>
    * - if a {@link Field} is passed, look for the namespace of this {@link Field}
-   * 
+   *
    * @param o
    * @param f
    * @return
@@ -131,7 +131,7 @@ public class J2JHelper {
 
   /**
    * To use only if getNamespace(Object o, Field f) can not be use
-   * 
+   *
    * @param f
    * @return
    */
@@ -152,7 +152,7 @@ public class J2JHelper {
 
   /**
    * Return {@link j2jResource} value
-   * 
+   *
    * @param o
    * @return
    */
@@ -166,7 +166,7 @@ public class J2JHelper {
 
   /**
    * Return the namespace of an URI object defined by a {@link j2jResource}
-   * 
+   *
    * @param o
    * @param f
    * @return
@@ -186,7 +186,7 @@ public class J2JHelper {
 
   /**
    * Return the namespace of an object defined by a {@link j2jLiteral}
-   * 
+   *
    * @param f
    * @return
    */
@@ -202,7 +202,7 @@ public class J2JHelper {
 
   /**
    * Read {@link j2jList} value
-   * 
+   *
    * @param f
    * @return
    */
@@ -216,7 +216,7 @@ public class J2JHelper {
 
   /**
    * Read the {@link j2jLazyList} value
-   * 
+   *
    * @param f
    * @return
    */
@@ -230,7 +230,7 @@ public class J2JHelper {
 
   /**
    * True if object is a {@link j2jResource}
-   * 
+   *
    * @param o
    * @return
    */
@@ -240,7 +240,7 @@ public class J2JHelper {
 
   /**
    * True id the {@link Field} is a {@link j2jResource}
-   * 
+   *
    * @param f
    * @return
    */
@@ -250,7 +250,7 @@ public class J2JHelper {
 
   /**
    * True if the {@link Field} is a {@link j2jResource} and and {@link URI}
-   * 
+   *
    * @param o
    * @param f
    * @return
@@ -262,7 +262,7 @@ public class J2JHelper {
 
   /**
    * True if the {@link Field} is a {@link j2jLiteral}
-   * 
+   *
    * @param f
    * @return
    */
@@ -272,7 +272,7 @@ public class J2JHelper {
 
   /**
    * True if the {@link Field} is a {@link j2jList}
-   * 
+   *
    * @param f
    * @return
    */
@@ -282,7 +282,7 @@ public class J2JHelper {
 
   /**
    * True if the {@link Field} is a {@link j2jLazyList}
-   * 
+   *
    * @param f
    * @return
    */
@@ -292,7 +292,7 @@ public class J2JHelper {
 
   /**
    * true if the {@link Object} has a {@link j2jDataType} value
-   * 
+   *
    * @param o
    * @return
    */
@@ -303,7 +303,7 @@ public class J2JHelper {
   /**
    * Return a {@link Field} as a {@link Object} of the same {@link Class} as the {@link Object}
    * passed as parameter
-   * 
+   *
    * @param f
    * @param o
    * @return
@@ -324,7 +324,7 @@ public class J2JHelper {
   /**
    * Return all the Fields that should be written as rdf property If class is not inheriting from a
    * {@link RDFObject} then return empty list.
-   * 
+   *
    * @param clazz
    * @return
    */
@@ -342,7 +342,7 @@ public class J2JHelper {
 
   /**
    * Return only {@link Field} which have a j2j Annotation
-   * 
+   *
    * @param l
    * @return
    */
@@ -358,7 +358,7 @@ public class J2JHelper {
 
   /**
    * True if the {@link Field} is a j2j annotation
-   * 
+   *
    * @param f
    * @return
    */

@@ -12,7 +12,7 @@ import javax.faces.convert.Converter;
 
 /**
  * {@link Converter} for {@link URI}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.search.model.FileTypes.Type;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchMetadata;
@@ -26,13 +28,11 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Factory to created Sparql query from a {@link SearchPair}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -42,7 +42,7 @@ public class JenaQueryFactory {
 
   /**
    * Create a SPARQL query
-   * 
+   *
    * @param rdfType
    * @param pair
    * @param sortCriterion
@@ -52,6 +52,7 @@ public class JenaQueryFactory {
    * @return
    * @deprecated
    */
+  @Deprecated
   public static String getQuery(String modelName, String rdfType, SearchPair pair,
       SortCriterion sortCriterion, User user, boolean isCollection, String specificQuery,
       String spaceId) {
@@ -81,7 +82,7 @@ public class JenaQueryFactory {
 
   /**
    * Return the RDF Type of the search objects
-   * 
+   *
    * @param rdfType
    * @return
    */
@@ -96,7 +97,7 @@ public class JenaQueryFactory {
    * Return the space query of the search objects. It checks the query for model and adds
    * respectively the spaceUri Space restriction will only work for search and for explicitly
    * provided model in this case
-   * 
+   *
    * @param spaceURI
    * @return
    */
@@ -129,7 +130,7 @@ public class JenaQueryFactory {
 
   /**
    * Return the names of the dataset (model) of the query
-   * 
+   *
    * @param modelName
    * @return
    */
@@ -152,7 +153,7 @@ public class JenaQueryFactory {
 
   /**
    * Return all sparql elements needed for the query
-   * 
+   *
    * @param pair
    * @return
    */
@@ -183,8 +184,9 @@ public class JenaQueryFactory {
         break;
       case col: // search for a collection
         // If not logged in, add the the path to collection/album
-        if (user == null && J2JHelper.getResourceNamespace(new Item()).equals(rdfType))
+        if (user == null && J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
           searchQuery = " ?s <" + ImejiNamespaces.COLLECTION + "> ?c .";
+        }
         // Search for collection by id (uri)
         return " ?s <" + ImejiNamespaces.COLLECTION + "> ?c. FILTER("
             + getSimpleFilter(pair, JenaSecurityQuery.getVariableName(rdfType), pair.isNot())
@@ -231,10 +233,11 @@ public class JenaQueryFactory {
         String regex = "";
         String types = pair.getValue();
         for (String typeName : types.split(Pattern.quote("|"))) {
-          Type type = ConfigurationBean.getFileTypesStatic().getType(typeName);
+          Type type = Imeji.CONFIG.getFileTypes().getType(typeName);
           if (type != null) {
-            if (!regex.equals(""))
+            if (!regex.equals("")) {
               regex += "|";
+            }
             regex += type.getAsRegexQuery();
           }
         }
@@ -295,7 +298,8 @@ public class JenaQueryFactory {
         if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType)) {
           pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
           return "FILTER(" + getSimpleFilter(pair, "s", pair.isNot()) + ") . ?c <"
-              + JenaSearch.getIndex(SearchIndex.SearchFields.prof).getNamespace() + "> ?s .";
+              + SearchIndexes.getIndex(SearchIndex.SearchFields.prof).getNamespace()
+              + "> ?s .";
         } else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)) {
           searchQuery = "?s <http://imeji.org/terms/mdprofile> ?el";
         } else if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
@@ -305,12 +309,13 @@ public class JenaQueryFactory {
       case prop:
         break;
       case statement: // search for a statement
-        if (pair.isNot())
+        if (pair.isNot()) {
           return "?s <http://imeji.org/terms/metadataSet> ?mds . OPTIONAL { ?mds <http://imeji.org/terms/metadata/> ?md  . ?md  <http://imeji.org/terms/statement> ?el  . FILTER(?el=<"
               + pair.getValue() + ">)} . FILTER (!bound(?el) ) .";
-        else
+        } else {
           return "?s <http://imeji.org/terms/metadataSet> ?mds .  ?mds <http://imeji.org/terms/metadata/> ?md  . ?md  <http://imeji.org/terms/statement> ?el  . FILTER(?el=<"
               + pair.getValue() + ">) .";
+        }
       case status: // Search for the status (release, pending)
         return "";// this is filtered in the security query
       case text:
@@ -331,12 +336,13 @@ public class JenaQueryFactory {
         // If user is same as searchpair value, then the security query will
         // be enough else Search for all objects
         // of rdfType for which the user (pair.getValue) has a Grant
-        if (user != null && pair.getValue().equals(user.getId().toString()))
+        if (user != null && pair.getValue().equals(user.getId().toString())) {
           return "";
-        else
+        } else {
           return "<" + pair.getValue()
               + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
               + JenaSecurityQuery.getVariableName(rdfType) + " .";
+        }
       case visibility:
         break;
     }
@@ -363,7 +369,7 @@ public class JenaQueryFactory {
   /**
    * Return all parent search element (according to {@link SearchIndex}) of a search element, as a
    * sparql query
-   * 
+   *
    * @param index
    * @param parentNumber
    * @return
@@ -380,7 +386,7 @@ public class JenaQueryFactory {
   /**
    * If the uri has been corrupted (for instance /profile/ instead /metadataProfile/), return the
    * correct uri
-   * 
+   *
    * @param c
    * @param uri
    * @return
@@ -394,7 +400,7 @@ public class JenaQueryFactory {
 
   /**
    * If the curretn {@link SearchPair} search for a {@link Status}, then return the search value
-   * 
+   *
    * @param pair
    * @return
    */
@@ -416,7 +422,7 @@ public class JenaQueryFactory {
 
   /**
    * True if th {@link SearchPair} is searching for a {@link User}
-   * 
+   *
    * @param pair
    * @return
    */
@@ -426,7 +432,7 @@ public class JenaQueryFactory {
 
   /**
    * Return the sparql elements needed for the search
-   * 
+   *
    * @param sortCriterion
    * @return
    */
@@ -455,7 +461,7 @@ public class JenaQueryFactory {
 
   /**
    * Return a sparql filter for a {@link SearchPair}
-   * 
+   *
    * @param pair
    * @param variable
    * @return
@@ -500,7 +506,7 @@ public class JenaQueryFactory {
 
   /**
    * Return the search value in SPARQL
-   * 
+   *
    * @param str
    * @return
    */
@@ -522,7 +528,7 @@ public class JenaQueryFactory {
 
   /**
    * True if the {@link String} is an URL
-   * 
+   *
    * @param str
    * @return
    */
@@ -532,7 +538,7 @@ public class JenaQueryFactory {
 
   /**
    * True if the String is a {@link Date}
-   * 
+   *
    * @param str
    * @return
    */
@@ -542,7 +548,7 @@ public class JenaQueryFactory {
 
   /**
    * True if it is a Number
-   * 
+   *
    * @param str
    * @return
    */
@@ -552,7 +558,7 @@ public class JenaQueryFactory {
 
   /**
    * Return the {@link String} search value of the filter
-   * 
+   *
    * @param pair
    * @param variable
    * @return
@@ -572,8 +578,9 @@ public class JenaQueryFactory {
             isPhraseQuery = false;
             words.add(word);
             word = "";
-          } else
+          } else {
             isPhraseQuery = true;
+          }
         } else if (i == ' ' && !isPhraseQuery) {
           words.add(word);
           word = "";
@@ -598,7 +605,7 @@ public class JenaQueryFactory {
 
   /**
    * Escape the Apostrophe in String
-   * 
+   *
    * @param s
    * @return
    */
@@ -608,7 +615,7 @@ public class JenaQueryFactory {
 
   /**
    * True if the pair used a rdf date format
-   * 
+   *
    * @param pair
    * @return
    */

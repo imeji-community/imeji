@@ -8,8 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,21 +16,17 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
-import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.auth.ImejiRsaKeys;
 import de.mpg.imeji.logic.jobs.ReadMaxPlanckIPMappingJob;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
  * Initialize application on server start
- * 
+ *
  * @author saquet
  */
 public class InitializerServlet extends HttpServlet {
@@ -43,11 +37,9 @@ public class InitializerServlet extends HttpServlet {
   public void init() throws ServletException {
     try {
       super.init();
-      new PropertyBean();
       Imeji.locksSurveyor.start();
       initModel();
       Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
-      initRsaKeys();
     } catch (Exception e) {
       LOGGER.error("imeji didn't initialize correctly", e);
     }
@@ -55,7 +47,7 @@ public class InitializerServlet extends HttpServlet {
 
   /**
    * Initialize the imeji jena tdb
-   * 
+   *
    * @throws URISyntaxException
    * @throws IOException
    * @throws ImejiException
@@ -65,23 +57,10 @@ public class InitializerServlet extends HttpServlet {
     runMigration();
   }
 
-  /**
-   * Initialize the RSA Keys, used to generate API Keys
-   */
-  private void initRsaKeys() {
-    try {
-      ImejiRsaKeys.init(ConfigurationBean.getRsaPublicKey(), ConfigurationBean.getRsaPrivateKey());
-      Imeji.CONFIG.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
-      Imeji.CONFIG.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
-      Imeji.CONFIG.saveConfig();
-    } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-      LOGGER.error("!!! Error initalizing API Key !!!", e);
-    }
-  }
 
   /**
    * look to the migration File (migration.txt)
-   * 
+   *
    * @throws IOException
    */
   private void runMigration() throws IOException {
@@ -94,7 +73,8 @@ public class InitializerServlet extends HttpServlet {
     }
     if (in != null) {
       String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
-      migrationRequests = migrationRequests.replaceAll("XXX_BASE_URI_XXX", PropertyBean.baseURI());
+      migrationRequests =
+          migrationRequests.replaceAll("XXX_BASE_URI_XXX", Imeji.PROPERTIES.getBaseURI());
       migrationRequests = addNewIdToMigration(migrationRequests);
       LOGGER.info("Running migration with query: ");
       LOGGER.info(migrationRequests);
@@ -105,7 +85,7 @@ public class InitializerServlet extends HttpServlet {
 
   /**
    * Replace XXX_NEW_ID_XXX by a new ID in Migration File
-   * 
+   *
    * @param migrationRequests
    * @return
    */

@@ -3,7 +3,7 @@
 	  xmlns:h="http://java.sun.com/jsf/html"
 	  xmlns:f="http://java.sun.com/jsf/core"
 	  xmlns:composite="http://java.sun.com/jsf/composite"
-		>
+	  xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<composite:interface>
 		<composite:attribute name="itemClass" required="true"/>
@@ -42,8 +42,7 @@
 				</div>
 			</div>
 			<div class="imj_statusArea">
-                <h:outputText value="&#160;" styleClass="fa fa-lock fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'PENDING'}"/>
-                <h:outputText value="&#160;" styleClass="fa fa-trash-o fa-pull-right fa-size-2" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}"/>
+				<imjc:iconStatus id="status" imejiResource="#{cc.attrs.item}"/>
 			</div>
 
 			<div class="imj_itemContent">
@@ -104,7 +103,7 @@
 								</h:outputLink>
 							</li>
 							</ui:fragment>
-							<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.create(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
+							<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.createContent(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
 								<li>
 									<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
 										<h:outputText value="#{lbl.upload_images}"/>
@@ -114,7 +113,7 @@
 
 							<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes'}">
 								<li style="float:right">
-									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">					
+									<ui:fragment rendered="#{Auth.createContent(cc.attrs.item)}">					
 										<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive(AlbumsBean.addSelected)}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
 											<f:ajax execute="@this" render=":actionsMenuArea :ajaxWrapper"/>
 										</h:commandButton>
@@ -123,7 +122,7 @@
 										</h:commandButton>
 										
 									</ui:fragment>
-									<ui:fragment rendered="#{!Auth.create(cc.attrs.item) and !cc.attrs.item.active}">
+									<ui:fragment rendered="#{!Auth.createContent(cc.attrs.item) and !cc.attrs.item.active}">
 										<h:outputText value="#{lbl.only_view_allowed}"/>
 									</ui:fragment>
 								</li>

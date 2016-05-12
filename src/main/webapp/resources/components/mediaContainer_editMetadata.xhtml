@@ -5,7 +5,8 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:imjc="http://java.sun.com/jsf/composite/components"
-      xmlns:mdprofile="http://java.sun.com/jsf/composite/components/mdProfile">
+      xmlns:mdprofile="http://java.sun.com/jsf/composite/components/mdProfile"
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
 
     <composite:interface>
         <composite:attribute name="formularBean" required="true" />
@@ -49,7 +50,7 @@
 	                    <ui:repeat id="persons" var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
 	                        <div class="imj_authorMetadataSet">
 	                            <div class="imj_sectionHeadline">
-	                                <h4> <!-- TODO NB: sectionHeadlines please not additionally style with h4, this should be in the class definition -->
+	                                <h4>
 	                                    <!-- Add/Remove Author buttons -->
 	                                    <span class="imj_inlineButtonGroup">
 	                                        <h:commandLink styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
@@ -69,6 +70,57 @@
 	
 	                        </div>
 	                    </ui:repeat>
+              		</h:panelGroup>
+              		
+              		<!-- additional Infos -->
+              		<h:panelGroup id="additionalInfos">
+              		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/combobox.js"/>
+              			<div class="imj_sectionHeadline">
+                             <h4><h:outputText value="#{lbl.colUtil}"/></h4>
+                             <span class="imj_noDisplay">: </span>
+                         </div>
+	                    <ui:repeat id="list" var="info" value="#{cc.attrs.formularContextBean.metadata.additionalInformations}" varStatus="indexA">
+                            <div class="imj_sectionHeadline">
+                                 <!-- Add/Remove Author buttons -->
+                                 <span class="imj_inlineButtonGroup">
+                                     <h:commandLink styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAdditionalInfo(indexA.index)}">
+                                         <f:ajax execute="editContainer:mediaContainerForm:additionalInfos" render="editContainer:mediaContainerForm:additionalInfos" />
+                                     </h:commandLink>
+                                     <h:commandLink styleClass="fa fa-minus-square-o" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAdditionalInfo(indexA.index)}">
+                                         <f:ajax execute="editContainer:mediaContainerForm:additionalInfos" render="editContainer:mediaContainerForm:additionalInfos" />
+                                     </h:commandLink>
+                                 </span>
+                                 <span class="imj_noDisplay">: </span>
+                            </div>
+	                        <div class="imj_metadataSet">
+		                        <label class="imj_metadataLabel">
+		                       	 	<h:outputText value="#{lbl.label} *" /> <span class="imj_noDisplay">: </span>
+		                        </label>
+		                        <h:inputText id="inputInfoLabel" styleClass="imj_metadataValue fa-list" autocomplete="off" value="#{info.label}" html5:placeholder="#{lbl.placeholder_additional_info_label}"/>
+		                   	</div>
+		                   	<div class="imj_metadataSet">
+		                        <label class="imj_metadataLabel">
+		                        	<h:outputText  value="#{lbl.text}" /> 
+		                        	<span class="imj_noDisplay">: </span>
+		                        </label>
+		                        <h:inputTextarea id="inputInfoText" styleClass="imj_metadataValue" value="#{info.text}" html5:placeholder="#{lbl.placeholder_text}"/>
+		                   	</div>
+		                   	<div class="imj_metadataSet">
+		                        <label class="imj_metadataLabel">
+		                        	<h:outputText  value="#{lbl.url}" /> <span class="imj_noDisplay">: </span>
+		                        </label>
+		                        <h:inputText id="inputInfoUrl" styleClass="imj_metadataValue" value="#{info.url}" html5:placeholder="#{lbl.placeholder_url}"/>
+		                   	</div>
+	                    </ui:repeat>
+	                    <div class="imj_sectionHeadline">
+	                        <span class="imj_inlineButtonGroup">
+	                            <h:commandLink styleClass="fa fa-plus-square-o" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAdditionalInfo(cc.attrs.formularContextBean.metadata.additionalInformations.size())}">
+	                                <f:ajax execute="editContainer:mediaContainerForm:additionalInfos" render="editContainer:mediaContainerForm:additionalInfos" />
+	                            </h:commandLink>
+	                        </span>
+	                        <span class="imj_noDisplay">: </span>
+	                  	</div>
+	                <span class="imj_noDisplay">: </span>
               		</h:panelGroup>
 
 
@@ -90,7 +142,6 @@
                     </ui:fragment>
                     <!-- Logo upload -->
 
-                    <ui:fragment rendered="#{cc.attrs.formularBean.id != null}">
                         <div class="imj_collectionLogoUpload">
                             <div class="imj_sectionHeadline">
                                 <h4>
@@ -113,7 +164,7 @@
                                                 runtimes: 'html5,flash,silverlight,html4',
                                                 browse_button: 'pickfiles', // you can pass in id...
                                                 container: document.getElementById('container'), // ... or DOM Element itself
-                                                url: location.pathname + "?start=1",
+                                                url: '#{Navigation.applicationUrl}uploadlogo',
                                                 max_file_size: '#{Configuration.uploadMaxFileSize}kb',
                                                 multi_selection: false,
                                                 init: {
@@ -187,7 +238,6 @@
                                 </div>
                             </ui:fragment>
                         </div>
-                    </ui:fragment>
                     <br/>
                 </c:if> 
                 <!-- END profileSelectMode, basicInfoAria -->

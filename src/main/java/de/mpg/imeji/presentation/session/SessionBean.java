@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -26,29 +24,30 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.SpaceController;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.config.ImejiConfiguration;
+import de.mpg.imeji.logic.config.ImejiConfiguration.BROWSE_VIEW;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.SpaceController;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.ConfigurationBean.BROWSE_VIEW;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.upload.IngestImage;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
-import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * The session Bean for imeji.
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -62,16 +61,10 @@ public class SessionBean implements Serializable {
     NONE, DEFAULT, ALTERNATIVE;
   }
 
-  private User user = null;
-  // Bundle
-  public static final String LABEL_BUNDLE = "labels";
-  public static final String MESSAGES_BUNDLE = "messages";
-  public static final String METADATA_BUNDLE = "metadata";
   private Locale locale;
+  private User user = null;
   private Page currentPage;
   private List<String> selected;
-  private List<URI> selectedCollections;
-  private List<URI> selectedAlbums;
   private Album activeAlbum;
   private Map<URI, MetadataProfile> profileCached;
   private Map<URI, CollectionImeji> collectionCached;
@@ -80,6 +73,7 @@ public class SessionBean implements Serializable {
   private boolean showLogin = false;
   private int numberOfItemsPerPage = 18;
   private int numberOfContainersPerPage = 10;
+  private boolean hasUploadRights = false;
 
   private String applicationUrl;
   private String spaceId;
@@ -107,16 +101,15 @@ public class SessionBean implements Serializable {
   // fulfill the sprint deadline
   private IngestImage spaceLogoIngestImage;
 
+
   /**
    * The session Bean for imeji
    */
   public SessionBean() {
     selected = new ArrayList<String>();
-    selectedCollections = new ArrayList<URI>();
-    selectedAlbums = new ArrayList<URI>();
     profileCached = new HashMap<URI, MetadataProfile>();
     collectionCached = new HashMap<URI, CollectionImeji>();
-    this.locale = InternationalizationBean.getRequestedLocale();
+    locale = InternationalizationBean.getUserLocale();
     initCssWithCookie();
     initApplicationUrl();
     initNumberOfItemsPerPageWithCookieOrProperties();
@@ -143,10 +136,8 @@ public class SessionBean implements Serializable {
    * Init the default browse view. If a cookie is set, use it, otherwise use config value
    */
   private void initBrowseViewWithCookieOrConfig() {
-    ConfigurationBean config =
-        (ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class);
     this.selectedBrowseListView =
-        CookieUtils.readNonNull(browseViewCookieName, config.getDefaultBrowseView());
+        CookieUtils.readNonNull(browseViewCookieName, Imeji.CONFIG.getDefaultBrowseView());
   }
 
   /**
@@ -168,7 +159,7 @@ public class SessionBean implements Serializable {
    * 2- Reading the Cookie<br/>
    * If the cookie is not null, this value is used, otherwise, a new cookie is created with the
    * value from the property file
-   * 
+   *
    * @param value
    * @param cookieName
    * @param propertyName
@@ -194,80 +185,8 @@ public class SessionBean implements Serializable {
   }
 
   /**
-   * Returns the label according to the current user locale.
-   * 
-   * @param placeholder A string containing the name of a label.
-   * @return The label.
-   */
-  public String getLabel(String placeholder) {
-    try {
-      try {
-        return ResourceBundle.getBundle(this.getSelectedLabelBundle()).getString(placeholder);
-      } catch (MissingResourceException e) {
-        return ResourceBundle.getBundle(this.getDefaultLabelBundle()).getString(placeholder);
-      }
-    } catch (Exception e) {
-      return placeholder;
-    }
-  }
-
-  /**
-   * Returns the message according to the current user locale.
-   * 
-   * @param placeholder A string containing the name of a message.
-   * @return The label.
-   */
-  public String getMessage(String placeholder) {
-    try {
-      try {
-        return ResourceBundle.getBundle(this.getSelectedMessagesBundle()).getString(placeholder);
-      } catch (MissingResourceException e) {
-        return ResourceBundle.getBundle(this.getDefaultMessagesBundle()).getString(placeholder);
-      }
-    } catch (Exception e) {
-      return placeholder;
-    }
-  }
-
-  /**
-   * Get the bundle for the labels
-   * 
-   * @return
-   */
-  private String getSelectedLabelBundle() {
-    return LABEL_BUNDLE + "_" + locale.getLanguage();
-  }
-
-  /**
-   * Get the default bundle for the labels
-   *
-   * @return
-   */
-  private String getDefaultLabelBundle() {
-    return LABEL_BUNDLE + "_" + Locale.ENGLISH.getLanguage();
-  }
-
-  /**
-   * Get the bundle for the messages
-   * 
-   * @return
-   */
-  private String getSelectedMessagesBundle() {
-    return MESSAGES_BUNDLE + "_" + locale.getLanguage();
-  }
-
-  /**
-   * Get the default bundle for the messages
-   *
-   * @return
-   */
-  private String getDefaultMessagesBundle() {
-    return MESSAGES_BUNDLE + "_" + Locale.ENGLISH.getLanguage();
-  }
-
-  /**
    * Return the version of the software
-   * 
+   *
    * @return
    */
   public String getVersion() {
@@ -276,15 +195,14 @@ public class SessionBean implements Serializable {
 
   /**
    * Return the name of the current application (defined in the property)
-   * 
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
    */
   public String getInstanceName() {
     try {
-      return ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-          .getInstanceName();
+      return Imeji.CONFIG.getInstanceName();
     } catch (Exception e) {
       return "imeji";
     }
@@ -307,16 +225,16 @@ public class SessionBean implements Serializable {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public Locale getLocale() {
-    return locale;
+    return this.locale;
   }
 
   /**
    * Setter
-   * 
+   *
    * @param userLocale
    */
   public void setLocale(final Locale userLocale) {
@@ -325,7 +243,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Get the context of the images (item, collection, album)
-   * 
+   *
    * @return
    */
   public String getSelectedImagesContext() {
@@ -334,7 +252,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param selectedImagesContext
    */
   public void setSelectedImagesContext(String selectedImagesContext) {
@@ -345,6 +263,7 @@ public class SessionBean implements Serializable {
     if (user != null) {
       UserController c = new UserController(user);
       user = c.retrieve(user.getId());
+      checkIfHasUploadRights();
     }
   }
 
@@ -364,7 +283,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Page getCurrentPage() {
@@ -373,7 +292,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param currentPage
    */
   public void setCurrentPage(Page currentPage) {
@@ -382,7 +301,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<String> getSelected() {
@@ -391,7 +310,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param selected
    */
   public void setSelected(List<String> selected) {
@@ -400,80 +319,17 @@ public class SessionBean implements Serializable {
 
   /**
    * Return the number of item selected
-   * 
+   *
    * @return
    */
   public int getSelectedSize() {
     return selected.size();
   }
 
-  /**
-   * Add item to selected
-   * 
-   * @return
-   */
-  public void addToSelected(String selection) {
-    selected.add(selection);
-  }
-
-
-  /**
-   * getter
-   * 
-   * @return
-   */
-  public List<URI> getSelectedCollections() {
-    return selectedCollections;
-  }
 
   /**
    * setter
-   * 
-   * @param selectedCollections
-   */
-  public void setSelectedCollections(List<URI> selectedCollections) {
-    this.selectedCollections = selectedCollections;
-  }
-
-  /**
-   * Return the number of selected collections
-   * 
-   * @return
-   */
-  public int getSelectCollectionsSize() {
-    return this.selectedCollections.size();
-  }
-
-  /**
-   * getter
-   * 
-   * @return
-   */
-  public List<URI> getSelectedAlbums() {
-    return selectedAlbums;
-  }
-
-  /**
-   * setter
-   * 
-   * @param selectedAlbums
-   */
-  public void setSelectedAlbums(List<URI> selectedAlbums) {
-    this.selectedAlbums = selectedAlbums;
-  }
-
-  /**
-   * getter
-   * 
-   * @return
-   */
-  public int getSelectedAlbumsSize() {
-    return this.selectedAlbums.size();
-  }
-
-  /**
-   * setter
-   * 
+   *
    * @param activeAlbum
    */
   public void setActiveAlbum(Album activeAlbum) {
@@ -482,7 +338,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public Album getActiveAlbum() {
@@ -495,7 +351,7 @@ public class SessionBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @return
    */
   public String getActiveAlbumId() {
@@ -504,7 +360,7 @@ public class SessionBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getActiveAlbumSize() {
@@ -513,7 +369,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public Map<URI, MetadataProfile> getProfileCached() {
@@ -522,7 +378,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Setter
-   * 
+   *
    * @param profileCached
    */
   public void setProfileCached(Map<URI, MetadataProfile> profileCached) {
@@ -546,7 +402,7 @@ public class SessionBean implements Serializable {
   /**
    * Check if the selected CSS is correct according to the configuration value. If errors are found,
    * then change the selected CSS
-   * 
+   *
    * @param defaultCss - the value of the default css in the config
    * @param alternativeCss - the value of the alternative css in the config
    */
@@ -567,7 +423,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Get the the selected {@link Style}
-   * 
+   *
    * @return
    * @throws URISyntaxException
    * @throws IOException
@@ -578,7 +434,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Toggle the selected css
-   * 
+   *
    * @return
    */
   public void toggleCss() {
@@ -627,7 +483,7 @@ public class SessionBean implements Serializable {
   /**
    * Return the Institute of the current {@link User} according to his IP. IMPORTANT: works only for
    * Max Planck Institutes IPs.
-   * 
+   *
    * @return
    */
   public String getInstituteNameByIP() {
@@ -640,7 +496,7 @@ public class SessionBean implements Serializable {
   /**
    * Return the Institute of the current {@link User} according to his IP. IMPORTANT: works only for
    * Max Planck Institutes IPs.
-   * 
+   *
    * @return
    */
   public String getInstituteIdByIP() {
@@ -652,7 +508,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Return the suffix of the email of the user
-   * 
+   *
    * @return
    */
   public String getInstituteByUser() {
@@ -684,7 +540,7 @@ public class SessionBean implements Serializable {
 
   /**
    * Read the IP of the current User
-   * 
+   *
    * @return
    */
   private String readUserIp() {
@@ -732,8 +588,9 @@ public class SessionBean implements Serializable {
   }
 
   public String getSelectedSpaceString() {
-    if (this.selectedSpace != null)
+    if (this.selectedSpace != null) {
       return this.selectedSpace.toString();
+    }
     return "";
   }
 
@@ -754,16 +611,19 @@ public class SessionBean implements Serializable {
   }
 
   public String getPrettySpacePage(String prettyPage) {
-    if (isNullOrEmpty(this.spaceId)) {
+    return getPrettySpacePage(prettyPage, spaceId);
+  }
+
+  public static String getPrettySpacePage(String prettyPage, String space) {
+    if (isNullOrEmpty(space)) {
       return prettyPage;
     }
     return prettyPage.replace("pretty:", "pretty:space_");
-
   }
 
   /**
    * Logout and redirect to the home page
-   * 
+   *
    * @throws IOException
    */
   private void logoutFromSpot() {
@@ -782,8 +642,38 @@ public class SessionBean implements Serializable {
   }
 
   public void toggleBrowseView() {
-    selectedBrowseListView = selectedBrowseListView.equals(BROWSE_VIEW.LIST.name())
-        ? BROWSE_VIEW.THUMBNAIL.name() : BROWSE_VIEW.LIST.name();
+    selectedBrowseListView =
+        selectedBrowseListView.equals(ImejiConfiguration.BROWSE_VIEW.LIST.name())
+            ? BROWSE_VIEW.THUMBNAIL.name() : BROWSE_VIEW.LIST.name();
     CookieUtils.updateCookieValue(browseViewCookieName, selectedBrowseListView);
+  }
+
+  /**
+   * True if the current user has either right to create a collection or to upload items in at least
+   * one collection
+   *
+   * @return
+   */
+  public boolean isHasUploadRights() {
+    return hasUploadRights;
+  }
+
+  /**
+   * Check and set isHasUploadRights
+   */
+  public void checkIfHasUploadRights() {
+    if (user.isAllowedToCreateCollection()) {
+      hasUploadRights = true;
+      return;
+    }
+    List<String> collectionUris =
+        new CollectionController().search(null, null, -1, 0, user, spaceId).getResults();
+    for (String uri : collectionUris) {
+      if (AuthUtil.staticAuth().createContent(user, uri)) {
+        hasUploadRights = true;
+        return;
+      }
+    }
+    hasUploadRights = false;
   }
 }

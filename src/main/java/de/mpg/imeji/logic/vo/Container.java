@@ -15,7 +15,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Super class for all imeji containers ({@link CollectionImeji} and {@link Album})
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -28,9 +28,6 @@ public abstract class Container extends Properties implements Serializable {
   private ContainerMetadata metadata = new ContainerMetadata();
   @j2jLiteral("http://imeji.org/terms/doi")
   private String doi;
-
-  // same property used as in Space
-  // property is provided on Container level, in order to fit both Collection and Album
   @j2jResource("http://imeji.org/terms/logoUrl")
   private URI logoUrl;
 

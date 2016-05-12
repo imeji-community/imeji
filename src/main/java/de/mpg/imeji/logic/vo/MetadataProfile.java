@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -23,7 +23,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Profile where {@link Item} {@link Metadata} are defined
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -83,12 +83,12 @@ public class MetadataProfile extends Properties implements Cloneable {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#clone()
    */
   @Override
   public MetadataProfile clone() {
-    MetadataProfile clone = ImejiFactory.newProfile();
+    MetadataProfile clone = new MetadataProfile();
     clone.setTitle(this.title);
     clone.setDescription(this.description);
     // the mapping between the new uris (created by cloning) and the old uris
@@ -99,16 +99,18 @@ public class MetadataProfile extends Properties implements Cloneable {
       idMapping.put(s.getId().toString(), c.getId());
     }
     // Set the new parent
-    for (Statement s : clone.statements)
-      if (s.getParent() != null)
+    for (Statement s : clone.statements) {
+      if (s.getParent() != null) {
         s.setParent(idMapping.get(s.getParent().toString()));
+      }
+    }
 
     return clone;
   }
-  
-  public Statement getStatement(String statementId){
-    for(Statement st : statements){
-      if(statementId.equals(st.getId().toString())){
+
+  public Statement getStatement(String statementId) {
+    for (Statement st : statements) {
+      if (statementId.equals(st.getId().toString())) {
         return st;
       }
     }

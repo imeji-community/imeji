@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * {@link SearchElement} defining logical operations (and/or) between other {@link SearchElement}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

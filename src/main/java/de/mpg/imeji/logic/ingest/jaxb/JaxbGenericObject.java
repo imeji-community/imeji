@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.mpg.imeji.logic.ingest.jaxb;
 
@@ -24,9 +24,8 @@ public class JaxbGenericObject<T> extends JaxbUtil implements IJaxbGenericObject
 
   public JaxbGenericObject(Class<T> type) {
     this.type = type;
-    xsdFilename =
-        (type.equals(Items.class)) ? ImejiSchemaFilename.IMEJI_ITEM_XSDFILE
-            : ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
+    xsdFilename = (type.equals(Items.class)) ? ImejiSchemaFilename.IMEJI_ITEM_XSDFILE
+        : ImejiSchemaFilename.IMEJI_INGEST_PROFILE_XSDFILE;
   }
 
   public JaxbGenericObject(Class<T> type, String xsdFilename) {
@@ -43,8 +42,8 @@ public class JaxbGenericObject<T> extends JaxbUtil implements IJaxbGenericObject
   }
 
   @Override
-  public void marshal(String xmlFilename, T t) throws JAXBException, SAXException,
-      FileNotFoundException {
+  public void marshal(String xmlFilename, T t)
+      throws JAXBException, SAXException, FileNotFoundException {
     super.marshal(this.getXsdFilename(), xmlFilename, t);
   }
 

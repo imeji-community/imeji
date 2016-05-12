@@ -9,7 +9,7 @@ import scala.Serializable;
 
 /**
  * JSF Bean for usage of Workflow features
- * 
+ *
  * @author bastiens
  *
  */
@@ -20,7 +20,7 @@ public class WorkflowBean implements Serializable {
 
   /**
    * True if the Object can be Released
-   * 
+   *
    * @param p
    * @return
    */
@@ -35,7 +35,7 @@ public class WorkflowBean implements Serializable {
 
   /**
    * True if the Object ca be released
-   * 
+   *
    * @param p
    * @return
    */
@@ -50,7 +50,7 @@ public class WorkflowBean implements Serializable {
 
   /**
    * True if the Object can be deleted
-   * 
+   *
    * @param p
    * @return
    */

@@ -11,7 +11,7 @@ import de.mpg.imeji.rest.api.ProfileService;
 
 /**
  * This class is a cache to read profiles, to avoid to read too often the profiles
- * 
+ *
  * @author bastiens
  *
  */
@@ -23,13 +23,14 @@ public class ProfileCache {
 
   /**
    * If the profile is cached, read it from cache, else, read it from the database and cache it
-   * 
+   *
    * @param uri
    * @return
    */
   public MetadataProfile read(URI uri) {
-    if (uri == null )
-        return null;
+    if (uri == null) {
+      return null;
+    }
     if (profiles.containsKey(uri.toString())) {
       return profiles.get(uri.toString());
     }
@@ -40,7 +41,7 @@ public class ProfileCache {
 
   /**
    * Read the profile from the database
-   * 
+   *
    * @param uri
    * @return
    */

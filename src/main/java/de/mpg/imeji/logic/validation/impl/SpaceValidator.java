@@ -9,15 +9,14 @@ import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
-import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 
 /**
  * {@link Validator} for a {@link Space}
- * 
+ *
  * @author saquet
  *
  */
@@ -26,32 +25,32 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
 
   @Override
   public void validate(Space space, Method m) throws UnprocessableError {
-    exception = new UnprocessableError(new HashSet<String>());
+    exception = new UnprocessableError();
     setValidateForMethod(m);
     if (isDelete()) {
       return;
     }
 
     if (isNullOrEmptyTrim(space.getTitle())) {
-      exception.getMessages().add("error_space_need_title");
+      exception = new UnprocessableError("error_space_need_title", exception);
     }
 
     try {
       // creation of URI in order to check if it is a syntactically valid slug
       new URI(space.getSlug());
     } catch (URISyntaxException e) {
-      exception.getMessages().add("error_space_invalid_slug");
+      exception = new UnprocessableError("error_space_invalid_slug", exception);
     }
 
     if (isSpaceByLabel(space.getSlug(), space.getId())) {
-      exception.getMessages().add("error_there_is_another_space_with_same_slug");
+      exception = new UnprocessableError("error_there_is_another_space_with_same_slug", exception);
     }
 
     if (isNullOrEmptyTrim(space.getSlug())) {
-      exception.getMessages().add("error_space_needs_slug");
+      exception = new UnprocessableError("error_space_needs_slug", exception);
     }
 
-    if (!exception.getMessages().isEmpty()) {
+    if (exception.hasMessages()) {
       throw exception;
     }
   }

@@ -10,14 +10,14 @@ import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.ImejiTriple;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.JenaReader;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.transaction.CRUDTransaction;
-import de.mpg.j2j.transaction.PatchTransaction;
+import de.mpg.j2j.transaction.CRUDTransaction.CRUDTransactionType;
 import de.mpg.j2j.transaction.ThreadedTransaction;
 import de.mpg.j2j.transaction.Transaction;
 
@@ -27,7 +27,7 @@ import de.mpg.j2j.transaction.Transaction;
  * - For concurrency purpose, each write {@link Transaction} is made within a single {@link Thread}.
  * Use {@link ThreadedTransaction} <br/>
  * - for READ operations, uses {@link JenaReader}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -37,7 +37,7 @@ public class JenaWriter implements Writer {
 
   /**
    * Construct one {@link JenaWriter} for one {@link Model}
-   * 
+   *
    * @param modelURI
    */
   public JenaWriter(String modelURI) {
@@ -46,7 +46,7 @@ public class JenaWriter implements Writer {
 
   /**
    * Create a {@link List} of {@link Object} in {@link Jena}
-   * 
+   *
    * @param objects
    * @param user
    * @throws Exception
@@ -58,7 +58,7 @@ public class JenaWriter implements Writer {
 
   /**
    * Delete a {@link List} of {@link Object} in {@link Jena}
-   * 
+   *
    * @param objects
    * @param user
    * @throws Exception
@@ -68,14 +68,15 @@ public class JenaWriter implements Writer {
     runTransaction(objects, GrantType.DELETE, false);
     for (Object o : objects) {
       URI uri = WriterFacade.extractID(o);
-      if (uri != null)
+      if (uri != null) {
         ImejiSPARQL.execUpdate(JenaCustomQueries.updateRemoveGrantsFor(uri.toString()));
+      }
     }
   }
 
   /**
    * Update a {@link List} of {@link Object} in {@link Jena}
-   * 
+   *
    * @param objects
    * @param user
    * @throws Exception
@@ -89,7 +90,7 @@ public class JenaWriter implements Writer {
    * Update LAZY a {@link List} of {@link Object} in {@link Jena}<br/>
    * - {@link List} contained within the {@link Object} are not updated: faster performance,
    * especially for objects with huge {@link List}
-   * 
+   *
    * @param objects
    * @param user
    * @throws Exception
@@ -99,17 +100,9 @@ public class JenaWriter implements Writer {
     runTransaction(objects, GrantType.UPDATE, true);
   }
 
-  @Override
-  public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
-      throws ImejiException {
-    Transaction t = new PatchTransaction(triples, modelURI);
-    ThreadedTransaction.run(new ThreadedTransaction(t));
-
-  }
-
   /**
    * Run one WRITE operation in {@link Transaction} within a {@link ThreadedTransaction}
-   * 
+   *
    * @param objects
    * @param type
    * @param lazy
@@ -117,9 +110,10 @@ public class JenaWriter implements Writer {
    */
   private void runTransaction(List<Object> objects, GrantType type, boolean lazy)
       throws ImejiException {
-    Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
+    Transaction t =
+        new CRUDTransaction(objects, CRUDTransactionType.valueOf(type.name()), modelURI, lazy);
     // Write Transaction needs to be added in a new Thread
-    ThreadedTransaction.run(new ThreadedTransaction(t));
+    ThreadedTransaction.run(new ThreadedTransaction(t, Imeji.tdbPath));
   }
 
 

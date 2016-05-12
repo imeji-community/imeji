@@ -35,7 +35,7 @@ public class CollectionProcess {
 
   /**
    * Read the items of a {@link CollectionImeji} according to the search query
-   * 
+   *
    * @param req
    * @param id
    * @param q
@@ -146,7 +146,7 @@ public class CollectionProcess {
 
   /**
    * Returns an item template of a {@link CollectionImeji}
-   * 
+   *
    * @param req
    * @param id
    * @return

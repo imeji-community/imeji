@@ -6,20 +6,19 @@ package de.mpg.imeji.presentation.collection;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
+import de.mpg.imeji.logic.vo.util.MetadataFactory;
 
 /**
  * Session with objects related to {@link CollectionImeji}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 public class CollectionSessionBean {
-  private CollectionImeji active = null;
   private MetadataProfile profile = null;
   private String selectedMenu = "SORTING";
   private String filter = "all";
@@ -38,11 +37,10 @@ public class CollectionSessionBean {
 
   /**
    * Initialize the session objects
-   * 
+   *
    * @throws Exception
    */
-  public void init() throws Exception {
-    active = new CollectionImeji();
+  public void init() {
     profile = new MetadataProfile();
     metadataTypes = new ArrayList<Metadata>();
     for (Metadata.Types t : Metadata.Types.values()) {
@@ -50,19 +48,6 @@ public class CollectionSessionBean {
     }
   }
 
-  /**
-   * @return the active
-   */
-  public CollectionImeji getActive() {
-    return active;
-  }
-
-  /**
-   * @param active the active to set
-   */
-  public void setActive(CollectionImeji active) {
-    this.active = active;
-  }
 
   /**
    * @return the selectedMenu
@@ -80,7 +65,7 @@ public class CollectionSessionBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getFilter() {
@@ -89,7 +74,7 @@ public class CollectionSessionBean {
 
   /**
    * setter
-   * 
+   *
    * @param filter
    */
   public void setFilter(String filter) {
@@ -98,7 +83,7 @@ public class CollectionSessionBean {
 
   /**
    * setter
-   * 
+   *
    * @param metadataTypes
    */
   public void setMetadataTypes(List<Metadata> metadataTypes) {
@@ -107,7 +92,7 @@ public class CollectionSessionBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<Metadata> getMetadataTypes() {
@@ -116,7 +101,7 @@ public class CollectionSessionBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public MetadataProfile getProfile() {
@@ -125,7 +110,7 @@ public class CollectionSessionBean {
 
   /**
    * setter
-   * 
+   *
    * @param profile
    */
   public void setProfile(MetadataProfile profile) {

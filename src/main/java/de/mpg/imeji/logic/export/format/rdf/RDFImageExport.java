@@ -7,14 +7,13 @@ import java.util.HashMap;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.export.format.RDFExport;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link Item}
- * 
+ *
  * @author saquet
  */
 public class RDFImageExport extends RDFExport {
@@ -61,7 +60,7 @@ public class RDFImageExport extends RDFExport {
   /*
    * Not implemented : needs of specification about restricted metadata (how to make it really
    * private...)
-   * 
+   *
    * @see de.mpg.imeji.logic.export.format.RDFExport#filterResources(de.mpg.imeji
    * .logic.search.SearchResult, de.mpg.imeji.logic.vo.User)
    */

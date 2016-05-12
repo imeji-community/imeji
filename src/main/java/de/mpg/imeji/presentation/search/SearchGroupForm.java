@@ -11,9 +11,12 @@ import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -26,19 +29,19 @@ import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * A {@link SearchGroupForm} is a group of {@link SearchMetadataForm}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 public class SearchGroupForm {
+  private static final Logger LOGGER = Logger.getLogger(SearchGroupForm.class);
   private List<SearchMetadataForm> elements;
   private String profileId;
   private String collectionId;
@@ -62,13 +65,14 @@ public class SearchGroupForm {
 
   /**
    * Constructor for a {@link SearchGroup} and {@link MetadataProfile}
-   * 
+   *
    * @param searchGroup
    * @param profile
    * @param collectionId
    * @throws ImejiException
    */
-  public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile) throws ImejiException {
+  public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile,
+      MetadataLabels metadataLabels) throws ImejiException {
     this();
     if (profile != null) {
       this.setProfileId(profile.getId().toString());
@@ -90,35 +94,41 @@ public class SearchGroupForm {
               .setLogicalRelation(((SearchLogicalRelation) se).getLogicalRelation());
         }
       }
-      initStatementsMenu(profile);
+      initStatementsMenu(profile, metadataLabels);
     }
   }
 
   /**
    * Return the {@link SearchGroupForm} as a {@link SearchGroup}
-   * 
+   *
    * @return
    */
   public SearchGroup getAsSearchGroup() {
-    SearchGroup groupWithAllMetadata = new SearchGroup();
-    for (SearchMetadataForm e : elements) {
-      groupWithAllMetadata.addGroup(e.getAsSearchGroup());
-      groupWithAllMetadata.addLogicalRelation(e.getLogicalRelation());
+    try {
+      SearchGroup groupWithAllMetadata = new SearchGroup();
+      for (SearchMetadataForm e : elements) {
+        groupWithAllMetadata.addGroup(e.getAsSearchGroup());
+        groupWithAllMetadata.addLogicalRelation(e.getLogicalRelation());
+      }
+      if (collectionId != null && !"".equals(collectionId)) {
+        SearchGroup searchGroup = new SearchGroup();
+        searchGroup.addPair(new SearchPair(SearchFields.col, SearchOperators.EQUALS,
+            collectionId.toString(), false));
+        searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        searchGroup.addGroup(groupWithAllMetadata);
+        return searchGroup;
+      }
+      return groupWithAllMetadata;
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error transforming search group form to searchgroup", e);
+      return new SearchGroup();
     }
-    if (collectionId != null && !"".equals(collectionId)) {
-      SearchGroup searchGroup = new SearchGroup();
-      searchGroup.addPair(
-          new SearchPair(SearchFields.col, SearchOperators.EQUALS, collectionId.toString(), false));
-      searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
-      searchGroup.addGroup(groupWithAllMetadata);
-      return searchGroup;
-    }
-    return groupWithAllMetadata;
+
   }
 
   /**
    * Validate the Search Group according to the user entries
-   * 
+   *
    * @throws UnprocessableError
    */
   public void validate() throws UnprocessableError {
@@ -137,16 +147,16 @@ public class SearchGroupForm {
 
   /**
    * Initialize the {@link Statement} for the select menu in the form
-   * 
+   *
    * @param p
    * @throws ImejiException
    */
-  public void initStatementsMenu(MetadataProfile p) throws ImejiException {
+  public void initStatementsMenu(MetadataProfile p, MetadataLabels metadataLabels)
+      throws ImejiException {
     if (p != null) {
       if (p.getStatements() != null) {
         for (Statement st : p.getStatements()) {
-          String stName = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-              .getInternationalizedLabels().get(st.getId());
+          String stName = metadataLabels.getInternationalizedLabels().get(st.getId());
           statementMenu.add(new SelectItem(st.getId().toString(), stName));
         }
       }
@@ -160,7 +170,7 @@ public class SearchGroupForm {
   /**
    * Load all the {@link CollectionImeji} using a {@link MetadataProfile} and return it as menu for
    * the searchgroup
-   * 
+   *
    * @param p
    * @return
    * @throws ImejiException
@@ -172,10 +182,11 @@ public class SearchGroupForm {
         new SearchPair(SearchFields.prof, SearchOperators.EQUALS, p.getId().toString(), false));
     List<SelectItem> l = new ArrayList<SelectItem>();
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    l.add(new SelectItem(null, session.getLabel("adv_search_collection_restrict")));
+    l.add(new SelectItem(null,
+        Imeji.RESOURCE_BUNDLE.getLabel("adv_search_collection_restrict", session.getLocale())));
     for (String uri : cc.search(q, null, -1, 0, session.getUser(), session.getSelectedSpaceString())
         .getResults()) {
-      CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(uri), session.getUser());
+      CollectionImeji c = cc.retrieveLazy(URI.create(uri), session.getUser());
       l.add(new SelectItem(c.getId().toString(), c.getMetadata().getTitle()));
     }
     return l;

@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +11,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -26,11 +26,10 @@ import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * {@link ItemsBean} within an {@link Album}: Used to browse {@link Item} of an {@link Album}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -54,7 +53,7 @@ public class AlbumItemsBean extends ItemsBean {
   }
 
   @Override
-  public String getInitPage() throws Exception {
+  public String getInitPage() throws ImejiException {
     uri = ObjectHelper.getURI(Album.class, id);
     loadAlbum();
     browseContext = getNavigationString() + id;
@@ -83,10 +82,12 @@ public class AlbumItemsBean extends ItemsBean {
   /**
    * Load the current album
    * 
-   * @throws Exception
+   * @throws ImejiException
+   *
+   * @
    */
-  public void loadAlbum() throws Exception {
-    album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
+  public void loadAlbum() throws ImejiException {
+    album = new AlbumController().retrieveLazy(uri, sb.getUser());
   }
 
   @Override
@@ -96,9 +97,8 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove the selected {@link Item} from the current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public String removeFromAlbum() {
     removeFromAlbum(sb.getSelected());
@@ -108,11 +108,11 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove selected {@link Item} from active {@link Album}
-   * 
+   *
    * @return
-   * @throws Exception
+   * @throws ImejiException @
    */
-  public String removeFromActiveAlbum() throws Exception {
+  public String removeFromActiveAlbum() throws ImejiException {
     removeFromActive(sb.getSelected());
     sb.getSelected().clear();
     return "pretty:";
@@ -120,35 +120,33 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove all current {@link Item} from {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
   public String removeAllFromAlbum() {
     try {
       removeAllFromAlbum(album);
     } catch (ImejiException e) {
-      BeanHelper.error(sb.getMessage(e.getMessage()));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(e.getMessage(), sb.getLocale()));
     }
     return "pretty:";
   }
 
   /**
    * Remove all current {@link Item} from active {@link Album}
-   * 
+   *
    * @return
-   * @throws Exception
+   * @throws ImejiException @
    */
-  public String removeAllFromActiveAlbum() throws Exception {
+  public String removeAllFromActiveAlbum() throws ImejiException {
     removeAllFromAlbum(sb.getActiveAlbum());
     return "pretty:";
   }
 
   /**
    * Remove all {@link Item} from an {@link Album}
-   * 
-   * @param album
-   * @throws Exception
+   *
+   * @param album @
    */
   private void removeAllFromAlbum(Album album) throws ImejiException {
     if (sb.getActiveAlbum() != null
@@ -170,9 +168,8 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove a list of {@link Item} from the current {@link Album}
-   * 
-   * @param uris
-   * @throws Exception
+   *
+   * @param uris @
    */
   private void removeFromAlbum(List<String> uris) {
     try {
@@ -185,7 +182,8 @@ public class AlbumItemsBean extends ItemsBean {
         album = (Album) ic.searchAndSetContainerItems(album, sb.getUser(), -1, 0);
         AlbumController ac = new AlbumController();
         int deletedCount = ac.removeFromAlbum(album, uris, sb.getUser());
-        BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
+        BeanHelper.info(deletedCount + " "
+            + Imeji.RESOURCE_BUNDLE.getMessage("success_album_remove_images", sb.getLocale()));
       }
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
@@ -194,21 +192,22 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Remove a list of {@link Item} from the active {@link Album}
-   * 
-   * @param uris
-   * @throws Exception
+   *
+   * @param uris @
    */
   private void removeFromActive(List<String> uris) throws ImejiException {
     SessionObjectsController soc = new SessionObjectsController();
     int deleted = soc.removeFromActiveAlbum(uris);
     sb.getSelected().clear();
-    BeanHelper.info(deleted + " " + sb.getMessage("success_album_remove_images"));
+    BeanHelper.info(deleted + " "
+        + Imeji.RESOURCE_BUNDLE.getMessage("success_album_remove_images", sb.getLocale()));
   }
 
   @Override
   public String getImageBaseUrl() {
-    if (album == null || album.getId() == null)
+    if (album == null || album.getId() == null) {
       return "";
+    }
     return navigation.getApplicationSpaceUrl() + "album/" + this.id + "/";
   }
 
@@ -219,57 +218,50 @@ public class AlbumItemsBean extends ItemsBean {
 
   /**
    * Release current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public String release() throws Exception {
+  public String release() {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    try {
-      ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).initView();
-    } catch (IOException e) {
-      LOGGER.error("Error during release album items", e);
-    }
+    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).release();
     return "pretty:";
   }
 
   /**
    * Delete current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public String delete() throws Exception {
+  public String delete() {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    try {
-      ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).initView();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      LOGGER.error("Error during delete album items ", e);
-    }
+    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).delete();
     return sb.getPrettySpacePage("pretty:albums");
   }
 
   /**
    * Withdraw current {@link Album}
-   * 
-   * @return
-   * @throws Exception
+   *
+   * @return @
    */
-  public String withdraw() throws Exception {
+  public String withdraw() {
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).initView();
+    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).init();
     String dc = album.getDiscardComment();
     ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).getAlbum().setDiscardComment(dc);
-    ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
+    try {
+      ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
+    } catch (ImejiException e) {
+      LOGGER.error("Error discard album", e);
+      BeanHelper.error("Error discarding album");
+    }
     return "pretty:";
   }
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   @Override
@@ -285,8 +277,8 @@ public class AlbumItemsBean extends ItemsBean {
     this.id = id;
     // @Ye set session value to share with AlbumItemsBean, another way is
     // via injection
-    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-        .put("AlbumItemsBean.id", id);
+    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("AlbumItemsBean.id",
+        id);
   }
 
   public void setCollection(CollectionImeji collection) {

@@ -2,7 +2,7 @@ package de.mpg.imeji.presentation.history;
 
 /**
  * Pages of imeji. This pages are used by the {@link HistoryFilter}
- * 
+ *
  * @author saquet
  *
  */
@@ -10,8 +10,8 @@ public enum ImejiPages {
 
   /*
    * Order is important: The History will follow the regex rules following this order to find a
-   * match
-   * MAKE SURE "HOME" (history_home) is the last in this Enum (experienced not-matching where it should otherwise)
+   * match MAKE SURE "HOME" (history_home) is the last in this Enum (experienced not-matching where
+   * it should otherwise)
    */
   ITEM_DETAIL("", ".*/item/([A-Za-z0-9-_]+).*"), COLLECTIONS("history_collections",
       "/collections"), COLLECTION_ITEMS("history_images_collection",
@@ -50,12 +50,11 @@ public enum ImejiPages {
                                                                                               "admin_space_create",
                                                                                               ".*/createspace"), EDIT_SPACE(
                                                                                                   "admin_space_edit",
-                                                                                                  ".*/space/.*/editspace"), 
-                                                                                                  PROFILE("metadata_profile",
-                                                                                                      ".*/(profile|metadataProfile)/([a-zA-Z_0-9-]+).*"),
-                                                                                                  HOME(
-                                                                                                      "history_home",
-                                                                                                      "/");
+                                                                                                  ".*/space/.*/editspace"), PROFILE(
+                                                                                                      "metadata_profile",
+                                                                                                      ".*/(profile|metadataProfile)/([a-zA-Z_0-9-]+).*"), HOME(
+                                                                                                          "history_home",
+                                                                                                          "/");
 
   /**
    * The key to the label
@@ -68,7 +67,7 @@ public enum ImejiPages {
 
   /**
    * Constructor for {@link ImejiPages}
-   * 
+   *
    * @param label
    * @param regex
    */
@@ -79,7 +78,7 @@ public enum ImejiPages {
 
   /**
    * True is the {@link ImejiPages} matches the String
-   * 
+   *
    * @param s
    * @return
    */

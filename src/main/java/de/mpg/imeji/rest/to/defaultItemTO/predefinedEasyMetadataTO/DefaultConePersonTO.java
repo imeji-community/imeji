@@ -12,9 +12,9 @@ import de.mpg.imeji.rest.to.defaultItemTO.DefaultOrganizationTO;
 
 /**
  * TO for {@link ConePerson}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 @JsonInclude(Include.NON_NULL)
 public class DefaultConePersonTO implements Serializable {

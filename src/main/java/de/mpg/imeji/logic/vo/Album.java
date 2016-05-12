@@ -14,7 +14,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Simple {@link Container} which can have {@link Item} from different {@link Collection}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

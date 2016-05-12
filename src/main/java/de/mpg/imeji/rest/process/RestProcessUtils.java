@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +18,6 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -48,7 +46,7 @@ public class RestProcessUtils {
 
   /**
    * Parse a json file and construct a new Object of type T
-   * 
+   *
    * @param json
    * @param type
    * @return
@@ -58,24 +56,24 @@ public class RestProcessUtils {
       ObjectReader reader = new ObjectMapper().reader().withType(type);
       return reader.readValue(json);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage(), e);
     }
   }
 
   /**
    * Parse a JSON to a parameterized type object. Usage:
-   * 
+   *
    * <pre>
    * buildTOFromJSON(json,new TypeReference{@literal<T>}(){})
    * </pre>
-   * 
+   *
    * For instance, to parse a {@link SearchResultTO} of {@link DefaultItemTO}, do:
-   * 
+   *
    * <pre>
    * buildTOFromJSON(json,new TypeReference{@literal<SearchResultTO<DefaultItemTO>>}(){})
    * </pre>
    *
-   * 
+   *
    * @param json
    * @param type
    * @return
@@ -87,7 +85,7 @@ public class RestProcessUtils {
     try {
       data = new ObjectMapper().readValue(json, type);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage(), e);
     }
     return data;
   }
@@ -95,36 +93,7 @@ public class RestProcessUtils {
 
   public static JsonNode buildJsonNode(Object obj) {
     ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
     return mapper.convertValue(obj, JsonNode.class);
-  }
-
-  public static DefaultItemTO buildDefaultItemTOFromJSON(HttpServletRequest req)
-      throws BadRequestException {
-    DefaultItemTO easyTO = new DefaultItemTO();
-    try {
-      JsonFactory factory = new JsonFactory();
-      ObjectMapper mapper = new ObjectMapper(factory);
-      JsonNode rootNode = mapper.readTree(req.getInputStream());
-      easyTO.setCollectionId(rootNode.path("collectionId").asText());
-
-      String metadataText = rootNode.path("metadata").toString();
-      rootNode = mapper.readTree(metadataText);
-      Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
-      while (fieldsIterator.hasNext()) {
-        Map.Entry<String, JsonNode> field = fieldsIterator.next();
-        rootNode = mapper.readTree(field.getValue().toString());
-        Iterator<Map.Entry<String, JsonNode>> fieldsIterator2 = rootNode.fields();
-        while (fieldsIterator2.hasNext()) {
-          Map.Entry<String, JsonNode> field2 = fieldsIterator2.next();
-        }
-      }
-
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage());
-    }
-    return easyTO;
-
   }
 
   public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type)
@@ -133,7 +102,7 @@ public class RestProcessUtils {
     try {
       return reader.readValue(req.getInputStream());
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 
@@ -144,7 +113,7 @@ public class RestProcessUtils {
     try {
       return reader.readValue(jsonSting);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json:", e);
     }
   }
 
@@ -153,7 +122,7 @@ public class RestProcessUtils {
     try {
       return ow.writeValueAsString(obj);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 
@@ -164,7 +133,7 @@ public class RestProcessUtils {
     try {
       return ow.writeValueAsString(obj);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 
@@ -207,7 +176,7 @@ public class RestProcessUtils {
   /**
    * This method builds exception response. Based on the error Code, local title and message (which
    * can be localized through the Language Bundles) are built
-   * 
+   *
    * @param errorCode
    * @param e
    * @return
@@ -223,7 +192,7 @@ public class RestProcessUtils {
    * This method builds the response for successfully created, updated, deleted, released etc.
    * object. It is a convenience method to save 3 lines of code every time the HTTP Response needs
    * to be built after success
-   * 
+   *
    * @param statusCode
    * @param responseObject
    * @return
@@ -238,8 +207,8 @@ public class RestProcessUtils {
   /**
    * This method checks the exception type and returns appropriate JSON Response with properly
    * set-up HTTP Code.
-   * 
-   * 
+   *
+   *
    * @param eX
    * @param message
    * @return
@@ -303,7 +272,7 @@ public class RestProcessUtils {
       ObjectMapper mapper = new ObjectMapper();
       return mapper.readValue(str, Map.class);
     } catch (Exception e) {
-      throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+      throw new BadRequestException("Cannot parse json: ", e);
     }
   }
 }

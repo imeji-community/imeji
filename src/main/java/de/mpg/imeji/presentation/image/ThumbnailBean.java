@@ -9,19 +9,19 @@ import java.net.URI;
 import javax.faces.event.ValueChangeEvent;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.metadata.MetadataSetBean;
+import de.mpg.imeji.presentation.metadata.MetadataSetWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -32,7 +32,7 @@ import de.mpg.j2j.helper.DateHelper;
 /**
  * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
  * {@link ThumbnailBean}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -46,11 +46,10 @@ public class ThumbnailBean implements Serializable {
   private String id;
   private boolean selected = false;
   private boolean isInActiveAlbum = false;
-  private MetadataSetBean mds;
+  private MetadataSetWrapper mds;
   private MetadataProfile profile;
   private MetadataSet mdSet;
   private URI collectionUri;
-  private boolean isPrivate = true;
   private String fileType;
   private String shortFileType;
   private String fileSize;
@@ -64,7 +63,7 @@ public class ThumbnailBean implements Serializable {
   /**
    * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
    * {@link ThumbnailBean}
-   * 
+   *
    * @param item
    * @param initMetadata if true, will read the metadata
    * @throws Exception
@@ -75,7 +74,6 @@ public class ThumbnailBean implements Serializable {
     this.id = ObjectHelper.getId(getUri());
     this.link = initThumbnailLink(item);
     this.filename = item.getFilename();
-    this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false);
     this.fileType = item.getFiletype();
     this.fileSize = item.getFileSizeHumanReadable();
     this.modified = DateHelper.printDate(item.getModified());
@@ -84,7 +82,7 @@ public class ThumbnailBean implements Serializable {
       SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
       this.mdSet = item.getMetadataSet();
       this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet.getProfile());
-      this.caption = filename;// findCaption();
+      this.caption = findCaption();
       this.selected = sessionBean.getSelected().contains(uri.toString());
       if (sessionBean.getActiveAlbum() != null) {
         this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
@@ -94,8 +92,8 @@ public class ThumbnailBean implements Serializable {
 
 
   /**
-   * Initialize the {@link MetadataSetBean} which is used in the Popup
-   * 
+   * Initialize the {@link MetadataSetWrapper} which is used in the Popup
+   *
    * @throws ImejiException
    */
   public void initPopup() throws ImejiException {
@@ -103,13 +101,13 @@ public class ThumbnailBean implements Serializable {
     if (getMds() == null) {
       ItemController controller = new ItemController();
       mdSet = controller.retrieve(uri, sessionBean.getUser()).getMetadataSet();
-      setMds(new MetadataSetBean(mdSet, getProfile(), false));
+      setMds(new MetadataSetWrapper(mdSet, getProfile(), false));
     }
   }
 
   /**
    * Find the link (url) to the Thumbnail
-   * 
+   *
    * @param item
    * @return
    */
@@ -120,26 +118,34 @@ public class ThumbnailBean implements Serializable {
         : navigation.getApplicationUrl() + "resources/icon/discarded.png";
   }
 
+
   /**
    * Find the caption for this {@link ThumbnailBean} as defined in the {@link MetadataProfile}. If
    * none defined in the {@link MetadataProfile} return the filename
-   * 
+   *
    * @return
+   * @throws ImejiException
    */
-  private String findCaption() {
+  private String findCaption() throws ImejiException {
+    if (profile == null) {
+      return getFilename();
+    }
     for (Statement s : profile.getStatements()) {
       if (s.isDescription()) {
+        initPopup();
         for (Metadata md : mdSet.getMetadata()) {
           if (md.getStatement().equals(s.getId())) {
             String str = "";
-            if (md instanceof Link)
+            if (md instanceof Link) {
               str = ((Link) md).getLabel();
-            else if (md instanceof Publication)
+            } else if (md instanceof Publication) {
               str = CommonUtils.removeTags(((Publication) md).getCitation());
-            else
+            } else {
               str = md.asFulltext();
-            if (!"".equals(str.trim()))
+            }
+            if (!"".equals(str.trim())) {
               return str;
+            }
           }
         }
       }
@@ -149,7 +155,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * Listener for the select box of this {@link ThumbnailBean}
-   * 
+   *
    * @param event
    */
   public void selectedChanged(ValueChangeEvent event) {
@@ -165,7 +171,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getLink() {
@@ -174,7 +180,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param link
    */
   public void setLink(String link) {
@@ -183,7 +189,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getFilename() {
@@ -192,7 +198,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param filename
    */
   public void setFilename(String filename) {
@@ -201,7 +207,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getCaption() {
@@ -210,7 +216,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param caption
    */
   public void setCaption(String caption) {
@@ -219,7 +225,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public URI getUri() {
@@ -228,7 +234,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param id
    */
   public void setUri(URI id) {
@@ -237,7 +243,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public boolean isSelected() {
@@ -246,7 +252,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param selected
    */
   public void setSelected(boolean selected) {
@@ -255,7 +261,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public boolean isInActiveAlbum() {
@@ -264,7 +270,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param isInActiveAlbum
    */
   public void setInActiveAlbum(boolean isInActiveAlbum) {
@@ -273,7 +279,7 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getId() {
@@ -289,19 +295,19 @@ public class ThumbnailBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return the mds
    */
-  public MetadataSetBean getMds() {
+  public MetadataSetWrapper getMds() {
     return mds;
   }
 
   /**
    * setter
-   * 
+   *
    * @param mds the mds to set
    */
-  public void setMds(MetadataSetBean mds) {
+  public void setMds(MetadataSetWrapper mds) {
     this.mds = mds;
   }
 
@@ -319,14 +325,6 @@ public class ThumbnailBean implements Serializable {
 
   public void setProfile(MetadataProfile profile) {
     this.profile = profile;
-  }
-
-  public boolean isPrivate() {
-    return isPrivate;
-  }
-
-  public void setPrivate(boolean isPrivate) {
-    this.isPrivate = isPrivate;
   }
 
   public String getFileType() {

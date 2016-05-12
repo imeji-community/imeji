@@ -12,15 +12,15 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.resource.UserGroupController;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Clean empty {@link MetadataProfile}, which are not referenced by any collection
- * 
+ *
  * @author saquet
  *
  */
@@ -41,7 +41,7 @@ public class CleanUserGroupsJob implements Callable<Integer> {
 
   /**
    * Clean all usergrouf of their zombie members, ie, members that doesn't exist anymore in the db
-   * 
+   *
    * @throws ImejiException
    */
   private void cleanZombieMember() throws ImejiException {
@@ -55,7 +55,7 @@ public class CleanUserGroupsJob implements Callable<Integer> {
 
   /**
    * Look for all group member which are no user anymore
-   * 
+   *
    * @return
    */
   private List<URI> findZombieMember() {
@@ -85,7 +85,7 @@ public class CleanUserGroupsJob implements Callable<Integer> {
 
   /**
    * Retrieve a user
-   * 
+   *
    * @param userId
    * @return
    * @throws ImejiException
@@ -97,7 +97,7 @@ public class CleanUserGroupsJob implements Callable<Integer> {
 
   /**
    * Get All User Group
-   * 
+   *
    * @return
    */
   private List<UserGroup> getAllUserGroups() {

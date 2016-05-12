@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +19,7 @@ import java.util.concurrent.Executors;
 import org.apache.jena.atlas.lib.AlarmClock;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
+import org.jose4j.lang.JoseException;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
@@ -31,13 +34,22 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.auth.ImejiRsaKeys;
+import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.config.ImejiConfiguration;
+import de.mpg.imeji.logic.config.ImejiProperties;
+import de.mpg.imeji.logic.config.ImejiResourceBundle;
+import de.mpg.imeji.logic.controller.business.MetadataProfileBusinessController;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.resource.UserController.USER_TYPE;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
+import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -46,14 +58,11 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
 
 /**
  * {@link Jena} interface for imeji
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -73,7 +82,14 @@ public class Imeji {
   public static MetadataProfile defaultMetadataProfile;
   private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
   private static final String ADMIN_PASSWORD_INIT = "admin";
-  public static ConfigurationBean CONFIG;
+  public static ImejiConfiguration CONFIG;
+  public static ImejiProperties PROPERTIES = new ImejiProperties();
+  /**
+   * The path for this servlet as defined in the web.xml
+   */
+  public static final String FILE_SERVLET_PATH = "file";
+
+  public static final ImejiResourceBundle RESOURCE_BUNDLE = new ImejiResourceBundle();
   /**
    * Thread to check if locked objects can be unlocked
    */
@@ -88,13 +104,20 @@ public class Imeji {
   public static final NightlyExecutor nightlyExecutor = new NightlyExecutor();
 
   /**
+   * private Constructor
+   */
+  private Imeji() {
+    // avoid constructor
+  }
+
+  /**
    * Initialize the {@link Jena} database according to imeji.properties<br/>
    * Called when the server (Tomcat of JBoss) is started
-   * 
+   *
    * @throws URISyntaxException
    * @throws IOException
    * @throws ImejiException
-   * 
+   *
    */
   public static void init() throws IOException, URISyntaxException, ImejiException {
     tdbPath = PropertyReader.getProperty("imeji.tdb.path");
@@ -105,7 +128,7 @@ public class Imeji {
 
   /**
    * Run the migration instruction (SPARQL Update queries defines in the migration.xml file)
-   * 
+   *
    * @throws IOException
    */
   public static void runMigration() throws IOException {
@@ -114,7 +137,7 @@ public class Imeji {
     try {
       in = new FileInputStream(f);
     } catch (FileNotFoundException e) {
-      LOGGER.info("No" + f.getAbsolutePath() + " found, no migration runs");
+      LOGGER.info("No" + f.getAbsolutePath() + " found, no migration runs", e);
     }
     if (in != null) {
       String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
@@ -127,7 +150,7 @@ public class Imeji {
 
   /**
    * Initialize a {@link Jena} database according at one path location in filesystem
-   * 
+   *
    * @param path
    * @throws ImejiException
    * @throws URISyntaxException
@@ -160,7 +183,9 @@ public class Imeji {
     initModel(profileModel);
     initModel(spaceModel);
     LOGGER.info("... models done!");
-    CONFIG = new ConfigurationBean();
+    CONFIG = new ImejiConfiguration();
+    KeyValueStoreBusinessController.startAllStores();
+    initRsaKeys();
     initadminUser();
     initDefaultMetadataProfile();
   }
@@ -175,7 +200,7 @@ public class Imeji {
 
   /**
    * Initialize (Create when not existing) a {@link Model} with a given name
-   * 
+   *
    * @param name
    */
   private static void initModel(String name) {
@@ -192,8 +217,23 @@ public class Imeji {
       dataset.commit();
     } catch (Exception e) {
       dataset.abort();
+      LOGGER.fatal("Error initialising model " + name, e);
     } finally {
       dataset.end();
+    }
+  }
+
+  /**
+   * Initialize the RSA Keys, used to generate API Keys
+   */
+  private static void initRsaKeys() {
+    try {
+      ImejiRsaKeys.init(Imeji.CONFIG.getRsaPublicKey(), Imeji.CONFIG.getRsaPrivateKey());
+      Imeji.CONFIG.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
+      Imeji.CONFIG.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
+      Imeji.CONFIG.saveConfig();
+    } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+      LOGGER.error("!!! Error initalizing API Key !!!", e);
     }
   }
 
@@ -209,6 +249,7 @@ public class Imeji {
       adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));
       adminUser.getGrants()
           .addAll(AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
+      adminUser.setApiKey(APIKeyAuthentication.generateKey(adminUser.getId(), Integer.MAX_VALUE));
       // create
       UserController uc = new UserController(Imeji.adminUser);
       List<User> admins = uc.retrieveAllAdmins();
@@ -218,8 +259,8 @@ public class Imeji {
         } catch (NotFoundException e) {
           LOGGER.info(
               "!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
-          uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
-          LOGGER.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
+          Imeji.adminUser = uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
+          LOGGER.info("Created admin user successfully:" + Imeji.adminUser.getEmail(), e);
         }
       } else {
         LOGGER.info("Admin user already exists:");
@@ -228,7 +269,7 @@ public class Imeji {
         }
       }
     } catch (AlreadyExistsException e) {
-      LOGGER.warn(Imeji.adminUser.getEmail() + " already exists");
+      LOGGER.warn(Imeji.adminUser.getEmail() + " already exists", e);
     } catch (Exception e) {
       if (e.getCause() instanceof AlreadyExistsException) {
         LOGGER.warn(Imeji.adminUser.getEmail() + " already exists");
@@ -239,10 +280,10 @@ public class Imeji {
   }
 
   private static void initDefaultMetadataProfile() {
-    ProfileController pc = new ProfileController();
+    MetadataProfileBusinessController metadataProfileBC = new MetadataProfileBusinessController();
     LOGGER.info("Initializing default metadata profile...");
     try {
-      defaultMetadataProfile = pc.initDefaultMetadataProfile();
+      defaultMetadataProfile = metadataProfileBC.initDefaultMetadataProfile();
     } catch (Exception e) {
       LOGGER.error("error retrieving/creating default metadata profile: ", e);
     }
@@ -261,6 +302,7 @@ public class Imeji {
     nightlyExecutor.stop();
     LOGGER.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
     ElasticService.shutdown();
+    KeyValueStoreBusinessController.stopAllStores();
     LOGGER.info("Ending LockSurveyor...");
     locksSurveyor.terminate();
     LOGGER.info("...done");
@@ -288,7 +330,7 @@ public class Imeji {
 
   /**
    * Return the name of the model if defined in a {@link Class} with {@link j2jModel} annotation
-   * 
+   *
    * @param voClass
    * @return
    */
@@ -301,7 +343,7 @@ public class Imeji {
    * Returns true if checksum of uploaded files will be checked for duplicates within a single
    * collection according to settings in properties. If properties do not exist, checksum duplicate
    * checking will be set as default
-   * 
+   *
    */
 
   public static boolean isValidateChecksumInCollection() {

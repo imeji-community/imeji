@@ -5,11 +5,9 @@ import java.lang.annotation.RetentionPolicy;
 
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import de.mpg.imeji.logic.vo.Metadata;
-
 /**
- * The {@link RDF}.type of an object. Used to define the {@link Metadata} types
- * 
+ * The {@link RDF}.type of an object.
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

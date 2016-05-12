@@ -16,8 +16,8 @@ import org.openimaj.image.feature.local.keypoints.Keypoint;
 import org.openimaj.video.Video;
 import org.openimaj.video.xuggle.XuggleVideo;
 
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.TempFileUtil;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 public final class VideoUtils {
   private static final float IMAGE_DETECTION_UPPER_THRESHOLD = 0.1F;
@@ -67,46 +67,46 @@ public final class VideoUtils {
 
   /**
    * Gets byte array of an snapshot image from provided URL video
-   * 
+   *
    * @param url
    * @return byte array of an image from video file
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] videoToImageBytes(URL url) throws FileNotFoundException, IOException {
+  public static byte[] videoToImageBytes(URL url) throws IOException {
     return VideoUtils.videoFileToByteAray(url, VideoUtils.getGoodImageDetectionThreshold(),
         VideoUtils.IMAGE_FILE_EXTENTION);
   }
 
   /**
    * Gets byte array of an snapshot image from provided URL video
-   * 
+   *
    * @param md_url
    * @return byte array of an image from video file
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] videoToImageBytes(File file) throws FileNotFoundException, IOException {
+  public static byte[] videoToImageBytes(File file) throws IOException {
     return VideoUtils.videoFileToByteAray(file, VideoUtils.getGoodImageDetectionThreshold(),
         VideoUtils.IMAGE_FILE_EXTENTION);
   }
 
   /**
    * Gets byte array of an snapshot image from provided video as byte array
-   * 
+   *
    * @param bytes
    * @return byte array of an image from video file
    * @throws FileNotFoundException
    * @throws IOException
    */
-  public static byte[] videoToImageBytes(byte[] bytes) throws FileNotFoundException, IOException {
+  public static byte[] videoToImageBytes(byte[] bytes) throws IOException {
     return VideoUtils.videoFileToByteAray(bytes, VideoUtils.getGoodImageDetectionThreshold(),
         VideoUtils.IMAGE_FILE_EXTENTION);
   }
 
   /**
    * Gets byte array of an snapshot image from provided url video
-   * 
+   *
    * @param md_url
    * @param threshold
    * @param fileExtention
@@ -135,7 +135,7 @@ public final class VideoUtils {
 
   /**
    * Gets byte array of an snapshot image from provided url video
-   * 
+   *
    * @param url
    * @param threshold
    * @param fileExtention
@@ -157,7 +157,7 @@ public final class VideoUtils {
 
   /**
    * Gets byte array of an snapshot image from provided url video
-   * 
+   *
    * @param md_url
    * @param threshold
    * @param fileExtention
@@ -180,7 +180,7 @@ public final class VideoUtils {
   /**
    * This method gets a snapshot image as byte array using threshold bounding algorithms to
    * validate, whether a good candidate image is found.
-   * 
+   *
    * @param video
    * @param threshold, for upper and lower bound
    * @param fileExtention
@@ -227,7 +227,7 @@ public final class VideoUtils {
   /**
    * This method gets a snapshot image as byte array using threshold bounding algorithms to
    * validate.
-   * 
+   *
    * @param video
    * @param threshold, describe feature threshold
    * @param fileExtention

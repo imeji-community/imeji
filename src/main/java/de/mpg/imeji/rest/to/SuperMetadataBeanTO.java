@@ -13,15 +13,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
-import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
+import de.mpg.imeji.rest.transfer.MetadataTransferHelper;
 
 @XmlRootElement
 @JsonInclude(Include.NON_EMPTY)
@@ -29,12 +27,11 @@ import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all
  * metadata types.
- * 
+ *
  * @author saquet
  */
-public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Serializable {
+public class SuperMetadataBeanTO implements Comparable<SuperMetadataBeanTO>, Serializable {
   private static final long serialVersionUID = 5166665303590747237L;
-  private ObjectMapper mapper = new ObjectMapper();
   /**
    * The {@link Metadata} defined within thie {@link SuperMetadataBeanTO}
    */
@@ -54,7 +51,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
   /**
    * Define the position if the metadata in the {@link SuperMetadataTreeTO}
    */
-  
+
   @JsonIgnore
   private String treeIndex = "";
   /**
@@ -65,19 +62,19 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
   /**
    * All the childs of the metadata
    */
-  
+
   @JsonIgnore
   private String label;
   @JsonIgnore
   private List<JsonNode> values = new ArrayList<JsonNode>();
-  
+
 
   private List<JsonNode> jsonField;
   @JsonManagedReference
   private List<SuperMetadataBeanTO> childs = new ArrayList<SuperMetadataBeanTO>();
-  
+
   private JsonNode jsonFieldSingle;
-  
+
   /**
    * A field where it is possible to define many other fields
    */
@@ -87,7 +84,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
   /**
    * Bean for all Metadata types. This bean should have all variable that have been defined in all
    * metadata types.
-   * 
+   *
    * @param metadata
    */
   public SuperMetadataBeanTO(Metadata metadata, Statement statement) {
@@ -106,9 +103,9 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * Return the {@link Metadata} which has been used to initialize this {@link SuperMetadataBeanTO}
-   * Not to use to save the {@link SuperMetadataBeanTO} as a {@link Metadata} in the database. In this
-   * case use the asMetadata() method
-   * 
+   * Not to use to save the {@link SuperMetadataBeanTO} as a {@link Metadata} in the database. In
+   * this case use the asMetadata() method
+   *
    * @return
    */
   @JsonIgnore
@@ -119,7 +116,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
   /**
    * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI
    * representation
-   * 
+   *
    * @return
    */
   @JsonIgnore
@@ -127,10 +124,10 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
     return ObjectHelper.getId(getStatement().getId());
   }
 
-  
-    /**
+
+  /**
    * getter
-   * 
+   *
    * @return
    */
   public String getLabel() {
@@ -139,17 +136,17 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * setter
-   * 
+   *
    * @param label
    */
   public void setLabel(String label) {
     this.label = label;
   }
 
- 
+
   /**
    * getter
-   * 
+   *
    * @return
    */
   public int getPos() {
@@ -158,7 +155,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * setter
-   * 
+   *
    * @param pos
    */
   public void setPos(int pos) {
@@ -167,7 +164,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * setter
-   * 
+   *
    * @param parent the parent to set
    */
   public void setParent(SuperMetadataBeanTO parent) {
@@ -176,7 +173,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * getter
-   * 
+   *
    * @return the parent
    */
   public SuperMetadataBeanTO getParent() {
@@ -185,7 +182,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * getter
-   * 
+   *
    * @return the hierarchyLevel
    */
 
@@ -194,10 +191,10 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
     return (getTreeIndex().length() - 1) / 2;
   }
 
-  
-   /**
+
+  /**
    * getter
-   * 
+   *
    * @return the statement
    */
   public Statement getStatement() {
@@ -206,7 +203,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * setter
-   * 
+   *
    * @param statement the statement to set
    */
   public void setStatement(Statement statement) {
@@ -220,7 +217,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
 
   /**
    * Return the higher parent
-   * 
+   *
    * @return
    */
   public SuperMetadataBeanTO lastParent() {
@@ -234,7 +231,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
   /**
    * @return the childs
    */
-  
+
   public List<SuperMetadataBeanTO> getChilds() {
     return childs;
   }
@@ -246,7 +243,7 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
     this.childs = childs;
   }
 
- 
+
   /**
    * @return the treeIndex
    */
@@ -285,32 +282,32 @@ public class SuperMetadataBeanTO implements  Comparable<SuperMetadataBeanTO>, Se
   public void setJsonFieldList(List<JsonNode> jsonField) {
 
     if (!isMultiple()) {
-        this.jsonFieldSingle = jsonField.get(0);
-    }
-    else
-    {
+      this.jsonFieldSingle = jsonField.get(0);
+    } else {
       this.jsonField = jsonField;
     }
   }
-  
-  public boolean isMultiple(){
-      return !statement.getMaxOccurs().equals("1");
+
+  public boolean isMultiple() {
+    return !statement.getMaxOccurs().equals("1");
   }
-  
-  
-   @Override
+
+
+  @Override
   public int compareTo(SuperMetadataBeanTO o) {
-    if (statement.getPos() > o.getStatement().getPos())
+    if (statement.getPos() > o.getStatement().getPos()) {
       return 1;
-    else if (statement.getPos() < o.getStatement().getPos())
+    } else if (statement.getPos() < o.getStatement().getPos()) {
       return -1;
-    if (getPos() > o.getPos())
+    }
+    if (getPos() > o.getPos()) {
       return 1;
-    else if (getPos() < o.getPos())
+    } else if (getPos() < o.getPos()) {
       return -1;
+    }
     return 0;
   }
 
 
-  
+
 }

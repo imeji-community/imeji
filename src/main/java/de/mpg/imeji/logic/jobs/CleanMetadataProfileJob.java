@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
  * Clean unused {@link MetadataProfile}
- * 
+ *
  * @author saquet
  *
  */
@@ -32,7 +32,8 @@ public class CleanMetadataProfileJob implements Callable<Integer> {
   public Integer call() throws Exception {
     Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     List<String> r =
-        s.searchString(JenaCustomQueries.selectUnusedMetadataProfiles(), null, null, 0, -1).getResults();
+        s.searchString(JenaCustomQueries.selectUnusedMetadataProfiles(), null, null, 0, -1)
+            .getResults();
     ProfileController pc = new ProfileController();
     for (String uri : r) {
       profiles.add(pc.retrieve(URI.create(uri), Imeji.adminUser));

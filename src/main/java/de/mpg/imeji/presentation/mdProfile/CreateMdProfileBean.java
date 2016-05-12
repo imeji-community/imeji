@@ -7,9 +7,10 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -18,11 +19,10 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Java Bean for {@link MetadataProfile} create page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -54,7 +54,7 @@ public class CreateMdProfileBean {
 
   /**
    * Create a new profile, assign it to the current collection and redirect to the previous page
-   * 
+   *
    * @throws Exception
    */
   public void startNewProfile() throws Exception {
@@ -70,7 +70,7 @@ public class CreateMdProfileBean {
 
   /**
    * Change the profile of the current collection with the selected method
-   * 
+   *
    * @throws Exception
    */
   public void selectProfile() throws Exception {
@@ -81,7 +81,7 @@ public class CreateMdProfileBean {
 
   /**
    * Change the
-   * 
+   *
    * @param profile
    * @param method
    * @return
@@ -100,7 +100,7 @@ public class CreateMdProfileBean {
 
   /**
    * Go to the previous page in the History
-   * 
+   *
    * @throws Exception
    */
   public void cancel() throws Exception {

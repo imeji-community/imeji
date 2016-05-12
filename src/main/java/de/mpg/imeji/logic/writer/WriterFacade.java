@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -26,7 +26,6 @@ package de.mpg.imeji.logic.writer;
 
 import java.net.URI;
 import java.security.Security;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,15 +35,14 @@ import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.exceptions.WorkflowException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
-import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchIndexer;
-import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.validation.ValidatorFactory;
+import de.mpg.imeji.logic.validation.impl.Validator;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -58,7 +56,7 @@ import de.mpg.imeji.logic.workflow.WorkflowValidator;
 
 /**
  * Facade implementing Writer {@link Authorization}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -94,7 +92,7 @@ public class WriterFacade {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.writer.Writer#create(java.util.List, de.mpg.imeji.logic.vo.User)
    */
   public void create(List<Object> objects, MetadataProfile profile, User user)
@@ -110,7 +108,7 @@ public class WriterFacade {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.writer.Writer#delete(java.util.List, de.mpg.imeji.logic.vo.User)
    */
   public void delete(List<Object> objects, User user) throws ImejiException {
@@ -126,7 +124,7 @@ public class WriterFacade {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List, de.mpg.imeji.logic.vo.User),
    * choose to check security
    */
@@ -145,7 +143,7 @@ public class WriterFacade {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.writer.Writer#updateLazy(java.util.List, de.mpg.imeji.logic.vo.User)
    */
   public void updateLazy(List<Object> objects, MetadataProfile profile, User user)
@@ -157,27 +155,6 @@ public class WriterFacade {
     validate(objects, profile, Validator.Method.UPDATE);
     writer.updateLazy(objects, user);
     indexer.indexBatch(objects);
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see de.mpg.imeji.logic.writer.Writer#updatePatch(java.util.List, de.mpg.imeji.logic.vo.User)
-   */
-  public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
-      throws ImejiException {
-    if (triples.isEmpty()) {
-      return;
-    }
-    List<Object> l = new ArrayList<Object>();
-    for (ImejiTriple t : triples) {
-      l.add(t.getObject());
-    }
-    if (doCheckSecurity) {
-      checkSecurity(l, user, GrantType.UPDATE);
-    }
-    writer.patch(triples, user, doCheckSecurity);
-
   }
 
   @SuppressWarnings("unchecked")
@@ -203,7 +180,7 @@ public class WriterFacade {
 
   /**
    * Check {@link Security} for WRITE operations
-   * 
+   *
    * @param list
    * @param user
    * @param opType
@@ -233,7 +210,7 @@ public class WriterFacade {
 
   /**
    * Check {@link Security} for WRITE operations
-   * 
+   *
    * @param list
    * @param user
    * @param opType
@@ -250,7 +227,7 @@ public class WriterFacade {
 
   /**
    * Extract the id (as {@link URI}) of an imeji {@link Object},
-   * 
+   *
    * @param o
    * @return
    */
@@ -273,7 +250,7 @@ public class WriterFacade {
 
   /**
    * If false, throw a {@link NotAllowedError}
-   * 
+   *
    * @param b
    * @param message
    * @throws NotAllowedError
@@ -293,7 +270,7 @@ public class WriterFacade {
 
   /**
    * Transform a single {@link Object} into a {@link List} with one {@link Object}
-   * 
+   *
    * @param o
    * @return
    */

@@ -11,7 +11,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * Class helper for {@link Literal} objects
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -22,7 +22,7 @@ public class LiteralHelper {
 
   /**
    * Cosntructor for one model
-   * 
+   *
    * @param model
    */
   public LiteralHelper(Model model) {
@@ -31,7 +31,7 @@ public class LiteralHelper {
 
   /**
    * Transform data types used in jean by data types used for j2j
-   * 
+   *
    * @param o
    * @return
    */
@@ -47,7 +47,7 @@ public class LiteralHelper {
 
   /**
    * Transform a javo {@link Object} to a {@link Literal}
-   * 
+   *
    * @param p
    * @param o
    * @return

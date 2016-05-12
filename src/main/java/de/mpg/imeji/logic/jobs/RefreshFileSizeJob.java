@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
@@ -19,9 +19,9 @@ import de.mpg.imeji.logic.vo.Item;
 /**
  * Job which read all Items, read for each {@link Item} the size of the original File, and write the
  * items in Jena back with the file size;
- * 
+ *
  * @author saquet
- * 
+ *
  */
 public class RefreshFileSizeJob implements Callable<Integer> {
   private static final Logger LOGGER = Logger.getLogger(RefreshFileSizeJob.class);
@@ -48,12 +48,12 @@ public class RefreshFileSizeJob implements Callable<Integer> {
         f = new File(path);
         Dimension d = ImageUtils.getImageDimension(f);
         if (d != null && d.width > 0 && d.height > 0) {
-          ImejiSPARQL.execUpdate(JenaCustomQueries.insertFileSizeAndDimension(item.getId()
-              .toString(), Long.toString(f.length()), Long.toString(d.width), Long
-              .toString(d.height)));
+          ImejiSPARQL
+              .execUpdate(JenaCustomQueries.insertFileSizeAndDimension(item.getId().toString(),
+                  Long.toString(f.length()), Long.toString(d.width), Long.toString(d.height)));
         } else {
-          ImejiSPARQL.execUpdate(JenaCustomQueries.insertFileSize(item.getId().toString(),
-              Long.toString(f.length())));
+          ImejiSPARQL.execUpdate(
+              JenaCustomQueries.insertFileSize(item.getId().toString(), Long.toString(f.length())));
         }
 
       } catch (Exception e) {

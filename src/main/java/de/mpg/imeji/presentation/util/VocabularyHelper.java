@@ -12,11 +12,12 @@ import java.util.Properties;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.util.PropertyReader;
 
 /**
  * Helper to work with vocabularies
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -41,17 +42,16 @@ public class VocabularyHelper {
    * Initialize the vocabularies
    */
   public void initVocabularies() {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     vocabularies = new ArrayList<SelectItem>();
     for (Object o : properties.keySet()) {
       vocabularies.add(new SelectItem(properties.getProperty(o.toString()),
-          session.getLabel("vocabulary_" + o.toString())));
+          Imeji.RESOURCE_BUNDLE.getLabel("vocabulary_" + o.toString(), BeanHelper.getLocale())));
     }
   }
 
   /**
    * Load the properties form the file vocabularies.properties
-   * 
+   *
    * @throws IOException
    */
   public void loadProperties() throws IOException {
@@ -78,7 +78,7 @@ public class VocabularyHelper {
 
   /**
    * Return the name of a vocabulary as defined in the properties
-   * 
+   *
    * @param uri
    * @return
    */

@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -20,7 +19,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * {@link Metadata} for geolocation data
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -103,7 +102,6 @@ public class Geolocation extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    // Nothing to do
   }
 }

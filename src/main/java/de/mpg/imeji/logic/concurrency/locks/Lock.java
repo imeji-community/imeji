@@ -10,7 +10,7 @@ public class Lock {
 
   /**
    * Lock for one user (Used for GUI presentation)
-   * 
+   *
    * @param uri
    * @param email
    */
@@ -22,7 +22,7 @@ public class Lock {
 
   /**
    * Lock for all users (Used by system operation)
-   * 
+   *
    * @param uri
    */
   public Lock(String uri) {

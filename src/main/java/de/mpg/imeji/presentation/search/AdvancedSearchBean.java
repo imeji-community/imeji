@@ -18,30 +18,31 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.model.FileTypes.Type;
 import de.mpg.imeji.logic.search.model.SearchGroup;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.FileTypes.Type;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java bean for the advanced search page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 public class AdvancedSearchBean {
   private SearchForm formular = null;
+  private MetadataLabels metadataLabels;
   // Menus
   private List<SelectItem> profilesMenu;
   private List<SelectItem> collectionsMenu;
@@ -58,15 +59,19 @@ public class AdvancedSearchBean {
 
   /**
    * Constructor for the {@link AdvancedSearchBean}
+   *
+   * @throws ImejiException
    */
-  public AdvancedSearchBean() {
+  public AdvancedSearchBean() throws ImejiException {
     session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    metadataLabels = new MetadataLabels(new MetadataProfile(), session.getLocale());
+    formular = new SearchForm(new SearchQuery(), new HashMap<>(), metadataLabels);
   }
 
   /**
    * Called when the page is called per get request. Read the query in the url and initialize the
    * form with it
-   * 
+   *
    * @return
    */
   public String getNewSearch() {
@@ -90,25 +95,27 @@ public class AdvancedSearchBean {
    */
   private void initMenus() {
     operatorsMenu = new ArrayList<SelectItem>();
-    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and_small")));
-    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or_small")));
+    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND,
+        Imeji.RESOURCE_BUNDLE.getLabel("and_small", session.getLocale())));
+    operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR,
+        Imeji.RESOURCE_BUNDLE.getLabel("or_small", session.getLocale())));
     fileTypesMenu = new ArrayList<>();
-    for (Type type : ConfigurationBean.getFileTypesStatic().getTypes()) {
+    for (Type type : Imeji.CONFIG.getFileTypes().getTypes()) {
       fileTypesMenu.add(new SelectItem(type.getName(session.getLocale().getLanguage())));
     }
   }
 
   /**
    * Initialized the search form with the {@link SearchQuery}
-   * 
+   *
    * @param searchQuery
    * @throws Exception
    */
   public void initForm(SearchQuery searchQuery) throws Exception {
     Map<String, MetadataProfile> profs = loadProfilesAndInitMenu();
-    ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-        .init1((new ArrayList<MetadataProfile>(profs.values())));
-    formular = new SearchForm(searchQuery, profs);
+    metadataLabels =
+        new MetadataLabels(new ArrayList<MetadataProfile>(profs.values()), session.getLocale());
+    formular = new SearchForm(searchQuery, profs, metadataLabels);
     if (formular.getGroups().size() == 0) {
       formular.addSearchGroup(0);
     }
@@ -121,7 +128,7 @@ public class AdvancedSearchBean {
   private void initFileTypesSelected() {
     fileTypesSelected = new ArrayList<String>();
     for (String t : formular.getFileTypeSearch().getValue().split(Pattern.quote("|"))) {
-      Type type = ConfigurationBean.getFileTypesStatic().getType(t);
+      Type type = Imeji.CONFIG.getFileTypes().getType(t);
       if (type != null) {
         fileTypesSelected.add(type.getName(session.getLocale().getLanguage()));
       }
@@ -131,7 +138,7 @@ public class AdvancedSearchBean {
 
   /**
    * Reset the Search form with empty values
-   * 
+   *
    * @throws Exception
    */
   public String reset() throws Exception {
@@ -141,13 +148,14 @@ public class AdvancedSearchBean {
 
   /**
    * Load all available profiles
-   * 
+   *
    * @return
    * @throws ImejiException
    */
   private Map<String, MetadataProfile> loadProfilesAndInitMenu() throws ImejiException {
     profilesMenu = new ArrayList<SelectItem>();
-    profilesMenu.add(new SelectItem(null, session.getLabel("select_profile")));
+    profilesMenu.add(new SelectItem(null,
+        Imeji.RESOURCE_BUNDLE.getLabel("select_profile", session.getLocale())));
     ProfileController controller = new ProfileController();
     Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
     for (MetadataProfile p : controller.search(session.getUser(),
@@ -162,7 +170,7 @@ public class AdvancedSearchBean {
 
   /**
    * Method called when form is submitted
-   * 
+   *
    * @return
    * @throws IOException
    */
@@ -176,7 +184,7 @@ public class AdvancedSearchBean {
 
   /**
    * Redirect to the search result page
-   * 
+   *
    * @throws IOException
    */
   public void goToResultPage() throws IOException {
@@ -187,10 +195,9 @@ public class AdvancedSearchBean {
       String q = SearchQueryParser.transform2UTF8URL(formular.getFormularAsSearchQuery());
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(navigation.getBrowseUrl() + "?q=" + q);
-    } catch (UnprocessableError e1) {
-      for (String m : e1.getMessages()) {
-        BeanHelper.error(session.getMessage(m));
-      }
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, session.getLocale());
+      LOGGER.error("Error invalid search form", e);
     }
   }
 
@@ -202,7 +209,7 @@ public class AdvancedSearchBean {
 
   /**
    * REturn the file types Selected as a query
-   * 
+   *
    * @return
    */
   private String getFileTypesQuery() {
@@ -219,13 +226,13 @@ public class AdvancedSearchBean {
 
   /**
    * Change the {@link SearchGroup}
-   * 
+   *
    * @throws ImejiException
    */
   public void changeGroup() throws ImejiException {
     int gPos = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext()
         .getRequestParameterMap().get("gPos"));
-    formular.changeSearchGroup(gPos);
+    formular.changeSearchGroup(gPos, metadataLabels);
   }
 
   /**
@@ -299,16 +306,17 @@ public class AdvancedSearchBean {
 
   /**
    * Return the current {@link SearchQuery} in the form as a user friendly query
-   * 
+   *
    * @return
    */
   public String getSimpleQuery() {
-    return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
+    return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery(),
+        session.getLocale(), metadataLabels.getInternationalizedLabels());
   }
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getProfilesMenu() {
@@ -317,7 +325,7 @@ public class AdvancedSearchBean {
 
   /**
    * Setter
-   * 
+   *
    * @param collectionsMenu
    */
   public void setProfilesMenu(List<SelectItem> profilesMenu) {
@@ -326,7 +334,7 @@ public class AdvancedSearchBean {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public SearchForm getFormular() {
@@ -335,7 +343,7 @@ public class AdvancedSearchBean {
 
   /**
    * stter
-   * 
+   *
    * @param formular
    */
   public void setFormular(SearchForm formular) {
@@ -344,7 +352,7 @@ public class AdvancedSearchBean {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getOperatorsMenu() {
@@ -353,7 +361,7 @@ public class AdvancedSearchBean {
 
   /**
    * Setter
-   * 
+   *
    * @param operatorsMenu
    */
   public void setOperatorsMenu(List<SelectItem> operatorsMenu) {
@@ -408,6 +416,10 @@ public class AdvancedSearchBean {
 
   public void setCollectionsMenu(List<SelectItem> collectionsMenu) {
     this.collectionsMenu = collectionsMenu;
+  }
+
+  public MetadataLabels getMetadataLabels() {
+    return metadataLabels;
   }
 
 }

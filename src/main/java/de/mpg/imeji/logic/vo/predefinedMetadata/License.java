@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -21,7 +20,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * {@link Metadata} for license value
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -52,8 +51,9 @@ public class License extends Metadata {
   }
 
   public String getDateString() {
-    if (date == null || date.isLenient())
+    if (date == null || date.isLenient()) {
       return "";
+    }
     return date.format(date);
   }
 
@@ -110,7 +110,6 @@ public class License extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    license = license != null ? license.trim() : null;
   }
 }

@@ -11,7 +11,9 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.SpaceController;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 @ManagedBean(name = "EditSpaceBean")
@@ -32,7 +34,7 @@ public class EditSpaceBean extends SpaceBean {
         FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
       } else {
         FacesContext.getCurrentInstance().getExternalContext()
-            .redirect(navigation.getApplicationUrl() + navigation.spacesAllSlug);
+            .redirect(navigation.getApplicationUrl() + Navigation.spacesAllSlug);
       }
     }
 
@@ -49,9 +51,8 @@ public class EditSpaceBean extends SpaceBean {
   public boolean updatedSpace() throws ImejiException, IOException {
     try {
       SpaceController spaceController = new SpaceController();
-      File spaceLogoFile =
-          (sessionBean.getSpaceLogoIngestImage() != null) ? sessionBean.getSpaceLogoIngestImage()
-              .getFile() : null;
+      File spaceLogoFile = (sessionBean.getSpaceLogoIngestImage() != null)
+          ? sessionBean.getSpaceLogoIngestImage().getFile() : null;
       setSpace(spaceController.update(getSpace(), getSelectedCollections(), spaceLogoFile,
           sessionBean.getUser()));
       // reset the Session bean and this local, as anyway it will navigate
@@ -59,16 +60,18 @@ public class EditSpaceBean extends SpaceBean {
       // Note: check how it will work with eDit! Edit bean should be
       // implemented
       setIngestImage(null);
-      BeanHelper.info(sessionBean.getMessage("success_space_update"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_space_update", sessionBean.getLocale()));
       return true;
     } catch (UnprocessableError e) {
-        BeanHelper.cleanMessages();
-        BeanHelper.error(sessionBean.getMessage("error_space_update"));
-        List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
-        for (String errorM : listOfErrors) {
-          BeanHelper.error(sessionBean.getMessage(errorM));
-        }
-       return false;
+      BeanHelper.cleanMessages();
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_space_update", sessionBean.getLocale()));
+      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+      for (String errorM : listOfErrors) {
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage(errorM, sessionBean.getLocale()));
+      }
+      return false;
     }
   }
 

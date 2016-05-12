@@ -21,25 +21,25 @@ import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.authentication.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.notification.NotificationUtils;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * The Servlet to Read files from imeji {@link Storage}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -55,10 +55,6 @@ public class FileServlet extends HttpServlet {
   private static final String RESOURCE_EMTPY_ICON_URL =
       "http://localhost:8080/imeji/resources/icon/empty.png";
 
-  /**
-   * The path for this servlet as defined in the web.xml
-   */
-  public static final String SERVLET_PATH = "file";
 
   @Override
   public void init() {
@@ -131,7 +127,7 @@ public class FileServlet extends HttpServlet {
     boolean isExternalStorage = false;
     if (!AuthUtil.isSpaceUrl(url)) {
       Item fileItem = getItem(url, user);
-      NotificationUtils.notifyByItemDownload(user, fileItem, session);
+      NotificationUtils.notifyByItemDownload(user, fileItem, session.getLocale());
       isExternalStorage = StringHelper.isNullOrEmptyTrim(fileItem.getStorageId());
     }
     readFile(url, resp, isExternalStorage, user);
@@ -140,7 +136,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Read a File and write it back in the response
-   * 
+   *
    * @param url
    * @param resp
    * @param isExternalStorage
@@ -158,7 +154,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Read a File from the current storage
-   * 
+   *
    * @param url
    * @param resp
    * @throws ImejiException
@@ -172,7 +168,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Exeption if the user is not allowed to read the file
-   * 
+   *
    * @param url
    * @param user
    * @return
@@ -187,7 +183,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Read an external (i.e not in the current storage) file
-   * 
+   *
    * @param url
    * @param resp
    * @throws ImejiException
@@ -201,7 +197,7 @@ public class FileServlet extends HttpServlet {
   /**
    * Return the {@link User} of the request. Check first is a user is send with the request. If not,
    * check in the the session.
-   * 
+   *
    * @param req
    * @return
    * @throws AuthenticationError
@@ -219,7 +215,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Find the {@link Item} which is owner of the file
-   * 
+   *
    * @param url
    * @return
    * @throws Exception
@@ -238,7 +234,7 @@ public class FileServlet extends HttpServlet {
 
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
-   * 
+   *
    * @param req
    * @return
    */

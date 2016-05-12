@@ -31,7 +31,7 @@ import de.mpg.imeji.logic.vo.Person;
 
 /**
  * Utility Class for DOI Service
- * 
+ *
  * @author bastiens
  *
  */

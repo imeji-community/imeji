@@ -14,7 +14,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 import com.hp.hpl.jena.util.iterator.Filter;
 
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.search.elasticsearch.model.ElasticFields;
 import de.mpg.imeji.logic.search.elasticsearch.util.ElasticSearchUtil;
 import de.mpg.imeji.logic.search.model.SearchElement;
@@ -28,6 +27,7 @@ import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SearchSimpleMetadata;
 import de.mpg.imeji.logic.search.util.SearchUtils;
+import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -37,22 +37,21 @@ import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Factory to create an ElasticSearch query from the {@link SearchQuery}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticQueryFactory {
   private static final Logger LOGGER = Logger.getLogger(ElasticQueryFactory.class);
 
   /**
    * Build a {@link QueryBuilder} from a {@link SearchQuery}
-   * 
+   *
    * @param query
    * @return
    * @return
    */
   public static QueryBuilder build(SearchQuery query, String folderUri, String spaceId, User user) {
-    buildSearchQuery(query, user);
     return QueryBuilders.boolQuery().must(buildSearchQuery(query, user))
         .must(buildContainerFilter(folderUri)).must(buildSecurityQuery(user, folderUri))
         .must(buildSpaceQuery(spaceId)).must(buildStatusQuery(query, user));
@@ -60,7 +59,7 @@ public class ElasticQueryFactory {
 
   /**
    * The {@link QueryBuilder} with the search query
-   * 
+   *
    * @param query
    * @return
    */
@@ -73,7 +72,7 @@ public class ElasticQueryFactory {
 
   /**
    * Build a query for the status
-   * 
+   *
    * @param query
    * @param user
    * @return
@@ -96,7 +95,7 @@ public class ElasticQueryFactory {
 
   /**
    * Check if at least on {@link SearchPair} is related to the status. If yes, return true
-   * 
+   *
    * @param elements
    * @return
    */
@@ -114,7 +113,7 @@ public class ElasticQueryFactory {
 
   /**
    * Return the query for space
-   * 
+   *
    * @param spaceId
    * @return
    */
@@ -122,14 +121,13 @@ public class ElasticQueryFactory {
     if (spaceId == null || "".equals(spaceId)) {
       return QueryBuilders.matchAllQuery();
     } else {
-      // TODO: implements when folder are indexed as well
       return fieldQuery(ElasticFields.SPACE, spaceId, SearchOperators.EQUALS, false);
     }
   }
 
   /**
    * Build a {@link QueryBuilder} from a list of {@link SearchElement}
-   * 
+   *
    * @param elements
    * @return
    */
@@ -159,7 +157,7 @@ public class ElasticQueryFactory {
 
   /**
    * Build the security Query according to the user.
-   * 
+   *
    * @param user
    * @return
    */
@@ -170,12 +168,7 @@ public class ElasticQueryFactory {
         return QueryBuilders.matchAllQuery();
       } else {
         // normal user
-        Collection<Grant> grants = new ArrayList<Grant>();
-        grants.addAll(user.getGrants());
-        for (UserGroup g : user.getGroups()) {
-          grants.addAll(g.getGrants());
-        }
-        return buildGrantQuery(grants, null);
+        return buildGrantQuery(getAllGrants(user), null);
       }
     }
     return QueryBuilders.matchAllQuery();
@@ -184,7 +177,7 @@ public class ElasticQueryFactory {
   /**
    * Build a Filter for a container (album or folder): if the containerUri is not null, search
    * result will be filter to this only container
-   * 
+   *
    * @param containerUri
    * @return
    */
@@ -202,7 +195,7 @@ public class ElasticQueryFactory {
 
   /**
    * Build the query with all Read grants
-   * 
+   *
    * @param grants
    * @return
    */
@@ -232,7 +225,7 @@ public class ElasticQueryFactory {
   /**
    * Create a QueryBuilder with a term filter (see
    * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-filter.html)
-   * 
+   *
    * @param pair
    * @return
    */
@@ -264,8 +257,8 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case description:
-        // not indexed
-        break;
+        return fieldQuery(ElasticFields.DESCRIPTION, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case cont_md:
         // not indexed
         break;
@@ -282,8 +275,8 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case cont_person_org:
-        // not indexed
-        break;
+        return fieldQuery(ElasticFields.AUTHOR_ORGANIZATION_NAME, pair.getValue(),
+            pair.getOperator(), pair.isNot());
       case author_org_name:
         // not indexed
         break;
@@ -291,12 +284,12 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case created:
-        break;
+        return timeQuery(ElasticFields.CREATED, pair.getValue(), pair.getOperator(), pair.isNot());
       case creator:
         // not indexed
         break;
       case date:
-        return fieldQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
+        return timeQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
             pair.isNot());
       case editor:
         // not indexed
@@ -307,14 +300,15 @@ public class ElasticQueryFactory {
       case filetype:
         BoolQueryBuilder q = QueryBuilders.boolQuery();
         for (String ext : SearchUtils.parseFileTypesAsExtensionList(pair.getValue())) {
-          q.should(fieldQuery(ElasticFields.FILENAME, "*." + ext, SearchOperators.REGEX, false));
+          q.should(
+              fieldQuery(ElasticFields.FILENAME, "\"." + ext + "\"", SearchOperators.REGEX, false));
         }
         return q;
       case grant:
         // same as grant_type
         GrantType grant = pair.getValue().equals("upload") ? GrantType.CREATE
             : GrantType.valueOf(pair.getValue().toUpperCase());
-        return buildGrantQuery(user.getGrants(), grant);
+        return buildGrantQuery(getAllGrants(user), grant);
       case grant_for:
         // not indexed
         break;
@@ -338,7 +332,7 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case modified:
-        break;
+        return timeQuery(ElasticFields.MODIFIED, pair.getValue(), pair.getOperator(), pair.isNot());
       case number:
         return fieldQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
             pair.isNot());
@@ -393,13 +387,14 @@ public class ElasticQueryFactory {
         if (status.contains("#")) {
           status = status.split("#")[1];
         }
-        return fieldQuery(ElasticFields.STATUS, status, pair.getOperator(), pair.isNot());
+        return fieldQuery(ElasticFields.STATUS, status.toUpperCase(), pair.getOperator(),
+            pair.isNot());
       case text:
         return fieldQuery(ElasticFields.METADATA_TEXT, pair.getValue(), pair.getOperator(),
             pair.isNot());
       case time:
-        // not indexed
-        break;
+        return timeQuery(ElasticFields.METADATA_NUMBER, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case location:
         // not indexed
         break;
@@ -417,9 +412,19 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case coordinates:
-        break;
+        return fieldQuery(ElasticFields.METADATA_LOCATION, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       case pid:
         return fieldQuery(ElasticFields.PID, pair.getValue(), pair.getOperator(), pair.isNot());
+      case info_label:
+        return fieldQuery(ElasticFields.INFO_LABEL, pair.getValue(), pair.getOperator(),
+            pair.isNot());
+      case info_text:
+        return fieldQuery(ElasticFields.INFO_TEXT, pair.getValue(), pair.getOperator(),
+            pair.isNot());
+      case info_url:
+        return fieldQuery(ElasticFields.INFO_URL, pair.getValue(), pair.getOperator(),
+            pair.isNot());
       default:
         break;
     }
@@ -428,7 +433,7 @@ public class ElasticQueryFactory {
 
   /**
    * TODO Index Labels of metadata to search for metadata by label
-   * 
+   *
    * @param md
    * @return
    */
@@ -439,54 +444,55 @@ public class ElasticQueryFactory {
 
   /**
    * Create a {@link QueryBuilder} for a {@link SearchMetadata}
-   * 
+   *
    * @param md
    * @return
    */
   private static QueryBuilder metadataFilter(SearchMetadata md) {
     switch (md.getField()) {
       case text:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case citation:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case number:
-        return metadataQuery(ElasticFields.METADATA_NUMBER, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_NUMBER, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case date:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case url:
-        return metadataQuery(ElasticFields.METADATA_URI, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_URI, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       case person_family:
-        return metadataQuery(ElasticFields.METADATA_FAMILYNAME, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(fieldQuery(ElasticFields.METADATA_FAMILYNAME, md.getValue(),
+            md.getOperator(), md.isNot()), md.getStatement());
       case person_given:
-        return metadataQuery(ElasticFields.METADATA_GIVENNAME, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(fieldQuery(ElasticFields.METADATA_GIVENNAME, md.getValue(),
+            md.getOperator(), md.isNot()), md.getStatement());
       case coordinates:
-        return metadataQuery(ElasticFields.METADATA_LOCATION, md.getValue(), SearchOperators.GEO,
-            md.getStatement(), md.isNot());
+        return metadataQuery(fieldQuery(ElasticFields.METADATA_LOCATION, md.getValue(),
+            md.getOperator(), md.isNot()), md.getStatement());
       case time:
-        try {
-          return metadataQuery(ElasticFields.METADATA_NUMBER,
-              Long.toString(SearchUtils.parseDateAsTime(md.getValue())), md.getOperator(),
-              md.getStatement(), md.isNot());
-        } catch (UnprocessableError e) {
-          LOGGER.error("Wrong date format (can not be search): " + md.getValue());
-          return QueryBuilders.matchAllQuery();
-        }
+        return metadataQuery(
+            timeQuery(ElasticFields.METADATA_NUMBER, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
       default:
-        return metadataQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(),
-            md.getStatement(), md.isNot());
+        return metadataQuery(
+            fieldQuery(ElasticFields.METADATA_TEXT, md.getValue(), md.getOperator(), md.isNot()),
+            md.getStatement());
     }
   }
 
   /**
    * Create a {@link QueryBuilder}
-   * 
+   *
    * @param index
    * @param value
    * @param operator
@@ -524,26 +530,57 @@ public class ElasticQueryFactory {
   }
 
   /**
+   * Search for a date saved as a time (i.e) in ElasticSearch
+   *
+   * @param field
+   * @param dateString
+   * @param operator
+   * @param not
+   * @return
+   */
+  private static QueryBuilder timeQuery(ElasticFields field, String dateString,
+      SearchOperators operator, boolean not) {
+    QueryBuilder q = null;
+    if (operator == null) {
+      operator = SearchOperators.REGEX;
+    }
+    switch (operator) {
+      case GREATER:
+        q = greaterThanQuery(field, Long.toString(DateFormatter.getTime(dateString)));
+        break;
+      case LESSER:
+        q = lessThanQuery(field, Long.toString(DateFormatter.getTime(dateString)));
+        break;
+      default:
+        q = QueryBuilders.rangeQuery(field.field())
+            .gte(Long.toString(DateFormatter.parseDate(dateString).getTime()))
+            .lte(Long.toString(DateFormatter.parseDate2(dateString).getTime()));
+        break;
+    }
+    return negate(q, not);
+  }
+
+
+
+  /**
    * Create a {@link QueryBuilder} - used to sarch for metadata which are defined with a statement
-   * 
+   *
    * @param index
    * @param value
    * @param operator
    * @param statement
    * @return
    */
-  private static QueryBuilder metadataQuery(ElasticFields field, String value,
-      SearchOperators operator, URI statement, boolean not) {
+  private static QueryBuilder metadataQuery(QueryBuilder valueQuery, URI statement) {
     return QueryBuilders.nestedQuery(ElasticFields.METADATA.field(),
-        QueryBuilders.boolQuery().must(fieldQuery(field, value, operator, not))
-            .must(fieldQuery(ElasticFields.METADATA_STATEMENT, ObjectHelper.getId(statement),
-                SearchOperators.EQUALS, false)));
+        QueryBuilders.boolQuery().must(valueQuery).must(fieldQuery(ElasticFields.METADATA_STATEMENT,
+            ObjectHelper.getId(statement), SearchOperators.EQUALS, false)));
 
   }
 
   /**
    * Search for the exact value of a field
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -554,7 +591,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for a match (not the exact value)
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -568,7 +605,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for value greater than the searched value
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -582,7 +619,7 @@ public class ElasticQueryFactory {
 
   /**
    * Search for value smaller than searched value
-   * 
+   *
    * @param field
    * @param value
    * @return
@@ -608,7 +645,7 @@ public class ElasticQueryFactory {
 
   /**
    * Add NOT filter to the {@link Filter} if not is true
-   * 
+   *
    * @param f
    * @param not
    * @return
@@ -619,7 +656,7 @@ public class ElasticQueryFactory {
 
   /**
    * Return a query which find nothing
-   * 
+   *
    * @return
    */
   private static QueryBuilder matchNothing() {
@@ -628,12 +665,26 @@ public class ElasticQueryFactory {
 
   /**
    * True if the uri is an uri folder
-   * 
+   *
    * @param uri
    * @return
    */
   private static boolean isFolderUri(String uri) {
     return uri.contains("/collection/") ? true : false;
+  }
+
+  /**
+   * Return all Grants (included user group grants) of the user
+   *
+   * @param user
+   * @return
+   */
+  private static List<Grant> getAllGrants(User user) {
+    List<Grant> grants = new ArrayList<>(user.getGrants());
+    for (UserGroup group : user.getGroups()) {
+      grants.addAll(group.getGrants());
+    }
+    return grants;
   }
 
 }

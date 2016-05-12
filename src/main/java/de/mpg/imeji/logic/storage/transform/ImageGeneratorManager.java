@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -29,23 +29,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
-import de.mpg.imeji.logic.storage.transform.impl.MagickImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.PdfImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.RawFileImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.SimpleAudioImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.SimpleImageGenerator;
-import de.mpg.imeji.logic.storage.transform.impl.XuggleImageGenerator;
-import de.mpg.imeji.logic.storage.util.GifUtils;
+import de.mpg.imeji.logic.storage.transform.generator.ImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.MagickImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.PdfImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.RawFileImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.SimpleAudioImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.SimpleImageGenerator;
+import de.mpg.imeji.logic.storage.transform.generator.XuggleImageGenerator;
+import de.mpg.imeji.logic.storage.util.ImageMagickUtils;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
  * Implements all process to generate the images
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -69,7 +70,7 @@ public final class ImageGeneratorManager {
 
   /**
    * Generate a Thumbnail image for imeji
-   * 
+   *
    * @param bytes
    * @param extension
    * @return
@@ -80,7 +81,7 @@ public final class ImageGeneratorManager {
 
   /**
    * Generate a Web resolution image for imeji
-   * 
+   *
    * @param bytes
    * @param extension
    * @return
@@ -92,7 +93,7 @@ public final class ImageGeneratorManager {
   /**
    * Generate an image (only jpg and gif supported here) into a smaller image according to the
    * {@link FileResolution}
-   * 
+   *
    * @param bytes
    * @param extension
    * @param resolution
@@ -100,36 +101,17 @@ public final class ImageGeneratorManager {
    */
   public File generate(File file, String extension, FileResolution resolution) {
     if (StorageUtils.compareExtension("gif", extension)) {
-      try {
-        return generateGif(FileUtils.readFileToByteArray(file), extension, resolution);
-      } catch (IOException e) {
-        LOGGER.error("Error reading gif file to byte array", e);
+      File gifFile = ImageMagickUtils.resizeAnimatedGif(file, resolution);
+      if (gifFile != null) {
+        return gifFile;
       }
     }
     return generateJpeg(file, extension, resolution);
   }
 
   /**
-   * Generate an animated gif in the wished size. The file must be a gif, otherwise an exception is
-   * thrown
-   * 
-   * @param bytes
-   * @param extension
-   * @param resolution
-   * @return
-   */
-  private File generateGif(byte[] bytes, String extension, FileResolution resolution) {
-    try {
-      return StorageUtils.toFile(GifUtils.resizeAnimatedGif(bytes, resolution));
-    } catch (Exception e) {
-      LOGGER.error("Error generating gif", e);
-    }
-    return null;
-  }
-
-  /**
    * Generate an jpeg image in the wished size.
-   * 
+   *
    * @param bytes
    * @param extension
    * @param resolution
@@ -148,13 +130,14 @@ public final class ImageGeneratorManager {
 
   /**
    * Uses the {@link ImageGenerator} to transform the bytes into a jpg
-   * 
+   *
    * @param bytes
    * @param extension
    * @return
+   * @throws ImejiException
    * @throws IOException
    */
-  private File toJpeg(File file, String extension) throws IOException {
+  private File toJpeg(File file, String extension) throws ImejiException {
     if (StorageUtils.compareExtension(extension, "jpg")) {
       return file;
     }
@@ -168,6 +151,6 @@ public final class ImageGeneratorManager {
         LOGGER.warn("Error generating image (generator: " + imageGenerator.getClass().getName(), e);
       }
     }
-    throw new RuntimeException("Unsupported file format (requested was " + extension + ")");
+    throw new ImejiException("Unsupported file format (requested was " + extension + ")");
   }
 }

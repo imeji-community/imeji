@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.util.DateFormatter;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -21,7 +20,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * The Date {@link Metadata}. Should be used for {@link Metadata} related to a date
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -42,7 +41,9 @@ public class Date extends Metadata {
   @j2jResource("http://imeji.org/terms/statement")
   private URI statement;
 
-  public Date() {}
+  public Date() {
+    // constructor
+  }
 
   @XmlElement(name = "date", namespace = "http://imeji.org/terms/")
   public String getDate() {
@@ -92,7 +93,6 @@ public class Date extends Metadata {
 
   @Override
   public void clean() {
-    // TODO Auto-generated method stub
-
+    // nothing to do
   }
 }

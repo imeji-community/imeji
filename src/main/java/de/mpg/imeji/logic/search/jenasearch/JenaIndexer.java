@@ -6,9 +6,9 @@ import de.mpg.imeji.logic.search.SearchIndexer;
 
 /**
  * {@link SearchIndexer} for {@link JenaSearch}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class JenaIndexer implements SearchIndexer {
 

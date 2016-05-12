@@ -1,12 +1,8 @@
 package de.mpg.imeji.presentation.user;
 
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSenderStatic;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -15,18 +11,20 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.notification.NotificationUtils;
-import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.collaboration.email.EmailMessages;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
+import de.mpg.imeji.logic.registration.Registration;
+import de.mpg.imeji.logic.registration.RegistrationBusinessController;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
-import de.mpg.imeji.presentation.user.util.PasswordGenerator;
+import de.mpg.imeji.presentation.beans.SuperBean;
+import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -38,12 +36,12 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 @ManagedBean(name = "RegistrationBean")
 @ViewScoped
-public class RegistrationBean {
+public class RegistrationBean extends SuperBean {
+  private static final long serialVersionUID = -993770106648303808L;
   private static final Logger LOGGER = Logger.getLogger(RegistrationBean.class);
-  private UserController uc = new UserController(Imeji.adminUser);
+  private final RegistrationBusinessController registrationBC =
+      new RegistrationBusinessController();
 
-  private SessionBean sb;
-  private Navigation nb;
   private User user = new User();
 
   private String token = null;
@@ -54,93 +52,109 @@ public class RegistrationBean {
   private boolean activation_success = false;
   private String activation_message;
   private String redirect;
-
+  private boolean isInvited = false;
 
   @PostConstruct
   public void init() {
-    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    nb = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    this.user.setPerson(ImejiFactory.newPerson());;
     // get token etc
     this.token = UrlHelper.getParameterValue("token");
-    if (sb.getUser() == null) {
+    this.user.setEmail(UrlHelper.getParameterValue("login"));
+    this.isInvited = checkInvitations();
+    if (getSessionUser() == null) {
       if (!isNullOrEmptyTrim(token)) {
         // if user is not yet activated, activate it
         activate();
       }
-    } else
+    } else {
       // if is logged in, redirect to home page
       try {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(nb.getHomeUrl());
+        redirect(getNavigation().getHomeUrl());
       } catch (IOException e) {
         BeanHelper.error(e.getLocalizedMessage());
+        LOGGER.error("Error redirect", e);
       }
-
+    }
   }
 
   public void register() {
-    String password = "";
+    Registration registration = null;
     try {
-      this.activation_submitted = false;
-      this.registration_submitted = true;
-      PasswordGenerator generator = new PasswordGenerator();
-      password = generator.generatePassword();
-      user.setEncryptedPassword(StringHelper.convertToMD5(password));
-      user = uc.create(user, UserController.USER_TYPE.INACTIVE);
-      this.registration_success = true;
+      activation_submitted = false;
+      registration_submitted = true;
+      registration = registrationBC.register(user);
+      registration_success = true;
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, getLocale());
+      LOGGER.error("error registering user", e);
+    } catch (AlreadyExistsException e) {
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_user_already_exists", getLocale()));
+      LOGGER.error("error registering user", e);
     } catch (Exception e) {
-      BeanHelper.cleanMessages();
-      BeanHelper.error(sb.getMessage("error_during_user_registration"));
-      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
-      for (String errorM : listOfErrors) {
-        BeanHelper.error(sb.getMessage(errorM));
-      }
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_during_user_registration", getLocale()));
+      LOGGER.error("error registering user", e);
     }
-
-    if (this.registration_success) {
+    if (registration_success) {
       BeanHelper.cleanMessages();
       BeanHelper.info("Sending registration email and new password.");
-      sendRegistrationNotification(password);
+      sendRegistrationNotification(registration.getToken(), registration.getPassword());
       if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
         BeanHelper.cleanMessages();
         BeanHelper.info(
             "User account has been registered, but verification email could not be sent! Please contact service administrators!");
       }
     }
-
   }
 
   private void activate() {
     try {
       this.activation_submitted = true;
       this.registration_submitted = false;
-      this.user = uc.activate(this.token);
+      this.user = registrationBC.activate(registrationBC.retrieveByToken(token));
       sendActivationNotification();
       this.activation_success = true;
-      this.activation_message = sb.getMessage("activation_success");
+      this.activation_message = Imeji.RESOURCE_BUNDLE.getMessage("activation_success", getLocale());
       LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
       loginBean.setLogin(user.getEmail());
-      this.redirect = nb.getHomeUrl();
+      this.redirect = getNavigation().getHomeUrl();
     } catch (ImejiException e) {
       this.activation_success = false;
       this.activation_message = e.getLocalizedMessage();
+      LOGGER.error("Error activating user", e);
+    }
+  }
+
+  /**
+   * True if the user registering has been invited
+   *
+   * @return
+   * @throws ImejiException
+   */
+  private boolean checkInvitations() {
+    try {
+      return !new InvitationBusinessController().retrieveInvitationOfUser(user.getEmail())
+          .isEmpty();
+    } catch (ImejiException e) {
+      LOGGER.error("Error checking user invitations", e);
+      return false;
     }
   }
 
   /**
    * Send registration email
    */
-  private void sendRegistrationNotification(String password) {
-    EmailClient emailClient = new EmailClient();
-    EmailMessages emailMessages = new EmailMessages();
+  private void sendRegistrationNotification(String token, String password) {
+    EmailService emailClient = new EmailService();
     try {
       // send to requester
-      emailClient.sendMail(getUser().getEmail(), getEmailServerSenderStatic(),
-          emailMessages.getEmailOnRegistrationRequest_Subject(sb),
-          emailMessages.getEmailOnRegistrationRequest_Body(getUser(), password,
-              getContactEmailStatic(), sb, nb.getRegistrationUrl()));
+      emailClient.sendMail(getUser().getEmail(), Imeji.CONFIG.getEmailServerSender(),
+          EmailMessages.getEmailOnRegistrationRequest_Subject(getLocale()),
+          EmailMessages.getEmailOnRegistrationRequest_Body(getUser(), token, password,
+              Imeji.CONFIG.getContactEmail(), getLocale(), getNavigation().getRegistrationUrl()));
     } catch (Exception e) {
       LOGGER.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+      BeanHelper.error("Error: Email not sent");
     }
   }
 
@@ -148,7 +162,7 @@ public class RegistrationBean {
    * Send account activation email
    */
   private void sendActivationNotification() {
-    NotificationUtils.sendActivationNotification(user, sb);
+    NotificationUtils.sendActivationNotification(user, getLocale(), isInvited);
   }
 
   public boolean isRegistration_submitted() {
@@ -201,5 +215,9 @@ public class RegistrationBean {
 
   public String getRedirect() {
     return redirect;
+  }
+
+  public boolean isRegistrationEnabled() {
+    return Imeji.CONFIG.isRegistrationEnabled() || isInvited;
   }
 }

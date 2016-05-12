@@ -9,7 +9,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 import org.apache.log4j.Logger;
 import org.jose4j.lang.JoseException;
@@ -17,53 +19,55 @@ import org.jose4j.lang.JoseException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authentication.impl.APIKeyAuthentication;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.ShareController;
-import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController;
+import de.mpg.imeji.logic.collaboration.share.ShareBusinessController.ShareRoles;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.util.QuotaUtil;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
+import de.mpg.imeji.presentation.share.ShareListItem;
+import de.mpg.imeji.presentation.share.ShareUtil;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
-public class UserBean extends QuotaSuperBean {
+@ManagedBean(name = "UserBean")
+@ViewScoped
+public class UserBean extends SuperBean {
+  private static final long serialVersionUID = 8339673964329354673L;
+  private static final Logger LOGGER = Logger.getLogger(UserBean.class);
   private User user;
   private String newPassword = null;
   private String repeatedPassword = null;
-  private SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
   private String id;
-  private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+  private List<ShareListItem> roles = new ArrayList<ShareListItem>();
   private boolean edit = false;
+  private QuotaUICompoment quota;
 
   public UserBean() {
-    super();
+    // mandatory for JSF initialization
   }
 
   public UserBean(String email) {
-    super();
     init(email);
   }
 
-  /**
-   * Method called from the html page
-   * 
-   * @return
-   */
-  public String getInit() {
-    init(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
-    return "";
+  @PostConstruct
+  public void init() {
+    init(UrlHelper.getParameterValue("id"));
   }
 
+  /**
+   * Initialize the bean
+   * 
+   * @param id
+   */
   private void init(String id) {
     try {
       this.id = id;
@@ -71,23 +75,27 @@ public class UserBean extends QuotaSuperBean {
       repeatedPassword = null;
       retrieveUser();
       if (user != null) {
-        this.roles = AuthUtil.getAllRoles(user, session.getUser());
+        this.roles = ShareUtil.getAllRoles(user, getSessionUser(), getLocale());
         this.setEdit(false);
+        this.setQuota(new QuotaUICompoment(user, getLocale()));
       }
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      LOGGER.error("Error initializing page", e);
+      BeanHelper.error("Error initializing page");
     }
   }
 
   /**
    * Retrieve the current user
    * 
+   * @throws ImejiException
+   *
    * @throws Exception
    */
-  public void retrieveUser() throws Exception {
-    if (id != null && session.getUser() != null) {
-      user = ObjectLoader.loadUser(id, session.getUser());
-    } else if (id != null && session.getUser() == null) {
+  public void retrieveUser() throws ImejiException {
+    if (id != null && getSessionUser() != null) {
+      user = new UserController(getSessionUser()).retrieve(id, getSessionUser());
+    } else if (id != null && getSessionUser() == null) {
       LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
       loginBean.setLogin(id);
     }
@@ -95,17 +103,20 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Change the password of the user
-   * 
+   *
    * @throws Exception
    */
-  public void changePassword() throws Exception {
+  public void changePassword() throws ImejiException {
     if (user != null && newPassword != null && !"".equals(newPassword)) {
       if (newPassword.equals(repeatedPassword)) {
         user.setEncryptedPassword(StringHelper.convertToMD5(newPassword));
         updateUser();
-        BeanHelper.info(session.getMessage("success_change_user_password"));
+        BeanHelper
+            .info(Imeji.RESOURCE_BUNDLE.getMessage("success_change_user_password", getLocale()));
+        return;
       } else {
-        BeanHelper.error(session.getMessage("error_user_repeat_password"));
+        BeanHelper
+            .error(Imeji.RESOURCE_BUNDLE.getMessage("error_user_repeat_password", getLocale()));
       }
       reloadPage();
     }
@@ -117,23 +128,27 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Generate a new API Key, and update the user
-   * 
+   *
    * @throws ImejiException
    * @throws NoSuchAlgorithmException
    * @throws UnsupportedEncodingException
    * @throws JoseException
    */
-  public void generateNewApiKey()
-      throws ImejiException, NoSuchAlgorithmException, UnsupportedEncodingException, JoseException {
+  public void generateNewApiKey() throws ImejiException {
     if (user != null) {
-      user.setApiKey(APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE));
-      new UserController(session.getUser()).update(user, session.getUser());
+      try {
+        user.setApiKey(APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE));
+      } catch (JoseException e) {
+        LOGGER.error("Error generating API Key", e);
+        throw new ImejiException("Error generating API Key", e);
+      }
+      new UserController(getSessionUser()).update(user, getSessionUser());
     }
   }
 
   /**
    * Add a new empty organization
-   * 
+   *
    * @param index
    */
   public void addOrganization(int index) {
@@ -143,7 +158,7 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Remove an nth organization
-   * 
+   *
    * @param index
    */
   public void removeOrganization(int index) {
@@ -155,17 +170,17 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Toggle the Admin Role of the {@link User}
-   * 
+   *
    * @throws Exception
    */
-  public void toggleAdmin() throws Exception {
-    ShareController shareController = new ShareController();
+  public void toggleAdmin() throws ImejiException {
+    ShareBusinessController shareController = new ShareBusinessController();
     if (user.isAdmin()) {
-      shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
-          ShareController.rolesAsList(ShareRoles.CREATE));
+      shareController.shareToUser(getSessionUser(), user, Imeji.PROPERTIES.getBaseURI(),
+          ShareBusinessController.rolesAsList(ShareRoles.CREATE));
     } else {
-      shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
-          ShareController.rolesAsList(ShareRoles.ADMIN));
+      shareController.shareToUser(getSessionUser(), user, Imeji.PROPERTIES.getBaseURI(),
+          ShareBusinessController.rolesAsList(ShareRoles.ADMIN));
     }
   }
 
@@ -175,66 +190,62 @@ public class UserBean extends QuotaSuperBean {
 
   /**
    * Toggle the create collction role of the {@link User}
-   * 
+   *
    * @throws Exception
    */
-  public void toggleCreateCollection() throws Exception {
-    ShareController shareController = new ShareController();
+  public void toggleCreateCollection() throws ImejiException {
+    ShareBusinessController shareController = new ShareBusinessController();
     if (!user.isAdmin()) {
       // admin can not be forbidden to create collections
       if (user.isAllowedToCreateCollection()) {
-        shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(), null);
+        shareController.shareToUser(getSessionUser(), user, Imeji.PROPERTIES.getBaseURI(), null);
       } else {
-        shareController.shareToUser(session.getUser(), user, PropertyBean.baseURI(),
-            ShareController.rolesAsList(ShareController.ShareRoles.CREATE));
+        shareController.shareToUser(getSessionUser(), user, Imeji.PROPERTIES.getBaseURI(),
+            ShareBusinessController.rolesAsList(ShareBusinessController.ShareRoles.CREATE));
       }
     }
   }
 
   /**
    * Update the user in jena
-   * 
+   *
    * @throws ImejiException
+   * @throws IOException
    */
   public void updateUser() throws ImejiException {
     if (user != null) {
-      UserController controller = new UserController(session.getUser());
-      user.setQuota(QuotaUtil.getQuotaInBytes(getQuota()));
+      UserController controller = new UserController(getSessionUser());
+      user.setQuota(QuotaUtil.getQuotaInBytes(quota.getQuota()));
       try {
-        controller.update(user, session.getUser());
+        controller.update(user, getSessionUser());
         reloadPage();
       } catch (UnprocessableError e) {
-        BeanHelper.cleanMessages();
-        BeanHelper.error(session.getMessage("error_during_user_update"));
-        for (String errorM : e.getMessages()) {
-          BeanHelper.error(session.getMessage(errorM));
-        }
+        BeanHelper.error(e, getLocale());
+        LOGGER.error("Error updating user", e);
       }
     }
   }
 
   /**
    * Reload the page with the current user
-   * 
+   *
    * @throws IOException
    */
   private void reloadPage() {
     try {
-      FacesContext.getCurrentInstance().getExternalContext().redirect(getUserPageUrl());
+      redirect(getUserPageUrl());
     } catch (IOException e) {
-      Logger.getLogger(UserBean.class).info("Some reloadPage exception", e);
+      LOGGER.error("Error reloading user page", e);
     }
   }
 
   /**
    * return the URL of the current user
-   * 
+   *
    * @return
    */
   public String getUserPageUrl() {
-    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-
-    return navigation.getUserUrl() + "?id=" + user.getEmail();
+    return getNavigation().getUserUrl() + "?id=" + user.getEmail();
   }
 
   public User getUser() {
@@ -264,23 +275,24 @@ public class UserBean extends QuotaSuperBean {
   /**
    * @return the roles
    */
-  public List<SharedHistory> getRoles() {
+  public List<ShareListItem> getRoles() {
     return roles;
   }
 
-  public List<SharedHistory> getGroupRoles(UserGroup userGroup) throws Exception {
-    if (userGroup != null)
-      return AuthUtil.getAllRoles(userGroup, session.getUser());
-    else
+  public List<ShareListItem> getGroupRoles(UserGroup userGroup) throws ImejiException {
+    if (userGroup != null) {
+      return ShareUtil.getAllRoles(userGroup, getSessionUser(), getLocale());
+    } else {
       return null;
-  };
+    }
+  }
 
 
 
   /**
    * @param roles the roles to set
    */
-  public void setRoles(List<SharedHistory> roles) {
+  public void setRoles(List<ShareListItem> roles) {
     this.roles = roles;
   }
 
@@ -298,5 +310,17 @@ public class UserBean extends QuotaSuperBean {
     this.edit = edit;
   }
 
+  /**
+   * @return the quota
+   */
+  public QuotaUICompoment getQuota() {
+    return quota;
+  }
 
+  /**
+   * @param quota the quota to set
+   */
+  public void setQuota(QuotaUICompoment quota) {
+    this.quota = quota;
+  }
 }

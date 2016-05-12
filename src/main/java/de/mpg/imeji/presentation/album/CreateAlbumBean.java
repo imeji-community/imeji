@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -24,88 +24,103 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.ContainerEditorSession;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Java Bean for create album page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 @ManagedBean(name = "CreateAlbumBean")
-@SessionScoped
+@ViewScoped
 public class CreateAlbumBean extends AlbumBean {
   private static final long serialVersionUID = -3257133789269212025L;
-
-  /**
-   * DEfault constructor
-   */
-  public CreateAlbumBean() {
-    super();
-  }
+  private static final Logger LOGGER = Logger.getLogger(CreateAlbumBean.class);
+  @ManagedProperty(value = "#{ContainerEditorSession}")
+  private ContainerEditorSession containerEditorSession;
 
   /**
    * Called when bean page is called
    */
+  @Override
+  @PostConstruct
   public void init() {
     setAlbum(ImejiFactory.newAlbum());
     ((List<Person>) getAlbum().getMetadata().getPersons()).set(0,
-        sessionBean.getUser().getPerson().clone());
+        getSessionUser().getPerson().clone());
+    containerEditorSession.setUploadedLogoPath(null);
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.presentation.album.AlbumBean#getCancel()
    */
   @Override
   public String getCancel() {
-    Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    return nav.getAlbumsUrl();
+    return getNavigation().getAlbumsUrl();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see de.mpg.imeji.presentation.album.AlbumBean#save()
+  /**
+   * Create the album
    */
-  @Override
-  public String save() throws Exception {
+  public void save() {
     try {
       AlbumController ac = new AlbumController();
-      ac.create(getAlbum(), sessionBean.getUser());
-      UserController uc = new UserController(sessionBean.getUser());
-      sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
-      BeanHelper.info(sessionBean.getMessage("success_album_create"));
-
-      Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-
-      ((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class)).setAlbum(getAlbum());
-      sessionBean.setActiveAlbum(getAlbum());
-
-      FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(nav.getAlbumUrl() + getAlbum().getIdString());
-    } catch (UnprocessableError e) {
-      BeanHelper.cleanMessages();
-      BeanHelper.error(sessionBean.getMessage("error_album_create"));
-      for (String errorM : e.getMessages()) {
-        BeanHelper.error(sessionBean.getMessage(errorM));
+      Album album = ac.create(getAlbum(), getSessionUser());
+      if (containerEditorSession.getUploadedLogoPath() != null) {
+        ac.updateLogo(album, new File(containerEditorSession.getUploadedLogoPath()),
+            getSessionUser());
       }
-      getAlbum().setId(null);
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_album_create", getLocale()));
+      makeActive(false);
+      FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(getNavigation().getAlbumUrl() + getAlbum().getIdString());
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, getLocale());
+      LOGGER.error("Error creating album", e);
+    } catch (ImejiException e) {
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_album_create", getLocale()));
+      LOGGER.error("Error creating album", e);
+    } catch (IOException | URISyntaxException e) {
+      LOGGER.error("Error creating album", e);
     }
-    return "";
+  }
+
+  /**
+   * @return the containerEditorSession
+   */
+  public ContainerEditorSession getContainerEditorSession() {
+    return containerEditorSession;
+  }
+
+  /**
+   * @param containerEditorSession the containerEditorSession to set
+   */
+  public void setContainerEditorSession(ContainerEditorSession containerEditorSession) {
+    this.containerEditorSession = containerEditorSession;
   }
 }

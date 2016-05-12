@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -33,66 +33,61 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.resource.UserGroupController;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
+import de.mpg.imeji.presentation.share.ShareListItem;
+import de.mpg.imeji.presentation.share.ShareUtil;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Bean to create a
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 @ManagedBean(name = "UserGroup")
 @ViewScoped
-public class UserGroupBean implements Serializable {
+public class UserGroupBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = -6501626930686020874L;
   private UserGroup userGroup = new UserGroup();
   private Collection<User> users;
-  @ManagedProperty(value = "#{SessionBean.user}")
-  private User sessionUser;
   private static final Logger LOGGER = Logger.getLogger(UserGroupsBean.class);
-  private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+  private List<ShareListItem> roles = new ArrayList<ShareListItem>();
 
   @PostConstruct
   public void init() {
-    String groupId =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
+    String groupId = UrlHelper.getParameterValue("id");
     if (groupId != null) {
       UserGroupController c = new UserGroupController();
       try {
-        this.userGroup = c.read(groupId, sessionUser);
+        this.userGroup = c.read(groupId, getSessionUser());
         this.users = loadUsers(userGroup);
-        this.roles = AuthUtil.getAllRoles(userGroup, sessionUser);
-      } catch (Exception e) {
+        this.roles = ShareUtil.getAllRoles(userGroup, getSessionUser(), getLocale());
+      } catch (ImejiException e) {
         BeanHelper.error("Error reading user group " + groupId);
-        LOGGER.error(e);
+        LOGGER.error("Error initializing UserGroupBean", e);
       }
     }
   }
 
   /**
    * Load the {@link User} of a {@link UserGroup}
-   * 
+   *
    * @param subject
    * @param f
    * @param object
@@ -101,7 +96,7 @@ public class UserGroupBean implements Serializable {
    */
   public Collection<User> loadUsers(UserGroup group) {
     Collection<User> users = new ArrayList<User>();
-    UserController c = new UserController(sessionUser);
+    UserController c = new UserController(getSessionUser());
     for (URI uri : userGroup.getUsers()) {
       try {
         users.add(c.retrieve(uri));
@@ -114,7 +109,7 @@ public class UserGroupBean implements Serializable {
 
   /**
    * Remove a {@link User} from a {@link UserGroup}
-   * 
+   *
    * @param remove
    * @return
    * @throws IOException
@@ -127,25 +122,23 @@ public class UserGroupBean implements Serializable {
   /**
    * Unshare the {@link Container} for one {@link UserGroup} (i.e, remove all {@link Grant} of this
    * {@link User} related to the {@link container})
-   * 
+   *
    * @param sh
    * @throws IOException
    */
-  public void revokeGrants(SharedHistory sh) throws IOException {
-    sh.getSharedType().clear();
+  public void revokeGrants(ShareListItem sh) throws IOException {
+    sh.getRoles().clear();
     sh.update();
     reload();
   }
 
   /**
    * Reload the page
-   * 
+   *
    * @throws IOException
    */
   private void reload() throws IOException {
-    Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(nav.getApplicationUrl() + "usergroup?id=" + userGroup.getId());
+    redirect(getNavigation().getApplicationUrl() + "usergroup?id=" + userGroup.getId());
   }
 
   /**
@@ -154,48 +147,33 @@ public class UserGroupBean implements Serializable {
   public String create() {
     UserGroupController c = new UserGroupController();
     try {
-      if (groupNameAlreadyExists(userGroup)) {
-        BeanHelper.warn(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getLabel("group_name_already_exists"));
-        return "";
-      } else
-        c.create(userGroup, sessionUser);
-        reload();
+      c.create(userGroup, getSessionUser());
+      reload();
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, getLocale());
+      LOGGER.error("Error creating user group", e);
     } catch (Exception e) {
       BeanHelper.error("Error creating user group");
+      LOGGER.error("Error creating user group", e);
     }
     return "";
   }
 
   /**
-   * True if {@link UserGroup} name already used by another {@link UserGroup}
-   * 
-   * @param group
-   * @return
-   */
-  public boolean groupNameAlreadyExists(UserGroup g) {
-    for (String id : ImejiSPARQL.exec(JenaCustomQueries.selectUserGroupAll(g.getName()), null)) {
-      if (!id.equals(g.getId().toString()))
-        return true;
-    }
-    return false;
-  }
-
-  /**
    * Update the current {@link UserGroup}
-   * 
+   *
    * @throws IOException
    */
   public void save() throws IOException {
     UserGroupController c = new UserGroupController();
     try {
-      if (groupNameAlreadyExists(userGroup)) {
-        BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getLabel("group_name_already_exists"));
-      } else
-        c.update(userGroup, sessionUser);
+      c.update(userGroup, getSessionUser());
+    } catch (UnprocessableError e) {
+      BeanHelper.error(e, getLocale());
+      LOGGER.error("Error updating user group", e);
     } catch (Exception e) {
       BeanHelper.error("Error updating user group");
+      LOGGER.error("Error updating user group", e);
     }
     reload();
   }
@@ -215,20 +193,6 @@ public class UserGroupBean implements Serializable {
   }
 
   /**
-   * @return the sessionUser
-   */
-  public User getSessionUser() {
-    return sessionUser;
-  }
-
-  /**
-   * @param sessionUser the sessionUser to set
-   */
-  public void setSessionUser(User sessionUser) {
-    this.sessionUser = sessionUser;
-  }
-
-  /**
    * @return the users
    */
   public Collection<User> getUsers() {
@@ -245,14 +209,14 @@ public class UserGroupBean implements Serializable {
   /**
    * @return the roles
    */
-  public List<SharedHistory> getRoles() {
+  public List<ShareListItem> getRoles() {
     return roles;
   }
 
   /**
    * @param roles the roles to set
    */
-  public void setRoles(List<SharedHistory> roles) {
+  public void setRoles(List<ShareListItem> roles) {
     this.roles = roles;
   }
 }

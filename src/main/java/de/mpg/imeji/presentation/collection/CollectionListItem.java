@@ -3,7 +3,7 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+import static de.mpg.imeji.presentation.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 import java.net.URI;
 import java.util.Collection;
@@ -14,8 +14,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.doi.DoiService;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -29,11 +29,10 @@ import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Item of the collections page.
- * 
+ *
  * @author saquet
  */
 public class CollectionListItem {
@@ -46,7 +45,6 @@ public class CollectionListItem {
   private String id = null;
   private URI uri = null;
   private String discardComment = "";
-  private boolean selected = false;
   // dates
   private String creationDate = null;
   private String lastModificationDate = null;
@@ -56,6 +54,7 @@ public class CollectionListItem {
   private String selectedGrant;
   private URI profileURI;
   private boolean isOwner = false;
+  private CollectionImeji collection;
   /**
    * Maximum number of character displayed in the list for the description
    */
@@ -63,12 +62,13 @@ public class CollectionListItem {
 
   /**
    * Construct a new {@link CollectionListItem} with a {@link CollectionImeji}
-   * 
+   *
    * @param collection
    * @param user
    */
   public CollectionListItem(CollectionImeji collection, User user) {
     try {
+      this.collection = collection;
       title = collection.getMetadata().getTitle();
       description = CommonUtils.removeTags(collection.getMetadata().getDescription());
       descriptionFull = description;
@@ -94,8 +94,6 @@ public class CollectionListItem {
       // initializations
       initThumbnail(collection, user);
       initSize(collection, user);
-      // initDiscardedSize(collection, user);
-      initSelected();
       if (user != null) {
         isOwner = collection.getCreatedBy().equals(user.getId());
       }
@@ -106,7 +104,7 @@ public class CollectionListItem {
 
   /**
    * Find the Logo of the collection. If no logo defined, use the first file of the collection
-   * 
+   *
    * @param collection
    * @param user
    * @throws ImejiException
@@ -131,7 +129,7 @@ public class CollectionListItem {
 
   /**
    * Count the size of the collection
-   * 
+   *
    * @param user
    */
   private void initSize(CollectionImeji collection, User user) {
@@ -140,21 +138,9 @@ public class CollectionListItem {
         ic.search(collection.getId(), null, null, Imeji.adminUser, null, 0, 0).getNumberOfRecords();
   }
 
-
-  /**
-   * Chek if the {@link CollectionImeji} is selected in the {@link SessionBean}
-   */
-  private void initSelected() {
-    if (((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getSelectedCollections()
-        .contains(uri))
-      selected = true;
-    else
-      selected = false;
-  }
-
   /**
    * Release the {@link Collection} in the list
-   * 
+   *
    * @return
    */
   public String release() {
@@ -162,18 +148,21 @@ public class CollectionListItem {
     CollectionController cc = new CollectionController();
     try {
       cc.release(cc.retrieve(uri, sessionBean.getUser()), sessionBean.getUser());
-      BeanHelper.info(sessionBean.getMessage("success_collection_release"));
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", sessionBean.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_release"));
-      BeanHelper.error(sessionBean.getMessage(e.getMessage()));
-      LOGGER.error(sessionBean.getMessage("error_collection_release"), e);
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_release", sessionBean.getLocale()));
+      BeanHelper.error(e.getMessage());
+      LOGGER.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_release", sessionBean.getLocale()), e);
     }
     return "pretty:";
   }
 
   /**
    * Delete the {@link CollectionImeji} in the list
-   * 
+   *
    * @return
    */
   public String delete() {
@@ -182,10 +171,14 @@ public class CollectionListItem {
     try {
       CollectionImeji c = cc.retrieve(uri, sessionBean.getUser());
       cc.delete(c, sessionBean.getUser());
-      BeanHelper.info(getSuccessCollectionDeleteMessage(c.getMetadata().getTitle(), sessionBean));
+      BeanHelper.info(
+          getSuccessCollectionDeleteMessage(c.getMetadata().getTitle(), sessionBean.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_delete") + ":" + e.getMessage());
-      LOGGER.error(sessionBean.getMessage("error_collection_delete"), e);
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_delete", sessionBean.getLocale()) + ":"
+              + e.getMessage());
+      LOGGER.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_delete", sessionBean.getLocale()), e);
     }
     return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
         .getPrettySpacePage("pretty:collections");
@@ -202,9 +195,12 @@ public class CollectionListItem {
       } else {
         doiService.addDoiToCollection(collection, sessionBean.getUser());
       }
-      BeanHelper.info(sessionBean.getMessage("success_doi_creation"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", sessionBean.getLocale()));
     } catch (ImejiException e) {
-      BeanHelper.error(sessionBean.getMessage("error_doi_creation") + " " + e.getMessage());
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", sessionBean.getLocale())
+              + " " + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";
@@ -212,28 +208,30 @@ public class CollectionListItem {
 
   /**
    * Withdraw the {@link CollectionImeji} of the list
-   * 
+   *
    * @return
    */
   public String withdraw() {
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
       CollectionController cc = new CollectionController();
-      CollectionImeji c = ObjectLoader.loadCollectionLazy(uri, sessionBean.getUser());
+      CollectionImeji c = cc.retrieveLazy(uri, sessionBean.getUser());
       c.setDiscardComment(getDiscardComment());
       cc.withdraw(c, sessionBean.getUser());
-      BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", sessionBean.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", sessionBean.getLocale()));
       BeanHelper.error(e.getMessage());
-      LOGGER.error(sessionBean.getMessage("error_collection_withdraw"), e);
+      LOGGER.error("Error discarding collection", e);
     }
     return "pretty:";
   }
 
   /**
    * Listener for the discard comment
-   * 
+   *
    * @param event
    */
   public void discardCommentListener(ValueChangeEvent event) {
@@ -314,20 +312,6 @@ public class CollectionListItem {
     this.versionDate = versionDate;
   }
 
-  public boolean isSelected() {
-    return selected;
-  }
-
-  public void setSelected(boolean selected) {
-    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    if (selected) {
-      if (!(sessionBean.getSelectedCollections().contains(uri))) {
-        sessionBean.getSelectedCollections().add(uri);
-      }
-    } else
-      sessionBean.getSelectedCollections().remove(uri);
-    this.selected = selected;
-  }
 
   public URI getUri() {
     return uri;
@@ -387,6 +371,10 @@ public class CollectionListItem {
 
   public String getType() {
     return CONTAINER_TYPE.COLLECTION.name();
+  }
+
+  public CollectionImeji getCollection() {
+    return collection;
   }
 
 }

@@ -3,14 +3,14 @@ package de.mpg.imeji.logic.search.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
-import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.controller.util.MetadataTypesHelper;
+import de.mpg.imeji.logic.search.SearchIndexes;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * Element of a {@link SearchPair}, defines the index of the searched elements
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -18,13 +18,13 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
 public class SearchIndex {
   /**
    * All indexes names, searchable in imeji
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
    */
   public static enum SearchFields {
-    member, hasgrant, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, metadatatype, cont_md, title, description, cont_person, author_familyname, author_givenname, author_name, cont_person_org, author_org_name, md, statement, all, text, number, date, time, location, coordinates, license, url, label, citation, cone, person, person_completename, person_family, person_given, person_id, person_role, person_org, person_org_name, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype, filesize, pid;
+    member, hasgrant, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, metadatatype, cont_md, title, description, cont_person, author_familyname, author_givenname, author_name, cont_person_org, author_org_name, md, statement, all, text, number, date, time, location, coordinates, license, url, label, citation, cone, person, person_completename, person_family, person_given, person_id, person_role, person_org, person_org_name, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype, filesize, pid, info_label, info_text, info_url;
   }
 
   private String name;
@@ -36,7 +36,7 @@ public class SearchIndex {
 
   /**
    * Simple {@link SearchIndex} without namespace.
-   * 
+   *
    * @param name
    * @param namespace
    */
@@ -47,7 +47,7 @@ public class SearchIndex {
 
   /**
    * Construct a new {@link SearchIndex} with a name and a namespace
-   * 
+   *
    * @param name
    * @param namespace
    */
@@ -59,7 +59,7 @@ public class SearchIndex {
 
   /**
    * Construct a new {@link SearchIndex} with a name and a namespace and parent {@link SearchIndex}
-   * 
+   *
    * @param name
    * @param namespace
    * @param parent
@@ -75,7 +75,7 @@ public class SearchIndex {
   /**
    * Return all the necessary {@link SearchIndex} to search for a {@link Metadata} defined with a
    * {@link Statement}
-   * 
+   *
    * @param st
    * @return
    */
@@ -83,31 +83,31 @@ public class SearchIndex {
     List<SearchIndex> list = new ArrayList<SearchIndex>();
     switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString())) {
       case DATE:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.time.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.time));
         break;
       case GEOLOCATION:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.location.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.location));
         break;
       case LICENSE:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.license.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.license));
         break;
       case NUMBER:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.number.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.number));
         break;
       case CONE_PERSON:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_family.name()));
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_given.name()));
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_org_name.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.person_family));
+        list.add(SearchIndexes.getIndex(SearchFields.person_given));
+        list.add(SearchIndexes.getIndex(SearchFields.person_org_name));
         break;
       case PUBLICATION:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.citation.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.citation));
         break;
       case TEXT:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.text.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.text));
         break;
       case LINK:
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.url.name()));
-        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.label.name()));
+        list.add(SearchIndexes.getIndex(SearchFields.url));
+        list.add(SearchIndexes.getIndex(SearchFields.label));
         break;
     }
     return list;

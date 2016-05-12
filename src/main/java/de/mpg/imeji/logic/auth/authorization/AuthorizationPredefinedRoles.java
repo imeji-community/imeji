@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -28,15 +28,15 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
  * Defines the predefined roles (for instance the creator of collection) with a {@link List} of
  * {@link Grant}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -58,17 +58,17 @@ public class AuthorizationPredefinedRoles {
   // Can edit a profile
   private static final GrantType[] edit_profile = {GrantType.READ, GrantType.UPDATE};
   // Can administrate an album
-  private static final GrantType[] admin_album = {GrantType.READ, GrantType.ADMIN,
-      GrantType.CREATE, GrantType.DELETE, GrantType.UPDATE};
+  private static final GrantType[] admin_album =
+      {GrantType.READ, GrantType.ADMIN, GrantType.CREATE, GrantType.DELETE, GrantType.UPDATE};
   // Can administrate a collection
-  private static final GrantType[] admin_collection = {GrantType.READ, GrantType.ADMIN,
-      GrantType.ADMIN_CONTENT, GrantType.CREATE, GrantType.DELETE, GrantType.DELETE_CONTENT,
-      GrantType.UPDATE, GrantType.UPDATE_CONTENT};
-  public static final String IMEJI_GLOBAL_URI = PropertyBean.baseURI();
+  private static final GrantType[] admin_collection =
+      {GrantType.READ, GrantType.ADMIN, GrantType.ADMIN_CONTENT, GrantType.CREATE, GrantType.DELETE,
+          GrantType.DELETE_CONTENT, GrantType.UPDATE, GrantType.UPDATE_CONTENT};
+  public static final String IMEJI_GLOBAL_URI = Imeji.PROPERTIES.getBaseURI();
 
   /**
    * The default {@link User} role in imeji can create (collection/album) in imeji
-   * 
+   *
    * @param uri
    * @param allowedToCreateCollection
    * @return
@@ -82,7 +82,7 @@ public class AuthorizationPredefinedRoles {
 
   /**
    * This user can not create a collection in imeji. He only has the {@link Grant} on his account
-   * 
+   *
    * @param uri
    * @return
    */
@@ -94,7 +94,7 @@ public class AuthorizationPredefinedRoles {
 
   /**
    * Return the {@link Grant} of a {@link User} who is an imeji system administrator
-   * 
+   *
    * @return
    */
   public static List<Grant> imejiAdministrator(String uri) {
@@ -142,7 +142,7 @@ public class AuthorizationPredefinedRoles {
 
   /**
    * Transform an array of {@link GrantType} to a {@link List} of {@link Grant} for the given uri
-   * 
+   *
    * @param array
    * @param uri
    * @return

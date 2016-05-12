@@ -1,9 +1,9 @@
 package de.mpg.imeji.rest.api;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
+import static de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.transferCollection;
+import static de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+import static de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,32 +13,32 @@ import java.util.List;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
-import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.factory.SearchFactory;
+import de.mpg.imeji.logic.search.factory.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.rest.helper.CommonUtils;
 import de.mpg.imeji.rest.helper.ProfileCache;
-import de.mpg.imeji.rest.process.CommonUtils;
-import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.SearchResultTO;
 import de.mpg.imeji.rest.to.defaultItemTO.DefaultItemTO;
+import de.mpg.imeji.rest.transfer.MetadataTransferHelper;
+import de.mpg.imeji.rest.transfer.TransferObjectFactory;
 
 /**
  * API Service for {@link CollectionTO}
- * 
+ *
  * @author bastiens
  *
  */
@@ -62,7 +62,7 @@ public class CollectionService implements API<CollectionTO> {
   /**
    * Read all the items of a collection according to search query. Response is done with the default
    * format
-   * 
+   *
    * @param id
    * @param u
    * @param q
@@ -119,7 +119,7 @@ public class CollectionService implements API<CollectionTO> {
     transferCollection(to, vo, CREATE, u);
 
     URI collectionURI = null;
-    collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method), null);
+    collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method), null).getId();
     return read(CommonUtils.extractIDFromURI(collectionURI), u);
   }
 

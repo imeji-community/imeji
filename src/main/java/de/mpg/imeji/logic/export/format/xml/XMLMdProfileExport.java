@@ -11,16 +11,14 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.export.format.XMLExport;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.logic.search.model.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export the information for the ingest issue
- * 
+ *
  * @author hnguyen
  */
 public class XMLMdProfileExport extends XMLExport {
@@ -33,13 +31,11 @@ public class XMLMdProfileExport extends XMLExport {
   }
 
   @Override
-  public void export(OutputStream out, SearchResult sr) {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  public void export(OutputStream out, SearchResult sr, User user) {
     ProfileController pc = new ProfileController();
     if (sr.getNumberOfRecords() == 1) {
       try {
-        JaxbUtil.writeToOutputStream(
-            pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
+        JaxbUtil.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0)), user), out);
       } catch (JAXBException e) {
         throw new RuntimeException(e);
       } catch (ImejiException iie) {

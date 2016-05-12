@@ -4,45 +4,46 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.WorkflowException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.Authorization;
-import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.doi.models.DOICollection;
 import de.mpg.imeji.logic.doi.util.DOIUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 
 /**
  * Service for using MPDL DOI Service
- * 
+ *
  * @author bastiens
  *
  */
 public final class DoiService {
 
+  public static final String DOI_URL_RESOLVER = "http://dx.doi.org/";
   private final CollectionController collectionController = new CollectionController();
   private final Authorization authorization = new Authorization();
 
   /**
    * Add a DOI to a {@link CollectionImeji}
-   * 
+   *
    * @param coll
    * @param user
    * @throws ImejiException
    */
   public void addDoiToCollection(CollectionImeji coll, User user) throws ImejiException {
     isValidDOIOperation(coll, user);
-    String doiServiceUrl = ConfigurationBean.getDoiServiceUrlStatic();
-    String doiUser = ConfigurationBean.getDoiUserStatic();
-    String doiPassword = ConfigurationBean.getDoiPasswordStatic();
+    String doiServiceUrl = Imeji.CONFIG.getDoiServiceUrl();
+    String doiUser = Imeji.CONFIG.getDoiUser();
+    String doiPassword = Imeji.CONFIG.getDoiPassword();
     String doi = getNewDoi(coll, doiServiceUrl, doiUser, doiPassword);
     coll.setDoi(doi);
     collectionController.update(coll, user);
   }
 
   /**
-   * 
+   *
    * @param doi
    * @param collection
    * @param user
@@ -57,7 +58,7 @@ public final class DoiService {
 
   /**
    * Get a DOI for a {@link CollectionImeji}
-   * 
+   *
    * @param col
    * @throws Exception
    */
@@ -72,7 +73,7 @@ public final class DoiService {
 
   /**
    * Valid if the user is allowed to add a DOI to this Collection
-   * 
+   *
    * @param coll
    * @param user
    * @throws ImejiException

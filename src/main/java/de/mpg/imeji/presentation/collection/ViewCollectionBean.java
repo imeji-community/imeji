@@ -3,24 +3,29 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Bean for the pages "CollectionEntryPage" and "ViewCollection"
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -36,29 +41,27 @@ public class ViewCollectionBean extends CollectionBean {
    */
   private static final int MAX_ITEM_NUM_VIEW = 13;
 
-  /**
-   * Construct a default {@link ViewCollectionBean}
-   */
-  public ViewCollectionBean() {
-    super();
-  }
 
   /**
    * Initialize all elements of the page.
-   * 
+   *
+   * @throws NotFoundException
+   *
    * @throws Exception
    */
+  @PostConstruct
   public void init() {
+    setId(UrlHelper.getParameterValue("id"));
     try {
-      setCollection(new CollectionController().retrieveLazy(
-          ObjectHelper.getURI(CollectionImeji.class, getId()), sessionBean.getUser()));
+      setCollection(new CollectionController()
+          .retrieveLazy(ObjectHelper.getURI(CollectionImeji.class, getId()), getSessionUser()));
       if (getCollection() != null) {
-        findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
-        loadItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
+        findItems(getSessionUser(), MAX_ITEM_NUM_VIEW);
+        loadItems(getSessionUser(), MAX_ITEM_NUM_VIEW);
         countItems();
       }
-      if (sessionBean.getUser() != null) {
-        setSendEmailNotification(sessionBean.getUser().getObservedCollections().contains(getId()));
+      if (getSessionUser() != null) {
+        setSendEmailNotification(getSessionUser().getObservedCollections().contains(getId()));
       }
       if (getCollection() != null) {
         initCollectionProfile();
@@ -88,7 +91,7 @@ public class ViewCollectionBean extends CollectionBean {
 
   @Override
   protected String getNavigationString() {
-    return sessionBean.getPrettySpacePage("pretty:collectionInfos");
+    return SessionBean.getPrettySpacePage("pretty:collectionInfos", getSpace());
   }
 
   public String getSmallDescription() {
@@ -103,23 +106,9 @@ public class ViewCollectionBean extends CollectionBean {
     }
   }
 
-  /**
-   * @return
-   */
-  public String getFormattedDescription() {
-    if (getCollection() == null || getCollection().getMetadata().getDescription() == null) {
-      return "";
-    }
-    return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
+  @Override
+  protected List<URI> getSelectedCollections() {
+    return new ArrayList<>();
   }
 
-  /**
-   * @return
-   */
-  public String getCitation() {
-    String title = super.getCollection().getMetadata().getTitle();
-    String author = this.getPersonString();
-    String url = super.getPageUrl();
-    return title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
-  }
 }

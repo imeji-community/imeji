@@ -23,18 +23,18 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.transfer.ReverseTransferObjectFactory;
 import de.mpg.j2j.misc.LocalizedString;
 import util.JenaUtil;
 
@@ -73,7 +73,7 @@ public class ItemTestBase extends ImejiTestBase {
           ReverseTransferObjectFactory.TRANSFER_MODE.CREATE, JenaUtil.testUser);
 
       collectionId = ObjectHelper.getId(cc.create(ci, profile, JenaUtil.testUser,
-          CollectionController.MetadataProfileCreationMethod.REFERENCE, null));
+          CollectionController.MetadataProfileCreationMethod.REFERENCE, null).getId());
     } catch (Exception e) {
       LOGGER.error("Cannot init Collection", e);
     }

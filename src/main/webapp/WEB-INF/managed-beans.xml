@@ -38,11 +38,6 @@
 		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>CollectionItemBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionItemBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
 
 	<!-- Search Bean -->
 	<managed-bean>
@@ -75,27 +70,9 @@
 
 	<!-- Item Beans -->
 	<managed-bean>
-		<managed-bean-name>ItemBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.image.ItemBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
 		<managed-bean-name>ItemsBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.image.ItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>EditItemMetadataBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.metadata.EditItemMetadataBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>SingleEditBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.metadata.SingleEditBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 
 	<!-- Album Beans -->
@@ -109,25 +86,6 @@
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>AlbumItemBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-
-
-	<!-- Users bean -->
-	<managed-bean>
-		<managed-bean-name>UserBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.user.UserBean</managed-bean-class>
-		<managed-bean-scope>view</managed-bean-scope>
-	</managed-bean>
-
-	<managed-bean>
-		<managed-bean-name>UserCreationBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.user.UserCreationBean</managed-bean-class>
-		<managed-bean-scope>view</managed-bean-scope>
-	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>
@@ -135,21 +93,6 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 
-	<managed-bean>
-		<managed-bean-name>FiltersBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.filter.FiltersBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>Filter</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.filter.Filter</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>MetadataLabels</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.lang.MetadataLabels</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>FiltersSession</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.filter.FiltersSession</managed-bean-class>
@@ -163,11 +106,6 @@
 	<managed-bean>
 		<managed-bean-name>Navigation</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.beans.Navigation</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>PropertyBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.PropertyBean</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>

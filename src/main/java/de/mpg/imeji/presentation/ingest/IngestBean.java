@@ -15,6 +15,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXParseException;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ingest.controller.IngestController;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -25,7 +26,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Java Bean for the ingest
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -49,7 +50,7 @@ public class IngestBean {
 
   /**
    * Method reading url to trigger event
-   * 
+   *
    * @throws Exception
    */
   public void status() throws Exception {
@@ -129,10 +130,11 @@ public class IngestBean {
       }
     }
     if (error) {
-      BeanHelper.error(session.getLabel("ingestFail"));
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getLabel("ingestFail", session.getLocale()));
       BeanHelper.error(msg);
-    } else if (success)
-      BeanHelper.info(session.getLabel("ingestSuccess"));
+    } else if (success) {
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getLabel("ingestSuccess", session.getLocale()));
+    }
   }
 
   public boolean isSuccess() {
@@ -145,7 +147,7 @@ public class IngestBean {
 
   /**
    * Upload the files for the ingest
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -175,7 +177,7 @@ public class IngestBean {
 
   /**
    * Load the {@link CollectionImeji} for the ingest
-   * 
+   *
    * @throws Exception
    */
   private void loadCollection() throws Exception {
@@ -183,17 +185,17 @@ public class IngestBean {
       ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
           .setId(collectionId);
       ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
-      collection =
-          ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
-              .getCollection();
+      collection = ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
+          .getCollection();
     } else {
-      BeanHelper.error(session.getLabel("error") + " No ID in URL");
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getLabel("error", session.getLocale()) + " No ID in URL");
     }
   }
 
   /**
    * Write an {@link InputStream} to temp file
-   * 
+   *
    * @param fileName
    * @param is
    * @return
@@ -219,7 +221,7 @@ public class IngestBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public CollectionImeji getCollection() {
@@ -228,7 +230,7 @@ public class IngestBean {
 
   /**
    * setter
-   * 
+   *
    * @param collection
    */
   public void setCollection(CollectionImeji collection) {
@@ -237,7 +239,7 @@ public class IngestBean {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public String getCollectionId() {
@@ -246,7 +248,7 @@ public class IngestBean {
 
   /**
    * setter
-   * 
+   *
    * @param collectionId
    */
   public void setCollectionId(String collectionId) {
@@ -255,7 +257,7 @@ public class IngestBean {
 
   /**
    * Return the size of the current {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public int getCollectionSize() {

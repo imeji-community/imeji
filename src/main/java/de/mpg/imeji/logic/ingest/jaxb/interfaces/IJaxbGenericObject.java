@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.mpg.imeji.logic.ingest.jaxb.interfaces;
 
@@ -17,19 +17,19 @@ import org.xml.sax.SAXException;
 public interface IJaxbGenericObject<T> {
   /**
    * This method creates a xml filename from a type object through the given schema file.
-   * 
+   *
    * @param xmlFile, the provided xml filename output to an xml file
    * @param t, the type object
    * @throws JAXBException
    * @throws SAXException
    * @throws FileNotFoundException
    */
-  public void marshal(String xmlFilename, T t) throws JAXBException, SAXException,
-      FileNotFoundException;
+  public void marshal(String xmlFilename, T t)
+      throws JAXBException, SAXException, FileNotFoundException;
 
   /**
    * This method generates a type object from the xml filename.
-   * 
+   *
    * @param xmlFile, the xml filename specified the content of the object type information
    * @return a type object
    * @throws JAXBException
@@ -39,7 +39,7 @@ public interface IJaxbGenericObject<T> {
 
   /**
    * This method creates a xml file from a type object through the given schema file.
-   * 
+   *
    * @param xmlFile, the xml file to output to an xml file
    * @param t, the type object
    * @throws JAXBException
@@ -50,7 +50,7 @@ public interface IJaxbGenericObject<T> {
 
   /**
    * This method generates a type object from the xml file.
-   * 
+   *
    * @param xmlFile, the xml file specified the content of the object type information
    * @return a type object
    * @throws JAXBException

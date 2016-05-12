@@ -3,17 +3,15 @@
 				xmlns:ui="http://java.sun.com/jsf/facelets"
 				xmlns:h="http://java.sun.com/jsf/html"
 				xmlns:imjc="http://java.sun.com/jsf/composite/components"
-				xmlns:f="http://xmlns.jcp.org/jsf/core"
-		>
+				xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:param name="headline" value="#{lbl.register}"/>
 
     <ui:define name="mainContent">
 		
         <div class="imj_mainContentWrapper">
-
-            <!-- Register form , TODO: switched on by all statuses false -->
-            <h:panelGroup layout="block" id="registerArea" rendered="#{Configuration.registrationEnabled}">
+        
+            <h:panelGroup layout="block" id="registerArea" rendered="#{RegistrationBean.registrationEnabled}">
             
             	<ui:fragment rendered="#{!RegistrationBean.activation_submitted}">
 	            	<h2 class="imj_headline">#{lbl.registration}</h2>
@@ -23,6 +21,8 @@
 	                        <li class="imj_active">1. #{lbl.register}</li>
 	                        <li>2. #{lbl.register_activate}</li>
 	                    </ul>
+	                    
+	                    <h:outputText value="#{Configuration.registrationSnippet}" escape="false"/>
 	                    
 	                    <ui:fragment id="formArea">
 	                        <h:form id="userForm" rendered="#{!RegistrationBean.registration_success}">
@@ -37,8 +37,7 @@
 	                            </div>
 	                            <imjc:person id="userPersonRegister" person="#{RegistrationBean.user.person}" bean="#{RegistrationBean}" position="0" userSource="" minimized="true"/>
 	                            <h:panelGroup layout="block" styleClass="imj_submitPanel">
-	                                <h:commandButton action="#{RegistrationBean.register}" type="submit" value="#{lbl.register_now}" styleClass="imj_submitButton">
-	                                    <f:ajax execute="@form" render=":registerArea :imj_pageMessageArea"/>
+	                                <h:commandButton action="#{RegistrationBean.register}" type="submit" value="#{lbl.register_now}" styleClass="imj_submitButton"> 
 	                                </h:commandButton>
 	                            </h:panelGroup>
 	                        </h:form>

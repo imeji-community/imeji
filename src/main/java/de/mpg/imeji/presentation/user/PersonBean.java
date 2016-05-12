@@ -17,39 +17,37 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.util.ImejiFactory;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
+import de.mpg.imeji.presentation.beans.SuperBean;
+import de.mpg.imeji.presentation.metadata.MetadataWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * The JSF Composite for a {@link Person}
- * 
+ *
  * @author saquet
- * 
+ *
  */
 @ManagedBean(name = "PersonBean")
 @ViewScoped
-public class PersonBean implements Serializable {
+public class PersonBean extends SuperBean implements Serializable {
   private static final long serialVersionUID = 2066560191381597873L;
-
-  private SessionBean sb;
-
   private String personURI;
   private String orgaURI;
 
   public PersonBean() {
-    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
   }
 
   /**
    * Change the person
-   * 
+   *
    * @return
    */
   public String changePerson(Object bean, int position) {
@@ -62,15 +60,15 @@ public class PersonBean implements Serializable {
       l.set(position, person.clone());
     } else if (bean instanceof UserBean) {
       ((UserBean) bean).getUser().setPerson(person.clone());
-    } else if (bean instanceof SuperMetadataBean) {
-      ((SuperMetadataBean) bean).setPerson(person);
+    } else if (bean instanceof MetadataWrapper) {
+      ((MetadataWrapper) bean).setPerson(person);
     }
     return ":";
   }
 
   /**
    * Change the {@link Organization}
-   * 
+   *
    * @param bean
    * @param positionUser
    * @param positionOrga
@@ -91,9 +89,9 @@ public class PersonBean implements Serializable {
       List<Organization> l =
           (List<Organization>) ((UserBean) bean).getUser().getPerson().getOrganizations();
       l.set(positionOrga, orga);
-    } else if (bean instanceof SuperMetadataBean) {
+    } else if (bean instanceof MetadataWrapper) {
       List<Organization> l =
-          (List<Organization>) ((SuperMetadataBean) bean).getPerson().getOrganizations();
+          (List<Organization>) ((MetadataWrapper) bean).getPerson().getOrganizations();
       l.set(positionOrga, orga);
     } else if (bean instanceof RegistrationBean) {
       List<Organization> l =
@@ -105,7 +103,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Load the {@link Person} with the passed uri
-   * 
+   *
    * @param uri
    * @return
    */
@@ -114,7 +112,7 @@ public class PersonBean implements Serializable {
       try {
         URI.create(uri);
         // if not errors, then the person is intern to imeji
-        UserController uc = new UserController(sb.getUser());
+        UserController uc = new UserController(getSessionUser());
         return uc.retrievePersonById(personURI);
       } catch (Exception e) {
         // is a cone person
@@ -126,7 +124,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Parse a json from cone for a person
-   * 
+   *
    * @param jsonString
    * @return
    */
@@ -150,7 +148,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Parse a json from cone for an organization
-   * 
+   *
    * @param jsonString
    * @return
    */
@@ -174,7 +172,7 @@ public class PersonBean implements Serializable {
   private Organization loadOrga(String uri) {
     if (uri != null) {
       try {
-        UserController uc = new UserController(sb.getUser());
+        UserController uc = new UserController(getSessionUser());
         return uc.retrieveOrganizationById(uri);
       } catch (Exception e) {
         BeanHelper.error(e.getMessage());
@@ -186,7 +184,7 @@ public class PersonBean implements Serializable {
   /**
    * Read a JSON Object as a String, whether it is an {@link JSONArray}, a {@link String} or a
    * {@link JSONObject}
-   * 
+   *
    * @param jsonObj
    * @param jsonName
    * @return
@@ -222,7 +220,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Add an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @param authorPosition
    * @param organizationPosition
    * @return
@@ -237,23 +235,23 @@ public class PersonBean implements Serializable {
 
   /**
    * Remove an organization to an author of the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String removeOrganization(int organizationPosition) {
-
     List<Organization> orgs = (List<Organization>) getPersonFromParentBean().getOrganizations();
-    if (orgs.size() > 1)
+    if (orgs.size() > 1) {
       orgs.remove(organizationPosition);
-    else
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("error_author_need_one_organization"));
+    } else {
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_author_need_one_organization", getLocale()));
+    }
     return "";
   }
 
   /**
    * Listener
-   * 
+   *
    * @param event
    */
   public void orgaListener(ValueChangeEvent event) {
@@ -262,7 +260,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Listener
-   * 
+   *
    * @param event
    */
   public void personListener(ValueChangeEvent event) {
@@ -271,7 +269,7 @@ public class PersonBean implements Serializable {
 
   /**
    * Getter
-   * 
+   *
    * @return
    */
   public String getPersonURI() {
@@ -280,7 +278,7 @@ public class PersonBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param personURI
    */
   public void setPersonURI(String personURI) {

@@ -9,9 +9,9 @@ import de.mpg.imeji.logic.vo.Organization;
 
 /**
  * The default TO for an {@link Organization}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 @JsonInclude(Include.NON_NULL)
 public class DefaultOrganizationTO implements Serializable {

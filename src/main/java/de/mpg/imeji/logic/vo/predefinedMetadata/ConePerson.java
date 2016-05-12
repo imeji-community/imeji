@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
@@ -20,7 +19,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Metadata for {@link Person}. Can have a CoNe identifier
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -93,11 +92,10 @@ public class ConePerson extends Metadata {
 
   @Override
   public void clean() {
-    String completeName =
-        (person.getGivenName() != null ? person.getGivenName() : "")
-            + ((person.getGivenName() == null || person.getGivenName().isEmpty()
-                || person.getFamilyName() == null || person.getFamilyName().isEmpty()) ? "" : ", ")
-            + person.getFamilyName() != null ? person.getFamilyName() : "";
+    String completeName = (person.getGivenName() != null ? person.getGivenName() : "")
+        + ((person.getGivenName() == null || person.getGivenName().isEmpty()
+            || person.getFamilyName() == null || person.getFamilyName().isEmpty()) ? "" : ", ")
+        + person.getFamilyName() != null ? person.getFamilyName() : "";
     person.setCompleteName(completeName.trim());
   }
 }

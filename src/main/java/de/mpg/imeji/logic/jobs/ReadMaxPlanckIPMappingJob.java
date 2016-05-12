@@ -2,11 +2,11 @@ package de.mpg.imeji.logic.jobs;
 
 import java.util.concurrent.Callable;
 
-import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
+import de.mpg.imeji.logic.util.MaxPlanckInstitutUtils;
 
 /**
  * Read the IP Mapping for the Max Planck Planck Institutes
- * 
+ *
  * @author bastiens
  *
  */

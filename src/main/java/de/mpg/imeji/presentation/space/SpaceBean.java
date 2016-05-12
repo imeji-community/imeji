@@ -27,9 +27,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.SpaceController;
-import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.SpaceController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -46,7 +47,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Abstract bean for all collection beans
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -95,16 +96,18 @@ public abstract class SpaceBean implements Serializable {
 
   /**
    * Delete the {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String delete() {
     SpaceController sc = new SpaceController();
     try {
       sc.delete(space, sessionBean.getUser());
-      BeanHelper.info(sessionBean.getMessage("space_successfully_deleted"));
+      BeanHelper.info(
+          Imeji.RESOURCE_BUNDLE.getMessage("space_successfully_deleted", sessionBean.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_space_delete"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_space_delete", sessionBean.getLocale()));
       LOGGER.error("Error delete space", e);
     }
 
@@ -149,15 +152,21 @@ public abstract class SpaceBean implements Serializable {
         }
       });
     } catch (ImejiException e) {
-      BeanHelper.info(sessionBean.getMessage("could_not_load_collections_for_space"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("could_not_load_collections_for_space",
+          sessionBean.getLocale()));
+      LOGGER.error("error reading collection spaces", e);
     }
     if (UrlHelper.getParameterBoolean("start")) {
       try {
         upload();
       } catch (FileUploadException e) {
-        BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
+            sessionBean.getLocale()));
+        LOGGER.error("error upload space logo", e);
       } catch (TypeNotAllowedException e) {
-        BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
+        BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_logo_uri_save",
+            sessionBean.getLocale()));
+        LOGGER.error("error upload space logo", e);
       }
     }
 
@@ -165,8 +174,9 @@ public abstract class SpaceBean implements Serializable {
 
   public List<SelectItem> getCollectionItems() {
     List<SelectItem> itemList = new ArrayList<SelectItem>();
-    for (CollectionImeji ci : collections)
+    for (CollectionImeji ci : collections) {
       itemList.add(new SelectItem(ci.getId().toString(), ci.getMetadata().getTitle()));
+    }
     return itemList;
   }
 
@@ -245,13 +255,13 @@ public abstract class SpaceBean implements Serializable {
             response.getWriter().print(
                 "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}STOP");
             response.flushBuffer();
-            throw new TypeNotAllowedException(
-                ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getMessage("Logo_single_upload_invalid_content_format"));
+            throw new TypeNotAllowedException(Imeji.RESOURCE_BUNDLE
+                .getMessage("Logo_single_upload_invalid_content_format", sessionBean.getLocale()));
           }
           FileOutputStream fos = new FileOutputStream(tmp);
-          if (fis.getName() != null)
+          if (fis.getName() != null) {
             ii.setName(fis.getName());
+          }
           if (!fis.isFormField()) {
             try {
               IOUtils.copy(in, fos);
@@ -268,6 +278,7 @@ public abstract class SpaceBean implements Serializable {
       } catch (IOException | FileUploadException e) {
         ii.setFile(null);
         BeanHelper.error("Could not process uploaded Logo file");
+        LOGGER.error("Could not process uploaded Logo file", e);
       }
     }
     return ii;

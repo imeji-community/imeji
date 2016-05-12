@@ -15,7 +15,7 @@ import de.mpg.j2j.helper.J2JHelper;
 /**
  * Prepare Objects for Workflow operations.<br/>
  * NOTE: Objects are not written in the database. This must be done by the controllers
- * 
+ *
  * @author bastiens
  *
  */
@@ -25,7 +25,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the creation of an object: Set all Workflow properties
-   * 
+   *
    * @param p
    * @param user
    * @throws WorkflowException
@@ -45,7 +45,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the Update of an object
-   * 
+   *
    * @param p
    * @param user
    */
@@ -57,7 +57,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the release of an object
-   * 
+   *
    * @param p
    * @throws WorkflowException
    */
@@ -73,7 +73,7 @@ public class WorkflowManager {
 
   /**
    * Prepare the withdraw of an object
-   * 
+   *
    * @param p
    * @throws WorkflowException
    */

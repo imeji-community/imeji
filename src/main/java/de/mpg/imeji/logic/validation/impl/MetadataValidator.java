@@ -4,28 +4,24 @@ import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.controller.util.MetadataProfileUtil;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * {@link Validator} for a {@link Metadata}. Only working with profile
- * 
+ *
  * @author saquet
  *
  */
@@ -42,77 +38,72 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
     if (isDelete()) {
       return;
     }
-    Statement s = ProfileHelper.getStatement(md.getStatement(), p);
-    if (!validataMetadata(md, s))
-      throw new UnprocessableError("Invalid value provided for metadata of type " + getTypeLabel(md)
-          + " (" + md.asFulltext() + "...)");
-
+    Statement s = MetadataProfileUtil.getStatement(md.getStatement(), p);
+    validataMetadata(md, s);
   }
 
   /**
    * Validate the {@link Metadata} for the differents types
-   * 
+   *
    * @param md
    * @param s
    * @return
+   * @throws UnprocessableError
    */
-  private boolean validataMetadata(Metadata md, Statement s) {
+  private void validataMetadata(Metadata md, Statement s) throws UnprocessableError {
+    UnprocessableError e = new UnprocessableError();
     if (md instanceof Text) {
       String value = ((Text) md).getText();
-      return value != null && isAllowedValueString(value, s);
+      if (!isAllowedValueString(value, s)) {
+        e = new UnprocessableError("error_metadata_invalid_value" + value, e);
+      }
     } else if (md instanceof Number) {
       double value = ((Number) md).getNumber();
-      return isAllowedValueDouble(value, s);
-    } else if (md instanceof Date) {
-      // Date validation for format YYYY-MM-DD only, other dates will not be allowed
-      String value = ((Date) md).getDate();
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      java.util.Date valueDate = null;
-      try {
-        valueDate = sdf.parse(value);
-        if (!value.equals(sdf.format(valueDate))) {
-          return false;
-        }
-      } catch (ParseException e) {
-        return false;
+      if (!isAllowedValueDouble(value, s)) {
+        e = new UnprocessableError("error_metadata_invalid_value" + value, e);
       }
-      return ((Date) md).getTime() != Long.MIN_VALUE && isAllowedValueString(value, s);
+    } else if (md instanceof Date) {
+      String value = ((Date) md).getDate();
+      if (!isValidDate(value)) {
+        e = new UnprocessableError("error_date_format" + value, e);
+      }
     } else if (md instanceof Link) {
       URI value = ((Link) md).getUri();
-      return value != null && isAllowedValueURI(value, s);
-    } else if (md instanceof Geolocation) {
-      String value = ((Geolocation) md).getName();
-      Double latitude = ((Geolocation) md).getLatitude();
-      Double longitude = ((Geolocation) md).getLongitude();
-      if (!Double.isNaN(latitude) || !Double.isNaN(longitude)) {
-        return value != null && latitude >= -90 && latitude <= 90 && longitude >= -180
-            && longitude <= 180;
+      if (value == null) {
+        e = new UnprocessableError("error_metadata_url_empty", e);
       }
-      return value != null;// No Predefined Value supported
+      if (!isAllowedValueURI(value, s)) {
+        e = new UnprocessableError("error_metadata_invalid_value" + value, e);
+      }
+    } else if (md instanceof Geolocation) {
+      try {
+        new GeolocationValidator().validate((Geolocation) md, validateForMethod);
+      } catch (UnprocessableError e2) {
+        e = new UnprocessableError(e2.getMessages(), e);
+      }
     } else if (md instanceof ConePerson) {
       // no validation here for person only will be invoked, if family name is not
       // provided, presentation is deleting the whole person object!!!
       // should be fixed in the presentation
-      String value = ((ConePerson) md).getPerson().getFamilyName();
-      boolean valueOrg = true;
-      List<Organization> orgs =
-          (List<Organization>) ((ConePerson) md).getPerson().getOrganizations();
-      for (Organization org : orgs) {
-        if (StringHelper.isNullOrEmptyTrim(org.getName())
-            && (!StringHelper.isNullOrEmptyTrim(org.getCountry())
-                || !StringHelper.isNullOrEmptyTrim(org.getDescription())
-                || !StringHelper.isNullOrEmptyTrim(org.getCity())))
-          valueOrg = false;
+      try {
+        new PersonValidator().validate(((ConePerson) md).getPerson(), validateForMethod);
+      } catch (UnprocessableError e1) {
+        e = new UnprocessableError(e1.getMessages(), e);
       }
-      return !StringHelper.isNullOrEmptyTrim(value) && valueOrg;
     } else if (md instanceof License) {
       String value = ((License) md).getLicense();
-      return value != null;// No Predefined Value supported
+      if (value == null) {
+        e = new UnprocessableError("error_metadata_invalid_value" + value, e);
+      }
     } else if (md instanceof Publication) {
       URI value = ((Publication) md).getUri();
-      return value != null;// No Predefined Value supported
+      if (value == null) {
+        e = new UnprocessableError("error_metadata_invalid_value" + value, e);
+      }
     }
-    return false;
+    if (e.hasMessages()) {
+      throw e;
+    }
   }
 
   private String getTypeLabel(Metadata md) {
@@ -136,15 +127,38 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
     return "";
   }
 
+  /**
+   * True if the String is valid Date
+   *
+   * @param dateString
+   * @return
+   */
+  private boolean isValidDate(String dateString) {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    java.util.Date valueDate = null;
+    try {
+      valueDate = sdf.parse(dateString);
+      if (!dateString.equals(sdf.format(valueDate))) {
+        return false;
+      }
+    } catch (ParseException e1) {
+      return false;
+    }
+    return true;
+  }
+
 
   /**
    * Check if the value is allowed according the literal constraints
-   * 
+   *
    * @param value
    * @param s
    * @return
    */
   private boolean isAllowedValueString(String value, Statement s) {
+    if (value == null) {
+      return false;
+    }
     if (s.getLiteralConstraints() != null && s.getLiteralConstraints().size() > 0) {
       return containsString(s.getLiteralConstraints(), value);
     }
@@ -153,7 +167,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Check if the value is allowed according the literal constraints
-   * 
+   *
    * @param value
    * @param s
    * @return
@@ -167,7 +181,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Check if the value is allowed according the literal constraints
-   * 
+   *
    * @param value
    * @param s
    * @return
@@ -181,7 +195,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Test if the {@link Collection} contains the {@link String}
-   * 
+   *
    * @param l
    * @param value
    * @return
@@ -197,7 +211,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Test if the {@link Collection} contains the {@link Double}
-   * 
+   *
    * @param l
    * @param value
    * @return
@@ -213,7 +227,7 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
   /**
    * Test if the {@link Collection} contains the {@link URI}
-   * 
+   *
    * @param l
    * @param value
    * @return
@@ -226,4 +240,6 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
     }
     return false;
   }
+
+
 }

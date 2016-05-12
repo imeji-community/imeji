@@ -6,7 +6,7 @@ import java.net.URI;
 
 /**
  * The identifier of a {@link j2jResource}. The id must be an {@link URI}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

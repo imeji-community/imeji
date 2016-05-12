@@ -2,7 +2,7 @@ package de.mpg.imeji.exceptions;
 
 /**
  * Exception for authentication of inactive users
- * 
+ *
  * @author bastiens
  *
  */

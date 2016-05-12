@@ -14,17 +14,18 @@ import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.resource.UserController.USER_TYPE;
+import de.mpg.imeji.logic.keyValueStore.KeyValueStoreBusinessController;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /*
  * 
@@ -73,8 +74,6 @@ public class JenaUtil {
   public static void initJena() {
 
     try {
-      // Init PropertyBean
-      new PropertyBean();
       // Read tdb location
       TDB_PATH = PropertyReader.getProperty("imeji.tdb.path");
       // remove old Database
@@ -105,6 +104,7 @@ public class JenaUtil {
     LOGGER.info("TDB Location released!");
     deleteTDBDirectory();
     ElasticService.reset();
+    KeyValueStoreBusinessController.stopAllStores();
   }
 
   private static void initTestUser() throws Exception {
@@ -132,7 +132,7 @@ public class JenaUtil {
    * @param pwd
    * @throws Exception
    */
-  private static User getMockupUser(String email, String name, String pwd) throws Exception {
+  private static User getMockupUser(String email, String name, String pwd) throws ImejiException {
     User user = new User();
     user.setEmail(email);
     Person userPerson = user.getPerson();

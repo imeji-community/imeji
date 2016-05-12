@@ -6,11 +6,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DOITitle {
 
   private String title;
-  
-  public DOITitle(){
-  };
-  
-  public DOITitle(String title){
+
+  public DOITitle() {};
+
+  public DOITitle(String title) {
     this.title = title;
   }
 

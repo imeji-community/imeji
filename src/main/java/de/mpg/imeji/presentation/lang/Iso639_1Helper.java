@@ -15,12 +15,12 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.ProxyHelper;
+import de.mpg.imeji.logic.util.PropertyReader;
+import de.mpg.imeji.logic.util.ProxyHelper;
 
 /**
  * Utility class for Iso638_1 languages vocabulary
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -52,7 +52,7 @@ public class Iso639_1Helper {
 
   /**
    * Get the Iso638_1 languages vocabulary from CoNe with the options format
-   * 
+   *
    * @return
    */
   private String getVocabularyString() {
@@ -77,7 +77,7 @@ public class Iso639_1Helper {
 
   /**
    * Parse the Result as defined in Cone
-   * 
+   *
    * @param v
    */
   private void parseVocabularyString(String v) {
@@ -95,7 +95,7 @@ public class Iso639_1Helper {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<SelectItem> getList() {
@@ -104,7 +104,7 @@ public class Iso639_1Helper {
 
   /**
    * setter
-   * 
+   *
    * @param list
    */
   public void setList(List<SelectItem> list) {

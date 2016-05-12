@@ -14,7 +14,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * imeji collection has one {@link MetadataProfile} and contains {@link Item}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$

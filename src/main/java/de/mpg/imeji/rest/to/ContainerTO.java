@@ -5,14 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerTO extends PropertiesTO implements Serializable {
-
   private static final long serialVersionUID = -3159018504356059712L;
-
   private String title;
-
   private String description;
-
   private List<PersonTO> contributors = new ArrayList<PersonTO>();
+  private List<ContainerAdditionalInformationTO> additionalInfos = new ArrayList<>();
 
   public String getTitle() {
     return title;
@@ -36,6 +33,20 @@ public class ContainerTO extends PropertiesTO implements Serializable {
 
   public void setContributors(List<PersonTO> contributors) {
     this.contributors = contributors;
+  }
+
+  /**
+   * @return the additionalInformations
+   */
+  public List<ContainerAdditionalInformationTO> getAdditionalInfos() {
+    return additionalInfos;
+  }
+
+  /**
+   * @param additionalInformations the additionalInformations to set
+   */
+  public void setAdditionalInfos(List<ContainerAdditionalInformationTO> additionalInformations) {
+    this.additionalInfos = additionalInformations;
   }
 
 

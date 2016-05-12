@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Helper for {@link URI} of {@link HistoryPage}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -69,7 +69,7 @@ public class HistoryUtil {
 
   /**
    * Return the {@link ImejiPages} for the url
-   * 
+   *
    * @param url
    * @return
    */
@@ -86,8 +86,9 @@ public class HistoryUtil {
    * Return the label of a page according to its url
    **/
   public static String getPageLabel(String url) {
-    if (url == null)
+    if (url == null) {
       return "history_home";
+    }
 
     for (ImejiPages page : ImejiPages.values()) {
       if (url.matches(page.getRegex())) {
@@ -99,7 +100,7 @@ public class HistoryUtil {
 
   /**
    * return a {@link Map} of http paramter into on String as displayed in the url
-   * 
+   *
    * @param params
    * @return
    */

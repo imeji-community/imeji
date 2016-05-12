@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
 import de.mpg.imeji.logic.search.SearchIndexer;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticAnalysers;
 import de.mpg.imeji.logic.search.elasticsearch.ElasticService.ElasticTypes;
@@ -44,9 +44,9 @@ import de.mpg.imeji.logic.vo.Space;
 
 /**
  * Indexer for ElasticSearch
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticIndexer implements SearchIndexer {
   private static final Logger LOGGER = Logger.getLogger(ElasticIndexer.class);
@@ -124,7 +124,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Transform an object to a json
-   * 
+   *
    * @param obj
    * @return
    * @throws UnprocessableError
@@ -139,7 +139,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Index in Elasticsearch the passed json with the given id
-   * 
+   *
    * @param id
    * @param json
    */
@@ -169,7 +169,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Transform a model Entity into an Elasticsearch Entity
-   * 
+   *
    * @param obj
    * @return
    */
@@ -192,22 +192,26 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Set the albums of an item
-   * 
+   *
    * @param item
    * @return
    */
   private static Item setAlbums(Item item) {
     AlbumController c = new AlbumController();
     SearchQuery q = new SearchQuery();
-    q.addPair(new SearchPair(SearchFields.member, SearchOperators.EQUALS, item.getId().toString(),
-        false));
+    try {
+      q.addPair(new SearchPair(SearchFields.member, SearchOperators.EQUALS, item.getId().toString(),
+          false));
+    } catch (UnprocessableError e) {
+      LOGGER.error("Error searching for albums of item " + item.getIdString(), e);
+    }
     item.setAlbums(c.search(q, Imeji.adminUser, null, -1, 0, null).getResults());
     return item;
   }
 
   /**
    * Get the Id of an Object
-   * 
+   *
    * @param obj
    * @return
    */
@@ -238,7 +242,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Retrieve the space of the Item depending of its folder
-   * 
+   *
    * @param item
    * @return
    */
@@ -249,7 +253,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * True if a the space of a collection is different than the space in index
-   * 
+   *
    * @param ef
    * @param dataType
    * @param index
@@ -267,7 +271,7 @@ public class ElasticIndexer implements SearchIndexer {
 
   /**
    * Reindex all Items of these Folders
-   * 
+   *
    * @param collectionsToReindex
    * @throws URISyntaxException
    * @throws IOException
@@ -280,18 +284,18 @@ public class ElasticIndexer implements SearchIndexer {
           reindexItemsInContainer(collectionR);
         }
       } catch (Exception e) {
-        LOGGER.error("There has been an error during reindexing of Folder Items!");
+        LOGGER.error("There has been an error during reindexing of Folder Items!", e);
       }
     }
   }
 
   /**
    * Reindex all {@link Item} stored in the database
-   * 
+   *
    * @throws ImejiException
    * @throws URISyntaxException
    * @throws IOException
-   * 
+   *
    */
   private void reindexItemsInContainer(String containerUri) {
     ElasticIndexer indexer = new ElasticIndexer(index, ElasticTypes.items, analyser);
@@ -301,18 +305,18 @@ public class ElasticIndexer implements SearchIndexer {
           null, Imeji.adminUser, null, -1, -1);
       indexer.indexBatch(items);
     } catch (Exception e) {
-      LOGGER.error("There has been an error during reindexing of items in a container! ");
+      LOGGER.error("There has been an error during reindexing of items in a container! ", e);
     }
   }
 
 
   /**
    * Reindex all {@link Item} stored in the database
-   * 
+   *
    * @throws ImejiException
    * @throws URISyntaxException
    * @throws IOException
-   * 
+   *
    */
   private void reindexItemsFromList(List<String> itemUris) {
     if (itemUris.size() > 0) {
@@ -323,14 +327,14 @@ public class ElasticIndexer implements SearchIndexer {
         indexer.indexBatch(items);
       } catch (Exception e) {
         LOGGER.error(
-            "There has been an error during reindexing of items from provided list of items!");
+            "There has been an error during reindexing of items from provided list of items!", e);
       }
     }
   }
 
   /**
    * Find Folders which need to be updated, because they have been added/removed toa space
-   * 
+   *
    * @param collectionsToReindex
    * @param obj
    */
@@ -347,7 +351,7 @@ public class ElasticIndexer implements SearchIndexer {
   /**
    * Find Items which need to be reindexed as Album members, because they have been added/removed
    * to/from album
-   * 
+   *
    * @param collectionsToReindex
    * @param obj
    * @throws URISyntaxException
@@ -387,7 +391,8 @@ public class ElasticIndexer implements SearchIndexer {
         }
       } catch (Exception e) {
         LOGGER.error(
-            "There has been an error during creatino of the item list for reindexing of Albums!");
+            "There has been an error during creatino of the item list for reindexing of Albums!",
+            e);
       }
     }
   }

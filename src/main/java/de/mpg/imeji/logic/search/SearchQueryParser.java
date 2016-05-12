@@ -11,9 +11,12 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.model.SearchElement;
 import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.model.SearchGroup;
@@ -29,13 +32,10 @@ import de.mpg.imeji.logic.search.model.SearchSimpleMetadata;
 import de.mpg.imeji.logic.search.util.StringParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Static methods to manipulate imeji url search queries
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -45,16 +45,16 @@ public class SearchQueryParser {
    * Regex to match: statementid:field="value"
    */
   private static final String SEARCH_METADATA_REGEX =
-      "([a-zA-Z0-9-_]+):([a-z_]+)([=<>]{1,2})\"(.+)\"";
+      "([a-zA-Z0-9-_]+):([a-z_]+)([=<>@]{1,2})\"(.+)\"";
   /**
    * Regex to match: field="value"
    */
-  private static final String SEARCH_PAIR_REGEX = "([a-zA-Z_]+)([=<>]{1,2})\"(.+)\"";
+  private static final String SEARCH_PAIR_REGEX = "([a-zA-Z_]+)([=<>@]{1,2})\"(.+)\"";
   /**
    * Regex to match md:label="value"
    */
   private static final String SEARCH_METADATA_SIMPLE_REGEX =
-      "md:([a-zA-Z0-9-_]+)([=<>]{1,2})\"(.+)\"";
+      "md:([a-zA-Z0-9-_]+)([=<>@]{1,2})\"(.+)\"";
   /**
    * PAttern for SEARCH_METADATA_REGEX
    */
@@ -72,11 +72,13 @@ public class SearchQueryParser {
   /**
    * Private Constructor
    */
-  private SearchQueryParser() {}
+  private SearchQueryParser() {
+    // Avoid creation
+  }
 
   /**
    * Parse a url search query into a {@link SearchQuery}. Decode the query with UTF-8
-   * 
+   *
    * @param query
    * @return
    * @throws UnprocessableError
@@ -97,12 +99,13 @@ public class SearchQueryParser {
 
   /**
    * Parse a url search query into a {@link SearchQuery}. The query should be already decoded
-   * 
+   *
    * @param query
    * @return
    * @throws IOException
+   * @throws UnprocessableError
    */
-  public static SearchQuery parseStringQueryDecoded(String query) throws IOException {
+  public static SearchQuery parseStringQueryDecoded(String query) throws UnprocessableError {
     SearchQuery searchQuery = new SearchQuery();
     String subQuery = "";
     String scString = "";
@@ -119,62 +122,67 @@ public class SearchQueryParser {
     StringParser simpleMdParser = new StringParser(SEARCH_METADATA_SIMPLE_PATTERN);
     StringParser mdParser = new StringParser(SEARCH_METADATA_PATTERN);
     StringParser pairParser = new StringParser(SEARCH_PAIR_PATTERN);
-    while ((c = reader.read()) != -1) {
-      if (bracketsOpened - bracketsClosed != 0) {
-        subQuery += (char) c;
-      } else {
-        scString += (char) c;
-      }
-      if (c == '(') {
-        hasBracket = true;
-        bracketsOpened++;
-      }
-      if (c == ')') {
-        bracketsClosed++;
-        scString = "";
-      }
-      if (scString.trim().equals("AND") || scString.trim().equals("OR")) {
-        searchQuery.getElements()
-            .add(new SearchLogicalRelation(LOGICAL_RELATIONS.valueOf(scString.trim())));
-        scString = "";
-      }
-      if (scString.trim().equals("NOT")) {
-        not = true;
-        scString = "";
-      }
-      if (hasBracket && (bracketsOpened - bracketsClosed == 0)) {
-        SearchQuery subSearchQuery = parseStringQueryDecoded(subQuery);
-        if (!subSearchQuery.isEmpty()) {
-          SearchGroup searchGroup = new SearchGroup();
-          searchGroup.getGroup().addAll(parseStringQueryDecoded(subQuery).getElements());
-          searchQuery.getElements().add(searchGroup);
-          subQuery = "";
+    try {
+      while ((c = reader.read()) != -1) {
+        if (bracketsOpened - bracketsClosed != 0) {
+          subQuery += (char) c;
+        } else {
+          scString += (char) c;
+        }
+        if (c == '(') {
+          hasBracket = true;
+          bracketsOpened++;
+        }
+        if (c == ')') {
+          bracketsClosed++;
+          scString = "";
+        }
+        if (scString.toUpperCase().trim().equals("AND")
+            || scString.toUpperCase().trim().equals("OR")) {
+          searchQuery.getElements().add(
+              new SearchLogicalRelation(LOGICAL_RELATIONS.valueOf(scString.toUpperCase().trim())));
+          scString = "";
+        }
+        if (scString.toUpperCase().trim().equals("NOT")) {
+          not = true;
+          scString = "";
+        }
+        if (hasBracket && (bracketsOpened - bracketsClosed == 0)) {
+          SearchQuery subSearchQuery = parseStringQueryDecoded(subQuery);
+          if (!subSearchQuery.isEmpty()) {
+            SearchGroup searchGroup = new SearchGroup();
+            searchGroup.getGroup().addAll(parseStringQueryDecoded(subQuery).getElements());
+            searchQuery.getElements().add(searchGroup);
+            subQuery = "";
+          }
+        }
+        if (simpleMdParser.find(scString)) {
+          searchQuery.addPair(new SearchSimpleMetadata(simpleMdParser.getGroup(1),
+              stringOperator2SearchOperator(simpleMdParser.getGroup(2)), simpleMdParser.getGroup(3),
+              not));
+          not = false;
+          scString = "";
+        } else if (mdParser.find(scString)) {
+          SearchOperators operator = stringOperator2SearchOperator(mdParser.getGroup(3));
+          String value = mdParser.getGroup(4);
+          value = value.startsWith("\"") ? value + "\"" : value;
+          SearchFields field = SearchFields.valueOf(mdParser.getGroup(2));
+          URI statementId = ObjectHelper.getURI(Statement.class, mdParser.getGroup(1));
+          searchQuery.addPair(new SearchMetadata(field, operator, value, statementId, not));
+          not = false;
+          scString = "";
+        } else if (pairParser.find(scString)) {
+          SearchOperators operator = stringOperator2SearchOperator(pairParser.getGroup(2));
+          SearchFields field = SearchFields.valueOf(pairParser.getGroup(1));
+          String value = pairParser.getGroup(3);
+          value = value.startsWith("\"") ? value + "\"" : value;
+          searchQuery.addPair(new SearchPair(field, operator, value, not));
+          scString = "";
+          not = false;
         }
       }
-      if (simpleMdParser.find(scString)) {
-        searchQuery.addPair(new SearchSimpleMetadata(simpleMdParser.getGroup(1),
-            stringOperator2SearchOperator(simpleMdParser.getGroup(2)), simpleMdParser.getGroup(3),
-            not));
-        not = false;
-        scString = "";
-      } else if (mdParser.find(scString)) {
-        SearchOperators operator = stringOperator2SearchOperator(mdParser.getGroup(3));
-        String value = mdParser.getGroup(4);
-        value = value.startsWith("\"") ? value + "\"" : value;
-        SearchFields field = SearchFields.valueOf(mdParser.getGroup(2));
-        URI statementId = ObjectHelper.getURI(Statement.class, mdParser.getGroup(1));
-        searchQuery.addPair(new SearchMetadata(field, operator, value, statementId, not));
-        not = false;
-        scString = "";
-      } else if (pairParser.find(scString)) {
-        SearchOperators operator = stringOperator2SearchOperator(pairParser.getGroup(2));
-        SearchFields field = SearchFields.valueOf(pairParser.getGroup(1));
-        String value = pairParser.getGroup(3);
-        value = value.startsWith("\"") ? value + "\"" : value;
-        searchQuery.addPair(new SearchPair(field, operator, value, not));
-        scString = "";
-        not = false;
-      }
+    } catch (IOException e) {
+      throw new UnprocessableError(e);
     }
     if (!"".equals(query) && searchQuery.isEmpty()) {
       searchQuery
@@ -185,7 +193,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link String} to a {@link SearchOperators}
-   * 
+   *
    * @param str
    * @return
    */
@@ -198,13 +206,15 @@ public class SearchQueryParser {
       return SearchOperators.GREATER;
     } else if ("<=".equals(str)) {
       return SearchOperators.LESSER;
+    } else if ("@".equals(str)) {
+      return SearchOperators.GEO;
     }
-    return null;
+    return SearchOperators.REGEX;
   }
 
   /**
    * True is a {@link SearchQuery} is a simple search (i.e. triggered from the simple search form)
-   * 
+   *
    * @param searchQuery
    * @return
    */
@@ -220,7 +230,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchQuery} into a url search query encorded in UTF-8
-   * 
+   *
    * @param searchQuery
    * @return
    */
@@ -234,7 +244,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchQuery} into a url search query
-   * 
+   *
    * @param searchQuery
    * @return
    */
@@ -256,8 +266,9 @@ public class SearchQueryParser {
           logical = " " + ((SearchLogicalRelation) se).getLogicalRelation().name() + " ";
           break;
         case PAIR:
-          if ("".equals(((SearchPair) se).getValue()))
+          if ("".equals(((SearchPair) se).getValue())) {
             break;
+          }
           if (((SearchPair) se).isNot()) {
             query += " NOT";
           }
@@ -283,7 +294,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link Statement} to an index
-   * 
+   *
    * @param statement
    * @param index
    * @return
@@ -294,7 +305,7 @@ public class SearchQueryParser {
 
   /**
    * REturn the search value of the {@link SearchMetadata} as string for an url
-   * 
+   *
    * @param md
    * @return
    */
@@ -304,7 +315,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchOperators} to a {@link String} value used in url query
-   * 
+   *
    * @param op
    * @return
    */
@@ -325,20 +336,21 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchQuery} into a user friendly query
-   * 
+   *
    * @param sq
    * @return
    */
-  public static String searchQuery2PrettyQuery(SearchQuery sq) {
+  public static String searchQuery2PrettyQuery(SearchQuery sq, Locale locale,
+      Map<URI, String> metadataLabelMap) {
     if (sq == null) {
       return "";
     }
-    return searchElements2PrettyQuery(sq.getElements());
+    return searchElements2PrettyQuery(sq.getElements(), locale, metadataLabelMap);
   }
 
   /**
    * Transform a {@link SearchPair} into a user friendly query
-   * 
+   *
    * @param pair
    * @return
    */
@@ -358,34 +370,35 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchGroup} into a user friendly query
-   * 
+   *
    * @param group
    * @return
    */
-  private static String searchGroup2PrettyQuery(SearchGroup group) {
+  private static String searchGroup2PrettyQuery(SearchGroup group, Locale locale,
+      Map<URI, String> metadataLabelMap) {
     String str = "";
     int groupSize = group.getElements().size();
     if (isSearchGroupForComplexMetadata(group)) {
       for (SearchElement md : group.getElements()) {
         if (md instanceof SearchMetadata) {
-          str += searchMetadata2PrettyQuery((SearchMetadata) md);
+          str += searchMetadata2PrettyQuery((SearchMetadata) md, locale, metadataLabelMap);
         } else if (md instanceof SearchLogicalRelation) {
-          str += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) md);
+          str += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) md, locale);
         }
       }
       // str =
       // searchMetadata2PrettyQuery((SearchMetadata)group.getElements().get(0));
       // groupSize = 1;
     } else {
-      str = searchElements2PrettyQuery(group.getElements());
+      str = searchElements2PrettyQuery(group.getElements(), locale, metadataLabelMap);
     }
     if ("".equals(str)) {
       return "";
     }
     if (groupSize > 1) {
-      return " (" + removeUseLessLogicalOperation(str) + ") ";
+      return " (" + removeUseLessLogicalOperation(str, locale) + ") ";
     } else {
-      return removeUseLessLogicalOperation(str);
+      return removeUseLessLogicalOperation(str, locale);
     }
   }
 
@@ -393,7 +406,7 @@ public class SearchQueryParser {
    * Check if the search group is an group with pair about the same metadata. For instance, when
    * searching for person, the search group will be conposed of many pairs (family-name, givennane,
    * etc) which sould be displayed as a pretty query of only one metadata (person = value)
-   * 
+   *
    * @param group
    * @return
    */
@@ -413,27 +426,28 @@ public class SearchQueryParser {
 
   /**
    * transform a {@link SearchLogicalRelation} into a user friendly query
-   * 
+   *
    * @param rel
    * @return
    */
-  private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel) {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel,
+      Locale locale) {
     switch (rel.getLogicalRelation()) {
       case AND:
-        return " " + session.getLabel("and_big") + " ";
+        return " " + Imeji.RESOURCE_BUNDLE.getLabel("and_big", locale) + " ";
       default:
-        return " " + session.getLabel("or_big") + " ";
+        return " " + Imeji.RESOURCE_BUNDLE.getLabel("or_big", locale) + " ";
     }
   }
 
   /**
    * Transform a {@link SearchElement} into a user friendly query
-   * 
+   *
    * @param els
    * @return
    */
-  private static String searchElements2PrettyQuery(List<SearchElement> els) {
+  private static String searchElements2PrettyQuery(List<SearchElement> els, Locale locale,
+      Map<URI, String> metadataLabelMap) {
     String q = "";
     for (SearchElement el : els) {
       switch (el.getType()) {
@@ -441,31 +455,30 @@ public class SearchQueryParser {
           q += searchPair2PrettyQuery((SearchPair) el);
           break;
         case GROUP:
-          q += searchGroup2PrettyQuery((SearchGroup) el);
+          q += searchGroup2PrettyQuery((SearchGroup) el, locale, metadataLabelMap);
           break;
         case LOGICAL_RELATIONS:
-          q += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) el);
+          q += searchLogicalRelation2PrettyQuery((SearchLogicalRelation) el, locale);
           break;
         case METADATA:
-          q += searchMetadata2PrettyQuery((SearchMetadata) el);
+          q += searchMetadata2PrettyQuery((SearchMetadata) el, locale, metadataLabelMap);
           break;
         default:
           break;
       }
     }
-    return removeUseLessLogicalOperation(q.trim());
+    return removeUseLessLogicalOperation(q.trim(), locale);
   }
 
   /**
    * Remove a logical operation if is not followed by a non empty search element
-   * 
+   *
    * @param q
    * @return
    */
-  private static String removeUseLessLogicalOperation(String q) {
-    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    String orString = session.getLabel("or_big");
-    String andString = session.getLabel("and_big");
+  private static String removeUseLessLogicalOperation(String q, Locale locale) {
+    String orString = Imeji.RESOURCE_BUNDLE.getLabel("or_big", locale);
+    String andString = Imeji.RESOURCE_BUNDLE.getLabel("and_big", locale);
     if (q.endsWith(" ")) {
       q = q.substring(0, q.length() - 1);
     }
@@ -481,16 +494,16 @@ public class SearchQueryParser {
     if (q.startsWith(andString)) {
       q = q.substring(andString.length(), q.length());
     }
-    if (q.endsWith(" ") || q.endsWith(" " + session.getLabel("and_big"))
-        || q.endsWith(" " + session.getLabel("or_big"))) {
-      q = removeUseLessLogicalOperation(q);
+    if (q.endsWith(" ") || q.endsWith(" " + Imeji.RESOURCE_BUNDLE.getLabel("and_big", locale))
+        || q.endsWith(" " + Imeji.RESOURCE_BUNDLE.getLabel("or_big", locale))) {
+      q = removeUseLessLogicalOperation(q, locale);
     }
     return q.trim();
   }
 
   /**
    * transform a namespace of a {@link SearchIndex} into a user friendly value
-   * 
+   *
    * @param namespace
    * @return
    */
@@ -504,7 +517,7 @@ public class SearchQueryParser {
 
   /**
    * Transform a {@link SearchOperators} into a user friendly label
-   * 
+   *
    * @param op
    * @return
    */
@@ -523,7 +536,7 @@ public class SearchQueryParser {
 
   /**
    * Display a negation in a user friendly way
-   * 
+   *
    * @param isNot
    * @return
    */
@@ -536,44 +549,34 @@ public class SearchQueryParser {
 
   /**
    * Special case to display a search for a metadata in a
-   * 
+   *
    * @param group
    * @return
    */
-  private static String searchMetadata2PrettyQuery(SearchMetadata md) {
-    String label = ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-        .getInternationalizedLabels().get(md.getStatement());
+  private static String searchMetadata2PrettyQuery(SearchMetadata md, Locale locale,
+      Map<URI, String> metadataLabelMap) {
+    String label = metadataLabelMap.get(md.getStatement());
     if (label == null) {
       label = "Metadata-" + indexNamespace2PrettyQuery(md.getStatement().toString());
     }
     switch (md.getField()) {
       case coordinates:
-        label += "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getLabel("geolocation_location") + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("geolocation_location", locale) + ")";
         break;
       case person_family:
-        label += "("
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("family_name")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("family_name", locale) + ")";
         break;
       case person_given:
-        label += "("
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("first_name")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("first_name", locale) + ")";
         break;
       case person_id:
-        label += "( "
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("identifier")
-            + ")";
+        label += "( " + Imeji.RESOURCE_BUNDLE.getLabel("identifier", locale) + ")";
         break;
       case person_org_name:
-        label += "("
-            + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("organization")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("organization", locale) + ")";
         break;
       case url:
-        label += "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("url")
-            + ")";
+        label += "(" + Imeji.RESOURCE_BUNDLE.getLabel("url", locale) + ")";
         break;
       default:
         break;

@@ -4,15 +4,14 @@ import java.util.HashSet;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link Validator} for {@link CollectionImeji}
- * 
+ *
  * @author saquet
  *
  */
@@ -21,32 +20,32 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
 
   @Override
   public void validate(User user, Method m) throws UnprocessableError {
-    exception = new UnprocessableError(new HashSet<String>());
+    exception = new UnprocessableError();
     setValidateForMethod(m);
     if (isDelete()) {
       return;
     }
 
     if (user.getEmail() == null || "".equals(user.getEmail().trim())) {
-      exception.getMessages().add("error_user_email_unfilled");
+      exception = new UnprocessableError("error_user_email_unfilled", exception);
     } else if (!isValidEmail(user.getEmail())) {
-      exception.getMessages().add("error_user_email_not_valid");
+      exception = new UnprocessableError("error_user_email_not_valid", exception);
     }
 
     if (emailAlreadyUsed(user)) {
-      exception.getMessages().add("error_user_already_exists");
+      exception = new UnprocessableError("error_user_already_exists", exception);
     }
 
     if (user.getPerson() == null || "".equals(user.getPerson().getFamilyName())
         || user.getPerson().getFamilyName() == null) {
-      exception.getMessages().add("error_user_name_unfilled");
+      exception = new UnprocessableError("error_user_name_unfilled", exception);
     }
 
     if (user.getPerson() != null && "".equals(user.getPerson().getOrganizationString())) {
-      exception.getMessages().add("error_user_organization_unfilled");
+      exception = new UnprocessableError("error_user_organization_unfilled", exception);
     }
 
-    if (!exception.getMessages().isEmpty()) {
+    if (exception.hasMessages()) {
       throw exception;
     }
   }
@@ -54,7 +53,7 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
 
   /**
    * True if the {@link User} exists
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -66,7 +65,7 @@ public class UserValidator extends ObjectValidator implements Validator<User> {
 
   /**
    * Is true if the Email is valid
-   * 
+   *
    * @return
    */
   public static boolean isValidEmail(String email) {

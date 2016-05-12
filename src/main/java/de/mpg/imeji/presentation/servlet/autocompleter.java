@@ -27,12 +27,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.resource.UserController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.ProxyHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * Servlet implementation class autocompleter
@@ -42,14 +42,14 @@ import de.mpg.imeji.presentation.util.ProxyHelper;
     urlPatterns = {"/autocompleter"})
 public class autocompleter extends HttpServlet {
   private static final long serialVersionUID = 1L;
-  private Pattern conePattern = Pattern.compile("http.*/cone/.*?format=json.*",
-      Pattern.CASE_INSENSITIVE);
-  private Pattern coneAuthorPattern = Pattern.compile("http.*/cone/persons/.*?format=json.*",
-      Pattern.CASE_INSENSITIVE);
+  private Pattern conePattern =
+      Pattern.compile("http.*/cone/.*?format=json.*", Pattern.CASE_INSENSITIVE);
+  private Pattern coneAuthorPattern =
+      Pattern.compile("http.*/cone/persons/.*?format=json.*", Pattern.CASE_INSENSITIVE);
   private Pattern googleGeoAPIPattern = Pattern.compile(
       "https://maps.googleapis.com/maps/api/geocode/json.*address=", Pattern.CASE_INSENSITIVE);
-  private Pattern ccLicensePattern = Pattern
-      .compile("http.*://api.creativecommons.org/rest/.*/simple/chooser.*");
+  private Pattern ccLicensePattern =
+      Pattern.compile("http.*://api.creativecommons.org/rest/.*/simple/chooser.*");
 
   /**
    * @see HttpServlet#HttpServlet()
@@ -75,9 +75,8 @@ public class autocompleter extends HttpServlet {
         UserController uc = new UserController(getSession(request).getUser());
         Collection<Person> persons = uc.searchPersonByName(suggest);
         for (Person p : persons) {
-          responseString =
-              appendResponseForInternalSuggestion(responseString,
-                  p.getCompleteName() + "(" + p.getOrganizationString() + ")", p.getId().toString());
+          responseString = appendResponseForInternalSuggestion(responseString,
+              p.getCompleteName() + "(" + p.getOrganizationString() + ")", p.getId().toString());
         }
         responseString = "[" + responseString + "]";
 
@@ -85,8 +84,8 @@ public class autocompleter extends HttpServlet {
         UserController uc = new UserController(getSession(request).getUser());
         Collection<Organization> orgs = uc.searchOrganizationByName(suggest);
         for (Organization o : orgs) {
-          responseString =
-              appendResponseForInternalSuggestion(responseString, o.getName(), o.getId().toString());
+          responseString = appendResponseForInternalSuggestion(responseString, o.getName(),
+              o.getId().toString());
         }
         responseString = "[" + responseString + "]";
 
@@ -99,8 +98,9 @@ public class autocompleter extends HttpServlet {
           ProxyHelper.executeMethod(client, getMethod);
           responseString =
               new String(StorageUtils.toBytes(getMethod.getResponseBodyAsStream()), "UTF-8");
-          if (datasource != null && responseString != null)
+          if (datasource != null && responseString != null) {
             responseString = passResult(responseString, datasource);
+          }
         } catch (Exception e) {
           throw new RuntimeException(e);
         } finally {
@@ -120,8 +120,9 @@ public class autocompleter extends HttpServlet {
   }
 
   private String appendResponseForInternalSuggestion(String response, String label, String value) {
-    if (!"".equals(response))
+    if (!"".equals(response)) {
       response += ",";
+    }
     response += "{";
     response += "\"label\": \"" + label + "\",";
     response += "\"value\" : \"";
@@ -133,7 +134,7 @@ public class autocompleter extends HttpServlet {
   /**
    * parse JSON string returned from remote source by JSON-simple add properties [ { label:
    * "Choice1", value: "value1" }, ... ] to fit JQuery UI auto-complete pop format
-   * 
+   *
    * @param input
    * @param source
    * @return
@@ -156,7 +157,7 @@ public class autocompleter extends HttpServlet {
 
   /**
    * Parse a CoNE Vocabulary (read the title value)
-   * 
+   *
    * @param cone
    * @return
    * @throws IOException
@@ -180,7 +181,7 @@ public class autocompleter extends HttpServlet {
 
   /**
    * Parse a json input from Google Geo API
-   * 
+   *
    * @param google
    * @return
    * @throws IOException
@@ -208,7 +209,7 @@ public class autocompleter extends HttpServlet {
   /**
    * Parse a JSON file from CoNE with authors, and return a JSON which can be read by imeji
    * autocomplete
-   * 
+   *
    * @param cone
    * @return
    * @throws IOException
@@ -269,7 +270,7 @@ public class autocompleter extends HttpServlet {
   /**
    * Read a JSON Object as a String, whether it is an {@link JSONArray}, a {@link String} or a
    * {@link JSONObject}
-   * 
+   *
    * @param jsonObj
    * @param jsonName
    * @return
@@ -293,7 +294,7 @@ public class autocompleter extends HttpServlet {
 
   /**
    * Return the {@link SessionBean} form the {@link HttpSession}
-   * 
+   *
    * @param req
    * @return
    */

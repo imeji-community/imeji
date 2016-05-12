@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.user;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -17,24 +16,27 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.notification.NotificationUtils;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.PasswordGenerator;
+import de.mpg.imeji.logic.collaboration.email.EmailMessages;
+import de.mpg.imeji.logic.collaboration.email.EmailService;
+import de.mpg.imeji.logic.collaboration.invitation.InvitationBusinessController;
+import de.mpg.imeji.logic.controller.resource.UserController;
+import de.mpg.imeji.logic.controller.resource.UserGroupController;
+import de.mpg.imeji.logic.registration.RegistrationBusinessController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.notification.NotificationUtils;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
-import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Java Bean for the view users page
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -44,6 +46,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 public class UsersBean implements Serializable {
   private static final long serialVersionUID = 909531319532057429L;
   private List<User> users;
+  private List<User> inactiveUsers;
   private UserGroup group;
   private String query;
   @ManagedProperty(value = "#{SessionBean.user}")
@@ -79,11 +82,8 @@ public class UsersBean implements Serializable {
    * Retrieve all users
    */
   public void doSearch() {
-    UserController controller = new UserController(sessionUser);
-    users = new ArrayList<User>();
-    for (User user : controller.searchUserByName(query)) {
-      users.add(user);
-    }
+    users = (List<User>) new UserController(sessionUser).searchUserByName(query);
+    inactiveUsers = new RegistrationBusinessController().searchInactiveUsers(query);
   }
 
   /**
@@ -105,7 +105,7 @@ public class UsersBean implements Serializable {
 
   /**
    * Method called when a new password is sent
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -124,13 +124,13 @@ public class UsersBean implements Serializable {
       BeanHelper.error("Could not update or send new password!");
       LOGGER.error("Could not update or send new password", e);
     }
-    BeanHelper.info(session.getMessage("success_email"));
+    BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_email", session.getLocale()));
     return "";
   }
 
   /**
    * Send an Email to a {@link User} for its new password
-   * 
+   *
    * @param email
    * @param password
    * @param username
@@ -138,11 +138,11 @@ public class UsersBean implements Serializable {
    * @throws IOException
    */
   public void sendEmail(String email, String password, String username) {
-    EmailClient emailClient = new EmailClient();
-    EmailMessages emailMessages = new EmailMessages();
+    EmailService emailClient = new EmailService();
     try {
-      emailClient.sendMail(email, null, emailMessages.getEmailOnAccountAction_Subject(false),
-          emailMessages.getNewPasswordMessage(password, email, username));
+      emailClient.sendMail(email, null,
+          EmailMessages.getEmailOnAccountAction_Subject(false, BeanHelper.getLocale()),
+          EmailMessages.getNewPasswordMessage(password, email, username, BeanHelper.getLocale()));
     } catch (Exception e) {
       BeanHelper.info("Error: Password Email not sent");
       LOGGER.error("Error sending password email", e);
@@ -151,7 +151,7 @@ public class UsersBean implements Serializable {
 
   /**
    * Delete a {@link User}
-   * 
+   *
    * @return
    */
   public String deleteUser() {
@@ -159,7 +159,7 @@ public class UsersBean implements Serializable {
         .get("email");
     UserController controller = new UserController(sessionUser);
     try {
-      controller.delete(ObjectLoader.loadUser(email, sessionUser));
+      controller.delete(controller.retrieve(email));
     } catch (Exception e) {
       BeanHelper.error("Error Deleting user");
       LOGGER.error("Error Deleting user", e);
@@ -169,24 +169,35 @@ public class UsersBean implements Serializable {
   }
 
   /**
-   * Delete a {@link User}
-   * 
-   * @return
+   * Cancel a pending invitation
    */
-  public String activateUser() {
+  public void cancelInvitation() {
     String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
         .get("email");
-    UserController controller = new UserController(sessionUser);
+    RegistrationBusinessController registrationBC = new RegistrationBusinessController();
+    try {
+      registrationBC.delete(registrationBC.retrieveByEmail(email));
+    } catch (Exception e) {
+      BeanHelper.error("Error Deleting registration");
+      LOGGER.error("Error Deleting registration", e);
+    }
+    doSearch();
+  }
+
+  /**
+   * Activat4e a {@link User}
+   *
+   * @return
+   * @throws ImejiException
+   */
+  public String activateUser() throws ImejiException {
+    final RegistrationBusinessController registrationBC = new RegistrationBusinessController();
+    String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get("email");
     User toActivateUser = null;
-    String newPassword = "";
     try {
       // Activate first
-      toActivateUser = controller.retrieve(email, sessionUser);
-      toActivateUser = controller.activate(toActivateUser.getRegistrationToken());
-      PasswordGenerator generator = new PasswordGenerator();
-      newPassword = generator.generatePassword();
-      toActivateUser.setEncryptedPassword(StringHelper.convertToMD5(newPassword));
-      controller.update(toActivateUser, sessionUser);
+      toActivateUser = registrationBC.activate(registrationBC.retrieveByEmail(email));
     } catch (Exception e) {
       BeanHelper.error("Error during activation of the user ");
       LOGGER.error("Error during activation of the user", e);
@@ -194,22 +205,20 @@ public class UsersBean implements Serializable {
 
     BeanHelper.cleanMessages();
     BeanHelper.info("Sending activation email and new password.");
-    NotificationUtils.sendActivationNotification(toActivateUser,
-        (SessionBean) BeanHelper.getSessionBean(SessionBean.class));
-    sendEmail(email, newPassword, toActivateUser.getPerson().getCompleteName());
+    NotificationUtils.sendActivationNotification(toActivateUser, BeanHelper.getLocale(),
+        !new InvitationBusinessController().retrieveInvitationOfUser(email).isEmpty());
     if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
       BeanHelper.cleanMessages();
       BeanHelper.info(
           "User account has been activated, but email notification about activation and/or new password could not be performed! Check the eMail Server settings!");
     }
-
     doSearch();
     return "";
   }
 
   /**
    * Add a {@link User} to a {@link UserGroup} and then redirect to the {@link UserGroup} page
-   * 
+   *
    * @param hasgrant
    */
   public String addToGroup() {
@@ -232,7 +241,7 @@ public class UsersBean implements Serializable {
 
   /**
    * getter
-   * 
+   *
    * @return
    */
   public List<User> getUsers() {
@@ -241,7 +250,7 @@ public class UsersBean implements Serializable {
 
   /**
    * setter
-   * 
+   *
    * @param users
    */
   public void setUsers(List<User> users) {
@@ -288,5 +297,9 @@ public class UsersBean implements Serializable {
    */
   public void setQuery(String query) {
     this.query = query;
+  }
+
+  public List<User> getInactiveUsers() {
+    return inactiveUsers;
   }
 }

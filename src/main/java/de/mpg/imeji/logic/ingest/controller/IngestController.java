@@ -2,14 +2,14 @@ package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
 
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 
 /**
  * Controller for ingest
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -31,7 +31,7 @@ public class IngestController {
 
   /**
    * Ingest items and profile. Items schema is validated against the profile
-   * 
+   *
    * @param itemListXml
    * @param profileXml
    * @throws Exception

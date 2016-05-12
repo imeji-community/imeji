@@ -63,14 +63,14 @@ public class AlbumProcess {
   }
 
   /*
-   * 
+   *
    * try { u = BasicAuthentication.auth(req); switch (guessType(req.getParameter("syntax"))) { case
    * DEFAULT: resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
    * ccrud.readDefaultItems(id, u, q, offset, size)); break; case RAW: resp =
    * RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q, offset, size));
    * break; } } catch (Exception e) { resp = RestProcessUtils.localExceptionHandler(e,
    * e.getLocalizedMessage()); }
-   * 
+   *
    */
 
 

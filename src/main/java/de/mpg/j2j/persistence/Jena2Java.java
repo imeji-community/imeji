@@ -26,7 +26,7 @@ import de.mpg.j2j.misc.LocalizedString;
 /**
  * Class to load a {@link Resource} into a java object. This java object must have been annotated
  * with j2j annotations
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -44,7 +44,7 @@ public class Jena2Java {
   /**
    * Load a {@link Resource} into a Java Object. The Java Object must define a {@link j2jResource}
    * and have and id non null (defined by {@link j2jId})
-   * 
+   *
    * @param item : The uri of the resource
    * @param o : The java Object in which the resource should be written
    * @return
@@ -59,7 +59,7 @@ public class Jena2Java {
   /**
    * Load all {@link Field} defined in the Object. The Object must be a {@link Resource} (defined in
    * Java by {@link j2jResource})
-   * 
+   *
    * @param javaObject
    * @return
    */
@@ -79,7 +79,7 @@ public class Jena2Java {
   /**
    * Load the Object of a Triple. The {@link Field} defines the relation between the subject and the
    * object (i.e. the field contains predicate information)
-   * 
+   *
    * @param subject
    * @param f
    * @param object
@@ -106,7 +106,7 @@ public class Jena2Java {
 
   /**
    * Set object into the {@link Field} of the subject
-   * 
+   *
    * @param subject
    * @param f
    * @param object
@@ -129,7 +129,7 @@ public class Jena2Java {
    * Load the object the the statement (subject - predicate - object). The object must be a
    * {@link Resource}. The position defines which object should be loaded in case of many statement
    * with the same subject and predicate.
-   * 
+   *
    * @param subject
    * @param object
    * @param position
@@ -150,7 +150,7 @@ public class Jena2Java {
    * Load the object the the statement (subject - predicate - object). The object must be a
    * {@link Literal}. The position defines which object should be loaded in case of many statement
    * with the same subject and predicate.
-   * 
+   *
    * @param f
    * @param subject
    * @param object
@@ -171,7 +171,7 @@ public class Jena2Java {
    * Load the object the the statement (subject - predicate - object). The object must be a
    * {@link j2jResource} and an {@link URI}. The position defines which object should be loaded in
    * case of many statement with the same subject and predicate.
-   * 
+   *
    * @param f
    * @param subject
    * @param object
@@ -191,7 +191,7 @@ public class Jena2Java {
    * Load the object the the statement (subject - predicate - object). The object must be a
    * {@link LocalizedString}. The position defines which object should be loaded in case of many
    * statement with the same subject and predicate.
-   * 
+   *
    * @param f
    * @param subject
    * @param object
@@ -211,7 +211,7 @@ public class Jena2Java {
    * Load the object the the statement (subject - predicate - object). The object must be a
    * {@link List} The position defines which object should be loaded in case of many statement with
    * the same subject and predicate.
-   * 
+   *
    * @param f
    * @param subject
    * @return
@@ -253,7 +253,7 @@ public class Jena2Java {
   /**
    * True if the {@link Resource} is a {@link RDF}.type. This type must define the Java class of the
    * resource,
-   * 
+   *
    * @param r
    * @return
    */
@@ -265,7 +265,7 @@ public class Jena2Java {
   /**
    * Create an {@link Object} of the type defined in the {@link RDF}.type value defined for this
    * {@link Resource}
-   * 
+   *
    * @param r
    * @return
    */
@@ -285,7 +285,7 @@ public class Jena2Java {
   /**
    * Load the full statement defined by one subject and one predicate for a specific position (if
    * many statements with same subject and predicate)
-   * 
+   *
    * @param subject
    * @param predicateUri
    * @param position
@@ -306,7 +306,7 @@ public class Jena2Java {
 
   /**
    * Return an object instance contained in a List
-   * 
+   *
    * @param f
    * @return
    */

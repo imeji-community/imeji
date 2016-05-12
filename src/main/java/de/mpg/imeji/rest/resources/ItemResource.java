@@ -39,6 +39,7 @@ import de.mpg.imeji.rest.process.RestProcessUtils;
 public class ItemResource implements ImejiResource {
 
 
+  @Override
   @GET
   @ApiOperation(value = "Search and retrieve items")
   @Produces(MediaType.APPLICATION_JSON)
@@ -48,6 +49,7 @@ public class ItemResource implements ImejiResource {
     return buildJSONResponse(readItems(req, q, offset, size));
   }
 
+  @Override
   @GET
   @Path("/{id}")
   @ApiOperation(value = "Get item by id")

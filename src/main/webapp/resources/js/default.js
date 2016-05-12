@@ -622,13 +622,17 @@ $(function() {
  * For menu on the right side: set the margin of the body to avoid to be out of page
  */
 $(function() {
+	menuRightOffset();
+});
+function menuRightOffset(){
 	$('.imj_overlayMenu.imj_menuRight').each(function(i, obj) {
 		var menuHeaderWidth = $(this).find(".imj_menuHeader").width();
 		var menuBodyWidth = $(this).find(".imj_menuBody").width();
 		var width = menuHeaderWidth - menuBodyWidth;
 		$(this).find(".imj_menuBody").css("margin-left",width + "px");
 	});
-});
+}
+
 jQuery(document).ready(function() {
 	customSelectbox();
 	/**
@@ -644,11 +648,13 @@ jQuery(document).ready(function() {
  ******************************************************************************/
 var selectedSearch = 1;
 var albumsUrl, collectionsUrl, browseUrl;
+var numberOfContext = 3;
 
-function initSimpleSearch(albumsUrlValue, collectionsUrlValue, browseUrlValue) {
+function initSimpleSearch(albumsUrlValue, collectionsUrlValue, browseUrlValue, numberOfContextValue) {
 	albumsUrl = albumsUrlValue;
 	collectionsUrl = collectionsUrlValue;
 	browseUrl = browseUrlValue;
+	numberOfContext = numberOfContextValue;
 }
 
 function getSearchSelectedName() {
@@ -759,7 +765,7 @@ function highlightSearch() {
  * Select the next search 
  */
 function incrementSelectedSearch() {
-	if (selectedSearch < 3) {
+	if (selectedSearch < numberOfContext) {
 		selectedSearch = selectedSearch + 1;
 	}
 }

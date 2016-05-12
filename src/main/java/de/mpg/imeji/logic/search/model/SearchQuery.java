@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * A search query composed of {@link SearchElement}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -25,7 +25,7 @@ public class SearchQuery extends SearchElement {
 
   /**
    * Construct a {@link SearchQuery} with a {@link List} of {@link SearchElement}
-   * 
+   *
    * @param elements
    */
   public SearchQuery(List<SearchElement> elements) {

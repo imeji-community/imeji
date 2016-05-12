@@ -5,6 +5,10 @@ import java.util.Arrays;
 public class ImejiException extends Exception {
   private static final long serialVersionUID = -1024323233094119992L;
 
+  public ImejiException() {
+    super();
+  }
+
   public ImejiException(String message) {
     super(message);
   }
@@ -18,7 +22,7 @@ public class ImejiException extends Exception {
    * shows only the message plus the first element of the stacktrace
    */
   protected void minimizeStacktrace() {
-    setStackTrace(Arrays.copyOf(getStackTrace(), 1));
+    setStackTrace(Arrays.copyOf(getStackTrace(), 5));
   }
 
 }

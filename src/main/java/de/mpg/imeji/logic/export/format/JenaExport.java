@@ -15,12 +15,12 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Export data as they are in stored in Jena
- * 
+ *
  * @author saquet
  */
 public class JenaExport extends Export {
@@ -33,7 +33,7 @@ public class JenaExport extends Export {
   }
 
   @Override
-  public void export(OutputStream out, SearchResult sr) {
+  public void export(OutputStream out, SearchResult sr, User user) {
     Model m = exportIntoModel(sr);
     m.write(out, "RDF/XML");
   }
@@ -45,7 +45,7 @@ public class JenaExport extends Export {
 
   /**
    * Create a model with all Search results
-   * 
+   *
    * @param sr
    * @return
    */
@@ -70,7 +70,7 @@ public class JenaExport extends Export {
 
   /**
    * Write all properties of a resource in the model
-   * 
+   *
    * @param r
    * @param m
    * @return

@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.util;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -12,9 +13,13 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.presentation.session.SessionBean;
+
 /**
  * Helper to work with jsf beans
- * 
+ *
  * @author bastiens
  *
  */
@@ -25,12 +30,12 @@ public class BeanHelper {
    * Private Constructor
    */
   private BeanHelper() {
-
+    // Avoid creation
   }
 
   /**
    * Return any bean stored in request scope under the specified name.
-   * 
+   *
    * @param cls The bean class.
    * @return the actual or new bean instance
    */
@@ -48,7 +53,7 @@ public class BeanHelper {
 
   /**
    * Add a class to the request map
-   * 
+   *
    * @param cls
    * @param name
    * @return
@@ -56,8 +61,9 @@ public class BeanHelper {
   private static synchronized Object addRequestBean(final Class<?> cls, String name) {
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(name);
-    if (result != null)
+    if (result != null) {
       return result;
+    }
     try {
       LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
@@ -70,7 +76,7 @@ public class BeanHelper {
 
   /**
    * Return any bean stored in session scope under the specified name.
-   * 
+   *
    * @param cls The bean class.
    * @return the actual or new bean instance
    */
@@ -88,7 +94,7 @@ public class BeanHelper {
 
   /**
    * Add a class to the session map
-   * 
+   *
    * @param cls
    * @param name
    * @return
@@ -96,8 +102,9 @@ public class BeanHelper {
   private static synchronized Object addSessionBean(final Class<?> cls, String name) {
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(name);
-    if (result != null)
+    if (result != null) {
       return result;
+    }
     try {
       LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
@@ -110,7 +117,7 @@ public class BeanHelper {
 
   /**
    * Return any bean stored in application scope under the specified name.
-   * 
+   *
    * @param cls The bean class.
    * @return the actual or new bean instance
    */
@@ -128,7 +135,7 @@ public class BeanHelper {
 
   /**
    * Add a class to the application map
-   * 
+   *
    * @param cls
    * @param name
    * @return
@@ -136,8 +143,9 @@ public class BeanHelper {
   private static synchronized Object addApplicationBean(final Class<?> cls, String name) {
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
-    if (result != null)
+    if (result != null) {
       return result;
+    }
     try {
       LOGGER.debug("Creating new session bean: " + name);
       Object newBean = cls.newInstance();
@@ -150,15 +158,16 @@ public class BeanHelper {
 
   /**
    * Remove a Bean from the application map. Can be used to force a bean to be reinitialized
-   * 
+   *
    * @param cls
    */
   public static synchronized void removeBeanFromMap(final Class<?> cls) {
     String name = cls.getSimpleName();
     Object result =
         FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
-    if (result != null)
+    if (result != null) {
       FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove(name);
+    }
   }
 
   /**
@@ -224,6 +233,21 @@ public class BeanHelper {
    */
   public static void error(String summary) {
     error(summary, null, null);
+  }
+
+  /**
+   * Add all messages of the unprocessable error
+   *
+   * @param e
+   */
+  public static void error(UnprocessableError e, Locale locale) {
+    cleanMessages();
+    for (String m : e.getMessages()) {
+      int i = m.trim().indexOf(" ");
+      String placeholder = i > 0 ? m.substring(0, i) : m.trim();
+      String additionalInfo = i > 0 ? ": " + m.substring(i) : "";
+      error(Imeji.RESOURCE_BUNDLE.getMessage(placeholder, locale) + additionalInfo);
+    }
   }
 
   /**
@@ -303,6 +327,15 @@ public class BeanHelper {
 
   public static void addMessage(String message) {
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(message));
+  }
+
+  /**
+   * Return the Current Locale from the SessionBean
+   *
+   * @return
+   */
+  public static Locale getLocale() {
+    return ((SessionBean) getSessionBean(SessionBean.class)).getLocale();
   }
 
 }

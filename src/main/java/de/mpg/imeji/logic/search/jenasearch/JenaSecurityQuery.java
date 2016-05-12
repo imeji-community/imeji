@@ -19,7 +19,7 @@ import de.mpg.j2j.helper.J2JHelper;
 /**
  * Simple security query add to any imeji sparql query, a security filter (according to user,
  * searchtype, etc)
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -28,14 +28,15 @@ public class JenaSecurityQuery {
   /**
    * Static factory for the security query. A {@link String} is returned which sould be added to the
    * complete sparql query
-   * 
+   *
    * @param user
    * @param pair
    * @param rdfType
    * @param includeWithdrawn
    * @return
    */
-  public static String queryFactory(User user, String rdfType, Status status, boolean isUserSearch) {
+  public static String queryFactory(User user, String rdfType, Status status,
+      boolean isUserSearch) {
 
     String statusFilter = getStatusAsFilter(status);
 
@@ -72,7 +73,7 @@ public class JenaSecurityQuery {
 
   /**
    * Return a SPARQL Filter with the allowed status of an object
-   * 
+   *
    * @param includeWithdrawn
    * @return
    */
@@ -86,26 +87,29 @@ public class JenaSecurityQuery {
 
   /**
    * Simple Security query (is experimental, must be tested)
-   * 
+   *
    * @param user
    * @param rdfType
    * @return
    */
-  private static String getUserGrantsAsFilterSimple(User user, String rdfType, boolean isUserSearch) {
+  private static String getUserGrantsAsFilterSimple(User user, String rdfType,
+      boolean isUserSearch) {
 
-    if (user.isAdmin() && !isUserSearch)
+    if (user.isAdmin() && !isUserSearch) {
       return "";
+    }
     return getAllowedContainersFilter(user, rdfType, isUserSearch);
   }
 
   /**
    * Return ths SPARQL filter with all container the {@link User} is allowed to view
-   * 
+   *
    * @param user
    * @param rdfType
    * @return
    */
-  private static String getAllowedContainersFilter(User user, String rdfType, boolean isUserSearch) {
+  private static String getAllowedContainersFilter(User user, String rdfType,
+      boolean isUserSearch) {
     List<String> uris = new ArrayList<>();
 
     if (J2JHelper.getResourceNamespace(new Album()).equals(rdfType)) {
@@ -123,17 +127,16 @@ public class JenaSecurityQuery {
       int i = 0;
       for (String uri : uris) {
         i++;
-        builder.append((i == 1 ? "{ " : " UNION {") + "?s " + getPredicateName(rdfType) + " <"
-            + uri + "> }");
+        builder.append(
+            (i == 1 ? "{ " : " UNION {") + "?s " + getPredicateName(rdfType) + " <" + uri + "> }");
       }
       allowedContainerString = builder.toString();
       if (addReleasedStatus) {
-        s =
-            allowedContainerString + (uris.size() > 0 ? " UNION " : "") + " { ?s <"
-                + ImejiNamespaces.STATUS + "> <" + Status.RELEASED.getUriString() + "> }";
+        s = allowedContainerString + (uris.size() > 0 ? " UNION " : "") + " { ?s <"
+            + ImejiNamespaces.STATUS + "> <" + Status.RELEASED.getUriString() + "> }";
       }
-    } else if ((J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType) || J2JHelper
-        .getResourceNamespace(new Album()).equals(rdfType))) {
+    } else if ((J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)
+        || J2JHelper.getResourceNamespace(new Album()).equals(rdfType))) {
       int j = 0;
       for (String uri : uris) {
         j++;
@@ -165,9 +168,8 @@ public class JenaSecurityQuery {
           builderItems.append(" <" + uri + "> " + (itNo == allowedItems.size() ? "" : ","));
         }
 
-        allowedItemsString =
-            ((!"".equals(s)) ? " UNION " : "") + " { ?s <" + ImejiNamespaces.STATUS
-                + "> ?status. FILTER (?s in (" + builderItems.toString() + ")) }";
+        allowedItemsString = ((!"".equals(s)) ? " UNION " : "") + " { ?s <" + ImejiNamespaces.STATUS
+            + "> ?status. FILTER (?s in (" + builderItems.toString() + ")) }";
       }
 
       s += allowedItemsString;
@@ -188,17 +190,14 @@ public class JenaSecurityQuery {
           builderProfiles.append(" <" + uri + "> " + (pNo == allowedProfiles.size() ? "" : ","));
         }
 
-        allowedProfilesString =
-            " { ?s <" + ImejiNamespaces.STATUS + "> ?status. FILTER (?s in ("
-                + builderProfiles.toString() + ") || " + releasedStatusFilter + ") }";
+        allowedProfilesString = " { ?s <" + ImejiNamespaces.STATUS + "> ?status. FILTER (?s in ("
+            + builderProfiles.toString() + ") || " + releasedStatusFilter + ") }";
       }
 
-      allowedProfilesString =
-          " { ?s <"
-              + ImejiNamespaces.STATUS
-              + "> ?status. FILTER ("
-              + ((allowedProfiles.size() > 0) ? (" ?s in (" + builderProfiles.toString() + ") || ")
-                  : "") + releasedStatusFilter + ") }";
+      allowedProfilesString = " { ?s <" + ImejiNamespaces.STATUS
+          + "> ?status. FILTER (" + ((allowedProfiles.size() > 0)
+              ? (" ?s in (" + builderProfiles.toString() + ") || ") : "")
+          + releasedStatusFilter + ") }";
       s += allowedProfilesString;
 
     }
@@ -207,7 +206,7 @@ public class JenaSecurityQuery {
 
   /**
    * Return the variable name of for the object on with the security is checked
-   * 
+   *
    * @param rdfType
    * @return
    */
@@ -222,7 +221,7 @@ public class JenaSecurityQuery {
 
   /**
    * Return the predicate for the object on with the security is checked
-   * 
+   *
    * @param rdfType
    * @return
    */

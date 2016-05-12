@@ -3,7 +3,7 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+import static de.mpg.imeji.presentation.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 import java.net.URI;
 import java.util.concurrent.ExecutorService;
@@ -12,29 +12,30 @@ import java.util.concurrent.Executors;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
 import de.mpg.imeji.logic.doi.DoiService;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.MetadataLabels;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.facet.FacetsBean;
+import de.mpg.imeji.presentation.facet.FacetsJob;
 import de.mpg.imeji.presentation.image.ItemsBean;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * {@link ItemsBean} to browse {@link Item} of a {@link CollectionImeji}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -59,17 +60,17 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Initialize the elements of the page
-   * 
+   *
    * @return
-   * @throws Exception
+   * @throws ImejiException
    */
   @Override
-  public String getInitPage() throws Exception {
+  public String getInitPage() throws ImejiException {
     uri = ObjectHelper.getURI(CollectionImeji.class, id);
-    collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
-    this.profile = ObjectLoader.loadProfile(collection.getProfile(), sb.getUser());
+    collection = new CollectionController().retrieveLazy(uri, sb.getUser());
+    profile = new ProfileController().retrieve(collection.getProfile(), sb.getUser());
     // Initialize the metadata labels
-    ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+    metadataLabels = new MetadataLabels(profile, sb.getLocale());
     // browse context must be initialized before browseinit(), since the browseinit() will check if
     // the selected
     // items must be removed
@@ -96,7 +97,7 @@ public class CollectionItemsBean extends ItemsBean {
     try {
       searchQuery = SearchQueryParser.parseStringQuery(getQuery());
       SearchResult searchRes = search(getSearchQuery(), null, 0, -1);
-      setFacets(new FacetsBean(collection, searchQuery, searchRes));
+      setFacets(new FacetsJob(collection, searchQuery, searchRes, sb.getUser(), sb.getLocale()));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(getFacets());
       executor.shutdown();
@@ -145,16 +146,18 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Release the current {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String release() {
     CollectionController cc = new CollectionController();
     try {
       cc.release(collection, sb.getUser());
-      BeanHelper.info(sb.getMessage("success_collection_release"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_release", sb.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sb.getMessage("error_collection_release"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_release", sb.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error releasing collection", e);
     }
@@ -170,9 +173,10 @@ public class CollectionItemsBean extends ItemsBean {
       } else {
         doiService.addDoiToCollection(collection, sb.getUser());
       }
-      BeanHelper.info(sb.getMessage("success_doi_creation"));
+      BeanHelper.info(Imeji.RESOURCE_BUNDLE.getMessage("success_doi_creation", sb.getLocale()));
     } catch (ImejiException e) {
-      BeanHelper.error(sb.getMessage("error_doi_creation") + " " + e.getMessage());
+      BeanHelper.error(Imeji.RESOURCE_BUNDLE.getMessage("error_doi_creation", sb.getLocale()) + " "
+          + e.getMessage());
       LOGGER.error("Error during doi creation", e);
     }
     return "pretty:";
@@ -180,16 +184,18 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Delete the current {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public String delete() {
     CollectionController cc = new CollectionController();
     try {
       cc.delete(collection, sb.getUser());
-      BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
+      BeanHelper.info(
+          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
+      BeanHelper.error(
+          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error deleting collection", e);
     }
@@ -198,7 +204,7 @@ public class CollectionItemsBean extends ItemsBean {
 
   /**
    * Withdraw the current {@link CollectionImeji}
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -207,9 +213,11 @@ public class CollectionItemsBean extends ItemsBean {
     try {
       collection.setDiscardComment(getDiscardComment());
       cc.withdraw(collection, sb.getUser());
-      BeanHelper.info(sb.getMessage("success_collection_withdraw"));
+      BeanHelper
+          .info(Imeji.RESOURCE_BUNDLE.getMessage("success_collection_withdraw", sb.getLocale()));
     } catch (Exception e) {
-      BeanHelper.error(sb.getMessage("error_collection_withdraw"));
+      BeanHelper
+          .error(Imeji.RESOURCE_BUNDLE.getMessage("error_collection_withdraw", sb.getLocale()));
       BeanHelper.error(e.getMessage());
       LOGGER.error("Error discarding collection", e);
     }

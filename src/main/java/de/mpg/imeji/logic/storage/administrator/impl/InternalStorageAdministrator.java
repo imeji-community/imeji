@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -31,7 +31,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.jenasearch.ImejiSPARQL;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
@@ -40,7 +40,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 
 /**
  * {@link StorageAdministrator} for the {@link InternalStorage}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -62,7 +62,7 @@ public class InternalStorageAdministrator implements StorageAdministrator {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator#getNumberOfFiles()
    */
   @Override
@@ -72,7 +72,7 @@ public class InternalStorageAdministrator implements StorageAdministrator {
 
   /**
    * Return the number of files of one collection
-   * 
+   *
    * @param collectionId
    * @return
    */
@@ -83,7 +83,7 @@ public class InternalStorageAdministrator implements StorageAdministrator {
 
   /**
    * Count the number of files for one path
-   * 
+   *
    * @param directory
    * @return
    */
@@ -94,7 +94,7 @@ public class InternalStorageAdministrator implements StorageAdministrator {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator#getSizeOfFiles()
    */
   @Override
@@ -104,7 +104,7 @@ public class InternalStorageAdministrator implements StorageAdministrator {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.adminstrator.StorageAdministrator#getFreeSpace()
    */
   @Override
@@ -114,7 +114,7 @@ public class InternalStorageAdministrator implements StorageAdministrator {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.mpg.imeji.logic.storage.administrator.StorageAdministrator#getAllFiles()
    */
   @Override

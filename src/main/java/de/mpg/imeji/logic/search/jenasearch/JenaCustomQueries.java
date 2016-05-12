@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -26,6 +26,7 @@ package de.mpg.imeji.logic.search.jenasearch;
 
 import java.net.URI;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -34,18 +35,17 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Metadata;
 
 /**
  * SPARQL queries for imeji
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -62,7 +62,7 @@ public class JenaCustomQueries {
 
   /**
    * Select default {@link MetadataProfile}
-   * 
+   *
    * @return
    */
   public static final String selectDefaultMetadataProfile() {
@@ -73,7 +73,7 @@ public class JenaCustomQueries {
 
   /**
    * Select {@link MetadataProfile} which are not used by any {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public static final String selectUnusedMetadataProfiles() {
@@ -85,7 +85,7 @@ public class JenaCustomQueries {
   /**
    * Checks if provided {@link MetadataProfile} uri has other references than the reference in the
    * provided resource {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public static final String hasOtherMetadataProfileReferences(String profileUri,
@@ -103,7 +103,7 @@ public class JenaCustomQueries {
   /**
    * Checks if provided {@link MetadataProfile} uri has any collection references
    * {@link CollectionImeji}
-   * 
+   *
    * @return
    */
   public static final String hasMetadataProfileReferences(String profileUri) {
@@ -114,7 +114,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link Username}
-   * 
+   *
    * @return
    */
   public static final String selectUserAll(String name) {
@@ -125,7 +125,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link Username}
-   * 
+   *
    * @return
    */
   public static final String selectOrganizationByName(String name) {
@@ -136,7 +136,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link Username}
-   * 
+   *
    * @return
    */
   public static final String selectPersonByName(String name) {
@@ -147,7 +147,7 @@ public class JenaCustomQueries {
 
   /**
    * Select a User by its Email
-   * 
+   *
    * @param email
    * @return
    */
@@ -160,7 +160,7 @@ public class JenaCustomQueries {
 
   /**
    * Select a User by its Email
-   * 
+   *
    * @param email
    * @return
    */
@@ -173,7 +173,7 @@ public class JenaCustomQueries {
 
   /**
    * Select a User by its Email
-   * 
+   *
    * @param email
    * @return
    */
@@ -186,7 +186,7 @@ public class JenaCustomQueries {
 
   /**
    * Select a User by its Email
-   * 
+   *
    * @param email
    * @return
    */
@@ -199,20 +199,20 @@ public class JenaCustomQueries {
 
   /**
    * Find all the user which have SysAdmin rights for imeji
-   * 
+   *
    * @return
    */
   public static final String selectUserSysAdmin() {
     return X_PATH_FUNCTIONS_DECLARATION
         + "  SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantType> <"
         + AuthUtil.toGrantTypeURI(GrantType.ADMIN).toString()
-        + ">. ?g <http://imeji.org/terms/grantFor> <" + PropertyBean.baseURI()
+        + ">. ?g <http://imeji.org/terms/grantFor> <" + Imeji.PROPERTIES.getBaseURI()
         + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user>}";
   }
 
   /**
    * Select {@link User} having a {@link Grant} for an object defined by its uri
-   * 
+   *
    * @return
    */
   public static final String selectUserWithGrantFor(String uri) {
@@ -224,7 +224,7 @@ public class JenaCustomQueries {
 
   /**
    * Return th {@link UserGroup} which have {@link Grant} for the object defined by the passed uri
-   * 
+   *
    * @param uri
    * @return
    */
@@ -237,7 +237,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link UserGroup}
-   * 
+   *
    * @return
    */
   public static final String selectUserGroupAll(String name) {
@@ -248,7 +248,7 @@ public class JenaCustomQueries {
 
   /**
    * Select {@link UserGroup} of User
-   * 
+   *
    * @return
    */
   public static final String selectUserGroupOfUser(User user) {
@@ -259,7 +259,7 @@ public class JenaCustomQueries {
 
   /**
    * Select {@link CollectionImeji} of space
-   * 
+   *
    * @param uri
    * @return
    */
@@ -272,7 +272,7 @@ public class JenaCustomQueries {
   /**
    * Select Users to be notified by file download Note: Current <code>user</code> is excluded from
    * the result set
-   * 
+   *
    * @return
    * @param user
    * @param c
@@ -298,7 +298,7 @@ public class JenaCustomQueries {
 
   /**
    * Find the collection of an item and return its uri
-   * 
+   *
    * @param fileUrl
    * @return
    */
@@ -309,7 +309,7 @@ public class JenaCustomQueries {
 
   /**
    * Find the profile of a collection and return its uri
-   * 
+   *
    * @param collectionUri
    * @return
    */
@@ -332,7 +332,7 @@ public class JenaCustomQueries {
 
   /**
    * Selecte the item id for the file with the passed fileStorage
-   * 
+   *
    * @param storageId
    * @return
    */
@@ -343,7 +343,7 @@ public class JenaCustomQueries {
 
   /**
    * Select the Status of the item which got this file
-   * 
+   *
    * @param fileUrl
    * @return
    */
@@ -366,7 +366,7 @@ public class JenaCustomQueries {
   /**
    * Select all {@link Metadata} which are not related to a statement. Happens when a
    * {@link Statement} is removed from a {@link MetadataProfile}
-   * 
+   *
    * @return
    */
   public static final String selectMetadataUnbounded() {
@@ -379,7 +379,7 @@ public class JenaCustomQueries {
   /**
    * Select all {@link Statement} which are not bounded to a {@link MetadataProfile}. Should not
    * happen...
-   * 
+   *
    * @return
    */
   public static final String selectStatementUnbounded() {
@@ -392,7 +392,7 @@ public class JenaCustomQueries {
    * Select all {@link Grant} which are not valid anymore. For instance, when a {@link User}, or an
    * object ( {@link CollectionImeji}, {@link Album}) is deleted, some related {@link Grant} might
    * stay in the database, even if they are not needed anymore.
-   * 
+   *
    * @return
    */
   public static final String selectGrantWithoutUser() {
@@ -403,7 +403,7 @@ public class JenaCustomQueries {
 
   /**
    * Remove the grants withtout users
-   * 
+   *
    * @return
    */
   public static final String removeGrantWithoutUser() {
@@ -415,7 +415,7 @@ public class JenaCustomQueries {
 
   /**
    * Select {@link Grant} which don't have any triple
-   * 
+   *
    * @return
    */
   public static final String selectGrantEmtpy() {
@@ -424,7 +424,7 @@ public class JenaCustomQueries {
 
   /**
    * Remove the emtpy Grants
-   * 
+   *
    * @return
    */
   public static final String removeGrantEmtpy() {
@@ -433,19 +433,19 @@ public class JenaCustomQueries {
 
   /**
    * Select Grant which don't have a grantfor
-   * 
+   *
    * @return
    */
   public static final String selectGrantWithoutObjects() {
     return X_PATH_FUNCTIONS_DECLARATION
         + "  SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/grantFor> ?for"
         + " . not exists{?for ?p ?o} .filter (?for!= <http://imeji.org/> &&  ?for != <"
-        + PropertyBean.baseURI() + ">)}";
+        + Imeji.PROPERTIES.getBaseURI() + ">)}";
   }
 
   /**
    * Remove Grant which don't have a grantfor
-   * 
+   *
    * @return
    */
   public static final String removeGrantWithoutObject() {
@@ -455,12 +455,12 @@ public class JenaCustomQueries {
         + "USING <http://imeji.org/metadataProfile> "
         + " WHERE {?s <http://imeji.org/terms/grantFor> ?for"
         + " . not exists{?for ?p ?o} .filter (?for!= <http://imeji.org/> &&  ?for != <"
-        + PropertyBean.baseURI() + ">) . ?s ?prop ?sub}";
+        + Imeji.PROPERTIES.getBaseURI() + ">) . ?s ?prop ?sub}";
   }
 
   /**
    * Delete all grants granting for the given uri
-   * 
+   *
    * @param uri
    * @return
    */
@@ -473,7 +473,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link CollectionImeji} available imeji
-   * 
+   *
    * @return
    */
   public static final String selectCollectionAll() {
@@ -482,7 +482,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link Album} available imeji
-   * 
+   *
    * @return
    */
   public static final String selectAlbumAll() {
@@ -491,7 +491,7 @@ public class JenaCustomQueries {
 
   /**
    * select status
-   * 
+   *
    * @return
    */
   public static final String selectStatus(String id) {
@@ -500,7 +500,7 @@ public class JenaCustomQueries {
 
   /**
    * SElect the Version number of the object
-   * 
+   *
    * @param id
    * @return
    */
@@ -511,7 +511,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link Space} available imeji
-   * 
+   *
    * @return
    */
   public static final String selectSpaceAll() {
@@ -520,7 +520,7 @@ public class JenaCustomQueries {
 
   /**
    * Select a {@link Space} by its label
-   * 
+   *
    * @return
    */
   public static final String getSpaceByLabel(String spaceId) {
@@ -547,7 +547,7 @@ public class JenaCustomQueries {
 
   /**
    * Select all {@link Item} available imeji
-   * 
+   *
    * @return
    */
   public static final String selectItemAll() {
@@ -557,7 +557,7 @@ public class JenaCustomQueries {
   /**
    * Update all {@link Item}. Remove the {@link Metadata} which have a non existing
    * {@link Statement}
-   * 
+   *
    * @return
    */
   public static final String updateRemoveAllMetadataWithoutStatement(String profileURI) {
@@ -573,7 +573,7 @@ public class JenaCustomQueries {
 
   /**
    * Update the filesize of a {@link Item}
-   * 
+   *
    * @param itemId
    * @param fileSize
    * @return
@@ -586,7 +586,7 @@ public class JenaCustomQueries {
 
   /**
    * Update the filesize of a {@link Item}
-   * 
+   *
    * @param itemId
    * @param fileSize
    * @return
@@ -607,7 +607,7 @@ public class JenaCustomQueries {
 
   /**
    * Remove all Filesize of all {@link Item}
-   * 
+   *
    * @return
    */
   public static final String deleteAllFileSize() {
@@ -617,7 +617,7 @@ public class JenaCustomQueries {
   /**
    * Update all {@link Item}. Remove all {@link Metadata} which doesn't have any content (no triples
    * as subject)
-   * 
+   *
    * @return
    */
   public static final String updateEmptyMetadata() {
@@ -637,7 +637,7 @@ public class JenaCustomQueries {
 
   /**
    * Search for any file with the same checksum (in any collection)
-   * 
+   *
    * @return
    */
   public static final String selectItemByChecksum(URI containerURI, String checksum) {
@@ -653,7 +653,7 @@ public class JenaCustomQueries {
   /**
    * Search for all Institute of all {@link User} . An institute is defined by the emai of the
    * {@link User}, for instance user@mpdl.mpg.de has institute mpdl.mpg.de
-   * 
+   *
    * @return
    */
   public static final String selectAllInstitutes() {
@@ -663,7 +663,7 @@ public class JenaCustomQueries {
   /**
    * Search for all {@link Item} within a {@link CollectionImeji} belonging the the institute, and
    * sum all fileSize
-   * 
+   *
    * @param instituteName
    * @return
    */
@@ -676,7 +676,7 @@ public class JenaCustomQueries {
 
   /**
    * Search for all {@link Item}s created by the {@link User}, and sum all fileSize
-   * 
+   *
    * @param user
    * @return
    */
@@ -687,7 +687,7 @@ public class JenaCustomQueries {
 
   /**
    * Chararters ( and ) can not be accepted in the sparql query and must therefore removed
-   * 
+   *
    * @param s
    * @return
    */
@@ -700,7 +700,7 @@ public class JenaCustomQueries {
   }
 
   /**
-   * 
+   *
    * @return
    */
   public static final String selectUserCompleteName(URI uri) {
@@ -718,7 +718,7 @@ public class JenaCustomQueries {
 
   /**
    * SElect the last modication date of an object
-   * 
+   *
    * @param id
    * @return
    */

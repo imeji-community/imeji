@@ -13,7 +13,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Grant of one {@link GrantType} for one {@link User} used for imeji authorization
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -25,7 +25,7 @@ public class Grant implements Serializable {
 
   /**
    * The types of possible {@link Grant} in imeji
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -48,7 +48,7 @@ public class Grant implements Serializable {
   /**
    * Create a {@link Grant} of type {@link GrantType} for the object with the {@link URI} grantfor.
    * Define the id
-   * 
+   *
    * @param gt
    * @param gf
    */
@@ -64,18 +64,19 @@ public class Grant implements Serializable {
 
   /**
    * REturn the {@link Grant} as a {@link GrantType}
-   * 
+   *
    * @return
    */
   public GrantType asGrantType() {
-    if (grantType != null)
+    if (grantType != null) {
       return GrantType.valueOf(grantType.getFragment());
+    }
     return null;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

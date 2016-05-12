@@ -13,13 +13,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.resource.AlbumController;
+import de.mpg.imeji.logic.controller.resource.CollectionController;
+import de.mpg.imeji.logic.controller.resource.ItemController;
+import de.mpg.imeji.logic.controller.resource.ProfileController;
+import de.mpg.imeji.logic.export.format.Export;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -28,7 +29,7 @@ import de.mpg.imeji.logic.vo.User;
 
 /**
  * Manage {@link Export}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -42,7 +43,7 @@ public class ExportManager {
   /**
    * Create a new {@link ExportManager} with url parameters, and perform the {@link Export} in the
    * specified {@link OutputStream}
-   * 
+   *
    * @param out
    * @param user
    * @param params
@@ -59,13 +60,13 @@ public class ExportManager {
 
   /**
    * Write in {@link OutputStream} the export
-   * 
+   *
    * @param sr
-   * 
+   *
    */
-  public void export(SearchResult sr) {
+  public void export(SearchResult sr, User user) {
     if (export != null) {
-      export.export(out, sr);
+      export.export(out, sr, user);
     } else {
       try {
         out.write("Unknown format".getBytes());
@@ -77,7 +78,7 @@ public class ExportManager {
 
   /**
    * Search the element to export
-   * 
+   *
    * @param searchQuery
    * @return
    * @throws IOException
@@ -108,9 +109,8 @@ public class ExportManager {
     } else {
       if ("collection".equals(searchType) || "metadata".equals(searchType)) {
         CollectionController collectionController = new CollectionController();
-        result =
-            collectionController
-                .search(searchQuery, null, maximumNumberOfRecords, 0, user, spaceId);
+        result = collectionController.search(searchQuery, null, maximumNumberOfRecords, 0, user,
+            spaceId);
       } else if ("album".equals(searchType)) {
         AlbumController albumController = new AlbumController();
         result =
@@ -121,13 +121,11 @@ public class ExportManager {
       } else if ("image".equals(searchType)) {
         ItemController itemController = new ItemController();
         if (collectionId != null) {
-          result =
-              itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId),
-                  searchQuery, null, user, spaceId, -1, 0);
+          result = itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId),
+              searchQuery, null, user, spaceId, -1, 0);
         } else if (albumId != null) {
-          result =
-              itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null,
-                  user, spaceId, -1, 0);
+          result = itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery,
+              null, user, spaceId, -1, 0);
         } else {
           result = itemController.search(null, searchQuery, null, user, spaceId, -1, 0);
         }
@@ -142,7 +140,7 @@ public class ExportManager {
 
   /**
    * Return the content type of the {@link HttpResponse}
-   * 
+   *
    * @return
    */
   public String getContentType() {

@@ -1,12 +1,16 @@
 package de.mpg.imeji.rest.resources;
 
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
+
+import java.io.InputStream;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -49,6 +53,16 @@ public class ProfileResource implements ImejiResource {
     return buildJSONResponse(resp);
   }
 
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @ApiOperation(value = "Create Porifle or new version of profile",
+      notes = "The body parameter is the json of a profile. You can get an example by using the get profile method.")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response create(@Context HttpServletRequest req, InputStream json) {
+    JSONResponse resp = ProfileProcess.createProfile(req);
+    return buildJSONResponse(resp);
+  }
+
   @Override
   public Response create(@Context HttpServletRequest req) {
     // TODO Auto-generated method stub
@@ -85,14 +99,15 @@ public class ProfileResource implements ImejiResource {
     JSONResponse resp = ProfileProcess.withdrawProfile(req, id, discardComment);
     return buildJSONResponse(resp);
   }
-  
-  
+
+
   @GET
   @Path("/{id}/template")
   @ApiOperation(value = "Get template item for a metadata profile")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readProfileItemTemplate(@Context HttpServletRequest req, @PathParam("id") String id) {
-    JSONResponse resp = ProfileProcess.readItemTemplate(req, id); 
+  public Response readProfileItemTemplate(@Context HttpServletRequest req,
+      @PathParam("id") String id) {
+    JSONResponse resp = ProfileProcess.readItemTemplate(req, id);
     return buildJSONResponse(resp);
   }
 

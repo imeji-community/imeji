@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
@@ -24,7 +25,7 @@ import de.mpg.imeji.presentation.util.CookieUtils;
  * required GET parameters (via readOutParamaters()). This bean has to be managed in the session
  * scope of JSF. The list only refreshes if any GET parameters have changed or new parameters have
  * been added. If you want to refresh the list anyway, please call the hasChanged method.
- * 
+ *
  * @author Markus Haarlaender (initial creation)
  * @author $Author: haarlaender $ (last modification)
  * @version $Revision: 3185 $ $LastChangedDate: 2009-11-20 14:30:15 +0100 (Fri, 20 Nov 2009) $
@@ -66,7 +67,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Types of paginators
-   * 
+   *
    * @author saquet (initial creation)
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
@@ -141,7 +142,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the current list with the specified elements
-   * 
+   *
    * @return
    */
   public List<ListElementType> getCurrentPartList() {
@@ -150,7 +151,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the size of the current list
-   * 
+   *
    * @return
    */
   public int getPartListSize() {
@@ -174,7 +175,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Return the first page of the paginator
-   * 
+   *
    * @return
    */
   public int getPageOffset() {
@@ -210,7 +211,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the currently selected number of elements per page
-   * 
+   *
    * @return
    */
   public int getElementsPerPage() {
@@ -220,7 +221,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Listener for elementsPerPageTop
-   * 
+   *
    * @param event
    * @throws Exception
    */
@@ -233,7 +234,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Used as action when the user sends an value from the upper go to input field
-   * 
+   *
    * @return
    * @throws Exception
    */
@@ -243,12 +244,12 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
       if (goToPage > 0 && goToPage <= getPaginatorPageSize()) {
         setCurrentPageNumber(goToPage);
       } else {
-        BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-            .getMessage("error_page_not_exists"));
+        BeanHelper.error(
+            Imeji.RESOURCE_BUNDLE.getMessage("error_page_not_exists", BeanHelper.getLocale()));
       }
     } catch (Exception e) {
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getMessage("error_integer_required"));
+      BeanHelper.error(
+          Imeji.RESOURCE_BUNDLE.getMessage("error_integer_required", BeanHelper.getLocale()));
     }
     return "";
   }
@@ -256,7 +257,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the current page number of the paginator
-   * 
+   *
    * @return
    */
   public int getCurrentPageNumber() {
@@ -265,7 +266,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns a list with the paginator pages. Used from jsf to iterate over the numbers
-   * 
+   *
    * @return
    */
   public List<PaginatorPage> getPaginatorPages() {
@@ -274,7 +275,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the number of all paginator pages, not only the visible ones
-   * 
+   *
    * @return
    */
   public int getPaginatorPageSize() {
@@ -284,7 +285,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   /**
    * Returns the number of the paginator page button that should be displayed as first button of the
    * paginator in order to always display exactly seven paginator page buttons
-   * 
+   *
    * @return
    */
   public int getFirstPaginatorPageNumber() {
@@ -299,7 +300,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Sets the menu entries of the elements per page menu
-   * 
+   *
    * @param elementsPerPageSelectItems
    */
   public void setElementsPerPageSelectItems(List<SelectItem> elementsPerPageSelectItems) {
@@ -308,7 +309,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the menu entries of the elements per page menu
-   * 
+   *
    * @return
    */
   public List<SelectItem> getElementsPerPageSelectItems() {
@@ -317,7 +318,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Inner class pf which an instance represents an paginator button. Used by the iterator in jsf.
-   * 
+   *
    * @author Markus Haarlaender (initial creation)
    * @author $Author: haarlaender $ (last modification)
    * @version $Revision: 3185 $ $LastChangedDate: 2009-11-20 14:30:15 +0100 (Fri, 20 Nov 2009) $
@@ -334,7 +335,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
     /**
      * Sets the page number of the paginator button
-     * 
+     *
      * @param number
      */
     public void setNumber(int number) {
@@ -343,7 +344,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
     /**
      * Returns the page number of the paginator button
-     * 
+     *
      * @return
      */
     public int getNumber() {
@@ -352,7 +353,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
     /**
      * Returns the link that is used as output link of the paginator page button
-     * 
+     *
      * @return
      */
     public String goToPage() {
@@ -363,7 +364,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the link for the "Next"-Button of the Paginator
-   * 
+   *
    * @return
    */
   public String goToNextPage() {
@@ -373,7 +374,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the link for the "Previous"-Button of the Paginator
-   * 
+   *
    * @return
    */
   public String goToPreviousPage() {
@@ -383,7 +384,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the link for the "First Page"-Button of the Paginator
-   * 
+   *
    * @return
    */
   public String goToFirstPage() {
@@ -393,7 +394,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Returns the link for the "Last Page"-Button of the Paginator
-   * 
+   *
    * @return
    */
   public String goToLastPage() {
@@ -403,7 +404,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * Sets the current paginator page number
-   * 
+   *
    * @param currentPageNumber
    */
   public void setCurrentPageNumber(int currentPageNumber) {
@@ -413,7 +414,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   /**
    * WARNING: USE THIS METHOD ONLY FROM UPPER GO TO INPUT FIELD MENU IN JSPF. For setting the value
    * manually, use setGoToPage().
-   * 
+   *
    * @param elementsPerPageTop
    */
   public void setGoToPage(String goToPage) {
@@ -423,7 +424,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   /**
    * WARNING: USE THIS METHOD ONLY FROM UPPER GO TO INPUT FIELD MENU IN JSPF. For getting the value
    * manually, use getGoToPage().
-   * 
+   *
    * @param elementsPerPageTop
    */
   public String getGoToPage() {
@@ -435,7 +436,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   /**
    * Whenever this method is called, an updated list with elements of type ListelementType has to be
    * returned
-   * 
+   *
    * @param offset An offset from where the list must start (0 means at the beginning of all
    *        records)
    * @param limit The length of the list that has to be returned. If the whole list has less records
@@ -449,7 +450,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   /**
    * Must return the total size of the retrieved list without limit and offset parameters. E.g. for
    * a search the whole number of search records
-   * 
+   *
    * @return The whole number of elements in the list, regardless of limit and offset parameters
    */
   public abstract int getTotalNumberOfRecords();
@@ -460,7 +461,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 
   /**
    * return the {@link PAGINATOR_TYPE} of the current bean
-   * 
+   *
    * @return
    */
   public abstract String getType();

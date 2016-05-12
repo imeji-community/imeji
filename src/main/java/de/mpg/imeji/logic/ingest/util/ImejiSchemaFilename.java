@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.mpg.imeji.logic.ingest.util;
 

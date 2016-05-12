@@ -126,10 +126,10 @@
 													<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
 													<ui:param name="roles" value="#{sh.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
 													<div>
-														<h:outputText value=" #{SessionBean.getLabel(sh.type)}: #{sh.title}" styleClass="imj_admindataValueEntry"/>
+														<h:outputText value=" #{sh.typeLabel}: #{sh.title}" styleClass="imj_admindataValueEntry"/>
 														<h:commandButton action="#{UserGroup.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton"/>
-														<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
-															<f:selectItems value="#{roles}" />
+														<h:selectManyCheckbox id="role" value="#{sh.roles}" disabled="true" layout="pageDirection">
+															<f:selectItems value="#{sh.rolesMenu}" />
 														</h:selectManyCheckbox>
 													</div>
 													<br/>
@@ -146,9 +146,3 @@
 		</ui:fragment>
 	</ui:define>
 </ui:composition>
-
-
-
-
-
-

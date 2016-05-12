@@ -4,14 +4,13 @@ import java.util.HashMap;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.export.format.RDFExport;
-import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchResult;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 
 /**
  * {@link RDFExport} for {@link MetadataProfile}
- * 
+ *
  * @author saquet
  */
 public class RDFProfileExport extends RDFExport {

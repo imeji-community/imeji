@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -32,7 +32,7 @@ import de.mpg.imeji.logic.vo.User;
 /**
  * Object reader interface for imeji. Important: {@link Reader} doens't check Authorization. Please
  * use {@link ReaderFacade} instead.
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -40,7 +40,7 @@ import de.mpg.imeji.logic.vo.User;
 public interface Reader {
   /**
    * Read a single object by its uri
-   * 
+   *
    * @param uri
    * @param user
    * @param o
@@ -51,7 +51,7 @@ public interface Reader {
 
   /**
    * Read a single Object by its uri (Lazy means don't load Lazy list within the object)
-   * 
+   *
    * @param uri
    * @param user
    * @param o
@@ -62,7 +62,7 @@ public interface Reader {
 
   /**
    * Read a List of objects. All objects must have an uri
-   * 
+   *
    * @param objects
    * @param user
    * @return
@@ -73,7 +73,7 @@ public interface Reader {
   /**
    * Read a List of objects. All objects must have an uri. (Lazy means don't load Lazy list within
    * the object)
-   * 
+   *
    * @param objects
    * @param user
    * @return

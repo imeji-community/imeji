@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.mpg.imeji.presentation.util.IPUtils;
+import de.mpg.imeji.logic.util.IPUtils;
 
 /**
  * Test the {@link IPUtils} mehtods

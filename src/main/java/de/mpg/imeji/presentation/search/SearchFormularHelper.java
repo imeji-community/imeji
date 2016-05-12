@@ -15,7 +15,18 @@ import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 
+/**
+ * Helper for searchFormular
+ *
+ * @author bastiens
+ *
+ */
 public class SearchFormularHelper {
+
+  private SearchFormularHelper() {
+    // avoid construction
+  }
+
   public static String getCollectionId(SearchGroup searchGroup) {
     String id = null;
     for (SearchElement se : searchGroup.getElements()) {
@@ -37,19 +48,23 @@ public class SearchFormularHelper {
     String id = null;
     for (SearchElement se : searchGroup.getElements()) {
       if (se.getType().equals(SEARCH_ELEMENTS.METADATA)) {
-        for (MetadataProfile mdp : profiles)
-          if (isStatementOfProfile(((SearchMetadata) se).getStatement(), mdp))
+        for (MetadataProfile mdp : profiles) {
+          if (isStatementOfProfile(((SearchMetadata) se).getStatement(), mdp)) {
             return mdp.getId().toString();
-      } else if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
+          }
+        }
+      } else if (se.getType().equals(SEARCH_ELEMENTS.GROUP)) {
         return getProfileIdFromStatement((SearchGroup) se, profiles);
+      }
     }
     return id;
   }
 
   private static boolean isStatementOfProfile(URI statementId, MetadataProfile p) {
     for (Statement s : p.getStatements()) {
-      if (s.getId().compareTo(statementId) == 0)
+      if (s.getId().compareTo(statementId) == 0) {
         return true;
+      }
     }
     return false;
   }

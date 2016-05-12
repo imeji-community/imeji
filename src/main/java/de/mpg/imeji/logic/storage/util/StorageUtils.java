@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -55,7 +55,7 @@ import de.mpg.imeji.logic.util.TempFileUtil;
 
 /**
  * Util class fore the storage package
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -72,7 +72,7 @@ public class StorageUtils {
 
   /**
    * Transform an {@link InputStream} to a {@link Byte} array
-   * 
+   *
    * @param stream
    * @return
    */
@@ -87,7 +87,7 @@ public class StorageUtils {
 
   /**
    * Write a byte array into a File
-   * 
+   *
    * @param bytes
    * @return
    */
@@ -103,8 +103,25 @@ public class StorageUtils {
   }
 
   /**
+   * Write an inputStream into a File
+   *
+   * @param bytes
+   * @return
+   */
+  public static File toFile(InputStream in) {
+    try {
+      File f = TempFileUtil.createTempFile("storageUtils_toFile", null);
+      writeInOut(in, new FileOutputStream(f), true);
+      return f;
+    } catch (IOException e) {
+      LOGGER.error("Error creating a temp File", e);
+    }
+    return null;
+  }
+
+  /**
    * Write an {@link InputStream} to an {@link OutputStream}
-   * 
+   *
    * @param out
    * @param input
    * @throws IOException
@@ -116,14 +133,15 @@ public class StorageUtils {
       throw new RuntimeException("Error writing inputstream in outputstream: ", e);
     } finally {
       IOUtils.closeQuietly(in);
-      if (close)
+      if (close) {
         IOUtils.closeQuietly(out);
+      }
     }
   }
 
   /**
    * Return a {@link HttpClient} to be used in {@link Get}
-   * 
+   *
    * @return
    */
   public static HttpClient getHttpClient() {
@@ -137,7 +155,7 @@ public class StorageUtils {
 
   /**
    * Return a {@link GetMethod} ready to use
-   * 
+   *
    * @param client
    * @param url
    * @return
@@ -151,7 +169,7 @@ public class StorageUtils {
 
   /**
    * True if the Filename has an extension
-   * 
+   *
    * @param filename
    * @return
    */
@@ -161,7 +179,7 @@ public class StorageUtils {
 
   /**
    * Return the extension as String
-   * 
+   *
    * @param mimeType
    * @return
    */
@@ -175,7 +193,7 @@ public class StorageUtils {
 
   /**
    * Guess the extension of a {@link File}
-   * 
+   *
    * @param file
    * @return
    */
@@ -203,7 +221,7 @@ public class StorageUtils {
 
   /**
    * Get the Mimetype of a file
-   * 
+   *
    * @param f
    * @return
    */
@@ -213,18 +231,20 @@ public class StorageUtils {
 
   /**
    * True if 2 filename extension are the same (jpeg = jpeg = JPG, etc.)
-   * 
+   *
    * @param ext1
    * @param ext2
    * @return
    */
   public static boolean compareExtension(String ext1, String ext2) {
-    if ("".equals(ext1.trim()) || "".equals(ext2.trim()))
+    if ("".equals(ext1.trim()) || "".equals(ext2.trim())) {
       return false;
+    }
     String mimeType1 = getMimeType(ext1.trim());
     String mimeType2 = getMimeType(ext2.trim());
-    if (DEFAULT_MIME_TYPE.equals(mimeType1) && DEFAULT_MIME_TYPE.equals(mimeType2))
+    if (DEFAULT_MIME_TYPE.equals(mimeType1) && DEFAULT_MIME_TYPE.equals(mimeType2)) {
       return ext1.equalsIgnoreCase(ext2);
+    }
     return mimeType1.equals(mimeType2);
   }
 
@@ -236,8 +256,9 @@ public class StorageUtils {
    * @return
    */
   public static String getMimeType(String extension) {
-    if (extension != null)
+    if (extension != null) {
       extension = extension.toLowerCase();
+    }
     if ("tif".equals(extension)) {
       return "image/tiff";
     } else if ("jpg".equals(extension) || "jpeg".equals(extension)) {

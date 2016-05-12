@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * JavaBean for the http session object related to the history
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -30,7 +30,7 @@ public class HistorySession {
 
   /**
    * Add a {@link HistoryPage} to the history
-   * 
+   *
    * @param page
    * @param id - the ids defined in the url
    */
@@ -44,8 +44,9 @@ public class HistorySession {
       } else {
         // If the page is the same, it might be that the params have
         // been changed
-        if (!page.getParams().containsKey("edituploaded"))
+        if (!page.getParams().containsKey("edituploaded")) {
           getCurrentPage().setParams(page.getParams());
+        }
       }
     }
   }
@@ -62,7 +63,7 @@ public class HistorySession {
 
   /**
    * Remove a {@link HistoryPage} of the history according to its position in the history
-   * 
+   *
    * @param pos
    */
   public void remove(int pos) {
@@ -76,7 +77,7 @@ public class HistorySession {
 
   /**
    * Return the current {@link HistoryPage}
-   * 
+   *
    * @return
    */
   public HistoryPage getCurrentPage() {
@@ -88,7 +89,7 @@ public class HistorySession {
 
   /**
    * Return the previous {@link HistoryPage} in the history
-   * 
+   *
    * @return
    */
   public HistoryPage getPreviousPage() {
@@ -100,7 +101,7 @@ public class HistorySession {
 
   /**
    * Return the size of the history
-   * 
+   *
    * @return
    */
   public int getHistorySize() {
@@ -109,7 +110,7 @@ public class HistorySession {
 
   /**
    * Getter- Return the {@link List} of {@link HistoryPage} of the history
-   * 
+   *
    * @return
    */
   public List<HistoryPage> getPages() {
@@ -118,7 +119,7 @@ public class HistorySession {
 
   /**
    * setter
-   * 
+   *
    * @param pages
    */
   public void setPages(List<HistoryPage> pages) {

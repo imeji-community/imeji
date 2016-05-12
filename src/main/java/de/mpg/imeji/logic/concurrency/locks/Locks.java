@@ -39,7 +39,7 @@ public class Locks {
    * return true if the uri (i.e object) is locked for the user. <br/>
    * Check first if uri is locked by system. <br/>
    * Then check if uri is locked by one other user.
-   * 
+   *
    * @param uri
    * @param email
    * @return
@@ -61,7 +61,7 @@ public class Locks {
    * If lock doesn't already exist, then add a lock to: <br/>
    * System locks if email is null in Lock <br/>
    * User locks if email is defined.
-   * 
+   *
    * @param lock
    */
   public static void lock(Lock lock) {
@@ -74,14 +74,14 @@ public class Locks {
         getUserLocks().put(lock.getUri(), lock);
       }
     } else {
-      throw new RuntimeException(lock.getUri() + " already locked by another user "
-          + lock.getEmail());
+      throw new RuntimeException(
+          lock.getUri() + " already locked by another user " + lock.getEmail());
     }
   }
 
   /**
    * Unlock the lock.
-   * 
+   *
    * @param lock
    */
   public static void unLock(Lock lock) {
@@ -96,15 +96,16 @@ public class Locks {
 
   /**
    * Unlock all locks for one User
-   * 
+   *
    * @param email
    */
   public static void unlockAll(String email) {
     List<Lock> toUnlock = new ArrayList<Lock>();
     if (!getUserLocks().isEmpty() && email != null) {
       for (Lock l : getUserLocks().values()) {
-        if (email.equals(l.getEmail()))
+        if (email.equals(l.getEmail())) {
           toUnlock.add(l);
+        }
       }
     }
     for (Lock l : toUnlock) {
@@ -114,7 +115,7 @@ public class Locks {
 
   /**
    * Retreive a list of all locks which are expired
-   * 
+   *
    * @return
    */
   public static List<Lock> getExpiredLocks() {

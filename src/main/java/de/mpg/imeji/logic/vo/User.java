@@ -9,22 +9,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLazyList;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
@@ -32,7 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * imeji user
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -42,17 +39,13 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class User implements Serializable {
   private static final long serialVersionUID = -8961821901552709120L;
-  // @j2jLiteral("http://xmlns.com/foaf/0.1/name")
-  // private String name;
-  // @j2jLiteral("http://xmlns.com/foaf/0.1/nickname")
-  // private String nick;
   @j2jLiteral("http://xmlns.com/foaf/0.1/email")
   private String email;
   @j2jLiteral("http://xmlns.com/foaf/0.1/password")
   private String encryptedPassword;
   @j2jLiteral("http://xmlns.com/foaf/0.1/person")
-  private Person person;
-  @j2jList("http://imeji.org/terms/grant")
+  private Person person = new Person();
+  @j2jLazyList("http://imeji.org/terms/grant")
   private Collection<Grant> grants = new ArrayList<Grant>();
   @j2jLiteral("http://imeji.org/terms/quota")
   private long quota = -1;
@@ -81,50 +74,6 @@ public class User implements Serializable {
   @j2jList("http://imeji.org/terms/observedCollections")
   private Collection<String> observedCollections = new ArrayList<String>();
 
-
-  private static final Logger LOGGER = Logger.getLogger(User.class);
-
-  /**
-     * 
-     */
-  public User() {
-    this.person = ImejiFactory.newPerson();
-  }
-
-  /**
-   * Return a clone of this user, with a new email
-   * 
-   * @param email
-   * @return
-   */
-  public User clone(String email) {
-    User clone = new User();
-    clone.setEmail(email);
-    clone.encryptedPassword = encryptedPassword;
-    clone.setQuota(quota);
-    clone.grants = new ArrayList<Grant>();
-    for (Grant g : grants) {
-      if (g.asGrantType() != null && g.getGrantFor() != null) {
-        if (g.getGrantFor().toString().equals(this.getId().toString()))
-          clone.grants.add(new Grant(g.asGrantType(), clone.getId()));
-        else
-          clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
-      }
-    }
-    // Updates group references
-    for (UserGroup group : groups) {
-      UserGroupController c = new UserGroupController();
-      group.getUsers().remove(this.getId());
-      group.getUsers().add(clone.getId());
-      try {
-        c.update(group, Imeji.adminUser);
-      } catch (Exception e) {
-        LOGGER.error("Could not update the user group i think", e);
-      }
-    }
-    clone.person = person.clone();
-    return clone;
-  }
 
   public String getEmail() {
     return email;
@@ -184,7 +133,7 @@ public class User implements Serializable {
 
   /**
    * True if the current user is the system administrator
-   * 
+   *
    * @return
    */
   public boolean isAdmin() {
@@ -255,9 +204,9 @@ public class User implements Serializable {
     return quota;
   }
 
-  public String getQuotaHumanReadable() {
+  public String getQuotaHumanReadable(Locale locale) {
     if (quota == Long.MAX_VALUE) {
-      return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("unlimited");
+      return Imeji.RESOURCE_BUNDLE.getLabel("unlimited", locale);
     } else {
       return FileUtils.byteCountToDisplaySize(quota);
     }
@@ -275,7 +224,8 @@ public class User implements Serializable {
   @XmlEnum(String.class)
   public enum UserStatus {
     ACTIVE(new String(ImejiNamespaces.USER_STATUS + "#ACTIVE")), INACTIVE(
-        new String(ImejiNamespaces.USER_STATUS + "#INACTIVE"));
+        new String(ImejiNamespaces.USER_STATUS + "#INACTIVE")), INVITED(
+            ImejiNamespaces.USER_STATUS + "#INVITED");
 
     private String uri;
 

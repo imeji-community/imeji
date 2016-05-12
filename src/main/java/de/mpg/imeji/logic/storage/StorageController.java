@@ -1,20 +1,20 @@
 /*
- * 
+ *
  * CDDL HEADER START
- * 
+ *
  * The contents of this file are subject to the terms of the Common Development and Distribution
  * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
  * the License.
- * 
+ *
  * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
  * See the License for the specific language governing permissions and limitations under the
  * License.
- * 
+ *
  * When distributing Covered Code, include this CDDL HEADER in each file and include the License
  * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
  * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
  * Copyright [yyyy] [name of copyright owner]
- * 
+ *
  * CDDL HEADER END
  */
 /*
@@ -39,17 +39,16 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.auth.authorization.Authorization;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.PropertyReader;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Controller for the {@link Storage} objects
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -58,14 +57,13 @@ public final class StorageController implements Serializable {
   private static final long serialVersionUID = -2651970941029421673L;;
   public static final String IMEJI_STORAGE_NAME_PROPERTY = "imeji.storage.name";
   private final Storage storage;
-  private final Authorization authorization = new Authorization();
   private final String formatWhiteList;
   private final String formatBlackList;
   private static final Logger LOGGER = Logger.getLogger(StorageController.class);
 
   /**
    * Create new {@link StorageController} for the {@link Storage} defined in imeji.properties
-   * 
+   *
    * @throws URISyntaxException
    * @throws IOException
    */
@@ -75,7 +73,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Construct a {@link StorageController} for one {@link Storage}
-   * 
+   *
    * @param name - The name of the storage, as defined by getName() method
    */
   public StorageController(String name) {
@@ -87,13 +85,13 @@ public final class StorageController implements Serializable {
       LOGGER.error("Error initializing StorageController", e);
     }
     storage = StorageFactory.create(name);
-    formatBlackList = ConfigurationBean.getUploadBlackListStatic();
-    formatWhiteList = ConfigurationBean.getUploadWhiteListStatic();
+    formatBlackList = Imeji.CONFIG.getUploadBlackList();
+    formatWhiteList = Imeji.CONFIG.getUploadWhiteList();
   }
 
   /**
    * Call upload method of the controlled {@link Storage}
-   * 
+   *
    * @param filename
    * @param file
    * @param collectionId
@@ -119,7 +117,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Call read method of the controlled {@link Storage}
-   * 
+   *
    * @param url
    * @param out
    * @throws ImejiException
@@ -130,7 +128,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Call delete method of the controlled {@link Storage}
-   * 
+   *
    * @param url
    */
   public void delete(String url) {
@@ -139,7 +137,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Call update method of the controlled {@link Storage}
-   * 
+   *
    * @param url
    * @param bytes
    */
@@ -149,7 +147,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Return the {@link StorageAdministrator} of the current {@link Storage}
-   * 
+   *
    * @return
    */
   public StorageAdministrator getAdministrator() {
@@ -158,7 +156,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Return the id of the {@link CollectionImeji} of this file
-   * 
+   *
    * @return
    */
   public String getCollectionId(String url) {
@@ -174,7 +172,6 @@ public final class StorageController implements Serializable {
    */
   public String guessNotAllowedFormat(File file) {
     boolean canBeUploaded = false;
-
     String guessedExtension = FilenameUtils.getExtension(file.getName());
     if (!"".equals(guessedExtension)) {
       canBeUploaded = isAllowedFormat(guessedExtension);
@@ -220,7 +217,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Get the {@link Storage} used by the {@link StorageController}
-   * 
+   *
    * @return
    */
   public Storage getStorage() {
@@ -229,7 +226,7 @@ public final class StorageController implements Serializable {
 
   /**
    * Call read method of the controlled {@link Storage}
-   * 
+   *
    * @param url
    * @param out
    * @throws ImejiException

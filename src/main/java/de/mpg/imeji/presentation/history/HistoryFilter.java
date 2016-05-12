@@ -39,14 +39,14 @@ import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.logic.controller.resource.SpaceController;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ServletUtil;
 
 /**
  * {@link Filter} for the imeji history
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -71,6 +71,7 @@ public class HistoryFilter implements Filter {
         dofilterImpl((HttpServletRequest) serv, resp);
       }
     } catch (NotFoundException | NullPointerException e) {
+      LOGGER.error("Error history filter", e);
       if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
         ((HttpServletResponse) resp).sendRedirect(navigation.getApplicationUrl());
       } else {
@@ -78,15 +79,19 @@ public class HistoryFilter implements Filter {
             "RESOURCE_NOT_FOUND");
       }
     } catch (AuthenticationError e) {
+      LOGGER.error("Error history filter", e);
       redirectToLoginPage(serv, resp);
     } catch (NotAllowedException | NotAllowedError e) {
+      LOGGER.error("Error history filter", e);
       ((HttpServletResponse) resp).sendError(Status.FORBIDDEN.getStatusCode(), "FORBIDDEN");
     } catch (BadRequestException e) {
+      LOGGER.error("Error history filter", e);
       ((HttpServletResponse) resp).sendError(Status.BAD_REQUEST.getStatusCode(), "BAD_REQUEST");
     } catch (Exception e) {
+
+      LOGGER.error("Error history filter", e);
       ((HttpServletResponse) resp).sendError(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
           "INTERNAL_SERVER_ERROR");
-      LOGGER.error(e);
     } finally {
       chain.doFilter(serv, resp);
     }
@@ -94,7 +99,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Redicrect the request to the login page
-   * 
+   *
    * @param serv
    * @param resp
    * @throws IOException
@@ -115,7 +120,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Implement the History filter
-   * 
+   *
    * @param request
    * @param resp
    * @throws Exception
@@ -190,7 +195,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Return the {@link SessionBean}
-   * 
+   *
    * @param req
    * @return
    */
@@ -201,7 +206,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Get the {@link HistorySession} from the {@link FacesContext}
-   * 
+   *
    * @param request
    * @param resp
    * @return
@@ -230,7 +235,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Used to initialized FacesContext
-   * 
+   *
    * @author bastiens
    *
    */
@@ -242,7 +247,7 @@ public class HistoryFilter implements Filter {
 
   /**
    * Get {@link FacesContext} from Filter
-   * 
+   *
    * @param request
    * @param response
    * @return

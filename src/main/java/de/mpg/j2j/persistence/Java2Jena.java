@@ -23,7 +23,7 @@ import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Write Java objects annotated with j2jannotations as Jena {@link Resource} of {@link Literal}
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -36,7 +36,7 @@ public class Java2Jena {
 
   /**
    * Construct a {@link Java2Jena} for one {@link Model}
-   * 
+   *
    * @param model
    * @param lazy - defined whether the write operations will be lazy or not (i.e. skip or not the
    *        {@link List})
@@ -49,7 +49,7 @@ public class Java2Jena {
 
   /**
    * Write a {@link Object} in Jena
-   * 
+   *
    * @param r
    */
   public void write(Object o) {
@@ -64,23 +64,24 @@ public class Java2Jena {
   /**
    * Update a {@link RDFResource}. Remove all the properties of the {@link RDFResource} and write
    * the new again
-   * 
+   *
    * @param r
    */
   public void update(Object o) {
     if (J2JHelper.getId(o) == null) {
       throw new NullPointerException("Fatal error: Resource " + o + " with a null id");
     }
-    if (lazy)
+    if (lazy) {
       removeLazy(o);
-    else
+    } else {
       remove(o);
+    }
     write(o);
   }
 
   /**
    * Remove a {@link RDFResource} in Jena
-   * 
+   *
    * @param r
    */
   public void remove(Object o) {
@@ -98,7 +99,7 @@ public class Java2Jena {
 
   /**
    * Update a single Triple
-   * 
+   *
    * @param uri
    * @param property
    * @param obj
@@ -119,7 +120,6 @@ public class Java2Jena {
       if (o != null) {
         model.add(r, p, o);
       }
-
     } else {
       Literal o = literalHelper.java2Literal(obj);
       if (o != null) {
@@ -130,7 +130,7 @@ public class Java2Jena {
 
   /**
    * Remove only relation not defined in a lazy list
-   * 
+   *
    * @param o
    */
   private void removeLazy(Object o) {
@@ -152,7 +152,7 @@ public class Java2Jena {
   /**
    * True if resource exists, throw {@link NullPointerException} if {@link RDFResource} has a null
    * ID
-   * 
+   *
    * @param rdfR
    * @return
    */
@@ -168,7 +168,7 @@ public class Java2Jena {
 
   /**
    * True if the uri exists
-   * 
+   *
    * @param uri
    * @return
    */
@@ -182,7 +182,7 @@ public class Java2Jena {
 
   /**
    * Create a new {@link Resource} for one {@link Object}
-   * 
+   *
    * @param o
    * @return
    */
@@ -198,7 +198,7 @@ public class Java2Jena {
 
   /**
    * Add all properties to the {@link Resource} according to the {@link RDFObject}
-   * 
+   *
    * @param s
    * @param o
    */
@@ -220,7 +220,7 @@ public class Java2Jena {
 
   /**
    * Add a list to the {@link Resource}
-   * 
+   *
    * @param s
    * @param list
    */
@@ -233,9 +233,26 @@ public class Java2Jena {
           String objectName = ns.getPath().replaceAll("/terms/", "");
           String subjectId = s.getURI();
           listElement =
-              J2JHelper.setId(listElement, URI.create(subjectId + "/" + objectName + "/" + i));
+              J2JHelper.setId(listElement, URI.create(subjectId + "/" + objectName + "@pos" + i));
         }
+        updatePosition(listElement, i);
         addProperty(s, listElement, f);
+      }
+    }
+  }
+
+  /**
+   * Update the position according to the current place of this list element in the list
+   *
+   * @param id
+   * @return
+   */
+  private void updatePosition(Object listElement, int pos) {
+    URI id = J2JHelper.getId(listElement);
+    if (id != null) {
+      String[] s = id.getPath().split("@pos");
+      if (s.length > 1 && pos != Integer.parseInt(s[1])) {
+        listElement = J2JHelper.setId(listElement, URI.create(s[0] + "@pos" + pos));
       }
     }
   }
@@ -243,7 +260,7 @@ public class Java2Jena {
   /**
    * Add a {@link Property} to a {@link Resource}. The {@link Property} can be either a new
    * {@link Resource} or a {@link Literal}
-   * 
+   *
    * @param s
    * @param obj
    */
@@ -267,7 +284,7 @@ public class Java2Jena {
 
   /**
    * Write the object (resourceObject) as a {@link Resource}
-   * 
+   *
    * @param s
    * @param obj
    */
@@ -284,7 +301,7 @@ public class Java2Jena {
 
   /**
    * Write the object (literalObject) as a literal
-   * 
+   *
    * @param s
    * @param literalObject
    * @param f
@@ -301,7 +318,7 @@ public class Java2Jena {
 
   /**
    * Write the object (ls) as a {@link RDFS} label
-   * 
+   *
    * @param s
    * @param ls
    */
@@ -315,7 +332,7 @@ public class Java2Jena {
 
   /**
    * Write the object (resourceURI) as {@link Resource} without any childs
-   * 
+   *
    * @param s
    * @param obj
    * @param f
@@ -331,7 +348,7 @@ public class Java2Jena {
   /**
    * Get all Embedded {@link Resource} of an {@link Object} stored in {@link Jena} as a
    * {@link Resource}
-   * 
+   *
    * @param s - the {@link Resource}
    * @param r - {@link Object}
    * @return

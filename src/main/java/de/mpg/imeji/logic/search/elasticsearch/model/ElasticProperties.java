@@ -6,9 +6,9 @@ import de.mpg.imeji.logic.vo.Properties;
 
 /**
  * Elastic Search Entity for {@link Properties}
- * 
+ *
  * @author bastiens
- * 
+ *
  */
 public class ElasticProperties {
   private final String id;
@@ -19,7 +19,7 @@ public class ElasticProperties {
 
   /**
    * Constructor for {@link Properties}
-   * 
+   *
    * @param p
    */
   public ElasticProperties(Properties p) {

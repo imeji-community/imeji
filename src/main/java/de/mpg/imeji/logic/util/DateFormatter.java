@@ -102,12 +102,6 @@ public class DateFormatter {
     }
   }
 
-  public static void main(String[] args) {
-    System.out.println(parseDate2("2016"));
-    System.out.println(parseDate2("2016-04"));
-    System.out.println(parseDate2("2016-04-14"));
-  }
-
   /**
    * Parse a {@link Date} as {@link String} according to a {@link Pattern}
    *

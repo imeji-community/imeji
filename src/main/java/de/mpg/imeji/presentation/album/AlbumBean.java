@@ -121,7 +121,6 @@ public class AlbumBean extends ContainerBean {
   @PostConstruct
   public void init() {
     setId(UrlHelper.getParameterValue("id"));
-    System.out.println("album");
     try {
       if (id != null) {
         album =

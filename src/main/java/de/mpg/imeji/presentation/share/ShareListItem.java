@@ -26,6 +26,12 @@ import de.mpg.imeji.presentation.share.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ListUtils;
 
+/**
+ * A Item of the list of shared person
+ * 
+ * @author bastiens
+ *
+ */
 public class ShareListItem implements Serializable {
   private static final long serialVersionUID = -1637916656299359982L;
   private static final Logger LOGGER = Logger.getLogger(ShareListItem.class);
@@ -223,6 +229,15 @@ public class ShareListItem implements Serializable {
         invitationBC.invite(newInvitation);
       }
     }
+  }
+
+  /**
+   * Revoke all grants for the current object. Called from the user page
+   */
+  public String revokeGrants() {
+    roles.clear();
+    update();
+    return "";
   }
 
   /**

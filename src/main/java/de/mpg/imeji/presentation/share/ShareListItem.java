@@ -136,7 +136,7 @@ public class ShareListItem implements Serializable {
   }
 
   /**
-   * Used to trigger the checkrole process
+   * Used to trigger the checkroles process
    */
   public void checkRoles() {
     // do nothing
@@ -152,7 +152,7 @@ public class ShareListItem implements Serializable {
           roles = new ArrayList<>(Arrays.asList(ShareRoles.CREATE.toString(),
               ShareRoles.EDIT_ITEM.toString(), ShareRoles.DELETE_ITEM.toString(),
               ShareRoles.EDIT.toString(), ShareRoles.ADMIN.toString()));
-          if (AuthUtil.staticAuth().administrate(user, profileUri)) {
+          if (AuthUtil.staticAuth().administrate(currentUser, profileUri)) {
             roles.add(ShareRoles.EDIT_PROFILE.toString());
           }
         } else if (type == SharedObjectType.ALBUM) {

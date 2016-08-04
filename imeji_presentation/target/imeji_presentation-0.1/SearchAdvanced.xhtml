@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+	xmlns:pretty="http://ocpsoft.com/prettyfaces">
+<ui:remove>
+<!--
+
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+-->
+</ui:remove>
+
+	<body>
+
+	<ui:composition template="templates/template.xhtml">
+		<ui:param name="headline" value="#{lbl.search_advanced}"/>
+		
+		<ui:define name="additionalSubheaders">
+			<h:outputText value="#{AdvancedSearchBean.newSearch}"/>
+			<a4j:outputPanel id="ajaxQuery" styleClass="full_area0">
+				<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p4" rendered="#{AdvancedSearchBean.simpleQuery != ''}"/>
+				<h:outputText value="#{AdvancedSearchBean.simpleQuery} " styleClass="xHuge_area0_p4"/>
+			</a4j:outputPanel>
+		</ui:define>
+		
+		<ui:define name="mainContent">
+		
+		<div id="advancedSearch">
+			<h:panelGroup layout="block" styleClass="full_area0">
+				
+				
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem" style="border-top-width: 0px !important;">
+					
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
+					
+						<h:panelGroup layout="block" styleClass="full_area0" >
+						 	<ui:include src="./include/History.xhtml"></ui:include>
+						 </h:panelGroup>
+						 
+					</h:panelGroup>
+					
+					
+					<a4j:outputPanel id="ajaxForm" styleClass="itemList full_area0_p8">
+						
+						<a4j:repeat id="groups" var="g" value="#{AdvancedSearchBean.formular.groups}" rows="0" rowKeyVar="gIndex">
+							
+							<h:panelGroup class="full_area0 medium_marginLExcl itemBlock" rendered="#{gIndex > 0}">
+					    		<h:outputLabel value="#{lbl.or_big}"/>
+				    		</h:panelGroup>
+				    		
+							<h:panelGroup styleClass="medium_marginLExcl full_area0_p8  ">
+							
+								<h:selectOneMenu value="#{g.collectionId}" styleClass="double_area0" onchange="getElementById('formular:groups:#{gIndex}:changeGroup').click();">
+									<f:selectItems value="#{AdvancedSearchBean.collectionsMenu}"/>
+								</h:selectOneMenu>
+								
+								<a4j:commandButton id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" reRender="ajaxForm, ajaxQuery" style="visibility:hidden;">
+									<f:param name="gPos" value="#{gIndex}"/>
+								</a4j:commandButton>
+							
+							
+								<a4j:repeat id="els" var="el" value="#{g.elements}" rows="0" rowKeyVar="elIndex">
+									
+									<h:panelGroup styleClass="full_area0_p8" rendered="#{elIndex > 0}">
+										<h:selectOneMenu value="#{el.operator}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+											<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
+										</h:selectOneMenu>
+									</h:panelGroup>
+									
+									<h:panelGroup styleClass="tiny_marginLExcl full_area0_p8">
+
+										
+										<h:selectOneMenu value="#{el.namespace}" styleClass="double_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:changeEl').click();">
+											<f:selectItems value="#{g.statementMenu}"/>
+										</h:selectOneMenu>
+										
+										<a4j:commandButton id="changeEl" action="#{AdvancedSearchBean.changeElement}" reRender="ajaxForm, ajaxQuery" style="visibility:hidden;">
+											<f:param name="gPos" value="#{gIndex}"/>
+											<f:param name="elPos" value="#{elIndex}"/>
+										</a4j:commandButton>
+										
+										<a4j:commandButton id="updateEl" action="#{AdvancedSearchBean.updateElement}" reRender="ajaxQuery" style="visibility:hidden;">
+											<f:param name="gPos" value="#{gIndex}"/>
+											<f:param name="elPos" value="#{elIndex}"/>
+										</a4j:commandButton>
+										
+										<h:panelGroup styleClass="medium_are0">
+											<h:panelGroup rendered="#{el.filtersMenu == null}" styleClass="tiny_marginLExcl small_area0">
+												<h:outputText value=" = " style="visibility:hidden;"/>
+											</h:panelGroup>
+											
+											<h:selectOneMenu value="#{el.filter}" rendered="#{el.filtersMenu != null}" styleClass="tiny_marginLExcl small_area0" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+												<f:selectItems value="#{el.filtersMenu}"/>
+											</h:selectOneMenu>
+										</h:panelGroup>
+										
+										<h:inputText value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues == null}" onkeyup="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();"/>
+										<h:selectOneMenu value="#{el.searchValue}" styleClass="tiny_marginLExcl double_area0" rendered="#{el.predefinedValues != null}" onchange="getElementById('formular:groups:#{gIndex}:els:#{elIndex}:updateEl').click();">
+											<f:selectItems value="#{el.predefinedValues}"/>
+										</h:selectOneMenu>
+										
+										<a4j:commandButton value="Add" action="#{AdvancedSearchBean.addElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add">
+											<f:param name="gPos" value="#{gIndex}"/>
+											<f:param name="elPos" value="#{elIndex}"/>
+										</a4j:commandButton>
+										<a4j:commandButton value="Remove" action="#{AdvancedSearchBean.removeElement}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool remove">
+											<f:param name="gPos" value="#{gIndex}"/>
+											<f:param name="elPos" value="#{elIndex}"/>
+										</a4j:commandButton>
+
+									</h:panelGroup>
+								</a4j:repeat>
+								
+								<h:panelGroup styleClass="full_area0_p8">
+									<a4j:commandButton value="Add collection" action="#{AdvancedSearchBean.addGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn sectionTool add" shortDesc="#{lbl.add_collection}">
+										<f:param name="gPos" value="#{gIndex}"/>
+									</a4j:commandButton>
+									<a4j:commandButton value="Remove collection" action="#{AdvancedSearchBean.removeGroup}" reRender="ajaxForm, ajaxQuery" styleClass="min_imgBtn remove sectionTool" shortDesc="#{lbl.remove_collection}">
+										<f:param name="gPos" value="#{gIndex}"/>
+									</a4j:commandButton>
+								</h:panelGroup>
+							</h:panelGroup>
+						</a4j:repeat>
+					</a4j:outputPanel>
+					<h:panelGroup styleClass="full_area0_p8">
+						<a4j:commandButton value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.initFormular}" reRender="ajaxForm, ajaxQuery" styleClass="medium_marginLExcl free_area1_p8 cancelButton">
+						</a4j:commandButton>
+						<a4j:commandButton value="#{lbl.search}" action="#{AdvancedSearchBean.search}" styleClass="free_area1_p8 activeButton advancedSearchButton">
+						</a4j:commandButton>
+					</h:panelGroup>
+				</h:panelGroup>			
+				
+		
+			</h:panelGroup>
+		</div>
+			
+			
+		</ui:define>
+
+	</ui:composition>
+	
+	</body>
+</html>

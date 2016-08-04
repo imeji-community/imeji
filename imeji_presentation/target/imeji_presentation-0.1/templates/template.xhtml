@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+/*
+CDDL HEADER START
+The contents of this file are subject to the terms of the
+Common Development and Distribution License, Version 1.0 only
+(the "License"). You may not use this file except in compliance
+with the License.
+You can obtain a copy of the license at license/ESCIDOC.LICENSE
+or http://www.escidoc.de/license.
+See the License for the specific language governing permissions
+and limitations under the License.
+When distributing Covered Code, include this CDDL HEADER in each
+file and include the License file at license/ESCIDOC.LICENSE.
+If applicable, add the following below this CDDL HEADER, with the
+fields enclosed by brackets "[]" replaced with your own identifying
+information: Portions Copyright [yyyy] [name of copyright owner]
+CDDL HEADER END
+Copyright 2006-2010 Fachinformationszentrum Karlsruhe Gesellschaft
+für wissenschaftlich-technische Information mbH and Max-Planck-
+Gesellschaft zur Förderung der Wissenschaft e.V.
+All rights reserved. Use is subject to license terms.
+*/
+-->
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+    <f:loadBundle var="lbl" basename="labels"/>
+    <f:loadBundle var="msg" basename="messages"/>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta http-equiv="pragma" content="no-cache"/>
+            <meta http-equiv="cache-control" content="no-cache"/>
+            <meta http-equiv="expires" content="0"/>
+            <title><h:outputText value="Imeji - #{HistorySession.currentPage.internationalizedName}"/></title>
+            <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
+            <link rel="stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_darkGrey/styles/theme.css" id="DarkGreyTheme" title="dark grey" type="text/css" media="all"/>
+            <link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_highContrast/styles/theme.css" id="highContrastTheme" title="high contrast" type="text/css" />
+            <link rel="alternate stylesheet" href="#{Navigation.domain}common/resources/cssFramework/themes/skin_classic/styles/theme.css" id="classicTheme" title="classic" type="text/css" />
+			
+			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js"></script>
+            <script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/theme_cookie.js"></script>
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
+        </head>
+        <body lang="#{SessionBean.locale}">
+            <h:form id="formular">
+                <div class="full wrapper">
+                    <ui:insert name="init"/>
+                    <h:inputHidden id="offset" styleClass="offset">
+                    </h:inputHidden>
+                    <h:inputHidden id="rssFeedUrl" value="#{BlogBean.rssFeedUrl}">
+                    </h:inputHidden>
+                    <!-- import header --><ui:include src="/headerPages/Header.jspf" />
+                    <div id="content" class="full_area0 clear">
+                        <!-- begin: content section (including elements that visualy belong to the header (breadcrumb, headline, subheader and content menu)) -->
+                        <div class="clear">
+                            <div class="headerSection">
+                                <div class="clear breadcrumb">
+                                   
+                                </div>
+                                <div id="contentSkipLinkAnchor" class="clear headLine">
+                                    <!-- Headline starts here, taken from facelets parameter -->
+                                    <ui:insert name="headline">
+                                        <h1><h:outputText value="#{headline}" /></h1>
+                                    </ui:insert><!-- Headline ends here -->
+                                </div>
+                            </div>
+                            <div class="small_marginLIncl subHeaderSection">
+                                <div class="contentMenu">
+                                    <!-- content menu starts here -->
+                                    <div class="free_area0 sub">
+                                        <!-- content menu upper line starts here -->
+                                        <ui:insert name="contentMenu">
+                                            &#160;
+                                        </ui:insert>
+                                        <!-- content menu upper line ends here -->
+                                    </div>
+                                    <div class="free_area0 sub action">
+                                        <!-- content menu lower line starts here --><ui:insert name="actionsMenu"/><!-- content menu lower line ends here -->
+                                    </div>
+                                    <div class="free_area0 sub action">
+                                        <!-- content menu lower line starts here --><ui:insert name="actionsMenu2"/><!-- content menu lower line ends here -->
+                                    </div>
+                                    <div class="free_area0 sub action">
+                                        <!-- content menu lower line starts here --><ui:insert name="actionsMenu3"/><!-- content menu lower line ends here -->
+                                    </div><!-- content menu ends here -->
+                                </div>
+                                <ui:insert name="additionalSubheaders">
+                                    &#160;
+                                </ui:insert>
+                               	<div class="subHeader">
+                                    <!-- Subheadline starts here -->
+                                    <a4j:outputPanel id="subHeader">
+                                    <h:messages styleClass="singleMessage" errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.numberOfMessages == 1}"/>
+                                    <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea errorMessageArea" rendered="#{MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+                                        <h2><h:outputText value="#{lbl.warning_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="half_area2_p6 messageArea infoMessageArea" rendered="#{MessagesBean.hasMessages and !MessagesBean.hasErrorMessages and MessagesBean.numberOfMessages != 1}">
+                                        <h2><h:outputText value="#{lbl.info_lblMessageHeader}"/></h2><h:messages errorClass="messageError" warnClass="messageWarn" fatalClass="messageFatal" infoClass="messageStatus" layout="list" globalOnly="false" showDetail="false" showSummary="true" rendered="#{MessagesBean.hasMessages}"/>
+                                    </h:panelGroup><h:outputText value="&#160;" rendered="#{!MessagesBean.hasErrorMessages}" /><!-- Subheadline ends here -->
+                                   	<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="full_area0" rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
+										<h:panelGroup styleClass="huge_area0">
+											<h:outputText value="#{lbl.active_album}: " />
+											<h:outputLink value="#{Navigation.imagesUrl}/album#{SessionBean.activeAlbum.id}">
+												<h:outputText value="#{SessionBean.activeAlbum.album.metadata.title} (#{SessionBean.activeAlbum.size})" />
+											</h:outputLink>
+										</h:panelGroup>
+									</h:panelGroup>
+									</a4j:outputPanel>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="full_area0">
+                            <!-- Main Content -->
+                            <ui:insert name="paginationTop">
+                                &#160;
+                            </ui:insert>
+                            <ui:insert name="searchQuery"/>
+                            <ui:insert name="mainContent">
+                                &#160;
+                            </ui:insert>
+                            <ui:insert name="paginationBottom">
+                                &#160;
+                            </ui:insert>
+                        </div>
+                    </div>
+                    <!-- end: content section -->
+                </div>
+                <ui:include src="/footerPages/Footer.jspf" />
+                         
+            </h:form>
+           
+            <script type="text/javascript">
+                
+                window.onkeypress = function disableEnterKey(e){
+                    var key;
+                    
+                    if (window.event) 
+                        key = window.event.keyCode; //IE
+                    else 
+                        key = e.which; //firefox
+                    if (key == 13) 
+                        return false;
+                    else 
+                        return true;
+                }
+                
+            </script>
+        </body>
+    </html>
+</f:view>

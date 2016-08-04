@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
+
+	<classpath>
+		<dir name="C:/Users/hnguyen/workspaceGIT/Imeji/imeji_presentation/target/classes">
+			<include name="assembler/namedgraphs4faces.ttl"/>
+			<include name="labels_de.properties"/>
+			<include name="labels_en.properties"/>
+			<include name="labels_ja.properties"/>
+			<include name="license/escidoc.license"/>
+			<include name="messages_de.properties"/>
+			<include name="messages_en.properties"/>
+			<include name="messages_ja.properties"/>
+			<include name="sparql/metadata4item.rq"/>
+		</dir>
+		<dir name="C:/Users/hnguyen/workspaceGIT/Imeji/imeji_presentation/target/classes">
+		</dir>
+	</classpath>
+
+	<web>
+		<link target="/">
+			<dir name="C:/Users/hnguyen/workspaceGIT/Imeji/imeji_presentation/src/main/webapp">
+			</dir>
+		</link>
+	</web>
+
+</application>

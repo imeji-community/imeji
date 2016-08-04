@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:pretty="http://ocpsoft.com/prettyfaces">
+	<ui:remove>
+		<!--
+
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License, Version 1.0 only
+ (the "License"). You may not use this file except in compliance
+ with the License.
+
+ You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ or http://www.escidoc.de/license.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at license/ESCIDOC.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+
+ Copyright 2006-2009 Fachinformationszentrum Karlsruhe Gesellschaft
+ für wissenschaftlich-technische Information mbH and Max-Planck-
+ Gesellschaft zur Förderung der Wissenschaft e.V.
+ All rights reserved. Use is subject to license terms.
+-->
+	</ui:remove>
+	<body>
+		<ui:composition template="templates/template_album.xhtml">
+			<h:messages/><ui:debug></ui:debug>
+			<ui:define name="headline">
+				<h1>
+					<h:outputText value="#{AlbumBean.album.metadata.title}"/> 
+				</h1>
+			</ui:define>
+			
+			<ui:define name="contentMenu">
+			
+				<h:outputText styleClass="free_area0" value="#{lbl.album_home}"/>
+				
+				<h:outputText styleClass="seperator void" />
+				
+				<h:outputLink id="lnkViewCollectionAllImages" styleClass="free_area0" value="#{Navigation.applicationUri}/images#{AlbumBean.album.id.path}?q=" rendered="#{AlbumBean.size > 0}">
+					<h:outputText value="#{lbl.view_images}"/>
+				</h:outputLink>
+				
+				<h:outputText styleClass="seperator void" rendered="#{AlbumBean.size > 0}"/>
+				
+				<h:outputLink id="lnkViewCollectionDetail" styleClass="free_area0" value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}/details?init=1" rendered="true">
+					<h:outputText value="#{lbl.album_metadata}"/>
+				</h:outputLink>
+				
+			</ui:define>
+			
+			
+			<ui:define name="mainContent">
+				
+				<div id="preListHeader" class="full_area0 itemList" style="border-width: 0px !important;">
+					<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
+						 	<ui:include src="./include/History.xhtml"></ui:include>
+					 </h:panelGroup>
+				</div>
+				
+				
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!AlbumBean.visible}">
+				 	<ui:include src="./include/LoginFormular.xhtml" />
+				 </h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{AlbumBean.visible}">
+					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+							<ui:remove>
+								<!-- ALBUM TITLE -->
+							<h:panelGroup styleClass="full_area0_p8">
+								<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/> </h1>
+							</h:panelGroup>
+							</ui:remove>
+							
+							<h:panelGroup styleClass="full_area0_p8 small_marginLExcl">
+								<!-- ALBUM IMAGES -->
+								<pretty:link mappingId="albumImages" style="color:transparent;" styleClass="xTiny_negMarginLExcl">
+									<f:param value="#{AlbumBean.id}"/>
+										<a4j:repeat var="img" value="#{AlbumBean.images}" rendered="#{AlbumBean.album.properties.status != 'WITHDRAWN'}">
+											<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}coreserviceimage?imageUrl=#{img.thumbnailImageUrlAsString}"/>
+										</a4j:repeat>
+										<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.properties.status == 'WITHDRAWN'}" url="../../../common/resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
+									</pretty:link>
+								<h2>
+									<pretty:link mappingId="albumImages" rendered="#{AlbumBean.album.properties.status != 'WITHDRAWN'}">
+										<f:param value="#{AlbumBean.id}"/>
+										<h:outputText value ="#{lbl.album_view_all_images}"/>
+									</pretty:link>
+									<h:outputText value="#{lbl.withdrawn}" rendered="#{AlbumBean.album.properties.status == 'WITHDRAWN'}"/>
+								</h2>
+							</h:panelGroup>
+							
+							<h:panelGroup styleClass="full_area0_p8 small_marginLExcl">
+								<h:panelGroup styleClass="full_area0_p8 xTiny_negMarginLExcl">
+									<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/></h1>
+								</h:panelGroup>
+								
+								<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{AlbumBean.album.properties.status == 'WITHDRAWN'}">
+									<h:outputText value="#{lbl.withdraw_comment}: "/>
+									<h:outputText value="#{AlbumBean.album.properties.discardComment}"/><br/><br/><br/>
+								</h:panelGroup>
+								
+								<h:panelGroup styleClass="full_area0">
+									<h:outputText escape="false" value="#{AlbumBean.album.metadata.description}"/>
+								</h:panelGroup>
+							</h:panelGroup>
+			
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</ui:define>
+			
+			
+			<ui:define name="actionsMenu">
+				<h:panelGroup>
+					<rich:togglePanel  value="#{SharingBean.status}" switchType="ajax" stateOrder="closed, open" rendered="#{AlbumBean.editable}">
+						 <f:facet name="closed">
+						 	  <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+					            
+					            <rich:toggleControl styleClass="free_area0" value="#{lbl.album_share}" switchToState="open" rendered="#{AlbumBean.album.properties.status=='PENDING' and AlbumBean.admin}"/>
+								
+								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status=='PENDING'}">
+									<h:outputText value="#{lbl.release}"/>
+									<rich:componentControl for="panelConfirmRelease" operation="show" event="onclick"/>
+								</h:outputLink>
+								
+								<h:outputLink id="lnkWithdrawCollection" styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.editable and AlbumBean.album.properties.status=='RELEASED'}">
+									<h:outputText value="#{lbl.withdraw}"/>
+									<rich:componentControl for="panelConfirmWithdraw" operation="show" event="onclick"/>
+								</h:outputLink>
+								
+								<h:outputLink styleClass="free_area0 xTiny_marginLIncl" value="#" rendered="#{AlbumBean.deletable}">
+									<h:outputText value="#{lbl.delete}"/>
+									<rich:componentControl for="panelConfirmDelete" operation="show" event="onclick"/>
+								</h:outputLink>
+								
+							</h:panelGrid>
+					     </f:facet>
+					     <f:facet name="open">
+					         <h:panelGrid cellpadding="0" cellspacing="0" border="0">
+     								<h:outputText value="Share with " />
+          							*<rich:inplaceInput styleClass="large_area0 selected" value="#{SharingBean.email}" defaultLabel="click to enter your email"/>*
+          							<h:outputText value=" as" />
+          							<h:selectOneMenu  id="grantsMenu" value="#{SharingBean.selectedGrant}" styleClass="free_area0">
+											<f:selectItems value="#{SharingBean.grantsMenu}"/>
+									</h:selectOneMenu>
+					        		<h:commandLink id="lnkShareCollection" value="Save" actionListener="#{SharingBean.share}">
+										<f:attribute name="albumId" value="#{AlbumBean.id}"/>
+										<f:attribute name="name" value="#{AlbumBean.album.metadata.title}"/>
+					           		</h:commandLink>
+					           		<h:outputLink value="#{Navigation.applicationUri}#{AlbumBean.album.id.path}"><h:outputText value="Cancel"/></h:outputLink>
+								</h:panelGrid>
+						 </f:facet>   
+					</rich:togglePanel>
+				</h:panelGroup>
+				
+				<ui:include src="confirmationPages/ContainerRelease.xhtml">
+					<ui:param name="bean" value="#{AlbumBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerDelete.xhtml">
+					<ui:param name="bean" value="#{AlbumBean}"/>
+				</ui:include>
+				<ui:include src="confirmationPages/ContainerWithdraw.xhtml">
+					<ui:param name="bean" value="#{AlbumBean}"/>
+					<ui:param name="discardComment" value="#{AlbumBean.album.properties.discardComment}"/>
+				</ui:include>
+				
+			</ui:define>
+		
+			
+		</ui:composition>
+	</body>
+</html>

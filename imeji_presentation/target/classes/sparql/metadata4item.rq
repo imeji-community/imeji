@@ -1,0 +1,18 @@
+PREFIX srel: <http://escidoc.de/core/01/structural-relations/>
+PREFIX terms: <http://purl.org/escidoc/metadata/terms/0.1/>
+PREFIX prop: <http://escidoc.de/core/01/properties/>
+PREFIX item: <http://dev-coreservice.mpdl.mpg.de/metastore/items/>
+PREFIX face: <http://dev-coreservice.mpdl.mpg.de/metastore/metadata/faces/>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+CONSTRUCT { ?s ?p ?o }
+{
+	{ ?s ?p ?o }
+	UNION
+	{
+		GRAPH ?g
+		{
+			?s ?p ?o .
+		}
+	}
+	FILTER regex(str(?s), "6$")
+}

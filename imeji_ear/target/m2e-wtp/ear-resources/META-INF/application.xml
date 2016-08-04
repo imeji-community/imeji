@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd" version="5">
+  <description>imeji</description>
+  <display-name>imeji</display-name>
+  <module>
+    <web>
+      <web-uri>imeji_presentation-0.1.war</web-uri>
+      <context-root>/imeji</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>common_presentation-1.0.45-SNAPSHOT.war</web-uri>
+      <context-root>/common</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>fledgeddata_presentation-1.0.0-SNAPSHOT.war</web-uri>
+      <context-root>/fledgeddata</context-root>
+    </web>
+  </module>
+</application>

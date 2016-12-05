@@ -4,10 +4,10 @@
 <p><b>imeji creates citable research assets by describing, enriching, sharing, exposing, linking and archiving data. </b></p>
 <p>imeji is an open source software which offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</p>
 <p>All objects within the imeji software have a unique identifier and therefore can be referenced in publications or reused in other contexts (dissemination). Large collections can be organized in different albums to focus special items of interest.</p>
-<p>imeji is developed by the <a href="https://github.com/imeji-community/imeji/wiki/imeji" target="_blank" title="imeji community">imeji community</a> under the <a href="https://opensource.org/licenses/cddl1.php" target="_blank">CDDL-License</a>.</p>
+<p>imeji is developed by the <a href="https://github.com/imeji-community/imeji/wiki" target="_blank" title="imeji community">imeji community</a> under the <a href="https://opensource.org/licenses/cddl1.php" target="_blank">CDDL-License</a>.</p>
 
 <h2>Features and documentation</h2>
-<p>See the <a href="https://github.com/imeji-community/imeji/wiki/imeji">imeji Community wiki</a></p>
+<p>See the <a href="https://github.com/imeji-community/imeji/wiki">imeji Community wiki</a></p>
 
 <h2>REST API v1</h2>
 <p>See <a href="https://github.com/imeji-community/imeji/wiki/A_Home-imeji-API-V1">REST API v1 (imeji Community wiki)</a><p>
